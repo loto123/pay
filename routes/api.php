@@ -20,4 +20,4 @@ use Illuminate\Http\Request;
 Route::post('auth/login', 'Api\AuthController@login');
 Route::post('auth/register', 'Api\AuthController@register');
 
-Route::any('test', 'API\TestController@index');
+Route::any('test', 'Api\TestController@index');
