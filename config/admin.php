@@ -10,7 +10,7 @@ return [
     /*
      * Logo in admin panel header.
      */
-    'logo'      => '<b>游戏</b> 宝',
+    'logo'      => '<b>游戏宝</b>',
 
     /*
      * Mini-logo in admin panel header.
@@ -140,7 +140,7 @@ return [
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
      */
-    'layout'  => ['sidebar-mini', 'sidebar-collapse'],
+    'layout'  => ['sidebar-mini'],
 
     /*
      * Version displayed in footer.
