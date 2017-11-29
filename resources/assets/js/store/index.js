@@ -1,19 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import login from './modules/login'
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  strict: true,// 生产环境记得关闭
   state: {
     count: 0
   },
 
+  modules: {
+    login: login
+  },
   //  更改store必须执行mutations
   mutations: {
+
     increment(state, step) {
-
-      console.log(step);
-
       if (!step) {
         state.count++;
       } else {
@@ -30,7 +34,7 @@ const store = new Vuex.Store({
   },
   // action 允许异步执行mutations
   actions: {
-    increment({commit,state}, value) {
+    increment({ commit, state }, value) {
       commit("increment", value);
     }
   }

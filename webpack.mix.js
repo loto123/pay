@@ -12,4 +12,22 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+    .sass('resources/assets/sass/app.scss', 'public/css');
+    // .extract(['vue','axios']);
+
+// mix.webpackConfig({
+//     resolve: {
+//         alias: {
+//             'components': 'assets/js/components',
+//             'config': 'assets/js/config',
+//             'lang': 'assets/js/lang',
+//             'plugins': 'assets/js/plugins',
+//             'vendor': 'assets/js/vendor',
+//             'views': 'assets/js/views',
+//         },
+//         modules: [
+//             'node_modules',
+//             path.resolve(__dirname, "resources")
+//         ]
+//     }
+// });
