@@ -1,18 +1,23 @@
 <template>
   <div id="login">
 
-    <div class="top flex flex-reverse">
+    <div class="top flex flex-reverse flex-align-center">
       注册
     </div>
+    
+  <div class="logo-wrap">
 
-    <mt-field label="用户名" placeholder="请输入用户名"></mt-field>
-    <mt-field label="邮箱" placeholder="请输入邮箱" type="email"></mt-field>
-    <mt-field label="密码" placeholder="请输入密码" type="password"></mt-field>
-    <mt-field label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
-    <mt-field label="网站" placeholder="请输入网址" type="url"></mt-field>
-    <mt-field label="数字" placeholder="请输入数字" type="number"></mt-field>
-    <mt-field label="生日" placeholder="请输入生日" type="date"></mt-field>
-    <mt-field label="自我介绍" placeholder="自我介绍" type="textarea" rows="4"></mt-field>
+  </div>
+
+    <div class="text-area flex-v flex-justify-center">
+      <mt-field label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
+      <mt-field label="密码" placeholder="请输入密码" type="password"></mt-field>
+    </div>
+    
+    <div class="login-button flex flex-justify-center">
+      <mt-button type="primary" size="large">登录</mt-button>
+    </div>
+    
   </div>
 
 </template>
@@ -24,6 +29,21 @@
   height: 2em;
   width: 100%;
   font-size: 1.2em;
+  padding-right: 2em;
+}
+
+.text-area{
+  margin-left: auto;
+  margin-right:auto;
+  margin-top:3em;
+  width: 95%;
+
+}
+
+.login-button {
+  width: 100%;
+  height: 2em;
+  margin-top: 5em;
 }
 </style>
 
