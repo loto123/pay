@@ -1,5 +1,5 @@
 <!-- 我的账户 -->
-<<template>
+<template>
     <div class="myAccount-container">
         <mt-header title="标题过长会隐藏后面的内容啊哈哈哈哈">
             <router-link to="/" slot="left">
