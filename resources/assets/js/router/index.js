@@ -4,6 +4,7 @@ import Mint from 'mint-ui'
 import Router from 'vue-router'
 import Index from '../components/ExampleComponent.vue'
 import Login from '../view/Login/login.vue'
+import MyAccount from '../view/MyAccount/myAccount.vue'
 import 'mint-ui/lib/style.css'
 // import '../../sass/oo_flex.scss'
 

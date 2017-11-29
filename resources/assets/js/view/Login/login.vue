@@ -2,14 +2,15 @@
   <div id="login">
 
     <div class="top flex flex-reverse flex-align-center">
-      注册
+      <a href="javascript:;">注册</a>
     </div>
     
-  <div class="logo-wrap">
+    <div class="logo-wrap flex-v flex-justify-center" >
+      <img src="/images/logo.png" alt="logo">
+      <h3>游戏宝</h3>
+    </div>
 
-  </div>
-
-    <div class="text-area flex-v flex-justify-center">
+    <div class="text-area flex flex-v flex-justify-center">
       <mt-field label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
       <mt-field label="密码" placeholder="请输入密码" type="password"></mt-field>
     </div>
@@ -18,6 +19,19 @@
       <mt-button type="primary" size="large">登录</mt-button>
     </div>
     
+    <div class="bottom flex flex-v flex-align-center">
+      <hr>
+      <div class="text">
+        其他登录
+      </div>
+      <div class="login-type flex flex-v flex-align-center">
+        <a href="javascript:;" class="flex flex-v flex-align-center">
+          <img src="/images/weichat_login.png" alt="">
+          <p>微信登录</p>
+        </a>
+      </div>
+    </div>
+
   </div>
 
 </template>
@@ -28,16 +42,37 @@
 .top {
   height: 2em;
   width: 100%;
-  font-size: 1.2em;
-  padding-right: 2em;
+
+  padding-right: 0.8em;
+  box-sizing: border-box;
+  > a {
+    font-size: 1em;
+  }
 }
 
-.text-area{
-  margin-left: auto;
-  margin-right:auto;
-  margin-top:3em;
-  width: 95%;
+.logo-wrap {
+  width: 100%;
+  height: auto;
+  margin-top: 2em;
 
+  img {
+    display: block;
+    width: 55px;
+    height: 55px;
+    margin: 0 auto;
+  }
+
+  h3 {
+    font-size: 1.3em;
+    text-align: center;
+  }
+}
+
+.text-area {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em;
+  width: 95%;
 }
 
 .login-button {
@@ -45,9 +80,46 @@
   height: 2em;
   margin-top: 5em;
 }
+
+.bottom {
+  width: 100%;
+  margin-top: 5em;
+  height: 10em;
+
+  hr {
+    border: none;
+    border-top: 1px solid #eee;
+    height: 0;
+    width: 100%;
+  }
+
+  .text {
+    margin-top: -1.2em;
+    width: 8em;
+    height: 1em;
+    background: #fff;
+    text-align: center;
+    color: #999;
+  }
+
+  .login-type {
+    margin-top: 1em;
+    width: 100%;
+    img {
+      width: 2em;
+      display: block;
+    }
+    p {
+      text-align: center;
+      font-size: 0.8em;
+      color: #999;
+    }
+  }
+}
 </style>
 
 <script>
+
 import axios from "axios";
 
 export default {
