@@ -9,12 +9,22 @@ use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
+/**
+ * @resource 验证
+ *
+ * 验证授权
+ *
+ * 使用token验证
+ * "Authorization: token"
+ * 或
+ * http://url/?token=token
+ *
+ * @package App\Http\Controllers\Api
+ */
 class AuthController extends Controller {
 
     /**
-     * login api
      *
-     * @return \Illuminate\Http\Response
      */
     public function login(Request $request){
         $credentials = $request->only('mobile', 'password');
@@ -34,7 +44,7 @@ class AuthController extends Controller {
     }
 
     /**
-     * Register api
+     * 注册
      *
      * @return \Illuminate\Http\Response
      */
