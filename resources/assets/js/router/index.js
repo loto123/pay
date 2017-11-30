@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import Mint from 'mint-ui'
 import Router from 'vue-router'
-import MyAccount from '../view/MyAccount/myAccount.vue'
-
 import Index from '../components/ExampleComponent.vue'
 
 // 登录注册
 import Login from './login'
+import MyAccount from './myAccount'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -20,7 +19,8 @@ var index = [
 
 var routerList = {
     login: Login,
-    index: index
+    index: index,
+    myAccount:MyAccount
 };
 
 var router = [];
