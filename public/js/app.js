@@ -375,6 +375,115 @@ module.exports = {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11073,115 +11182,6 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(14).setImmediate))
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11853,7 +11853,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(13);
-module.exports = __webpack_require__(61);
+module.exports = __webpack_require__(65);
 
 
 /***/ }),
@@ -11862,12 +11862,12 @@ module.exports = __webpack_require__(61);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App_vue__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__App_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store__ = __webpack_require__(62);
 
 // require('./bootstrap');
 
@@ -12140,7 +12140,7 @@ exports.clearImmediate = clearImmediate;
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(17)
 /* template */
@@ -12225,18 +12225,17 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_router__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ExampleComponent_vue__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ExampleComponent_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_ExampleComponent_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Login_login_vue__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Login_login_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__view_Login_login_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_MyAccount_myAccount_vue__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_MyAccount_myAccount_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__view_MyAccount_myAccount_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mint_ui_lib_style_css__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MyAccount_myAccount_vue__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MyAccount_myAccount_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__view_MyAccount_myAccount_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ExampleComponent_vue__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ExampleComponent_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_ExampleComponent_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mint_ui_lib_style_css__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mint_ui_lib_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_mint_ui_lib_style_css__);
 
 
@@ -12245,21 +12244,29 @@ if (false) {
 
 
 
+// 登录注册
+
+
 
 // import '../../sass/oo_flex.scss'
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_mint_ui___default.a);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]);
+
+var index = [{ path: '/index', name: 'index', component: __WEBPACK_IMPORTED_MODULE_4__components_ExampleComponent_vue___default.a }];
+
+var routerList = {
+    login: __WEBPACK_IMPORTED_MODULE_5__login__["a" /* default */],
+    index: index
+};
+
+var router = [];
+for (var i in routerList) {
+    router = router.concat(routerList[i]);
+}
+
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]({
-    routes: [{
-        path: '/index',
-        name: 'index',
-        component: __WEBPACK_IMPORTED_MODULE_3__components_ExampleComponent_vue___default.a
-    }, {
-        path: '/login',
-        name: 'login',
-        component: __WEBPACK_IMPORTED_MODULE_4__view_Login_login_vue___default.a
-    }]
+    routes: router
 }));
 
 /***/ }),
@@ -12436,7 +12443,7 @@ module.exports = function normalizeComponent (
 /* 1 */
 /***/ function(module, exports) {
 
-module.exports = __webpack_require__(1);
+module.exports = __webpack_require__(2);
 
 /***/ },
 /* 2 */
@@ -24911,7 +24918,7 @@ if (inBrowser && window.Vue) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(26)
 /* template */
@@ -25035,7 +25042,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(29)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(33)
 /* template */
@@ -25113,7 +25120,7 @@ exports = module.exports = __webpack_require__(6)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5c93fb5e], body[data-v-5c93fb5e], div[data-v-5c93fb5e], span[data-v-5c93fb5e], applet[data-v-5c93fb5e], object[data-v-5c93fb5e], iframe[data-v-5c93fb5e],\nh1[data-v-5c93fb5e], h2[data-v-5c93fb5e], h3[data-v-5c93fb5e], h4[data-v-5c93fb5e], h5[data-v-5c93fb5e], h6[data-v-5c93fb5e], p[data-v-5c93fb5e], blockquote[data-v-5c93fb5e], pre[data-v-5c93fb5e],\na[data-v-5c93fb5e], abbr[data-v-5c93fb5e], acronym[data-v-5c93fb5e], address[data-v-5c93fb5e], big[data-v-5c93fb5e], cite[data-v-5c93fb5e], code[data-v-5c93fb5e],\ndel[data-v-5c93fb5e], dfn[data-v-5c93fb5e], em[data-v-5c93fb5e], img[data-v-5c93fb5e], ins[data-v-5c93fb5e], kbd[data-v-5c93fb5e], q[data-v-5c93fb5e], s[data-v-5c93fb5e], samp[data-v-5c93fb5e],\nsmall[data-v-5c93fb5e], strike[data-v-5c93fb5e], strong[data-v-5c93fb5e], sub[data-v-5c93fb5e], sup[data-v-5c93fb5e], tt[data-v-5c93fb5e], var[data-v-5c93fb5e],\nb[data-v-5c93fb5e], u[data-v-5c93fb5e], i[data-v-5c93fb5e], center[data-v-5c93fb5e],\ndl[data-v-5c93fb5e], dt[data-v-5c93fb5e], dd[data-v-5c93fb5e], ol[data-v-5c93fb5e], ul[data-v-5c93fb5e], li[data-v-5c93fb5e],\nfieldset[data-v-5c93fb5e], form[data-v-5c93fb5e], label[data-v-5c93fb5e], legend[data-v-5c93fb5e],\ntable[data-v-5c93fb5e], caption[data-v-5c93fb5e], tbody[data-v-5c93fb5e], tfoot[data-v-5c93fb5e], thead[data-v-5c93fb5e], tr[data-v-5c93fb5e], th[data-v-5c93fb5e], td[data-v-5c93fb5e],\narticle[data-v-5c93fb5e], aside[data-v-5c93fb5e], canvas[data-v-5c93fb5e], details[data-v-5c93fb5e], embed[data-v-5c93fb5e],\nfigure[data-v-5c93fb5e], figcaption[data-v-5c93fb5e], footer[data-v-5c93fb5e], header[data-v-5c93fb5e], hgroup[data-v-5c93fb5e],\nmenu[data-v-5c93fb5e], nav[data-v-5c93fb5e], output[data-v-5c93fb5e], ruby[data-v-5c93fb5e], section[data-v-5c93fb5e], summary[data-v-5c93fb5e],\ntime[data-v-5c93fb5e], mark[data-v-5c93fb5e], audio[data-v-5c93fb5e], video[data-v-5c93fb5e] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5c93fb5e], aside[data-v-5c93fb5e], details[data-v-5c93fb5e], figcaption[data-v-5c93fb5e], figure[data-v-5c93fb5e],\nfooter[data-v-5c93fb5e], header[data-v-5c93fb5e], hgroup[data-v-5c93fb5e], menu[data-v-5c93fb5e], nav[data-v-5c93fb5e], section[data-v-5c93fb5e] {\n  display: block;\n}\nbody[data-v-5c93fb5e] {\n  line-height: 1;\n}\nol[data-v-5c93fb5e], ul[data-v-5c93fb5e] {\n  list-style: none;\n}\nblockquote[data-v-5c93fb5e], q[data-v-5c93fb5e] {\n  quotes: none;\n}\nblockquote[data-v-5c93fb5e]:before, blockquote[data-v-5c93fb5e]:after,\nq[data-v-5c93fb5e]:before, q[data-v-5c93fb5e]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5c93fb5e] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5c93fb5e] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5c93fb5e] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5c93fb5e] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5c93fb5e] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5c93fb5e] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5c93fb5e] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5c93fb5e] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5c93fb5e] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5c93fb5e] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5c93fb5e] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5c93fb5e] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5c93fb5e] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5c93fb5e] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5c93fb5e] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5c93fb5e] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5c93fb5e] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5c93fb5e] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5c93fb5e] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5c93fb5e] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5c93fb5e] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5c93fb5e] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5c93fb5e] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5c93fb5e] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5c93fb5e] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5c93fb5e] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5c93fb5e] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5c93fb5e] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5c93fb5e] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5c93fb5e] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.top[data-v-5c93fb5e] {\n  height: 2em;\n  width: 100%;\n  padding-right: 0.8em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.top > a[data-v-5c93fb5e] {\n    font-size: 1em;\n}\n.logo-wrap[data-v-5c93fb5e] {\n  width: 100%;\n  height: auto;\n  margin-top: 2em;\n}\n.logo-wrap img[data-v-5c93fb5e] {\n    display: block;\n    width: 55px;\n    height: 55px;\n    margin: 0 auto;\n}\n.logo-wrap h3[data-v-5c93fb5e] {\n    font-size: 1.3em;\n    text-align: center;\n}\n.text-area[data-v-5c93fb5e] {\n  margin-left: auto;\n  margin-right: auto;\n  margin-top: 2em;\n  width: 95%;\n}\n.login-button[data-v-5c93fb5e] {\n  width: 100%;\n  height: 2em;\n  margin-top: 5em;\n}\n.bottom[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 5em;\n  height: 10em;\n}\n.bottom hr[data-v-5c93fb5e] {\n    border: none;\n    border-top: 1px solid #eee;\n    height: 0;\n    width: 100%;\n}\n.bottom .text[data-v-5c93fb5e] {\n    margin-top: -1.2em;\n    width: 8em;\n    height: 1em;\n    background: #fff;\n    text-align: center;\n    color: #999;\n}\n.bottom .login-type[data-v-5c93fb5e] {\n    margin-top: 1em;\n    width: 100%;\n}\n.bottom .login-type img[data-v-5c93fb5e] {\n      width: 2em;\n      display: block;\n}\n.bottom .login-type p[data-v-5c93fb5e] {\n      text-align: center;\n      font-size: 0.8em;\n      color: #999;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5c93fb5e], body[data-v-5c93fb5e], div[data-v-5c93fb5e], span[data-v-5c93fb5e], applet[data-v-5c93fb5e], object[data-v-5c93fb5e], iframe[data-v-5c93fb5e],\nh1[data-v-5c93fb5e], h2[data-v-5c93fb5e], h3[data-v-5c93fb5e], h4[data-v-5c93fb5e], h5[data-v-5c93fb5e], h6[data-v-5c93fb5e], p[data-v-5c93fb5e], blockquote[data-v-5c93fb5e], pre[data-v-5c93fb5e],\na[data-v-5c93fb5e], abbr[data-v-5c93fb5e], acronym[data-v-5c93fb5e], address[data-v-5c93fb5e], big[data-v-5c93fb5e], cite[data-v-5c93fb5e], code[data-v-5c93fb5e],\ndel[data-v-5c93fb5e], dfn[data-v-5c93fb5e], em[data-v-5c93fb5e], img[data-v-5c93fb5e], ins[data-v-5c93fb5e], kbd[data-v-5c93fb5e], q[data-v-5c93fb5e], s[data-v-5c93fb5e], samp[data-v-5c93fb5e],\nsmall[data-v-5c93fb5e], strike[data-v-5c93fb5e], strong[data-v-5c93fb5e], sub[data-v-5c93fb5e], sup[data-v-5c93fb5e], tt[data-v-5c93fb5e], var[data-v-5c93fb5e],\nb[data-v-5c93fb5e], u[data-v-5c93fb5e], i[data-v-5c93fb5e], center[data-v-5c93fb5e],\ndl[data-v-5c93fb5e], dt[data-v-5c93fb5e], dd[data-v-5c93fb5e], ol[data-v-5c93fb5e], ul[data-v-5c93fb5e], li[data-v-5c93fb5e],\nfieldset[data-v-5c93fb5e], form[data-v-5c93fb5e], label[data-v-5c93fb5e], legend[data-v-5c93fb5e],\ntable[data-v-5c93fb5e], caption[data-v-5c93fb5e], tbody[data-v-5c93fb5e], tfoot[data-v-5c93fb5e], thead[data-v-5c93fb5e], tr[data-v-5c93fb5e], th[data-v-5c93fb5e], td[data-v-5c93fb5e],\narticle[data-v-5c93fb5e], aside[data-v-5c93fb5e], canvas[data-v-5c93fb5e], details[data-v-5c93fb5e], embed[data-v-5c93fb5e],\nfigure[data-v-5c93fb5e], figcaption[data-v-5c93fb5e], footer[data-v-5c93fb5e], header[data-v-5c93fb5e], hgroup[data-v-5c93fb5e],\nmenu[data-v-5c93fb5e], nav[data-v-5c93fb5e], output[data-v-5c93fb5e], ruby[data-v-5c93fb5e], section[data-v-5c93fb5e], summary[data-v-5c93fb5e],\ntime[data-v-5c93fb5e], mark[data-v-5c93fb5e], audio[data-v-5c93fb5e], video[data-v-5c93fb5e] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5c93fb5e], aside[data-v-5c93fb5e], details[data-v-5c93fb5e], figcaption[data-v-5c93fb5e], figure[data-v-5c93fb5e],\nfooter[data-v-5c93fb5e], header[data-v-5c93fb5e], hgroup[data-v-5c93fb5e], menu[data-v-5c93fb5e], nav[data-v-5c93fb5e], section[data-v-5c93fb5e] {\n  display: block;\n}\nbody[data-v-5c93fb5e] {\n  line-height: 1;\n}\nol[data-v-5c93fb5e], ul[data-v-5c93fb5e] {\n  list-style: none;\n}\nblockquote[data-v-5c93fb5e], q[data-v-5c93fb5e] {\n  quotes: none;\n}\nblockquote[data-v-5c93fb5e]:before, blockquote[data-v-5c93fb5e]:after,\nq[data-v-5c93fb5e]:before, q[data-v-5c93fb5e]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5c93fb5e] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5c93fb5e] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5c93fb5e] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5c93fb5e] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5c93fb5e] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5c93fb5e] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5c93fb5e] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5c93fb5e] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5c93fb5e] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5c93fb5e] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5c93fb5e] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5c93fb5e] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5c93fb5e] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5c93fb5e] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5c93fb5e] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5c93fb5e] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5c93fb5e] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5c93fb5e] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5c93fb5e] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5c93fb5e] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5c93fb5e] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5c93fb5e] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5c93fb5e] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5c93fb5e] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5c93fb5e] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5c93fb5e] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5c93fb5e] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5c93fb5e] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5c93fb5e] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5c93fb5e] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5c93fb5e] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.top[data-v-5c93fb5e] {\n  height: 2em;\n  width: 100%;\n  padding-right: 0.8em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.top > a[data-v-5c93fb5e] {\n    font-size: 1em;\n}\n.logo-wrap[data-v-5c93fb5e] {\n  width: 100%;\n  height: auto;\n  margin-top: 2em;\n}\n.logo-wrap .circle-wrap[data-v-5c93fb5e] {\n    width: 7em;\n    height: 7em;\n    border-radius: 50%;\n    border: 1px solid #eee;\n}\n.logo-wrap img[data-v-5c93fb5e] {\n    display: block;\n    width: 5em;\n    height: 5em;\n    margin: 0 auto;\n}\n.logo-wrap h3[data-v-5c93fb5e] {\n    font-size: 1.3em;\n    text-align: center;\n    margin-top: 0.7em;\n}\n.text-area[data-v-5c93fb5e] {\n  margin-left: auto;\n  margin-right: auto;\n  margin-top: 2em;\n  width: 95%;\n}\n.login-button[data-v-5c93fb5e] {\n  width: 100%;\n  height: 2em;\n  margin-top: 5em;\n}\n.bottom[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 5em;\n  height: 10em;\n}\n.bottom hr[data-v-5c93fb5e] {\n    border: none;\n    border-top: 1px solid #eee;\n    height: 0;\n    width: 100%;\n}\n.bottom .text[data-v-5c93fb5e] {\n    margin-top: -1.2em;\n    width: 8em;\n    height: 1em;\n    background: #fff;\n    text-align: center;\n    color: #999;\n}\n.bottom .login-type[data-v-5c93fb5e] {\n    margin-top: 1em;\n    width: 100%;\n}\n.bottom .login-type img[data-v-5c93fb5e] {\n      width: 2em;\n      display: block;\n}\n.bottom .login-type p[data-v-5c93fb5e] {\n      text-align: center;\n      font-size: 0.8em;\n      color: #999;\n}\n", ""]);
 
 // exports
 
@@ -25500,7 +25507,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -26476,18 +26492,24 @@ var staticRenderFns = [
     return _c(
       "div",
       { staticClass: "top flex flex-reverse flex-align-center" },
-      [_c("a", { attrs: { href: "javascript:;" } }, [_vm._v("注册")])]
+      [_c("a", { attrs: { href: "/#/login/regist" } }, [_vm._v("注册")])]
     )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "logo-wrap flex-v flex-justify-center" }, [
-      _c("img", { attrs: { src: "/images/logo.png", alt: "logo" } }),
-      _vm._v(" "),
-      _c("h3", [_vm._v("游戏宝")])
-    ])
+    return _c(
+      "div",
+      { staticClass: "logo-wrap flex flex-v flex-align-center" },
+      [
+        _c("div", { staticClass: "circle-wrap flex flex-align-center" }, [
+          _c("img", { attrs: { src: "/images/logo.png", alt: "logo" } })
+        ]),
+        _vm._v(" "),
+        _c("h3", [_vm._v("游戏宝")])
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -26528,10 +26550,135 @@ if (false) {
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = null
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\MyAccount\\myAccount.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(56)
+/* template */
+var __vue_template__ = __webpack_require__(57)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\Login\\regist.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3139b4d1", Component.options)
+  } else {
+    hotAPI.reload("data-v-3139b4d1", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'regist'
+});
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0, false, false)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("p", [_vm._v("hello regist")])])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3139b4d1", module.exports)
+  }
+}
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(55);
+var content = __webpack_require__(59);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -26539,7 +26686,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(56)(content, options);
+var update = __webpack_require__(60)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -26556,7 +26703,7 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(6)(undefined);
@@ -26570,7 +26717,7 @@ exports.push([module.i, "/* Cell Component */\n/* Header Component */\n/* Button
 
 
 /***/ }),
-/* 56 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -26616,7 +26763,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(57);
+var	fixUrls = __webpack_require__(61);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -26929,7 +27076,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, exports) {
 
 
@@ -27024,14 +27171,14 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 58 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_login__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_login__ = __webpack_require__(64);
 
 
 
@@ -27078,7 +27225,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 /* harmony default export */ __webpack_exports__["a"] = (store);
 
 /***/ }),
-/* 59 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28023,7 +28170,7 @@ var index_esm = {
 
 
 /***/ }),
-/* 60 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28052,47 +28199,25 @@ var loginModule = {
 /* harmony default export */ __webpack_exports__["a"] = (loginModule);
 
 /***/ }),
-/* 61 */
+/* 65 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
 /* 66 */,
-/* 67 */,
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var normalizeComponent = __webpack_require__(2)
-/* script */
-var __vue_script__ = null
-/* template */
-var __vue_template__ = null
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\view\\MyAccount\\myAccount.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue__);
 
-module.exports = Component.exports
 
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/login', name: 'login', component: __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default.a }, { path: '/login/regist', name: 'regist', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }]);
 
 /***/ })
 /******/ ]);
