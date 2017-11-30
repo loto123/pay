@@ -1,32 +1,33 @@
 import Vue from 'vue'
 import Mint from 'mint-ui'
-
 import Router from 'vue-router'
 import Index from '../components/ExampleComponent.vue'
-import Login from '../view/Login/login.vue'
-import Myaccount from '../view/MyAccount/myAccount.vue'//我的账户
-d29b30f6142d5ef1ce3a05f92d6aac93cefa4e
+
+// 登录注册
+import Login from './login'
+import MyAccount from './myAccount'
+
 import 'mint-ui/lib/style.css'
 // import '../../sass/oo_flex.scss'
 
 Vue.use(Mint)
 Vue.use(Router)
+
+var index = [
+    { path: '/index', name: 'index', component: Index },
+]
+
+var routerList = {
+    login: Login,
+    index: index,
+    myAccount:MyAccount
+};
+
+var router = [];
+for (var i in routerList) {
+    router = router.concat(routerList[i]);
+}
+
 export default new Router({
-    routes: [
-        {
-            path: '/index',
-            name: 'index',
-            component: Index
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: Login
-        },
-        {
-            path:'/myAccount',
-            name:'/myAccount',
-            component:Myaccount
-        }
-    ]
+    routes: router
 })

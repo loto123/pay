@@ -1,16 +1,19 @@
 <template>
     <div class="myAccount-container">
+        <a href="/#/myAccount/bill" class="recharge-btn flex">
+            账单明细
+        </a>
         <div class="withDraw-money">
             <div class="money">88.88</div>
             <div class="title">当前可用余额</div>
         </div>
         <div class="submit-btn">
-            <route-link to="/">
+            <a href="" class="recharge-btn">
                 <mt-button size="large" type="primary">充值</mt-button>    
-            </route-link>
-            <route-link to='/myAccount/withdraw'>
+            </a>
+            <a href="/#/myAccount/withdraw" class="withdraw-btn">
                 <mt-button size="large" type="danger">提现</mt-button>    
-            </route-link>  
+            </a>  
         </div>
     </div>
 </template>
@@ -51,12 +54,12 @@
             color:#ddd;
         }
     }
-    .withdraw_btn,.recharge_btn{
+    .withdraw-btn,.recharge-btn{
         display: block;
         width: 100%;
         margin: auto;
     }
-    .recharge_btn{
+    .withdraw-btn{
         margin-top: 1.5em;
     }
 </style>

@@ -2,11 +2,13 @@
   <div id="login">
 
     <div class="top flex flex-reverse flex-align-center">
-      <a href="javascript:;">注册</a>
+      <a href="/#/login/regist">注册</a>
     </div>
     
-    <div class="logo-wrap flex-v flex-justify-center" >
-      <img src="/images/logo.png" alt="logo">
+    <div class="logo-wrap flex flex-v flex-align-center" >
+      <div class="circle-wrap flex flex-align-center">
+        <img src="/images/logo.png" alt="logo">
+      </div>
       <h3>游戏宝</h3>
     </div>
 
@@ -55,16 +57,24 @@
   height: auto;
   margin-top: 2em;
 
+  .circle-wrap {
+    width: 7em;
+    height: 7em;
+    border-radius: 50%;
+    border:1px solid #eee;
+  }
+
   img {
     display: block;
-    width: 55px;
-    height: 55px;
+    width: 5em;
+    height: 5em;
     margin: 0 auto;
   }
 
   h3 {
     font-size: 1.3em;
     text-align: center;
+    margin-top:0.7em;
   }
 }
 
@@ -119,7 +129,6 @@
 </style>
 
 <script>
-
 import axios from "axios";
 
 export default {
