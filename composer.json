@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "darkaonline/l5-swagger": "5.5.*",
         "encore/laravel-admin": "1.5.*",
         "fideloper/proxy": "~3.3",
         "laravel-admin-ext/api-tester": "^1.0",
@@ -14,6 +15,7 @@
         "laravel-admin-ext/log-viewer": "^1.0",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
+        "mpociot/laravel-apidoc-generator": "^2.0",
         "tymon/jwt-auth": "^0.5.12"
     },
     "require-dev": {
