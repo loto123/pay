@@ -9,7 +9,7 @@ import Index from '../components/ExampleComponent.vue'
 import Login from './login'
 
 import 'mint-ui/lib/style.css'
-// import '../../sass/oo_flex.scss'
+import '../../sass/oo_flex.scss'
 
 Vue.use(Mint)
 Vue.use(Router)

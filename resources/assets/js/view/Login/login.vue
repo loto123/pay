@@ -39,7 +39,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import "../../../sass/oo_flex.scss";
 
 .top {
   height: 2em;
