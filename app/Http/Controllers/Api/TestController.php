@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use JWTAuth;
 
+/**
+ * @resource 测试 test
+ *
+ * Class TestController
+ *
+ * @package App\Http\Controllers\Api
+ */
 class TestController extends Controller {
 
     public function __construct() {
@@ -12,7 +19,7 @@ class TestController extends Controller {
     }
 
     /**
-     * test api
+     * 测试 api
      *
      * @return \Illuminate\Http\Response
      */
