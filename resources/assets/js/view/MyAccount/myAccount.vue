@@ -1,18 +1,16 @@
-<!-- 我的账户 -->
 <template>
     <div class="myAccount-container">
-        <div class="withDraw-money-box">
-            <div class="withDraw-money">231321</div>
-            <div>当前可余额</div>
+        <div class="withDraw-money">
+            <div class="money">88.88</div>
+            <div class="title">当前可用余额</div>
         </div>
-        <div>
-            <a href="javascript:;" class="withdraw_btn">
-                <mt-button size="large" type="primary">提现</mt-button>    
-            </a>
-
-            <a href="javascript:;" class="recharge_btn">
-                <mt-button size="large" type="danger">充值</mt-button>    
-            </a>    
+        <div class="submit-btn">
+            <route-link to="/">
+                <mt-button size="large" type="primary">充值</mt-button>    
+            </route-link>
+            <route-link to='/myAccount/withdraw'>
+                <mt-button size="large" type="danger">提现</mt-button>    
+            </route-link>  
         </div>
     </div>
 </template>
@@ -29,26 +27,37 @@
 
 <style lang="scss" scoped>
     @import "../../../sass/oo_flex.scss";
-    .withDraw-money-box{
-        width: 15em;
-        height: 15em;
+    .withDraw-money{
+        width: 14em;
+        height: 14em;
         border: 1px solid #aaa;
         border-radius: 50%;
-        margin: 3em auto 3em auto;
-        background: #26a2ff;
-        color: #fff;
-        .withDraw-money{
+        margin: 0 auto 3em auto;
+        background: #199ED8;
+        position: relative;
+        text-align: center;
+        .money,.title{
+            position: absolute;
+            width:100%;
             text-align: center;
+        }
+        .money{
+            top: 30%;
+            color: #fff;
+            font-size: 2em;
+        }
+        .title{
+            top: 50%;
+            color:#ddd;
         }
     }
     .withdraw_btn,.recharge_btn{
         display: block;
         width: 100%;
-        width: 96%;
         margin: auto;
     }
     .recharge_btn{
-        margin-top: 2em;
+        margin-top: 1.5em;
     }
 </style>
 
