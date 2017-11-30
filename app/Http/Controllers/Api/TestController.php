@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use JWTAuth;
 
 /**
- * @resource 测试
+ * @resource 测试 test
  *
  * Class TestController
  *
