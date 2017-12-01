@@ -29,4 +29,5 @@ Route::group([
     'shop',
 ], function (Router $router) {
     $router->post('create', 'Api\ShopController@create');
+    $router->get('types', 'Api\ShopController@types');
 });
