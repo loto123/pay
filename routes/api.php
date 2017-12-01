@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +16,17 @@ use Illuminate\Http\Request;
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
-
-Route::post('auth/login', 'Api\AuthController@login');
-Route::post('auth/register', 'Api\AuthController@register');
+Route::group([
+    'auth',
+], function (Router $router) {
+    $router->post('auth/login', 'Api\AuthController@login');
+    $router->post('auth/register', 'Api\AuthController@register');
+});
 
 Route::any('test', 'Api\TestController@index');
+
+Route::group([
+    'shop',
+], function (Router $router) {
+    $router->post('create', 'Api\ShopController@create');
+});
