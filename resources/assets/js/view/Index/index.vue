@@ -2,7 +2,7 @@
   <div id="index">
       <section id="top">
           <section class="transaction flex flex-justify-center">
-            <a href="javascript:;">
+            <a href="/#/makeDeal">
               <div class="imggWrap flex flex-justify-center flex-align-center">
                     <img src="/images/transaction.png" alt="">
               </div>
@@ -15,7 +15,7 @@
         <ul class="flex flex-wrap-on">
 
           <li class="flex flex-v flex-align-center">
-            <a href="javascript:;" class="flex flex-v flex-align-center">
+            <a href="/#/myAccount" class="flex flex-v flex-align-center">
                <i class="iconfont account-icon common-icon">
                 &#xe61e;
               </i>

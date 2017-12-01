@@ -7,6 +7,7 @@ import Index from '../view/Index/index.vue'
 // 登录注册
 import Login from './login'
 import MyAccount from './myAccount'
+import MakeDeal from './makeDeal'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -22,7 +23,8 @@ var index = [
 var routerList = {
     login: Login,
     index: index,
-    myAccount:MyAccount
+    myAccount:MyAccount,
+    makedeal:MakeDeal
 };
 
 var router = [];

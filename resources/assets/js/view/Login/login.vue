@@ -1,6 +1,7 @@
-<template>
-  <div id="login">
 
+<template>
+  <!-- 登录模块 -->
+  <div id="login">
     <div class="top flex flex-reverse flex-align-center">
       <a href="/#/login/regist">注册</a>
     </div>
