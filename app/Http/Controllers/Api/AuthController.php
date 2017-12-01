@@ -24,7 +24,9 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class AuthController extends Controller {
 
     /**
+     * 登录
      *
+     * @return \Illuminate\Http\Response
      */
     public function login(Request $request){
         $credentials = $request->only('mobile', 'password');

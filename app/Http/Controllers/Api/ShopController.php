@@ -29,4 +29,15 @@ class ShopController extends Controller {
         return response()->json(['success' => $user]);
     }
 
+    /**
+     * 收益方式列表
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function types() {
+        return response()->json(['code' => 0, 'msg' => '', 'data' => [
+            [0 => '大赢家', 1 => '小赢家']
+        ]]);
+    }
+
 }
