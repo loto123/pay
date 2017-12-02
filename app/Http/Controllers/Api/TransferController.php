@@ -26,7 +26,7 @@ class TransferController extends Controller
                 'price' => 'bail|required|numeric|min:0.1|max:99999',
             ],
             [
-                'required' => 'trans.required',
+                'required' => trans('trans.required'),
                 'numeric' => 'trans.numeric',
                 'between' => 'trans.between',
 //                'price.max' => trans('price.max'),
