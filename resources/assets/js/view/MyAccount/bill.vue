@@ -1,19 +1,23 @@
 <template>
     <div id="bill">
        <ul class="bill-list">
-           <li class="flex">
-             <div class="bill-content">
-                 <h5>交易</h5>
-                 <div class="time">2017-11-23  19:44:31</div>
-             </div>
-             <div class="bill-money active">+100</div>
+           <li class="">
+               <a href="/#/myAccount/billDetails" class="flex">
+                    <div class="bill-content">
+                        <h5>交易</h5>
+                        <div class="time">2017-11-23  19:44:31</div>
+                    </div>
+                    <div class="bill-money active">+100</div>
+                </a>
            </li>
-           <li class="flex">
-             <div class="bill-content">
-                 <h5>交易</h5>
-                 <div class="time">2017-11-23  19:44:31</div>
-             </div>
-             <div class="bill-money">+10</div>
+           <li class="">
+             <a href="/#/myAccount/billDetails" class="flex">
+                <div class="bill-content">
+                    <h5>交易</h5>
+                    <div class="time">2017-11-23  19:44:31</div>
+                </div>
+                <div class="bill-money">+10</div>
+              </a>
            </li>
        </ul>
     </div>
@@ -31,13 +35,16 @@ export default {
 @import "../../../sass/oo_flex.scss";
 .bill-list {
   li {
-    height: 55px;
-    line-height: 20px;
     border-top: 1px solid #ccc;
     padding: 0 0.7em;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    a{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 55px;
+        line-height: 20px;
+    }
     .bill-content {
       .time {
         color: #999;
