@@ -3,8 +3,6 @@ import Mint from 'mint-ui'
 import Router from 'vue-router'
 
 import Index from '../view/Index/index.vue'
-
-// 登录注册
 import Login from './login'
 import MyAccount from './myAccount'
 import MakeDeal from './makeDeal'
@@ -21,9 +19,13 @@ var index = [
 ]
 
 var routerList = {
+    // 登录
     login: Login,
+    // 首页
     index: index,
+    // 我的账户
     myAccount:MyAccount,
+    // 发起交易
     makedeal:MakeDeal
 };
 

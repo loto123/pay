@@ -26,7 +26,7 @@
     </div>
 
     <div class="commit-btn">
-        <mt-button type="primary" size="large" v-on:click="comfirm">确认</mt-button>
+        <mt-button type="primary" size="large" v-on:click = "confirm">确认</mt-button>
     </div>
 
     <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
@@ -36,7 +36,7 @@
 
 <style scoped lang="scss">
 #makeDeal{
-    // padding-top:2em;
+    // padding-top:2em;s
     background:#eee;
     width:100%;
     height: 100vh;
@@ -109,6 +109,7 @@
         font-size:1.2em;
         outline:none;
         border:none;
+        color:#666;
         // text-align: center;
     }
 
@@ -153,6 +154,12 @@
 import topBack from '../../components/topBack'
 
 export default {
+  name:'makeDeal',
+  methods:{
+      confirm(){
+          this.$router.push({path:'/makeDeal/deal_detail'})
+      }
+  },
   components:{ topBack }
 }
 </script>
