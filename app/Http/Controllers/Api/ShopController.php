@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Request;
 use JWTAuth;
 
 /**
- * @resource 测试 test
+ * @resource 店铺
  *
- * Class TestController
+ * Class ShopController
  *
  * @package App\Http\Controllers\Api
  */
-class TestController extends Controller {
+class ShopController extends Controller {
 
     public function __construct() {
         $this->middleware("jwt.auth");
     }
 
     /**
-     * 测试 api
+     * 创建店铺
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
+    public function create(Request $request){
         $user = JWTAuth::parseToken()->authenticate();
         return response()->json(['success' => $user]);
     }

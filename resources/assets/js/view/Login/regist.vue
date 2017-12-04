@@ -1,9 +1,7 @@
 <template>
+<!-- 注册模块 -->
     <div id="regist">
-        <div id="top" class="flex flex-align-center">
-            <a href="javascript:;" v-on:click="goBack">返回</a>
-        </div>
-
+        <topBack></topBack>
         <section class="content step1" v-if="step==0?true:false">
             <h3>
                 请输入推荐码
@@ -24,7 +22,6 @@
                 <h3>
                     输入手机号快速注册
                 </h3>
-                <!-- <p>推荐码为推荐人的手机号</p> -->
 
                 <section class="input-wrap">
                     <mt-field label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
@@ -57,7 +54,6 @@
                     <mt-button type="primary" size="large" v-on:click="goNextStep">确定</mt-button>
                 </div>
 
-                <!-- <p class="agreement-btn">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p> -->
             </section>
         </transition>  
 
@@ -71,18 +67,12 @@
 
                 <section class="input-wrap ">
                     <mt-field label="密码" placeholder="请输入登录密码" type="password"></mt-field>
-                    
-                    <!-- <span class="flex-1">验证码:</span>
-                    <input type="text" placeholder="请输入验证码" class="flex-1">
-                    <mt-button type="default" class="flex-2">发送验证码(10)</mt-button> -->
-                    
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
                     <mt-button type="primary" size="large" v-on:click="goNextStep">确定</mt-button>
                 </div>
 
-                <!-- <p class="agreement-btn">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p> -->
             </section>
         </transition>  
 
@@ -113,14 +103,6 @@
 .slide-enter,
 .slide-leave-to {
   transform: translateY(100vh);
-}
-
-#top {
-  height: 2em;
-  width: 100%;
-  padding-left: 1em;
-  box-sizing: border-box;
-  //   border-bottom: 1px solid #eee;
 }
 
 .content {
@@ -186,8 +168,7 @@
   padding-left: 1em;
   padding-right: 1em;
   box-sizing: border-box;
-  // font-size: 1.1em;
-  // width:100%;
+
 }
 
 // 用户协议详情
@@ -218,6 +199,8 @@
 </style>
 
 <script>
+import topBack from '../../components/topBack'
+
 export default {
   name: "regist",
   data() {
@@ -227,11 +210,7 @@ export default {
     };
   },
   methods: {
-    goBack() {
-      this.$router.go(-1);
-    },
-
-    //
+   
     comfirm() {
       if (this.step == 0) {
         this.step = 1;
@@ -251,7 +230,9 @@ export default {
     closeAgreenment() {
       this.agrementState = false;
     }
-  }
+  },
+  components:{topBack}
+
 };
 </script>
 
