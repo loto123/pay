@@ -14,6 +14,9 @@
             <a href="/#/myAccount/withdraw" class="withdraw-btn">
                 <mt-button size="large" type="danger">提现</mt-button>    
             </a>  
+            <a href="/#/myAccount/give" class="give-btn">
+                <mt-button size="large" type="danger">转账到店铺</mt-button>    
+            </a>  
         </div>
     </div>
 </template>
@@ -54,12 +57,12 @@
             color:#ddd;
         }
     }
-    .withdraw-btn,.recharge-btn{
+    .withdraw-btn,.recharge-btn,.give-btn{
         display: block;
         width: 100%;
         margin: auto;
     }
-    .withdraw-btn{
+    .withdraw-btn,.give-btn{
         margin-top: 1.5em;
     }
 </style>

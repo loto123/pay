@@ -6,6 +6,7 @@ import Index from '../view/Index/index.vue'
 import Login from './login'
 import MyAccount from './myAccount'
 import MakeDeal from './makeDeal'
+import My from './my'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -26,7 +27,8 @@ var routerList = {
     // 我的账户
     myAccount:MyAccount,
     // 发起交易
-    makedeal:MakeDeal
+    makedeal:MakeDeal,
+	my:My
 };
 
 var router = [];
