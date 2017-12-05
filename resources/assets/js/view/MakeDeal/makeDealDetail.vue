@@ -2,13 +2,20 @@
     <div id="deal-detail">
         <topBack></topBack>
 
-        <section class="content flex flex-v flex-align-center">
+        <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
+            <p>大赢家</p>
+            <p>茶水费</p>
+        </section>
+
+        <!-- <section class="content flex flex-v flex-align-center">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <h3 class="user-name">看看我的名字是不是很长</h3>
             <p class="message">玩家留言  大吉大利  晚上吃鸡</p>
-        </section>
+        </section> -->
+        
+        <deal-content></deal-content>
 
-        <section class="balance-wrap flex ">
+        <!-- <section class="balance-wrap flex ">
             <div class="flex flex-v flex-align-center flex-justify-around">
                 <h3>当前倍率</h3>
                 <span>10</span>
@@ -17,7 +24,7 @@
                 <h3>当前钱包中的余额</h3>
                 <span>288.66元</span>
             </div>
-        </section>
+        </section> -->
 
         <section class="pay-wrap flex flex-v flex-align-center">
 
@@ -41,7 +48,7 @@
         <!-- 参与玩家记录 -->
         <section class="pay-record ">
             <div class="title">
-                <span>3人参与</span>
+                <span>交易记录</span>
                 <span class="info-friend">提醒好友</span>
             </div>
             
@@ -102,44 +109,22 @@
   /*padding-bottom:1em;*/
 }
 
-.content {
-  .avatar {
-    display: block;
-    width: 3.5em;
-    height: 3.5em;
+.big-winner-tip{
+    width:4em;
+    height: 4em;
     border-radius: 50%;
-  }
+    background: #26a2ff;
+    position: absolute;
+    right:2em;
 
-  .user-name {
-    margin-top: 1em;
-    font-color: #666;
-  }
-
-  .message {
-    // font-size:em;
-    margin-top: 0.5em;
-    color: #666;
-  }
+    p{
+        text-align: center;
+        font-size: 0.9em;
+        color:#fff;
+    }
 }
 
-.balance-wrap {
-  width: 100%;
-  height: 4.5em;
-  margin-top: 1em;
 
-  div {
-    width: 50%;
-    h3 {
-      font-size: 0.9em;
-      color: #999;
-    }
-
-    span {
-      height: 60%;
-      font-size: 1.5em;
-    }
-  }
-}
 
 .pay-wrap {
   .pay-money {
@@ -184,7 +169,6 @@
 .pay-record {
     padding-top:0.5em;
     .title{
-        /*margin-top:1em;*/
         width:90%;
         height: 2em;
         line-height: 2em;
@@ -209,7 +193,6 @@
   ul {
     margin-top:0.5em;
     li {
-      /*overflow :hidden;*/
       margin-top: 0.2em;
       width: 90%;
       .slider-item {
@@ -217,7 +200,6 @@
         padding-left: 0.5em;
         padding-right: 0.5em;
         height: 3em;
-        /*padding-top: 0.4em;*/
 
         .pay-money-text{
             width:20%;
@@ -248,7 +230,6 @@
           display: block;
           text-align:center;
         }
-    
 
       }
       /*#slider-component {
@@ -273,12 +254,12 @@
 
 
 <script>
-import topBack from "../../components/topBack";
-import slider from "../../components/slider";
+import topBack from "../../components/topBack"
+import slider from "../../components/slider"
+import dealContent from "./dealContent"
 
 import qrCode from "../../utils/qrCode"
 
-console.log(qrCode);
 export default {
   name: "makeDealDetail",
 
@@ -290,6 +271,10 @@ export default {
     deleteIt() {
       console.log("i m ru");
     },
+
+    goTipPage(){
+        this.$router.push('/makeDeal/deal_tip');
+    },
     _getQRCode: function() {
         var qrcode = new QRCode(document.getElementById("qrcode"), {
             width : 100,//设置宽高  
@@ -300,10 +285,9 @@ export default {
         // };
 
         qrcode.makeCode("http://www.baidu.com");
-
-            },
+    },
   },
-  components: { topBack, slider }
+  components: { topBack, slider ,dealContent}
 };
 </script>
 
