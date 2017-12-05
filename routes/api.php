@@ -24,9 +24,17 @@ Route::group([
 });
 
 Route::any('test', 'Api\TestController@index');
+Route::group([
+    'prefix'        => '/shop',
+    'namespace'     => 'Api',
+], function (Router $router) {
+    $router->post('create', 'ShopController@create');
+    $router->get('types', 'ShopController@types');
+});
 
 Route::group([
-    'shop',
+    'prefix'        => '/transfer',
+    'namespace'     => 'Api',
 ], function (Router $router) {
-    $router->post('create', 'Api\ShopController@create');
+    $router->post('create', 'TransferController@create');
 });
