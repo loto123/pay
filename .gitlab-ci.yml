@@ -1,4 +1,4 @@
 deploy1:
  stage: deploy
  script:
-   - cd /data/pay/pay && git pull && php artisan api:generate --routePrefix="api/*" --noResponseCalls --output=/data/pay/docs/api
+   - cd /data/pay/pay && git pull
