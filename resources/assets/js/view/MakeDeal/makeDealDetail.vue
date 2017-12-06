@@ -6,25 +6,8 @@
             <p>大赢家</p>
             <p>茶水费</p>
         </section>
-
-        <!-- <section class="content flex flex-v flex-align-center">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <h3 class="user-name">看看我的名字是不是很长</h3>
-            <p class="message">玩家留言  大吉大利  晚上吃鸡</p>
-        </section> -->
         
         <deal-content></deal-content>
-
-        <!-- <section class="balance-wrap flex ">
-            <div class="flex flex-v flex-align-center flex-justify-around">
-                <h3>当前倍率</h3>
-                <span>10</span>
-            </div>
-            <div class="flex flex-v flex-align-center flex-justify-around">
-                <h3>当前钱包中的余额</h3>
-                <span>288.66元</span>
-            </div>
-        </section> -->
 
         <section class="pay-wrap flex flex-v flex-align-center">
 
@@ -99,8 +82,8 @@
 </template>
 
 <style lang="scss" scoped>
-.green-color{
-    color:green;
+.green-color {
+  color: green;
 }
 
 #deal-detail {
@@ -109,22 +92,20 @@
   /*padding-bottom:1em;*/
 }
 
-.big-winner-tip{
-    width:4em;
-    height: 4em;
-    border-radius: 50%;
-    background: #26a2ff;
-    position: absolute;
-    right:2em;
+.big-winner-tip {
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  background: #26a2ff;
+  position: absolute;
+  right: 2em;
 
-    p{
-        text-align: center;
-        font-size: 0.9em;
-        color:#fff;
-    }
+  p {
+    text-align: center;
+    font-size: 0.9em;
+    color: #fff;
+  }
 }
-
-
 
 .pay-wrap {
   .pay-money {
@@ -167,31 +148,30 @@
 }
 
 .pay-record {
-    padding-top:0.5em;
-    .title{
-        width:90%;
-        height: 2em;
-        line-height: 2em;
+  padding-top: 0.5em;
+  .title {
+    width: 90%;
+    height: 2em;
+    line-height: 2em;
 
-        margin: 0 auto;
-        >span{
-            float:  left;
-        }
-    
-        .info-friend{
-            float:right;
-            background: green;
-            color:#fff;
-            padding-left: 0.3em;
-            padding-right: 0.3em;
-            border-radius: 0.3em;
-            font-size:0.9em;
-        }
-
+    margin: 0 auto;
+    > span {
+      float: left;
     }
 
+    .info-friend {
+      float: right;
+      background: green;
+      color: #fff;
+      padding-left: 0.3em;
+      padding-right: 0.3em;
+      border-radius: 0.3em;
+      font-size: 0.9em;
+    }
+  }
+
   ul {
-    margin-top:0.5em;
+    margin-top: 0.5em;
     li {
       margin-top: 0.2em;
       width: 90%;
@@ -201,23 +181,22 @@
         padding-right: 0.5em;
         height: 3em;
 
-        .pay-money-text{
-            width:20%;
-            height: 100%;
-            .money{
-                font-size: 1.1em;
-                width:100%;
-                line-height: 2em;
-                height: 50%;
-            }
+        .pay-money-text {
+          width: 20%;
+          height: 100%;
+          .money {
+            font-size: 1.1em;
+            width: 100%;
+            line-height: 2em;
+            height: 50%;
+          }
 
-            .title{
-                font-size:0.9em;
-                height: 50%;
-                color:#999;
-                width: 100%;
-            }
-
+          .title {
+            font-size: 0.9em;
+            height: 50%;
+            color: #999;
+            width: 100%;
+          }
         }
 
         img {
@@ -228,9 +207,8 @@
 
         span {
           display: block;
-          text-align:center;
+          text-align: center;
         }
-
       }
       /*#slider-component {
         margin-top: 0.5em;
@@ -239,55 +217,51 @@
   }
 }
 
-#qrcode{
-    margin-top:1.5em;
+#qrcode {
+  margin-top: 1.5em;
 }
 
-.notice{
-    margin-top:1em;
-    padding-bottom: 1.5em;
-    text-align: center;
-    font-size: 0.9em;
-    color:#999;
+.notice {
+  margin-top: 1em;
+  padding-bottom: 1.5em;
+  text-align: center;
+  font-size: 0.9em;
+  color: #999;
 }
 </style>
 
 
 <script>
-import topBack from "../../components/topBack"
-import slider from "../../components/slider"
-import dealContent from "./dealContent"
+import topBack from "../../components/topBack";
+import slider from "../../components/slider";
+import dealContent from "./dealContent";
 
-import qrCode from "../../utils/qrCode"
+import qrCode from "../../utils/qrCode";
 
 export default {
   name: "makeDealDetail",
 
-  mounted(){
-    this._getQRCode()
+  mounted() {
+    this._getQRCode();
   },
   methods: {
-   
     deleteIt() {
       console.log("i m ru");
     },
 
-    goTipPage(){
-        this.$router.push('/makeDeal/deal_tip');
+    goTipPage() {
+      this.$router.push("/makeDeal/deal_tip");
     },
     _getQRCode: function() {
-        var qrcode = new QRCode(document.getElementById("qrcode"), {
-            width : 100,//设置宽高  
-            height : 100
-        });
-        // document.getElementById("getval").onkeyup =function(){
-        //     qrcode.makeCode(document.getElementById("getval").value);
-        // };
-
-        qrcode.makeCode("http://www.baidu.com");
-    },
+      var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 100, //设置宽高
+        height: 100
+      });
+     
+      qrcode.makeCode("http://www.baidu.com");
+    }
   },
-  components: { topBack, slider ,dealContent}
+  components: { topBack, slider, dealContent }
 };
 </script>
 

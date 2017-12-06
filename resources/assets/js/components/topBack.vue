@@ -2,7 +2,10 @@
     <div id="top" class="flex flex-align-center flex-justify-between">
         <a href="javascript:;" v-on:click="goBack">返回</a>
         <h3>{{title}}</h3>
-        <div></div>
+        <div>
+          <slot></slot>
+        </div>
+        
     </div>
 </template>
 
@@ -12,7 +15,6 @@
   width: 100%;
   padding-left: 1em;
   box-sizing: border-box;
-  //   border-bottom: 1px solid #eee;
   a{
       display: block;
       width:33.33%
@@ -23,7 +25,6 @@
   }
   div{
     width:33.33%
-      
   }
 }
 </style>

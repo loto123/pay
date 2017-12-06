@@ -52,16 +52,16 @@
 
 <script>
 export default {
-  props:["height","actionUser","able"],
+  props: ["height", "actionUser", "able"],
 
-  mounted(){
-    if(this.$props.height){
+  mounted() {
+    if (this.$props.height) {
       this.$refs.remove.style.height = this.$props.height;
       this.$refs.slider.style.height = this.$props.height;
       this.$refs.remove.style.lineHeight = this.$props.height;
     }
   },
- 
+
   data() {
     return {
       startX: 0, //触摸位置
@@ -72,15 +72,14 @@ export default {
     };
   },
   methods: {
-
     touchStart(ev) {
       ev = ev || event;
       //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
 
-      if(this.$props.able == true){
+      if (this.$props.able == true) {
         return;
       }
-      
+
       if (ev.touches.length == 1) {
         // 记录开始位置
         this.startX = ev.touches[0].clientX;
@@ -88,7 +87,7 @@ export default {
     },
 
     touchMove(ev) {
-      if(this.$props.able == true){
+      if (this.$props.able == true) {
         return;
       }
 
@@ -119,7 +118,7 @@ export default {
     },
 
     touchEnd(ev) {
-       if(this.$props.able == true){
+      if (this.$props.able == true) {
         return;
       }
 
@@ -141,10 +140,9 @@ export default {
       }
     },
 
-    deleteIt(){
-      this.$emit("deleteIt",true);
+    deleteIt() {
+      this.$emit("deleteIt", true);
     }
-
   }
 };
 </script>

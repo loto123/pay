@@ -20,7 +20,7 @@
         <transition name="fade">
             <section class="content step2" v-if="step==1?true:false">
                 <h3>
-                    输入手机号快速注册
+                    {{findPasswordSwitch?"手机号验证":"输入手机号快速注册"}}                 
                 </h3>
 
                 <section class="input-wrap">
@@ -28,10 +28,10 @@
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
-                    <mt-button type="primary" size="large" v-on:click="goNextStep">注册</mt-button>
+                    <mt-button type="primary" size="large" v-on:click="goNextStep">{{findPasswordSwitch?"下一步":"注册"}}</mt-button>
                 </div>
 
-                <p class="agreement-btn">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
+                <p class="agreement-btn" v-if="!findPasswordSwitch">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
             </section>
         </transition>  
 
@@ -87,7 +87,7 @@
 </template>
 
 <style lang="scss" scoped>
-.fade-enter-active{
+.fade-enter-active {
   transition: opacity 1s;
 }
 .fade-enter,
@@ -168,8 +168,7 @@
   padding-left: 1em;
   padding-right: 1em;
   box-sizing: border-box;
-  width:20%;
-
+  width: 20%;
 }
 
 // 用户协议详情
@@ -200,29 +199,40 @@
 </style>
 
 <script>
-import topBack from '../../components/topBack'
+import topBack from "../../components/topBack";
 
 export default {
   name: "regist",
   data() {
     return {
       step: 0,
-      agrementState: false
+      agrementState: false,
+      findPasswordSwitch: false
     };
   },
+
+  mounted() {
+    if (this.$store.state.regist.refindPassword == true) {
+      this.findPasswordSwitch = this.$store.state.regist.refindPassword;
+      this.step = this.$store.state.regist.step;
+
+      localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
+      localStorage.setItem("registStep", this.step);
+    }
+
+  },
   methods: {
-   
     comfirm() {
       if (this.step == 0) {
         this.step = 1;
       }
     },
 
-    goNextStep(){
-        if(this.step>=3){
-            return;
-        }
-        this.step =  this.step+1;
+    goNextStep() {
+      if (this.step >= 3) {
+        return;
+      }
+      this.step = this.step + 1;
     },
 
     showAgreement() {
@@ -232,8 +242,7 @@ export default {
       this.agrementState = false;
     }
   },
-  components:{topBack}
-
+  components: { topBack }
 };
 </script>
 
