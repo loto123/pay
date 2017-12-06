@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 Vue.config.debug = true;
+Vue.config.devtools = true;
 new Vue({
     el: '#app',
     router,

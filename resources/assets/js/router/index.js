@@ -7,6 +7,7 @@ import Login from './login'
 import MyAccount from './myAccount'
 import MakeDeal from './makeDeal'
 import My from './my'
+import Shop from './shop'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -28,7 +29,10 @@ var routerList = {
     myAccount:MyAccount,
     // 发起交易
     makedeal:MakeDeal,
-	my:My
+
+    my:My,
+    
+    shop:Shop
 };
 
 var router = [];

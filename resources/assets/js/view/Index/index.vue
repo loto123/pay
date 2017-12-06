@@ -24,7 +24,7 @@
           </li>
 
           <li class="flex flex-v flex-align-center">
-            <a href="javascript:;" class="flex flex-v flex-align-center">
+            <a href="/#/shop" class="flex flex-v flex-align-center">
               <i class="iconfont myShop-icon common-icon">
                 &#xe61c;
               </i>
@@ -33,7 +33,7 @@
           </li>
 
           <li class="flex flex-v flex-align-center">
-            <a href="javascript:;" class="flex flex-v flex-align-center">
+            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
               <i class="iconfont transaction-icon common-icon">
                 &#xe63b;
               </i>
