@@ -38,3 +38,12 @@ Route::group([
 ], function (Router $router) {
     $router->post('create', 'TransferController@create');
 });
+
+Route::group([
+    'prefix'       => '/my',
+    'namespace'    => 'Api',
+], function (Router $router){
+    $router->get('account','UserController@account');
+    $router->post('change_password','UserController@change_password');
+});
+
