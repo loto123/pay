@@ -1,38 +1,44 @@
 <template>
     <div class="myAccount-container">
-        <a href="/#/myAccount/bill" class="recharge-btn flex">
-            账单明细
-        </a>
-        <div class="withDraw-money">
-            <div class="money">88.88</div>
-            <div class="title">当前可用余额</div>
-        </div>
-        <div class="submit-btn">
-            <a href="" class="recharge-btn">
-                <mt-button size="large" type="primary">充值</mt-button>    
-            </a>
-            <a href="/#/myAccount/withdraw" class="withdraw-btn">
-                <mt-button size="large" type="danger">提现</mt-button>    
-            </a>  
-            <a href="/#/myAccount/give" class="give-btn">
-                <mt-button size="large" type="danger">转账到店铺</mt-button>    
-            </a>  
+        <topBack title="我的账户"></topBack>
+        <div class="myAccount-box">
+            <a href="/#/myAccount/bill" class="recharge-btn flex">账单明细</a>
+            <div class="withDraw-money">
+                <div class="money">88.88</div>
+                <div class="title">当前可用余额</div>
+            </div>
+            <div class="submit-btn">
+                <a href="" class="recharge-btn">
+                    <mt-button size="large" type="primary">充值</mt-button>    
+                </a>
+                <a href="/#/myAccount/withdraw" class="withdraw-btn">
+                    <mt-button size="large" type="danger">提现</mt-button>    
+                </a>  
+                <a href="/#/myAccount/give" class="give-btn">
+                    <mt-button size="large" type="danger">转账到店铺</mt-button>    
+                </a>  
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    import topBack from '../../components/topBack.vue'
     export default {
         data () {
             return {
                 
             }
-        }
+        },
+        components: {topBack}
     }
 </script>
 
 <style lang="scss" scoped>
     @import "../../../sass/oo_flex.scss";
+    .myAccount-box{
+        background:#fff;
+    }
     .withDraw-money{
         width: 14em;
         height: 14em;

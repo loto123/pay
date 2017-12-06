@@ -14,20 +14,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-.list{
-  border-bottom: 1px solid #d9d9d9;
-  li{
-    .mint-cell{
-      background-image: none;
-      background-size: 100% 1px;
-      background-repeat: no-repeat;
-      background-position: top;
-    }
-  }
-}
-
-</style>
 
 <script>
  import topBack from '../../components/topBack'
@@ -36,3 +22,17 @@
   components: { topBack }
  }
 </script>
+
+<style lang="scss" scoped>
+  .list{
+    border-bottom: 1px solid #d9d9d9;
+    li{
+      .mint-cell{
+        background-image: none;
+        background-size: 100% 1px;
+        background-repeat: no-repeat;
+        background-position: top;
+      }
+    }
+  }
+</style>

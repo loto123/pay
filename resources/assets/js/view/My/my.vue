@@ -2,7 +2,7 @@
   <div id="my">
     <section class="header-container">
       <div class="header">
-        <div class="imggWrap">
+        <div class="imgWrap">
             <img src="/images/logo.png">
         </div>
         <h3>发起交易</h3>
@@ -43,24 +43,25 @@
         </li>
       </ul>
     </section>
+    <tabBar></tabBar> 
   </div>
 </template>
 
 <style lang="scss" scoped>
 .header-container {
   height: 12em;
-  padding-top: 4.5em;
+  padding-top: 4em;
   box-sizing: border-box;
   // border-bottom: 1px solid #ccc;
 }
 .header {
   text-align: center;
-  .imggWrap {
+  .imgWrap {
     width: 100%;
     background: #fff;
     > img {
-      width: 3.5em;
-      height: 3.5em;
+      width: 4.5em;
+      height: 4.5em;
       display: block;
       margin: auto;
       border-radius: 50%;
@@ -96,4 +97,9 @@
 
 
 <script>
+  import tabBar from "../../components/tabBar";
+
+  export default {
+    components: { tabBar }
+  };
 </script>
