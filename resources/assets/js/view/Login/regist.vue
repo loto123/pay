@@ -46,7 +46,7 @@
                 <section class="input-wrap flex flex-align-center">
                     <span class="flex-1">验证码:</span>
                     <input type="text" placeholder="请输入验证码" class="flex-1">
-                    <mt-button type="default" class="flex-2">发送验证码(10)</mt-button>
+                    <mt-button type="default" class="flex-1">发送验证码(10)</mt-button>
                     
                 </section>
 
@@ -168,6 +168,7 @@
   padding-left: 1em;
   padding-right: 1em;
   box-sizing: border-box;
+  width:20%;
 
 }
 
