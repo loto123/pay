@@ -8,14 +8,18 @@
 
 namespace App\Pay\Impl\Heepay;
 
-use App\Pay\DepositInterface;
-use App\Pay\Model\PayMethod;
+use App\Pay\CashInterface;
 
-class WechatH5 extends PayMethod implements DepositInterface
+class WechatH5 implements CashInterface
 {
 
-    public function deposit($amount, $master_container)
+    public function deposit($deposit_id, $amount, $master_container, array $config)
     {
         // TODO: Implement deposit() method.
+    }
+
+    public function withdraw($withdraw_id, $amount, $receiver_info, array $config)
+    {
+        // TODO: Implement withdraw() method.
     }
 }

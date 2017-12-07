@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::match(['get', 'post'], '/pay-notify/channel{channel_id}', function (\App\Pay\Model\Channel $channel, Request $request) {
+    //支付通知接收
+    $channel->acceptNotify($request);
+})->name('pay_notify');
+
 //Auth::routes();
 //
 //Route::get('/home', 'HomeController@index')->name('home');

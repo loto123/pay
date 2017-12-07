@@ -10,7 +10,40 @@
 namespace App\Pay\Model;
 
 
-class SettleContainer extends Container
+use App\Pay\ContainerTrait;
+use Illuminate\Database\Eloquent\Model;
+
+class SettleContainer extends Model
 {
+    use ContainerTrait;
+
+    const CREATED_AT = null;
     protected $table = 'pay_settle_container';
+
+    /**
+     * 主容器
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function masterContainer()
+    {
+        return $this->belongsTo('App\Pay\Model\MasterContainer', 'master_container');
+    }
+
+    /**
+     * 取得内部容器
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function container()
+    {
+        return $this->morphOne('App\Pay\Model\Container', 'instance');
+    }
+
+    /**
+     * 结算提取
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function extraction()
+    {
+        return $this->hasOne('App\Pay\Model\MoneyExtract', 'settle_container');
+    }
 }

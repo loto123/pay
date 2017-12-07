@@ -11,5 +11,8 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
+    $router->resource('pay/platform', PayPlatformController::class);
+    $router->resource('pay/method', PayMethodController::class);
+    $router->resource('pay/entity', BusinessEntityController::class);
 
 });

@@ -8,25 +8,13 @@
 
 namespace App\Pay\Impl\Heepay;
 
-
-use App\Pay\Model\Platform;
 use App\Pay\PlatformInterface;
+use Illuminate\Http\Request;
 
-class Heepay extends Platform implements PlatformInterface
+class Heepay implements PlatformInterface
 {
-
-    public function withdraw($amount, $receiver_info)
-    {
-        // TODO: Implement withdraw() method.
-    }
-
-    public function acceptNotify()
+    public function acceptNotify(Request $request, array $config)
     {
         // TODO: Implement acceptNotify() method.
-    }
-
-    public function gatherConfigure(array $args)
-    {
-        // TODO: Implement gatherConfigure() method.
     }
 }
