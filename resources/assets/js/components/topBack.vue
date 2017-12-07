@@ -1,6 +1,6 @@
 <template>
     <div id="top-component" class="flex flex-align-center flex-justify-between">
-        <a href="javascript:;" v-on:click="goBack">返回</a>
+        <div v-on:click="goBack">返回</div>
         <h3>{{title}}</h3>
         <div>
           <slot></slot>
@@ -10,11 +10,16 @@
 </template>
 
 <style lang="scss" scoped>
+
 #top-component {
   height: 2em;
   width: 100%;
   padding-left: 1em;
   box-sizing: border-box;
+  position: fixed;
+  top:0em;
+  left:0em;
+  z-index: 9999;
   a {
     display: block;
     width: 33.33%;

@@ -1,8 +1,13 @@
 <template>
   <div id="shop">
       <div id="top">
-          <topBack :backUrl="'\/index\/'">
-              <div>hello</div>
+          <topBack :backUrl="'\/index\/'" style="color:#fff;">
+              <div class="top-message flex flex-reverse" @click = "goMessagePage">
+                <i class="iconfont">&#xe626;</i>
+                <span class="notice">
+
+                </span>
+              </div>
           </topBack>
 
           <div class="imgwrap flex flex-justify-center flex-align-center">
@@ -22,7 +27,8 @@
       </div>
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
-        <div class="shop-item flex flex-v flex-align-center">
+
+        <div class="shop-item flex flex-v flex-align-center" @click="goDetail('hello')">
           <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
             
@@ -56,11 +62,38 @@
 </template>
 
 <style lang="scss" scoped>
-#top {
-  height: 12em;
 
+// #shop{
+//   padding-top:1em;
+// }
+#top {
+  height: 10em;
   width: 100%;
   background: #26a2ff;
+  padding-top:2em;
+  
+  .top-message{
+    box-sizing:border-box;
+    width:100%;
+    height: 100%;
+    padding-right: 0.8em;
+    padding-top:0.4em;
+    position: relative;
+    .notice{
+      position: absolute;
+      background:red;
+      width:0.6em;
+      height:0.6em;
+      top:0.3em;
+      right:0.6em;
+      border-radius: 50%;
+    }
+
+    >i{
+      font-size: 1.5em;
+      color:#fff;
+    }
+  }
 
   .imgwrap {
     width: 5em;
@@ -68,7 +101,6 @@
     background: #fff;
     border-radius: 50%;
     margin: 0 auto;
-    margin-top: 1em;
     i {
       display: block;
     }
@@ -177,6 +209,14 @@ export default {
   methods:{
     goMyCollection(){
       this.$router.push('/shop/my_collection');
+    },
+    goMessagePage(){
+      this.$router.push('/shop/message_list');
+    },
+    goDetail(e,evnet){
+      this.$router.push('/shop/shop_detail');
+      // console.log(e);
+      // console.log(event);
     }
   }
 };

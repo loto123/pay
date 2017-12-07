@@ -36,7 +36,7 @@
 
 <style scoped lang="scss">
 #makeDeal{
-    // padding-top:2em;s
+    padding-top:2em;
     background:#eee;
     width:100%;
     height: 100vh;
