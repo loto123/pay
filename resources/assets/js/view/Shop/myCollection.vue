@@ -1,5 +1,5 @@
 <template>
-  <div id="shop">
+  <div id="my-collection">
       <div id="top">
           <topBack :backUrl="'\/index\/'">
               <div>hello</div>
@@ -10,22 +10,17 @@
               &#xe61c;
             </i>
           </div>
-          
-          <h3 class="money-text">689523236.56元</h3>
-          <h3>店铺总收益(元)</h3>
-
+          <h3>店铺</h3>
       </div>
-      
+
       <div class="tab-menu flex flex-align-center flex-justify-center" >
-        <div class="my-shop flex flex-align-center flex-justify-center active">我的店铺</div>
-        <div class="my-star flex flex-align-center flex-justify-center" @click="goMyCollection">我的收藏</div>
+        <div class="my-shop flex flex-align-center flex-justify-center " @click="goMyShop">我的店铺</div>
+        <div class="my-star flex flex-align-center flex-justify-center active" >我的收藏</div>
       </div>
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
-        <div class="shop-item flex flex-v flex-align-center">
-          <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around">
+        <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
-            
             <img src="/images/avatar.jpg" alt="">
             <img src="/images/avatar.jpg" alt="">
             <img src="/images/avatar.jpg" alt="">
@@ -35,23 +30,23 @@
             <img src="/images/avatar.jpg" alt="">
             <img src="/images/avatar.jpg" alt="">
             <img src="/images/avatar.jpg" alt="">
-            
-          </div>
-
-          <h3>店铺1</h3>
-          <p class="today-earn">今日收益:123456</p>
-          <p class="all-earn">总收益:666666</p>
         </div>
-
         <div class="shop-item">
-          
+
         </div>
-
         <div class="shop-item">
-          
+
+        </div>
+        <div class="shop-item">
+
+        </div>
+        <div class="shop-item">
+
+        </div>
+        <div class="shop-item">
+
         </div>
       </div>
-
   </div>
 </template>
 
@@ -79,14 +74,10 @@
   }
 
   h3 {
-    margin-top: 0.4em;
+    margin-top: 1em;
     color: #fff;
     text-align: center;
-    font-size: 0.9em;
-  }
-
-  .money-text {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 }
 
@@ -107,79 +98,52 @@
 }
 
 .shop-list {
+  padding-top: 0.7em;
+
   .shop-item {
-    width: 8em;
-    min-height: 7em;
+    width: 4em;
+    height: 4em;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top: 0.5em;
+    background: #eee;
     border-radius: 0.4em;
-    border: 1px solid #eee;
-    margin-top: 1em;
+    box-sizing: border-box;
+    padding: 0.2em;
     position: relative;
 
-    .img-wrap {
-      margin-top: 0.2em;
-      border-radius: 0.4em;
-      padding: 0.2em;
-      box-sizing: border-box;
-      background: #eee;
-      width: 3.6em;
-      height: 3.6em;
-      position: relative;
-
-      .notice {
-        position: absolute;
-        width: 0.9em;
-        height: 0.9em;
-        background: red;
-        border-radius: 50%;
-        right: -0.2em;
-        top: -0.2em;
-      }
-
-      > img {
-        width: 30%;
-        height: 30%;
-        display: block;
-        margin-left: 1%;
-        margin-top: 1%;
-      }
+    .notice {
+      position: absolute;
+      width: 0.9em;
+      height: 0.9em;
+      background: red;
+      border-radius: 50%;
+      right: -0.2em;
+      top: -0.2em;
     }
 
-    h3 {
-      font-size: 0.95em;
-      padding-top: 0.1em;
-      padding-bottom: 0.1em;
-    }
-
-    p {
+    > img {
+      width: 30%;
+      height: 30%;
       display: block;
-      width: 100%;
-      text-align: center;
-      background: #eee;
-      margin-top: 0.1em;
-    }
-
-    .today-earn {
-      font-size: 0.9em;
-    }
-
-    .all-earn {
-      font-size: 0.9em;
+      margin-left: 1%;
+      margin-top: 1%;
     }
   }
 }
 </style>
 
+
 <script>
 import topBack from "../../components/topBack";
 
 export default {
-  components: { topBack },
-  methods:{
-    goMyCollection(){
-      this.$router.push('/shop/my_collection');
+  methods: {
+    goMyShop() {
+      this.$router.push("/shop/");
     }
-  }
+  },
+  components: { topBack }
 };
 </script>
-
 
