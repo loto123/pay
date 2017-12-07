@@ -14,5 +14,6 @@ Route::group([
     $router->resource('pay/platform', PayPlatformController::class);
     $router->resource('pay/method', PayMethodController::class);
     $router->resource('pay/entity', BusinessEntityController::class);
+    $router->resource('pay/channel', PayChannelController::class);
 
 });

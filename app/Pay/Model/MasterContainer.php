@@ -69,6 +69,10 @@ class MasterContainer extends Model
      */
     public function initiateDeposit($amount, Channel $byChannel, PayMethod $byMethod)
     {
+        if ($byChannel->disabled) {
+            return null;
+        }
+
         $order = new Deposit([
             'amount' => $amount,
             'channel' => $byChannel,

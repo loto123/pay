@@ -77,7 +77,7 @@ class PayMethodController extends Controller
             $form->text('title', '支付方式')->placeholder('如扫码支付,银行卡支付..')->rules('required|max:255', ['required' => '必填项']);
             $form->select('platform_id', '所属平台')->options(Platform::all()->mapWithKeys(function ($item) {
                 return [$item['id'] => $item['name']];
-            }))->placeholder('选择支付平台')->rules('required', ['required' => '必须选择所属平台']);
+            }))->rules('required', ['required' => '必须选择所属平台']);
             $form->text('impl', '实现路径')->rules('required|max:255', ['required' => '必填项']);
             $form->setWidth(4, 2);
         });

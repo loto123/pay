@@ -46,7 +46,7 @@ class Transfer extends Model
         DB::beginTransaction();
         do {
             //撤回分润
-            $transfer = Transfer::with('profitShares.receiveContainer')->find($this->getKey());
+            $transfer = Transfer::where('state', self::STATE_COMPLETE)->with('profitShares.receiveContainer')->find($this->getKey());
             $profit_share_sum = 0;
             foreach ($transfer->profitShares as $profitShare) {
                 if (!$profitShare->receiveContainer->changeBalance($profitShare->is_frozen ? 0 : -$profitShare->amount, $profitShare->is_frozen ? -$profitShare->amount : 0)) {
