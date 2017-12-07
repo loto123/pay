@@ -4,10 +4,10 @@
     <section>
       <ul class="list">
         <li>
-          <mt-cell title="更换手机号" is-link to=""></mt-cell>
+          <mt-cell title="修改登录密码" is-link to=""></mt-cell>
         </li>
         <li>
-          <mt-cell title="修改密码" is-link to=""></mt-cell>
+          <mt-cell title="修改支付密码" is-link to=""></mt-cell>
         </li>
       </ul>
     </section>
