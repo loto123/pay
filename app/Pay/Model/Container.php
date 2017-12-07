@@ -122,8 +122,11 @@ class Container extends Model
      *
      * @return mixed 返回转账id,失败返回false
      */
-    public function transfer(Container $to_container, $amount, $type, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
+    public function transfer($to_container, $amount, $type, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
     {
+        if (!($to_container instanceof Container)) {
+            $to_container = $to_container->container();
+        }
 
         //开始事务
         $commit = false;
