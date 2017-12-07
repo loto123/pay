@@ -27940,7 +27940,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#top[data-v-789d58d5] {\n  height: 2em;\n  width: 100%;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top a[data-v-789d58d5] {\n    display: block;\n    width: 33.33%;\n}\n#top h3[data-v-789d58d5] {\n    text-align: center;\n    width: 33.33%;\n}\n#top div[data-v-789d58d5] {\n    width: 33.33%;\n}\n", ""]);
+exports.push([module.i, "\n#top-component[data-v-789d58d5] {\n  height: 2em;\n  width: 100%;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top-component a[data-v-789d58d5] {\n    display: block;\n    width: 33.33%;\n}\n#top-component h3[data-v-789d58d5] {\n    text-align: center;\n    width: 33.33%;\n}\n#top-component div[data-v-789d58d5] {\n    width: 33.33%;\n}\n", ""]);
 
 // exports
 
@@ -27986,10 +27986,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "topBack",
-  props: ["title"],
+  props: ["title", "backUrl"],
   methods: {
     goBack: function goBack() {
-      this.$router.go(-1);
+      if (!this.$props.backUrl) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push(this.$props.backUrl);
+      }
     }
   }
 });
@@ -28006,7 +28010,7 @@ var render = function() {
     "div",
     {
       staticClass: "flex flex-align-center flex-justify-between",
-      attrs: { id: "top" }
+      attrs: { id: "top-component" }
     },
     [
       _c("a", { attrs: { href: "javascript:;" }, on: { click: _vm.goBack } }, [
@@ -32945,9 +32949,12 @@ if (false) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue__ = __webpack_require__(142);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/shop', name: 'shop', component: __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default.a }]);
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/shop', name: 'shop', component: __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default.a }, { path: '/shop/my_collection', name: 'myCollection', component: __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default.a }]);
 
 /***/ }),
 /* 142 */
@@ -33036,7 +33043,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#top[data-v-2cbc9344] {\n  height: 12em;\n  width: 100%;\n  background: #26a2ff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    margin-top: 1em;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n    /*&:nth-child(1){\r\n        background:#fff;\r\n      };*/\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n", ""]);
+exports.push([module.i, "\n#top[data-v-2cbc9344] {\n  height: 12em;\n  width: 100%;\n  background: #26a2ff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    margin-top: 1em;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 30%;\n      height: 30%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n", ""]);
 
 // exports
 
@@ -33112,11 +33119,124 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  methods: {
+    goMyCollection: function goMyCollection() {
+      this.$router.push('/shop/my_collection');
+    }
+  }
 });
 
 /***/ }),
@@ -33132,7 +33252,9 @@ var render = function() {
       "div",
       { attrs: { id: "top" } },
       [
-        _c("topBack", [_c("div", [_vm._v("hello")])]),
+        _c("topBack", { attrs: { backUrl: "/index/" } }, [
+          _c("div", [_vm._v("hello")])
+        ]),
         _vm._v(" "),
         _vm._m(0, false, false),
         _vm._v(" "),
@@ -33141,7 +33263,33 @@ var render = function() {
         _c("h3", [_vm._v("店铺总收益(元)")])
       ],
       1
-    )
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "tab-menu flex flex-align-center flex-justify-center" },
+      [
+        _c(
+          "div",
+          {
+            staticClass:
+              "my-shop flex flex-align-center flex-justify-center active"
+          },
+          [_vm._v("我的店铺")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "my-star flex flex-align-center flex-justify-center",
+            on: { click: _vm.goMyCollection }
+          },
+          [_vm._v("我的收藏")]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _vm._m(1, false, false)
   ])
 }
 var staticRenderFns = [
@@ -33156,6 +33304,57 @@ var staticRenderFns = [
         _c("i", { staticClass: "iconfont myShop-icon common-icon" }, [
           _vm._v("\n            \n          ")
         ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
+      [
+        _c("div", { staticClass: "shop-item flex flex-v flex-align-center" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "img-wrap flex flex-justify-around flex-wrap-on flex-align-around"
+            },
+            [
+              _c("div", { staticClass: "notice" }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+            ]
+          ),
+          _vm._v(" "),
+          _c("h3", [_vm._v("店铺1")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "today-earn" }, [_vm._v("今日收益:123456")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "all-earn" }, [_vm._v("总收益:666666")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "shop-item" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "shop-item" })
       ]
     )
   }
@@ -34443,6 +34642,380 @@ var registStore = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 158 */,
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(160)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(162)
+/* template */
+var __vue_template__ = __webpack_require__(163)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-7328b9b8"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\Shop\\myCollection.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7328b9b8", Component.options)
+  } else {
+    hotAPI.reload("data-v-7328b9b8", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(161);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("cd6646a2", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7328b9b8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./myCollection.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7328b9b8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./myCollection.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 161 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n#top[data-v-7328b9b8] {\n  height: 12em;\n  width: 100%;\n  background: #26a2ff;\n}\n#top .imgwrap[data-v-7328b9b8] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    margin-top: 1em;\n}\n#top .imgwrap i[data-v-7328b9b8] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-7328b9b8] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-7328b9b8] {\n    margin-top: 1em;\n    color: #fff;\n    text-align: center;\n    font-size: 1.2em;\n}\n.tab-menu[data-v-7328b9b8] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-7328b9b8] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-7328b9b8] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list[data-v-7328b9b8] {\n  padding-top: 0.7em;\n}\n.shop-list .shop-item[data-v-7328b9b8] {\n    width: 4em;\n    height: 4em;\n    margin-left: 1em;\n    margin-right: 1em;\n    margin-top: 0.5em;\n    background: #eee;\n    border-radius: 0.4em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding: 0.2em;\n    position: relative;\n}\n.shop-list .shop-item .notice[data-v-7328b9b8] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item > img[data-v-7328b9b8] {\n      width: 30%;\n      height: 30%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 162 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    goMyShop: function goMyShop() {
+      this.$router.push("/shop/");
+    }
+  },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+});
+
+/***/ }),
+/* 163 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "my-collection" } }, [
+    _c(
+      "div",
+      { attrs: { id: "top" } },
+      [
+        _c("topBack", { attrs: { backUrl: "/index/" } }, [
+          _c("div", [_vm._v("hello")])
+        ]),
+        _vm._v(" "),
+        _vm._m(0, false, false),
+        _vm._v(" "),
+        _c("h3", [_vm._v("店铺")])
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "tab-menu flex flex-align-center flex-justify-center" },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "my-shop flex flex-align-center flex-justify-center ",
+            on: { click: _vm.goMyShop }
+          },
+          [_vm._v("我的店铺")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "my-star flex flex-align-center flex-justify-center active"
+          },
+          [_vm._v("我的收藏")]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _vm._m(1, false, false)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "imgwrap flex flex-justify-center flex-align-center" },
+      [
+        _c("i", { staticClass: "iconfont myShop-icon common-icon" }, [
+          _vm._v("\n            \n          ")
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
+      [
+        _c(
+          "div",
+          {
+            staticClass:
+              "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
+          },
+          [
+            _c("div", { staticClass: "notice" }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "shop-item" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "shop-item" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "shop-item" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "shop-item" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "shop-item" })
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7328b9b8", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
