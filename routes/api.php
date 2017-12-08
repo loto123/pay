@@ -38,3 +38,25 @@ Route::group([
 ], function (Router $router) {
     $router->post('create', 'TransferController@create');
 });
+
+Route::group([
+    'prefix'       => '/my',
+    'namespace'    => 'Api',
+], function (Router $router){
+    $router->get('index','UserController@index');
+    $router->post('updatePassword','UserController@updatePassword');
+    $router->post('setPayPassword','UserController@setPayPassword');
+    $router->post('updatePayPassword','UserController@updatePayPassword');
+    $router->post('updatePayCard','UserController@updatePayCard');
+    $router->get('GetPayCard','UserController@GetPayCard');
+
+});
+
+Route::group([
+    'prefix'      => '/card',
+    'namespace'   => 'Api',
+], function(Router $router){
+    $router->get('index', 'CardController@index');
+    $router->post('create', 'CardController@create');
+    $router->post('delete', 'CardController@delete');
+});

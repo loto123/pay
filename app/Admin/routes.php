@@ -11,6 +11,12 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
+    $router->resource('users',UserController::class);
+    $router->any('/user/detail/{id}','UserController@details');
+    $router->any('shop','ShopController@index');
+    $router->any('/shop/detail/{shop_id?}','ShopController@details');
+    $router->any('/shop/updates','ShopController@updates');
+
     $router->resource('pay/platform', PayPlatformController::class);
     $router->resource('pay/method', PayMethodController::class);
     $router->resource('pay/entity', BusinessEntityController::class);
