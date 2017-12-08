@@ -68,7 +68,7 @@
 
     <div class="member-wrap flex flex-align-center flex-justify-around">
 
-        <div class="flex-2" style="padding-left:1em;">
+        <div class="flex-1" style="padding-left:1em;">
             <i class="iconfont icon">
                 &#xe73c;
             </i>
@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="flex-3 flex flex-reverse">
+        <div class="flex-4 flex flex-reverse">
             
             <i class="iconfont" style="padding-right:1em;">
                 &#xe62e;
@@ -268,18 +268,20 @@
         // width:
         > img {
           display: block;
-          width: 2.5em;
+          width: 2.3em;
           border-radius: 0.4em;
-          height: 2.5em;
+          height: 2.3em;
+          margin-left:0.2em;
         }
       }
 
       .add-avatar {
         box-sizing: border-box;
-        width: 2.5em;
+        width: 2.3em;
         border-radius: 0.4em;
-        height: 2.5em;
+        height: 2.3em;
         border:0.1em solid #ccc;
+        margin-left: 0.2em;
 
         >i{
             font-size: 2em;
@@ -384,7 +386,11 @@ export default {
       tradeStatus: true
     };
   },
-  methods: {}
+  methods: {
+    hide(){
+      console.log(1);
+    }
+  }
 };
 </script>
 

@@ -27861,6 +27861,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -27940,7 +27941,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#top-component[data-v-789d58d5] {\n  height: 2em;\n  width: 100%;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 9999;\n}\n#top-component a[data-v-789d58d5] {\n    display: block;\n    width: 33.33%;\n}\n#top-component h3[data-v-789d58d5] {\n    text-align: center;\n    width: 33.33%;\n}\n#top-component div[data-v-789d58d5] {\n    width: 33.33%;\n}\n", ""]);
+exports.push([module.i, "\n#top-component[data-v-789d58d5] {\n  height: 2em;\n  width: 100%;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1000;\n}\n#top-component a[data-v-789d58d5] {\n    display: block;\n    width: 33.33%;\n}\n#top-component h3[data-v-789d58d5] {\n    text-align: center;\n    width: 33.33%;\n}\n#top-component div[data-v-789d58d5] {\n    width: 33.33%;\n}\n", ""]);
 
 // exports
 
@@ -27987,17 +27988,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "topBack",
-  props: ["title", "backUrl"],
+  props: ["title", "backUrl", "userAction"],
   methods: {
     goBack: function goBack() {
-      if (!this.$props.backUrl) {
-        this.$router.go(-1);
+      if (!this.$props.userAction) {
+        if (!this.$props.backUrl) {
+          this.$router.go(-1);
+        } else {
+          this.$router.push(this.$props.backUrl);
+        }
       } else {
-        this.$router.push(this.$props.backUrl);
+        this.$emit(this.$props.userAction);
       }
     }
   }
@@ -31964,7 +31968,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
+exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
 
 // exports
 
@@ -32081,12 +32085,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a }
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a },
+  methonds: {}
 });
 
 /***/ }),
@@ -32101,7 +32108,7 @@ var render = function() {
     "div",
     { attrs: { id: "makeDealTip" } },
     [
-      _c("topBack"),
+      _c("topBack", { staticStyle: { background: "#eee" } }),
       _vm._v(" "),
       _c("dealContent"),
       _vm._v(" "),
@@ -33693,7 +33700,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 30%;\n      height: 30%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-active[data-v-2cbc9344] {\n  -webkit-transition: all 0.5s ease;\n  transition: all 0.5s ease;\n}\n.slide-enter[data-v-2cbc9344],\n.slide-leave-to[data-v-2cbc9344] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 30%;\n      height: 30%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .add-shop[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .add-shop > div[data-v-2cbc9344] {\n    border-radius: 0.4em;\n    width: 85%;\n    height: 85%;\n    border: 1px dashed #eee;\n}\n.shop-list .add-shop > div > i[data-v-2cbc9344] {\n      font-size: 4em;\n      color: #bbb;\n}\n.shop-list .add-shop h3[data-v-2cbc9344] {\n    padding-top: 0.3em;\n    color: #999;\n}\n.add-shop-tab[data-v-2cbc9344] {\n  width: 100%;\n  height: 100vh;\n  background: #eee;\n  padding-bottom: 2em;\n  padding-top: 1em;\n  position: absolute;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.add-shop-tab h3[data-v-2cbc9344] {\n    font-size: 1.8em;\n    text-align: center;\n    padding-top: 0.5em;\n    padding-bottom: 0.5em;\n}\n.add-shop-tab p[data-v-2cbc9344] {\n    line-height: 1.5;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-left: 1em;\n    padding-right: 1em;\n    text-indent: 2em;\n}\n.add-shop-tab .item[data-v-2cbc9344] {\n    width: 95%;\n    margin: 0 auto;\n}\n.add-shop-tab .open-deal-switch[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 2.9em;\n    background: #fff;\n    border-top: 1px solid #ddd;\n    border-bottom: 1px solid #ddd;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.add-shop-tab .pay-wrap[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 3em;\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n.add-shop-tab .pay-wrap .origin[data-v-2cbc9344] {\n      margin-right: 1em;\n}\n.add-shop-tab .btn-wrap[data-v-2cbc9344] {\n    margin: 0 auto;\n    margin-top: 2em;\n    width: 95%;\n}\n", ""]);
 
 // exports
 
@@ -33906,22 +33913,169 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  data: function data() {
+    return {
+      addShopTabStatus: false, // 创建店铺拉起状态
+      dealStatus: true // 是否开启交易(创建店铺tab)
+    };
+  },
+
   methods: {
     goMyCollection: function goMyCollection() {
-      this.$router.push('/shop/my_collection');
+      this.$router.push("/shop/my_collection");
     },
     goMessagePage: function goMessagePage() {
-      this.$router.push('/shop/message_list');
+      this.$router.push("/shop/message_list");
     },
     goDetail: function goDetail(e, evnet) {
-      this.$router.push('/shop/shop_detail');
-      // console.log(e);
-      // console.log(event);
+      this.$router.push("/shop/shop_detail");
+    },
+    addShop: function addShop() {
+      this.addShopTabStatus = true;
+    },
+    hide: function hide() {
+      this.addShopTabStatus = false;
     }
   }
 });
@@ -33934,94 +34088,240 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "shop" } }, [
-    _c(
-      "div",
-      { attrs: { id: "top" } },
-      [
-        _c(
-          "topBack",
-          { staticStyle: { color: "#fff" }, attrs: { backUrl: "/index/" } },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "top-message flex flex-reverse",
-                on: { click: _vm.goMessagePage }
-              },
-              [
-                _c("i", { staticClass: "iconfont" }, [_vm._v("")]),
-                _vm._v(" "),
-                _c("span", { staticClass: "notice" })
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _vm._m(0, false, false),
-        _vm._v(" "),
-        _c("h3", { staticClass: "money-text" }, [_vm._v("689523236.56元")]),
-        _vm._v(" "),
-        _c("h3", [_vm._v("店铺总收益(元)")])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tab-menu flex flex-align-center flex-justify-center" },
-      [
-        _c(
-          "div",
-          {
-            staticClass:
-              "my-shop flex flex-align-center flex-justify-center active"
-          },
-          [_vm._v("我的店铺")]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "my-star flex flex-align-center flex-justify-center",
-            on: { click: _vm.goMyCollection }
-          },
-          [_vm._v("我的收藏")]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "shop-item flex flex-v flex-align-center",
-            on: {
-              click: function($event) {
-                _vm.goDetail("hello")
+  return _c(
+    "div",
+    { attrs: { id: "shop" } },
+    [
+      _c(
+        "div",
+        { attrs: { id: "top" } },
+        [
+          _c(
+            "topBack",
+            { staticStyle: { color: "#fff" }, attrs: { backUrl: "/index/" } },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "top-message flex flex-reverse",
+                  on: { click: _vm.goMessagePage }
+                },
+                [
+                  _c("i", { staticClass: "iconfont" }, [_vm._v("")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "notice" })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _vm._m(0, false, false),
+          _vm._v(" "),
+          _c("h3", { staticClass: "money-text" }, [_vm._v("689523236.56元")]),
+          _vm._v(" "),
+          _c("h3", [_vm._v("店铺总收益(元)")])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "tab-menu flex flex-align-center flex-justify-center" },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "my-shop flex flex-align-center flex-justify-center active"
+            },
+            [_vm._v("我的店铺")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "my-star flex flex-align-center flex-justify-center",
+              on: { click: _vm.goMyCollection }
+            },
+            [_vm._v("我的收藏")]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "shop-item flex flex-v flex-align-center",
+              on: {
+                click: function($event) {
+                  _vm.goDetail("hello")
+                }
               }
-            }
-          },
-          [
-            _vm._m(1, false, false),
-            _vm._v(" "),
-            _c("h3", [_vm._v("店铺1")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "today-earn" }, [_vm._v("今日收益:123456")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "all-earn" }, [_vm._v("总收益:666666")])
-          ]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "shop-item" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "shop-item" })
-      ]
-    )
-  ])
+            },
+            [
+              _vm._m(1, false, false),
+              _vm._v(" "),
+              _c("h3", [_vm._v("店铺1")]),
+              _vm._v(" "),
+              _c("p", { staticClass: "today-earn" }, [
+                _vm._v("今日收益:123456")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "all-earn" }, [_vm._v("总收益:666666")])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "add-shop flex flex-v flex-align-center flex-justify-center",
+              on: { click: _vm.addShop }
+            },
+            [_vm._m(2, false, false), _vm._v(" "), _c("h3", [_vm._v("开新店")])]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide" } }, [
+        _vm.addShopTabStatus
+          ? _c(
+              "section",
+              { staticClass: "add-shop-tab" },
+              [
+                _c("top-back", {
+                  attrs: { title: "填写店铺信息", userAction: "hide" },
+                  on: { hide: _vm.hide }
+                }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "item" },
+                  [
+                    _c("mt-field", {
+                      attrs: {
+                        label: "店铺名称",
+                        placeholder: "请设置店铺名称"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "item" },
+                  [
+                    _c("mt-field", {
+                      staticStyle: { "margin-top": "0.4em" },
+                      attrs: {
+                        label: "设置倍率",
+                        placeholder: "请输入倍率(数字)",
+                        type: "number"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "item" },
+                  [
+                    _c("mt-field", {
+                      staticStyle: { "margin-top": "0.4em" },
+                      attrs: {
+                        label: "设置抽水比率",
+                        placeholder: "设置抽水比率(小数)",
+                        type: "number"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "item open-deal-switch flex flex-align-center"
+                  },
+                  [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "flex-7",
+                        staticStyle: { "padding-left": "0.8em" },
+                        attrs: { for: "" }
+                      },
+                      [_vm._v("是否开启交易")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        staticClass: "flex-3 flex flex-reverse",
+                        staticStyle: { "padding-right": "1em" }
+                      },
+                      [
+                        _c("mt-switch", {
+                          model: {
+                            value: _vm.dealStatus,
+                            callback: function($$v) {
+                              _vm.dealStatus = $$v
+                            },
+                            expression: "dealStatus"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "pay-wrap flex flex-reverse flex-align-center"
+                  },
+                  [
+                    _c("div", { staticClass: "onsale" }, [
+                      _vm._v("推广价:"),
+                      _c("i", { staticStyle: { color: "red" } }, [
+                        _vm._v("￥0")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "origin" }, [
+                      _vm._v("开店原价:"),
+                      _c("i", [_vm._v("￥200")])
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "btn-wrap" },
+                  [
+                    _c(
+                      "mt-button",
+                      { attrs: { type: "primary", size: "large" } },
+                      [_vm._v("完成")]
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          : _vm._e()
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -34068,6 +34368,20 @@ var staticRenderFns = [
         _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
         _vm._v(" "),
         _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "flex flex-align-center flex-justify-center" },
+      [
+        _c("i", { staticClass: "iconfont" }, [
+          _vm._v("\n            \n          ")
+        ])
       ]
     )
   }
@@ -34535,7 +34849,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#message-list[data-v-ac447032] {\n  padding-top: 2em;\n  padding-bottom: 7em;\n}\n#message-list ul li[data-v-ac447032] {\n    height: 6em;\n    border-bottom: 0.1em solid #eee;\n}\n#message-list ul li .notice-content[data-v-ac447032] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding-top: 0.5em;\n}\n#message-list ul li .notice-content .user-info span[data-v-ac447032] {\n        font-size: 0.9em;\n        padding-left: 1.2em;\n}\n#message-list ul li .notice-content > span[data-v-ac447032] {\n        display: block;\n        font-size: 0.9em;\n}\n#message-list ul li .notice-content .avatar[data-v-ac447032] {\n        display: block;\n        border-radius: 0.4em;\n        width: 2em;\n        height: 2em;\n}\n#message-list ul li .notice-controller > div[data-v-ac447032] {\n      color: #666;\n      font-size: 0.9em;\n}\n#message-list ul li .notice-controller .btn-wrap[data-v-ac447032] {\n      width: 40%;\n      height: 100%;\n}\n#message-list ul li .notice-controller .btn-wrap .cancel[data-v-ac447032] {\n        background: #999;\n        color: #fff;\n}\n#message-list ul li .notice-controller .btn-wrap .agree[data-v-ac447032] {\n        background: #00cc00;\n        color: #fff;\n}\n#message-list ul li .notice-controller .btn-wrap > span[data-v-ac447032] {\n        width: 40%;\n        height: 70%;\n        border-radius: 0.3em;\n        text-align: center;\n        line-height: 2.3em;\n}\n#message-list ul li > div[data-v-ac447032] {\n      height: 50%;\n}\n#message-list ul li[data-v-ac447032]:nth-child(1) {\n      border-top: 0.1em solid #eee;\n}\n#message-list .all-list-controller[data-v-ac447032] {\n    height: 7em;\n    position: fixed;\n    width: 100%;\n    border-top: 0.1em solid #eee;\n    bottom: 0em;\n    left: 0em;\n    background: #fff;\n}\n#message-list .all-list-controller .btn-wrap[data-v-ac447032] {\n      width: 80%;\n}\n", ""]);
+exports.push([module.i, "\n#message-list[data-v-ac447032] {\n  padding-top: 2em;\n  padding-bottom: 7em;\n}\n#message-list ul li[data-v-ac447032] {\n    height: 6em;\n    border-bottom: 0.1em solid #eee;\n}\n#message-list ul li .notice-content[data-v-ac447032] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding-top: 0.5em;\n}\n#message-list ul li .notice-content .user-info span[data-v-ac447032] {\n        font-size: 0.9em;\n        padding-left: 1.2em;\n}\n#message-list ul li .notice-content > span[data-v-ac447032] {\n        display: block;\n        font-size: 0.9em;\n}\n#message-list ul li .notice-content .avatar[data-v-ac447032] {\n        display: block;\n        border-radius: 0.4em;\n        width: 2em;\n        height: 2em;\n}\n#message-list ul li .notice-controller > div[data-v-ac447032] {\n      color: #999;\n      font-size: 0.9em;\n}\n#message-list ul li .notice-controller .btn-wrap[data-v-ac447032] {\n      width: 40%;\n      height: 100%;\n}\n#message-list ul li .notice-controller .btn-wrap .cancel[data-v-ac447032] {\n        background: #ccc;\n        color: #fff;\n}\n#message-list ul li .notice-controller .btn-wrap .agree[data-v-ac447032] {\n        background: #00cc00;\n        color: #fff;\n}\n#message-list ul li .notice-controller .btn-wrap > span[data-v-ac447032] {\n        width: 40%;\n        height: 70%;\n        border-radius: 0.3em;\n        text-align: center;\n        line-height: 2.3em;\n}\n#message-list ul li > div[data-v-ac447032] {\n      height: 50%;\n}\n#message-list ul li[data-v-ac447032]:nth-child(1) {\n      border-top: 0.1em solid #eee;\n}\n#message-list .all-list-controller[data-v-ac447032] {\n    height: 7em;\n    position: fixed;\n    width: 100%;\n    border-top: 0.1em solid #eee;\n    bottom: 0em;\n    left: 0em;\n    background: #fff;\n}\n#message-list .all-list-controller .btn-wrap[data-v-ac447032] {\n      width: 80%;\n}\n", ""]);
 
 // exports
 
@@ -34834,7 +35148,7 @@ var render = function() {
               _c(
                 "mt-button",
                 {
-                  staticStyle: { background: "#999" },
+                  staticStyle: { background: "#ccc" },
                   attrs: { type: "primary", size: "large" }
                 },
                 [_vm._v("全部忽略")]
@@ -35376,7 +35690,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#shop-detail[data-v-d72c7396] {\n  background: #eee;\n  min-height: 100vh;\n}\n#shop-detail .top[data-v-d72c7396] {\n    padding-top: 2em;\n    height: 10em;\n    background: #26a2ff;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#shop-detail .top .img-wrap[data-v-d72c7396] {\n      width: 4.5em;\n      height: 4.5em;\n      background: #eee;\n      border-radius: 0.3em;\n      margin-top: 0.5em;\n      padding: 0.2em;\n}\n#shop-detail .top .img-wrap .avatar[data-v-d72c7396] {\n        margin-top: 1%;\n        margin-left: 1%;\n        width: 30%;\n        height: 30%;\n}\n#shop-detail .top h3[data-v-d72c7396] {\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n      color: #fff;\n      font-size: 0.9em;\n}\n#shop-detail .menu[data-v-d72c7396] {\n    height: 6em;\n    background: #fff;\n}\n#shop-detail .menu .menu-item[data-v-d72c7396] {\n      width: 25%;\n      height: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding-top: 0.4em;\n}\n#shop-detail .menu .menu-item > i[data-v-d72c7396] {\n        display: block;\n        font-size: 3em;\n}\n#shop-detail .menu .menu-item h3[data-v-d72c7396] {\n        font-size: 0.9em;\n}\n#shop-detail .shop-info[data-v-d72c7396] {\n    margin-top: 0.5em;\n    background: #fff;\n    height: 5em;\n    width: 100%;\n}\n#shop-detail .shop-info .info-item[data-v-d72c7396] {\n      height: 2.5em;\n      width: 100%;\n      border-bottom: 0.05em solid #eee;\n}\n#shop-detail .shop-info .info-item .title[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 1em;\n}\n#shop-detail .shop-info .info-item > i[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-right: 1em;\n        text-align: right;\n}\n#shop-detail .shop-info .shop-qrcode[data-v-d72c7396] {\n      height: 2.5em;\n}\n#shop-detail .shop-info .shop-qrcode .title[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 1em;\n}\n#shop-detail .shop-info .shop-qrcode > i[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-right: 1em;\n        text-align: right;\n}\n#shop-detail .shop-info .shop-qrcode .qr-code[data-v-d72c7396] {\n        text-align: right;\n}\n#shop-detail .shop-info .shop-qrcode .qr-code > i[data-v-d72c7396] {\n          font-size: 1.2em;\n          color: #555;\n}\n#shop-detail .member-wrap[data-v-d72c7396] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 4em;\n    background: #fff;\n}\n#shop-detail .member-wrap .avatar-wrap .avatar-item > img[data-v-d72c7396] {\n      display: block;\n      width: 2.5em;\n      border-radius: 0.4em;\n      height: 2.5em;\n}\n#shop-detail .member-wrap .avatar-wrap .add-avatar[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      width: 2.5em;\n      border-radius: 0.4em;\n      height: 2.5em;\n      border: 0.1em solid #ccc;\n}\n#shop-detail .member-wrap .avatar-wrap .add-avatar > i[data-v-d72c7396] {\n        font-size: 2em;\n        color: #ccc;\n}\n#shop-detail .member-wrap .icon[data-v-d72c7396] {\n      font-size: 2em;\n}\n#shop-detail .invite-wrap[data-v-d72c7396] {\n    width: 100%;\n    height: 5em;\n    background: #fff;\n    margin-top: 0.5em;\n}\n#shop-detail .invite-wrap > div[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 2.5em;\n      padding-left: 1em;\n}\n#shop-detail .invite-wrap > div[data-v-d72c7396]:nth-child(1) {\n        border-bottom: 0.05em solid #eee;\n}\n#shop-detail .invite-wrap > div i[data-v-d72c7396] {\n        text-align: right;\n        padding-right: 1em;\n}\n#shop-detail .invite-wrap .invite-link-switch .text[data-v-d72c7396] {\n      padding-right: 1em;\n}\n#shop-detail .platform[data-v-d72c7396] {\n    width: 100%;\n    height: 5em;\n    background: #fff;\n    margin-top: 0.5em;\n}\n#shop-detail .platform > div[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 2.5em;\n      padding-left: 1em;\n}\n#shop-detail .platform > div[data-v-d72c7396]:nth-child(1) {\n        border-bottom: 0.05em solid #eee;\n}\n#shop-detail .platform > div .text[data-v-d72c7396] {\n        text-align: right;\n        padding-right: 1em;\n        color: #555;\n}\n#shop-detail .commission[data-v-d72c7396] {\n    width: 100%;\n    height: 5em;\n    background: #fff;\n    margin-top: 0.5em;\n}\n#shop-detail .commission > div[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 2.5em;\n      padding-left: 1em;\n}\n#shop-detail .commission > div[data-v-d72c7396]:nth-child(1) {\n        border-bottom: 0.05em solid #eee;\n}\n#shop-detail .commission > div .text[data-v-d72c7396] {\n        text-align: right;\n        padding-right: 1em;\n        color: #555;\n}\n#shop-detail .button-wrap[data-v-d72c7396] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 1em;\n    padding-bottom: 1em;\n}\n", ""]);
+exports.push([module.i, "\n#shop-detail[data-v-d72c7396] {\n  background: #eee;\n  min-height: 100vh;\n}\n#shop-detail .top[data-v-d72c7396] {\n    padding-top: 2em;\n    height: 10em;\n    background: #26a2ff;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#shop-detail .top .img-wrap[data-v-d72c7396] {\n      width: 4.5em;\n      height: 4.5em;\n      background: #eee;\n      border-radius: 0.3em;\n      margin-top: 0.5em;\n      padding: 0.2em;\n}\n#shop-detail .top .img-wrap .avatar[data-v-d72c7396] {\n        margin-top: 1%;\n        margin-left: 1%;\n        width: 30%;\n        height: 30%;\n}\n#shop-detail .top h3[data-v-d72c7396] {\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n      color: #fff;\n      font-size: 0.9em;\n}\n#shop-detail .menu[data-v-d72c7396] {\n    height: 6em;\n    background: #fff;\n}\n#shop-detail .menu .menu-item[data-v-d72c7396] {\n      width: 25%;\n      height: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding-top: 0.4em;\n}\n#shop-detail .menu .menu-item > i[data-v-d72c7396] {\n        display: block;\n        font-size: 3em;\n}\n#shop-detail .menu .menu-item h3[data-v-d72c7396] {\n        font-size: 0.9em;\n}\n#shop-detail .shop-info[data-v-d72c7396] {\n    margin-top: 0.5em;\n    background: #fff;\n    height: 5em;\n    width: 100%;\n}\n#shop-detail .shop-info .info-item[data-v-d72c7396] {\n      height: 2.5em;\n      width: 100%;\n      border-bottom: 0.05em solid #eee;\n}\n#shop-detail .shop-info .info-item .title[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 1em;\n}\n#shop-detail .shop-info .info-item > i[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-right: 1em;\n        text-align: right;\n}\n#shop-detail .shop-info .shop-qrcode[data-v-d72c7396] {\n      height: 2.5em;\n}\n#shop-detail .shop-info .shop-qrcode .title[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 1em;\n}\n#shop-detail .shop-info .shop-qrcode > i[data-v-d72c7396] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-right: 1em;\n        text-align: right;\n}\n#shop-detail .shop-info .shop-qrcode .qr-code[data-v-d72c7396] {\n        text-align: right;\n}\n#shop-detail .shop-info .shop-qrcode .qr-code > i[data-v-d72c7396] {\n          font-size: 1.2em;\n          color: #555;\n}\n#shop-detail .member-wrap[data-v-d72c7396] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 4em;\n    background: #fff;\n}\n#shop-detail .member-wrap .avatar-wrap .avatar-item > img[data-v-d72c7396] {\n      display: block;\n      width: 2.3em;\n      border-radius: 0.4em;\n      height: 2.3em;\n      margin-left: 0.2em;\n}\n#shop-detail .member-wrap .avatar-wrap .add-avatar[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      width: 2.3em;\n      border-radius: 0.4em;\n      height: 2.3em;\n      border: 0.1em solid #ccc;\n      margin-left: 0.2em;\n}\n#shop-detail .member-wrap .avatar-wrap .add-avatar > i[data-v-d72c7396] {\n        font-size: 2em;\n        color: #ccc;\n}\n#shop-detail .member-wrap .icon[data-v-d72c7396] {\n      font-size: 2em;\n}\n#shop-detail .invite-wrap[data-v-d72c7396] {\n    width: 100%;\n    height: 5em;\n    background: #fff;\n    margin-top: 0.5em;\n}\n#shop-detail .invite-wrap > div[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 2.5em;\n      padding-left: 1em;\n}\n#shop-detail .invite-wrap > div[data-v-d72c7396]:nth-child(1) {\n        border-bottom: 0.05em solid #eee;\n}\n#shop-detail .invite-wrap > div i[data-v-d72c7396] {\n        text-align: right;\n        padding-right: 1em;\n}\n#shop-detail .invite-wrap .invite-link-switch .text[data-v-d72c7396] {\n      padding-right: 1em;\n}\n#shop-detail .platform[data-v-d72c7396] {\n    width: 100%;\n    height: 5em;\n    background: #fff;\n    margin-top: 0.5em;\n}\n#shop-detail .platform > div[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 2.5em;\n      padding-left: 1em;\n}\n#shop-detail .platform > div[data-v-d72c7396]:nth-child(1) {\n        border-bottom: 0.05em solid #eee;\n}\n#shop-detail .platform > div .text[data-v-d72c7396] {\n        text-align: right;\n        padding-right: 1em;\n        color: #555;\n}\n#shop-detail .commission[data-v-d72c7396] {\n    width: 100%;\n    height: 5em;\n    background: #fff;\n    margin-top: 0.5em;\n}\n#shop-detail .commission > div[data-v-d72c7396] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      height: 2.5em;\n      padding-left: 1em;\n}\n#shop-detail .commission > div[data-v-d72c7396]:nth-child(1) {\n        border-bottom: 0.05em solid #eee;\n}\n#shop-detail .commission > div .text[data-v-d72c7396] {\n        text-align: right;\n        padding-right: 1em;\n        color: #555;\n}\n#shop-detail .button-wrap[data-v-d72c7396] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 1em;\n    padding-bottom: 1em;\n}\n", ""]);
 
 // exports
 
@@ -35389,6 +35703,8 @@ exports.push([module.i, "\n#shop-detail[data-v-d72c7396] {\n  background: #eee;\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
 //
 //
 //
@@ -35776,7 +36092,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
-  methods: {}
+  methods: {
+    hide: function hide() {
+      console.log(1);
+    }
+  }
 });
 
 /***/ }),
@@ -36052,7 +36372,7 @@ var staticRenderFns = [
       [
         _c(
           "div",
-          { staticClass: "flex-2", staticStyle: { "padding-left": "1em" } },
+          { staticClass: "flex-1", staticStyle: { "padding-left": "1em" } },
           [
             _c("i", { staticClass: "iconfont icon" }, [
               _vm._v("\n              \n          ")
@@ -36091,7 +36411,7 @@ var staticRenderFns = [
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "flex-3 flex flex-reverse" }, [
+        _c("div", { staticClass: "flex-4 flex flex-reverse" }, [
           _c(
             "i",
             {

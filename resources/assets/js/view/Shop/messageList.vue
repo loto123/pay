@@ -146,7 +146,7 @@
       <div class="all-list-controller flex flex-justify-center ">
         <div class="btn-wrap flex flex-v flex-justify-around">
           <mt-button type="primary" size="large" style="background:#00cc00;">全部同意</mt-button>
-          <mt-button type="primary" size="large" style="background:#999;">全部忽略</mt-button>
+          <mt-button type="primary" size="large" style="background:#ccc;">全部忽略</mt-button>
         </div>
         
       </div>
@@ -186,14 +186,14 @@
       }
       .notice-controller {
         > div {
-          color: #666;
+          color: #999;
           font-size: 0.9em;
         }
         .btn-wrap {
           width:40%;
           height:100%;
           .cancel {
-            background: #999;
+            background: #ccc;
             color: #fff;
           }
           .agree {

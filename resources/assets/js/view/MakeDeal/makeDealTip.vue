@@ -1,6 +1,6 @@
 <template>
     <div id="makeDealTip">
-        <topBack></topBack>
+        <topBack style="background:#eee;"></topBack>
         <dealContent></dealContent>
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
@@ -47,65 +47,69 @@
 </template>
 
 <style lang="scss" scoped>
-#makeDealTip{
-    min-height: 100vh;
-    background: #eee;
+#makeDealTip {
+  min-height: 100vh;
+  background: #eee;
+  padding-top: 2em;
+  box-sizing: border-box;
 }
 
-.tip-wrap{
-    width:90%;
-    height: 2.5em;
-    background:#fff;
-    border-radius: 0.2em;
-    margin:0 auto;
+.tip-wrap {
+  width: 90%;
+  height: 2.5em;
+  background: #fff;
+  border-radius: 0.2em;
+  margin: 0 auto;
 }
 
-.button-wrap{
+.button-wrap {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 0.5em;
+}
+
+.green-color-bg {
+  background: #11bb00;
+}
+
+.tip-record {
+  margin-top: 3em;
+  h3 {
     width: 90%;
-    margin:0 auto;
-    margin-top:0.5em;
-}
+    margin: 0 auto;
+    font-size: 0.9em;
+    color: #666;
+  }
 
-.green-color-bg{
-    background: #11bb00;
-}
+  ul {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 0.5em;
 
-.tip-record{
-    margin-top:3em;
-    h3{
-        width:90%;
-        margin:0 auto;
-        font-size: 0.9em;
-        color:#666;
+    li {
+      border-bottom: 1px solid #ccc;
+      height: 3.2em;
+      > img {
+        width: 2.5em;
+        height: 2.5em;
+      }
+
+      > span {
+        color: #555;
+      }
     }
-
-    ul{
-        width: 90%;
-        margin:0 auto;
-        margin-top:0.5em;
-
-        li{
-            border-bottom: 1px solid #ccc;
-            height: 3.2em;
-            >img{
-                width: 2.5em;
-                height: 2.5em;
-            }
-
-            >span{
-                color:#555;
-            }
-        }
-    }
+  }
 }
 </style>
 
 <script>
-import topBack from "../../components/topBack"
-import dealContent from "./dealContent"
+import topBack from "../../components/topBack";
+import dealContent from "./dealContent";
 
-
-export default{
-    components:{topBack,dealContent}
-}
+export default {
+  components: { topBack, dealContent },
+  methonds: {
+   
+  }
+};
 </script>
