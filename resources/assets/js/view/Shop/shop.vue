@@ -63,9 +63,6 @@
 
 <style lang="scss" scoped>
 
-// #shop{
-//   padding-top:1em;
-// }
 #top {
   height: 10em;
   width: 100%;

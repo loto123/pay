@@ -1,7 +1,7 @@
 <template>
   <div id="my-collection">
       <div id="top">
-          <topBack :backUrl="'\/index\/'">
+          <topBack :backUrl="'\/index\/'" style="color:#fff;">
               
           </topBack>
 
@@ -23,14 +23,7 @@
           <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
             <img src="/images/avatar.jpg" alt="">
-            <!-- <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt=""> -->
+           
           </div>
 
         <h3>店铺111</h3>
