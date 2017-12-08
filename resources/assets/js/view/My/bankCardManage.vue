@@ -1,0 +1,104 @@
+<template>
+  <div id="bankManage">
+    <topBack title="银行卡管理"></topBack>
+    <ul class="bankCard-list">
+      <li>
+        <div class="bankCard-box flex">
+          <div class="card-image">
+            <img src="/images/personal.jpg" alt="">
+          </div>
+          <div class="card-info">
+            <div class="bank-name">招商银行</div>
+            <div class="card-type">借记卡</div>
+            <div class="card-number">62120646545465454</div>
+          </div>
+        </div>
+        <button class="del">删除</button>
+        <div class="binding">(已绑定)</div>
+      </li>
+    </ul>
+    <div class="add-bankCard">
+      <a href="/#/my/bankCardManage/addBankCard">添加新银行卡</a>
+    </div>
+  </div>
+</template>
+
+
+<script>
+import topBack from "../../components/topBack";
+
+export default {
+  components: { topBack }
+};
+</script>
+
+<style lang="scss" scoped>
+.bankCard-list {
+  width: 90%;
+  margin: auto;
+  li {
+    border: 1px solid #ccc;
+    margin-bottom: 1em;
+    padding: 0.7em;
+    position: relative;
+    .del,
+    .binding {
+      position: absolute;
+      right: 1em;
+    }
+    .del {
+      bottom: 10px;
+      color: #aaa;
+    }
+    .binding {
+      top: 1em;
+      color: #333;
+      font-size: 0.8em;
+    }
+  }
+}
+.bankCard-box {
+  .card-image {
+    width: 3em;
+    height: 3em;
+    > img {
+      display: block;
+      width: 100%;
+      border-radius: 50%;
+    }
+  }
+  .card-info {
+    margin-left: 1em;
+    .card-type,
+    .bank-name {
+      margin-bottom: 0.3em;
+    }
+    .card-type,
+    .card-number {
+      color: #999;
+      font-size: 0.9em;
+    }
+    .bank-name {
+      font-size: 1em;
+      margin-top: 0.1em;
+    }
+    .card-number {
+      font-size: 1em;
+    }
+  }
+}
+.add-bankCard {
+  width: 90%;
+  height: 4em;
+  line-height: 4em;
+  border: 1px dashed #ccc;
+  text-align: center;
+  margin: auto;
+  margin-top: 1em;
+  a {
+    display: block;
+    width: 100%;
+    color: #999;
+  }
+}
+</style>

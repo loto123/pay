@@ -1,6 +1,6 @@
 <template>
     <div id="deal-detail">
-        <topBack></topBack>
+        <topBack style="background:#eee;"></topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
             <p>大赢家</p>
@@ -89,7 +89,7 @@
 #deal-detail {
   background: #eee;
   min-height: 100vh;
-  /*padding-bottom:1em;*/
+  padding-top:2em;
 }
 
 .big-winner-tip {

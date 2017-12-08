@@ -2,7 +2,7 @@
   <div id="tabBar">
       <ul class="flex flex-align-center">
           <li class="flex-1 flex flex-v flex-justify-center flex-align-center">
-              <a href="javascript:;">
+              <a href="/#/index">
                   <i class="iconfont index-icon comonIcon active">&#xe61f;</i>
                   <p class="active">首页</p>
               </a>
@@ -15,7 +15,7 @@
               </a>
           </li>
           <li class="flex-1 flex flex-v flex-justify-center flex-align-center">
-              <a href="javascript:;">
+              <a href="/#/my">
                 <i class="iconfont account-icon comonIcon normal">&#xe6a3;</i>
                 <p class="normal">我的</p>
               </a>
