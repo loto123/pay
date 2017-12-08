@@ -5,47 +5,44 @@ namespace App\Pay\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Container extends Model
+abstract class Container extends Model
 {
-    const UPDATED_AT = null;
-
     /**
-     * 取得一个容器实例
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function instance()
-    {
-        return $this->morphTo();
-    }
-
-    /**
-     * 容器余额转入
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * 汇入转账
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function transfersIn()
     {
-        return $this->hasMany('App\Pay\Model\Transfer', 'container_to');
+        return $this->morphMany(Transfer::class, 'containerTo', 'to_type', 'container_to');
     }
 
 
     /**
-     * 容器余额转出
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * 汇出转账
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function transfersOut()
     {
-        return $this->hasMany('App\Pay\Model\Transfer', 'container_from');
+        return $this->morphMany(Transfer::class, 'containerFrom', 'from_type', 'container_from');
     }
 
 
     /**
-     * 容器收到分润
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * 收到分润
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function profitShares()
     {
-        return $this->hasMany('App\Pay\Model\ProfitShare', 'receive_container');
+        return $this->morphMany(ProfitShare::class, 'receiveContainer', 'container_type', 'receive_container');
+    }
+
+    /**
+     * 冻结/解冻记录
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function fronzens()
+    {
+        return $this->morphMany(Freeze::class, 'container');
     }
 
 
@@ -78,7 +75,7 @@ class Container extends Model
             $frozen_opt = $frozen_balance > 0 ? '+' : '-';
             $frozen_balance = abs($frozen_balance);
 
-            $sql = "UPDATE `pay_container` SET `balance` = `balance` $balance_opt :balance,
+            $sql = "UPDATE {$this->table} SET `balance` = `balance` $balance_opt :balance,
                 `frozen_balance` = `frozen_balance` $frozen_opt :frozen WHERE `id` = :id";
 
             if ($balance_opt === '-') {
@@ -120,13 +117,16 @@ class Container extends Model
      * @param $to_frozen bool 汇入冻结or可用余额
      * @param array ProfitShare $profit_shares 分润列表
      *
-     * @return mixed 返回转账id,失败返回false
+     * @return Transfer 失败返回false
      */
-    public function transfer($to_container, $amount, $type, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
+    public function transfer(Container $to_container, $amount, $type, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
     {
-        if (!($to_container instanceof Container)) {
-            $to_container = $to_container->container();
+        if ($to_container instanceof SettleContainer) {
+            if ($to_container->state != SettleContainer::STATE_NORMAL) {
+                return false;
+            }
         }
+
 
         //开始事务
         $commit = false;
@@ -145,9 +145,6 @@ class Container extends Model
             if ($profit_shares !== []) {
                 if (array_filter($profit_shares, function ($profit_share) use (&$share_sum) {
                         if ($profit_share instanceof ProfitShare) {
-                            if ($profit_share->receiveContainer->getKey() == $this->getKey()) {
-                                return false;//不能分润给自己
-                            }
                             $share_sum += $profit_share->amount;
                         } else {
                             return false;
@@ -213,7 +210,7 @@ class Container extends Model
         //结束事务
         if ($commit) {
             DB::commit();
-            return $transfer->getKey();
+            return $transfer;
         } else {
             DB::rollBack();
             return false;

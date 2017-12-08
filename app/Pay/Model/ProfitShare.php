@@ -23,11 +23,11 @@ class ProfitShare extends Model
     }
 
     /**
-     * 接收分润容器
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * 接收容器
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function receiveContainer()
     {
-        return $this->belongsTo('App\Pay\Model\Container', 'receive_container');
+        return $this->morphTo();
     }
 }

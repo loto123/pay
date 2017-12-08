@@ -9,15 +9,27 @@
 namespace App\Pay\Model;
 
 
-use App\Pay\ContainerTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class MasterContainer extends Model
+class MasterContainer extends Container
 {
-    use ContainerTrait;
-    public $timestamps = false;
+    const UPDATED_AT = null;
     protected $table = 'pay_master_container';
+
+    /**
+     * 发起新的结算
+     *
+     * @return SettleContainer
+     */
+    public function newSettlement()
+    {
+        $settlement = new SettleContainer();
+        if ($this->settleContainers()->save($settlement)) {
+            return $settlement;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * 生成的结算容器
@@ -27,17 +39,6 @@ class MasterContainer extends Model
     {
         return $this->hasMany('App\Pay\Model\SettleContainer', 'master_container');
     }
-
-
-    /**
-     * 取得内部容器
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
-     */
-    public function container()
-    {
-        return $this->morphOne('App\Pay\Model\Container', 'instance');
-    }
-
 
     /**
      * 储值记录

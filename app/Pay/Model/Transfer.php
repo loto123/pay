@@ -86,19 +86,19 @@ class Transfer extends Model
 
     /**
      * 转入容器
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function containerTo()
     {
-        return $this->belongsTo('App\Pay\Model\Container', 'container_to');
+        return $this->morphTo();
     }
 
     /**
      * 转出容器
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function containerFrom()
     {
-        return $this->belongsTo('App\Pay\Model\Container', 'container_from');
+        return $this->morphTo();
     }
 }
