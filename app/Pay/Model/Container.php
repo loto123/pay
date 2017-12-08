@@ -111,7 +111,6 @@ abstract class Container extends Model
      *
      * @param Container $to_container 目标容器
      * @param $amount float 金额
-     * @param $type int 转账类型
      * @param $fee float 系统手续费
      * @param $from_frozen bool 使用冻结or可用余额
      * @param $to_frozen bool 汇入冻结or可用余额
@@ -119,7 +118,7 @@ abstract class Container extends Model
      *
      * @return Transfer 失败返回false
      */
-    public function transfer(Container $to_container, $amount, $type, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
+    public function transfer(Container $to_container, $amount, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
     {
         if ($to_container instanceof SettleContainer) {
             if ($to_container->state != SettleContainer::STATE_NORMAL) {
@@ -194,7 +193,6 @@ abstract class Container extends Model
                 'fee' => $fee,
                 'from_frozen' => $from_frozen,
                 'to_frozen' => $to_frozen,
-                'type' => $type,
                 'amount' => $amount,
                 'state' => Transfer::STATE_COMPLETE
             ]);

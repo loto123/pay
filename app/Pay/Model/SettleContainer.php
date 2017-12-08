@@ -124,11 +124,11 @@ class SettleContainer extends Container
      * @param array $profit_shares
      * @return Transfer|bool
      */
-    public function transfer(Container $to_container, $amount, $type, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
+    public function transfer(Container $to_container, $amount, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
     {
         if ($this->state != self::STATE_NORMAL) {
             return false;
         }
-        return $this->transfer($to_container, $amount, $type, $fee, $from_frozen, $to_frozen, $profit_shares);
+        return $this->transfer($to_container, $amount, $fee, $from_frozen, $to_frozen, $profit_shares);
     }
 }
