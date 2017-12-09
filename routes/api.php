@@ -60,3 +60,13 @@ Route::group([
     $router->post('create', 'CardController@create');
     $router->post('delete', 'CardController@delete');
 });
+
+Route::group([
+    'prefix'      => '/notice',
+    'namespace'   => 'Api',
+],function(Router $router){
+    $router->get('index','NoticeController@index');
+    $router->post('create', 'NoticeController@create');
+    $router->post('delete', 'NoticeController@delete');
+    $router->post('detail', 'NoticeController@detail');
+});
