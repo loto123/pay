@@ -1,18 +1,14 @@
 <template>
-    <div id="withdraw" class="withdraw-container">
-        <topBack title="提现"></topBack>
-        <div class="withdraw-box">
-            <div class="title">提现金额</div>
-            <div class="withdraw-money">
+    <div id="recharge" class="recharge-container">
+        <topBack title="充值"></topBack>
+        <div class="recharge-box">
+            <div class="title">充值金额</div>
+            <div class="recharge-money">
                 <label>￥</label>
                 <input type="text" placeholder="请输入金额">
             </div>
-            <div class="all-money flex">
-                <div class="money">可提现余额 ¥<span>231321</span>, </div>
-                <a href="javascript:;" class="all-withdraw">全部提现</a>
-            </div>
-            <div class="withdraw-way">
-                <div class="title">提现到</div>
+            <div class="recharge-way">
+                <div class="title">选择充值方式</div>
                 <a class="list">
                     <div class="list-wrapper">
                         <div class="list-title">
@@ -40,7 +36,7 @@
                     </div>
                 </a>
             </div>
-            <a href="javascript:;" class="withdraw-btn"> 
+            <a href="javascript:;" class="recharge-btn"> 
                 <mt-button type="primary" size="large">提现</mt-button>    
             </a>
         </div>
@@ -59,12 +55,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../../sass/oo_flex.scss";
-.withdraw-container {
+.recharge-container {
   background: #efeef4;
   height: 100vh;
   padding-top: 2em;
 }
-.withdraw-box {
+.recharge-box {
   background: #fff;
   padding: 1em;
   margin: 0 0.5em;
@@ -73,7 +69,7 @@ export default {
     color: #999;
   }
 }
-.withdraw-money {
+.recharge-money {
   height: 40px;
   line-height: 40px;
   border-bottom: 1px solid #ccc;
@@ -86,18 +82,8 @@ export default {
     width: 70%;
   }
 }
-.all-money {
-  margin-top: 1em;
-  font-size: 0.8em;
-  .money {
-    color: #666;
-  }
-  .all-withdraw {
-    color: #199ed8;
-    margin-left: 0.4em;
-  }
-}
-.withdraw-way {
+
+.recharge-way {
   margin-top: 2em;
   .title {
     color: #666;
@@ -161,7 +147,7 @@ export default {
     background-color: #fff;
   }
 }
-.withdraw-btn {
+.recharge-btn {
   display: block;
   margin-top: 3em;
   margin-bottom: 1em;

@@ -19,7 +19,7 @@
         <h3>店铺id:123123123</h3>
       </div>
 
-      <div class="menu flex ">
+      <div class="menu flex " v-if="isGroupMaster">
           <div class="menu-item flex flex-v flex-align-center flex-justify-around">
               <i class="iconfont">
                   &#xe61e;
@@ -27,7 +27,7 @@
               <h3>店铺账户</h3>
           </div>
 
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around">
+          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goDealManagement">
               <i class="iconfont">
                   &#xe63b;
               </i>
@@ -66,9 +66,9 @@
         </div>
     </div>
 
-    <div class="member-wrap flex flex-align-center flex-justify-around">
+    <div class="member-wrap flex flex-align-center flex-justify-around" @click="goMember">
 
-        <div class="flex-2" style="padding-left:1em;">
+        <div class="flex-1" style="padding-left:1em;">
             <i class="iconfont icon">
                 &#xe73c;
             </i>
@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="flex-3 flex flex-reverse">
+        <div class="flex-4 flex flex-reverse">
             
             <i class="iconfont" style="padding-right:1em;">
                 &#xe62e;
@@ -111,7 +111,7 @@
             </i>
         </div>
 
-        <div class="invite-link-switch flex flex-align-center flex-justify-between">
+        <div class="invite-link-switch flex flex-align-center flex-justify-between" v-if="isGroupMaster">
             <span class="title flex-9"> 邀请链接 </span>
             <span class="text flex-1 flex flex-reverse">
                 <mt-switch v-model="inviteLinkStatus"></mt-switch>
@@ -121,7 +121,7 @@
     </div>
 
     <div class="platform">
-        <div class="flex flex-align-center flex-justify-between">
+        <div class="flex flex-align-center flex-justify-between" v-if="isGroupMaster">
             <span class="title flex-9"> 平台交易费 </span>
             <span class="text flex-1">5%</span>
         </div>
@@ -133,7 +133,7 @@
         
     </div>
 
-    <div class="commission">
+    <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 抽水比例 </span>
             <span class="text flex-1">5%</span>
@@ -144,6 +144,13 @@
             <span class="text flex-1 flex flex-reverse">
                 <mt-switch v-model="tradeStatus" ></mt-switch>
             </span>
+        </div>
+    </div>
+
+    <div class="complaint" v-if="!isGroupMaster">
+        <div class="flex flex-align-center flex-justify-between">
+            <span class="title flex-9"> 投诉 </span>
+            <span class="text flex-1"></span>
         </div>
     </div>
 
@@ -201,7 +208,8 @@
 
       > i {
         display: block;
-        font-size: 3em;
+        font-size: 2.8em;
+        color:#555;
       }
 
       h3 {
@@ -268,18 +276,20 @@
         // width:
         > img {
           display: block;
-          width: 2.5em;
+          width: 2.3em;
           border-radius: 0.4em;
-          height: 2.5em;
+          height: 2.3em;
+          margin-left:0.2em;
         }
       }
 
       .add-avatar {
         box-sizing: border-box;
-        width: 2.5em;
+        width: 2.3em;
         border-radius: 0.4em;
-        height: 2.5em;
+        height: 2.3em;
         border:0.1em solid #ccc;
+        margin-left: 0.2em;
 
         >i{
             font-size: 2em;
@@ -295,7 +305,7 @@
 
   .invite-wrap {
     width: 100%;
-    height: 5em;
+    // height: 5em;
     background: #fff;
     margin-top: 0.5em;
 
@@ -321,7 +331,7 @@
 
   .platform {
     width: 100%;
-    height: 5em;
+    // height: 5em;
     background: #fff;
     margin-top: 0.5em;
 
@@ -343,7 +353,6 @@
 
   .commission {
     width: 100%;
-    height: 5em;
     background: #fff;
     margin-top: 0.5em;
 
@@ -363,6 +372,10 @@
     }
   }
 
+  .complaint{
+    @extend .commission;
+  }
+
   .button-wrap {
     width: 90%;
     margin: 0 auto;
@@ -380,11 +393,21 @@ export default {
   components: { topBack },
   data() {
     return {
-      inviteLinkStatus: true,
-      tradeStatus: true
+      inviteLinkStatus: true,    // 邀请链接状态
+      tradeStatus: true,         // 交易状态
+      isGroupMaster:true        // 是否是群主 
     };
   },
-  methods: {}
+  methods: {
+    hide(){
+    },
+    goMember(){
+      this.$router.push("/shop/shop_member");
+    },
+    goDealManagement(){
+      this.$router.push("/shop/deal_management");
+    }
+  }
 };
 </script>
 
