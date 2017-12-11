@@ -35,6 +35,7 @@ export default {
   #addBankCard{
     background: #EFEEF4;
     height: 100vh;
+    padding-top:2em;
   }
   .addBankCard-box{
     h2{
