@@ -13,12 +13,12 @@ use App\Pay\CashInterface;
 class WechatH5 implements CashInterface
 {
 
-    public function deposit($deposit_id, $amount, $master_container, array $config)
+    public function deposit($deposit_id, $amount, $master_container, array $config, $notify_url)
     {
         // TODO: Implement deposit() method.
     }
 
-    public function withdraw($withdraw_id, $amount, $receiver_info, array $config)
+    public function withdraw($withdraw_id, $amount, $receiver_info, array $config, $notify_url)
     {
         // TODO: Implement withdraw() method.
     }

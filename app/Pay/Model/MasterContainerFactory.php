@@ -19,15 +19,10 @@ class MasterContainerFactory
     public static function get($id = null)
     {
         if ($id !== null) {
-            return MasterContainer::find($id);
+            return MasterContainer::findOrFail($id);
         } else {
             //生成
-            $master_container = new MasterContainer();
-            if ($master_container->save()) {
-                return $master_container;
-            } else {
-                return null;
-            }
+            return new MasterContainer();
         }
     }
 }

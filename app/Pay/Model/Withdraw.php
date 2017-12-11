@@ -21,6 +21,13 @@ class Withdraw extends Model
     const STATE_SEND_FAIL = 5;//提交失败
 
     protected $table = 'pay_withdraw';
+    protected $casts = [
+        'amount' => 'float',
+        'system_fee' => 'float',
+        'channel_fee' => 'float',
+        'create_at' => 'datetime',
+        'update_at' => 'datetime'
+    ];
 
     /**
      * 提现方式

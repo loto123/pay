@@ -52,7 +52,7 @@ class PayMethod extends Model
      * 获取支付方式实现
      * @return CashInterface
      */
-    public function getInterface()
+    public function getImplInstance()
     {
         if (!$this->interface) {
             $this->interface = new $this->impl();

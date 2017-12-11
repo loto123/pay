@@ -19,6 +19,11 @@ class Deposit extends Model
     const STATE_API_ERR = 4;//部分支付
     protected $table = 'pay_deposit';//接口不通
 
+    protected $casts = [
+        'state' => 'integer',
+        'amount' => 'float',
+    ];
+
     /**
      * 储值通道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

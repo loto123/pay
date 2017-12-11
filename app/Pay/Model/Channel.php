@@ -14,6 +14,12 @@ class Channel extends Model
 {
     public $timestamps = false;
     protected $table = 'pay_channel';
+    protected $casts = [
+        'limit_amount' => 'float',
+        'used_amount' => 'float',
+        'disabled' => 'boolean'
+    ];
+
 
     /**
      * 获取通道通知地址
@@ -26,11 +32,21 @@ class Channel extends Model
 
 
     /**
+     * 获取备用通道
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function spareChannel()
+    {
+        return $this->belongsTo(self::class, 'spare_channel_id');
+    }
+
+
+    /**
      * 通道所属支付平台
      */
     public function platform()
     {
-        return $this->belongsTo('App\Pay\Model\Platform');
+        return $this->belongsTo(Platform::class);
     }
 
     /**
@@ -38,7 +54,7 @@ class Channel extends Model
      */
     public function businessEntity()
     {
-        return $this->belongsTo('App\Pay\Model\BusinessEntity', 'entity_id');
+        return $this->belongsTo(BusinessEntity::class, 'entity_id');
     }
 
     /**
@@ -46,7 +62,7 @@ class Channel extends Model
      */
     public function deposits()
     {
-        return $this->hasMany('App\Pay\Model\Deposit');
+        return $this->hasMany(Deposit::class);
     }
 
     /**
@@ -54,7 +70,7 @@ class Channel extends Model
      */
     public function withdraws()
     {
-        return $this->hasMany('App\Pay\Model\Withdraw');
+        return $this->hasMany(Withdraw::class);
     }
 
     /**
@@ -62,13 +78,14 @@ class Channel extends Model
      */
     public function acceptNotify(Request $request)
     {
-        $platformInterface = $this->platform->getInterface();
+        $platformInterface = $this->platform->getImplInstance();
         if ($platformInterface instanceof PlatformInterface) {
 
             //启动事务
             $commit = false;
             DB::beginTransaction();
 
+            ob_start();
             do {
                 $result = $platformInterface->acceptNotify($request, $this->getInterfaceConfigure());
                 if (!($result instanceof Withdraw || $result instanceof Deposit)) {
@@ -92,13 +109,16 @@ class Channel extends Model
                 }
 
                 $commit = true;
-
-                //结束事务
-
             } while (false);
 
-            $commit ? DB::commit() : DB::rollBack();
-
+            //结束事务
+            if ($commit) {
+                DB::commit();
+                return ob_get_clean();
+            } else {
+                DB::rollBack();
+                ob_end_clean();
+            }
         }
     }
 

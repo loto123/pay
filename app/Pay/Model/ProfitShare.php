@@ -12,6 +12,10 @@ class ProfitShare extends Model
 {
     public $timestamps = false;
     protected $table = 'pay_profit_share';
+    protected $casts = [
+        'amount' => 'float',
+        'is_frozen' => 'boolean'
+    ];
 
     /**
      * 转账来源

@@ -69,13 +69,14 @@ abstract class Container extends Model
      */
     protected function changeBalance($balance, $frozen_balance)
     {
-        if ((is_float($balance) || is_int($balance)) && (is_float($frozen_balance) || is_int($frozen_balance))) {
-            $balance_opt = $balance > 0 ? '+' : '-';
+        if (is_numeric($balance) && is_numeric($frozen_balance) && ($balance != 0 || $frozen_balance != 0)) {
+            static::find($this->getKey());
+            $balance_opt = $balance < 0 ? '-' : '+';
             $balance = abs($balance);
-            $frozen_opt = $frozen_balance > 0 ? '+' : '-';
+            $frozen_opt = $frozen_balance < 0 ? '-' : '+';
             $frozen_balance = abs($frozen_balance);
 
-            $sql = "UPDATE {$this->table} SET `balance` = `balance` $balance_opt :balance,
+            $sql = "UPDATE `{$this->table}` SET `balance` = `balance` $balance_opt :balance,
                 `frozen_balance` = `frozen_balance` $frozen_opt :frozen WHERE `id` = :id";
 
             if ($balance_opt === '-') {

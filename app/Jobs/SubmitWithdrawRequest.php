@@ -52,7 +52,7 @@ class SubmitWithdrawRequest implements ShouldQueue
             $prev_except = null;
             $result = [];
             try {
-                $result = $withdraw->method()->getInterface()->withdraw($withdraw->getKey(), $actual_withdraw_amount, $withdraw->receiver_info, $withdraw->channel()->getInterfaceConfigure());
+                $result = $withdraw->method()->getImplInstance()->withdraw($withdraw->getKey(), $actual_withdraw_amount, $withdraw->receiver_info, $withdraw->channel()->getInterfaceConfigure(), $withdraw->channel->getNotifyUrl());
                 if (is_array($result) && array_key_exists('state', $result) && array_key_exists('raw_respon', $result)) {
                     $state = $result['state'];
                     //通道交易号
@@ -68,7 +68,7 @@ class SubmitWithdrawRequest implements ShouldQueue
                 $withdraw->sate = $state;
 
             } catch (\Exception $e) {
-                $result['raw_respon'] = 'Uncaught queue execution exception';
+                $result['raw_response'] = 'Uncaught queue execution exception';
                 $state = Withdraw::STATE_SEND_FAIL;
                 $prev_except = $e;
             }
@@ -76,7 +76,7 @@ class SubmitWithdrawRequest implements ShouldQueue
             $withdraw->save();
 
             if ($state == Withdraw::STATE_SEND_FAIL || $state == Withdraw::STATE_PROCESS_FAIL) {
-                throw new WithdrawException($result['raw_respon'], $state, $prev_except);
+                throw new WithdrawException($result['raw_response'], $state, $prev_except);
             }
         }
     }

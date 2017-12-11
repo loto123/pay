@@ -17,6 +17,6 @@ class BusinessEntity extends Model
      */
     public function channels()
     {
-        $this->hasMany('App\Pay\Model\Channel', 'entity_id');
+        $this->hasMany(Channel::class, 'entity_id');
     }
 }

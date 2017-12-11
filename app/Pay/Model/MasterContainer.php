@@ -15,6 +15,10 @@ class MasterContainer extends Container
 {
     const UPDATED_AT = null;
     protected $table = 'pay_master_container';
+    protected $casts = [
+        'balance' => 'float',
+        'frozen_balance' => 'float',
+    ];
 
     /**
      * 发起新的结算
@@ -71,7 +75,7 @@ class MasterContainer extends Container
     public function initiateDeposit($amount, Channel $byChannel, PayMethod $byMethod)
     {
         if ($byChannel->disabled) {
-            return null;
+            $byChannel = $byChannel->spareChannel()->firstOrFail();
         }
 
         $order = new Deposit([
@@ -83,7 +87,7 @@ class MasterContainer extends Container
         ]);
 
         if ($order->save()) {
-            $respon = $byMethod->getInterface()->deposit($order->getKey(), $amount, $this->getKey(), $byChannel->getInterfaceConfigure());
+            $respon = $byMethod->getImplInstance()->deposit($order->getKey(), $amount, $this->getKey(), $byChannel->getInterfaceConfigure(), $byChannel->getNotifyUrl());
             if ($respon == null) {
                 $order->state = Deposit::STATE_API_ERR;
                 $order->save();

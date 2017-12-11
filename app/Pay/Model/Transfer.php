@@ -13,15 +13,22 @@ class Transfer extends Model
     /**
      * 转账状态
      */
-    const STATE_COMPLETE = 1;
-    const STATE_CHARGEBACK = 2;//完成
+    const STATE_COMPLETE = 1;//完成
+    const STATE_CHARGEBACK = 2;//被撤回
     /**
      * 撤回结果
      */
-    const CHARGE_BACK_SUCCESS = 1;//已撤回
-    const CHARGE_BACK_OUT_OF_BALANCE = 2;//成功
-    const CHARGE_BACK_ERR = 3;//余额不足
-    protected $table = 'pay_transfer';//错误
+    const CHARGE_BACK_SUCCESS = 1;//成功
+    const CHARGE_BACK_OUT_OF_BALANCE = 2;//余额不足
+    const CHARGE_BACK_ERR = 3;//错误
+    protected $table = 'pay_transfer';
+
+    protected $casts = [
+        'fee' => 'flaot',
+        'amount' => 'float',
+        'create_at' => 'datetime',
+        'update_at' => 'datetime'
+    ];
 
     /**
      * 转账分润

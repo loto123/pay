@@ -45,10 +45,10 @@ class Platform extends Model
      *
      * @return PlatformInterface
      */
-    public function getInterface()
+    public function getImplInstance()
     {
         if (!$this->interface) {
-            $this->interface = new $this->impl();
+            $this->interface = new $this->impl;
         }
 
         return $this->interface;

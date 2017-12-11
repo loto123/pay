@@ -18,9 +18,10 @@ interface CashInterface
      * @param $amount float
      * @param $receiver_info string
      * @param $config array 接口配置
-     * @return array|null 提交成功返回外部交易号和状态:['out_batch_no' => xxx(可选), 'state' => Withdraw::STATE_*, 'raw_respon'=> xxx, 'fee' => xxx(可选)]
+     * @param $notify_url string 通知地址
+     * @return array|null 提交成功返回外部交易号和状态:['out_batch_no' => xxx(可选), 'state' => Withdraw::STATE_*, 'raw_response'=> xxx, 'fee' => xxx(可选)]
      */
-    public function withdraw($withdraw_id, $amount, $receiver_info, array $config);
+    public function withdraw($withdraw_id, $amount, $receiver_info, array $config, $notify_url);
 
     /**
      * 向支付平台发出充值订单,返回支付信息给客户端
@@ -29,7 +30,8 @@ interface CashInterface
      * @param $amount float
      * @param $master_container int
      * @param $config array 接口配置
+     * @param $notify_url string 通知地址
      * @return mixed 返回储值信息,失败返回null
      */
-    public function deposit($deposit_id, $amount, $master_container, array $config);
+    public function deposit($deposit_id, $amount, $master_container, array $config, $notify_url);
 }

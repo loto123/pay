@@ -11,6 +11,9 @@ class WithdrawException extends Model
 {
     const UPDATED_AT = null;
     protected $table = 'pay_withdraw_exception';
+    protected $casts = [
+        'create_at' => 'datetime'
+    ];
 
     /**
      * 所属提现

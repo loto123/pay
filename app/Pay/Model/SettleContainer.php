@@ -22,6 +22,12 @@ class SettleContainer extends Container
     const STATE_CLOSED = 1; //正常
     const STATE_EXTRACTED = 2; //关闭
     protected $table = 'pay_settle_container'; //已提取
+    protected $casts = [
+        'create_at' => 'datetime',
+        'update_at' => 'datetime',
+        'balance' => 'float',
+        'frozen_balance' => 'float',
+    ];
 
     /**
      * 提取所有金额
