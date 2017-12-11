@@ -19,7 +19,7 @@
         <h3>店铺id:123123123</h3>
       </div>
 
-      <div class="menu flex ">
+      <div class="menu flex " v-if="isGroupMaster">
           <div class="menu-item flex flex-v flex-align-center flex-justify-around">
               <i class="iconfont">
                   &#xe61e;
@@ -27,7 +27,7 @@
               <h3>店铺账户</h3>
           </div>
 
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around">
+          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goDealManagement">
               <i class="iconfont">
                   &#xe63b;
               </i>
@@ -111,7 +111,7 @@
             </i>
         </div>
 
-        <div class="invite-link-switch flex flex-align-center flex-justify-between">
+        <div class="invite-link-switch flex flex-align-center flex-justify-between" v-if="isGroupMaster">
             <span class="title flex-9"> 邀请链接 </span>
             <span class="text flex-1 flex flex-reverse">
                 <mt-switch v-model="inviteLinkStatus"></mt-switch>
@@ -121,7 +121,7 @@
     </div>
 
     <div class="platform">
-        <div class="flex flex-align-center flex-justify-between">
+        <div class="flex flex-align-center flex-justify-between" v-if="isGroupMaster">
             <span class="title flex-9"> 平台交易费 </span>
             <span class="text flex-1">5%</span>
         </div>
@@ -133,7 +133,7 @@
         
     </div>
 
-    <div class="commission">
+    <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 抽水比例 </span>
             <span class="text flex-1">5%</span>
@@ -144,6 +144,13 @@
             <span class="text flex-1 flex flex-reverse">
                 <mt-switch v-model="tradeStatus" ></mt-switch>
             </span>
+        </div>
+    </div>
+
+    <div class="complaint" v-if="!isGroupMaster">
+        <div class="flex flex-align-center flex-justify-between">
+            <span class="title flex-9"> 投诉 </span>
+            <span class="text flex-1"></span>
         </div>
     </div>
 
@@ -298,7 +305,7 @@
 
   .invite-wrap {
     width: 100%;
-    height: 5em;
+    // height: 5em;
     background: #fff;
     margin-top: 0.5em;
 
@@ -324,7 +331,7 @@
 
   .platform {
     width: 100%;
-    height: 5em;
+    // height: 5em;
     background: #fff;
     margin-top: 0.5em;
 
@@ -346,7 +353,6 @@
 
   .commission {
     width: 100%;
-    height: 5em;
     background: #fff;
     margin-top: 0.5em;
 
@@ -366,6 +372,10 @@
     }
   }
 
+  .complaint{
+    @extend .commission;
+  }
+
   .button-wrap {
     width: 90%;
     margin: 0 auto;
@@ -383,16 +393,19 @@ export default {
   components: { topBack },
   data() {
     return {
-      inviteLinkStatus: true,
-      tradeStatus: true
+      inviteLinkStatus: true,    // 邀请链接状态
+      tradeStatus: true,         // 交易状态
+      isGroupMaster:true        // 是否是群主 
     };
   },
   methods: {
     hide(){
-      console.log(1);
     },
     goMember(){
       this.$router.push("/shop/shop_member");
+    },
+    goDealManagement(){
+      this.$router.push("/shop/deal_management");
     }
   }
 };

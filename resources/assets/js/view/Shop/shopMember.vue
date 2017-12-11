@@ -7,29 +7,34 @@
 
       <div id="search-wrap" class="flex flex-align-center">
           <div class="flex flex-align-center flex-justify-around">
-              <input type="text" placeholder="搜索" id="search-input" class="flex-7" @click="openSearchSwitch">
+              <input type="text" placeholder="搜索" id="search-input" class="flex-7" @keyup="openSearchSwitch">
               <button type="button" class="flex-3" v-if="searchSwitch"> 取消 </button>
           </div>
       </div>
       <ul class="flex flex-wrap-on">
-          <li class="flex flex-v flex-align-center">
-              <i class="iconfont">
-                  &#xe600;
-              </i>
+
+          <li class="add-member flex flex-v flex-align-center flex-justify-center">
+                <div class="img-wrap flex flex-align-center flex-justify-center">
+                  <i class="iconfont">
+                    &#xe600;
+                </i>
+              </div>
               <span>
                    
               </span>
           </li>
-          <li class="flex flex-v flex-align-center">
-              <i class="iconfont">
-                  &#xe620;
-              </i>
 
+          <li class="minus-member flex flex-v flex-align-center flex-justify-center">
+              <div class="img-wrap flex flex-align-center flex-justify-center">
+                  <i class="iconfont" style="margin-top:-0.2em;">
+                    &#xe620;
+                </i>
+              </div>
               <span>
               </span>
           </li>
 
-          <li class="flex flex-v flex-align-center">
+          <li class="flex flex-v flex-align-center flex-justify-start">
               <img src="/images/avatar.jpg" alt="" class="avatar">
               <h3>玩家姓名已</h3>
           </li>
@@ -61,16 +66,37 @@
     width: 100%;
     li {
       width: 20%;
-      height: 4em;
+      height: 4.5em;
       box-sizing: border-box;
+
+      .img-wrap {
+        width: 3em;
+        height: 3em;
+        border: 1px solid #aaa;
+        border-radius: 0.4em;
+
+        > i {
+          font-size: 2em;
+          color: #aaa;
+        }
+      }
+
       > img {
         width: 2.6em;
         height: 2.6em;
         display: block;
       }
+
       h3 {
-        font-size: 0.9em;
+        font-size: 0.8em;
+        margin-top:0.2em;
       }
+
+      .avatar{
+          box-sizing: border-box;
+          margin-top:0.6em;
+      }
+
     }
   }
 }
