@@ -70,10 +70,19 @@ app('Dingo\Api\Auth\Auth')->extend('jwt', function ($app) {
 });
 $api->version('v1', function ($api) {
     $api->group([
-        'prefix'      => 'auth',
-        'namespace'   => 'App\Http\Controllers\Api',
-    ], function($api){
+        'prefix' => 'auth',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
         $api->post('login', 'AuthController@login');
         $api->post('register', 'AuthController@register');
     });
+});
+Route::group([
+    'prefix'      => '/notice',
+    'namespace'   => 'Api',
+],function(Router $router){
+    $router->get('index','NoticeController@index');
+    $router->post('create', 'NoticeController@create');
+    $router->post('delete', 'NoticeController@delete');
+    $router->post('detail', 'NoticeController@detail');
 });
