@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use JWTAuth;
 use Swagger\Annotations as SWG;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * @SWG\Swagger(
@@ -20,8 +19,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
  * )
  * @package App\Http\Controllers\Api
  */
-class AuthController extends Controller {
-
+class AuthController extends BaseController {
     /**
      *
      * @SWG\Post(
@@ -67,7 +65,7 @@ class AuthController extends Controller {
         }
 
         // all good so return the token
-        return response()->json(compact('token'));
+        return $this->json(compact('token'));
     }
 
     /**
@@ -116,7 +114,7 @@ class AuthController extends Controller {
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return $this->json([], $validator->errors()->first());
         }
 
         $input = $request->all();
@@ -126,7 +124,7 @@ class AuthController extends Controller {
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
 
-        return response()->json(['success' => $success]);
+        return $this->json($success);
     }
 
 }
