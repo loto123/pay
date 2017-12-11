@@ -88,6 +88,7 @@
                   </div>
               </div>
           </li>
+
           <li class="flex flex-v flex-justify-around">
               <div class="notice-content flex flex-align-center flex-justify-around">
                   <div class="user-info flex flex-align-center">

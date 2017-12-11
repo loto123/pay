@@ -335,14 +335,14 @@
 </style>
 
 <script>
-import topBack from "../../components/topBack";
+import topBack from "../../components/topBack"
 
 export default {
   components: { topBack },
   data() {
     return {
-      addShopTabStatus: false, // 创建店铺拉起状态
-      dealStatus: true // 是否开启交易(创建店铺tab)
+      addShopTabStatus: false,      // 创建店铺拉起状态
+      dealStatus: true              // 是否开启交易(创建店铺tab)
     };
   },
   methods: {

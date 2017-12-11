@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <div class="member-wrap flex flex-align-center flex-justify-around">
+    <div class="member-wrap flex flex-align-center flex-justify-around" @click="goMember">
 
         <div class="flex-1" style="padding-left:1em;">
             <i class="iconfont icon">
@@ -201,7 +201,8 @@
 
       > i {
         display: block;
-        font-size: 3em;
+        font-size: 2.8em;
+        color:#555;
       }
 
       h3 {
@@ -389,6 +390,9 @@ export default {
   methods: {
     hide(){
       console.log(1);
+    },
+    goMember(){
+      this.$router.push("/shop/shop_member");
     }
   }
 };

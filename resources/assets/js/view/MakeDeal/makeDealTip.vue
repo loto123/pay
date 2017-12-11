@@ -108,7 +108,7 @@ import dealContent from "./dealContent";
 
 export default {
   components: { topBack, dealContent },
-  methonds: {
+  methods: {
    
   }
 };
