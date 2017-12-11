@@ -41,6 +41,7 @@
     .give-container{
         background:#eee;
         height: 100vh;
+        padding-top:2em;
     }
     .give-box{
         background:#fff;
