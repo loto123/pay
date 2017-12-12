@@ -71,7 +71,7 @@ class ShopController extends BaseController {
     }
 
     /**
-     * @SWG\Post(
+     * @SWG\Get(
      *   path="/shop/lists",
      *   summary="我参与的店铺",
      *   tags={"店铺"},
@@ -106,8 +106,8 @@ class ShopController extends BaseController {
     }
 
     /**
-     * @SWG\Post(
-     *   path="/shop/lists",
+     * @SWG\Get(
+     *   path="/shop/lists/mine",
      *   summary="我创建的店铺",
      *   tags={"店铺"},
      *   @SWG\Parameter(
@@ -140,4 +140,105 @@ class ShopController extends BaseController {
         return $this->json(['count' => $count, 'data' => $data]);
     }
 
+    /**
+     * @SWG\Get(
+     *   path="/shop/detail/{id}",
+     *   summary="店铺详情",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="member_size",
+     *     in="query",
+     *     description="成员数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function detail($id, Request $request) {
+        $shop = Shop::find($id);
+        return $this->json(['name' => $shop->name, 'members' => []]);
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/close/{id}",
+     *   summary="解散店铺",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function close() {
+
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/quit/{id}",
+     *   summary="退出店铺",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function quit() {
+
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/update/{id}",
+     *   summary="更新店铺",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="use_link",
+     *     in="formData",
+     *     description="是否开启邀请链接",
+     *     required=false,
+     *     type="boolean"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="active",
+     *     in="formData",
+     *     description="是否开启交易",
+     *     required=false,
+     *     type="boolean"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function update() {
+
+    }
 }

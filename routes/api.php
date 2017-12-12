@@ -76,14 +76,6 @@ $api->version('v1', function ($api) {
         $api->post('login', 'AuthController@login');
         $api->post('register', 'AuthController@register');
     });
-
-    $api->group([
-        'prefix' => 'shop',
-        'namespace' => 'App\Http\Controllers\Api',
-    ], function ($api) {
-        $api->get('types', 'ShopController@types');
-        $api->post('register', 'AuthController@register');
-    });
 });
 
 $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
@@ -93,6 +85,10 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     ], function ($api) {
         $api->get('lists', 'ShopController@lists');
         $api->get('lists/mine', 'ShopController@my_lists');
+        $api->get('detail/{id}', 'ShopController@detail');
+        $api->post('close/{id}', 'ShopController@close');
+        $api->post('quit/{id}', 'ShopController@quit');
+        $api->post('update/{id}', 'ShopController@update');
         $api->post('create', 'ShopController@create');
     });
 });
