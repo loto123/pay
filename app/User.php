@@ -27,6 +27,49 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    //发起的交易
+    public function transfer()
+    {
+        return $this->hasMany('App\Transfer', 'user_id', 'id');
+    }
+
+    //交易记录
+    public function transfer_record()
+    {
+        return $this->hasMany('App\TransferRecord', 'user_id', 'id');
+    }
+
+    //茶水费
+    public function tips()
+    {
+        return $this->hasMany('App\TipRecord', 'user_id', 'id');
+    }
+
+    //产出利润
+    public function output_profit()
+    {
+        return $this->hasMany('App\Profit', 'user_id', 'id');
+    }
+
+    //参与的交易
+    public function involved_transfer()
+    {
+        return $this->hasMany('App\TransferUserRelation', 'user_id', 'id');
+    }
+
+    //代理
+    public function parent()
+    {
+        return $this->hasOne('App\User', 'id', 'parent_id');
+    }
+
+    //运营
+    public function operator()
+    {
+        return $this->hasOne('App\Admin', 'id', 'operator_id');
+
+    }
+    
     /**
      * 我管理的店铺
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
