@@ -1,6 +1,8 @@
 <?php
 /**
  * 支付通道
+ *
+ * @transaction safe
  */
 
 namespace App\Pay\Model;

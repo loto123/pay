@@ -1,6 +1,8 @@
 <?php
 /**
  * 运营主体
+ *
+ * @transaction safe
  */
 
 namespace App\Pay\Model;

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * 支付平台
  *
+ * @transaction safe
  * 例如微信，支付宝,汇付宝
  */
 class Platform extends Model

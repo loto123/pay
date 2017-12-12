@@ -1,12 +1,12 @@
 <?php
 /**
+ *
+ * @transaction safe
  * 提现模型
  */
 
 namespace App\Pay\Model;
 
-use App\Jobs\SubmitWithdrawRequest;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Withdraw extends Model
@@ -26,7 +26,8 @@ class Withdraw extends Model
         'system_fee' => 'float',
         'channel_fee' => 'float',
         'create_at' => 'datetime',
-        'update_at' => 'datetime'
+        'update_at' => 'datetime',
+        'state' => 'integer'
     ];
 
     /**
@@ -63,18 +64,5 @@ class Withdraw extends Model
     public function exceptions()
     {
         return $this->hasMany('App\Pay\Model\WithdrawException');
-    }
-
-    /**
-     * 进入提现队列
-     */
-    public function addToQueue()
-    {
-        $this->state = self::STATE_QUEUED;
-        if ($this->save()) {
-            return SubmitWithdrawRequest::dispatch($this)->onQueue('withdraw')->delay(Carbon::now()->addSecond());
-        } else {
-            return null;
-        }
     }
 }

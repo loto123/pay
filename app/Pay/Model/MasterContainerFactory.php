@@ -1,6 +1,8 @@
 <?php
 /**
  * 主容器工厂
+ *
+ * @transaction safe
  * Author: huangkaixuan
  * Date: 2017/12/7
  * Time: 16:07

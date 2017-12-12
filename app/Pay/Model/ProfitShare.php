@@ -2,6 +2,8 @@
 /**
  * 转账分润
  * 手续费是一种特殊的分润形式
+ *
+ * @transaction safe
  */
 
 namespace App\Pay\Model;

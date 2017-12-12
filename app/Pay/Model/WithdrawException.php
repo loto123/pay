@@ -1,5 +1,7 @@
 <?php
 /**
+ *
+ * @transaction safe
  * 提现异常
  */
 

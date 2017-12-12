@@ -52,7 +52,7 @@ class SubmitWithdrawRequest implements ShouldQueue
             $prev_except = null;
             $result = [];
             try {
-                $result = $withdraw->method()->getImplInstance()->withdraw($withdraw->getKey(), $actual_withdraw_amount, $withdraw->receiver_info, $withdraw->channel()->getInterfaceConfigure(), $withdraw->channel->getNotifyUrl());
+                $result = $withdraw->method->getImplInstance()->withdraw($withdraw->getKey(), $actual_withdraw_amount, $withdraw->receiver_info, $withdraw->channel->getInterfaceConfigure(), $withdraw->channel->getNotifyUrl());
                 if (is_array($result) && array_key_exists('state', $result) && array_key_exists('raw_respon', $result)) {
                     $state = $result['state'];
                     //通道交易号

@@ -1,5 +1,7 @@
 <?php
 /**
+ *
+ * @transaction safe
  * 结算容器资金提取
  */
 

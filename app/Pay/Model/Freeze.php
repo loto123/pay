@@ -1,6 +1,8 @@
 <?php
 /**
  * 资金冻结/解冻记录
+ *
+ * @transaction safe
  */
 
 namespace App\Pay\Model;

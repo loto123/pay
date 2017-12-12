@@ -1,4 +1,8 @@
 <?php
+/**
+ * 余额容器基类
+ * @transaction safe
+ */
 
 namespace App\Pay\Model;
 
@@ -62,6 +66,7 @@ abstract class Container extends Model
 
     /**
      * 变更余额
+     * 隐式独占容器
      *
      * @param $balance float 可用余额,正数增加,负数减少
      * @param $frozen_balance float 冻结余额,正数增加,负数减少
@@ -70,14 +75,13 @@ abstract class Container extends Model
     protected function changeBalance($balance, $frozen_balance)
     {
         if (is_numeric($balance) && is_numeric($frozen_balance) && ($balance != 0 || $frozen_balance != 0)) {
-            static::find($this->getKey());
             $balance_opt = $balance < 0 ? '-' : '+';
             $balance = abs($balance);
             $frozen_opt = $frozen_balance < 0 ? '-' : '+';
             $frozen_balance = abs($frozen_balance);
 
             $sql = "UPDATE `{$this->table}` SET `balance` = `balance` $balance_opt :balance,
-                `frozen_balance` = `frozen_balance` $frozen_opt :frozen WHERE `id` = :id";
+                `frozen_balance` = `frozen_balance` $frozen_opt :frozen WHERE `{$this->getKeyName()}` = :primary_key";
 
             if ($balance_opt === '-') {
                 $sql .= ' AND `balance` >= :balance';
@@ -87,7 +91,7 @@ abstract class Container extends Model
                 $sql .= ' AND `frozen_balance` >= :frozen';
             }
 
-            return DB::update($sql, ['balance' => $balance, 'frozen' => $frozen_balance, 'id' => $this->getKey()]) > 0;
+            return DB::update($sql, ['balance' => $balance, 'frozen' => $frozen_balance, 'primary_key' => $this->getKey()]) > 0;
         }
         return false;
 
@@ -110,6 +114,12 @@ abstract class Container extends Model
     /**
      * 容器转账
      *
+     * 独占所有容器
+     *
+     * 约束：
+     * 1.转入与转出容器状态必须正常
+     * 2.手续费 + 分润 < 金额
+     *
      * @param Container $to_container 目标容器
      * @param $amount float 金额
      * @param $fee float 系统手续费
@@ -121,20 +131,16 @@ abstract class Container extends Model
      */
     public function transfer(Container $to_container, $amount, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
     {
-        if ($to_container instanceof SettleContainer) {
-            if ($to_container->state != SettleContainer::STATE_NORMAL) {
-                return false;
-            }
-        }
-
-
         //开始事务
         $commit = false;
         $transfer = null;
         DB::beginTransaction();
 
         do {
-            if ($amount <= 0) {
+            /**
+             * 检查状态
+             */
+            if (!$this->isNormalForUpdate() || !$to_container->isNormalForUpdate()) {
                 break;
             }
 
@@ -142,7 +148,7 @@ abstract class Container extends Model
              * 检查分润
              */
             $share_sum = 0;//分润总额
-            if ($profit_shares !== []) {
+            if ($profit_shares != []) {
                 if (array_filter($profit_shares, function ($profit_share) use (&$share_sum) {
                         if ($profit_share instanceof ProfitShare) {
                             $share_sum += $profit_share->amount;
@@ -171,6 +177,7 @@ abstract class Container extends Model
             if (!$this->changeBalance($from_frozen ? 0 : -$amount, $from_frozen ? -$amount : 0)) {
                 break;//余额不足
             }
+
             //汇入
             if (!$to_container->changeBalance($to_frozen ? 0 : $actual_received, $to_frozen ? $actual_received : 0)) {
                 break;
@@ -178,7 +185,7 @@ abstract class Container extends Model
 
             //分润
             foreach ($profit_shares as $profit_share) {
-                if (!$profit_share->receiveContainer->changeBalance(
+                if (!$profit_share->receiveContainer->isNormalForUpdate() || !$profit_share->receiveContainer->changeBalance(
                     $profit_share->is_frozen ? 0 : $profit_share->amount,
                     $profit_share->is_frozen ? $profit_share->amount : 0
                 )
@@ -189,7 +196,7 @@ abstract class Container extends Model
 
             //生成转账
             $transfer = new Transfer([
-                'containerFrom' => $this->container,
+                'containerFrom' => $this,
                 'containerTo' => $to_container,
                 'fee' => $fee,
                 'from_frozen' => $from_frozen,
@@ -214,5 +221,20 @@ abstract class Container extends Model
             DB::rollBack();
             return false;
         }
+    }
+
+    /**
+     * 容器状态判断
+     * 显式独占结算容器
+     * @return bool
+     */
+    private function isNormalForUpdate()
+    {
+        if (is_a($this, SettleContainer::class)) {
+            if (SettleContainer::find($this->getKey())->lockForUpdate()->value('state') != SettleContainer::STATE_NORMAL) {
+                return false;
+            }
+        }
+        return true;
     }
 }

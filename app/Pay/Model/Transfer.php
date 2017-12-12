@@ -1,6 +1,8 @@
 <?php
 /**
  * 余额转账
+ *
+ * @transaction safe
  */
 
 namespace App\Pay\Model;
@@ -27,7 +29,8 @@ class Transfer extends Model
         'fee' => 'flaot',
         'amount' => 'float',
         'create_at' => 'datetime',
-        'update_at' => 'datetime'
+        'update_at' => 'datetime',
+        'state' => 'integer'
     ];
 
     /**
@@ -53,7 +56,7 @@ class Transfer extends Model
         DB::beginTransaction();
         do {
             //撤回分润
-            $transfer = Transfer::where('state', self::STATE_COMPLETE)->with('profitShares.receiveContainer')->find($this->getKey());
+            $transfer = Transfer::where('state', self::STATE_COMPLETE)->with('profitShares.receiveContainer')->lockForUpdate()->find($this->getKey());
             $profit_share_sum = 0;
             foreach ($transfer->profitShares as $profitShare) {
                 if (!$profitShare->receiveContainer->changeBalance($profitShare->is_frozen ? 0 : -$profitShare->amount, $profitShare->is_frozen ? -$profitShare->amount : 0)) {

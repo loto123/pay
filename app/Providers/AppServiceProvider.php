@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Encore\Admin\Config\Config;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
             'master' => 'App\Pay\Model\MasterContainer', //主容器
             'settle' => 'App\Pay\Model\SettleContainer', //结算容器
         ]);
+
+        //降低隔离级别,不需要重复读
+        DB::statement('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php
 /**
  * 结算容器
+ *
+ * @transaction safe
  * 用于向多个主容器收发资金
  * Author: huangkaixuan
  * Date: 2017/12/4
@@ -23,6 +25,7 @@ class SettleContainer extends Container
     const STATE_EXTRACTED = 2; //关闭
     protected $table = 'pay_settle_container'; //已提取
     protected $casts = [
+        'state' => 'integer',
         'create_at' => 'datetime',
         'update_at' => 'datetime',
         'balance' => 'float',
@@ -31,6 +34,7 @@ class SettleContainer extends Container
 
     /**
      * 提取所有金额
+     * 独占主-从容器
      * @return bool
      */
     public function extract()
@@ -40,19 +44,10 @@ class SettleContainer extends Container
         DB::beginTransaction();
 
         do {
-            //更改容器状态
-            if (!DB::table($this->table)->where([
-                ['id', '=', $this->getKey()],
-                ['state', '<>', self::STATE_EXTRACTED]
-            ])->update(['state' => self::STATE_EXTRACTED])
-            ) {
-                break;
-            }
-            $this->state = self::STATE_EXTRACTED;
-
             //获取总余额
-            $reserve = DB::table($this->table)->select('balance, frozen_balance')
-                ->where('id', $this->getKey())->lockForUpdate()->first();
+            $reserve = DB::table($this->table)->select('balance, frozen_balance')->where([
+                ['state', '<>', self::STATE_EXTRACTED]
+            ])->lockForUpdate()->first();
 
             $toExtract = $reserve->balance + $reserve->frozen_balance;
             if ($toExtract <= 0) {
@@ -65,7 +60,7 @@ class SettleContainer extends Container
             }
 
             //主容器增加余额
-            if (!$this->masterContainer()->changeBalance($toExtract, 0)) {
+            if (!$this->masterContainer->changeBalance($toExtract, 0)) {
                 break;
             }
 
@@ -77,20 +72,19 @@ class SettleContainer extends Container
                 break;
             }
 
+            //更新提取状态
+            if (!self::where($this->getKeyName(), $this->getKey())->update(['state' => self::STATE_EXTRACTED])) {
+                break;
+            }
+
             $commit = true;
         } while (false);
 
         $commit ? DB::commit() : DB::rollBack();
+        if ($commit) {
+            $this->state = self::STATE_EXTRACTED;
+        }
         return $commit;
-    }
-
-    /**
-     * 主容器
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function masterContainer()
-    {
-        return $this->belongsTo('App\Pay\Model\MasterContainer', 'master_container');
     }
 
     /**
@@ -103,6 +97,15 @@ class SettleContainer extends Container
     }
 
     /**
+     * 主容器
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function masterContainer()
+    {
+        return $this->belongsTo('App\Pay\Model\MasterContainer', 'master_container');
+    }
+
+    /**
      * 关闭结算容器
      * 容器关闭后无法收发款
      *
@@ -110,13 +113,7 @@ class SettleContainer extends Container
      */
     public function close()
     {
-        if ($this->state == self::STATE_NORMAL) {
-            $this->state = self::STATE_CLOSED;
-            return $this->save();
-        } else {
-            return false;
-        }
-
+        return self::where([[$this->getKeyName(), $this->getKey()], ['state', self::STATE_NORMAL]])->update(['state' => self::STATE_CLOSED]) > 0;
     }
 
     /**
@@ -132,9 +129,6 @@ class SettleContainer extends Container
      */
     public function transfer(Container $to_container, $amount, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
     {
-        if ($this->state != self::STATE_NORMAL) {
-            return false;
-        }
-        return $this->transfer($to_container, $amount, $fee, $from_frozen, $to_frozen, $profit_shares);
+        return parent::transfer($to_container, $amount, $fee, $from_frozen, $to_frozen, $profit_shares);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 /**
  * 主容器
+ *
+ * @transaction safe
  * Author: huangkaixuan
  * Date: 2017/12/5
  * Time: 10:55
@@ -9,6 +11,7 @@
 namespace App\Pay\Model;
 
 
+use App\Jobs\SubmitWithdrawRequest;
 use Illuminate\Support\Facades\DB;
 
 class MasterContainer extends Container
@@ -86,30 +89,42 @@ class MasterContainer extends Container
             'state' => Deposit::STATE_UNPAID
         ]);
 
-        if ($order->save()) {
-            $respon = $byMethod->getImplInstance()->deposit($order->getKey(), $amount, $this->getKey(), $byChannel->getInterfaceConfigure(), $byChannel->getNotifyUrl());
-            if ($respon == null) {
+        DB::beginTransaction();
+        $commit = false;
+        $response = null;
+
+        do {
+            if (!$order->save()) {
+                break;
+            }
+
+            $response = $byMethod->getImplInstance()->deposit($order->getKey(), $amount, $this->getKey(), $byChannel->getInterfaceConfigure(), $byChannel->getNotifyUrl());
+
+            if ($response == null) {
                 $order->state = Deposit::STATE_API_ERR;
                 $order->save();
             }
-            return $respon;
-        } else {
-            return null;
-        }
 
+            $commit = true;
+        } while (false);
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $response;
     }
 
 
     /**
      * 发起提现
+     * 隐式容器独占
+     *
      * @param $amount
      * @param $receiver_info
-     * @param PayMethod $byMethod
      * @param Channel $byChannel
+     * @param PayMethod $byMethod
      * @param $system_fee
      * @return bool
      */
-    public function initiateWithdraw($amount, $receiver_info, PayMethod $byMethod, Channel $byChannel, $system_fee)
+    public function initiateWithdraw($amount, $receiver_info, Channel $byChannel, PayMethod $byMethod, $system_fee)
     {
         //开始事务
         $commit = false;
@@ -132,16 +147,17 @@ class MasterContainer extends Container
             ]);
 
             //加入提现队列
-            if (!$withdraw->addToQueue()) {
-                break;
+            if ($withdraw->save()) {
+                DB::commit();
+                SubmitWithdrawRequest::dispatch($withdraw)->onQueue('withdraw');
+                $commit = true;
             }
-
-            $commit = true;
-
         } while (false);
 
         //结束事务
-        $commit ? DB::commit() : DB::rollBack();
+        if (!$commit) {
+            DB::rollBack();
+        }
         return $commit;
     }
 
