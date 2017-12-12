@@ -67,6 +67,12 @@ class User extends Authenticatable
     public function operator()
     {
         return $this->hasOne('App\Admin', 'id', 'operator_id');
+
+    }
+
+    public function shop()
+    {
+        return $this->hasMany('App\shop','manager','id');
     }
 
 }

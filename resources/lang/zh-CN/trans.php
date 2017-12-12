@@ -43,4 +43,8 @@ return [
     'record_withdraw_error_3' => '交易相关店铺不存在，不允许撤回交易',
     'withdraw_success' => '交易撤回成功',
     'withdraw_failed' => '交易撤回失败',
+    'min' => ':attribute的长度不能小于:min位',
+    'max' => ':attribute的长度不能超过:max位',
+    'digits_between' => ':attribute必须为数字，且长度在:min到:max之间',
+    'digits' => ':attribute必须为数字，且长度必须是:value位',
 ];

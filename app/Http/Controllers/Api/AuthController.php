@@ -3,37 +3,60 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use Swagger\Annotations as SWG;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
- * @resource 验证
- *
- * 验证授权
- *
- * 使用token验证
- * "Authorization: token"
- * 或
- * http://url/?token=token
- *
+ * @SWG\Swagger(
+ *   basePath="/api",
+ *   @SWG\Info(
+ *     title="游戏宝接口列表",
+ *     version="0.0.1"
+ *   )
+ * )
  * @package App\Http\Controllers\Api
  */
-class AuthController extends Controller {
-
+class AuthController extends BaseController {
     /**
-     * 登录
      *
+     * @SWG\Post(
+     *   path="/auth/login",
+     *   summary="手机号登录",
+     *     tags={"登录"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="password",
+     *         in="formData",
+     *         description="密码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="A list with products",
+     *     examples={
+     *      "code":0,
+     *      "msg":"ok"
+     *     }
+     *   ),
+     * )
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request){
+    public function login(Request $request) {
         $credentials = $request->only('mobile', 'password');
 
         try {
             // attempt to verify the credentials and create a token for the user
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 401);
             }
         } catch (JWTException $e) {
@@ -42,16 +65,48 @@ class AuthController extends Controller {
         }
 
         // all good so return the token
-        return response()->json(compact('token'));
+        return $this->json(compact('token'));
     }
 
     /**
-     * 注册
      *
+     * @SWG\Post(
+     *   path="/auth/register",
+     *   summary="手机号注册",
+     *     tags={"登录"},
+     *     @SWG\Parameter(
+     *         name="name",
+     *         in="formData",
+     *         description="用户名",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="password",
+     *         in="formData",
+     *         description="密码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="A list with products",
+     *     examples={
+     *      "code":0,
+     *      "msg":"ok"
+     *     }
+     *   ),
+     * )
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
-    {
+    public function register(Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'mobile' => 'required',
@@ -59,17 +114,17 @@ class AuthController extends Controller {
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return $this->json([], $validator->errors()->first());
         }
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
 
-        $success['token'] =  JWTAuth::fromUser($user);
-        $success['name'] =  $user->name;
+        $success['token'] = JWTAuth::fromUser($user);
+        $success['name'] = $user->name;
 
-        return response()->json(['success'=>$success]);
+        return $this->json($success);
     }
 
 }

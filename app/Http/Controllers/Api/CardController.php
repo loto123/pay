@@ -1,0 +1,138 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\User;
+use App\UserCard;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use JWTAuth;
+use phpDocumentor\Reflection\Types\Null_;
+use Validator;
+
+class CardController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware("jwt.auth");
+    }
+
+    //银行卡列表
+    public function index()
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $cards = UserCard::query()->where('user_id', '=', $this->user->id)->select()->get();
+        $data = [];
+        if( !empty($cards) && count($cards)>0 ) {
+            foreach ($cards as $item) {
+                Log::info($item);
+                $data[] = [
+                    'card_id' => $item->id,
+                    'card_num' => $this->formatNum($item->card_num), //做掩码处理
+                    'bank' => $item->bank,
+                ];
+            }
+        }
+        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+    }
+
+    //绑定银行卡
+    public function create(Request $request)
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        //字段验证
+        $validator = Validator::make($request->all(),
+            [
+                'card_num' => 'bail|required|digits_between:16,19',
+                'name' => 'bail|required',
+                'id' => 'bail|required|digits:18',
+                'bank' => 'bail|required',
+                'mobile' => 'bail|required|digits:11',
+            ],
+            [
+                'required' => trans('trans.required'),
+                'digits_between' =>trans('trans.digits_between'),
+                'digits' => trans('trans.digits'),
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+        }
+
+        $card_num = $request->input('card_num');
+        $bank = $request->input('bank');
+        $holder_name = $request->input('name');
+        $holder_id = $request->input('id');
+        $holder_mobile = $request->input('mobile');
+
+        //验证卡号？身份证号？手机号？
+
+        //同一用户只能绑定一次
+        $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$card_num)->first();
+        if (!empty($card_list) && count($card_list)>0) {
+            return response()->json(['code' => 0,'msg' => '已经绑定的银行卡不能重复绑定','data' => []]);
+        }
+
+        $cards = new UserCard();
+        $cards->user_id = $this->user->id;
+        $cards->card_num = $card_num;
+        $cards->bank = $bank;
+        $cards->holder_name = $holder_name;
+        $cards->holder_id = $holder_id;
+        $cards->holder_mobile = $holder_mobile;
+        $cards->save();
+        if(empty($this->user->pay_card_id)) {
+            $this->user->pay_card_id =$cards->id;
+            $this->user->save();
+        }
+        return response()->json(['code' => 1,'msg' => '','data' => []]);
+    }
+
+    //解绑银行卡
+    public function delete(Request $request)
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $validator = Validator::make($request->all(),
+            ['card_id' => 'required|numeric'],
+            [
+                'required' => trans('trans.required'),
+                'numeric' => trans('trans.numeric'),
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['code'=>0,'msg'=>$validator->errors()->first(),'data'=>[]]);
+        }
+
+        $card_id = $request->input('card_id');
+        $user_card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
+        if (!empty($user_card) && count($user_card)>0) {
+            $user_card->delete();
+            //如果银行卡都解绑了，要把结算卡清零
+            $user_card_count = UserCard::where('id',$this->user->id)->count();
+            if($user_card_count==0) {
+                User::where('id',$this->user->id)->update(['pay_card_id'=>NULL]);
+            }
+            return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
+        } else {
+            return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
+        }
+    }
+
+    //对字符串做掩码处理
+    private function formatNum($num,$pre=0,$suf=4)
+    {
+        $prefix = '';
+        $suffix = '';
+        if($pre>0) {
+            $prefix = substr($num, 0, $pre);
+        }
+        if ($suf>0){
+            $suffix = substr($num, 0-$suf, $suf);
+        }
+        $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
+        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
+        return $maskBankCardNo;
+    }
+}
