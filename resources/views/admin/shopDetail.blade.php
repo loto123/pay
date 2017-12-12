@@ -14,7 +14,7 @@
                             </div>
                         </div>
                     </h4>
-                    <h4 class="widget-user-desc">店铺会员（{{3}}）：
+                    <h4 class="widget-user-desc">店铺会员（{{$users_arr->count()}}）：
                         @if (!empty($users_arr) && $users_arr->count()>0 )
                         <div class="user-panel clearfix">
                             @foreach($users_arr as $user_item)
@@ -32,14 +32,13 @@
                         @endif
                     </h4>
                     <h4 class="widget-user-desc">店铺交易笔数：<span>{{$list->transfer_cnt}}</span></h4>
-                    <h4 class="widget-user-desc">平台交易费率：<span>{{'xxx'}}</span></h4>
-                    <h4 class="widget-user-desc">已付平台交易费：<span>{{'xxx'}}</span></h4>
-                    <h4 class="widget-user-desc">店铺会员收费对象：<span>{{($list->type=='1') ? '大卖家':'小卖家' }}</span></h4>
-                    <h4 class="widget-user-desc">店铺分成比例：<span>{{$list->percent}}</span></h4>
-                    <h4 class="widget-user-desc">店铺默认茶水费：<span>{{$list->fee}}</span></h4>
-                    <h4 class="widget-user-desc">店铺收入：<span>{{'xxx'}}</span></h4>
-                    <h4 class="widget-user-desc">平均交易额：<span>{{($list->transfer_cnt>0)?round($list->summary/$list->transfer_cnt,2):0}}</span></h4>
-                    <h4 class="widget-user-desc">单笔最高交易额：<span>{{$list->max_amount?$list->max_amount:'0'}}</span></h4>
+                    <h4 class="widget-user-desc">平台交易费率：<span>{{config('platform_fee_percent') . '%'}}</span></h4>
+                    <h4 class="widget-user-desc">已付平台交易费：<span>{{$list->fee_amount_cnt}}</span></h4>
+                    <h4 class="widget-user-desc">店铺手续费率：<span>{{(int)$list->fee . '%'}}</span>
+                    <h4 class="widget-user-desc">店铺默认单价：<span>{{$list->price}}</span></h4>
+                    <h4 class="widget-user-desc">总交易额：<span>{{$list->summary??0}}</span></h4>
+                    <h4 class="widget-user-desc">店铺收入：<span>{{$list->tip_amount_cnt??0}}</span></h4>
+                    <h4 class="widget-user-desc">店铺余额：<span>{{$list->balance}}</span></h4>
                     <h4 class="widget-user-desc">店铺创建时间：<span>{{$list->created_at}}</span></h4>
                 </div>
                 <form class="form-horizontal" method="post" action="/admin/shop/updates">
