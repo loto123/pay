@@ -20,7 +20,7 @@
       </div>
 
       <div class="menu flex " v-if="isGroupMaster">
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around">
+          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopAccount">
               <i class="iconfont">
                   &#xe61e;
               </i>
@@ -313,9 +313,6 @@
       &:nth-child(1) {
         border-bottom: 0.05em solid #eee;
       }
-      box-sizing: border-box;
-      height: 2.5em;
-      padding-left: 1em;
       i {
         text-align: right;
         padding-right: 1em;
@@ -406,6 +403,9 @@ export default {
     },
     goDealManagement(){
       this.$router.push("/shop/deal_management");
+    },
+    goShopAccount(){
+      this.$router.push("/shop/shopAccount");
     }
   }
 };
