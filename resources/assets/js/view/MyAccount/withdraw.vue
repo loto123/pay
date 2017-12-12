@@ -60,9 +60,10 @@ export default {
 <style lang="scss" scoped>
 @import "../../../sass/oo_flex.scss";
 .withdraw-container {
-  background: #efeef4;
+  background: #eee;
   height: 100vh;
   padding-top: 2em;
+  box-sizing: border-box;
 }
 .withdraw-box {
   background: #fff;
@@ -88,7 +89,7 @@ export default {
 }
 .all-money {
   margin-top: 1em;
-  font-size: 0.8em;
+  font-size: 1em;
   .money {
     color: #666;
   }
@@ -100,7 +101,7 @@ export default {
 .withdraw-way {
   margin-top: 2em;
   .title {
-    color: #666;
+    color: #999;
     margin-bottom: 0.5em;
   }
 }

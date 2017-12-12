@@ -42,6 +42,7 @@
         background:#eee;
         height: 100vh;
         padding-top:2em;
+        box-sizing: border-box;
     }
     .give-box{
         background:#fff;

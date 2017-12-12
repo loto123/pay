@@ -11683,7 +11683,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(199);
+var	fixUrls = __webpack_require__(189);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -22462,13 +22462,13 @@ module.exports = Cancel;
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(120)
+  __webpack_require__(115)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = null
 /* template */
-var __vue_template__ = __webpack_require__(122)
+var __vue_template__ = __webpack_require__(117)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -22512,7 +22512,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(19);
-module.exports = __webpack_require__(207);
+module.exports = __webpack_require__(197);
 
 
 /***/ }),
@@ -22526,7 +22526,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App_vue__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__App_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store__ = __webpack_require__(194);
 
 // require('./bootstrap');
 
@@ -22894,14 +22894,14 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_Index_index_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__view_Index_index_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__myAccount__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__makeDeal__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__my__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shop__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_mint_ui_lib_style_css__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__makeDeal__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__my__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shop__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_mint_ui_lib_style_css__ = __webpack_require__(187);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_mint_ui_lib_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_mint_ui_lib_style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sass_oo_flex_scss__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sass_oo_flex_scss__ = __webpack_require__(190);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sass_oo_flex_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__sass_oo_flex_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sass_iconfont_scss__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sass_iconfont_scss__ = __webpack_require__(192);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sass_iconfont_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__sass_iconfont_scss__);
 
 
@@ -27941,7 +27941,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#top-component[data-v-789d58d5] {\n  height: 2em;\n  width: 100%;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1000;\n}\n#top-component a[data-v-789d58d5] {\n    display: block;\n    width: 33.33%;\n}\n#top-component h3[data-v-789d58d5] {\n    text-align: center;\n    width: 33.33%;\n}\n#top-component div[data-v-789d58d5] {\n    width: 33.33%;\n}\n", ""]);
+exports.push([module.i, "\n#top-component[data-v-789d58d5] {\n  height: 2em;\n  width: 100%;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1000;\n}\n#top-component h3[data-v-789d58d5] {\n    text-align: center;\n    width: 33.33%;\n}\n#top-component div[data-v-789d58d5] {\n    width: 33.33%;\n}\n", ""]);
 
 // exports
 
@@ -28296,13 +28296,13 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_MyAccount_myAccount_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__view_MyAccount_myAccount_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_MyAccount_withdraw_vue__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_MyAccount_withdraw_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_MyAccount_withdraw_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_MyAccount_recharge_vue__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_MyAccount_recharge_vue__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_MyAccount_recharge_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__view_MyAccount_recharge_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MyAccount_give_vue__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MyAccount_give_vue__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MyAccount_give_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__view_MyAccount_give_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_MyAccount_bill_vue__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_MyAccount_bill_vue__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_MyAccount_bill_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__view_MyAccount_bill_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_MyAccount_billDetails_vue__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_MyAccount_billDetails_vue__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_MyAccount_billDetails_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__view_MyAccount_billDetails_vue__);
 
 
@@ -28400,7 +28400,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5a753464], body[data-v-5a753464], div[data-v-5a753464], span[data-v-5a753464], applet[data-v-5a753464], object[data-v-5a753464], iframe[data-v-5a753464],\nh1[data-v-5a753464], h2[data-v-5a753464], h3[data-v-5a753464], h4[data-v-5a753464], h5[data-v-5a753464], h6[data-v-5a753464], p[data-v-5a753464], blockquote[data-v-5a753464], pre[data-v-5a753464],\na[data-v-5a753464], abbr[data-v-5a753464], acronym[data-v-5a753464], address[data-v-5a753464], big[data-v-5a753464], cite[data-v-5a753464], code[data-v-5a753464],\ndel[data-v-5a753464], dfn[data-v-5a753464], em[data-v-5a753464], img[data-v-5a753464], ins[data-v-5a753464], kbd[data-v-5a753464], q[data-v-5a753464], s[data-v-5a753464], samp[data-v-5a753464],\nsmall[data-v-5a753464], strike[data-v-5a753464], strong[data-v-5a753464], sub[data-v-5a753464], sup[data-v-5a753464], tt[data-v-5a753464], var[data-v-5a753464],\nb[data-v-5a753464], u[data-v-5a753464], i[data-v-5a753464], center[data-v-5a753464],\ndl[data-v-5a753464], dt[data-v-5a753464], dd[data-v-5a753464], ol[data-v-5a753464], ul[data-v-5a753464], li[data-v-5a753464],\nfieldset[data-v-5a753464], form[data-v-5a753464], label[data-v-5a753464], legend[data-v-5a753464],\ntable[data-v-5a753464], caption[data-v-5a753464], tbody[data-v-5a753464], tfoot[data-v-5a753464], thead[data-v-5a753464], tr[data-v-5a753464], th[data-v-5a753464], td[data-v-5a753464],\narticle[data-v-5a753464], aside[data-v-5a753464], canvas[data-v-5a753464], details[data-v-5a753464], embed[data-v-5a753464],\nfigure[data-v-5a753464], figcaption[data-v-5a753464], footer[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464],\nmenu[data-v-5a753464], nav[data-v-5a753464], output[data-v-5a753464], ruby[data-v-5a753464], section[data-v-5a753464], summary[data-v-5a753464],\ntime[data-v-5a753464], mark[data-v-5a753464], audio[data-v-5a753464], video[data-v-5a753464] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5a753464], aside[data-v-5a753464], details[data-v-5a753464], figcaption[data-v-5a753464], figure[data-v-5a753464],\nfooter[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464], menu[data-v-5a753464], nav[data-v-5a753464], section[data-v-5a753464] {\n  display: block;\n}\nbody[data-v-5a753464] {\n  line-height: 1;\n}\nol[data-v-5a753464], ul[data-v-5a753464] {\n  list-style: none;\n}\nblockquote[data-v-5a753464], q[data-v-5a753464] {\n  quotes: none;\n}\nblockquote[data-v-5a753464]:before, blockquote[data-v-5a753464]:after,\nq[data-v-5a753464]:before, q[data-v-5a753464]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5a753464] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5a753464] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5a753464] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5a753464] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5a753464] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5a753464] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5a753464] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5a753464] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5a753464] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5a753464] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5a753464] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5a753464] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5a753464] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5a753464] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5a753464] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5a753464] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5a753464] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5a753464] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5a753464] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5a753464] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5a753464] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5a753464] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5a753464] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5a753464] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5a753464] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5a753464] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5a753464] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5a753464] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5a753464] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5a753464] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5a753464] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5a753464] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.mb15[data-v-5a753464] {\n  margin-bottom: 1.5em;\n}\n#myAccount[data-v-5a753464] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.withDraw-money[data-v-5a753464] {\n  width: 14em;\n  height: 14em;\n  border: 1px solid #aaa;\n  border-radius: 50%;\n  margin: 0 auto 3em auto;\n  background: #199ED8;\n  position: relative;\n  text-align: center;\n}\n.withDraw-money .money[data-v-5a753464], .withDraw-money .title[data-v-5a753464] {\n    position: absolute;\n    width: 100%;\n    text-align: center;\n}\n.withDraw-money .money[data-v-5a753464] {\n    top: 30%;\n    color: #fff;\n    font-size: 2em;\n}\n.withDraw-money .title[data-v-5a753464] {\n    top: 50%;\n    color: #ddd;\n}\n.submit-btn[data-v-5a753464] {\n  width: 90%;\n  margin: auto;\n}\n.submit-btn a[data-v-5a753464] {\n    display: block;\n}\n.submit-btn a button[data-v-5a753464] {\n      border: none;\n      height: 2.8em;\n      line-height: 2.8em;\n      text-align: center;\n      width: 100%;\n      margin: auto;\n      border-radius: 5px;\n      font-size: 1em;\n}\n.submit-btn a .recharge-btn[data-v-5a753464] {\n      background: #00CC00;\n      color: #fff;\n}\n.submit-btn a .withdraw-btn[data-v-5a753464] {\n      background: #fff;\n      color: #333;\n}\n.submit-btn a .give-btn[data-v-5a753464] {\n      background: #199ED8;\n      color: #fff;\n}\n.mint-button--danger[data-v-5a753464] {\n  background: #fff !important;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5a753464], body[data-v-5a753464], div[data-v-5a753464], span[data-v-5a753464], applet[data-v-5a753464], object[data-v-5a753464], iframe[data-v-5a753464],\nh1[data-v-5a753464], h2[data-v-5a753464], h3[data-v-5a753464], h4[data-v-5a753464], h5[data-v-5a753464], h6[data-v-5a753464], p[data-v-5a753464], blockquote[data-v-5a753464], pre[data-v-5a753464],\na[data-v-5a753464], abbr[data-v-5a753464], acronym[data-v-5a753464], address[data-v-5a753464], big[data-v-5a753464], cite[data-v-5a753464], code[data-v-5a753464],\ndel[data-v-5a753464], dfn[data-v-5a753464], em[data-v-5a753464], img[data-v-5a753464], ins[data-v-5a753464], kbd[data-v-5a753464], q[data-v-5a753464], s[data-v-5a753464], samp[data-v-5a753464],\nsmall[data-v-5a753464], strike[data-v-5a753464], strong[data-v-5a753464], sub[data-v-5a753464], sup[data-v-5a753464], tt[data-v-5a753464], var[data-v-5a753464],\nb[data-v-5a753464], u[data-v-5a753464], i[data-v-5a753464], center[data-v-5a753464],\ndl[data-v-5a753464], dt[data-v-5a753464], dd[data-v-5a753464], ol[data-v-5a753464], ul[data-v-5a753464], li[data-v-5a753464],\nfieldset[data-v-5a753464], form[data-v-5a753464], label[data-v-5a753464], legend[data-v-5a753464],\ntable[data-v-5a753464], caption[data-v-5a753464], tbody[data-v-5a753464], tfoot[data-v-5a753464], thead[data-v-5a753464], tr[data-v-5a753464], th[data-v-5a753464], td[data-v-5a753464],\narticle[data-v-5a753464], aside[data-v-5a753464], canvas[data-v-5a753464], details[data-v-5a753464], embed[data-v-5a753464],\nfigure[data-v-5a753464], figcaption[data-v-5a753464], footer[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464],\nmenu[data-v-5a753464], nav[data-v-5a753464], output[data-v-5a753464], ruby[data-v-5a753464], section[data-v-5a753464], summary[data-v-5a753464],\ntime[data-v-5a753464], mark[data-v-5a753464], audio[data-v-5a753464], video[data-v-5a753464] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5a753464], aside[data-v-5a753464], details[data-v-5a753464], figcaption[data-v-5a753464], figure[data-v-5a753464],\nfooter[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464], menu[data-v-5a753464], nav[data-v-5a753464], section[data-v-5a753464] {\n  display: block;\n}\nbody[data-v-5a753464] {\n  line-height: 1;\n}\nol[data-v-5a753464], ul[data-v-5a753464] {\n  list-style: none;\n}\nblockquote[data-v-5a753464], q[data-v-5a753464] {\n  quotes: none;\n}\nblockquote[data-v-5a753464]:before, blockquote[data-v-5a753464]:after,\nq[data-v-5a753464]:before, q[data-v-5a753464]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5a753464] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5a753464] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5a753464] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5a753464] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5a753464] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5a753464] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5a753464] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5a753464] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5a753464] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5a753464] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5a753464] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5a753464] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5a753464] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5a753464] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5a753464] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5a753464] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5a753464] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5a753464] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5a753464] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5a753464] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5a753464] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5a753464] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5a753464] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5a753464] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5a753464] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5a753464] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5a753464] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5a753464] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5a753464] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5a753464] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5a753464] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5a753464] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.mb15[data-v-5a753464] {\n  margin-bottom: 1.5em;\n}\n#myAccount[data-v-5a753464] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#myAccount .header-right[data-v-5a753464] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.myAccount-box[data-v-5a753464] {\n  margin-top: 2em;\n}\n.withDraw-money[data-v-5a753464] {\n  width: 13em;\n  height: 13em;\n  border: 1px solid #aaa;\n  border-radius: 50%;\n  margin: 0 auto 3em auto;\n  background: #199ED8;\n  position: relative;\n  text-align: center;\n}\n.withDraw-money .money[data-v-5a753464], .withDraw-money .title[data-v-5a753464] {\n    position: absolute;\n    width: 100%;\n    text-align: center;\n}\n.withDraw-money .money[data-v-5a753464] {\n    top: 30%;\n    color: #fff;\n    font-size: 2em;\n}\n.withDraw-money .title[data-v-5a753464] {\n    top: 50%;\n    color: #ddd;\n}\n.submit-btn[data-v-5a753464] {\n  width: 90%;\n  margin: auto;\n}\n.submit-btn a[data-v-5a753464] {\n    display: block;\n}\n.submit-btn a button[data-v-5a753464] {\n      border: none;\n      height: 2.8em;\n      line-height: 2.8em;\n      text-align: center;\n      width: 100%;\n      margin: auto;\n      border-radius: 5px;\n      font-size: 1em;\n}\n.submit-btn a .recharge-btn[data-v-5a753464] {\n      background: #00CC00;\n      color: #fff;\n}\n.submit-btn a .withdraw-btn[data-v-5a753464] {\n      background: #fff;\n      color: #333;\n}\n.submit-btn a .give-btn[data-v-5a753464] {\n      background: #199ED8;\n      color: #fff;\n}\n.mint-button--danger[data-v-5a753464] {\n  background: #fff !important;\n}\n", ""]);
 
 // exports
 
@@ -28465,21 +28465,12 @@ var render = function() {
       _c("topBack", { attrs: { title: "我的账户" } }, [
         _c(
           "div",
-          {
-            staticClass: "flex flex-reverse flex-align-center",
-            staticStyle: {
-              width: "100%",
-              "padding-right": "1em",
-              height: "2em",
-              "box-sizing": "border-box"
-            }
-          },
+          { staticClass: "flex flex-reverse flex-align-center header-right" },
           [
             _c(
               "a",
               {
                 staticClass: "recharge-btn ",
-                staticStyle: { width: "4em" },
                 attrs: { href: "/#/myAccount/bill" }
               },
               [_vm._v("账单明细")]
@@ -28635,7 +28626,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-1723c92d], body[data-v-1723c92d], div[data-v-1723c92d], span[data-v-1723c92d], applet[data-v-1723c92d], object[data-v-1723c92d], iframe[data-v-1723c92d],\nh1[data-v-1723c92d], h2[data-v-1723c92d], h3[data-v-1723c92d], h4[data-v-1723c92d], h5[data-v-1723c92d], h6[data-v-1723c92d], p[data-v-1723c92d], blockquote[data-v-1723c92d], pre[data-v-1723c92d],\na[data-v-1723c92d], abbr[data-v-1723c92d], acronym[data-v-1723c92d], address[data-v-1723c92d], big[data-v-1723c92d], cite[data-v-1723c92d], code[data-v-1723c92d],\ndel[data-v-1723c92d], dfn[data-v-1723c92d], em[data-v-1723c92d], img[data-v-1723c92d], ins[data-v-1723c92d], kbd[data-v-1723c92d], q[data-v-1723c92d], s[data-v-1723c92d], samp[data-v-1723c92d],\nsmall[data-v-1723c92d], strike[data-v-1723c92d], strong[data-v-1723c92d], sub[data-v-1723c92d], sup[data-v-1723c92d], tt[data-v-1723c92d], var[data-v-1723c92d],\nb[data-v-1723c92d], u[data-v-1723c92d], i[data-v-1723c92d], center[data-v-1723c92d],\ndl[data-v-1723c92d], dt[data-v-1723c92d], dd[data-v-1723c92d], ol[data-v-1723c92d], ul[data-v-1723c92d], li[data-v-1723c92d],\nfieldset[data-v-1723c92d], form[data-v-1723c92d], label[data-v-1723c92d], legend[data-v-1723c92d],\ntable[data-v-1723c92d], caption[data-v-1723c92d], tbody[data-v-1723c92d], tfoot[data-v-1723c92d], thead[data-v-1723c92d], tr[data-v-1723c92d], th[data-v-1723c92d], td[data-v-1723c92d],\narticle[data-v-1723c92d], aside[data-v-1723c92d], canvas[data-v-1723c92d], details[data-v-1723c92d], embed[data-v-1723c92d],\nfigure[data-v-1723c92d], figcaption[data-v-1723c92d], footer[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d],\nmenu[data-v-1723c92d], nav[data-v-1723c92d], output[data-v-1723c92d], ruby[data-v-1723c92d], section[data-v-1723c92d], summary[data-v-1723c92d],\ntime[data-v-1723c92d], mark[data-v-1723c92d], audio[data-v-1723c92d], video[data-v-1723c92d] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-1723c92d], aside[data-v-1723c92d], details[data-v-1723c92d], figcaption[data-v-1723c92d], figure[data-v-1723c92d],\nfooter[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d], menu[data-v-1723c92d], nav[data-v-1723c92d], section[data-v-1723c92d] {\n  display: block;\n}\nbody[data-v-1723c92d] {\n  line-height: 1;\n}\nol[data-v-1723c92d], ul[data-v-1723c92d] {\n  list-style: none;\n}\nblockquote[data-v-1723c92d], q[data-v-1723c92d] {\n  quotes: none;\n}\nblockquote[data-v-1723c92d]:before, blockquote[data-v-1723c92d]:after,\nq[data-v-1723c92d]:before, q[data-v-1723c92d]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-1723c92d] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-1723c92d] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-1723c92d] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-1723c92d] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-1723c92d] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-1723c92d] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-1723c92d] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-1723c92d] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-1723c92d] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-1723c92d] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-1723c92d] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-1723c92d] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-1723c92d] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-1723c92d] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-1723c92d] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-1723c92d] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-1723c92d] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-1723c92d] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-1723c92d] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-1723c92d] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-1723c92d] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-1723c92d] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-1723c92d] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-1723c92d] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-1723c92d] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-1723c92d] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-1723c92d] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-1723c92d] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-1723c92d] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-1723c92d] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-1723c92d] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-1723c92d] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.withdraw-container[data-v-1723c92d] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.withdraw-box[data-v-1723c92d] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.withdraw-box .tltle[data-v-1723c92d] {\n    font-size: 1em;\n    color: #999;\n}\n.withdraw-money[data-v-1723c92d] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 1.2em;\n}\n.withdraw-money input[data-v-1723c92d] {\n    border: none;\n    padding: 7px 0;\n    display: inline-block;\n    width: 70%;\n}\n.all-money[data-v-1723c92d] {\n  margin-top: 1em;\n  font-size: 0.8em;\n}\n.all-money .money[data-v-1723c92d] {\n    color: #666;\n}\n.all-money .all-withdraw[data-v-1723c92d] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.withdraw-way[data-v-1723c92d] {\n  margin-top: 2em;\n}\n.withdraw-way .title[data-v-1723c92d] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.list[data-v-1723c92d] {\n  background-color: #fff;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  color: inherit;\n  min-height: 48px;\n  display: block;\n  border-bottom: 1px solid #d9d9d9;\n}\n.list-title[data-v-1723c92d] {\n  width: 100%;\n}\n.list-wrapper[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  min-height: inherit;\n  padding: 0 10px;\n}\n.radio-core[data-v-1723c92d] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  display: inline-block;\n  background-color: #fff;\n  border-radius: 100%;\n  border: 1px solid #ccc;\n  position: relative;\n  width: 20px;\n  height: 20px;\n  vertical-align: middle;\n}\n.radio-core[data-v-1723c92d]::after {\n    content: \" \";\n    border-radius: 100%;\n    top: 5px;\n    left: 5px;\n    position: absolute;\n    width: 8px;\n    height: 8px;\n}\n.radiolist-label[data-v-1723c92d] {\n  display: block;\n  width: 100%;\n}\n.radio-input[data-v-1723c92d] {\n  display: none;\n}\n.radio-label[data-v-1723c92d] {\n  vertical-align: middle;\n}\n.radio-input:checked + .radio-core[data-v-1723c92d] {\n  background-color: #26a2ff;\n  border-color: #26a2ff;\n}\n.radio-input:checked + .radio-core[data-v-1723c92d]::after {\n    background-color: #fff;\n}\n.withdraw-btn[data-v-1723c92d] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-1723c92d], body[data-v-1723c92d], div[data-v-1723c92d], span[data-v-1723c92d], applet[data-v-1723c92d], object[data-v-1723c92d], iframe[data-v-1723c92d],\nh1[data-v-1723c92d], h2[data-v-1723c92d], h3[data-v-1723c92d], h4[data-v-1723c92d], h5[data-v-1723c92d], h6[data-v-1723c92d], p[data-v-1723c92d], blockquote[data-v-1723c92d], pre[data-v-1723c92d],\na[data-v-1723c92d], abbr[data-v-1723c92d], acronym[data-v-1723c92d], address[data-v-1723c92d], big[data-v-1723c92d], cite[data-v-1723c92d], code[data-v-1723c92d],\ndel[data-v-1723c92d], dfn[data-v-1723c92d], em[data-v-1723c92d], img[data-v-1723c92d], ins[data-v-1723c92d], kbd[data-v-1723c92d], q[data-v-1723c92d], s[data-v-1723c92d], samp[data-v-1723c92d],\nsmall[data-v-1723c92d], strike[data-v-1723c92d], strong[data-v-1723c92d], sub[data-v-1723c92d], sup[data-v-1723c92d], tt[data-v-1723c92d], var[data-v-1723c92d],\nb[data-v-1723c92d], u[data-v-1723c92d], i[data-v-1723c92d], center[data-v-1723c92d],\ndl[data-v-1723c92d], dt[data-v-1723c92d], dd[data-v-1723c92d], ol[data-v-1723c92d], ul[data-v-1723c92d], li[data-v-1723c92d],\nfieldset[data-v-1723c92d], form[data-v-1723c92d], label[data-v-1723c92d], legend[data-v-1723c92d],\ntable[data-v-1723c92d], caption[data-v-1723c92d], tbody[data-v-1723c92d], tfoot[data-v-1723c92d], thead[data-v-1723c92d], tr[data-v-1723c92d], th[data-v-1723c92d], td[data-v-1723c92d],\narticle[data-v-1723c92d], aside[data-v-1723c92d], canvas[data-v-1723c92d], details[data-v-1723c92d], embed[data-v-1723c92d],\nfigure[data-v-1723c92d], figcaption[data-v-1723c92d], footer[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d],\nmenu[data-v-1723c92d], nav[data-v-1723c92d], output[data-v-1723c92d], ruby[data-v-1723c92d], section[data-v-1723c92d], summary[data-v-1723c92d],\ntime[data-v-1723c92d], mark[data-v-1723c92d], audio[data-v-1723c92d], video[data-v-1723c92d] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-1723c92d], aside[data-v-1723c92d], details[data-v-1723c92d], figcaption[data-v-1723c92d], figure[data-v-1723c92d],\nfooter[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d], menu[data-v-1723c92d], nav[data-v-1723c92d], section[data-v-1723c92d] {\n  display: block;\n}\nbody[data-v-1723c92d] {\n  line-height: 1;\n}\nol[data-v-1723c92d], ul[data-v-1723c92d] {\n  list-style: none;\n}\nblockquote[data-v-1723c92d], q[data-v-1723c92d] {\n  quotes: none;\n}\nblockquote[data-v-1723c92d]:before, blockquote[data-v-1723c92d]:after,\nq[data-v-1723c92d]:before, q[data-v-1723c92d]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-1723c92d] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-1723c92d] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-1723c92d] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-1723c92d] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-1723c92d] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-1723c92d] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-1723c92d] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-1723c92d] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-1723c92d] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-1723c92d] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-1723c92d] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-1723c92d] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-1723c92d] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-1723c92d] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-1723c92d] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-1723c92d] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-1723c92d] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-1723c92d] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-1723c92d] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-1723c92d] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-1723c92d] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-1723c92d] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-1723c92d] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-1723c92d] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-1723c92d] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-1723c92d] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-1723c92d] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-1723c92d] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-1723c92d] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-1723c92d] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-1723c92d] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-1723c92d] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.withdraw-container[data-v-1723c92d] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.withdraw-box[data-v-1723c92d] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.withdraw-box .tltle[data-v-1723c92d] {\n    font-size: 1em;\n    color: #999;\n}\n.withdraw-money[data-v-1723c92d] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 1.2em;\n}\n.withdraw-money input[data-v-1723c92d] {\n    border: none;\n    padding: 7px 0;\n    display: inline-block;\n    width: 70%;\n}\n.all-money[data-v-1723c92d] {\n  margin-top: 1em;\n  font-size: 1em;\n}\n.all-money .money[data-v-1723c92d] {\n    color: #666;\n}\n.all-money .all-withdraw[data-v-1723c92d] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.withdraw-way[data-v-1723c92d] {\n  margin-top: 2em;\n}\n.withdraw-way .title[data-v-1723c92d] {\n    color: #999;\n    margin-bottom: 0.5em;\n}\n.list[data-v-1723c92d] {\n  background-color: #fff;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  color: inherit;\n  min-height: 48px;\n  display: block;\n  border-bottom: 1px solid #d9d9d9;\n}\n.list-title[data-v-1723c92d] {\n  width: 100%;\n}\n.list-wrapper[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  min-height: inherit;\n  padding: 0 10px;\n}\n.radio-core[data-v-1723c92d] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  display: inline-block;\n  background-color: #fff;\n  border-radius: 100%;\n  border: 1px solid #ccc;\n  position: relative;\n  width: 20px;\n  height: 20px;\n  vertical-align: middle;\n}\n.radio-core[data-v-1723c92d]::after {\n    content: \" \";\n    border-radius: 100%;\n    top: 5px;\n    left: 5px;\n    position: absolute;\n    width: 8px;\n    height: 8px;\n}\n.radiolist-label[data-v-1723c92d] {\n  display: block;\n  width: 100%;\n}\n.radio-input[data-v-1723c92d] {\n  display: none;\n}\n.radio-label[data-v-1723c92d] {\n  vertical-align: middle;\n}\n.radio-input:checked + .radio-core[data-v-1723c92d] {\n  background-color: #26a2ff;\n  border-color: #26a2ff;\n}\n.radio-input:checked + .radio-core[data-v-1723c92d]::after {\n    background-color: #fff;\n}\n.withdraw-btn[data-v-1723c92d] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
 
 // exports
 
@@ -28854,269 +28845,6 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-35d4264a"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\view\\MyAccount\\recharge.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-35d4264a", Component.options)
-  } else {
-    hotAPI.reload("data-v-35d4264a", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(87);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("6a326cfe", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-35d4264a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./recharge.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-35d4264a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./recharge.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-35d4264a], body[data-v-35d4264a], div[data-v-35d4264a], span[data-v-35d4264a], applet[data-v-35d4264a], object[data-v-35d4264a], iframe[data-v-35d4264a],\nh1[data-v-35d4264a], h2[data-v-35d4264a], h3[data-v-35d4264a], h4[data-v-35d4264a], h5[data-v-35d4264a], h6[data-v-35d4264a], p[data-v-35d4264a], blockquote[data-v-35d4264a], pre[data-v-35d4264a],\na[data-v-35d4264a], abbr[data-v-35d4264a], acronym[data-v-35d4264a], address[data-v-35d4264a], big[data-v-35d4264a], cite[data-v-35d4264a], code[data-v-35d4264a],\ndel[data-v-35d4264a], dfn[data-v-35d4264a], em[data-v-35d4264a], img[data-v-35d4264a], ins[data-v-35d4264a], kbd[data-v-35d4264a], q[data-v-35d4264a], s[data-v-35d4264a], samp[data-v-35d4264a],\nsmall[data-v-35d4264a], strike[data-v-35d4264a], strong[data-v-35d4264a], sub[data-v-35d4264a], sup[data-v-35d4264a], tt[data-v-35d4264a], var[data-v-35d4264a],\nb[data-v-35d4264a], u[data-v-35d4264a], i[data-v-35d4264a], center[data-v-35d4264a],\ndl[data-v-35d4264a], dt[data-v-35d4264a], dd[data-v-35d4264a], ol[data-v-35d4264a], ul[data-v-35d4264a], li[data-v-35d4264a],\nfieldset[data-v-35d4264a], form[data-v-35d4264a], label[data-v-35d4264a], legend[data-v-35d4264a],\ntable[data-v-35d4264a], caption[data-v-35d4264a], tbody[data-v-35d4264a], tfoot[data-v-35d4264a], thead[data-v-35d4264a], tr[data-v-35d4264a], th[data-v-35d4264a], td[data-v-35d4264a],\narticle[data-v-35d4264a], aside[data-v-35d4264a], canvas[data-v-35d4264a], details[data-v-35d4264a], embed[data-v-35d4264a],\nfigure[data-v-35d4264a], figcaption[data-v-35d4264a], footer[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a],\nmenu[data-v-35d4264a], nav[data-v-35d4264a], output[data-v-35d4264a], ruby[data-v-35d4264a], section[data-v-35d4264a], summary[data-v-35d4264a],\ntime[data-v-35d4264a], mark[data-v-35d4264a], audio[data-v-35d4264a], video[data-v-35d4264a] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-35d4264a], aside[data-v-35d4264a], details[data-v-35d4264a], figcaption[data-v-35d4264a], figure[data-v-35d4264a],\nfooter[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a], menu[data-v-35d4264a], nav[data-v-35d4264a], section[data-v-35d4264a] {\n  display: block;\n}\nbody[data-v-35d4264a] {\n  line-height: 1;\n}\nol[data-v-35d4264a], ul[data-v-35d4264a] {\n  list-style: none;\n}\nblockquote[data-v-35d4264a], q[data-v-35d4264a] {\n  quotes: none;\n}\nblockquote[data-v-35d4264a]:before, blockquote[data-v-35d4264a]:after,\nq[data-v-35d4264a]:before, q[data-v-35d4264a]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-35d4264a] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-35d4264a] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-35d4264a] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-35d4264a] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-35d4264a] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-35d4264a] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-35d4264a] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-35d4264a] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-35d4264a] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-35d4264a] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-35d4264a] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-35d4264a] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-35d4264a] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-35d4264a] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-35d4264a] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-35d4264a] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-35d4264a] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-35d4264a] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-35d4264a] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-35d4264a] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-35d4264a] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-35d4264a] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-35d4264a] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-35d4264a] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-35d4264a] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-35d4264a] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-35d4264a] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-35d4264a] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-35d4264a] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-35d4264a] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-35d4264a] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-35d4264a] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.recharge-container[data-v-35d4264a] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.recharge-box[data-v-35d4264a] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.recharge-box .tltle[data-v-35d4264a] {\n    font-size: 1em;\n    color: #999;\n}\n.recharge-money[data-v-35d4264a] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 1.2em;\n}\n.recharge-money input[data-v-35d4264a] {\n    border: none;\n    padding: 7px 0;\n    display: inline-block;\n    width: 70%;\n}\n.recharge-way[data-v-35d4264a] {\n  margin-top: 2em;\n}\n.recharge-way .title[data-v-35d4264a] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.list[data-v-35d4264a] {\n  background-color: #fff;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  color: inherit;\n  min-height: 48px;\n  display: block;\n  border-bottom: 1px solid #d9d9d9;\n}\n.list-title[data-v-35d4264a] {\n  width: 100%;\n}\n.list-wrapper[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  min-height: inherit;\n  padding: 0 10px;\n}\n.radio-core[data-v-35d4264a] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  display: inline-block;\n  background-color: #fff;\n  border-radius: 100%;\n  border: 1px solid #ccc;\n  position: relative;\n  width: 20px;\n  height: 20px;\n  vertical-align: middle;\n}\n.radio-core[data-v-35d4264a]::after {\n    content: \" \";\n    border-radius: 100%;\n    top: 5px;\n    left: 5px;\n    position: absolute;\n    width: 8px;\n    height: 8px;\n}\n.radiolist-label[data-v-35d4264a] {\n  display: block;\n  width: 100%;\n}\n.radio-input[data-v-35d4264a] {\n  display: none;\n}\n.radio-label[data-v-35d4264a] {\n  vertical-align: middle;\n}\n.radio-input:checked + .radio-core[data-v-35d4264a] {\n  background-color: #26a2ff;\n  border-color: #26a2ff;\n}\n.radio-input:checked + .radio-core[data-v-35d4264a]::after {\n    background-color: #fff;\n}\n.recharge-btn[data-v-35d4264a] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 88 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {};
-  },
-
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a }
-});
-
-/***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "recharge-container", attrs: { id: "recharge" } },
-    [
-      _c("topBack", { attrs: { title: "充值" } }),
-      _vm._v(" "),
-      _c("div", { staticClass: "recharge-box" }, [
-        _c("div", { staticClass: "title" }, [_vm._v("充值金额")]),
-        _vm._v(" "),
-        _vm._m(0, false, false),
-        _vm._v(" "),
-        _vm._m(1, false, false),
-        _vm._v(" "),
-        _c(
-          "a",
-          { staticClass: "recharge-btn", attrs: { href: "javascript:;" } },
-          [
-            _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
-              _vm._v("提现")
-            ])
-          ],
-          1
-        )
-      ])
-    ],
-    1
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "recharge-money" }, [
-      _c("label", [_vm._v("￥")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", placeholder: "请输入金额" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "recharge-way" }, [
-      _c("div", { staticClass: "title" }, [_vm._v("选择充值方式")]),
-      _vm._v(" "),
-      _c("a", { staticClass: "list" }, [
-        _c("div", { staticClass: "list-wrapper" }, [
-          _c("div", { staticClass: "list-title" }, [
-            _c("label", { staticClass: "radiolist-label" }, [
-              _c("span", { staticClass: "mint-radio is-right" }, [
-                _c("input", {
-                  staticClass: "radio-input",
-                  attrs: {
-                    type: "radio",
-                    checked: "",
-                    name: "tool",
-                    value: "银行卡"
-                  }
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "radio-core" })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio-label" }, [_vm._v("银行卡")])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "list" }, [
-        _c("div", { staticClass: "list-wrapper" }, [
-          _c("div", { staticClass: "list-title" }, [
-            _c("label", { staticClass: "radiolist-label" }, [
-              _c("span", { staticClass: "mint-radio is-right" }, [
-                _c("input", {
-                  staticClass: "radio-input",
-                  attrs: { type: "radio", name: "tool", value: "微信" }
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "radio-core" })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio-label" }, [_vm._v("微信")])
-            ])
-          ])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-35d4264a", module.exports)
-  }
-}
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(91)
-}
-var normalizeComponent = __webpack_require__(1)
-/* script */
-var __vue_script__ = __webpack_require__(93)
-/* template */
-var __vue_template__ = __webpack_require__(94)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
 var __vue_scopeId__ = "data-v-b4146998"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
@@ -29151,13 +28879,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 91 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(92);
+var content = __webpack_require__(87);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -29177,7 +28905,7 @@ if(false) {
 }
 
 /***/ }),
-/* 92 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -29185,13 +28913,13 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-b4146998], body[data-v-b4146998], div[data-v-b4146998], span[data-v-b4146998], applet[data-v-b4146998], object[data-v-b4146998], iframe[data-v-b4146998],\nh1[data-v-b4146998], h2[data-v-b4146998], h3[data-v-b4146998], h4[data-v-b4146998], h5[data-v-b4146998], h6[data-v-b4146998], p[data-v-b4146998], blockquote[data-v-b4146998], pre[data-v-b4146998],\na[data-v-b4146998], abbr[data-v-b4146998], acronym[data-v-b4146998], address[data-v-b4146998], big[data-v-b4146998], cite[data-v-b4146998], code[data-v-b4146998],\ndel[data-v-b4146998], dfn[data-v-b4146998], em[data-v-b4146998], img[data-v-b4146998], ins[data-v-b4146998], kbd[data-v-b4146998], q[data-v-b4146998], s[data-v-b4146998], samp[data-v-b4146998],\nsmall[data-v-b4146998], strike[data-v-b4146998], strong[data-v-b4146998], sub[data-v-b4146998], sup[data-v-b4146998], tt[data-v-b4146998], var[data-v-b4146998],\nb[data-v-b4146998], u[data-v-b4146998], i[data-v-b4146998], center[data-v-b4146998],\ndl[data-v-b4146998], dt[data-v-b4146998], dd[data-v-b4146998], ol[data-v-b4146998], ul[data-v-b4146998], li[data-v-b4146998],\nfieldset[data-v-b4146998], form[data-v-b4146998], label[data-v-b4146998], legend[data-v-b4146998],\ntable[data-v-b4146998], caption[data-v-b4146998], tbody[data-v-b4146998], tfoot[data-v-b4146998], thead[data-v-b4146998], tr[data-v-b4146998], th[data-v-b4146998], td[data-v-b4146998],\narticle[data-v-b4146998], aside[data-v-b4146998], canvas[data-v-b4146998], details[data-v-b4146998], embed[data-v-b4146998],\nfigure[data-v-b4146998], figcaption[data-v-b4146998], footer[data-v-b4146998], header[data-v-b4146998], hgroup[data-v-b4146998],\nmenu[data-v-b4146998], nav[data-v-b4146998], output[data-v-b4146998], ruby[data-v-b4146998], section[data-v-b4146998], summary[data-v-b4146998],\ntime[data-v-b4146998], mark[data-v-b4146998], audio[data-v-b4146998], video[data-v-b4146998] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-b4146998], aside[data-v-b4146998], details[data-v-b4146998], figcaption[data-v-b4146998], figure[data-v-b4146998],\nfooter[data-v-b4146998], header[data-v-b4146998], hgroup[data-v-b4146998], menu[data-v-b4146998], nav[data-v-b4146998], section[data-v-b4146998] {\n  display: block;\n}\nbody[data-v-b4146998] {\n  line-height: 1;\n}\nol[data-v-b4146998], ul[data-v-b4146998] {\n  list-style: none;\n}\nblockquote[data-v-b4146998], q[data-v-b4146998] {\n  quotes: none;\n}\nblockquote[data-v-b4146998]:before, blockquote[data-v-b4146998]:after,\nq[data-v-b4146998]:before, q[data-v-b4146998]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-b4146998] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-b4146998] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-b4146998] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-b4146998] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-b4146998] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-b4146998] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-b4146998] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-b4146998] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-b4146998] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-b4146998] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-b4146998] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-b4146998] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-b4146998] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-b4146998] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-b4146998] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-b4146998] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-b4146998] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-b4146998] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-b4146998] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-b4146998] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-b4146998] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-b4146998] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-b4146998] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-b4146998] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-b4146998] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-b4146998] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-b4146998] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-b4146998] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-b4146998] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-b4146998] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-b4146998] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-b4146998] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-b4146998] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-b4146998] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-b4146998] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-b4146998] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.give-container[data-v-b4146998] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.give-box[data-v-b4146998] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.give-box .tltle[data-v-b4146998] {\n    font-size: 1em;\n    color: #999;\n}\n.give-money[data-v-b4146998] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 1.2em;\n}\n.give-money input[data-v-b4146998] {\n    border: none;\n    padding: 7px 0;\n    display: inline-block;\n    width: 70%;\n}\n.all-money[data-v-b4146998] {\n  margin-top: 1em;\n  font-size: 0.8em;\n}\n.all-money .money[data-v-b4146998] {\n    color: #666;\n}\n.all-money .all-giveAcc[data-v-b4146998] {\n    color: #199ED8;\n    margin-left: 0.4em;\n}\n.give-store[data-v-b4146998] {\n  margin-top: 2.5em;\n}\n.give-store h3[data-v-b4146998] {\n    color: #999;\n    font-size: 0.9em;\n}\n.give-store #store[data-v-b4146998] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 40px;\n    line-height: 40px;\n    border: 1px solid #ccc;\n}\n.transAcc-btn[data-v-b4146998] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-b4146998], body[data-v-b4146998], div[data-v-b4146998], span[data-v-b4146998], applet[data-v-b4146998], object[data-v-b4146998], iframe[data-v-b4146998],\nh1[data-v-b4146998], h2[data-v-b4146998], h3[data-v-b4146998], h4[data-v-b4146998], h5[data-v-b4146998], h6[data-v-b4146998], p[data-v-b4146998], blockquote[data-v-b4146998], pre[data-v-b4146998],\na[data-v-b4146998], abbr[data-v-b4146998], acronym[data-v-b4146998], address[data-v-b4146998], big[data-v-b4146998], cite[data-v-b4146998], code[data-v-b4146998],\ndel[data-v-b4146998], dfn[data-v-b4146998], em[data-v-b4146998], img[data-v-b4146998], ins[data-v-b4146998], kbd[data-v-b4146998], q[data-v-b4146998], s[data-v-b4146998], samp[data-v-b4146998],\nsmall[data-v-b4146998], strike[data-v-b4146998], strong[data-v-b4146998], sub[data-v-b4146998], sup[data-v-b4146998], tt[data-v-b4146998], var[data-v-b4146998],\nb[data-v-b4146998], u[data-v-b4146998], i[data-v-b4146998], center[data-v-b4146998],\ndl[data-v-b4146998], dt[data-v-b4146998], dd[data-v-b4146998], ol[data-v-b4146998], ul[data-v-b4146998], li[data-v-b4146998],\nfieldset[data-v-b4146998], form[data-v-b4146998], label[data-v-b4146998], legend[data-v-b4146998],\ntable[data-v-b4146998], caption[data-v-b4146998], tbody[data-v-b4146998], tfoot[data-v-b4146998], thead[data-v-b4146998], tr[data-v-b4146998], th[data-v-b4146998], td[data-v-b4146998],\narticle[data-v-b4146998], aside[data-v-b4146998], canvas[data-v-b4146998], details[data-v-b4146998], embed[data-v-b4146998],\nfigure[data-v-b4146998], figcaption[data-v-b4146998], footer[data-v-b4146998], header[data-v-b4146998], hgroup[data-v-b4146998],\nmenu[data-v-b4146998], nav[data-v-b4146998], output[data-v-b4146998], ruby[data-v-b4146998], section[data-v-b4146998], summary[data-v-b4146998],\ntime[data-v-b4146998], mark[data-v-b4146998], audio[data-v-b4146998], video[data-v-b4146998] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-b4146998], aside[data-v-b4146998], details[data-v-b4146998], figcaption[data-v-b4146998], figure[data-v-b4146998],\nfooter[data-v-b4146998], header[data-v-b4146998], hgroup[data-v-b4146998], menu[data-v-b4146998], nav[data-v-b4146998], section[data-v-b4146998] {\n  display: block;\n}\nbody[data-v-b4146998] {\n  line-height: 1;\n}\nol[data-v-b4146998], ul[data-v-b4146998] {\n  list-style: none;\n}\nblockquote[data-v-b4146998], q[data-v-b4146998] {\n  quotes: none;\n}\nblockquote[data-v-b4146998]:before, blockquote[data-v-b4146998]:after,\nq[data-v-b4146998]:before, q[data-v-b4146998]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-b4146998] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-b4146998] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-b4146998] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-b4146998] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-b4146998] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-b4146998] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-b4146998] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-b4146998] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-b4146998] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-b4146998] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-b4146998] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-b4146998] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-b4146998] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-b4146998] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-b4146998] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-b4146998] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-b4146998] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-b4146998] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-b4146998] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-b4146998] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-b4146998] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-b4146998] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-b4146998] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-b4146998] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-b4146998] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-b4146998] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-b4146998] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-b4146998] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-b4146998] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-b4146998] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-b4146998] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-b4146998] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-b4146998] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-b4146998] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-b4146998] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-b4146998] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-b4146998] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.give-container[data-v-b4146998] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.give-box[data-v-b4146998] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.give-box .tltle[data-v-b4146998] {\n    font-size: 1em;\n    color: #999;\n}\n.give-money[data-v-b4146998] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 1.2em;\n}\n.give-money input[data-v-b4146998] {\n    border: none;\n    padding: 7px 0;\n    display: inline-block;\n    width: 70%;\n}\n.all-money[data-v-b4146998] {\n  margin-top: 1em;\n  font-size: 0.8em;\n}\n.all-money .money[data-v-b4146998] {\n    color: #666;\n}\n.all-money .all-giveAcc[data-v-b4146998] {\n    color: #199ED8;\n    margin-left: 0.4em;\n}\n.give-store[data-v-b4146998] {\n  margin-top: 2.5em;\n}\n.give-store h3[data-v-b4146998] {\n    color: #999;\n    font-size: 0.9em;\n}\n.give-store #store[data-v-b4146998] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 40px;\n    line-height: 40px;\n    border: 1px solid #ccc;\n}\n.transAcc-btn[data-v-b4146998] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 93 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29235,7 +28963,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 94 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -29322,19 +29050,19 @@ if (false) {
 }
 
 /***/ }),
-/* 95 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(96)
+  __webpack_require__(91)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(98)
+var __vue_script__ = __webpack_require__(93)
 /* template */
-var __vue_template__ = __webpack_require__(99)
+var __vue_template__ = __webpack_require__(94)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -29374,13 +29102,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 96 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(97);
+var content = __webpack_require__(92);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -29400,7 +29128,7 @@ if(false) {
 }
 
 /***/ }),
-/* 97 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -29408,19 +29136,34 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-e43bcdac], body[data-v-e43bcdac], div[data-v-e43bcdac], span[data-v-e43bcdac], applet[data-v-e43bcdac], object[data-v-e43bcdac], iframe[data-v-e43bcdac],\nh1[data-v-e43bcdac], h2[data-v-e43bcdac], h3[data-v-e43bcdac], h4[data-v-e43bcdac], h5[data-v-e43bcdac], h6[data-v-e43bcdac], p[data-v-e43bcdac], blockquote[data-v-e43bcdac], pre[data-v-e43bcdac],\na[data-v-e43bcdac], abbr[data-v-e43bcdac], acronym[data-v-e43bcdac], address[data-v-e43bcdac], big[data-v-e43bcdac], cite[data-v-e43bcdac], code[data-v-e43bcdac],\ndel[data-v-e43bcdac], dfn[data-v-e43bcdac], em[data-v-e43bcdac], img[data-v-e43bcdac], ins[data-v-e43bcdac], kbd[data-v-e43bcdac], q[data-v-e43bcdac], s[data-v-e43bcdac], samp[data-v-e43bcdac],\nsmall[data-v-e43bcdac], strike[data-v-e43bcdac], strong[data-v-e43bcdac], sub[data-v-e43bcdac], sup[data-v-e43bcdac], tt[data-v-e43bcdac], var[data-v-e43bcdac],\nb[data-v-e43bcdac], u[data-v-e43bcdac], i[data-v-e43bcdac], center[data-v-e43bcdac],\ndl[data-v-e43bcdac], dt[data-v-e43bcdac], dd[data-v-e43bcdac], ol[data-v-e43bcdac], ul[data-v-e43bcdac], li[data-v-e43bcdac],\nfieldset[data-v-e43bcdac], form[data-v-e43bcdac], label[data-v-e43bcdac], legend[data-v-e43bcdac],\ntable[data-v-e43bcdac], caption[data-v-e43bcdac], tbody[data-v-e43bcdac], tfoot[data-v-e43bcdac], thead[data-v-e43bcdac], tr[data-v-e43bcdac], th[data-v-e43bcdac], td[data-v-e43bcdac],\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], canvas[data-v-e43bcdac], details[data-v-e43bcdac], embed[data-v-e43bcdac],\nfigure[data-v-e43bcdac], figcaption[data-v-e43bcdac], footer[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac],\nmenu[data-v-e43bcdac], nav[data-v-e43bcdac], output[data-v-e43bcdac], ruby[data-v-e43bcdac], section[data-v-e43bcdac], summary[data-v-e43bcdac],\ntime[data-v-e43bcdac], mark[data-v-e43bcdac], audio[data-v-e43bcdac], video[data-v-e43bcdac] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], details[data-v-e43bcdac], figcaption[data-v-e43bcdac], figure[data-v-e43bcdac],\nfooter[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac], menu[data-v-e43bcdac], nav[data-v-e43bcdac], section[data-v-e43bcdac] {\n  display: block;\n}\nbody[data-v-e43bcdac] {\n  line-height: 1;\n}\nol[data-v-e43bcdac], ul[data-v-e43bcdac] {\n  list-style: none;\n}\nblockquote[data-v-e43bcdac], q[data-v-e43bcdac] {\n  quotes: none;\n}\nblockquote[data-v-e43bcdac]:before, blockquote[data-v-e43bcdac]:after,\nq[data-v-e43bcdac]:before, q[data-v-e43bcdac]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-e43bcdac] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-e43bcdac] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-e43bcdac] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-e43bcdac] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-e43bcdac] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-e43bcdac] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-e43bcdac] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-e43bcdac] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-e43bcdac] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-e43bcdac] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-e43bcdac] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-e43bcdac] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-e43bcdac] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-e43bcdac] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-e43bcdac] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-e43bcdac] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-e43bcdac] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-e43bcdac] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-e43bcdac] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-e43bcdac] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-e43bcdac] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-e43bcdac] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-e43bcdac] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-e43bcdac] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-e43bcdac] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-e43bcdac] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-e43bcdac] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-e43bcdac] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-e43bcdac] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-e43bcdac] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#bill[data-v-e43bcdac] {\n  padding-top: 2em;\n}\n.bill-list li[data-v-e43bcdac] {\n  border-top: 1px solid #ccc;\n  padding: 0 0.7em;\n}\n.bill-list li a[data-v-e43bcdac] {\n    width: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    height: 55px;\n    line-height: 20px;\n}\n.bill-list li .bill-content .time[data-v-e43bcdac] {\n    color: #999;\n    font-size: 0.8em;\n}\n.bill-list li .bill-money[data-v-e43bcdac] {\n    font-size: 1.2em;\n}\n.bill-list li .active[data-v-e43bcdac] {\n    color: #00cc00;\n}\n.bill-list li[data-v-e43bcdac]:last-child {\n    border-bottom: 1px solid #ccc;\n}\n.slide-enter-active[data-v-e43bcdac],\n.slide-leave-active[data-v-e43bcdac] {\n  -webkit-transition: all 1s ease;\n  transition: all 1s ease;\n}\n.slide-enter[data-v-e43bcdac],\n.slide-leave-to[data-v-e43bcdac] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n.sel-type-box h2[data-v-e43bcdac] {\n  height: 2.8em;\n  line-height: 2.8em;\n  text-align: center;\n  color: #333;\n  border: 1px solid #f1f1f1;\n  font-weight: 700;\n}\n.sel-type-box .type-list[data-v-e43bcdac] {\n  padding: 4%;\n  overflow: hidden;\n}\n.sel-type-box .type-list li[data-v-e43bcdac] {\n    width: 32%;\n    float: left;\n    text-align: center;\n    height: 60px;\n    line-height: 60px;\n}\n.sel-type-box .type-list a[data-v-e43bcdac] {\n    display: block;\n    width: 100%;\n    height: 100%;\n}\n.sel-type-box .type-list .active a[data-v-e43bcdac] {\n    background: #50b56a;\n    color: #fff;\n}\n.sel-type[data-v-e43bcdac] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 1000;\n  -webkit-transition: all 0.3s ease-in-out;\n  transition: all 0.3s ease-in-out;\n}\n.sel-type-box[data-v-e43bcdac] {\n  position: absolute;\n  z-index: 1002;\n  width: 100%;\n  background: #fff;\n  bottom: 0;\n  border-radius: 4px;\n}\n.cancel-btn[data-v-e43bcdac] {\n  margin-top: 1.5em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-e43bcdac], body[data-v-e43bcdac], div[data-v-e43bcdac], span[data-v-e43bcdac], applet[data-v-e43bcdac], object[data-v-e43bcdac], iframe[data-v-e43bcdac],\nh1[data-v-e43bcdac], h2[data-v-e43bcdac], h3[data-v-e43bcdac], h4[data-v-e43bcdac], h5[data-v-e43bcdac], h6[data-v-e43bcdac], p[data-v-e43bcdac], blockquote[data-v-e43bcdac], pre[data-v-e43bcdac],\na[data-v-e43bcdac], abbr[data-v-e43bcdac], acronym[data-v-e43bcdac], address[data-v-e43bcdac], big[data-v-e43bcdac], cite[data-v-e43bcdac], code[data-v-e43bcdac],\ndel[data-v-e43bcdac], dfn[data-v-e43bcdac], em[data-v-e43bcdac], img[data-v-e43bcdac], ins[data-v-e43bcdac], kbd[data-v-e43bcdac], q[data-v-e43bcdac], s[data-v-e43bcdac], samp[data-v-e43bcdac],\nsmall[data-v-e43bcdac], strike[data-v-e43bcdac], strong[data-v-e43bcdac], sub[data-v-e43bcdac], sup[data-v-e43bcdac], tt[data-v-e43bcdac], var[data-v-e43bcdac],\nb[data-v-e43bcdac], u[data-v-e43bcdac], i[data-v-e43bcdac], center[data-v-e43bcdac],\ndl[data-v-e43bcdac], dt[data-v-e43bcdac], dd[data-v-e43bcdac], ol[data-v-e43bcdac], ul[data-v-e43bcdac], li[data-v-e43bcdac],\nfieldset[data-v-e43bcdac], form[data-v-e43bcdac], label[data-v-e43bcdac], legend[data-v-e43bcdac],\ntable[data-v-e43bcdac], caption[data-v-e43bcdac], tbody[data-v-e43bcdac], tfoot[data-v-e43bcdac], thead[data-v-e43bcdac], tr[data-v-e43bcdac], th[data-v-e43bcdac], td[data-v-e43bcdac],\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], canvas[data-v-e43bcdac], details[data-v-e43bcdac], embed[data-v-e43bcdac],\nfigure[data-v-e43bcdac], figcaption[data-v-e43bcdac], footer[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac],\nmenu[data-v-e43bcdac], nav[data-v-e43bcdac], output[data-v-e43bcdac], ruby[data-v-e43bcdac], section[data-v-e43bcdac], summary[data-v-e43bcdac],\ntime[data-v-e43bcdac], mark[data-v-e43bcdac], audio[data-v-e43bcdac], video[data-v-e43bcdac] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], details[data-v-e43bcdac], figcaption[data-v-e43bcdac], figure[data-v-e43bcdac],\nfooter[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac], menu[data-v-e43bcdac], nav[data-v-e43bcdac], section[data-v-e43bcdac] {\n  display: block;\n}\nbody[data-v-e43bcdac] {\n  line-height: 1;\n}\nol[data-v-e43bcdac], ul[data-v-e43bcdac] {\n  list-style: none;\n}\nblockquote[data-v-e43bcdac], q[data-v-e43bcdac] {\n  quotes: none;\n}\nblockquote[data-v-e43bcdac]:before, blockquote[data-v-e43bcdac]:after,\nq[data-v-e43bcdac]:before, q[data-v-e43bcdac]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-e43bcdac] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-e43bcdac] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-e43bcdac] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-e43bcdac] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-e43bcdac] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-e43bcdac] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-e43bcdac] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-e43bcdac] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-e43bcdac] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-e43bcdac] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-e43bcdac] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-e43bcdac] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-e43bcdac] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-e43bcdac] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-e43bcdac] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-e43bcdac] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-e43bcdac] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-e43bcdac] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-e43bcdac] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-e43bcdac] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-e43bcdac] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-e43bcdac] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-e43bcdac] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-e43bcdac] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-e43bcdac] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-e43bcdac] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-e43bcdac] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-e43bcdac] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-e43bcdac] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-e43bcdac] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#bill[data-v-e43bcdac] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#bill .header-right[data-v-e43bcdac] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.bill-box[data-v-e43bcdac] {\n  font-size: 0.9em;\n  height: 3.4em;\n  line-height: 1.7em;\n  background: #eee;\n  padding-top: 0.5em;\n}\n.bill-box .bill-date[data-v-e43bcdac] {\n    padding: 0 1em;\n    color: #666;\n}\n.bill-box .month-money[data-v-e43bcdac] {\n    color: #999;\n}\n.bill-box .month-money .income[data-v-e43bcdac] {\n      margin-left: 1em;\n}\n.bill-list li[data-v-e43bcdac] {\n  border-top: 1px solid #ccc;\n  padding: 0 1em;\n}\n.bill-list li a[data-v-e43bcdac] {\n    width: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    height: 55px;\n    line-height: 20px;\n}\n.bill-list li .bill-content .time[data-v-e43bcdac] {\n    color: #999;\n    font-size: 0.8em;\n}\n.bill-list li .bill-money[data-v-e43bcdac] {\n    font-size: 1.2em;\n}\n.bill-list li .active[data-v-e43bcdac] {\n    color: #00cc00;\n}\n.bill-list li[data-v-e43bcdac]:last-child {\n    border-bottom: 1px solid #ccc;\n}\n.slide-enter-active[data-v-e43bcdac],\n.slide-leave-active[data-v-e43bcdac] {\n  -webkit-transition: all 1s ease;\n  transition: all 1s ease;\n}\n.slide-enter[data-v-e43bcdac],\n.slide-leave-to[data-v-e43bcdac] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n.sel-type-box h2[data-v-e43bcdac] {\n  height: 2.8em;\n  line-height: 2.8em;\n  text-align: center;\n  color: #333;\n  border: 1px solid #f1f1f1;\n  font-weight: 700;\n}\n.sel-type-box .type-list[data-v-e43bcdac] {\n  padding: 4%;\n  overflow: hidden;\n}\n.sel-type-box .type-list li[data-v-e43bcdac] {\n    width: 32%;\n    float: left;\n    text-align: center;\n    height: 60px;\n    line-height: 60px;\n}\n.sel-type-box .type-list a[data-v-e43bcdac] {\n    display: block;\n    width: 100%;\n    height: 100%;\n}\n.sel-type-box .type-list .active a[data-v-e43bcdac] {\n    background: #50b56a;\n    color: #fff;\n}\n.sel-type[data-v-e43bcdac] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 1000;\n  -webkit-transition: all 0.3s ease-in-out;\n  transition: all 0.3s ease-in-out;\n}\n.sel-type-box[data-v-e43bcdac] {\n  position: absolute;\n  z-index: 1002;\n  width: 100%;\n  background: #fff;\n  bottom: 0;\n  border-radius: 4px;\n}\n.cancel-btn[data-v-e43bcdac] {\n  margin-top: 1.5em;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 98 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -29494,7 +29237,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 99 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -29505,27 +29248,41 @@ var render = function() {
     "div",
     { attrs: { id: "bill" } },
     [
-      _c("topBack", { attrs: { title: "账单明细" } }),
-      _vm._v(" "),
-      _c("a", { attrs: { href: "javascript:;" }, on: { click: _vm.show } }, [
-        _vm._v("筛选")
+      _c("topBack", { attrs: { title: "账单明细" } }, [
+        _c(
+          "div",
+          { staticClass: "flex flex-reverse flex-align-center header-right" },
+          [
+            _c(
+              "a",
+              { attrs: { href: "javascript:;" }, on: { click: _vm.show } },
+              [_vm._v("筛选")]
+            )
+          ]
+        )
       ]),
       _vm._v(" "),
-      _c("ul", { staticClass: "bill-list" }, [
-        _c("li", {}, [
-          _c(
-            "a",
-            {
-              staticClass: "flex",
-              attrs: { href: "javascript:;" },
-              on: { click: _vm.details }
-            },
-            [
-              _vm._m(0, false, false),
-              _vm._v(" "),
-              _c("div", { staticClass: "bill-money active" }, [_vm._v("+100")])
-            ]
-          )
+      _c("div", { staticClass: "bill-box" }, [
+        _vm._m(0, false, false),
+        _vm._v(" "),
+        _c("ul", { staticClass: "bill-list" }, [
+          _c("li", {}, [
+            _c(
+              "a",
+              {
+                staticClass: "flex",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.details }
+              },
+              [
+                _vm._m(1, false, false),
+                _vm._v(" "),
+                _c("div", { staticClass: "bill-money active" }, [
+                  _vm._v("+100")
+                ])
+              ]
+            )
+          ])
         ])
       ]),
       _vm._v(" "),
@@ -29597,6 +29354,34 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "bill-date flex flex-align-center flex-justify-between" },
+      [
+        _c("div", { staticClass: "left-content" }, [
+          _c("div", { staticClass: "cur-date" }, [_vm._v("2017年11月")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "month-money flex" }, [
+            _c("div", { staticClass: "expend flex-1" }, [
+              _vm._v("支出¥"),
+              _c("span", [_vm._v("616.55")])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "income" }, [
+              _vm._v("收入¥"),
+              _c("span", [_vm._v("616.55")])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", [_vm._v("图标")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "bill-content" }, [
       _c("h5", [_vm._v("交易")]),
       _vm._v(" "),
@@ -29614,19 +29399,19 @@ if (false) {
 }
 
 /***/ }),
-/* 100 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(101)
+  __webpack_require__(96)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(103)
+var __vue_script__ = __webpack_require__(98)
 /* template */
-var __vue_template__ = __webpack_require__(104)
+var __vue_template__ = __webpack_require__(99)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -29666,13 +29451,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 101 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(102);
+var content = __webpack_require__(97);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -29692,7 +29477,7 @@ if(false) {
 }
 
 /***/ }),
-/* 102 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -29700,13 +29485,13 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-4853cce8], body[data-v-4853cce8], div[data-v-4853cce8], span[data-v-4853cce8], applet[data-v-4853cce8], object[data-v-4853cce8], iframe[data-v-4853cce8],\nh1[data-v-4853cce8], h2[data-v-4853cce8], h3[data-v-4853cce8], h4[data-v-4853cce8], h5[data-v-4853cce8], h6[data-v-4853cce8], p[data-v-4853cce8], blockquote[data-v-4853cce8], pre[data-v-4853cce8],\na[data-v-4853cce8], abbr[data-v-4853cce8], acronym[data-v-4853cce8], address[data-v-4853cce8], big[data-v-4853cce8], cite[data-v-4853cce8], code[data-v-4853cce8],\ndel[data-v-4853cce8], dfn[data-v-4853cce8], em[data-v-4853cce8], img[data-v-4853cce8], ins[data-v-4853cce8], kbd[data-v-4853cce8], q[data-v-4853cce8], s[data-v-4853cce8], samp[data-v-4853cce8],\nsmall[data-v-4853cce8], strike[data-v-4853cce8], strong[data-v-4853cce8], sub[data-v-4853cce8], sup[data-v-4853cce8], tt[data-v-4853cce8], var[data-v-4853cce8],\nb[data-v-4853cce8], u[data-v-4853cce8], i[data-v-4853cce8], center[data-v-4853cce8],\ndl[data-v-4853cce8], dt[data-v-4853cce8], dd[data-v-4853cce8], ol[data-v-4853cce8], ul[data-v-4853cce8], li[data-v-4853cce8],\nfieldset[data-v-4853cce8], form[data-v-4853cce8], label[data-v-4853cce8], legend[data-v-4853cce8],\ntable[data-v-4853cce8], caption[data-v-4853cce8], tbody[data-v-4853cce8], tfoot[data-v-4853cce8], thead[data-v-4853cce8], tr[data-v-4853cce8], th[data-v-4853cce8], td[data-v-4853cce8],\narticle[data-v-4853cce8], aside[data-v-4853cce8], canvas[data-v-4853cce8], details[data-v-4853cce8], embed[data-v-4853cce8],\nfigure[data-v-4853cce8], figcaption[data-v-4853cce8], footer[data-v-4853cce8], header[data-v-4853cce8], hgroup[data-v-4853cce8],\nmenu[data-v-4853cce8], nav[data-v-4853cce8], output[data-v-4853cce8], ruby[data-v-4853cce8], section[data-v-4853cce8], summary[data-v-4853cce8],\ntime[data-v-4853cce8], mark[data-v-4853cce8], audio[data-v-4853cce8], video[data-v-4853cce8] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-4853cce8], aside[data-v-4853cce8], details[data-v-4853cce8], figcaption[data-v-4853cce8], figure[data-v-4853cce8],\nfooter[data-v-4853cce8], header[data-v-4853cce8], hgroup[data-v-4853cce8], menu[data-v-4853cce8], nav[data-v-4853cce8], section[data-v-4853cce8] {\n  display: block;\n}\nbody[data-v-4853cce8] {\n  line-height: 1;\n}\nol[data-v-4853cce8], ul[data-v-4853cce8] {\n  list-style: none;\n}\nblockquote[data-v-4853cce8], q[data-v-4853cce8] {\n  quotes: none;\n}\nblockquote[data-v-4853cce8]:before, blockquote[data-v-4853cce8]:after,\nq[data-v-4853cce8]:before, q[data-v-4853cce8]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-4853cce8] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-4853cce8] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-4853cce8] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-4853cce8] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-4853cce8] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-4853cce8] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-4853cce8] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-4853cce8] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-4853cce8] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-4853cce8] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-4853cce8] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-4853cce8] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-4853cce8] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-4853cce8] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-4853cce8] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-4853cce8] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-4853cce8] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-4853cce8] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-4853cce8] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-4853cce8] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-4853cce8] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-4853cce8] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-4853cce8] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-4853cce8] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-4853cce8] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-4853cce8] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-4853cce8] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-4853cce8] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-4853cce8] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-4853cce8] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-4853cce8] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-4853cce8] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-4853cce8] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-4853cce8] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-4853cce8] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-4853cce8] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#billDetails[data-v-4853cce8] {\n  padding-top: 2em;\n  background: #eee;\n  height: 100vh;\n}\n.details-content[data-v-4853cce8] {\n  background: #fff;\n  padding-bottom: 7em;\n}\n.money-box[data-v-4853cce8] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: .5em .7em 0 .7em;\n}\n.billDetails-list li[data-v-4853cce8] {\n  margin-top: 1em;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: 0 0.7em;\n}\n.billDetails-list li .title[data-v-4853cce8] {\n    color: #333;\n}\n.billDetails-list li .content[data-v-4853cce8] {\n    color: #555;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-4853cce8], body[data-v-4853cce8], div[data-v-4853cce8], span[data-v-4853cce8], applet[data-v-4853cce8], object[data-v-4853cce8], iframe[data-v-4853cce8],\nh1[data-v-4853cce8], h2[data-v-4853cce8], h3[data-v-4853cce8], h4[data-v-4853cce8], h5[data-v-4853cce8], h6[data-v-4853cce8], p[data-v-4853cce8], blockquote[data-v-4853cce8], pre[data-v-4853cce8],\na[data-v-4853cce8], abbr[data-v-4853cce8], acronym[data-v-4853cce8], address[data-v-4853cce8], big[data-v-4853cce8], cite[data-v-4853cce8], code[data-v-4853cce8],\ndel[data-v-4853cce8], dfn[data-v-4853cce8], em[data-v-4853cce8], img[data-v-4853cce8], ins[data-v-4853cce8], kbd[data-v-4853cce8], q[data-v-4853cce8], s[data-v-4853cce8], samp[data-v-4853cce8],\nsmall[data-v-4853cce8], strike[data-v-4853cce8], strong[data-v-4853cce8], sub[data-v-4853cce8], sup[data-v-4853cce8], tt[data-v-4853cce8], var[data-v-4853cce8],\nb[data-v-4853cce8], u[data-v-4853cce8], i[data-v-4853cce8], center[data-v-4853cce8],\ndl[data-v-4853cce8], dt[data-v-4853cce8], dd[data-v-4853cce8], ol[data-v-4853cce8], ul[data-v-4853cce8], li[data-v-4853cce8],\nfieldset[data-v-4853cce8], form[data-v-4853cce8], label[data-v-4853cce8], legend[data-v-4853cce8],\ntable[data-v-4853cce8], caption[data-v-4853cce8], tbody[data-v-4853cce8], tfoot[data-v-4853cce8], thead[data-v-4853cce8], tr[data-v-4853cce8], th[data-v-4853cce8], td[data-v-4853cce8],\narticle[data-v-4853cce8], aside[data-v-4853cce8], canvas[data-v-4853cce8], details[data-v-4853cce8], embed[data-v-4853cce8],\nfigure[data-v-4853cce8], figcaption[data-v-4853cce8], footer[data-v-4853cce8], header[data-v-4853cce8], hgroup[data-v-4853cce8],\nmenu[data-v-4853cce8], nav[data-v-4853cce8], output[data-v-4853cce8], ruby[data-v-4853cce8], section[data-v-4853cce8], summary[data-v-4853cce8],\ntime[data-v-4853cce8], mark[data-v-4853cce8], audio[data-v-4853cce8], video[data-v-4853cce8] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-4853cce8], aside[data-v-4853cce8], details[data-v-4853cce8], figcaption[data-v-4853cce8], figure[data-v-4853cce8],\nfooter[data-v-4853cce8], header[data-v-4853cce8], hgroup[data-v-4853cce8], menu[data-v-4853cce8], nav[data-v-4853cce8], section[data-v-4853cce8] {\n  display: block;\n}\nbody[data-v-4853cce8] {\n  line-height: 1;\n}\nol[data-v-4853cce8], ul[data-v-4853cce8] {\n  list-style: none;\n}\nblockquote[data-v-4853cce8], q[data-v-4853cce8] {\n  quotes: none;\n}\nblockquote[data-v-4853cce8]:before, blockquote[data-v-4853cce8]:after,\nq[data-v-4853cce8]:before, q[data-v-4853cce8]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-4853cce8] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-4853cce8] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-4853cce8] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-4853cce8] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-4853cce8] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-4853cce8] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-4853cce8] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-4853cce8] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-4853cce8] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-4853cce8] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-4853cce8] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-4853cce8] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-4853cce8] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-4853cce8] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-4853cce8] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-4853cce8] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-4853cce8] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-4853cce8] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-4853cce8] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-4853cce8] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-4853cce8] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-4853cce8] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-4853cce8] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-4853cce8] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-4853cce8] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-4853cce8] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-4853cce8] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-4853cce8] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-4853cce8] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-4853cce8] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-4853cce8] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-4853cce8] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-4853cce8] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-4853cce8] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-4853cce8] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-4853cce8] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-4853cce8] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#billDetails[data-v-4853cce8] {\n  padding-top: 2em;\n  background: #eee;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.details-content[data-v-4853cce8] {\n  background: #fff;\n  padding-bottom: 7em;\n}\n.money-box[data-v-4853cce8] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: .5em .7em 0 .7em;\n}\n.billDetails-list li[data-v-4853cce8] {\n  margin-top: 1em;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: 0 0.7em;\n}\n.billDetails-list li .title[data-v-4853cce8] {\n    color: #333;\n}\n.billDetails-list li .content[data-v-4853cce8] {\n    color: #555;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 103 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29765,7 +29550,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 104 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -29834,17 +29619,17 @@ if (false) {
 }
 
 /***/ }),
-/* 105 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_MakeDeal_makeDeal_vue__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_MakeDeal_makeDeal_vue__ = __webpack_require__(101);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_MakeDeal_makeDeal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__view_MakeDeal_makeDeal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_MakeDeal_makeDealDetail_vue__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_MakeDeal_makeDealDetail_vue__ = __webpack_require__(106);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_MakeDeal_makeDealDetail_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_MakeDeal_makeDealDetail_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_MakeDeal_makeDealTip_vue__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_MakeDeal_makeDealTip_vue__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_MakeDeal_makeDealTip_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__view_MakeDeal_makeDealTip_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MakeDeal_myDeal_vue__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MakeDeal_myDeal_vue__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_MakeDeal_myDeal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__view_MakeDeal_myDeal_vue__);
 
 
@@ -29858,19 +29643,19 @@ if (false) {
 }]);
 
 /***/ }),
-/* 106 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(107)
+  __webpack_require__(102)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(109)
+var __vue_script__ = __webpack_require__(104)
 /* template */
-var __vue_template__ = __webpack_require__(110)
+var __vue_template__ = __webpack_require__(105)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -29910,13 +29695,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 107 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(108);
+var content = __webpack_require__(103);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -29936,7 +29721,7 @@ if(false) {
 }
 
 /***/ }),
-/* 108 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -29950,7 +29735,7 @@ exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  
 
 
 /***/ }),
-/* 109 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30123,7 +29908,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 110 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -30228,19 +30013,19 @@ if (false) {
 }
 
 /***/ }),
-/* 111 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(112)
+  __webpack_require__(107)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(114)
+var __vue_script__ = __webpack_require__(109)
 /* template */
-var __vue_template__ = __webpack_require__(124)
+var __vue_template__ = __webpack_require__(119)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30280,13 +30065,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 112 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(113);
+var content = __webpack_require__(108);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -30306,7 +30091,7 @@ if(false) {
 }
 
 /***/ }),
-/* 113 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -30320,18 +30105,18 @@ exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n
 
 
 /***/ }),
-/* 114 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_slider__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_slider__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_slider___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_slider__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dealContent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_qrCode__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_qrCode__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__utils_qrCode__);
 //
 //
@@ -30601,19 +30386,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 115 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(116)
+  __webpack_require__(111)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(118)
+var __vue_script__ = __webpack_require__(113)
 /* template */
-var __vue_template__ = __webpack_require__(119)
+var __vue_template__ = __webpack_require__(114)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30653,13 +30438,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 116 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(117);
+var content = __webpack_require__(112);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -30679,7 +30464,7 @@ if(false) {
 }
 
 /***/ }),
-/* 117 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -30693,7 +30478,7 @@ exports.push([module.i, "\n.slider[data-v-70fed678] {\n  width: 100%;\n  height:
 
 
 /***/ }),
-/* 118 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30844,7 +30629,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 119 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -30897,13 +30682,13 @@ if (false) {
 }
 
 /***/ }),
-/* 120 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(121);
+var content = __webpack_require__(116);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -30923,7 +30708,7 @@ if(false) {
 }
 
 /***/ }),
-/* 121 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -30937,7 +30722,7 @@ exports.push([module.i, "\n.content .avatar[data-v-2b519d93] {\n  display: block
 
 
 /***/ }),
-/* 122 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -31001,7 +30786,7 @@ if (false) {
 }
 
 /***/ }),
-/* 123 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -31944,7 +31729,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 }();
 
 /***/ }),
-/* 124 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -32190,19 +31975,19 @@ if (false) {
 }
 
 /***/ }),
-/* 125 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(126)
+  __webpack_require__(121)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(128)
+var __vue_script__ = __webpack_require__(123)
 /* template */
-var __vue_template__ = __webpack_require__(129)
+var __vue_template__ = __webpack_require__(124)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -32242,13 +32027,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 126 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(127);
+var content = __webpack_require__(122);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -32268,7 +32053,7 @@ if(false) {
 }
 
 /***/ }),
-/* 127 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -32282,7 +32067,7 @@ exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;
 
 
 /***/ }),
-/* 128 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32405,7 +32190,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 129 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -32554,19 +32339,19 @@ if (false) {
 }
 
 /***/ }),
-/* 130 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(131)
+  __webpack_require__(126)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(133)
+var __vue_script__ = __webpack_require__(128)
 /* template */
-var __vue_template__ = __webpack_require__(134)
+var __vue_template__ = __webpack_require__(129)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -32606,13 +32391,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 131 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(132);
+var content = __webpack_require__(127);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -32632,7 +32417,7 @@ if(false) {
 }
 
 /***/ }),
-/* 132 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -32646,7 +32431,7 @@ exports.push([module.i, "", ""]);
 
 
 /***/ }),
-/* 133 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32672,7 +32457,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 134 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -32692,23 +32477,23 @@ if (false) {
 }
 
 /***/ }),
-/* 135 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__view_My_my_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_My_set_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue__ = __webpack_require__(141);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue__ = __webpack_require__(146);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_My_addBankCard_vue__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_My_addBankCard_vue__ = __webpack_require__(151);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_My_addBankCard_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__view_My_addBankCard_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_My_checkSettle_vue__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_My_checkSettle_vue__ = __webpack_require__(156);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_My_checkSettle_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__view_My_checkSettle_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__view_My_changePassword_vue__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__view_My_changePassword_vue__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__view_My_changePassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__view_My_changePassword_vue__);
 
 
@@ -32720,19 +32505,19 @@ if (false) {
 /* harmony default export */ __webpack_exports__["a"] = ([{ path: '/my', name: 'my', component: __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default.a }, { path: '/my/set', name: 'set', component: __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default.a }, { path: '/my/referrer', name: 'referrer', component: __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default.a }, { path: '/my/bankCardManage', name: 'bankCardManage', component: __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default.a }, { path: '/my/bankCardManage/addBankCard', name: 'addBankCard', component: __WEBPACK_IMPORTED_MODULE_4__view_My_addBankCard_vue___default.a }, { path: '/my/checkSettle', name: 'checkSettle', component: __WEBPACK_IMPORTED_MODULE_5__view_My_checkSettle_vue___default.a }, { path: '/my/changePassword', name: 'changePassword', component: __WEBPACK_IMPORTED_MODULE_6__view_My_changePassword_vue___default.a }]);
 
 /***/ }),
-/* 136 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(137)
+  __webpack_require__(132)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(139)
+var __vue_script__ = __webpack_require__(134)
 /* template */
-var __vue_template__ = __webpack_require__(140)
+var __vue_template__ = __webpack_require__(135)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -32772,13 +32557,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 137 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(138);
+var content = __webpack_require__(133);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -32798,7 +32583,7 @@ if(false) {
 }
 
 /***/ }),
-/* 138 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -32806,19 +32591,22 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.header-container[data-v-65470904] {\n  height: 12em;\n  padding-top: 4em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.header[data-v-65470904] {\n  text-align: center;\n}\n.header .imgWrap[data-v-65470904] {\n    width: 100%;\n    background: #fff;\n}\n.header .imgWrap > img[data-v-65470904] {\n      width: 4.5em;\n      height: 4.5em;\n      display: block;\n      margin: auto;\n      border-radius: 50%;\n}\n.header h3[data-v-65470904], .header .acc-number[data-v-65470904] {\n    font-size: 1em;\n    text-align: center;\n    margin-top: 0.5em;\n    color: #616161;\n}\n.header .acc-number[data-v-65470904] {\n    color: #333;\n}\n.header .acc-number span[data-v-65470904] {\n      color: #616161;\n}\n.my-list[data-v-65470904] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.my-list li .mint-cell[data-v-65470904] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n", ""]);
+exports.push([module.i, "\n.header-container[data-v-65470904] {\n  height: 12em;\n  padding-top: 4em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.header[data-v-65470904] {\n  text-align: center;\n}\n.header .imgWrap[data-v-65470904] {\n    width: 100%;\n    background: #fff;\n}\n.header .imgWrap > img[data-v-65470904] {\n      width: 4.5em;\n      height: 4.5em;\n      display: block;\n      margin: auto;\n      border-radius: 50%;\n}\n.header h3[data-v-65470904], .header .acc-number[data-v-65470904] {\n    font-size: 1em;\n    text-align: center;\n    margin-top: 0.5em;\n    color: #616161;\n}\n.header .acc-number[data-v-65470904] {\n    color: #333;\n}\n.header .acc-number span[data-v-65470904] {\n      color: #616161;\n}\n.my-list[data-v-65470904] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.my-list li .mint-cell[data-v-65470904] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n.my-list li .mint-cell span[data-v-65470904] {\n      font-size: 0.9em;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 139 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_tabBar__);
+//
+//
+//
 //
 //
 //
@@ -32925,7 +32713,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 140 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -32945,7 +32733,9 @@ var render = function() {
             [
               _c(
                 "mt-cell",
-                { attrs: { title: "推荐人", "is-link": "", to: "" } },
+                {
+                  attrs: { title: "推荐人", "is-link": "", to: "/my/referrer" }
+                },
                 [
                   _c("img", {
                     attrs: {
@@ -32957,31 +32747,10 @@ var render = function() {
                     slot: "icon"
                   }),
                   _vm._v(" "),
-                  _c("span", [_vm._v("icon 是图片")])
-                ]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            [
-              _c(
-                "mt-cell",
-                { attrs: { title: "银行卡管理", "is-link": "", to: "" } },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/logo.png",
-                      width: "24",
-                      height: "24"
-                    },
-                    slot: "icon"
-                  }),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("icon 是图片")])
+                  _c("span", [
+                    _vm._v("张三李四: "),
+                    _c("em", [_vm._v("132131321321")])
+                  ])
                 ]
               )
             ],
@@ -33005,31 +32774,7 @@ var render = function() {
                     slot: "icon"
                   }),
                   _vm._v(" "),
-                  _c("span", [_vm._v("icon 是图片")])
-                ]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            [
-              _c(
-                "mt-cell",
-                { attrs: { title: "查看那结算卡", "is-link": "", to: "" } },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/logo.png",
-                      width: "24",
-                      height: "24"
-                    },
-                    slot: "icon"
-                  }),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("icon 是图片")])
+                  _c("span", [_vm._v("未完善")])
                 ]
               )
             ],
@@ -33042,7 +32787,11 @@ var render = function() {
               _c(
                 "mt-cell",
                 {
-                  attrs: { title: "更多设置", "is-link": "", to: "/#/my/set" }
+                  attrs: {
+                    title: "银行卡管理",
+                    "is-link": "",
+                    to: "/my/bankCardManage"
+                  }
                 },
                 [
                   _c("img", {
@@ -33055,7 +32804,61 @@ var render = function() {
                     slot: "icon"
                   }),
                   _vm._v(" "),
-                  _c("span", [_vm._v("icon 是图片")])
+                  _c("span", [_c("font", [_vm._v("0")]), _vm._v("张")], 1)
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            [
+              _c(
+                "mt-cell",
+                {
+                  attrs: {
+                    title: "查看结算卡",
+                    "is-link": "",
+                    to: "/my/checkSettle"
+                  }
+                },
+                [
+                  _c("img", {
+                    attrs: {
+                      slot: "icon",
+                      src: "/images/logo.png",
+                      width: "24",
+                      height: "24"
+                    },
+                    slot: "icon"
+                  }),
+                  _vm._v(" "),
+                  _c("span")
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            [
+              _c(
+                "mt-cell",
+                { attrs: { title: "更多设置", "is-link": "", to: "/my/set" } },
+                [
+                  _c("img", {
+                    attrs: {
+                      slot: "icon",
+                      src: "/images/logo.png",
+                      width: "24",
+                      height: "24"
+                    },
+                    slot: "icon"
+                  }),
+                  _vm._v(" "),
+                  _c("span")
                 ]
               )
             ],
@@ -33100,19 +32903,19 @@ if (false) {
 }
 
 /***/ }),
-/* 141 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(142)
+  __webpack_require__(137)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(144)
+var __vue_script__ = __webpack_require__(139)
 /* template */
-var __vue_template__ = __webpack_require__(145)
+var __vue_template__ = __webpack_require__(140)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -33152,13 +32955,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 142 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(143);
+var content = __webpack_require__(138);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -33178,7 +32981,7 @@ if(false) {
 }
 
 /***/ }),
-/* 143 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -33186,13 +32989,13 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.list[data-v-6298473a] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.list li .mint-cell[data-v-6298473a] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n", ""]);
+exports.push([module.i, "\n#set[data-v-6298473a] {\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.list[data-v-6298473a] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.list li .mint-cell[data-v-6298473a] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 144 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33224,7 +33027,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 145 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -33275,19 +33078,19 @@ if (false) {
 }
 
 /***/ }),
-/* 146 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(147)
+  __webpack_require__(142)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(149)
+var __vue_script__ = __webpack_require__(144)
 /* template */
-var __vue_template__ = __webpack_require__(150)
+var __vue_template__ = __webpack_require__(145)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -33327,13 +33130,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 147 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(148);
+var content = __webpack_require__(143);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -33353,7 +33156,7 @@ if(false) {
 }
 
 /***/ }),
-/* 148 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -33361,13 +33164,13 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #38c3ec;\n  height: 100vh;\n}\n.referrer-container[data-v-4698f5f7] {\n  background: #fff;\n  width: 94%;\n  margin: auto;\n  height: auto;\n  border-radius: 0.7em;\n  margin-top: 4em;\n}\n.header[data-v-4698f5f7] {\n  height: 4.5em;\n  padding: 1em;\n}\n.header .referrer-image[data-v-4698f5f7] {\n    width: 4.5em;\n    height: 4.5em;\n}\n.header .referrer-image > img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n      border-radius: 50%;\n}\n.header .referrer-info[data-v-4698f5f7] {\n    margin-left: 1em;\n}\n.header .referrer-info .tel[data-v-4698f5f7],\n    .header .referrer-info h2[data-v-4698f5f7] {\n      margin-bottom: 0.8em;\n}\n.header .referrer-info .wx-number[data-v-4698f5f7],\n    .header .referrer-info .tel[data-v-4698f5f7] {\n      color: #999;\n      font-size: 0.9em;\n}\n.header .referrer-info h2[data-v-4698f5f7] {\n      font-size: 1em;\n      margin-top: 0.1em;\n}\n.code[data-v-4698f5f7] {\n  padding: 1em;\n  padding-bottom: 2.5em;\n}\n.code .code-image[data-v-4698f5f7] {\n    max-width: 150px;\n    margin: 2em auto;\n    background: #f1f1f1;\n    padding: 10px;\n    border-radius: 5px;\n}\n.code .code-image img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n}\n.code .add-referrer[data-v-4698f5f7] {\n    text-align: center;\n    font-size: 0.8em;\n    color: #666;\n}\n", ""]);
+exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #38c3ec;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.referrer-container[data-v-4698f5f7] {\n  background: #fff;\n  width: 94%;\n  margin: auto;\n  height: auto;\n  border-radius: 0.7em;\n  margin-top: 4em;\n}\n.header[data-v-4698f5f7] {\n  height: 4.5em;\n  padding: 1em;\n}\n.header .referrer-image[data-v-4698f5f7] {\n    width: 4.5em;\n    height: 4.5em;\n}\n.header .referrer-image > img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n      border-radius: 50%;\n}\n.header .referrer-info[data-v-4698f5f7] {\n    margin-left: 1em;\n}\n.header .referrer-info .tel[data-v-4698f5f7],\n    .header .referrer-info h2[data-v-4698f5f7] {\n      margin-bottom: 0.8em;\n}\n.header .referrer-info .wx-number[data-v-4698f5f7],\n    .header .referrer-info .tel[data-v-4698f5f7] {\n      color: #999;\n      font-size: 0.9em;\n}\n.header .referrer-info h2[data-v-4698f5f7] {\n      font-size: 1em;\n      margin-top: 0.1em;\n}\n.code[data-v-4698f5f7] {\n  padding: 1em;\n  padding-bottom: 2.5em;\n}\n.code .code-image[data-v-4698f5f7] {\n    max-width: 150px;\n    margin: 2em auto;\n    background: #f1f1f1;\n    padding: 10px;\n    border-radius: 5px;\n}\n.code .code-image img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n}\n.code .add-referrer[data-v-4698f5f7] {\n    text-align: center;\n    font-size: 0.8em;\n    color: #666;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 149 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33407,7 +33210,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 150 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -33418,7 +33221,10 @@ var render = function() {
     "div",
     { attrs: { id: "referrer" } },
     [
-      _c("topBack", { attrs: { title: "推荐人信息" } }),
+      _c("topBack", {
+        staticStyle: { color: "#fff" },
+        attrs: { title: "推荐人信息" }
+      }),
       _vm._v(" "),
       _vm._m(0, false, false)
     ],
@@ -33473,19 +33279,19 @@ if (false) {
 }
 
 /***/ }),
-/* 151 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(152)
+  __webpack_require__(147)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(154)
+var __vue_script__ = __webpack_require__(149)
 /* template */
-var __vue_template__ = __webpack_require__(155)
+var __vue_template__ = __webpack_require__(150)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -33525,13 +33331,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 152 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(153);
+var content = __webpack_require__(148);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -33551,7 +33357,7 @@ if(false) {
 }
 
 /***/ }),
-/* 153 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -33559,13 +33365,13 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.bankCard-list[data-v-5865f0c9] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-5865f0c9] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-5865f0c9],\n    .bankCard-list li .binding[data-v-5865f0c9] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-5865f0c9] {\n      bottom: 10px;\n      color: #aaa;\n}\n.bankCard-list li .binding[data-v-5865f0c9] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-5865f0c9] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-5865f0c9] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    font-size: 1em;\n}\n.add-bankCard[data-v-5865f0c9] {\n  width: 90%;\n  height: 4em;\n  line-height: 4em;\n  border: 1px dashed #ccc;\n  text-align: center;\n  margin: auto;\n  margin-top: 1em;\n}\n.add-bankCard a[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    color: #999;\n}\n", ""]);
+exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-list[data-v-5865f0c9] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-5865f0c9] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-5865f0c9],\n    .bankCard-list li .binding[data-v-5865f0c9] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-5865f0c9] {\n      bottom: 10px;\n      color: #aaa;\n}\n.bankCard-list li .binding[data-v-5865f0c9] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-5865f0c9] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-5865f0c9] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    font-size: 1em;\n}\n.add-bankCard[data-v-5865f0c9] {\n  width: 90%;\n  height: 4em;\n  line-height: 4em;\n  border: 1px dashed #ccc;\n  text-align: center;\n  margin: auto;\n  margin-top: 1em;\n}\n.add-bankCard a[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    color: #999;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 154 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33606,7 +33412,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 155 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -33676,19 +33482,19 @@ if (false) {
 }
 
 /***/ }),
-/* 156 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(157)
+  __webpack_require__(152)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(159)
+var __vue_script__ = __webpack_require__(154)
 /* template */
-var __vue_template__ = __webpack_require__(160)
+var __vue_template__ = __webpack_require__(155)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -33728,13 +33534,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 157 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(158);
+var content = __webpack_require__(153);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -33754,7 +33560,7 @@ if(false) {
 }
 
 /***/ }),
-/* 158 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -33768,7 +33574,7 @@ exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #EFEEF
 
 
 /***/ }),
-/* 159 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33808,7 +33614,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 160 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -33907,19 +33713,19 @@ if (false) {
 }
 
 /***/ }),
-/* 161 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(162)
+  __webpack_require__(157)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(164)
+var __vue_script__ = __webpack_require__(159)
 /* template */
-var __vue_template__ = __webpack_require__(165)
+var __vue_template__ = __webpack_require__(160)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -33959,13 +33765,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 162 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(163);
+var content = __webpack_require__(158);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -33985,7 +33791,7 @@ if(false) {
 }
 
 /***/ }),
-/* 163 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -33999,7 +33805,7 @@ exports.push([module.i, "\n#settleInfo[data-v-7396d6cb] {\n  background: #eee;\n
 
 
 /***/ }),
-/* 164 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34050,7 +33856,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 165 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -34141,19 +33947,19 @@ if (false) {
 }
 
 /***/ }),
-/* 166 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(167)
+  __webpack_require__(162)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(169)
+var __vue_script__ = __webpack_require__(164)
 /* template */
-var __vue_template__ = __webpack_require__(170)
+var __vue_template__ = __webpack_require__(165)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -34193,13 +33999,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 167 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(168);
+var content = __webpack_require__(163);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -34219,7 +34025,7 @@ if(false) {
 }
 
 /***/ }),
-/* 168 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -34233,7 +34039,7 @@ exports.push([module.i, "\n#settleInfo[data-v-1ca6337a] {\n  background: #efeef4
 
 
 /***/ }),
-/* 169 */
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34268,7 +34074,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 170 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -34360,19 +34166,19 @@ if (false) {
 }
 
 /***/ }),
-/* 171 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue__ = __webpack_require__(167);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue__ = __webpack_require__(172);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue__ = __webpack_require__(177);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue__ = __webpack_require__(187);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue__ = __webpack_require__(182);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue__ = __webpack_require__(192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue__ = __webpack_require__(205);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue__);
 
 
@@ -34383,19 +34189,19 @@ if (false) {
 /* harmony default export */ __webpack_exports__["a"] = ([{ path: '/shop', name: 'shop', component: __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default.a }, { path: '/shop/my_collection', name: 'myCollection', component: __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default.a }, { path: '/shop/message_list', name: "shopMessageList", component: __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue___default.a }, { path: '/shop/shop_detail', name: "shopDetail", component: __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue___default.a }, { path: '/shop/shop_member', name: "shopMember", component: __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue___default.a }]);
 
 /***/ }),
-/* 172 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(173)
+  __webpack_require__(168)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(175)
+var __vue_script__ = __webpack_require__(170)
 /* template */
-var __vue_template__ = __webpack_require__(176)
+var __vue_template__ = __webpack_require__(171)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -34435,13 +34241,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 173 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(174);
+var content = __webpack_require__(169);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -34461,7 +34267,7 @@ if(false) {
 }
 
 /***/ }),
-/* 174 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -34475,7 +34281,7 @@ exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-a
 
 
 /***/ }),
-/* 175 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34850,7 +34656,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 176 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -35165,19 +34971,19 @@ if (false) {
 }
 
 /***/ }),
-/* 177 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(178)
+  __webpack_require__(173)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(180)
+var __vue_script__ = __webpack_require__(175)
 /* template */
-var __vue_template__ = __webpack_require__(181)
+var __vue_template__ = __webpack_require__(176)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -35217,13 +35023,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 178 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(179);
+var content = __webpack_require__(174);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -35243,7 +35049,7 @@ if(false) {
 }
 
 /***/ }),
-/* 179 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -35257,7 +35063,7 @@ exports.push([module.i, "\n#top[data-v-7328b9b8] {\n  height: 10em;\n  padding-t
 
 
 /***/ }),
-/* 180 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35418,7 +35224,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 181 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -35532,19 +35338,19 @@ if (false) {
 }
 
 /***/ }),
-/* 182 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(183)
+  __webpack_require__(178)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(185)
+var __vue_script__ = __webpack_require__(180)
 /* template */
-var __vue_template__ = __webpack_require__(186)
+var __vue_template__ = __webpack_require__(181)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -35584,13 +35390,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 183 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(184);
+var content = __webpack_require__(179);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -35610,7 +35416,7 @@ if(false) {
 }
 
 /***/ }),
-/* 184 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -35624,7 +35430,7 @@ exports.push([module.i, "\n#message-list[data-v-ac447032] {\n  padding-top: 2em;
 
 
 /***/ }),
-/* 185 */
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35880,7 +35686,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 186 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -36374,19 +36180,19 @@ if (false) {
 }
 
 /***/ }),
-/* 187 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(188)
+  __webpack_require__(183)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(190)
+var __vue_script__ = __webpack_require__(185)
 /* template */
-var __vue_template__ = __webpack_require__(191)
+var __vue_template__ = __webpack_require__(186)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -36426,13 +36232,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 188 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(189);
+var content = __webpack_require__(184);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -36452,7 +36258,7 @@ if(false) {
 }
 
 /***/ }),
-/* 189 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -36466,7 +36272,7 @@ exports.push([module.i, "\n#shop-detail[data-v-d72c7396] {\n  background: #eee;\
 
 
 /***/ }),
-/* 190 */
+/* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36874,7 +36680,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 191 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -37278,372 +37084,13 @@ if (false) {
 }
 
 /***/ }),
-/* 192 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(193)
-}
-var normalizeComponent = __webpack_require__(1)
-/* script */
-var __vue_script__ = __webpack_require__(195)
-/* template */
-var __vue_template__ = __webpack_require__(196)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-fb842804"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\view\\Shop\\shopMember.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-fb842804", Component.options)
-  } else {
-    hotAPI.reload("data-v-fb842804", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 193 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(194);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("649291d6", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fb842804\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopMember.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fb842804\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopMember.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 194 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n#shop-member[data-v-fb842804] {\n  padding-top: 2em;\n}\n#shop-member ul[data-v-fb842804] {\n    width: 100%;\n}\n#shop-member ul li[data-v-fb842804] {\n      width: 20%;\n      height: 4em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#shop-member ul li > img[data-v-fb842804] {\n        width: 2.6em;\n        height: 2.6em;\n        display: block;\n}\n#shop-member ul li h3[data-v-fb842804] {\n        font-size: 0.9em;\n}\n#search-wrap[data-v-fb842804] {\n  width: 100%;\n  height: 3em;\n  background: #eee;\n}\n#search-wrap > div[data-v-fb842804] {\n    width: 95%;\n    height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n#search-wrap > div #search-input[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      margin: 0 auto;\n      height: 100%;\n      border-radius: 0.2em;\n      padding-left: 2em;\n      padding-right: 2em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      width: 80%;\n}\n#search-wrap > div #search-input[data-v-fb842804]::-webkit-input-placeholder {\n        padding-left: 49%;\n        color: #aaa;\n}\n#search-wrap > div > button[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      height: 100%;\n      background: none;\n      font-size: 1em;\n      color: #00cc00;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 195 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      searchSwitch: false
-    };
-  },
-
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
-  methods: {
-    openSearchSwitch: function openSearchSwitch() {
-      this.searchSwitch = true;
-    }
-  }
-});
-
-/***/ }),
-/* 196 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "shop-member" } }, [
-    _c(
-      "div",
-      { staticClass: "top" },
-      [_c("top-back", { attrs: { title: "店铺成员(74)" } })],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "flex flex-align-center", attrs: { id: "search-wrap" } },
-      [
-        _c(
-          "div",
-          { staticClass: "flex flex-align-center flex-justify-around" },
-          [
-            _c("input", {
-              staticClass: "flex-7",
-              attrs: { type: "text", placeholder: "搜索", id: "search-input" },
-              on: { click: _vm.openSearchSwitch }
-            }),
-            _vm._v(" "),
-            _vm.searchSwitch
-              ? _c(
-                  "button",
-                  { staticClass: "flex-3", attrs: { type: "button" } },
-                  [_vm._v(" 取消 ")]
-                )
-              : _vm._e()
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _vm._m(0, false, false)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "flex flex-wrap-on" }, [
-      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-        _c("i", { staticClass: "iconfont" }, [
-          _vm._v("\n                \n            ")
-        ]),
-        _vm._v(" "),
-        _c("span")
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-        _c("i", { staticClass: "iconfont" }, [
-          _vm._v("\n                \n            ")
-        ]),
-        _vm._v(" "),
-        _c("span")
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: { src: "/images/avatar.jpg", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("h3", [_vm._v("玩家姓名已")])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: { src: "/images/avatar.jpg", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("h3", [_vm._v("玩家姓名已")])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: { src: "/images/avatar.jpg", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("h3", [_vm._v("玩家姓名已")])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: { src: "/images/avatar.jpg", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("h3", [_vm._v("玩家姓名已")])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: { src: "/images/avatar.jpg", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("h3", [_vm._v("玩家姓名已")])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-fb842804", module.exports)
-  }
-}
-
-/***/ }),
-/* 197 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(198);
+var content = __webpack_require__(188);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -37668,7 +37115,7 @@ if(false) {
 }
 
 /***/ }),
-/* 198 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -37682,7 +37129,7 @@ exports.push([module.i, "/* Cell Component */\n/* Header Component */\n/* Button
 
 
 /***/ }),
-/* 199 */
+/* 189 */
 /***/ (function(module, exports) {
 
 
@@ -37777,13 +37224,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 200 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(201);
+var content = __webpack_require__(191);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -37808,7 +37255,7 @@ if(false) {
 }
 
 /***/ }),
-/* 201 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -37822,13 +37269,13 @@ exports.push([module.i, "@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    �
 
 
 /***/ }),
-/* 202 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(203);
+var content = __webpack_require__(193);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -37853,7 +37300,7 @@ if(false) {
 }
 
 /***/ }),
-/* 203 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -37867,14 +37314,14 @@ exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project 
 
 
 /***/ }),
-/* 204 */
+/* 194 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(205);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_regist__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_regist__ = __webpack_require__(196);
 
 
 
@@ -37914,7 +37361,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 /* harmony default export */ __webpack_exports__["a"] = (store);
 
 /***/ }),
-/* 205 */
+/* 195 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38859,7 +38306,7 @@ var index_esm = {
 
 
 /***/ }),
-/* 206 */
+/* 196 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38906,10 +38353,634 @@ var registStore = {
 /* harmony default export */ __webpack_exports__["a"] = (registStore);
 
 /***/ }),
-/* 207 */
+/* 197 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 198 */,
+/* 199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(200)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(202)
+/* template */
+var __vue_template__ = __webpack_require__(203)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-35d4264a"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\MyAccount\\recharge.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-35d4264a", Component.options)
+  } else {
+    hotAPI.reload("data-v-35d4264a", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 200 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(201);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("6a326cfe", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-35d4264a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./recharge.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-35d4264a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./recharge.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-35d4264a], body[data-v-35d4264a], div[data-v-35d4264a], span[data-v-35d4264a], applet[data-v-35d4264a], object[data-v-35d4264a], iframe[data-v-35d4264a],\nh1[data-v-35d4264a], h2[data-v-35d4264a], h3[data-v-35d4264a], h4[data-v-35d4264a], h5[data-v-35d4264a], h6[data-v-35d4264a], p[data-v-35d4264a], blockquote[data-v-35d4264a], pre[data-v-35d4264a],\na[data-v-35d4264a], abbr[data-v-35d4264a], acronym[data-v-35d4264a], address[data-v-35d4264a], big[data-v-35d4264a], cite[data-v-35d4264a], code[data-v-35d4264a],\ndel[data-v-35d4264a], dfn[data-v-35d4264a], em[data-v-35d4264a], img[data-v-35d4264a], ins[data-v-35d4264a], kbd[data-v-35d4264a], q[data-v-35d4264a], s[data-v-35d4264a], samp[data-v-35d4264a],\nsmall[data-v-35d4264a], strike[data-v-35d4264a], strong[data-v-35d4264a], sub[data-v-35d4264a], sup[data-v-35d4264a], tt[data-v-35d4264a], var[data-v-35d4264a],\nb[data-v-35d4264a], u[data-v-35d4264a], i[data-v-35d4264a], center[data-v-35d4264a],\ndl[data-v-35d4264a], dt[data-v-35d4264a], dd[data-v-35d4264a], ol[data-v-35d4264a], ul[data-v-35d4264a], li[data-v-35d4264a],\nfieldset[data-v-35d4264a], form[data-v-35d4264a], label[data-v-35d4264a], legend[data-v-35d4264a],\ntable[data-v-35d4264a], caption[data-v-35d4264a], tbody[data-v-35d4264a], tfoot[data-v-35d4264a], thead[data-v-35d4264a], tr[data-v-35d4264a], th[data-v-35d4264a], td[data-v-35d4264a],\narticle[data-v-35d4264a], aside[data-v-35d4264a], canvas[data-v-35d4264a], details[data-v-35d4264a], embed[data-v-35d4264a],\nfigure[data-v-35d4264a], figcaption[data-v-35d4264a], footer[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a],\nmenu[data-v-35d4264a], nav[data-v-35d4264a], output[data-v-35d4264a], ruby[data-v-35d4264a], section[data-v-35d4264a], summary[data-v-35d4264a],\ntime[data-v-35d4264a], mark[data-v-35d4264a], audio[data-v-35d4264a], video[data-v-35d4264a] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-35d4264a], aside[data-v-35d4264a], details[data-v-35d4264a], figcaption[data-v-35d4264a], figure[data-v-35d4264a],\nfooter[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a], menu[data-v-35d4264a], nav[data-v-35d4264a], section[data-v-35d4264a] {\n  display: block;\n}\nbody[data-v-35d4264a] {\n  line-height: 1;\n}\nol[data-v-35d4264a], ul[data-v-35d4264a] {\n  list-style: none;\n}\nblockquote[data-v-35d4264a], q[data-v-35d4264a] {\n  quotes: none;\n}\nblockquote[data-v-35d4264a]:before, blockquote[data-v-35d4264a]:after,\nq[data-v-35d4264a]:before, q[data-v-35d4264a]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-35d4264a] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-35d4264a] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-35d4264a] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-35d4264a] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-35d4264a] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-35d4264a] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-35d4264a] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-35d4264a] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-35d4264a] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-35d4264a] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-35d4264a] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-35d4264a] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-35d4264a] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-35d4264a] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-35d4264a] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-35d4264a] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-35d4264a] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-35d4264a] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-35d4264a] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-35d4264a] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-35d4264a] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-35d4264a] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-35d4264a] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-35d4264a] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-35d4264a] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-35d4264a] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-35d4264a] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-35d4264a] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-35d4264a] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-35d4264a] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-35d4264a] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-35d4264a] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.recharge-container[data-v-35d4264a] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.recharge-box[data-v-35d4264a] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.recharge-box .tltle[data-v-35d4264a] {\n    font-size: 1em;\n    color: #999;\n}\n.recharge-money[data-v-35d4264a] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 1.2em;\n}\n.recharge-money input[data-v-35d4264a] {\n    border: none;\n    padding: 7px 0;\n    display: inline-block;\n    width: 70%;\n}\n.recharge-way[data-v-35d4264a] {\n  margin-top: 2em;\n}\n.recharge-way .title[data-v-35d4264a] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.list[data-v-35d4264a] {\n  background-color: #fff;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  color: inherit;\n  min-height: 48px;\n  display: block;\n  border-bottom: 1px solid #d9d9d9;\n}\n.list-title[data-v-35d4264a] {\n  width: 100%;\n}\n.list-wrapper[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  min-height: inherit;\n  padding: 0 10px;\n}\n.radio-core[data-v-35d4264a] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  display: inline-block;\n  background-color: #fff;\n  border-radius: 100%;\n  border: 1px solid #ccc;\n  position: relative;\n  width: 20px;\n  height: 20px;\n  vertical-align: middle;\n}\n.radio-core[data-v-35d4264a]::after {\n    content: \" \";\n    border-radius: 100%;\n    top: 5px;\n    left: 5px;\n    position: absolute;\n    width: 8px;\n    height: 8px;\n}\n.radiolist-label[data-v-35d4264a] {\n  display: block;\n  width: 100%;\n}\n.radio-input[data-v-35d4264a] {\n  display: none;\n}\n.radio-label[data-v-35d4264a] {\n  vertical-align: middle;\n}\n.radio-input:checked + .radio-core[data-v-35d4264a] {\n  background-color: #26a2ff;\n  border-color: #26a2ff;\n}\n.radio-input:checked + .radio-core[data-v-35d4264a]::after {\n    background-color: #fff;\n}\n.recharge-btn[data-v-35d4264a] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 202 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a }
+});
+
+/***/ }),
+/* 203 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "recharge-container", attrs: { id: "recharge" } },
+    [
+      _c("topBack", { attrs: { title: "充值" } }),
+      _vm._v(" "),
+      _c("div", { staticClass: "recharge-box" }, [
+        _c("div", { staticClass: "title" }, [_vm._v("充值金额")]),
+        _vm._v(" "),
+        _vm._m(0, false, false),
+        _vm._v(" "),
+        _vm._m(1, false, false),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "recharge-btn", attrs: { href: "javascript:;" } },
+          [
+            _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
+              _vm._v("提现")
+            ])
+          ],
+          1
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "recharge-money" }, [
+      _c("label", [_vm._v("￥")]),
+      _vm._v(" "),
+      _c("input", { attrs: { type: "text", placeholder: "请输入金额" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "recharge-way" }, [
+      _c("div", { staticClass: "title" }, [_vm._v("选择充值方式")]),
+      _vm._v(" "),
+      _c("a", { staticClass: "list" }, [
+        _c("div", { staticClass: "list-wrapper" }, [
+          _c("div", { staticClass: "list-title" }, [
+            _c("label", { staticClass: "radiolist-label" }, [
+              _c("span", { staticClass: "mint-radio is-right" }, [
+                _c("input", {
+                  staticClass: "radio-input",
+                  attrs: {
+                    type: "radio",
+                    checked: "",
+                    name: "tool",
+                    value: "银行卡"
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "radio-core" })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "radio-label" }, [_vm._v("银行卡")])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("a", { staticClass: "list" }, [
+        _c("div", { staticClass: "list-wrapper" }, [
+          _c("div", { staticClass: "list-title" }, [
+            _c("label", { staticClass: "radiolist-label" }, [
+              _c("span", { staticClass: "mint-radio is-right" }, [
+                _c("input", {
+                  staticClass: "radio-input",
+                  attrs: { type: "radio", name: "tool", value: "微信" }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "radio-core" })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "radio-label" }, [_vm._v("微信")])
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-35d4264a", module.exports)
+  }
+}
+
+/***/ }),
+/* 204 */,
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(206)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(208)
+/* template */
+var __vue_template__ = __webpack_require__(209)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-fb842804"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\Shop\\shopMember.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-fb842804", Component.options)
+  } else {
+    hotAPI.reload("data-v-fb842804", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 206 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(207);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("649291d6", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fb842804\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopMember.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fb842804\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopMember.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 207 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n#shop-member[data-v-fb842804] {\n  padding-top: 2em;\n}\n#shop-member ul[data-v-fb842804] {\n    width: 100%;\n}\n#shop-member ul li[data-v-fb842804] {\n      width: 20%;\n      height: 4em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#shop-member ul li > img[data-v-fb842804] {\n        width: 2.6em;\n        height: 2.6em;\n        display: block;\n}\n#shop-member ul li h3[data-v-fb842804] {\n        font-size: 0.9em;\n}\n#search-wrap[data-v-fb842804] {\n  width: 100%;\n  height: 3em;\n  background: #eee;\n}\n#search-wrap > div[data-v-fb842804] {\n    width: 95%;\n    height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n#search-wrap > div #search-input[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      margin: 0 auto;\n      height: 100%;\n      border-radius: 0.2em;\n      padding-left: 2em;\n      padding-right: 2em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      width: 80%;\n}\n#search-wrap > div #search-input[data-v-fb842804]::-webkit-input-placeholder {\n        padding-left: 49%;\n        color: #aaa;\n}\n#search-wrap > div > button[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      height: 100%;\n      background: none;\n      font-size: 1em;\n      color: #00cc00;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 208 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      searchSwitch: false
+    };
+  },
+
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  methods: {
+    openSearchSwitch: function openSearchSwitch() {
+      this.searchSwitch = true;
+    }
+  }
+});
+
+/***/ }),
+/* 209 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "shop-member" } }, [
+    _c(
+      "div",
+      { staticClass: "top" },
+      [_c("top-back", { attrs: { title: "店铺成员(74)" } })],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "flex flex-align-center", attrs: { id: "search-wrap" } },
+      [
+        _c(
+          "div",
+          { staticClass: "flex flex-align-center flex-justify-around" },
+          [
+            _c("input", {
+              staticClass: "flex-7",
+              attrs: { type: "text", placeholder: "搜索", id: "search-input" },
+              on: { click: _vm.openSearchSwitch }
+            }),
+            _vm._v(" "),
+            _vm.searchSwitch
+              ? _c(
+                  "button",
+                  { staticClass: "flex-3", attrs: { type: "button" } },
+                  [_vm._v(" 取消 ")]
+                )
+              : _vm._e()
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _vm._m(0, false, false)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "flex flex-wrap-on" }, [
+      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+        _c("i", { staticClass: "iconfont" }, [
+          _vm._v("\n                \n            ")
+        ]),
+        _vm._v(" "),
+        _c("span")
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+        _c("i", { staticClass: "iconfont" }, [
+          _vm._v("\n                \n            ")
+        ]),
+        _vm._v(" "),
+        _c("span")
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("h3", [_vm._v("玩家姓名已")])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("h3", [_vm._v("玩家姓名已")])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("h3", [_vm._v("玩家姓名已")])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("h3", [_vm._v("玩家姓名已")])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("h3", [_vm._v("玩家姓名已")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-fb842804", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

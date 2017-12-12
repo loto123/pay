@@ -33,6 +33,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#bankManage{
+  padding-top: 2em;
+  box-sizing: border-box;
+}
 .bankCard-list {
   width: 90%;
   margin: auto;
