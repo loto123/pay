@@ -4,15 +4,12 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Shop;
-use App\ShopUser;
 use App\User;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Route;
+use Invoker\ParameterResolver\DefaultValueResolver;
 
 class ShopController extends Controller
 {
@@ -31,7 +28,7 @@ class ShopController extends Controller
         if (!empty($date_time)) {
             $date_time_arr = explode(' - ', $date_time);
             $begin = $date_time_arr[0];
-            $end = $date_time_arr[1];
+            $end = $end = $date_time_arr[1] . ' 23:59:59';
         }
 
         $table_name = (new Shop)->getTable();
@@ -39,9 +36,13 @@ class ShopController extends Controller
         $listQuery = Shop::leftJoin('transfer as t',function ($join) use($table_name) {
             $join->on( $table_name.'.id' ,'=' ,'t.shop_id' )
                 ->where('t.status', '=', '3');
+        })->leftJoin('transfer_record as tfr', function ($join) {
+            $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=' , '2');
         })->leftJoin('users as u', 'u.id', '=', $table_name .'.manager')
-            ->select( DB::raw($table_name.'.*'),'u.id as manager_id', 'u.name as manager_name', DB::raw('COUNT(t.id) as transfer_cnt'),
-                DB::raw('SUM(t.price) as summary'), DB::raw('MAX(t.price) as max_amount '));
+            ->select( DB::raw($table_name.'.*'),'u.id as manager_id', 'u.name as manager_name',
+                DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
+                DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
+                DB::raw('(SELECT SUM(amount) FROM tip_record WHERE tip_record.transfer_id = t.id ) as tip_amount_cnt'));
         if(!empty($manager_id)) {
             $listQuery->where('u.id', $manager_id);
         }
@@ -54,15 +55,14 @@ class ShopController extends Controller
             $countQuery->where($table_name.'.name', $shop_name);
         }
         if($begin && $end) {
-            $listQuery->where($table_name.'.created_time', '>=', $begin)->where($table_name.'.created_time', '<=', $end);
-            $countQuery->where($table_name.'.created_time', '>=', $begin)->where($table_name.'.created_time', '<=', $end);
+            $listQuery->where($table_name.'.created_at', '>=', $begin)->where($table_name.'.created_at', '<=', $end);
+            $countQuery->where($table_name.'.created_at', '>=', $begin)->where($table_name.'.created_at', '<=', $end);
         }
-        $listQuery->groupBy($table_name.'.id')->orderBy('transfer_cnt','DESC')->withCount('shop_user');
+        $listQuery->groupBy($table_name.'.id','t.id')->orderBy('tip_amount_cnt','DESC')->withCount('shop_user');
 
         $count = $countQuery->count();
         $list = $listQuery->paginate($this->limit);
-        $sort = 1;
-        $data = compact('list','count','date_time','manager_id','shop_id','shop_name','sort');
+        $data = compact('list','count','date_time','manager_id','shop_id','shop_name');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shop',$data));
             $content->header("店铺管理");
@@ -76,16 +76,19 @@ class ShopController extends Controller
         $listQuery = Shop::leftJoin('transfer as t',function ($join) use($table_name) {
             $join->on( $table_name.'.id' ,'=' ,'t.shop_id' )
                 ->where('t.status', '=', '3');
+        })->leftJoin('transfer_record as tfr', function ($join) {
+            $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=' , '2');
         })->leftJoin('users as u', 'u.id', '=', $table_name .'.manager')
-            ->select( DB::raw($table_name.'.*'),'u.id as manager_id', 'u.name as manager_name', DB::raw('COUNT(t.id) as transfer_cnt'),
-                DB::raw('SUM(t.price) as summary'), DB::raw('MAX(t.price) as max_amount '))
-            ->where($table_name.'.id', $shop_id)->groupBy($table_name.'.id');
+            ->select( DB::raw($table_name.'.*'),'u.id as manager_id', 'u.name as manager_name',
+                DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
+                DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
+                DB::raw('(SELECT SUM(amount) FROM tip_record WHERE tip_record.transfer_id = t.id ) as tip_amount_cnt'))
+            ->where($table_name.'.id', $shop_id)->groupBy($table_name.'.id','t.id');
         $list = $listQuery->first();
 
         $user_table = (new User)->getTable();
         $users_arr = User::leftJoin('shop_users as su', 'su.user_id', '=', $user_table.'.id')->where('su.shop_id', '=', $shop_id)->select()->get();
-        $cnt = 6;
-        $data = compact('list','users_arr','cnt');
+        $data = compact('list','users_arr');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shopDetail', $data));
             $content->header('店铺详情');
