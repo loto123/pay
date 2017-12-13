@@ -44,13 +44,12 @@ export default {
   components: { topBack , passWorld},
   data(){
     return {
-      showPasswordTag:true
+      showPasswordTag:false       // 密码弹出开关
     }
   },
   methods:{
     showPassword(){
       this.showPasswordTag = true;
-      console.log(this.showPasswordTag);
     },
 
     hidePassword(){
