@@ -35,7 +35,6 @@
   </div>
 </template>
 
-
 <script>
 import topBack from "../../components/topBack";
 import passWorld from "../../components/password"

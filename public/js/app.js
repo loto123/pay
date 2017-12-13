@@ -32730,7 +32730,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n#my-deal[data-v-6a1cc302] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-deal #tab-menu[data-v-6a1cc302] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#my-deal #tab-menu .menu-item[data-v-6a1cc302] {\n      height: 100%;\n      width: 33.33%;\n}\n#my-deal #tab-menu .active[data-v-6a1cc302] {\n      border-bottom: 4px solid #26a2ff;\n}\n#my-deal .deal-wrap[data-v-6a1cc302] {\n    width: 100%;\n}\n#my-deal .deal-wrap ul .timer[data-v-6a1cc302] {\n      width: 100%;\n      height: 3em;\n      margin-top: 0.1em;\n}\n#my-deal .deal-wrap ul .timer > div[data-v-6a1cc302] {\n        display: inline-block;\n        font-size: 0.8em;\n        background: #aaa;\n        color: #fff;\n        padding-left: 0.4em;\n        padding-right: 0.4em;\n        padding-top: 0.4em;\n        padding-bottom: 0.4em;\n        border-radius: 0.2em;\n}\n#my-deal .deal-wrap ul .deal-item[data-v-6a1cc302] {\n      height: 4em;\n      background: #fff;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      margin-top: 0.1em;\n      /*border-bottom:1px solid #eee;*/\n}\n#my-deal .deal-wrap ul .deal-item .avatar-wrap[data-v-6a1cc302] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n}\n#my-deal .deal-wrap ul .deal-item .avatar-wrap img[data-v-6a1cc302] {\n          width: 2.3em;\n          height: 2.3em;\n          border-radius: 0.2em;\n}\n#my-deal .deal-wrap ul .deal-item .avatar-wrap h3[data-v-6a1cc302] {\n          font-size: 0.5em;\n          margin-top: 0.2em;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap[data-v-6a1cc302] {\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .title[data-v-6a1cc302] {\n          margin-top: 0.8em;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .date[data-v-6a1cc302] {\n          color: #999;\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap[data-v-6a1cc302] {\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-6a1cc302] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-6a1cc302] {\n          font-size: 1.1em;\n          margin-top: 0.6em;\n          color: #00cc00;\n}\n", ""]);
+exports.push([module.i, "\n#my-deal[data-v-6a1cc302] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-deal .mark-wrap[data-v-6a1cc302] {\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n#my-deal #tab-menu[data-v-6a1cc302] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#my-deal #tab-menu .menu-item[data-v-6a1cc302] {\n      height: 100%;\n      width: 33.33%;\n}\n#my-deal #tab-menu .active[data-v-6a1cc302] {\n      border-bottom: 4px solid #26a2ff;\n}\n#my-deal .deal-wrap[data-v-6a1cc302] {\n    width: 100%;\n}\n#my-deal .deal-wrap ul .timer[data-v-6a1cc302] {\n      width: 100%;\n      height: 3em;\n      margin-top: 0.1em;\n}\n#my-deal .deal-wrap ul .timer > div[data-v-6a1cc302] {\n        display: inline-block;\n        font-size: 0.8em;\n        background: #aaa;\n        color: #fff;\n        padding-left: 0.4em;\n        padding-right: 0.4em;\n        padding-top: 0.4em;\n        padding-bottom: 0.4em;\n        border-radius: 0.2em;\n}\n#my-deal .deal-wrap ul .deal-item[data-v-6a1cc302] {\n      height: 4em;\n      background: #fff;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      margin-top: 0.1em;\n      /*border-bottom:1px solid #eee;*/\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap[data-v-6a1cc302] {\n        height: 100%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.8em;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .title[data-v-6a1cc302] {\n          margin-top: 0.8em;\n          width: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .date[data-v-6a1cc302] {\n          color: #999;\n          font-size: 0.9em;\n          margin-top: 1em;\n          width: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .star-wrap[data-v-6a1cc302] {\n        width: 100%;\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .star-wrap i[data-v-6a1cc302] {\n          display: block;\n          width: 1.5em;\n          height: 1.5em;\n          border-radius: 50%;\n          background: #26a2ff;\n          text-align: center;\n          line-height: 1.5em;\n          color: #fff;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap[data-v-6a1cc302] {\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-6a1cc302] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-6a1cc302] {\n          font-size: 1.1em;\n          color: #00cc00;\n}\n", ""]);
 
 // exports
 
@@ -32907,6 +32907,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -32914,7 +32975,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
   data: function data() {
     return {
-      tabItem: [true, false, false]
+      tabItem: [true, false, false],
+      isStar: false
     };
   },
 
@@ -32929,6 +32991,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     goDetail: function goDetail() {
       this.$router.push("/makeDeal/deal_detail");
+    },
+    mark: function mark() {
+      console.log('mark');
     }
   }
 });
@@ -32945,10 +33010,18 @@ var render = function() {
     "div",
     { attrs: { id: "my-deal" } },
     [
-      _c("top-back", {
-        staticStyle: { background: "#26a2ff", color: "#fff" },
-        attrs: { title: "交易管理" }
-      }),
+      _c(
+        "top-back",
+        {
+          staticStyle: { background: "#26a2ff", color: "#fff" },
+          attrs: { title: "交易管理" }
+        },
+        [
+          _c("div", { staticClass: "mark-wrap flex flex-reverse" }, [
+            _vm._v("\n        标记\n      ")
+          ])
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -33003,7 +33076,20 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "deal-wrap" }, [
         _c("ul", [
-          _vm._m(0, false, false),
+          _c(
+            "li",
+            {
+              staticClass: "deal-item flex flex-align-center",
+              on: { click: _vm.goDetail }
+            },
+            [
+              _vm._m(0, false, false),
+              _vm._v(" "),
+              _vm._m(1, false, false),
+              _vm._v(" "),
+              _vm._m(2, false, false)
+            ]
+          ),
           _vm._v(" "),
           _c(
             "li",
@@ -33012,19 +33098,64 @@ var render = function() {
               on: { click: _vm.goDetail }
             },
             [
-              _vm._m(1, false, false),
+              _vm._m(3, false, false),
               _vm._v(" "),
-              _vm._m(2, false, false),
+              _vm._m(4, false, false),
               _vm._v(" "),
-              _vm._m(3, false, false)
+              _vm._m(5, false, false)
             ]
           ),
           _vm._v(" "),
-          _vm._m(4, false, false),
+          _c(
+            "li",
+            {
+              staticClass: "deal-item flex flex-align-center",
+              on: { click: _vm.goDetail }
+            },
+            [
+              _vm._m(6, false, false),
+              _vm._v(" "),
+              _vm._m(7, false, false),
+              _vm._v(" "),
+              _vm._m(8, false, false)
+            ]
+          ),
           _vm._v(" "),
-          _vm._m(5, false, false),
-          _vm._v(" "),
-          _vm._m(6, false, false)
+          _c(
+            "li",
+            {
+              staticClass: "deal-item flex flex-align-center",
+              on: { click: _vm.goDetail }
+            },
+            [
+              _vm._m(9, false, false),
+              _vm._v(" "),
+              _vm._m(10, false, false),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "star-wrap flex flex-align-center flex-justify-center flex-1",
+                  on: {
+                    click: function($event) {
+                      $event.stopPropagation()
+                      _vm.mark($event)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "iconfont " }, [
+                    _vm._v(
+                      "\n                      " +
+                        _vm._s(_vm.isStar ? "" : "") +
+                        "\n                    "
+                    )
+                  ])
+                ]
+              )
+            ]
+          )
         ])
       ])
     ],
@@ -33037,40 +33168,12 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "li",
-      { staticClass: "timer flex flex-align-center flex-justify-center" },
-      [
-        _c("div", [
-          _vm._v(
-            "\n                      2017年11月18日 12:45\n                  "
-          )
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
       "div",
-      { staticClass: "avatar-wrap flex flex-v flex-align-center flex-2" },
+      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
       [
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("h3", [_vm._v("发起人发起")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "content-wrap flex flex-v flex-align-center flex-5" },
-      [
-        _c("div", { staticClass: "title" }, [_vm._v("交易包中余额:￥168")]),
+        _c("div", { staticClass: "title" }, [
+          _vm._v("交易来源:无敌先生的小店")
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
       ]
@@ -33082,62 +33185,26 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "pay-detail-wrap flex flex-v flex-align-center flex-3" },
-      [
-        _c("div", { staticClass: "title" }, [_vm._v("手续费收益")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "m-text" }, [_vm._v("￥168")])
-      ]
+      {
+        staticClass:
+          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
+      },
+      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
     )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "deal-item flex flex-align-center" }, [
-      _c(
-        "div",
-        { staticClass: "avatar-wrap flex flex-v flex-align-center flex-2" },
-        [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("h3", [_vm._v("发起人发起")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "content-wrap flex flex-v flex-align-center flex-5" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("交易包中余额:￥168")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pay-detail-wrap flex flex-v flex-align-center flex-3" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("手续费收益")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "m-text" }, [_vm._v("￥168")])
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c(
-      "li",
-      { staticClass: "timer flex flex-align-center flex-justify-center" },
+      "div",
+      {
+        staticClass:
+          "star-wrap flex flex-align-center flex-justify-center flex-1"
+      },
       [
-        _c("div", [
-          _vm._v(
-            "\n                      2017年11月18日 12:45\n                  "
-          )
+        _c("i", { staticClass: "iconfont " }, [
+          _vm._v("\n                      \n                    ")
         ])
       ]
     )
@@ -33146,37 +33213,122 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "deal-item flex flex-align-center" }, [
-      _c(
-        "div",
-        { staticClass: "avatar-wrap flex flex-v flex-align-center flex-2" },
-        [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("h3", [_vm._v("发起人发起")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "content-wrap flex flex-v flex-align-center flex-5" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("交易包中余额:￥168")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pay-detail-wrap flex flex-v flex-align-center flex-3" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("手续费收益")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "m-text" }, [_vm._v("￥168")])
-        ]
-      )
-    ])
+    return _c(
+      "div",
+      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
+      [
+        _c("div", { staticClass: "title" }, [
+          _vm._v("交易来源:无敌先生的小店")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
+      },
+      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "star-wrap flex flex-align-center flex-justify-center flex-1"
+      },
+      [
+        _c("i", { staticClass: "iconfont " }, [
+          _vm._v("\n                      \n                    ")
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
+      [
+        _c("div", { staticClass: "title" }, [
+          _vm._v("交易来源:无敌先生的小店")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
+      },
+      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "star-wrap flex flex-align-center flex-justify-center flex-1"
+      },
+      [
+        _c("i", { staticClass: "iconfont " }, [
+          _vm._v("\n                      \n                    ")
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
+      [
+        _c("div", { staticClass: "title" }, [
+          _vm._v("交易来源:无敌先生的小店")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
+      },
+      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
+    )
   }
 ]
 render._withStripped = true
@@ -34563,7 +34715,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -35421,6 +35572,8 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_Shop_dealManagement_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__view_Shop_dealManagement_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__view_Shop_shopAccount_vue__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__view_Shop_shopAccount_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__view_Shop_shopAccount_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__view_Shop_shopOrder_vue__ = __webpack_require__(245);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__view_Shop_shopOrder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__view_Shop_shopOrder_vue__);
 
 
 
@@ -35429,9 +35582,10 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/shop', name: 'shop', component: __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default.a }, { path: '/shop/my_collection', name: 'myCollection', component: __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default.a }, { path: '/shop/message_list', name: "shopMessageList", component: __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue___default.a }, { path: '/shop/shop_detail', name: "shopDetail", component: __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue___default.a }, { path: '/shop/shop_member', name: "shopMember", component: __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue___default.a }, { path: '/shop/deal_management', name: "dealManagement", component: __WEBPACK_IMPORTED_MODULE_5__view_Shop_dealManagement_vue___default.a }, { path: '/shop/shopAccount', name: "shopAccount", component: __WEBPACK_IMPORTED_MODULE_6__view_Shop_shopAccount_vue___default.a
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/shop', name: 'shop', component: __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default.a }, { path: '/shop/my_collection', name: 'myCollection', component: __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default.a }, { path: '/shop/message_list', name: "shopMessageList", component: __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue___default.a }, { path: '/shop/shop_detail', name: "shopDetail", component: __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue___default.a }, { path: '/shop/shop_member', name: "shopMember", component: __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue___default.a }, { path: '/shop/deal_management', name: "dealManagement", component: __WEBPACK_IMPORTED_MODULE_5__view_Shop_dealManagement_vue___default.a }, { path: '/shop/shopAccount', name: "shopAccount", component: __WEBPACK_IMPORTED_MODULE_6__view_Shop_shopAccount_vue___default.a }, { path: '/shop/shopOrder', name: "shopOrder", component: __WEBPACK_IMPORTED_MODULE_7__view_Shop_shopOrder_vue___default.a
+
     // { path: '/shop/shop_account', name: "shopDetail", component: ShopDetail },
-
 }]);
 
 /***/ }),
@@ -37936,6 +38090,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     goShopAccount: function goShopAccount() {
       this.$router.push("/shop/shopAccount");
+    },
+    goShopOrder: function goShopOrder() {
+      this.$router.push("/shop/shopOrder");
     }
   }
 });
@@ -37990,11 +38147,25 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm._m(1, false, false)
+            _c(
+              "div",
+              {
+                staticClass:
+                  "menu-item flex flex-v flex-align-center flex-justify-around",
+                on: { click: _vm.goShopOrder }
+              },
+              [
+                _c("i", { staticClass: "iconfont" }, [
+                  _vm._v("\n                \n            ")
+                ]),
+                _vm._v(" "),
+                _c("h3", [_vm._v("\n                店铺订单\n            ")])
+              ]
+            )
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._m(2, false, false),
+      _vm._m(1, false, false),
       _vm._v(" "),
       _c(
         "div",
@@ -38003,16 +38174,16 @@ var render = function() {
           on: { click: _vm.goMember }
         },
         [
+          _vm._m(2, false, false),
+          _vm._v(" "),
           _vm._m(3, false, false),
           _vm._v(" "),
-          _vm._m(4, false, false),
-          _vm._v(" "),
-          _vm._m(5, false, false)
+          _vm._m(4, false, false)
         ]
       ),
       _vm._v(" "),
       _c("div", { staticClass: "invite-wrap" }, [
-        _vm._m(6, false, false),
+        _vm._m(5, false, false),
         _vm._v(" "),
         _vm.isGroupMaster
           ? _c(
@@ -38062,12 +38233,12 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _vm._m(7, false, false)
+        _vm._m(6, false, false)
       ]),
       _vm._v(" "),
       _vm.isGroupMaster
         ? _c("div", { staticClass: "commission" }, [
-            _vm._m(8, false, false),
+            _vm._m(7, false, false),
             _vm._v(" "),
             _c(
               "div",
@@ -38099,7 +38270,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       !_vm.isGroupMaster
-        ? _c("div", { staticClass: "complaint" }, [_vm._m(9, false, false)])
+        ? _c("div", { staticClass: "complaint" }, [_vm._m(8, false, false)])
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -38182,25 +38353,6 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("h3", [_vm._v("店铺id:123123123")])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "menu-item flex flex-v flex-align-center flex-justify-around"
-      },
-      [
-        _c("i", { staticClass: "iconfont" }, [
-          _vm._v("\n                \n            ")
-        ]),
-        _vm._v(" "),
-        _c("h3", [_vm._v("\n                店铺订单\n            ")])
-      ]
-    )
   },
   function() {
     var _vm = this
@@ -40937,7 +41089,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_gh15oyluiovl5wmi.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_gh15oyluiovl5wmi.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_gh15oyluiovl5wmi.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_gh15oyluiovl5wmi.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_gh15oyluiovl5wmi.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_2q8cnd4w7n6a8aor.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_2q8cnd4w7n6a8aor.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_2q8cnd4w7n6a8aor.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_2q8cnd4w7n6a8aor.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_2q8cnd4w7n6a8aor.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
 
 // exports
 
@@ -41986,6 +42138,204 @@ var registStore = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 244 */,
+/* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(246)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(248)
+/* template */
+var __vue_template__ = __webpack_require__(249)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-94dca4cc"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\Shop\\shopOrder.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-94dca4cc", Component.options)
+  } else {
+    hotAPI.reload("data-v-94dca4cc", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 246 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(247);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("a93b92fe", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-94dca4cc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopOrder.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-94dca4cc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopOrder.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 247 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n#shop-order[data-v-94dca4cc] {\n  padding-top: 2em;\n}\n#shop-order .top[data-v-94dca4cc] {\n    height: 8em;\n    background: #26a2ff;\n}\n#shop-order .top .data-input-wrap[data-v-94dca4cc] {\n      width: 100%;\n      height: 3em;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 248 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+});
+
+/***/ }),
+/* 249 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "shop-order" } }, [
+    _c(
+      "div",
+      { staticClass: "top" },
+      [
+        _c("topBack", {
+          staticStyle: { background: "#26a2ff", color: "#fff" },
+          attrs: { title: "店铺订单" }
+        }),
+        _vm._v(" "),
+        _vm._m(0, false, false)
+      ],
+      1
+    ),
+    _vm._v("\n\n    店铺订单\n")
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "data-input-wrap flex flex-align-center" },
+      [
+        _c("div", { staticClass: "start-time" }),
+        _vm._v(" "),
+        _c("div"),
+        _vm._v(" "),
+        _c("div", { staticClass: "end-time" })
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-94dca4cc", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

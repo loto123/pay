@@ -1,6 +1,10 @@
 <template>
   <div id="my-deal">
-      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'"></top-back>
+      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
+        <div class="mark-wrap flex flex-reverse">
+          标记
+        </div>
+      </top-back>
         <div id="tab-menu" class=" flex flex-align-center">
             <div class="menu-item flex flex-justify-center flex-align-center " v-bind:class="{active:tabItem[0]}" @click = "changeTab(0)">待结算</div>
             <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已平账</div>
@@ -9,61 +13,92 @@
 
         <div class="deal-wrap">
             <ul>
-                <li class="timer flex flex-align-center flex-justify-center">
+                <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
                     </div>
-                </li>
-                <li class="deal-item flex flex-align-center" @click="goDetail">
-                    <div class="avatar-wrap flex flex-v flex-align-center flex-2">
+                </li> -->
+                
+                 <li class="deal-item flex flex-align-center" @click="goDetail">
+                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
                         <img src="/images/avatar.jpg" alt="">
                         <h3>发起人发起</h3>
-                    </div>
-                    <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
+                    </div> -->
+                    <div class="content-wrap flex flex-v flex-align-center flex-6">
+                        <div class="title">交易来源:无敌先生的小店</div>
                         <div class="date">2017-11-18 &nbsp; 14:25:46</div>
                     </div>
-                    <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
+                    <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
+                        <!-- <div class="title">手续费收益</div> -->
                         <div class="m-text">￥168</div>
                     </div>
-                </li>
-                 
-                <li class="deal-item flex flex-align-center">
-                    <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div>
-                    <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
-                    </div>
-                    <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
-                        <div class="m-text">￥168</div>
+                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1">
+                      <i class="iconfont ">
+                        &#xe708;
+                      </i>
                     </div>
                 </li>
 
-                <li class="timer flex flex-align-center flex-justify-center">
-                    <div>
-                        2017年11月18日 12:45
-                    </div>
-                </li>
-                <li class="deal-item flex flex-align-center">
-                    <div class="avatar-wrap flex flex-v flex-align-center flex-2">
+                <li class="deal-item flex flex-align-center" @click="goDetail">
+                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
                         <img src="/images/avatar.jpg" alt="">
                         <h3>发起人发起</h3>
-                    </div>
-                    <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
+                    </div> -->
+                    <div class="content-wrap flex flex-v flex-align-center flex-6">
+                        <div class="title">交易来源:无敌先生的小店</div>
                         <div class="date">2017-11-18 &nbsp; 14:25:46</div>
                     </div>
-                    <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
+                    <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
+                        <!-- <div class="title">手续费收益</div> -->
                         <div class="m-text">￥168</div>
                     </div>
-                </li>  
-                
+                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1">
+                      <i class="iconfont ">
+                        &#xe708;
+                      </i>
+                    </div>
+                </li>
+
+                <li class="deal-item flex flex-align-center" @click="goDetail">
+                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
+                        <img src="/images/avatar.jpg" alt="">
+                        <h3>发起人发起</h3>
+                    </div> -->
+                    <div class="content-wrap flex flex-v flex-align-center flex-6">
+                        <div class="title">交易来源:无敌先生的小店</div>
+                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
+                    </div>
+                    <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
+                        <!-- <div class="title">手续费收益</div> -->
+                        <div class="m-text">￥168</div>
+                    </div>
+                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1">
+                      <i class="iconfont ">
+                        &#xe708;
+                      </i>
+                    </div>
+                </li>
+
+                <li class="deal-item flex flex-align-center" @click="goDetail">
+                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
+                        <img src="/images/avatar.jpg" alt="">
+                        <h3>发起人发起</h3>
+                    </div> -->
+                    <div class="content-wrap flex flex-v flex-align-center flex-6">
+                        <div class="title">交易来源:无敌先生的小店</div>
+                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
+                    </div>
+                    <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
+                        <!-- <div class="title">手续费收益</div> -->
+                        <div class="m-text">￥168</div>
+                    </div>
+
+                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1" @click.stop="mark">
+                      <i class="iconfont ">
+                        {{isStar?'&#xe708;':''}}
+                      </i>
+                    </div>
+                </li>
             </ul>
         </div>
   </div>
@@ -75,6 +110,12 @@
   background: #eee;
   min-height: 100vh;
   box-sizing: border-box;
+
+  .mark-wrap {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 1em;
+  }
 
   #tab-menu {
     height: 3em;
@@ -119,31 +160,52 @@
         margin-top: 0.1em;
         /*border-bottom:1px solid #eee;*/
 
-        .avatar-wrap {
-          box-sizing: border-box;
-          padding-left: 0.5em;
-          img {
-            width: 2.3em;
-            height: 2.3em;
-            border-radius: 0.2em;
-          }
-          h3 {
-            font-size: 0.5em;
-            margin-top: 0.2em;
-          }
-        }
+        // .avatar-wrap {
+        //   box-sizing: border-box;
+        //   padding-left: 0.5em;
+        //   img {
+        //     width: 2.3em;
+        //     height: 2.3em;
+        //     border-radius: 0.2em;
+        //   }
+        //   h3 {
+        //     font-size: 0.5em;
+        //     margin-top: 0.2em;
+        //   }
+        // }
         .content-wrap {
           height: 100%;
+          box-sizing: border-box;
+          padding-left: 0.8em;
           .title {
             margin-top: 0.8em;
+            width: 100%;
           }
 
           .date {
             color: #999;
             font-size: 0.9em;
             margin-top: 1em;
+            width: 100%;
           }
         }
+
+        .star-wrap {
+          width:100%;
+          height:100%;
+
+          i {
+            display: block;
+            width: 1.5em;
+            height: 1.5em;
+            border-radius: 50%;
+            background: #26a2ff;
+            text-align: center;
+            line-height: 1.5em;
+            color:#fff;
+          }
+        }
+
         .pay-detail-wrap {
           height: 100%;
           .title {
@@ -152,7 +214,6 @@
           }
           .m-text {
             font-size: 1.1em;
-            margin-top: 0.6em;
             color: #00cc00;
           }
         }
@@ -169,7 +230,8 @@ export default {
   components: { topBack },
   data() {
     return {
-      tabItem: [true, false, false]
+      tabItem: [true, false, false],
+      isStar:false
     };
   },
   methods: {
@@ -183,6 +245,9 @@ export default {
     },
     goDetail() {
       this.$router.push("/makeDeal/deal_detail");
+    },
+    mark(){
+      console.log('mark');
     }
   }
 };

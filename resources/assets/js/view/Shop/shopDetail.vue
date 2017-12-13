@@ -33,7 +33,7 @@
               </i>
               <h3>交易管理</h3>
           </div>
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around">
+          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopOrder">
               <i class="iconfont">
                   &#xe603;
               </i>
@@ -409,7 +409,12 @@ export default {
     },
     goShopAccount(){
       this.$router.push("/shop/shopAccount");
+    },
+    goShopOrder(){
+      this.$router.push("/shop/shopOrder");
+      
     }
+
   }
 };
 </script>
