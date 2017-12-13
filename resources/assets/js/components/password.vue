@@ -184,7 +184,6 @@ export default {
     closePassword(){
         this.$emit("hidePassword");
         this.password = "";
-        // this.setSwitch = false;
     }
   }
 };
