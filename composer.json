@@ -16,6 +16,7 @@
         "laravel-admin-ext/log-viewer": "^1.0",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
+        "overtrue/laravel-wechat": "~4.0",
         "tymon/jwt-auth": "^0.5.12"
     },
     "require-dev": {
