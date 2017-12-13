@@ -33,16 +33,18 @@ export default {
 
 <style lang="scss" scoped>
   #addBankCard{
-    background: #EFEEF4;
+    background: #eee;
     height: 100vh;
     padding-top:2em;
   }
   .addBankCard-box{
+    border-top: 1px solid #ccc;
     h2{
-      color:#666;
+      color:#999;
       height: 2em;
       line-height: 2em;
       padding-left: 10px;
+      padding-top:0.7em;
     }
     .bank-info{
       margin-top: 1em;
