@@ -13,32 +13,30 @@
       <ul class="my-list">
         <li>
           <mt-cell title="推荐人" is-link to="/my/referrer">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
+            <img slot="icon" src="/images/referrer.png" width="30" height="30">
             <span>张三李四: <em>132131321321</em></span>
           </mt-cell>
         </li>
         <li>
           <mt-cell title="实名认证" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
+            <img slot="icon" src="/images/realName.png" width="30" height="30">
             <span>未完善</span>
           </mt-cell>
         </li>
         <li>
           <mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
+            <img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
             <span><font>0</font>张</span>
           </mt-cell>
         </li>
         <li>
           <mt-cell title="查看结算卡" is-link to="/my/checkSettle">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span></span>
+            <img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
           </mt-cell>
         </li>
         <li>
           <mt-cell title="更多设置" is-link to="/my/set">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span></span>
+            <img slot="icon" src="/images/moreSet.png" width="30" height="30">
           </mt-cell>
         </li>
       </ul>

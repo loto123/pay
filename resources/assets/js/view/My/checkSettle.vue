@@ -72,6 +72,9 @@ export default {
   line-height: 3em;
   background: #fff;
   padding-left: 1em;
+  margin-bottom: 1em;
+  border: 1px solid #ccc;
+  margin-bottom: 1em;
   .account-title {
     width: 8em;
     margin-right: 1em;
@@ -88,7 +91,7 @@ export default {
   li {
     background: #fff;
     padding: 0 1em;
-    border: 1px solid #d9d9d9;
+    border: 1px solid #ccc;
     .content-box {
       height: 3em;
       line-height: 3em;
