@@ -1,38 +1,65 @@
 <template>
   <div id="bankManage">
     <topBack title="银行卡管理"></topBack>
-    <ul class="bankCard-list">
-      <li>
-        <div class="bankCard-box flex">
-          <div class="card-image">
-            <img src="/images/personal.jpg" alt="">
+    <div class="bankCard-container">
+      <ul class="bankCard-list">
+        <li>
+          <div class="bankCard-box flex">
+            <div class="card-image">
+              <img src="/images/personal.jpg" alt="">
+            </div>
+            <div class="card-info">
+              <div class="bank-name">招商银行</div>
+              <div class="card-type">借记卡</div>
+              <div class="card-number">62120646545465454</div>
+            </div>
           </div>
-          <div class="card-info">
-            <div class="bank-name">招商银行</div>
-            <div class="card-type">借记卡</div>
-            <div class="card-number">62120646545465454</div>
-          </div>
-        </div>
-        <button class="del">删除</button>
-        <div class="binding">(已绑定)</div>
-      </li>
-    </ul>
-    <div class="add-bankCard">
-      <a href="/#/my/bankCardManage/addBankCard">添加新银行卡</a>
+          <button class="del" @click="del">
+            <i class="iconfont">&#xe634;</i>
+          </button>
+          <div class="binding">(已绑定)</div>
+        </li>
+      </ul>
+      <div class="add-bankCard">
+        <a href="/#/my/bankCardManage/addBankCard">添加新银行卡</a>
+      </div>
     </div>
   </div>
 </template>
 
-
 <script>
 import topBack from "../../components/topBack";
-
+import { MessageBox } from 'mint-ui';
+import { Toast } from 'mint-ui';
 export default {
-  components: { topBack }
-};
+  components: { topBack },
+  methods: {
+    del(){
+      MessageBox.confirm('是否删除该银行卡?','温馨提示').then(() => {
+        Toast({
+          message: '删除成功',
+          iconClass: 'icon icon-success',
+          duration: 800
+        })
+      },() => {
+        //取消操作
+        console.log('已经取消');
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
+#bankManage{
+  padding-top: 2em;
+  box-sizing: border-box;
+}
+.bankCard-container{
+  width: 100;
+  border-top: 1px solid #ccc;
+  padding-top: 1em;
+}
 .bankCard-list {
   width: 90%;
   margin: auto;
@@ -48,7 +75,13 @@ export default {
     }
     .del {
       bottom: 10px;
-      color: #aaa;
+      background:#fff;
+      border: none;
+      outline: none;
+      i{
+        font-size: 2em;
+        color: #777;
+      }
     }
     .binding {
       top: 1em;

@@ -3,7 +3,7 @@
     <section class="header-container">
       <div class="header">
         <div class="imgWrap">
-            <img src="/images/logo.png">
+          <img src="/images/avatar.jpg">
         </div>
         <h3>发起交易</h3>
         <div class="acc-number">账号:<span>18674231689</span></div>
@@ -12,33 +12,31 @@
     <section>
       <ul class="my-list">
         <li>
-          <mt-cell title="推荐人" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
-          </mt-cell>
-        </li>
-        <li>
-          <mt-cell title="银行卡管理" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+          <mt-cell title="推荐人" is-link to="/my/referrer">
+            <img slot="icon" src="/images/referrer.png" width="30" height="30">
+            <span>张三李四: <em>132131321321</em></span>
           </mt-cell>
         </li>
         <li>
           <mt-cell title="实名认证" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+            <img slot="icon" src="/images/realName.png" width="30" height="30">
+            <span>未完善</span>
           </mt-cell>
         </li>
         <li>
-          <mt-cell title="查看那结算卡" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+          <mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
+            <img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
+            <span><font>0</font>张</span>
           </mt-cell>
         </li>
         <li>
-          <mt-cell title="更多设置" is-link to="/#/my/set">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+          <mt-cell title="查看结算卡" is-link to="/my/checkSettle">
+            <img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
+          </mt-cell>
+        </li>
+        <li>
+          <mt-cell title="更多设置" is-link to="/my/set">
+            <img slot="icon" src="/images/moreSet.png" width="30" height="30">
           </mt-cell>
         </li>
       </ul>
@@ -49,16 +47,16 @@
 
 <style lang="scss" scoped>
 .header-container {
-  height: 12em;
   padding-top: 4em;
+  padding-bottom: 1em;
   box-sizing: border-box;
-  // border-bottom: 1px solid #ccc;
+  background:#26a2ff;
+  color: #fff;
 }
 .header {
   text-align: center;
   .imgWrap {
     width: 100%;
-    background: #fff;
     > img {
       width: 4.5em;
       height: 4.5em;
@@ -67,18 +65,10 @@
       border-radius: 50%;
     }
   }
-
   h3,.acc-number{
     font-size: 1em;
     text-align: center;
     margin-top: 0.5em;
-    color:#616161;
-  }
-  .acc-number {
-    color:#333;
-    span{
-      color:#616161;
-    }
   }
 }
 .my-list{
@@ -89,6 +79,9 @@
       background-size: 100% 1px;
       background-repeat: no-repeat;
       background-position: top;
+      span{
+        font-size: 0.9em;
+      }
     }
   }
 }
