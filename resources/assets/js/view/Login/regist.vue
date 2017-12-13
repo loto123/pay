@@ -87,6 +87,7 @@
 </template>
 
 <style lang="scss" scoped>
+
 .fade-enter-active {
   transition: opacity 1s;
 }
@@ -219,7 +220,6 @@ export default {
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
       localStorage.setItem("registStep", this.step);
     }
-
   },
   methods: {
     comfirm() {
