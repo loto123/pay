@@ -28,7 +28,7 @@ class PayMethod extends Model
      */
     public function platform()
     {
-        return $this->belongsTo('App\Pay\Model\Platform');
+        return $this->belongsTo(Platform::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class PayMethod extends Model
      */
     public function deposits()
     {
-        return $this->hasMany('App\Pay\Model\Deposit', 'method_id');
+        return $this->hasMany(Deposit::class, 'method_id');
     }
 
     /**
@@ -46,7 +46,7 @@ class PayMethod extends Model
      */
     public function withdraws()
     {
-        return $this->hasMany('App\Pay\Model\Withdraw', 'method_id');
+        return $this->hasMany(Withdraw::class, 'method_id');
     }
 
 

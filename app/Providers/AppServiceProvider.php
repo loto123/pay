@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Pay\Model\MasterContainer;
+use App\Pay\Model\SettleContainer;
 use Encore\Admin\Config\Config;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +23,11 @@ class AppServiceProvider extends ServiceProvider
 
         //容器多态映射
         Relation::morphMap([
-            'master' => 'App\Pay\Model\MasterContainer', //主容器
-            'settle' => 'App\Pay\Model\SettleContainer', //结算容器
+            'master' => MasterContainer::class, //主容器
+            'settle' => SettleContainer::class, //结算容器
         ]);
 
-        //降低隔离级别,不需要重复读
+        //降低隔离级别
         DB::statement('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
     }
 

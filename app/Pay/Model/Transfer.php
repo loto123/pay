@@ -30,8 +30,12 @@ class Transfer extends Model
         'amount' => 'float',
         'create_at' => 'datetime',
         'update_at' => 'datetime',
-        'state' => 'integer'
+        'state' => 'integer',
+        'from_frozen' => 'boolean',
+        'to_frozen' => 'boolean'
     ];
+
+    protected $guarded = ['id'];
 
     /**
      * 转账分润
@@ -39,7 +43,7 @@ class Transfer extends Model
      */
     public function profitShares()
     {
-        return $this->hasMany('App\Pay\Model\ProfitShare');
+        return $this->hasMany(ProfitShare::class);
     }
 
     /**
@@ -55,8 +59,13 @@ class Transfer extends Model
         $commit = false;
         DB::beginTransaction();
         do {
+            //状态检查
+            $transfer = Transfer::where('state', self::STATE_COMPLETE)->with(['profitShares.receiveContainer', 'containerFrom', 'containerTo'])->lockForUpdate()->find($this->getKey());
+            if (!$transfer) {
+                break;
+            }
+
             //撤回分润
-            $transfer = Transfer::where('state', self::STATE_COMPLETE)->with('profitShares.receiveContainer')->lockForUpdate()->find($this->getKey());
             $profit_share_sum = 0;
             foreach ($transfer->profitShares as $profitShare) {
                 if (!$profitShare->receiveContainer->changeBalance($profitShare->is_frozen ? 0 : -$profitShare->amount, $profitShare->is_frozen ? -$profitShare->amount : 0)) {
@@ -68,13 +77,13 @@ class Transfer extends Model
 
             //撤回实收资金
             $actual_received = $transfer->amount - $transfer->fee - $profit_share_sum;
-            if (!$transfer->containerTo()->changeBalance($transfer->to_frozen ? 0 : -$actual_received, $transfer->to_frozen ? -$actual_received : 0)) {
+            if (!$transfer->containerTo->changeBalance($transfer->to_frozen ? 0 : -$actual_received, $transfer->to_frozen ? -$actual_received : 0)) {
                 $result = self::CHARGE_BACK_OUT_OF_BALANCE;
                 break;
             }
 
             //资金打回
-            if (!$transfer->containerFrom()->changeBalance($transfer->from_frozen ? 0 : $transfer->amount, $transfer->from_frozen ? $transfer->amount : 0)) {
+            if (!$transfer->containerFrom->changeBalance($transfer->from_frozen ? 0 : $transfer->amount, $transfer->from_frozen ? $transfer->amount : 0)) {
                 break;
             }
 
@@ -100,7 +109,7 @@ class Transfer extends Model
      */
     public function containerTo()
     {
-        return $this->morphTo();
+        return $this->morphTo(null, 'to_type', 'container_to');
     }
 
     /**
@@ -109,6 +118,6 @@ class Transfer extends Model
      */
     public function containerFrom()
     {
-        return $this->morphTo();
+        return $this->morphTo(null, 'from_type', 'container_from');
     }
 }

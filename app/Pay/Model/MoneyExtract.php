@@ -18,6 +18,7 @@ class MoneyExtract extends Model
         'amount' => 'float',
         'create_at' => 'datetime'
     ];
+    protected $fillable = ['amount'];
 
     /**
      * 所属结算容器
@@ -25,6 +26,6 @@ class MoneyExtract extends Model
      */
     public function settleContainer()
     {
-        return $this->belongsTo('App\Pay\Model\SettleContainer', 'settle_container');
+        return $this->belongsTo(SettleContainer::class, 'settle_container');
     }
 }

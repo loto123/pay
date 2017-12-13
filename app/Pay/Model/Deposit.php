@@ -32,7 +32,7 @@ class Deposit extends Model
      */
     public function channel()
     {
-        return $this->belongsTo('App\Pay\Model\Channel');
+        return $this->belongsTo(Channel::class);
     }
 
     /**
@@ -41,7 +41,7 @@ class Deposit extends Model
      */
     public function method()
     {
-        return $this->belongsTo('App\Pay\Model\PayMethod', 'method_id');
+        return $this->belongsTo(PayMethod::class, 'method_id');
     }
 
     /**
@@ -50,6 +50,6 @@ class Deposit extends Model
      */
     public function masterContainer()
     {
-        return $this->belongsTo('App\Pay\Model\MasterContainer', 'master_container');
+        return $this->belongsTo(MasterContainer::class, 'master_container');
     }
 }

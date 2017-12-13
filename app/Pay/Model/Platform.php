@@ -29,7 +29,7 @@ class Platform extends Model
      */
     public function methods()
     {
-        return $this->hasMany('App\Pay\Model\PayMethod');
+        return $this->hasMany(PayMethod::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class Platform extends Model
      */
     public function channels()
     {
-        $this->hasMany('App\Pay\Model\Channel');
+        $this->hasMany(Channel::class);
     }
 
 

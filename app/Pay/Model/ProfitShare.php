@@ -18,6 +18,7 @@ class ProfitShare extends Model
         'amount' => 'float',
         'is_frozen' => 'boolean'
     ];
+    protected $guarded = ['id', 'transfer_id'];
 
     /**
      * 转账来源
@@ -25,7 +26,7 @@ class ProfitShare extends Model
      */
     public function transfer()
     {
-        return $this->belongsTo('App\Pay\Model\Transfer');
+        return $this->belongsTo(Transfer::class);
     }
 
     /**
@@ -34,6 +35,6 @@ class ProfitShare extends Model
      */
     public function receiveContainer()
     {
-        return $this->morphTo();
+        return $this->morphTo(null, 'container_type', 'receive_container');
     }
 }

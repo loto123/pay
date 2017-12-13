@@ -45,7 +45,7 @@ class SettleContainer extends Container
 
         do {
             //获取总余额
-            $reserve = DB::table($this->table)->select('balance, frozen_balance')->where([
+            $reserve = DB::table($this->table)->select('balance', 'frozen_balance')->where([
                 ['state', '<>', self::STATE_EXTRACTED]
             ])->lockForUpdate()->first();
 
@@ -93,7 +93,7 @@ class SettleContainer extends Container
      */
     public function extraction()
     {
-        return $this->hasOne('App\Pay\Model\MoneyExtract', 'settle_container');
+        return $this->hasOne(MoneyExtract::class, 'settle_container');
     }
 
     /**
@@ -102,7 +102,7 @@ class SettleContainer extends Container
      */
     public function masterContainer()
     {
-        return $this->belongsTo('App\Pay\Model\MasterContainer', 'master_container');
+        return $this->belongsTo(MasterContainer::class, 'master_container');
     }
 
     /**
@@ -114,21 +114,5 @@ class SettleContainer extends Container
     public function close()
     {
         return self::where([[$this->getKeyName(), $this->getKey()], ['state', self::STATE_NORMAL]])->update(['state' => self::STATE_CLOSED]) > 0;
-    }
-
-    /**
-     * 转账到容器
-     * @param Container $to_container
-     * @param float $amount
-     * @param int $type
-     * @param float $fee
-     * @param bool $from_frozen
-     * @param bool $to_frozen
-     * @param array $profit_shares
-     * @return Transfer|bool
-     */
-    public function transfer(Container $to_container, $amount, $fee, $from_frozen, $to_frozen, array $profit_shares = [])
-    {
-        return parent::transfer($to_container, $amount, $fee, $from_frozen, $to_frozen, $profit_shares);
     }
 }

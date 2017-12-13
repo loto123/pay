@@ -72,7 +72,7 @@ abstract class Container extends Model
      * @param $frozen_balance float 冻结余额,正数增加,负数减少
      * @return bool
      */
-    protected function changeBalance($balance, $frozen_balance)
+    public function changeBalance($balance, $frozen_balance)
     {
         if (is_numeric($balance) && is_numeric($frozen_balance) && ($balance != 0 || $frozen_balance != 0)) {
             $balance_opt = $balance < 0 ? '-' : '+';
@@ -80,18 +80,26 @@ abstract class Container extends Model
             $frozen_opt = $frozen_balance < 0 ? '-' : '+';
             $frozen_balance = abs($frozen_balance);
 
-            $sql = "UPDATE `{$this->table}` SET `balance` = `balance` $balance_opt :balance,
-                `frozen_balance` = `frozen_balance` $frozen_opt :frozen WHERE `{$this->getKeyName()}` = :primary_key";
+            $bindings = [$balance, $frozen_balance, $this->getKey()];
+            $sql = "UPDATE `{$this->table}` SET `balance` = `balance` $balance_opt ?,
+                `frozen_balance` = `frozen_balance` $frozen_opt ? WHERE `{$this->getKeyName()}` = ?";
+
+            if (is_a($this, SettleContainer::class)) {
+                $sql .= ' AND `state` = ?';
+                $bindings[] = SettleContainer::STATE_NORMAL;
+            }
 
             if ($balance_opt === '-') {
-                $sql .= ' AND `balance` >= :balance';
+                $sql .= ' AND `balance` >= ?';
+                $bindings[] = $balance;
             }
 
             if ($frozen_opt === '-') {
-                $sql .= ' AND `frozen_balance` >= :frozen';
+                $sql .= ' AND `frozen_balance` >= ?';
+                $bindings[] = $frozen_balance;
             }
 
-            return DB::update($sql, ['balance' => $balance, 'frozen' => $frozen_balance, 'primary_key' => $this->getKey()]) > 0;
+            return DB::update($sql, $bindings) > 0;
         }
         return false;
 
@@ -137,13 +145,6 @@ abstract class Container extends Model
         DB::beginTransaction();
 
         do {
-            /**
-             * 检查状态
-             */
-            if (!$this->isNormalForUpdate() || !$to_container->isNormalForUpdate()) {
-                break;
-            }
-
             /**
              * 检查分润
              */
@@ -196,20 +197,21 @@ abstract class Container extends Model
 
             //生成转账
             $transfer = new Transfer([
-                'containerFrom' => $this,
-                'containerTo' => $to_container,
                 'fee' => $fee,
                 'from_frozen' => $from_frozen,
                 'to_frozen' => $to_frozen,
                 'amount' => $amount,
-                'state' => Transfer::STATE_COMPLETE
+                'state' => Transfer::STATE_COMPLETE,
             ]);
-            if (!($transfer->save() && $transfer->profitShares()->saveMany($profit_shares))) {
+            $transfer->containerFrom()->associate($this);
+            $transfer->containerTo()->associate($to_container);
+
+            if (!$transfer->save()) {
                 break;
             }
+            $transfer->profitShares()->saveMany($profit_shares);
 
             $commit = true;
-
 
         } while (false);
 
@@ -221,20 +223,5 @@ abstract class Container extends Model
             DB::rollBack();
             return false;
         }
-    }
-
-    /**
-     * 容器状态判断
-     * 显式独占结算容器
-     * @return bool
-     */
-    private function isNormalForUpdate()
-    {
-        if (is_a($this, SettleContainer::class)) {
-            if (SettleContainer::find($this->getKey())->lockForUpdate()->value('state') != SettleContainer::STATE_NORMAL) {
-                return false;
-            }
-        }
-        return true;
     }
 }

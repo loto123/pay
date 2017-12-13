@@ -22,6 +22,6 @@ class WithdrawException extends Model
      */
     public function withdrawBelongTo()
     {
-        return $this->belongsTo('App\Pay\Model\Withdraw');
+        return $this->belongsTo(Withdraw::class);
     }
 }
