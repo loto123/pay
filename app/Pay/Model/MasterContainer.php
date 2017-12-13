@@ -44,7 +44,7 @@ class MasterContainer extends Container
      */
     public function settleContainers()
     {
-        return $this->hasMany('App\Pay\Model\SettleContainer', 'master_container');
+        return $this->hasMany(SettleContainer::class, 'master_container');
     }
 
     /**
@@ -53,7 +53,7 @@ class MasterContainer extends Container
      */
     public function deposits()
     {
-        return $this->hasMany('App\Pay\Model\Deposit', 'master_container');
+        return $this->hasMany(Deposit::class, 'master_container');
     }
 
 
@@ -63,7 +63,7 @@ class MasterContainer extends Container
      */
     public function withdraws()
     {
-        return $this->hasMany('App\Pay\Model\Withdraws', 'master_container');
+        return $this->hasMany(Withdraw::class, 'master_container');
     }
 
 
