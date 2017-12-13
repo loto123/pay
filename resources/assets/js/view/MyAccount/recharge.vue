@@ -56,9 +56,10 @@ export default {
 <style lang="scss" scoped>
 @import "../../../sass/oo_flex.scss";
 .recharge-container {
-  background: #efeef4;
+  background: #eee;
   height: 100vh;
   padding-top: 2em;
+  box-sizing: border-box;
 }
 .recharge-box {
   background: #fff;

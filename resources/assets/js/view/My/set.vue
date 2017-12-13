@@ -24,6 +24,11 @@
 </script>
 
 <style lang="scss" scoped>
+  #set{
+    background: #eee;
+    padding-top: 2em;
+    box-sizing: border-box;
+  }
   .list{
     border-bottom: 1px solid #d9d9d9;
     li{

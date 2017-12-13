@@ -310,6 +310,9 @@
     margin-top: 0.5em;
 
     > div {
+      height: 2.5em;
+      padding-left: 1em;
+      box-sizing: border-box;
       &:nth-child(1) {
         border-bottom: 0.05em solid #eee;
       }

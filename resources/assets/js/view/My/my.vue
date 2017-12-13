@@ -12,33 +12,33 @@
     <section>
       <ul class="my-list">
         <li>
-          <mt-cell title="推荐人" is-link to="">
+          <mt-cell title="推荐人" is-link to="/my/referrer">
             <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
-          </mt-cell>
-        </li>
-        <li>
-          <mt-cell title="银行卡管理" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+            <span>张三李四: <em>132131321321</em></span>
           </mt-cell>
         </li>
         <li>
           <mt-cell title="实名认证" is-link to="">
             <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+            <span>未完善</span>
           </mt-cell>
         </li>
         <li>
-          <mt-cell title="查看那结算卡" is-link to="">
+          <mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
             <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+            <span><font>0</font>张</span>
           </mt-cell>
         </li>
         <li>
-          <mt-cell title="更多设置" is-link to="/#/my/set">
+          <mt-cell title="查看结算卡" is-link to="/my/checkSettle">
             <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
+            <span></span>
+          </mt-cell>
+        </li>
+        <li>
+          <mt-cell title="更多设置" is-link to="/my/set">
+            <img slot="icon" src="/images/logo.png" width="24" height="24">
+            <span></span>
           </mt-cell>
         </li>
       </ul>
@@ -89,6 +89,9 @@
       background-size: 100% 1px;
       background-repeat: no-repeat;
       background-position: top;
+      span{
+        font-size: 0.9em;
+      }
     }
   }
 }

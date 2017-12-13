@@ -1,6 +1,6 @@
 <template>
   <div id="referrer">
-    <topBack title="推荐人信息"></topBack>
+    <topBack title="推荐人信息" style="color:#fff"></topBack>
     <div class="referrer-container">
       <div class="header flex">
         <div class="referrer-image">
@@ -35,6 +35,8 @@ export default {
 #referrer {
   background: #38c3ec;
   height: 100vh;
+  padding-top:2em;
+  box-sizing: border-box; 
 }
 .referrer-container {
   background: #fff;

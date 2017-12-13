@@ -1,18 +1,33 @@
 <template>
     <div id="bill">
-      <topBack title="账单明细"></topBack>
-      <a href="javascript:;" @click="show">筛选</a>
-       <ul class="bill-list">
-           <li class="">
-               <a href="javascript:;" v-on:click="details" class="flex">
-                  <div class="bill-content">
-                      <h5>交易</h5>
-                      <div class="time">2017-11-23  19:44:31</div>
-                  </div>
-                  <div class="bill-money active">+100</div>
-                </a>
-           </li>
-       </ul>
+      <topBack title="账单明细">
+        <div class= "flex flex-reverse flex-align-center header-right">
+          <a href="javascript:;" @click="show">筛选</a>
+        </div>
+      </topBack>
+      <div class="bill-box">
+        <div class="bill-date flex flex-align-center flex-justify-between">
+          <div class="left-content">
+            <div class="cur-date">2017年11月</div>
+            <div class="month-money flex">
+              <div class="expend flex-1">支出¥<span>616.55</span></div>
+              <div class="income">收入¥<span>616.55</span></div>
+            </div>
+          </div>
+          <div>图标</div>
+        </div>
+        <ul class="bill-list">
+          <li class="">
+            <a href="javascript:;" v-on:click="details" class="flex">
+              <div class="bill-content">
+                  <h5>交易</h5>
+                  <div class="time">2017-11-23  19:44:31</div>
+              </div>
+              <div class="bill-money active">+100</div>
+            </a>
+          </li>
+        </ul>
+       </div>
        <transition  name="slide">
         <div class="sel-type" v-if="showAlert">
           <div class="sel-type-box">
@@ -74,11 +89,35 @@ export default {
 @import "../../../sass/oo_flex.scss";
 #bill {
   padding-top: 2em;
+  box-sizing: border-box;
+  .header-right {
+    width: 100%;
+    padding-right: 1em;
+    height: 2em;
+    box-sizing: border-box;
+  }
+}
+.bill-box{
+  font-size: 0.9em;
+  height: 3.4em;
+  line-height: 1.7em;
+  background: #eee;
+  padding-top: 0.5em;
+  .bill-date{
+    padding:0 1em;
+    color:#666;
+  }
+  .month-money{
+    color:#999;
+    .income{
+      margin-left: 1em;
+    }
+  }
 }
 .bill-list {
   li {
     border-top: 1px solid #ccc;
-    padding: 0 0.7em;
+    padding: 0 1em;
     a {
       width: 100%;
       display: flex;

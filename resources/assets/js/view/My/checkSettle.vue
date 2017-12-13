@@ -26,19 +26,38 @@
           </div>
         </li>
       </ul>
-      <a href="javascript:;" class="btn">
-        <mt-button type="primary" size="large">更换结算卡</mt-button>
+      <a href="javascript:;" class="btn" @click = "showPassword">
+        <mt-button type="primary" size="large" >更换结算卡</mt-button>
       </a>
     </div>
+
+    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword = "hidePassword"></passWorld>
   </div>
 </template>
 
 
 <script>
 import topBack from "../../components/topBack";
+import passWorld from "../../components/password"
 
 export default {
-  components: { topBack }
+  components: { topBack , passWorld},
+  data(){
+    return {
+      showPasswordTag:true
+    }
+  },
+  methods:{
+    showPassword(){
+      this.showPasswordTag = true;
+      console.log(this.showPasswordTag);
+    },
+
+    hidePassword(){
+      this.showPasswordTag = false;
+    }
+
+  }
 };
 </script>
 
@@ -47,6 +66,7 @@ export default {
   background: #eee;
   height: 100vh;
   padding-top: 2em;
+  box-sizing:border-box;
 }
 .account {
   height: 3em;
