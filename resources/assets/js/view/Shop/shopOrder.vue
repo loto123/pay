@@ -83,8 +83,6 @@
 import topBack from "../../components/topBack";
 import moment from 'moment'
 
-console.log(moment);
-
 export default {
   components: { topBack },
   data(){

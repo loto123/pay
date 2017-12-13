@@ -49589,8 +49589,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -49626,9 +49624,9 @@ var render = function() {
                   _c("img", {
                     attrs: {
                       slot: "icon",
-                      src: "/images/logo.png",
-                      width: "24",
-                      height: "24"
+                      src: "/images/referrer.png",
+                      width: "30",
+                      height: "30"
                     },
                     slot: "icon"
                   }),
@@ -49653,9 +49651,9 @@ var render = function() {
                   _c("img", {
                     attrs: {
                       slot: "icon",
-                      src: "/images/logo.png",
-                      width: "24",
-                      height: "24"
+                      src: "/images/realName.png",
+                      width: "30",
+                      height: "30"
                     },
                     slot: "icon"
                   }),
@@ -49683,9 +49681,9 @@ var render = function() {
                   _c("img", {
                     attrs: {
                       slot: "icon",
-                      src: "/images/logo.png",
-                      width: "24",
-                      height: "24"
+                      src: "/images/bankCardManage.png",
+                      width: "30",
+                      height: "30"
                     },
                     slot: "icon"
                   }),
@@ -49713,14 +49711,12 @@ var render = function() {
                   _c("img", {
                     attrs: {
                       slot: "icon",
-                      src: "/images/logo.png",
-                      width: "24",
-                      height: "24"
+                      src: "/images/bankCardManage.png",
+                      width: "30",
+                      height: "30"
                     },
                     slot: "icon"
-                  }),
-                  _vm._v(" "),
-                  _c("span")
+                  })
                 ]
               )
             ],
@@ -49737,14 +49733,12 @@ var render = function() {
                   _c("img", {
                     attrs: {
                       slot: "icon",
-                      src: "/images/logo.png",
-                      width: "24",
-                      height: "24"
+                      src: "/images/moreSet.png",
+                      width: "30",
+                      height: "30"
                     },
                     slot: "icon"
-                  }),
-                  _vm._v(" "),
-                  _c("span")
+                  })
                 ]
               )
             ],
@@ -50050,7 +50044,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #38c3ec;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.referrer-container[data-v-4698f5f7] {\n  background: #fff;\n  width: 94%;\n  margin: auto;\n  height: auto;\n  border-radius: 0.7em;\n  margin-top: 4em;\n}\n.header[data-v-4698f5f7] {\n  height: 4.5em;\n  padding: 1em;\n}\n.header .referrer-image[data-v-4698f5f7] {\n    width: 4.5em;\n    height: 4.5em;\n}\n.header .referrer-image > img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n      border-radius: 50%;\n}\n.header .referrer-info[data-v-4698f5f7] {\n    margin-left: 1em;\n}\n.header .referrer-info .tel[data-v-4698f5f7],\n    .header .referrer-info h2[data-v-4698f5f7] {\n      margin-bottom: 0.8em;\n}\n.header .referrer-info .wx-number[data-v-4698f5f7],\n    .header .referrer-info .tel[data-v-4698f5f7] {\n      color: #999;\n      font-size: 0.9em;\n}\n.header .referrer-info h2[data-v-4698f5f7] {\n      font-size: 1em;\n      margin-top: 0.1em;\n}\n.code[data-v-4698f5f7] {\n  padding: 1em;\n  padding-bottom: 2.5em;\n}\n.code .code-image[data-v-4698f5f7] {\n    max-width: 150px;\n    margin: 2em auto;\n    background: #f1f1f1;\n    padding: 10px;\n    border-radius: 5px;\n}\n.code .code-image img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n}\n.code .add-referrer[data-v-4698f5f7] {\n    text-align: center;\n    font-size: 0.8em;\n    color: #666;\n}\n", ""]);
+exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #26a2ff;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.referrer-container[data-v-4698f5f7] {\n  background: #fff;\n  width: 92%;\n  border-radius: 0.7em;\n}\n.header[data-v-4698f5f7] {\n  height: 4.5em;\n  padding: 1em;\n}\n.header .referrer-image[data-v-4698f5f7] {\n    width: 4.5em;\n    height: 4.5em;\n}\n.header .referrer-image > img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n      border-radius: 50%;\n}\n.header .referrer-info[data-v-4698f5f7] {\n    margin-left: 1em;\n}\n.header .referrer-info .tel[data-v-4698f5f7],\n    .header .referrer-info h2[data-v-4698f5f7] {\n      margin-bottom: 0.8em;\n}\n.header .referrer-info .wx-number[data-v-4698f5f7],\n    .header .referrer-info .tel[data-v-4698f5f7] {\n      color: #999;\n      font-size: 0.9em;\n}\n.header .referrer-info h2[data-v-4698f5f7] {\n      font-size: 1em;\n      margin-top: 0.1em;\n}\n.code[data-v-4698f5f7] {\n  padding-bottom: 2.5em;\n}\n.code .code-image[data-v-4698f5f7] {\n    max-width: 150px;\n    margin: 2em auto;\n    background: #f1f1f1;\n    padding: 10px;\n    border-radius: 5px;\n}\n.code .code-image img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n}\n.code .add-referrer[data-v-4698f5f7] {\n    text-align: center;\n    font-size: 0.8em;\n    color: #666;\n}\n", ""]);
 
 // exports
 
@@ -50063,6 +50057,8 @@ exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #38c3ec;\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
 //
 //
 //
@@ -50122,37 +50118,46 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "referrer-container" }, [
-      _c("div", { staticClass: "header flex" }, [
-        _c("div", { staticClass: "referrer-image" }, [
-          _c("img", { attrs: { src: "/images/personal.jpg" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "referrer-info" }, [
-          _c("h2", [_vm._v("牛大王")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "tel" }, [
-            _vm._v("电话:"),
-            _c("span", [_vm._v("31231321321")])
+    return _c(
+      "div",
+      {
+        staticClass: "flex flex-align-center flex-justify-center",
+        staticStyle: { height: "100%" }
+      },
+      [
+        _c("div", { staticClass: "referrer-container" }, [
+          _c("div", { staticClass: "header flex" }, [
+            _c("div", { staticClass: "referrer-image" }, [
+              _c("img", { attrs: { src: "/images/personal.jpg" } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "referrer-info" }, [
+              _c("h2", [_vm._v("牛大王")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "tel" }, [
+                _vm._v("电话:"),
+                _c("span", [_vm._v("31231321321")])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "wx-number" }, [
+                _vm._v("微信号:"),
+                _c("span", [_vm._v("31231321321")])
+              ])
+            ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "wx-number" }, [
-            _vm._v("微信号:"),
-            _c("span", [_vm._v("31231321321")])
+          _c("div", { staticClass: "code" }, [
+            _c("div", { staticClass: "code-image" }, [
+              _c("img", { attrs: { src: "/images/code.png" } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "add-referrer" }, [
+              _vm._v("用微信识别二维码添加您的推荐人")
+            ])
           ])
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "code" }, [
-        _c("div", { staticClass: "code-image" }, [
-          _c("img", { attrs: { src: "/images/code.png" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "add-referrer" }, [
-          _vm._v("用微信识别二维码添加您的推荐人")
-        ])
-      ])
-    ])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -50251,7 +50256,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-list[data-v-5865f0c9] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-5865f0c9] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-5865f0c9],\n    .bankCard-list li .binding[data-v-5865f0c9] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-5865f0c9] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-5865f0c9] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-5865f0c9] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-5865f0c9] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-5865f0c9] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    font-size: 1em;\n}\n.add-bankCard[data-v-5865f0c9] {\n  width: 90%;\n  height: 4em;\n  line-height: 4em;\n  border: 1px dashed #ccc;\n  text-align: center;\n  margin: auto;\n  margin-top: 1em;\n}\n.add-bankCard a[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    color: #999;\n}\n", ""]);
+exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-container[data-v-5865f0c9] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-5865f0c9] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-5865f0c9] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-5865f0c9],\n    .bankCard-list li .binding[data-v-5865f0c9] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-5865f0c9] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-5865f0c9] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-5865f0c9] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-5865f0c9] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-5865f0c9] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    font-size: 1em;\n}\n.add-bankCard[data-v-5865f0c9] {\n  width: 90%;\n  height: 4em;\n  line-height: 4em;\n  border: 1px dashed #ccc;\n  text-align: center;\n  margin: auto;\n  margin-top: 1em;\n}\n.add-bankCard a[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    color: #999;\n}\n", ""]);
 
 // exports
 
@@ -50266,6 +50271,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
+//
+//
 //
 //
 //
@@ -50329,19 +50336,21 @@ var render = function() {
     [
       _c("topBack", { attrs: { title: "银行卡管理" } }),
       _vm._v(" "),
-      _c("ul", { staticClass: "bankCard-list" }, [
-        _c("li", [
-          _vm._m(0, false, false),
-          _vm._v(" "),
-          _c("button", { staticClass: "del", on: { click: _vm.del } }, [
-            _c("i", { staticClass: "iconfont" }, [_vm._v("")])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "binding" }, [_vm._v("(已绑定)")])
-        ])
-      ]),
-      _vm._v(" "),
-      _vm._m(1, false, false)
+      _c("div", { staticClass: "bankCard-container" }, [
+        _c("ul", { staticClass: "bankCard-list" }, [
+          _c("li", [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _c("button", { staticClass: "del", on: { click: _vm.del } }, [
+              _c("i", { staticClass: "iconfont" }, [_vm._v("")])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "binding" }, [_vm._v("(已绑定)")])
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(1, false, false)
+      ])
     ],
     1
   )
@@ -50472,7 +50481,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #EFEEF4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n  color: #666;\n  height: 2em;\n  line-height: 2em;\n  padding-left: 10px;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n  margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n", ""]);
+exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n", ""]);
 
 // exports
 
@@ -50703,7 +50712,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n#settleInfo[data-v-7396d6cb] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.account[data-v-7396d6cb] {\n  height: 3em;\n  line-height: 3em;\n  background: #fff;\n  padding-left: 1em;\n}\n.account .account-title[data-v-7396d6cb] {\n    width: 8em;\n    margin-right: 1em;\n    color: #999;\n    font-size: 0.8em;\n}\n.account .account-number[data-v-7396d6cb] {\n    font-size: 0.8em;\n}\n.info-content-list[data-v-7396d6cb] {\n  margin-bottom: 3em;\n}\n.info-content-list li[data-v-7396d6cb] {\n    background: #fff;\n    padding: 0 1em;\n    border: 1px solid #d9d9d9;\n}\n.info-content-list li .content-box[data-v-7396d6cb] {\n      height: 3em;\n      line-height: 3em;\n      border-bottom: 1px solid #d9d9d9;\n}\n.info-content-list li .content-box[data-v-7396d6cb]:nth-child(2) {\n        border-bottom: 1px solid #aaa;\n}\n.info-content-list li .content-box[data-v-7396d6cb]:last-child {\n        border-bottom: none;\n}\n.info-content-list li .content-box .title[data-v-7396d6cb] {\n        width: 8em;\n        margin-right: 1em;\n        color: #999;\n        font-size: 0.8em;\n}\n.info-content-list li .content-box .content[data-v-7396d6cb] {\n        font-size: 0.8em;\n}\n", ""]);
+exports.push([module.i, "\n#settleInfo[data-v-7396d6cb] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.account[data-v-7396d6cb] {\n  height: 3em;\n  line-height: 3em;\n  background: #fff;\n  padding-left: 1em;\n  margin-bottom: 1em;\n  border: 1px solid #ccc;\n  margin-bottom: 1em;\n}\n.account .account-title[data-v-7396d6cb] {\n    width: 8em;\n    margin-right: 1em;\n    color: #999;\n    font-size: 0.8em;\n}\n.account .account-number[data-v-7396d6cb] {\n    font-size: 0.8em;\n}\n.info-content-list[data-v-7396d6cb] {\n  margin-bottom: 3em;\n}\n.info-content-list li[data-v-7396d6cb] {\n    background: #fff;\n    padding: 0 1em;\n    border: 1px solid #ccc;\n}\n.info-content-list li .content-box[data-v-7396d6cb] {\n      height: 3em;\n      line-height: 3em;\n      border-bottom: 1px solid #d9d9d9;\n}\n.info-content-list li .content-box[data-v-7396d6cb]:nth-child(2) {\n        border-bottom: 1px solid #aaa;\n}\n.info-content-list li .content-box[data-v-7396d6cb]:last-child {\n        border-bottom: none;\n}\n.info-content-list li .content-box .title[data-v-7396d6cb] {\n        width: 8em;\n        margin-right: 1em;\n        color: #999;\n        font-size: 0.8em;\n}\n.info-content-list li .content-box .content[data-v-7396d6cb] {\n        font-size: 0.8em;\n}\n", ""]);
 
 // exports
 
@@ -56137,8 +56146,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
-console.log(__WEBPACK_IMPORTED_MODULE_1_moment___default.a);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
