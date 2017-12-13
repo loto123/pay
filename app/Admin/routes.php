@@ -17,3 +17,13 @@ Route::group([
     $router->any('/shop/detail/{shop_id?}','ShopController@details');
     $router->any('/shop/updates','ShopController@updates');
 });
+
+Route::group([
+    'prefix'        => config('admin.route.prefix').'/data',
+    'namespace'     => config('admin.route.namespace'),
+    'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+    $router->any('profit', "DataController@profit");
+    $router->any('transfer', "DataController@transfer");
+    $router->any('record', "DataController@record");
+});

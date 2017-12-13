@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use JWTAuth;
 use Validator;
-use QrCode;
 
 class TransferController extends Controller
 {
@@ -215,8 +214,8 @@ class TransferController extends Controller
             return response()->json(['code' => 1, 'msg' => trans('trans.trade_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
         }
+        return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
     }
 
     //撤回
@@ -387,7 +386,7 @@ class TransferController extends Controller
             $user->balance = $user->balance - $request->fee;
             $user->save();
             //增加交易红包茶水费总额 交易红包茶水费状态改为已结清
-            $transfer->tip_amount = $request->fee;
+            $transfer->tip_amount = $transfer->tip_amount + $request->fee;
             $transfer->tip_status = 1;
             $transfer->save();
             //增加店铺余额
@@ -405,8 +404,8 @@ class TransferController extends Controller
             return response()->json(['code' => 1, 'msg' => trans('trans.pay_fee_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['code' => 0, 'msg' => trans('trans.pay_fee_failed'), 'data' => []]);
         }
+        return response()->json(['code' => 0, 'msg' => trans('trans.pay_fee_failed'), 'data' => []]);
     }
 
     //交易记录
