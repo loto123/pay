@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "element-ui": "^2.0.5",
-        "mint-ui": "^2.2.11"
+        "mint-ui": "^2.2.11",
+        "moment": "^2.19.4"
     }
 }

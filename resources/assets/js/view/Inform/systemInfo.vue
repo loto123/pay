@@ -1,7 +1,7 @@
 <template>
   <div id="Inform">
       <div id="top">
-          <topBack title="消息中心">
+          <topBack title="消息中心" :backUrl="'\/index\/'">
               <div class="clear-inform flex flex-reverse flex-align-center">
                 清空消息
               </div>

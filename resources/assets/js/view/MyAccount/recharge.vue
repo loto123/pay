@@ -1,6 +1,10 @@
 <template>
     <div id="recharge" class="recharge-container">
-        <topBack title="充值"></topBack>
+        <topBack title="充值">
+            <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
+              <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
+            </div>
+        </topBack>
         <div class="recharge-box">
             <div class="title">充值金额</div>
             <div class="recharge-money">
@@ -47,9 +51,14 @@
 import topBack from "../../components/topBack.vue";
 export default {
   data() {
-    return {}
+    return {};
   },
-  components: { topBack }
+  components: { topBack },
+  methods: {
+    goIndex() {
+      this.$router.push("/index");
+    }
+  }
 };
 </script>
 
