@@ -68,6 +68,10 @@ $api = app('Dingo\Api\Routing\Router');
 //app('Dingo\Api\Auth\Auth')->extend('jwt', function ($app) {
 //    return new Dingo\Api\Auth\Provider\JWT($app['Tymon\JWTAuth\JWTAuth']);
 //});
+app('api.exception')->register(function (Exception $exception) {
+    $request = Illuminate\Http\Request::capture();
+    return app('App\Exceptions\Handler')->render($request, $exception);
+});
 $api->version('v1', function ($api) {
     $api->group([
         'prefix' => 'auth',
@@ -75,6 +79,7 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         $api->post('login', 'AuthController@login');
         $api->post('register', 'AuthController@register');
+        $api->get("login/wechat/url", 'AuthController@wechat_login_url');
     });
 });
 
