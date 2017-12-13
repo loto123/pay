@@ -45,9 +45,7 @@ class SettleContainer extends Container
 
         do {
             //获取总余额
-            $reserve = DB::table($this->table)->select('balance', 'frozen_balance')->where([
-                ['state', '<>', self::STATE_EXTRACTED]
-            ])->lockForUpdate()->first();
+            $reserve = DB::table($this->table)->select('balance', 'frozen_balance')->lockForUpdate()->first();
 
             $toExtract = $reserve->balance + $reserve->frozen_balance;
             if ($toExtract <= 0) {
