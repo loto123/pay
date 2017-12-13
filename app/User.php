@@ -69,10 +69,22 @@ class User extends Authenticatable
         return $this->hasOne('App\Admin', 'id', 'operator_id');
 
     }
-
+    
+    /**
+     * 我管理的店铺
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function shop()
     {
-        return $this->hasMany('App\shop','manager','id');
+        return $this->hasMany('App\Shop','manager','id');
+    }
+
+    /**
+     * 我参与的店铺
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function in_shops() {
+        return $this->belongsToMany(Shop::class, (new ShopUser)->getTable(), 'user_id', 'shop_id');
     }
 
 }

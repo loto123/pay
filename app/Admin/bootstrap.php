@@ -19,3 +19,7 @@
  */
 
 Encore\Admin\Form::forget(['map', 'editor']);
+
+Admin::css('/css/daterangepicker-bs3.css');
+Admin::js('/js/moment.js');
+Admin::js('/js/daterangepicker.js');
