@@ -1,30 +1,30 @@
 <template>
   <div id="Inform">
-      <div id="top">
-          <topBack title="消息中心">
-              <div class="clear-inform flex flex-reverse flex-align-center">
-                清空消息
-              </div>
-          </topBack>
-      </div>
-      <div class="tab-menu flex flex-align-center flex-justify-center" >
-        <div class="flex flex-align-center flex-justify-center" @click="goshareBenefit">分润通知</div>
-        <div class="flex flex-align-center flex-justify-center active">用户注册</div>
-        <div class="flex flex-align-center flex-justify-center" @click="goSystemInfo">系统通知</div>
-      </div>
-      <div class="userRegister-box">
-        <ul>
-          <li class="flex flex-align-center flex-justify-between">
-              <div class="left-content">
-                <div class="title flex">
-                  <div class="flex-1 flex">新用户注册通知</div>
-                </div>
-                <div class="date">2017-11-23  19:44:31</div>
-              </div>
-              <div class="status">您推荐的<span>18676456235</span>成功注册</div>
-          </li>
-        </ul>
-      </div>
+    <div id="top">
+      <topBack title="消息中心" :backUrl="'\/index\/'">
+        <div class="clear-inform flex flex-reverse flex-align-center">
+          清空消息
+        </div>
+      </topBack>
+    </div>
+    <div class="tab-menu flex flex-align-center flex-justify-center" >
+      <div class="flex flex-align-center flex-justify-center" @click="goshareBenefit">分润通知</div>
+      <div class="flex flex-align-center flex-justify-center active">用户注册</div>
+      <div class="flex flex-align-center flex-justify-center" @click="goSystemInfo">系统通知</div>
+    </div>
+    <div class="userRegister-box">
+      <ul>
+        <li class="flex flex-align-center flex-justify-between">
+          <div class="left-content">
+            <div class="title flex">
+              <div class="flex-1 flex">新用户注册通知</div>
+            </div>
+            <div class="date">2017-11-23  19:44:31</div>
+          </div>
+          <div class="status">您推荐的<span>18676456235</span>成功注册</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -40,11 +40,11 @@ export default {
     goshareBenefit() {
       this.$router.push("/inform");
     },
-    goUser(){
-      this.$router.push("/userRegister")
+    goUser() {
+      this.$router.push("/userRegister");
     },
-    goSystemInfo(){
-      this.$router.push('/systemInfo')
+    goSystemInfo() {
+      this.$router.push("/systemInfo");
     }
   }
 };
@@ -87,8 +87,8 @@ export default {
     border: 1px solid #ddd;
     padding: 0.5em 1em;
     .left-content {
-      .title{
-        margin-bottom:0.7em;
+      .title {
+        margin-bottom: 0.7em;
       }
       .date {
         color: #999;

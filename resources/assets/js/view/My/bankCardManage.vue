@@ -13,7 +13,9 @@
             <div class="card-number">62120646545465454</div>
           </div>
         </div>
-        <button class="del">删除</button>
+        <button class="del" @click="del">
+          <i class="iconfont">&#xe634;</i>
+        </button>
         <div class="binding">(已绑定)</div>
       </li>
     </ul>
@@ -23,13 +25,27 @@
   </div>
 </template>
 
-
 <script>
 import topBack from "../../components/topBack";
-
+import { MessageBox } from 'mint-ui';
+import { Toast } from 'mint-ui';
 export default {
-  components: { topBack }
-};
+  components: { topBack },
+  methods: {
+    del(){
+      MessageBox.confirm('是否删除该银行卡?','温馨提示').then(() => {
+        Toast({
+          message: '删除成功',
+          iconClass: 'icon icon-success',
+          duration: 800
+        })
+      },() => {
+        //取消操作
+        console.log('已经取消');
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -52,7 +68,13 @@ export default {
     }
     .del {
       bottom: 10px;
-      color: #aaa;
+      background:#fff;
+      border: none;
+      outline: none;
+      i{
+        font-size: 2em;
+        color: #777;
+      }
     }
     .binding {
       top: 1em;

@@ -1,6 +1,10 @@
 <template>
     <div id="withdraw" class="withdraw-container">
-        <topBack title="提现"></topBack>
+        <topBack title="提现">
+            <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
+              <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
+            </div>
+        </topBack>
         <div class="withdraw-box">
             <div class="title">提现金额</div>
             <div class="withdraw-money">
@@ -53,7 +57,12 @@ export default {
   data() {
     return {}
   },
-  components: { topBack }
+  components: { topBack },
+  methods: {
+    goIndex(){
+      this.$router.push('/index');
+    }
+  }
 };
 </script>
 
