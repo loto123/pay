@@ -14,12 +14,20 @@ use Validator;
 
 class CardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("jwt.auth");
-    }
+//    public function __construct()
+//    {
+//        $this->middleware("jwt.auth");
+//    }
 
-    //银行卡列表
+    /**
+     * @SWG\GET(
+     *   path="/card/index",
+     *   summary="银行卡列表",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -38,7 +46,50 @@ class CardController extends Controller
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
 
-    //绑定银行卡
+    /**
+     * @SWG\Post(
+     *   path="/card/create",
+     *   summary="绑定银行卡",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="card_num",
+     *     in="formData",
+     *     description="银行卡号",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="name",
+     *     in="formData",
+     *     description="持卡人姓名",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="formData",
+     *     description="持卡人身份证ID",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="bank",
+     *     in="formData",
+     *     description="开户银行名称",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="mobile",
+     *     in="formData",
+     *     description="银行卡绑定手机号",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function create(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -47,14 +98,14 @@ class CardController extends Controller
             [
                 'card_num' => 'bail|required|digits_between:16,19',
                 'name' => 'bail|required',
-                'id' => 'bail|required|digits:18',
+                'id' => 'bail|required|size:18',
                 'bank' => 'bail|required',
                 'mobile' => 'bail|required|digits:11',
             ],
             [
                 'required' => trans('trans.required'),
                 'digits_between' =>trans('trans.digits_between'),
-                'digits' => trans('trans.digits'),
+                'size' => trans('trans.size'),
             ]
         );
         if ($validator->fails()) {
@@ -90,7 +141,22 @@ class CardController extends Controller
         return response()->json(['code' => 1,'msg' => '','data' => []]);
     }
 
-    //解绑银行卡
+    /**
+     * @SWG\Post(
+     *   path="/card/delete",
+     *   summary="解绑银行卡",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="card_id",
+     *     in="formData",
+     *     description="银行卡ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function delete(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
