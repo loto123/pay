@@ -141,7 +141,7 @@ class AuthController extends BaseController {
      * @SWG\Get(
      *   path="/auth/login/wechat/url",
      *   summary="获取微信授权url",
-     *     tags={"登录"},
+     *     tags={"web微信登录"},
      *     @SWG\Parameter(
      *         name="redirect_url",
      *         in="query",
@@ -184,7 +184,7 @@ class AuthController extends BaseController {
      * @SWG\Post(
      *   path="/auth/login/wechat",
      *   summary="微信登录",
-     *     tags={"登录"},
+     *     tags={"web微信登录"},
      *     @SWG\Parameter(
      *         name="code",
      *         in="formData",
