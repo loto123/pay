@@ -696,14 +696,22 @@ class TransferController extends Controller
      *     in="formData",
      *     description="标记的交易记录ID 数组",
      *     required=true,
-     *     type="array"
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
      *   ),
      *   @SWG\Parameter(
      *     name="dismark",
      *     in="formData",
      *     description="取消标记的交易记录ID 数组",
      *     required=true,
-     *     type="array"
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
