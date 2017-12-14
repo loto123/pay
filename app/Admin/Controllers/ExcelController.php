@@ -4,13 +4,15 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Shop;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Excel;
+use Illuminate\Support\Facades\Log;
 
 class ExcelController extends Controller
 {
-    public function  shop(Request $request){
+    public function shop(Request $request){
         $manager_id = $request->input('manager_id');
         $shop_id = $request->input('shop_id');
         $shop_name = $request->input('shop_name');
@@ -72,6 +74,48 @@ class ExcelController extends Controller
         }
         Excel::create('店铺管理',function($excel) use ($cellData){
             $excel->sheet('店铺管理', function($sheet) use ($cellData){
+                $sheet->rows($cellData);
+            });
+        })->export('xls');
+    }
+
+    public function user(Request $request)
+    {
+        $cellData = [
+            ['编号','用户','交易笔数','余额','收益','收款','付款','上级运营','上级代理','支付渠道','公司账户']
+        ];
+
+        $query = User::with('transfer_record')->select()->get();
+
+        $user_table = (new User)->getTable();
+        $query = User::leftJoin('transfer_record as tfr', 'tfr.user_id', '=', $user_table .'.id')
+            ->select($user_table.'.*',
+                DB::raw('SUM( CASE WHEN stat=1 THEN amount ELSE 0 END) AS payment'),
+                DB::raw('SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END) AS profit'),
+                DB::raw('COUNT(*) AS transfer_count'));
+
+        $query = $query->groupBy($user_table.'.id')->get();
+
+        if(!empty($query) && count($query)>0) {
+            foreach($query as $item) {
+                $cellData[] = [
+                    $item->id,
+                    $item->name,
+                    $item->transfer_count??0,
+                    $item->balance,
+                    ($item->profit-$item->payment)??0,
+                    $item->profit??0,
+                    $item->payment??0,
+                    '',
+                    '',
+                    '',
+                    '',
+                ];
+            }
+        }
+
+        Excel::create('用户管理',function($excel) use ($cellData){
+            $excel->sheet('用户管理', function($sheet) use ($cellData){
                 $sheet->rows($cellData);
             });
         })->export('xls');
