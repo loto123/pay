@@ -47,4 +47,5 @@ return [
     'max' => ':attribute的长度不能超过:max位',
     'digits_between' => ':attribute必须为数字，且长度在:min到:max之间',
     'digits' => ':attribute必须为数字，且长度必须是:value位',
+    'user_pay_password_error' => '支付密码错误',
 ];

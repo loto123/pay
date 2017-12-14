@@ -18,6 +18,7 @@ Route::group([
     $router->any('/shop/updates','ShopController@updates');
 
     $router->post('/excel/shop', 'ExcelController@shop');
+    $router->post('/excel/user', 'ExcelController@user');
 });
 
 Route::group([

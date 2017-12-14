@@ -21,7 +21,7 @@ class Transfer extends Model
 
     //交易所属店铺
     public function shop() {
-        return $this->belongsTo('App\Shop', 'id', 'shop_id');
+        return $this->belongsTo('App\Shop','shop_id', 'id');
     }
 
     //参与交易人
