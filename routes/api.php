@@ -92,6 +92,27 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('create', 'ShopController@create');
     });
 });
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'transfer',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('show', 'TransferController@show');
+        $api->get('feerecord', 'TransferController@feeRecord');
+        $api->get('record', 'TransferController@record');
+        $api->post('mark', 'TransferController@mark');
+        $api->post('payfee', 'TransferController@payFee');
+        $api->post('notice', 'TransferController@notice');
+        $api->post('withdraw', 'TransferController@withdraw');
+        $api->post('trade', 'TransferController@trade');
+        $api->post('validate', 'TransferController@validate');
+        $api->post('create', 'TransferController@create');
+        $api->post('close', 'TransferController@close');
+        $api->post('cancel', 'TransferController@cancel');
+    });
+});
+
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',

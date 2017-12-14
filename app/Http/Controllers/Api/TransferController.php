@@ -11,18 +11,48 @@ use App\TransferUserRelation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use JWTAuth;
 use Validator;
 
 class TransferController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("jwt.auth");
-    }
+//    public function __construct()
+//    {
+//        $this->middleware("jwt.auth");
+//    }
 
-    //发起交易
+    /**
+     * @SWG\Post(
+     *   path="/transfer/create",
+     *   summary="发起交易",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="formData",
+     *     description="店铺ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="price",
+     *     in="formData",
+     *     description="单价",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="comment",
+     *     in="formData",
+     *     description="备注",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function create(Request $request)
     {
         $user = JWTAuth::parseToken()->authenticate();
@@ -71,7 +101,22 @@ class TransferController extends Controller
         }
     }
 
-    //交易详情
+    /**
+     * @SWG\GET(
+     *   path="/transfer/show",
+     *   summary="交易详情",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function show(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -104,7 +149,92 @@ class TransferController extends Controller
         }
     }
 
-    //交易
+    /**
+     * @SWG\Post(
+     *   path="/transfer/validate",
+     *   summary="验证交易数据(放钱的)",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="points",
+     *     in="formData",
+     *     description="积分",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function validate(Request $request) {
+        $user = JWTAuth::parseToken()->authenticate();
+
+        $validator = Validator::make($request->all(),
+            [
+                'transfer_id' => 'bail|required',
+                'points' => 'bail|required|integer|between:1,99999',
+//                'action' => ['bail', 'required', Rule::in(['put', 'get'])],
+            ],
+            [
+                'required' => trans('trans.required'),
+                'integer' => trans('trans.integer'),
+                'between' => trans('trans.between'),
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
+        }
+
+        $transfer = Transfer::find($request->transfer_id);
+        if ($transfer->isEmpty()) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
+        }
+        if ($transfer->status == 3) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
+        }
+        if ($user->balance < ($request->points * $transfer->price)) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.user_not_enough_money'), 'data' => []]);
+        }
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => []]);
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/transfer/trade",
+     *   summary="交易",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="points",
+     *     in="formData",
+     *     description="积分",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="action",
+     *     in="formData",
+     *     description="action value:put or get",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function trade(Request $request)
     {
         $user = JWTAuth::parseToken()->authenticate();
@@ -145,6 +275,9 @@ class TransferController extends Controller
             if ($request->action == 'put') {
                 if ($user->balance < $record->amount) {
                     return response()->json(['code' => 0, 'msg' => trans('trans.user_not_enough_money'), 'data' => []]);
+                }
+                if (!Hash::check($request->pay_password,$user->pay_password)) {
+                    return response()->json(['code' => 0,'msg' => trans('trans.user_pay_password_error'),'data' => []]);
                 }
                 $record->stat = 1;
                 $record->real_amount = $record->amount;
@@ -218,7 +351,22 @@ class TransferController extends Controller
         return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
     }
 
-    //撤回
+    /**
+     * @SWG\Post(
+     *   path="/transfer/withdraw",
+     *   summary="撤回",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="record_id",
+     *     in="formData",
+     *     description="交易记录ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function withdraw(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -282,7 +430,29 @@ class TransferController extends Controller
         return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_failed'), 'data' => []]);
     }
 
-    //通知
+    /**
+     * @SWG\Post(
+     *   path="/transfer/notice",
+     *   summary="通知好友",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="friend_id",
+     *     in="formData",
+     *     description="好友user_id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function notice(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -319,7 +489,22 @@ class TransferController extends Controller
         }
     }
 
-    //茶水费记录
+    /**
+     * @SWG\GET(
+     *   path="/transfer/feerecord",
+     *   summary="茶水费记录",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function feeRecord(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -344,7 +529,29 @@ class TransferController extends Controller
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $list]);
     }
 
-    //缴纳茶水费
+    /**
+     * @SWG\Post(
+     *   path="/transfer/payfee",
+     *   summary="缴纳茶水费",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="fee",
+     *     in="formData",
+     *     description="茶水费金额",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function payFee(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -408,7 +615,36 @@ class TransferController extends Controller
         return response()->json(['code' => 0, 'msg' => trans('trans.pay_fee_failed'), 'data' => []]);
     }
 
-    //交易记录
+    /**
+     * @SWG\GET(
+     *   path="/transfer/record",
+     *   summary="交易记录",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="status",
+     *     in="formData",
+     *     description="交易状态 0, 1 待结算, 2 已平账, 3 已关闭",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="formData",
+     *     description="每页条数",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="offset",
+     *     in="formData",
+     *     description="起始位置",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function record(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -443,7 +679,36 @@ class TransferController extends Controller
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $list]);
     }
 
-    //标记
+    /**
+     * @SWG\Post(
+     *   path="/transfer/mark",
+     *   summary="标记",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="record_id",
+     *     in="formData",
+     *     description="交易记录ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="mark",
+     *     in="formData",
+     *     description="标记的交易记录ID 数组",
+     *     required=true,
+     *     type="array"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="dismark",
+     *     in="formData",
+     *     description="取消标记的交易记录ID 数组",
+     *     required=true,
+     *     type="array"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function mark(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -467,7 +732,22 @@ class TransferController extends Controller
         return response()->json(['code' => 1, 'msg' => trans('trans.mark_success'), 'data' => []]);
     }
 
-    //关闭交易
+    /**
+     * @SWG\Post(
+     *   path="/transfer/close",
+     *   summary="关闭交易",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function close(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -536,7 +816,22 @@ class TransferController extends Controller
         return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
     }
 
-    //取消交易
+    /**
+     * @SWG\Post(
+     *   path="/transfer/cancel",
+     *   summary="取消交易",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function cancel(Request $request) {
         $validator = Validator::make($request->all(),
             [
