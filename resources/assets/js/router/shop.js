@@ -6,6 +6,8 @@ import ShopMember from '../view/Shop/shopMember.vue'
 import DealManagement from '../view/Shop/dealManagement.vue'
 import ShopAccount from '../view/Shop/shopAccount.vue'
 import ShopOrder from '../view/Shop/shopOrder.vue'
+import Withdraw from '../view/Shop/withdraw.vue'
+import Give from '../view/Shop/give.vue'
 
 export default [
     { path: '/shop', name: 'shop', component: Shop },
@@ -15,6 +17,8 @@ export default [
     { path: '/shop/shop_member', name: "shopMember", component: ShopMember },
     { path: '/shop/deal_management', name: "dealManagement", component: DealManagement },
     { path: '/shop/shopAccount', name: "shopAccount", component: ShopAccount },
+    { path: '/shop/shopAccount/withdraw', name: "withdraw", component: Withdraw },
+    { path: '/shop/shopAccount/give', name: "give", component: Give },
     { path: '/shop/shopOrder', name: "shopOrder", component: ShopOrder }
     
     // { path: '/shop/shop_account', name: "shopDetail", component: ShopDetail },

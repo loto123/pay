@@ -7,7 +7,7 @@
         </topBack>
         <div class="withdraw-box">
             <div class="title">提现金额</div>
-            <div class="withdraw-money">
+            <div class="withdraw-money flex flex-justify-center">
                 <label>￥</label>
                 <input type="text" placeholder="请输入金额">
             </div>
@@ -84,16 +84,16 @@ export default {
   }
 }
 .withdraw-money {
-  height: 40px;
-  line-height: 40px;
   border-bottom: 1px solid #ccc;
   vertical-align: middle;
-  margin-top: 1.2em;
+  margin-top: 2em;
+  font-size:1.2em;
+  padding: 0.2em 0;
   input {
     border: none;
-    padding: 7px 0;
-    display: inline-block;
-    width: 70%;
+    outline: none;
+    width: 100%;
+    font-size:0.9em;
   }
 }
 .all-money {
