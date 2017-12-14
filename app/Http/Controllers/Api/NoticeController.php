@@ -12,12 +12,21 @@ use Validator;
 
 class NoticeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("jwt.auth");
-    }
+//    public function __construct()
+//    {
+//        $this->middleware("jwt.auth");
+//    }
 
     //消息列表
+    /**
+     * @SWG\GET(
+     *   path="/notice/index",
+     *   summary="消息列表",
+     *   tags={"消息"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -65,7 +74,50 @@ class NoticeController extends Controller
         return response()->json(['code' => 1,'msg' => '','data' => $data]);
     }
 
-    //添加消息
+    /**
+     * @SWG\Post(
+     *   path="/notice/create",
+     *   summary="新建消息",
+     *   tags={"消息"},
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="formData",
+     *     description="接收消息的用户ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="formData",
+     *     description="消息类型：1：分润，2：用户注册，3：系统",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="content",
+     *     in="formData",
+     *     description="消息内容",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="title",
+     *     in="formData",
+     *     description="消息标题，根据type，默认值分别为 1：分润通知，2：用户注册，3：系统通知",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="param",
+     *     in="formData",
+     *     description="参数，当type=1时，代表交易id，必填",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function create(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -87,6 +139,22 @@ class NoticeController extends Controller
         $type = $request->input('type');
         $content = $request->input('content');
         $title = $request->input('title');
+        if(empty($title)) {
+            switch ($type) {
+                case 1:
+                    $title = '分润通知';
+                    break;
+                case 2:
+                    $title = '用户注册';
+                    break;
+                case 3:
+                    $title = '系统通知';
+                    break;
+                default:
+                    $title = '通知';
+                    break;
+            }
+        }
         $param = $request->input('param');
         if ($type==1 && empty($param)) {
             return response()->json(['code' => 0,'msg' => '缺少参数param','data' => []]);
@@ -115,7 +183,22 @@ class NoticeController extends Controller
         }
     }
 
-    //分润通知的详情
+    /**
+     * @SWG\Post(
+     *   path="/notice/detail",
+     *   summary="分润通知的详情",
+     *   tags={"消息"},
+     *   @SWG\Parameter(
+     *     name="notice_id",
+     *     in="formData",
+     *     description="消息ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function detail(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -153,6 +236,15 @@ class NoticeController extends Controller
         return response()->json(['code' => 0,'msg' => '','data' => $data]);
     }
 
+    /**
+     * @SWG\Post(
+     *   path="/notice/delete",
+     *   summary="清空消息",
+     *   tags={"消息"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function delete(){
         $this->user = JWTAuth::parseToken()->authenticate();
         Notice::where('user_id',$this->user->id)->where('created_at','<',date('Y-m-d H:i:s'))->delete();
