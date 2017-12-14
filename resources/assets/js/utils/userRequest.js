@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import 'babel-polyfill'
 
 export default class UserRequest{
     static getInstance(){
