@@ -80,6 +80,7 @@ $api->version('v1', function ($api) {
         $api->post('login', 'AuthController@login');
         $api->post('register', 'AuthController@register');
         $api->get("login/wechat/url", 'AuthController@wechat_login_url');
+        $api->post("login/wechat", 'AuthController@wechat_login');
     });
 });
 
