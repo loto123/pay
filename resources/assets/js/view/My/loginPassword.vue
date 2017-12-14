@@ -1,6 +1,6 @@
 <template>
   <div id="settleInfo">
-    <topBack title="修改密码"></topBack>
+    <topBack title="修改登录密码"></topBack>
     <div class="settleInfo-container">
       <mt-field label="原密码" placeholder="请填写原密码" v-model="oldPassword"></mt-field>
       <mt-field label="新密码" placeholder="请填写新密码" type="email" v-model="newPassword"></mt-field>
