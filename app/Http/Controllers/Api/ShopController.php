@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Shop;
+use App\ShopUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -184,8 +185,11 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function close() {
-
+    public function close($id) {
+        $shop = Shop::find($id);
+        $shop->status = 1;
+        $shop->save();
+        return $this->json();
     }
 
     /**
@@ -204,8 +208,12 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function quit() {
+    public function quit($id) {
+        $user = $this->auth->user();
 
+        $shop = Shop::find($id);
+        ShopUser::where('shop_id', $shop->id)->where("user_id", $user->id)->delete();
+        return $this->json();
     }
 
     /**
@@ -238,7 +246,22 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function update() {
+    public function update($id, Request $request) {
+        $user = $this->auth->user();
 
+        $shop = Shop::find($id);
+        if ($request->name) {
+            $shop->name = $request->name;
+        }
+        if ($request->use_link) {
+            $shop->use_link = $request->use_link ? 1 : 0;
+        }
+
+        if ($request->active) {
+            $shop->active = $request->active ? 1 : 0;
+        }
+
+        $shop->save();
+        return $this->json();
     }
 }
