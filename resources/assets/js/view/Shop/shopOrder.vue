@@ -4,29 +4,38 @@
           <topBack style="background:#26a2ff;color:#fff;" :title="'店铺订单'"></topBack>
 
           <div class="data-input-wrap flex flex-align-center">
-              <div class="start-time flex-4" @click = "openPicker">
-                  {{trueDate}}
+              <div class="start-time flex-4 flex flex-justify-center flex-align-center" @click = "openStartPicker">
+                  {{startDate?startDate:'输入开始日期'}}
               </div>
               <div class="liner flex-2 flex flex-justify-center">
                   <div>
-
-                  </div>
                   
+                  </div>
               </div>
-              <div class="end-time flex-4">
-
+              <div class="end-time flex-4 flex flex-justify-center flex-align-center" @click = "openEndPicker">
+                {{endDate?endDate:'输入结束日期'}}
               </div>
           </div>
       </div>
 
       <mt-datetime-picker
-        ref="picker"
+        ref="startPicker"
         type="date"
         year-format="{value} 年"
         month-format="{value} 月"
         date-format="{value} 日"
         v-model="pickerValue"
-        v-on:confirm="setTime">
+        v-on:confirm="setStartTime">
+      </mt-datetime-picker>
+
+       <mt-datetime-picker
+        ref="endPicker"
+        type="date"
+        year-format="{value} 年"
+        month-format="{value} 月"
+        date-format="{value} 日"
+        v-model="pickerValue"
+        v-on:confirm="setEndTime">
       </mt-datetime-picker>
 
       店铺订单
@@ -81,23 +90,35 @@
 
 <script>
 import topBack from "../../components/topBack";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
   components: { topBack },
-  data(){
-      return {
-          pickerValue:null,
-          trueDate:null
-      }
+  data() {
+    return {
+      pickerValue: null,
+      startDate: null,
+      endDate: null
+    };
   },
-  methods:{
-      openPicker(){
-          this.$refs.picker.open();
-      },
-      setTime(){
-          console.log(33);
-      }
+  methods: {
+    openStartPicker() {
+      this.$refs.startPicker.open();
+    },
+
+    openEndPicker() {
+      this.$refs.endPicker.open();
+    },
+    setStartTime(timer) {
+      var _outDate = moment(timer).format("YYYY-MM-DD");
+      this.startDate = _outDate;
+
+      console.log(33);
+    },
+    setEndTime(timer) {
+      var _outDate = moment(timer).format("YYYY-MM-DD");
+      this.endDate = _outDate;
+    }
   }
 };
 </script>

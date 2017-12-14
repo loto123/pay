@@ -48986,18 +48986,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -50308,15 +50296,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
   methods: {
     del: function del() {
-      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm('是否删除该银行卡?', '温馨提示').then(function () {
+      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm("是否删除该银行卡?", "温馨提示").then(function () {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])({
-          message: '删除成功',
-          iconClass: 'icon icon-success',
+          message: "删除成功",
+          iconClass: "icon icon-success",
           duration: 800
         });
       }, function () {
         //取消操作
-        console.log('已经取消');
+        console.log("已经取消");
       });
     }
   }
@@ -56143,27 +56131,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
-    data: function data() {
-        return {
-            pickerValue: null,
-            trueDate: null
-        };
-    },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  data: function data() {
+    return {
+      pickerValue: null,
+      startDate: null,
+      endDate: null
+    };
+  },
 
-    methods: {
-        openPicker: function openPicker() {
-            this.$refs.picker.open();
-        },
-        setTime: function setTime() {
-            console.log(33);
-        }
+  methods: {
+    openStartPicker: function openStartPicker() {
+      this.$refs.startPicker.open();
+    },
+    openEndPicker: function openEndPicker() {
+      this.$refs.endPicker.open();
+    },
+    setStartTime: function setStartTime(timer) {
+      var _outDate = __WEBPACK_IMPORTED_MODULE_1_moment___default()(timer).format("YYYY-MM-DD");
+      this.startDate = _outDate;
+
+      console.log(33);
+    },
+    setEndTime: function setEndTime(timer) {
+      var _outDate = __WEBPACK_IMPORTED_MODULE_1_moment___default()(timer).format("YYYY-MM-DD");
+      this.endDate = _outDate;
     }
+  }
 });
 
 /***/ }),
@@ -56477,33 +56485,68 @@ var render = function() {
             _c(
               "div",
               {
-                staticClass: "start-time flex-4",
-                on: { click: _vm.openPicker }
+                staticClass:
+                  "start-time flex-4 flex flex-justify-center flex-align-center",
+                on: { click: _vm.openStartPicker }
               },
               [
                 _vm._v(
-                  "\n                " + _vm._s(_vm.trueDate) + "\n            "
+                  "\n                " +
+                    _vm._s(_vm.startDate ? _vm.startDate : "输入开始日期") +
+                    "\n            "
                 )
               ]
             ),
             _vm._v(" "),
             _vm._m(0, false, false),
             _vm._v(" "),
-            _c("div", { staticClass: "end-time flex-4" })
+            _c(
+              "div",
+              {
+                staticClass:
+                  "end-time flex-4 flex flex-justify-center flex-align-center",
+                on: { click: _vm.openEndPicker }
+              },
+              [
+                _vm._v(
+                  "\n              " +
+                    _vm._s(_vm.endDate ? _vm.endDate : "输入结束日期") +
+                    "\n            "
+                )
+              ]
+            )
           ])
         ],
         1
       ),
       _vm._v(" "),
       _c("mt-datetime-picker", {
-        ref: "picker",
+        ref: "startPicker",
         attrs: {
           type: "date",
           "year-format": "{value} 年",
           "month-format": "{value} 月",
           "date-format": "{value} 日"
         },
-        on: { confirm: _vm.setTime },
+        on: { confirm: _vm.setStartTime },
+        model: {
+          value: _vm.pickerValue,
+          callback: function($$v) {
+            _vm.pickerValue = $$v
+          },
+          expression: "pickerValue"
+        }
+      }),
+      _vm._v(" "),
+      _c("mt-datetime-picker", {
+        ref: "endPicker",
+        attrs: {
+          type: "date",
+          "year-format": "{value} 年",
+          "month-format": "{value} 月",
+          "date-format": "{value} 日"
+        },
+        on: { confirm: _vm.setEndTime },
         model: {
           value: _vm.pickerValue,
           callback: function($$v) {
