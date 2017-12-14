@@ -27,7 +27,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/create",
      *   summary="发起交易",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="shop_id",
      *     in="formData",
@@ -105,7 +105,7 @@ class TransferController extends Controller
      * @SWG\GET(
      *   path="/transfer/show",
      *   summary="交易详情",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
@@ -153,7 +153,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/validate",
      *   summary="验证交易数据(放钱的)",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
@@ -209,7 +209,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/trade",
      *   summary="交易",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
@@ -355,7 +355,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/withdraw",
      *   summary="撤回",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="record_id",
      *     in="formData",
@@ -434,7 +434,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/notice",
      *   summary="通知好友",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
@@ -493,7 +493,7 @@ class TransferController extends Controller
      * @SWG\GET(
      *   path="/transfer/feerecord",
      *   summary="茶水费记录",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
@@ -533,7 +533,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/payfee",
      *   summary="缴纳茶水费",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
@@ -619,7 +619,7 @@ class TransferController extends Controller
      * @SWG\GET(
      *   path="/transfer/record",
      *   summary="交易记录",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="status",
      *     in="formData",
@@ -683,7 +683,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/mark",
      *   summary="标记",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="record_id",
      *     in="formData",
@@ -736,7 +736,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/close",
      *   summary="关闭交易",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
@@ -820,7 +820,7 @@ class TransferController extends Controller
      * @SWG\Post(
      *   path="/transfer/cancel",
      *   summary="取消交易",
-     *   tags={"店铺"},
+     *   tags={"交易"},
      *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
