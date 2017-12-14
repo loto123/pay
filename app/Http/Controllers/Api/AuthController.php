@@ -147,7 +147,7 @@ class AuthController extends BaseController {
      *         in="query",
      *         description="跳转链接",
      *         required=true,
-     *         type="url",
+     *         type="string",
      *     ),
      *   @SWG\Response(
      *     response=200,
