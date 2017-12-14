@@ -27,10 +27,10 @@
                 <h4>单位(元)</h4>
             </div>
 
-            <div class="withdraw-cash">
+            <div class="withdraw-cash" @click="goWithdraw">
               <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
             </div>
-            <div class="transfer-accounts">
+            <div class="transfer-accounts" @click="goGive">
               <mt-button type="primary" size="large" >转账给店铺会员</mt-button>
             </div>
 
@@ -158,6 +158,14 @@
 import topBack from "../../components/topBack";
 
 export default {
-  components: { topBack }
+  components: { topBack },
+  methods: {
+    goWithdraw(){
+      this.$router.push('/shop/shopAccount/withdraw');
+    },
+    goGive(){
+      this.$router.push('/shop/shopAccount/give');
+    }
+  }
 };
 </script>

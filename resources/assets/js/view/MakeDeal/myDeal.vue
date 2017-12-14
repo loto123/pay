@@ -20,10 +20,7 @@
                 </li> -->
                 
                  <li class="deal-item flex flex-align-center" @click="goDetail">
-                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div> -->
+                    
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">交易来源:无敌先生的小店</div>
                         <div class="date">2017-11-18 &nbsp; 14:25:46</div>
@@ -40,10 +37,7 @@
                 </li>
 
                 <li class="deal-item flex flex-align-center" @click="goDetail">
-                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div> -->
+                    
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">交易来源:无敌先生的小店</div>
                         <div class="date">2017-11-18 &nbsp; 14:25:46</div>
@@ -60,10 +54,7 @@
                 </li>
 
                 <li class="deal-item flex flex-align-center" @click="goDetail">
-                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div> -->
+                    
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">交易来源:无敌先生的小店</div>
                         <div class="date">2017-11-18 &nbsp; 14:25:46</div>
@@ -80,10 +71,7 @@
                 </li>
 
                 <li class="deal-item flex flex-align-center" @click="goDetail">
-                    <!-- <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div> -->
+                    
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">交易来源:无敌先生的小店</div>
                         <div class="date">2017-11-18 &nbsp; 14:25:46</div>
