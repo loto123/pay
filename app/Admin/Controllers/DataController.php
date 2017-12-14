@@ -16,6 +16,8 @@ use App\TransferRecord;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 
 class DataController extends Controller
 {
@@ -72,9 +74,9 @@ class DataController extends Controller
             $with[] = 'tips';
             $with[] = 'output_profit';
         }
-        $list = $query->with($with)->sortByDesc(function ($item) {
+        $list = $query->with($with)->paginate(self::PAGE_SIZE)->sortByDesc(function ($item) {
             return $item->output_profit->sum('fee_amount');
-        })->paginate(self::PAGE_SIZE);
+        });
         $data = compact('aid', 'date_time', 'operator', 'parent', 'list', 'transfer_count', 'amount', 'shop_amount', 'tip_amount', 'proxy_amount', 'company_amount');
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/profit', $data));
@@ -87,6 +89,7 @@ class DataController extends Controller
     {
         $count = Transfer::count();
         $amount = TransferRecord::where('stat', 1)->sum('amount');
+//        $listQuery = Transfer::query();
         $listQuery = Transfer::with(['shop', 'shop.user', 'record' => function ($query) {
             $query->where('stat', 1);
         }, 'tips'])->withCount('joiner');
@@ -210,7 +213,7 @@ class DataController extends Controller
         $shop_id = $request->input('shop_id');
         if ($shop_id) {
             $listQuery->whereHas('transfer', function ($query) use ($shop_id) {
-                $query->where('shop_id', $shop_id);
+                $query->where('id', $shop_id);
             });
         }
         //店主ID
@@ -241,7 +244,7 @@ class DataController extends Controller
         $list = $listQuery->orderBy('created_at', 'DESC')->paginate(self::PAGE_SIZE);
         $data = compact('aid', 'date_time', 'shop_id', 'owner_id', 'id', 'stat', 'count', 'get_amount', 'put_amount', 'list');
         return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/record', $data));
+            $content->body(view('admin/data/record', $data));
             $content->header("支付流水");
         });
     }
