@@ -92,7 +92,7 @@
 <script>
   import axios from "axios";
   import tabBar from "../../components/tabBar";
-
+  import request from '../../utils/userRequest';
   export default {
     components: { tabBar },
     methods: {
@@ -100,7 +100,7 @@
         this.$router.push('/my/referrer');
       },
       goBankCardManage(){
-        axios.get('/api/card/index')
+        request.getInstance().getData('api/card/index')
         .then((res)=>{
           console.log(res);
         //   this.$router.push('/my/bankCardManage');

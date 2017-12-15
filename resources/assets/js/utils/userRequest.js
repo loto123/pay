@@ -18,7 +18,7 @@ export default class UserRequest {
     // 发起请求 post
     postData(url, data) {
         var tempUrl = this.baseUrl + url;
-        var postData = data;
+        var postData = data||{};
 
         var _token = sessionStorage.getItem("_token");
 
@@ -31,9 +31,7 @@ export default class UserRequest {
                 method: 'post',
                 url: tempUrl,
                 data: postData,
-                auth: {
-                    token: _token,
-                }
+                headers:{Authorization:"Bearer "+_token}
             })
                 .then(function (res) {
                     if(res.data.code == 1){
@@ -49,9 +47,9 @@ export default class UserRequest {
         });
     }
 
-    getData() {
+    getData(url, data) {
         var tempUrl = this.baseUrl + url;
-        var postData = data;
+        var postData = data || {};
 
         var _token = sessionStorage.getItem("_token");
 
@@ -64,9 +62,7 @@ export default class UserRequest {
                 method: 'get',
                 url: tempUrl,
                 data: postData,
-                auth: {
-                    token: _token,
-                }
+                headers:{Authorization:"Bearer "+_token}
             })
                 .then(function (res) {
                     if(res.data.code == 1){
