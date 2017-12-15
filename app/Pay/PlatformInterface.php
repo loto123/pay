@@ -8,7 +8,9 @@
 
 namespace App\Pay;
 
-use Illuminate\Http\Request;
+
+use App\Pay\Model\Deposit;
+use App\Pay\Model\Withdraw;
 
 interface PlatformInterface
 {
@@ -17,7 +19,14 @@ interface PlatformInterface
      *
      * @param $request
      * @config 接口配置
-     * @return mixed Withdraw/Deposit,不合法或交易不存在返回null
+     * @return Deposit,不合法或交易不存在返回null
      */
-    public function acceptNotify(Request $request, array $config);
+    public function acceptDepositNotify(array $config);
+
+    /**
+     * 接收提现通知
+     * @param array $config
+     * @return Withdraw,不合法或交易不存在返回null
+     */
+    public function acceptWithdrawNotify(array $config);
 }

@@ -30,6 +30,16 @@ class Withdraw extends Model
         'state' => 'integer'
     ];
 
+    public function getReceiverInfoAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+
+    public function setReceiverInfoAttribute(array $value)
+    {
+        $this->attributes['receiver_info'] = json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
     /**
      * 提现方式
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

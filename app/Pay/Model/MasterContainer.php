@@ -83,11 +83,12 @@ class MasterContainer extends Container
 
         $order = new Deposit([
             'amount' => $amount,
-            'channel' => $byChannel,
-            'method' => $byMethod,
-            'masterContainer' => $this,
             'state' => Deposit::STATE_UNPAID
         ]);
+
+        $order->channel()->associate($byChannel);
+        $order->method()->associate($byMethod);
+        $order->masterContainer()->associate($this);
 
         DB::beginTransaction();
         $commit = false;
@@ -98,7 +99,7 @@ class MasterContainer extends Container
                 break;
             }
 
-            $response = $byMethod->getImplInstance()->deposit($order->getKey(), $amount, $this->getKey(), $byChannel->getInterfaceConfigure(), $byChannel->getNotifyUrl());
+            $response = $byMethod->getImplInstance()->deposit($order->getKey(), $amount, $this->getKey(), $byChannel->getInterfaceConfigure(), $byChannel->getNotifyUrl('deposit'), $byMethod->getReturnUrl());
 
             if ($response == null) {
                 $order->state = Deposit::STATE_API_ERR;
@@ -118,13 +119,13 @@ class MasterContainer extends Container
      * 隐式容器独占
      *
      * @param $amount
-     * @param $receiver_info
+     * @param $receiver_info array
      * @param Channel $byChannel
      * @param PayMethod $byMethod
      * @param $system_fee
      * @return bool
      */
-    public function initiateWithdraw($amount, $receiver_info, Channel $byChannel, PayMethod $byMethod, $system_fee)
+    public function initiateWithdraw($amount, array $receiver_info, Channel $byChannel, PayMethod $byMethod, $system_fee)
     {
         //开始事务
         $commit = false;
@@ -140,11 +141,12 @@ class MasterContainer extends Container
             $withdraw = new Withdraw([
                 'amount' => $amount,
                 'system_fee' => $system_fee,
-                'method' => $byMethod,
-                'channel' => $byChannel,
-                'masterContainer' => $this,
                 'receiver_info' => $receiver_info
             ]);
+
+            $withdraw->method()->associate($byMethod);
+            $withdraw->channel()->associate($byChannel);
+            $withdraw->masterContainer()->associate($this);
 
             //加入提现队列
             if ($withdraw->save()) {

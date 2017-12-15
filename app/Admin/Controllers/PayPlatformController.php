@@ -47,7 +47,6 @@ class PayPlatformController extends Controller
             });
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
-                $actions->prepend('<a href=""><i class="fa fa-paper-plane">增加支付方式</i></a>');
             });
 
 

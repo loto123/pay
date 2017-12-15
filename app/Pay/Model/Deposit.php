@@ -26,6 +26,30 @@ class Deposit extends Model
         'amount' => 'float',
     ];
 
+    protected $guarded = ['id'];
+
+
+    /**
+     * 获取充值状态可读文本
+     * @param $state int
+     * @return string
+     */
+    public static function getStateText($state)
+    {
+        switch ($state) {
+            case self::STATE_UNPAID:
+                return '未完成';
+            case self::STATE_COMPLETE:
+                return '成功';
+            case self::STATE_FAIL:
+                return '失败';
+            case self::STATE_PART_PAID:
+                return '金额不足';
+            default:
+                return '异常';
+        }
+    }
+
     /**
      * 储值通道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

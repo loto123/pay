@@ -21,6 +21,14 @@ class PayMethod extends Model
      */
     private $interface;
 
+    /**
+     * 获取支付返回地址
+     * @return string
+     */
+    public function getReturnUrl()
+    {
+        return route('pay_result', ['method' => $this->getKey()]);
+    }
 
     /**
      * 所属支付平台
@@ -57,7 +65,7 @@ class PayMethod extends Model
     public function getImplInstance()
     {
         if (!$this->interface) {
-            $this->interface = new $this->impl();
+            $this->interface = new $this->impl;
         }
 
         return $this->interface;

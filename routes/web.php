@@ -1,4 +1,7 @@
 <?php
+use App\Pay\Model\Channel;
+use App\Pay\Model\Deposit;
+use App\Pay\Model\PayMethod;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,16 +13,22 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::match(['get', 'post'], '/pay-notify/channel{channel_id}', function (Request $request, \App\Pay\Model\Channel $channel) {
-    //支付通知接收
-    return $channel->acceptNotify($request);
-})->name('pay_notify');
+//支付通知接收
+Route::match(['get', 'post'], '/{type}-notify/channel{channel}/', function ($type, Channel $channel) {
+    return $channel->acceptNotify($type);
+})->name('pay_notify')->where(['type' => 'withdraw|deposit', 'channel' => '[0-9]+']);;
+
+//支付跳回地址
+Route::match(['get', 'post'], '/pay-result/method{method}', function (PayMethod $method) {
+    $result = $method->getImplInstance()->displayReturn();
+    $result['state'] = Deposit::getStateText($result['state']);
+    return view('pay_result', $result);
+})->name('pay_result');
 
 //Auth::routes();
 //

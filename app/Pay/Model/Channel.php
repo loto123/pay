@@ -9,7 +9,6 @@ namespace App\Pay\Model;
 
 use App\Pay\PlatformInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class Channel extends Model
@@ -25,11 +24,15 @@ class Channel extends Model
 
     /**
      * 获取通道通知地址
+     * @param $type string
      * @return string
      */
-    public function getNotifyUrl()
+    public function getNotifyUrl($type)
     {
-        return route('pay_notify', ['channel_id' => $this->getKey()]);
+        if ($type === 'deposit' || $type === 'withdraw') {
+            return route('pay_notify', ['channel' => $this->getKey(), 'type' => $type]);
+        }
+        throw new \Exception('Invalid notify type ' . $type);
     }
 
 
@@ -78,24 +81,31 @@ class Channel extends Model
     /**
      * 处理通道通知
      */
-    public function acceptNotify(Request $request)
+    public function acceptNotify($type)
     {
         $platformInterface = $this->platform->getImplInstance();
         if ($platformInterface instanceof PlatformInterface) {
-
             //启动事务
             $commit = false;
             DB::beginTransaction();
 
             ob_start();
             do {
-                $result = $platformInterface->acceptNotify($request, $this->getInterfaceConfigure());
+                $notifyHandler = 'accept' . ucfirst($type) . 'Notify';
+                $result = $platformInterface->$notifyHandler($this->getInterfaceConfigure());
+
                 if (!($result instanceof Withdraw || $result instanceof Deposit)) {
                     break;
                 }
 
                 if ($result instanceof Withdraw) {
                     //提现通知
+                    if ($result->state === Withdraw::STATE_PROCESS_FAIL) {
+                        $result->exceptions()->save(new WithdrawException([
+                            'message' => json_encode(['query' => request()->query(), 'body' => file_get_contents('php://input')], JSON_UNESCAPED_UNICODE),
+                            'state' => $result->state,
+                        ]));
+                    }
 
                 } else {
                     //充值通知
@@ -123,6 +133,7 @@ class Channel extends Model
             }
         }
     }
+
 
     /**
      * 获取接口参数
