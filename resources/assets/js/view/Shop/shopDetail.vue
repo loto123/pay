@@ -15,8 +15,8 @@
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
         </div>
-        <h3 style="margin-top:0.5em;">店铺1111</h3>
-        <h3>店铺id:123123123</h3>
+        <h3 style="margin-top:0.5em;">{{shopName}}</h3>
+        <h3>店铺id:{{shopId}}</h3>
       </div>
 
       <div class="menu flex " v-if="isGroupMaster">
@@ -392,15 +392,25 @@ import request from "../../utils/userRequest"
 
 export default {
   name: "shopDetail",
-  mounted(){
+  beforeMount(){
+
+  },
+  created(){
     this.init();
+
+  },
+  mounted(){
+    
   },
   components: { topBack },
   data() {
     return {
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
-      isGroupMaster:true        // 是否是群主 
+      isGroupMaster:true,        // 是否是群主 
+
+      shopId:null,
+      shopName:null
     };
   },
   methods: {
@@ -424,14 +434,16 @@ export default {
       Indicator.open("加载中...");
       var self = this;
       var _id = this.$route.query.id;
-      console.log(_id);
 
       request.getInstance().getData("api/shop/detail/"+_id).then((res)=>{
         console.log(res);
+
+        this.shopId = res.data.data.id;
+        this.shopName = res.data.data.name;
+
+        Indicator.close();
       });
 
-      setTimeout(function(){Indicator.close();},500)
-      
     }
 
   }
