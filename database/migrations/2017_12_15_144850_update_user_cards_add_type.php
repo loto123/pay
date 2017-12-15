@@ -14,8 +14,8 @@ class UpdateUserCardsAddType extends Migration
     public function up()
     {
         Schema::table('user_cards', function (Blueprint $table) {
-        $table->tinyInteger('type')->comment('银行卡类型 1：储蓄卡，0：信用卡')->nullable();
-    });
+            $table->tinyInteger('type')->comment('银行卡类型 1：储蓄卡，0：信用卡')->nullable();
+        });
     }
 
     /**
@@ -25,8 +25,8 @@ class UpdateUserCardsAddType extends Migration
      */
     public function down()
     {
-        Schema::table('tip_record', function (Blueprint $table) {
-        $table->dropColumn('type');
-    });
+        Schema::table('user_cards', function (Blueprint $table) {
+            $table->dropColumn('type');
+        });
     }
 }
