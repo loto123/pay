@@ -26,19 +26,36 @@
           </div>
         </li>
       </ul>
-      <a href="javascript:;" class="btn">
-        <mt-button type="primary" size="large">更换结算卡</mt-button>
+      <a href="javascript:;" class="btn" @click = "showPassword">
+        <mt-button type="primary" size="large" >更换结算卡</mt-button>
       </a>
     </div>
+
+    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword = "hidePassword"></passWorld>
   </div>
 </template>
 
-
 <script>
 import topBack from "../../components/topBack";
+import passWorld from "../../components/password"
 
 export default {
-  components: { topBack }
+  components: { topBack , passWorld},
+  data(){
+    return {
+      showPasswordTag:false       // 密码弹出开关
+    }
+  },
+  methods:{
+    showPassword(){
+      this.showPasswordTag = true;
+    },
+
+    hidePassword(){
+      this.showPasswordTag = false;
+    }
+
+  }
 };
 </script>
 
@@ -47,12 +64,16 @@ export default {
   background: #eee;
   height: 100vh;
   padding-top: 2em;
+  box-sizing:border-box;
 }
 .account {
   height: 3em;
   line-height: 3em;
   background: #fff;
   padding-left: 1em;
+  margin-bottom: 1em;
+  border: 1px solid #ccc;
+  margin-bottom: 1em;
   .account-title {
     width: 8em;
     margin-right: 1em;
@@ -69,7 +90,7 @@ export default {
   li {
     background: #fff;
     padding: 0 1em;
-    border: 1px solid #d9d9d9;
+    border: 1px solid #ccc;
     .content-box {
       height: 3em;
       line-height: 3em;

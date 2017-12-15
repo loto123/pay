@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Shop;
 use App\ShopUser;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -60,7 +61,7 @@ class ShopController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->json([], $validator->errors()->first());
+            return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
         $shop  = new Shop();
@@ -99,8 +100,11 @@ class ShopController extends BaseController {
         $count = $user->in_shops()->count();
         $data = [];
         foreach ($user->in_shops as $_shop) {
+            /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id
+                'id' => $_shop->id,
+                'name' => $_shop->name,
+                'logo' => asset("images/personal.jpg")
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -134,8 +138,11 @@ class ShopController extends BaseController {
         $count = $user->shop()->count();
         $data = [];
         foreach ($user->shop as $_shop) {
+            /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id
+                'id' => $_shop->id,
+                'name' => $_shop->name,
+                'logo' => asset("images/personal.jpg")
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -165,8 +172,23 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function detail($id, Request $request) {
+        $member_size = $request->input('member_size', 5);
         $shop = Shop::find($id);
-        return $this->json(['name' => $shop->name, 'members' => []]);
+        /* @var $shop Shop */
+        $members = [];
+        foreach ($shop->users()->limit($member_size)->get() as $_user) {
+            /* @var $_user User */
+            $members[] = [
+                'id' => $_user->id,
+                'name' => $_user->name,
+                'avatar' => asset("images/personal.jpg")
+            ];
+        }
+        return $this->json([
+            'id' => $shop->id,
+            'name' => $shop->name,
+            'members' => $members
+        ]);
     }
 
     /**

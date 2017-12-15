@@ -1,9 +1,13 @@
 <template>
     <div id="withdraw" class="withdraw-container">
-        <topBack title="提现"></topBack>
+        <topBack title="提现">
+            <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
+              <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
+            </div>
+        </topBack>
         <div class="withdraw-box">
             <div class="title">提现金额</div>
-            <div class="withdraw-money">
+            <div class="withdraw-money flex flex-justify-center">
                 <label>￥</label>
                 <input type="text" placeholder="请输入金额">
             </div>
@@ -53,16 +57,22 @@ export default {
   data() {
     return {}
   },
-  components: { topBack }
+  components: { topBack },
+  methods: {
+    goIndex(){
+      this.$router.push('/index');
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "../../../sass/oo_flex.scss";
 .withdraw-container {
-  background: #efeef4;
+  background: #eee;
   height: 100vh;
   padding-top: 2em;
+  box-sizing: border-box;
 }
 .withdraw-box {
   background: #fff;
@@ -74,21 +84,21 @@ export default {
   }
 }
 .withdraw-money {
-  height: 40px;
-  line-height: 40px;
   border-bottom: 1px solid #ccc;
   vertical-align: middle;
-  margin-top: 1.2em;
+  margin-top: 2em;
+  font-size:1.2em;
+  padding: 0.2em 0;
   input {
     border: none;
-    padding: 7px 0;
-    display: inline-block;
-    width: 70%;
+    outline: none;
+    width: 100%;
+    font-size:0.9em;
   }
 }
 .all-money {
   margin-top: 1em;
-  font-size: 0.8em;
+  font-size: 1em;
   .money {
     color: #666;
   }
@@ -100,7 +110,7 @@ export default {
 .withdraw-way {
   margin-top: 2em;
   .title {
-    color: #666;
+    color: #999;
     margin-bottom: 0.5em;
   }
 }

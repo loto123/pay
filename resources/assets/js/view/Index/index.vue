@@ -2,11 +2,12 @@
   <div id="index">
       <section id="top">
           <section class="transaction flex flex-justify-center">
-            <a href="/#/makeDeal">
+            <a href="/#/myAccount">
               <div class="imggWrap flex flex-justify-center flex-align-center">
-                    <img src="/images/transaction.png" alt="">
+                    <img src="/images/avatar.jpg" alt="">
               </div>
-              <h3>发起交易</h3>
+              <h3>0.00</h3>
+              <h4>账户余额(元)</h4>
             </a>
           </section>
       </section>
@@ -49,14 +50,13 @@
 </template>
 
 <style lang="scss" scoped>
-
-i{
+i {
   display: block;
 }
 
 #top {
   height: 12em;
-  padding-top: 3.4em;
+  padding-top: 2.2em;
   background: #26a2ff;
   box-sizing: border-box;
 
@@ -66,42 +66,49 @@ i{
     .imggWrap {
       width: 5em;
       height: 5em;
-      background: #fff;
-      border-radius: 50%;
+      // background: #fff;
+      // border-radius: 50%;
       > img {
-        width: 3.5em;
-        height: 3.5em;
+        width: 4em;
+        height: 4em;
+        border-radius: 50%;
         display: block;
         //   margin-top:0.4em;
       }
     }
 
     h3 {
-      font-size: 1em;
+      font-size: 1.8em;
       text-align: center;
-      margin-top: 0.8em;
       color: #fff;
+    }
+
+    h4 {
+      color: #fff;
+      font-size: 0.9em;
+      margin-top: 0.6em;
     }
   }
 }
 
-.content{
-  padding-top:0.5em;
-  box-sizing:border-box;
+.content {
+  padding-top: 0.5em;
+  box-sizing: border-box;
 
-  ul{
-    li{
-      padding-top:0.5em;
-      box-sizing:border-box;
-      width:33.33%;
+  ul {
+    li {
+      padding-top: 0.5em;
+      box-sizing: border-box;
+      width: 33.33%;
       height: 6em;
 
-      .common-icon{
-        font-size:3.5em;
-        color:#26a2ff;
+      .common-icon {
+        font-size: 3em;
+        color: #26a2ff;
       }
-      h3{
-        color:#000;
+      h3 {
+        color: #000;
+        font-size: 0.95em;
       }
     }
   }

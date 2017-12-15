@@ -1,8 +1,8 @@
 <template>
     <div id="myAccount" class="myAccount-container">
         <topBack title="我的账户">
-            <div style="width:100%; padding-right:1em; height:2em; box-sizing:border-box;" class= "flex flex-reverse flex-align-center">
-                <a  style="width:4em;" href="/#/myAccount/bill" class="recharge-btn ">账单明细</a>
+            <div class= "flex flex-reverse flex-align-center header-right">
+                <a href="/#/myAccount/bill" class="recharge-btn ">账单明细</a>
             </div>
         </topBack>
         <div class="myAccount-box">
@@ -46,10 +46,20 @@
         background: #eee;
         height: 100vh;
         padding-top: 2em;
+        box-sizing: border-box;
+        .header-right{
+            width:100%;
+            padding-right:1em;
+            height:2em;
+            box-sizing:border-box;
+        }
+    }
+    .myAccount-box{
+        margin-top: 2em;
     }
     .withDraw-money{
-        width: 14em;
-        height: 14em;
+        width: 13em;
+        height: 13em;
         border: 1px solid #aaa;
         border-radius: 50%;
         margin: 0 auto 3em auto;

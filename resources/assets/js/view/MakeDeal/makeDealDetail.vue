@@ -89,7 +89,7 @@
 #deal-detail {
   background: #eee;
   min-height: 100vh;
-  padding-top:2em;
+  padding-top: 2em;
 }
 
 .big-winner-tip {
@@ -257,7 +257,7 @@ export default {
         width: 100, //设置宽高
         height: 100
       });
-     
+
       qrcode.makeCode("http://www.baidu.com");
     }
   },
