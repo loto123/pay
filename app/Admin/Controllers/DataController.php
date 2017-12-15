@@ -74,9 +74,12 @@ class DataController extends Controller
             $with[] = 'tips';
             $with[] = 'output_profit';
         }
-        $list = $query->with($with)->paginate(self::PAGE_SIZE)->sortByDesc(function ($item) {
-            return $item->output_profit->sum('fee_amount');
-        });
+        $list = $query->with($with)->leftJoin('profit_record', 'users.id', '=', 'profit_record.user_id')
+            ->select('users.*',DB::raw('SUM(profit_record.fee_amount) as fee_amount_total'))
+            ->orderBy('fee_amount_total','DESC')->groupBy('users.id')->paginate(self::PAGE_SIZE);
+//            ->sortByDesc(function ($item) {
+//            return $item->output_profit->sum('fee_amount');
+//        });
         $data = compact('aid', 'date_time', 'operator', 'parent', 'list', 'transfer_count', 'amount', 'shop_amount', 'tip_amount', 'proxy_amount', 'company_amount');
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/profit', $data));
