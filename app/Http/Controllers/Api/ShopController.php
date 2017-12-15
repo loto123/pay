@@ -60,7 +60,7 @@ class ShopController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->json([], $validator->errors()->first());
+            return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
         $shop  = new Shop();
