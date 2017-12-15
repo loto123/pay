@@ -5,6 +5,14 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Class User
+ * @package App
+ * @property integer $id
+ * @property string $name
+ * @property string $mobile
+ * @property string $password
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -81,10 +89,14 @@ class User extends Authenticatable
 
     /**
      * 我参与的店铺
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
     public function in_shops() {
         return $this->belongsToMany(Shop::class, (new ShopUser)->getTable(), 'user_id', 'shop_id');
+    }
+
+    public function wechat_user() {
+        return $this->hasOne(OauthUser::class, 'user_id');
     }
 
 }
