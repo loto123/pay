@@ -17,7 +17,7 @@
           <button class="del" @click="del(item.card_id)">
             <i class="iconfont">&#xe634;</i>
           </button>
-          <div class="binding">(已绑定)</div>
+          <div class="binding">{{item.is_pay_card? '结算卡' : '不是结算卡' }}</div>
         </li>
       </ul>
       <div class="add-bankCard" @click="showPassword">
@@ -34,7 +34,7 @@
   import topBack from "../../components/topBack";
   import passWorld from "../../components/password"
   import { MessageBox } from "mint-ui";
-  import { Toast } from "mint-ui";
+  import { Indicator,Toast } from "mint-ui";
 
   export default {
     components: { topBack, passWorld },
@@ -58,9 +58,11 @@
       },
       //银行卡列表
       bank:function(){
+        Indicator.open("加载中...");
         request.getInstance().getData('api/card/index')
           .then((res) => {
             this.bankList = res.data.data;
+            Indicator.close();
           })
           .catch((err) => {
             console.log(err);

@@ -101,7 +101,8 @@
     position: fixed;
     bottom: 0;
     left: 0;
-
+    font-size: 1.5em;
+    color: #888;
     ul {
       width: 100%;
       height: 100%;
@@ -128,9 +129,6 @@
         &:nth-child(3) {
           border-top: none;
         }
-
-        font-size: 1.5em;
-        color: #888;
       }
     }
   }

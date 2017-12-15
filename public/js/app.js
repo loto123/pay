@@ -42448,6 +42448,10 @@ exports.clearImmediate = clearImmediate;
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(713)
+}
 var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(267)
@@ -42456,7 +42460,7 @@ var __vue_template__ = __webpack_require__(268)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -42497,6 +42501,13 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -59447,8 +59458,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     bank: function bank() {
       var _this = this;
 
+      __WEBPACK_IMPORTED_MODULE_4_mint_ui__["Indicator"].open("加载中...");
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
         _this.bankList = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_4_mint_ui__["Indicator"].close();
       }).catch(function (err) {
         console.log(err);
       });
@@ -59527,7 +59540,9 @@ var render = function() {
                   [_c("i", { staticClass: "iconfont" }, [_vm._v("")])]
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "binding" }, [_vm._v("(已绑定)")])
+                _c("div", { staticClass: "binding" }, [
+                  _vm._v(_vm._s(item.is_pay_card ? "结算卡" : "不是结算卡"))
+                ])
               ])
             ])
           }),
@@ -59951,7 +59966,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_1__components_password___default.a },
   data: function data() {
@@ -59959,25 +59973,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       showPasswordTag: false // 密码弹出开关
     };
   },
-
   created: function created() {
-    var _this = this;
-    __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/my/GetPayCard').then(function (res) {
-      console.log(res);
-      //   this.$router.push('/my/checkSettle');
-    }).catch(function (err) {
-      Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])({
-        message: err.data.msg,
-        duration: 800
-      });
-    });
+    this.getData();
   },
+
   methods: {
     showPassword: function showPassword() {
       this.showPasswordTag = true;
     },
     hidePassword: function hidePassword() {
       this.showPasswordTag = false;
+    },
+    getData: function getData() {
+      var _this2 = this;
+
+      var _this = this;
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/my/getPayCard').then(function (res) {
+        console.log(res);
+        //   this.$router.push('/my/checkSettle');
+      }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])({
+          message: err.data.msg,
+          duration: 800
+        });
+        _this2.$router.go(-1);
+      });
     }
   }
 });
@@ -60069,7 +60089,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-0ca9c772],\n.slide-leave-active[data-v-0ca9c772] {\n  -webkit-transition: all 0.4s ease;\n  transition: all 0.4s ease;\n}\n.slide-enter[data-v-0ca9c772],\n.slide-leave-to[data-v-0ca9c772] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#pass-word-component[data-v-0ca9c772] {\n  height: 100vh;\n  width: 100%;\n  background: #efeff4;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#pass-word-component .top[data-v-0ca9c772] {\n    padding-top: 2em;\n}\n#pass-word-component #content-wrap[data-v-0ca9c772] {\n    height: 6em;\n    width: 75%;\n    margin-top: 4em;\n}\n#pass-word-component #content-wrap h3[data-v-0ca9c772] {\n      font-size: 1.5em;\n}\n#pass-word-component #content-wrap ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 6em;\n      margin-top: 1.5em;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772] {\n        background: #fff;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-right: 1px solid #aaa;\n        border-top: 1px solid #aaa;\n        border-bottom: 1px solid #aaa;\n        font-weight: bold;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772]:nth-child(1) {\n          border-left: 1px solid #aaa;\n}\n#pass-word-component .keyboard[data-v-0ca9c772] {\n    width: 100%;\n    height: 15em;\n    position: fixed;\n    bottom: 0;\n    left: 0;\n}\n#pass-word-component .keyboard ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 100%;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772] {\n        background: #fff;\n        width: 33.33%;\n        height: 25%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-top: 1px solid #ccc;\n        border-right: 1px solid #ccc;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3n) {\n          border-right: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(1) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(2) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3) {\n          border-top: none;\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-0ca9c772],\n.slide-leave-active[data-v-0ca9c772] {\n  -webkit-transition: all 0.4s ease;\n  transition: all 0.4s ease;\n}\n.slide-enter[data-v-0ca9c772],\n.slide-leave-to[data-v-0ca9c772] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#pass-word-component[data-v-0ca9c772] {\n  height: 100vh;\n  width: 100%;\n  background: #efeff4;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#pass-word-component .top[data-v-0ca9c772] {\n    padding-top: 2em;\n}\n#pass-word-component #content-wrap[data-v-0ca9c772] {\n    height: 6em;\n    width: 75%;\n    margin-top: 4em;\n}\n#pass-word-component #content-wrap h3[data-v-0ca9c772] {\n      font-size: 1.5em;\n}\n#pass-word-component #content-wrap ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 6em;\n      margin-top: 1.5em;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772] {\n        background: #fff;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-right: 1px solid #aaa;\n        border-top: 1px solid #aaa;\n        border-bottom: 1px solid #aaa;\n        font-weight: bold;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772]:nth-child(1) {\n          border-left: 1px solid #aaa;\n}\n#pass-word-component .keyboard[data-v-0ca9c772] {\n    width: 100%;\n    height: 15em;\n    position: fixed;\n    bottom: 0;\n    left: 0;\n    font-size: 1.5em;\n    color: #888;\n}\n#pass-word-component .keyboard ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 100%;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772] {\n        background: #fff;\n        width: 33.33%;\n        height: 25%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-top: 1px solid #ccc;\n        border-right: 1px solid #ccc;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3n) {\n          border-right: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(1) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(2) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3) {\n          border-top: none;\n}\n", ""]);
 
 // exports
 
@@ -60082,8 +60102,6 @@ exports.push([module.i, "\n.slide-enter-active[data-v-0ca9c772],\n.slide-leave-a
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topBack__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__topBack__);
-//
-//
 //
 //
 //
@@ -60530,7 +60548,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "account flex flex-align-center" }, [
       _c("div", { staticClass: "account-title" }, [_vm._v("账号")]),
       _vm._v(" "),
-      _c("div", { staticClass: "account-number" }, [_vm._v("321321321")])
+      _c("div", { staticClass: "account-number" }, [_vm._v("21321321")])
     ])
   },
   function() {
@@ -60542,23 +60560,19 @@ var staticRenderFns = [
         _c("div", { staticClass: "content-box flex flex-align-center" }, [
           _c("div", { staticClass: "title" }, [_vm._v("真实姓名")]),
           _vm._v(" "),
-          _c("div", { staticClass: "content" }, [_vm._v("刘立夫")])
+          _c("div", { staticClass: "content" }, [_vm._v("埃德森")])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "content-box flex flex-align-center" }, [
           _c("div", { staticClass: "title" }, [_vm._v("身份证号码")]),
           _vm._v(" "),
-          _c("div", { staticClass: "content" }, [
-            _vm._v("430********21325132121")
-          ])
+          _c("div", { staticClass: "content" }, [_vm._v("231321321")])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "content-box flex flex-align-center" }, [
           _c("div", { staticClass: "title" }, [_vm._v("银行卡号(储蓄卡)")]),
           _vm._v(" "),
-          _c("div", { staticClass: "content" }, [
-            _vm._v("6542*******3101321132")
-          ])
+          _c("div", { staticClass: "content" }, [_vm._v("321321")])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "content-box flex flex-align-center" }, [
@@ -63588,20 +63602,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "shopDetail",
-  mounted: function mounted() {
+  beforeMount: function beforeMount() {},
+  created: function created() {
     this.init();
   },
+  mounted: function mounted() {},
 
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
   data: function data() {
     return {
       inviteLinkStatus: true, // 邀请链接状态
       tradeStatus: true, // 交易状态
-      isGroupMaster: true // 是否是群主 
+      isGroupMaster: true, // 是否是群主 
+
+      shopId: null,
+      shopName: null
     };
   },
 
   methods: {
+    // 跳转控制
     hide: function hide() {},
     goMember: function goMember() {
       this.$router.push("/shop/shop_member");
@@ -63615,19 +63635,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     goShopOrder: function goShopOrder() {
       this.$router.push("/shop/shopOrder");
     },
+
+
+    // 数据控制
     init: function init() {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_1_mint_ui__["Indicator"].open("加载中...");
       var self = this;
       var _id = this.$route.query.id;
-      console.log(_id);
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/detail/" + _id).then(function (res) {
         console.log(res);
-      });
 
-      setTimeout(function () {
+        _this.shopId = res.data.data.id;
+        _this.shopName = res.data.data.name;
+
         __WEBPACK_IMPORTED_MODULE_1_mint_ui__["Indicator"].close();
-      }, 500);
+      }).catch(function (error) {
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
+        _this.$router.go(-1);
+        console.error(error);
+      });
+    },
+    dissShop: function dissShop() {
+      var _this2 = this;
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + this.shopId).then(function (res) {
+        console.log(res);
+        _this2.$router.push("/shop");
+      }).catch(function (error) {
+        console.error(error);
+      });
     }
   }
 });
@@ -63646,7 +63685,15 @@ var render = function() {
     [
       _c("topBack", { staticStyle: { color: "#fff", background: "#26a2ff" } }),
       _vm._v(" "),
-      _vm._m(0, false, false),
+      _c("div", { staticClass: "top flex flex-v flex-align-center" }, [
+        _vm._m(0, false, false),
+        _vm._v(" "),
+        _c("h3", { staticStyle: { "margin-top": "0.5em" } }, [
+          _vm._v(_vm._s(_vm.shopName))
+        ]),
+        _vm._v(" "),
+        _c("h3", [_vm._v("店铺id:" + _vm._s(_vm.shopId))])
+      ]),
       _vm._v(" "),
       _vm.isGroupMaster
         ? _c("div", { staticClass: "menu flex " }, [
@@ -63812,9 +63859,14 @@ var render = function() {
         "div",
         { staticClass: "button-wrap" },
         [
-          _c("mt-button", { attrs: { type: "danger", size: "large" } }, [
-            _vm._v("解散店铺")
-          ])
+          _c(
+            "mt-button",
+            {
+              attrs: { type: "danger", size: "large" },
+              on: { click: _vm.dissShop }
+            },
+            [_vm._v("解散店铺")]
+          )
         ],
         1
       )
@@ -63827,67 +63879,59 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "top flex flex-v flex-align-center" }, [
-      _c(
-        "div",
-        {
-          staticClass:
-            "img-wrap flex flex-justify-center flex-align-center flex-wrap-on"
-        },
-        [
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "avatar",
-            attrs: { src: "/images/avatar.jpg", alt: "" }
-          })
-        ]
-      ),
-      _vm._v(" "),
-      _c("h3", { staticStyle: { "margin-top": "0.5em" } }, [
-        _vm._v("店铺1111")
-      ]),
-      _vm._v(" "),
-      _c("h3", [_vm._v("店铺id:123123123")])
-    ])
+    return _c(
+      "div",
+      {
+        staticClass:
+          "img-wrap flex flex-justify-center flex-align-center flex-wrap-on"
+      },
+      [
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "avatar",
+          attrs: { src: "/images/avatar.jpg", alt: "" }
+        })
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -69167,6 +69211,46 @@ var shopStore = {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (shopStore);
+
+/***/ }),
+/* 713 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(714);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("1f7922c0", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dd1125c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./App.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6dd1125c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./App.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 714 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.mint-indicator-mask {\n  z-index: 1001;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);
