@@ -11,8 +11,8 @@
     </section>
     <section>
       <ul class="my-list">
-        <li>
-          <mt-cell title="推荐人" is-link to="/my/referrer">
+        <li @click="toReffrrer">
+          <mt-cell title="推荐人" is-link>
             <img slot="icon" src="/images/referrer.png" width="30" height="30">
             <span>张三李四: <em>132131321321</em></span>
           </mt-cell>
@@ -93,6 +93,11 @@
   import tabBar from "../../components/tabBar";
 
   export default {
-    components: { tabBar }
+    components: { tabBar },
+    methods: {
+      toReffrrer(){
+        this.$router.push('/my/referrer');
+      }
+    }
   };
 </script>
