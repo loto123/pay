@@ -181,7 +181,7 @@ class ShopController extends BaseController {
             $members[] = [
                 'id' => $_user->id,
                 'name' => $_user->name,
-                'avatar' => $_user->avatar
+                'avatar' => asset("images/personal.jpg")
             ];
         }
         return $this->json([
