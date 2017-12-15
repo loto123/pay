@@ -29,33 +29,36 @@
 
 <script>
 import topBack from "../../components/topBack";
-import { MessageBox } from 'mint-ui';
-import { Toast } from 'mint-ui';
+import { MessageBox } from "mint-ui";
+import { Toast } from "mint-ui";
 export default {
   components: { topBack },
   methods: {
-    del(){
-      MessageBox.confirm('是否删除该银行卡?','温馨提示').then(() => {
-        Toast({
-          message: '删除成功',
-          iconClass: 'icon icon-success',
-          duration: 800
-        })
-      },() => {
-        //取消操作
-        console.log('已经取消');
-      })
+    del() {
+      MessageBox.confirm("是否删除该银行卡?", "温馨提示").then(
+        () => {
+          Toast({
+            message: "删除成功",
+            iconClass: "icon icon-success",
+            duration: 800
+          });
+        },
+        () => {
+          //取消操作
+          console.log("已经取消");
+        }
+      );
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-#bankManage{
+#bankManage {
   padding-top: 2em;
   box-sizing: border-box;
 }
-.bankCard-container{
+.bankCard-container {
   width: 100;
   border-top: 1px solid #ccc;
   padding-top: 1em;
@@ -75,10 +78,10 @@ export default {
     }
     .del {
       bottom: 10px;
-      background:#fff;
+      background: #fff;
       border: none;
       outline: none;
-      i{
+      i {
         font-size: 2em;
         color: #777;
       }

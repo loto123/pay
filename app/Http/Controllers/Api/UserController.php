@@ -7,19 +7,26 @@ use App\UserCard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
 
 class UserController extends Controller
 {
     //
-    public function __construct()
-    {
-        $this->middleware("jwt.auth");
-    }
+//    public function __construct()
+//    {
+//        $this->middleware("jwt.auth");
+//    }
 
-    //“我的”列表
+    /**
+     * @SWG\GET(
+     *   path="/my/index",
+     *   summary="我的列表",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request) {
         $this->user = JWTAuth::parseToken()->authenticate();
         return response()->json(['code'=>1,'msg'=>'','data'=>[
@@ -38,7 +45,36 @@ class UserController extends Controller
         ]]);
     }
 
-    //修改密码
+    /**
+     * @SWG\Post(
+     *   path="/my/updatePassword",
+     *   summary="修改登录密码",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="old_password",
+     *     in="formData",
+     *     description="旧密码",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="confirm_password",
+     *     in="formData",
+     *     description="确认密码",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="new_password",
+     *     in="formData",
+     *     description="新密码",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function updatePassword(Request $request) {
         $this->user = JWTAuth::parseToken()->authenticate();
         $validator = Validator::make($request->all(),
@@ -75,7 +111,22 @@ class UserController extends Controller
         return response()->json(['code' => 1,'msg' => '','data' => []]);
     }
 
-    //设置支付密码
+    /**
+     * @SWG\Post(
+     *   path="/my/setPayPassword",
+     *   summary="设置支付密码",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="pay_password",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function setPayPassword(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -102,7 +153,36 @@ class UserController extends Controller
         return response()->json(['code' => 1,'msg' => '','data' => []]);
     }
 
-    //修改支付密码
+    /**
+     * @SWG\Post(
+     *   path="/my/updatePayPassword",
+     *   summary="修改支付密码",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="old_pay_password",
+     *     in="formData",
+     *     description="旧支付密码",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="confirm_pay_password",
+     *     in="formData",
+     *     description="确认支付密码",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="new_pay_password",
+     *     in="formData",
+     *     description="新支付密码",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function updatePayPassword(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -138,7 +218,22 @@ class UserController extends Controller
         return response()->json(['code' => 1,'msg' => '','data' => []]);
     }
 
-    //更换结算卡
+    /**
+     * @SWG\Post(
+     *   path="/my/updatePayCard",
+     *   summary="更换结算卡",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="card_id",
+     *     in="formData",
+     *     description="银行卡id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function updatePayCard(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -165,7 +260,15 @@ class UserController extends Controller
 
     }
 
-    //查看结算卡
+    /**
+     * @SWG\GET(
+     *   path="/my/GetPayCard",
+     *   summary="查看结算卡",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function GetPayCard()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
