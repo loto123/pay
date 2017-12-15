@@ -4,10 +4,10 @@
     <section>
       <ul class="list">
         <li>
-          <mt-cell title="修改登录密码" is-link to=""></mt-cell>
+          <mt-cell title="修改登录密码" is-link to="/my/login_password"></mt-cell>
         </li>
         <li>
-          <mt-cell title="修改支付密码" is-link to=""></mt-cell>
+          <mt-cell title="修改支付密码" is-link to="/my/pay_password"></mt-cell>
         </li>
       </ul>
     </section>
@@ -24,6 +24,11 @@
 </script>
 
 <style lang="scss" scoped>
+  #set{
+    background: #eee;
+    padding-top: 2em;
+    box-sizing: border-box;
+  }
   .list{
     border-bottom: 1px solid #d9d9d9;
     li{

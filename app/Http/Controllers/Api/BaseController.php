@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 class BaseController extends Controller {
     use Helpers;
 
-    protected function json($data, $message = '', $code = 0) {
+    protected function json($data=[], $message = '', $code = 1) {
         $result = [
             'code' => (int)$code,
             'message' => $message,

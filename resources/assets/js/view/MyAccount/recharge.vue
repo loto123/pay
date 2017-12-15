@@ -1,9 +1,13 @@
 <template>
     <div id="recharge" class="recharge-container">
-        <topBack title="充值"></topBack>
+        <topBack title="充值">
+            <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
+              <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
+            </div>
+        </topBack>
         <div class="recharge-box">
             <div class="title">充值金额</div>
-            <div class="recharge-money">
+            <div class="recharge-money flex flex-justify-center">
                 <label>￥</label>
                 <input type="text" placeholder="请输入金额">
             </div>
@@ -47,18 +51,24 @@
 import topBack from "../../components/topBack.vue";
 export default {
   data() {
-    return {}
+    return {};
   },
-  components: { topBack }
+  components: { topBack },
+  methods: {
+    goIndex() {
+      this.$router.push("/index");
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "../../../sass/oo_flex.scss";
 .recharge-container {
-  background: #efeef4;
+  background: #eee;
   height: 100vh;
   padding-top: 2em;
+  box-sizing: border-box;
 }
 .recharge-box {
   background: #fff;
@@ -70,16 +80,16 @@ export default {
   }
 }
 .recharge-money {
-  height: 40px;
-  line-height: 40px;
-  border-bottom: 1px solid #ccc;
+ border-bottom: 1px solid #ccc;
   vertical-align: middle;
-  margin-top: 1.2em;
+  margin-top: 2em;
+  font-size:1.2em;
+  padding: 0.2em 0;
   input {
     border: none;
-    padding: 7px 0;
-    display: inline-block;
-    width: 70%;
+    outline: none;
+    width: 100%;
+    font-size:0.9em;
   }
 }
 

@@ -55,6 +55,7 @@ export default {
   padding-top: 2em;
   background: #eee;
   height: 100vh;
+  box-sizing: border-box;
 }
 .details-content{
   background: #fff;

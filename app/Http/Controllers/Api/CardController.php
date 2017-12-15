@@ -14,31 +14,95 @@ use Validator;
 
 class CardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("jwt.auth");
-    }
+//    public function __construct()
+//    {
+//        $this->middleware("jwt.auth");
+//    }
 
-    //银行卡列表
+    /**
+     * @SWG\GET(
+     *   path="/card/index",
+     *   summary="银行卡列表",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
-        $cards = UserCard::query()->where('user_id', '=', $this->user->id)->select()->get();
+        $user_card_table = (new UserCard)->getTable();
+        $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank')
+            ->where('user_id', '=', $this->user->id)
+            ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')->get();
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
-                Log::info($item);
+                $card_type = '';
+                switch ($item->type) {
+                    case 1:
+                        $card_type = '储蓄卡';
+                        break;
+                    case 2:
+                        $card_type = '信用卡';
+                        break;
+                }
                 $data[] = [
                     'card_id' => $item->id,
                     'card_num' => $this->formatNum($item->card_num), //做掩码处理
-                    'bank' => $item->bank,
+                    'bank' => $item->bank_name,
+                    'card_type' => $card_type,
+                    'card_logo' => $item->bank_logo,
                 ];
             }
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
 
-    //绑定银行卡
+    /**
+     * @SWG\Post(
+     *   path="/card/create",
+     *   summary="绑定银行卡",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="card_num",
+     *     in="formData",
+     *     description="银行卡号",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="name",
+     *     in="formData",
+     *     description="持卡人姓名",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="formData",
+     *     description="持卡人身份证ID",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="bank",
+     *     in="formData",
+     *     description="开户银行名称",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="mobile",
+     *     in="formData",
+     *     description="银行卡绑定手机号",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function create(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -47,14 +111,14 @@ class CardController extends Controller
             [
                 'card_num' => 'bail|required|digits_between:16,19',
                 'name' => 'bail|required',
-                'id' => 'bail|required|digits:18',
+                'id' => 'bail|required|size:18',
                 'bank' => 'bail|required',
                 'mobile' => 'bail|required|digits:11',
             ],
             [
                 'required' => trans('trans.required'),
                 'digits_between' =>trans('trans.digits_between'),
-                'digits' => trans('trans.digits'),
+                'size' => trans('trans.size'),
             ]
         );
         if ($validator->fails()) {
@@ -90,7 +154,22 @@ class CardController extends Controller
         return response()->json(['code' => 1,'msg' => '','data' => []]);
     }
 
-    //解绑银行卡
+    /**
+     * @SWG\Post(
+     *   path="/card/delete",
+     *   summary="解绑银行卡",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="card_id",
+     *     in="formData",
+     *     description="银行卡ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function delete(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -119,6 +198,9 @@ class CardController extends Controller
             return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
         }
     }
+
+
+
 
     //对字符串做掩码处理
     private function formatNum($num,$pre=0,$suf=4)

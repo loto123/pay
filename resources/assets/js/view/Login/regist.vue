@@ -20,11 +20,11 @@
         <transition name="fade">
             <section class="content step2" v-if="step==1?true:false">
                 <h3>
-                    {{findPasswordSwitch?"手机号验证":"输入手机号快速注册"}}                 
+                    {{findPasswordSwitch?"手机号验证":"输入手机号快速注册"}}
                 </h3>
 
                 <section class="input-wrap">
-                    <mt-field label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
+                    <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="userAccountName"></mt-field>
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
@@ -66,7 +66,7 @@
                 <p>密码又8-16位数字、字母或符号组成</p>
 
                 <section class="input-wrap ">
-                    <mt-field label="密码" placeholder="请输入登录密码" type="password"></mt-field>
+                    <mt-field label="密码" placeholder="请输入登录密码" type="password" v-model="userPassword"></mt-field>
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
@@ -201,6 +201,8 @@
 
 <script>
 import topBack from "../../components/topBack";
+import request from "../../utils/userRequest.js"
+import { Toast } from 'mint-ui';
 
 export default {
   name: "regist",
@@ -208,7 +210,10 @@ export default {
     return {
       step: 0,
       agrementState: false,
-      findPasswordSwitch: false
+      findPasswordSwitch: false,
+
+      userAccountName:null,
+      userPassword:null
     };
   },
 
@@ -229,7 +234,25 @@ export default {
     },
 
     goNextStep() {
+      var self = this;
+
       if (this.step >= 3) {
+        var data = {
+          mobile :this.userAccountName,
+          password :this.userPassword,
+          name:"sangliang"
+        }
+
+        request.getInstance().postData('api/auth/register',data).then(function(res){
+
+          if(res.data.code == 0){
+            sessionStorage.setItem("_token",res.data.data.token);
+            Toast("注册成功");
+            self.$router.push("/login");
+          }
+
+          console.log(res);
+        });
         return;
       }
       this.step = this.step + 1;
