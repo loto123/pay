@@ -66,7 +66,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $shop  = new Shop();
         $shop->name = $request->name;
-        $shop->manager = $user->id;
+        $shop->manager_id = $user->id;
 //        $shop->percent =
         $shop->save();
         return $this->json([$shop]);
