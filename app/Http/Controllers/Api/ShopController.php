@@ -99,8 +99,10 @@ class ShopController extends BaseController {
         $count = $user->in_shops()->count();
         $data = [];
         foreach ($user->in_shops as $_shop) {
+            /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id
+                'id' => $_shop->id,
+                'name' => $_shop->name,
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -134,8 +136,11 @@ class ShopController extends BaseController {
         $count = $user->shop()->count();
         $data = [];
         foreach ($user->shop as $_shop) {
+            /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id
+                'id' => $_shop->id,
+                'name' => $_shop->name,
+                'logo' => asset("images/personal.jpg")
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -166,7 +171,11 @@ class ShopController extends BaseController {
      */
     public function detail($id, Request $request) {
         $shop = Shop::find($id);
-        return $this->json(['name' => $shop->name, 'members' => []]);
+        $members = [];
+        return $this->json([
+            'name' => $shop->name,
+            'members' => $members
+        ]);
     }
 
     /**
