@@ -63611,9 +63611,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     dissShop: function dissShop() {
+      var _this2 = this;
+
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + this.shopId).then(function (res) {
         console.log(res);
-        // this.$router.push("/shop");
+        _this2.$router.push("/shop");
       });
     }
   }

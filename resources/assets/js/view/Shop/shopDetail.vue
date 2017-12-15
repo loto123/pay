@@ -450,7 +450,7 @@ export default {
     dissShop(){
       request.getInstance().postData("api/shop/close/"+this.shopId).then((res)=>{
         console.log(res);
-        // this.$router.push("/shop");
+        this.$router.push("/shop");
       });
     }
 
