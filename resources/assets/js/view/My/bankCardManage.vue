@@ -2,16 +2,16 @@
   <div id="bankManage">
     <topBack title="银行卡管理"></topBack>
     <div class="bankCard-container">
-      <ul class="bankCard-list">
+      <ul class="bankCard-list" v-for="item in bankList" >
         <li>
           <div class="bankCard-box flex">
             <div class="card-image">
               <img src="/images/personal.jpg" alt="">
             </div>
             <div class="card-info">
-              <div class="bank-name">招商银行</div>
-              <div class="card-type">借记卡</div>
-              <div class="card-number">62120646545465454</div>
+              <div class="bank-name">{{item.bank}}</div>
+              <div class="card-type">{{item.card_type}}</div>
+              <div class="card-number">{{item.card_num}}</div>
             </div>
           </div>
           <button class="del" @click="del">
@@ -28,11 +28,29 @@
 </template>
 
 <script>
+import axios from "axios";
 import topBack from "../../components/topBack";
 import { MessageBox } from "mint-ui";
 import { Toast } from "mint-ui";
+import request from '../../utils/userRequest';
 export default {
   components: { topBack },
+  data () {
+    return {
+      bankList:[]
+    }
+  },
+  created:function(){
+      var _this=this;
+      request.getInstance().getData('api/card/index')
+      .then((res) => {
+        console.log(res);
+        _this.bankList=res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  },
   methods: {
     del() {
       MessageBox.confirm("是否删除该银行卡?", "温馨提示").then(
