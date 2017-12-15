@@ -58565,7 +58565,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.header-container[data-v-65470904] {\n  padding-top: 4em;\n  padding-bottom: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  background: #26a2ff;\n  color: #fff;\n}\n.header[data-v-65470904] {\n  text-align: center;\n}\n.header .imgWrap[data-v-65470904] {\n    width: 100%;\n}\n.header .imgWrap > img[data-v-65470904] {\n      width: 4.5em;\n      height: 4.5em;\n      display: block;\n      margin: auto;\n      border-radius: 50%;\n}\n.header h3[data-v-65470904], .header .acc-number[data-v-65470904] {\n    font-size: 1em;\n    text-align: center;\n    margin-top: 0.5em;\n}\n.my-list[data-v-65470904] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.my-list li .mint-cell[data-v-65470904] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n.my-list li .mint-cell span[data-v-65470904] {\n      font-size: 0.9em;\n}\n", ""]);
+exports.push([module.i, "\n.header-container[data-v-65470904] {\n  padding-top: 4em;\n  padding-bottom: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  background: #26a2ff;\n  color: #fff;\n}\n.header[data-v-65470904] {\n  text-align: center;\n}\n.header .imgWrap[data-v-65470904] {\n    width: 100%;\n}\n.header .imgWrap > img[data-v-65470904] {\n      width: 4.5em;\n      height: 4.5em;\n      display: block;\n      margin: auto;\n      border-radius: 50%;\n}\n.header h3[data-v-65470904],\n  .header .acc-number[data-v-65470904] {\n    font-size: 1em;\n    text-align: center;\n    margin-top: 0.5em;\n}\n.my-list[data-v-65470904] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.my-list li .mint-cell[data-v-65470904] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n.my-list li .mint-cell span[data-v-65470904] {\n      font-size: 0.9em;\n}\n", ""]);
 
 // exports
 
@@ -58578,9 +58578,11 @@ exports.push([module.i, "\n.header-container[data-v-65470904] {\n  padding-top: 
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tabBar__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tabBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_tabBar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(315);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_tabBar__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_tabBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_tabBar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(315);
 //
 //
 //
@@ -58672,25 +58674,56 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { tabBar: __WEBPACK_IMPORTED_MODULE_1__components_tabBar___default.a },
-  methods: {
-    toReffrrer: function toReffrrer() {
-      this.$router.push('/my/referrer');
-    },
-    goBankCardManage: function goBankCardManage() {
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
-        console.log(res);
-        //   this.$router.push('/my/bankCardManage');
-      }).catch(function (err) {
-        console.log(err);
-      });
-    }
-  }
+	data: function data() {
+		return {
+			bankList: []
+		};
+	},
+
+	components: { tabBar: __WEBPACK_IMPORTED_MODULE_2__components_tabBar___default.a },
+	methods: {
+		reffrrer: function reffrrer() {
+			//推荐人
+			this.$router.push('/my/referrer');
+		},
+		bankCardManage: function bankCardManage() {
+			var _this = this;
+
+			//银行卡管理
+			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
+				console.log(res);
+				_this.bankList = res.data.data;
+				_this.$router.push('/my/bankCardManage');
+			}).catch(function (err) {
+				console.log(err);
+			});
+		},
+		checkSettle: function checkSettle() {
+			//查看结算卡
+			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/my/GetPayCard').then(function (res) {
+				console.log(res);
+				//   this.$router.push('/my/checkSettle');
+			}).catch(function (err) {
+				Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])({
+					message: err.data.msg,
+					duration: 800
+				});
+			});
+		}
+	}
 });
 
 /***/ }),
@@ -58711,7 +58744,7 @@ var render = function() {
         _c("ul", { staticClass: "my-list" }, [
           _c(
             "li",
-            { on: { click: _vm.toReffrrer } },
+            { on: { click: _vm.reffrrer } },
             [
               _c("mt-cell", { attrs: { title: "推荐人", "is-link": "" } }, [
                 _c("img", {
@@ -58725,7 +58758,7 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _c("span", [
-                  _vm._v("张三李四: "),
+                  _vm._v("张三李四:\n\t\t\t\t\t\t"),
                   _c("em", [_vm._v("132131321321")])
                 ])
               ])
@@ -58759,7 +58792,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
-            { on: { click: _vm.goBankCardManage } },
+            { on: { click: _vm.bankCardManage } },
             [
               _c("mt-cell", { attrs: { title: "银行卡管理", "is-link": "" } }, [
                 _c("img", {
@@ -58780,28 +58813,19 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
+            { on: { click: _vm.checkSettle } },
             [
-              _c(
-                "mt-cell",
-                {
+              _c("mt-cell", { attrs: { title: "查看结算卡", "is-link": "" } }, [
+                _c("img", {
                   attrs: {
-                    title: "查看结算卡",
-                    "is-link": "",
-                    to: "/my/checkSettle"
-                  }
-                },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/bankCardManage.png",
-                      width: "30",
-                      height: "30"
-                    },
-                    slot: "icon"
-                  })
-                ]
-              )
+                    slot: "icon",
+                    src: "/images/bankCardManage.png",
+                    width: "30",
+                    height: "30"
+                  },
+                  slot: "icon"
+                })
+              ])
             ],
             1
           ),
@@ -58849,7 +58873,7 @@ var staticRenderFns = [
         _c("h3", [_vm._v("发起交易")]),
         _vm._v(" "),
         _c("div", { staticClass: "acc-number" }, [
-          _vm._v("账号:"),
+          _vm._v("账号:\n\t\t\t\t"),
           _c("span", [_vm._v("18674231689")])
         ])
       ])
