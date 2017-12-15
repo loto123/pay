@@ -63608,6 +63608,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.shopName = res.data.data.name;
 
         __WEBPACK_IMPORTED_MODULE_1_mint_ui__["Indicator"].close();
+      }).catch(function (error) {
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
+        _this.$router.go(-1);
+        console.error(error);
       });
     },
     dissShop: function dissShop() {
@@ -63616,6 +63620,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + this.shopId).then(function (res) {
         console.log(res);
         _this2.$router.push("/shop");
+      }).catch(function (error) {
+        console.error(error);
       });
     }
   }

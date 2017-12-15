@@ -387,7 +387,7 @@
 
 <script>
 import topBack from "../../components/topBack";
-import {Indicator} from "mint-ui"
+import {Indicator,Toast} from "mint-ui"
 import request from "../../utils/userRequest"
 
 export default {
@@ -444,6 +444,10 @@ export default {
         this.shopName = res.data.data.name;
 
         Indicator.close();
+      }).catch((error)=>{
+        Toast("当前页面不存在");
+        this.$router.go(-1);
+        console.error(error);
       });
     },
 
@@ -451,6 +455,8 @@ export default {
       request.getInstance().postData("api/shop/close/"+this.shopId).then((res)=>{
         console.log(res);
         this.$router.push("/shop");
+      }).catch((error)=>{
+        console.error(error);
       });
     }
 
