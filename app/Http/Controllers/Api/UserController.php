@@ -262,14 +262,14 @@ class UserController extends Controller
 
     /**
      * @SWG\GET(
-     *   path="/my/GetPayCard",
+     *   path="/my/getPayCard",
      *   summary="查看结算卡",
      *   tags={"我的"},
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
      */
-    public function GetPayCard()
+    public function getPayCard()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
         if(empty($this->user->pay_card_id)) {
