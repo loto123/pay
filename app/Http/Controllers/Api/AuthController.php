@@ -59,11 +59,11 @@ class AuthController extends BaseController {
         try {
             // attempt to verify the credentials and create a token for the user
             if (!$token = JWTAuth::attempt($credentials)) {
-                return $this->json([], '用户名密码错误', 401);
+                return $this->json([], '用户名密码错误', 0);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return $this->json([], '系统错误', 401);
+            return $this->json([], '系统错误', 0);
         }
 
         // all good so return the token
@@ -116,7 +116,7 @@ class AuthController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->json([], $validator->errors()->first());
+            return $this->json([], $validator->errors()->first(), 0);
         }
 
         $input = $request->all();
@@ -166,7 +166,7 @@ class AuthController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->json([], $validator->errors()->first());
+            return $this->json([], $validator->errors()->first(), 0);
         }
         $app = EasyWeChat::officialAccount();
         $response = $app->oauth->scopes(['snsapi_userinfo'])
@@ -217,7 +217,7 @@ class AuthController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->json([], $validator->errors()->first());
+            return $this->json([], $validator->errors()->first(), 0);
         }
         $app = EasyWeChat::officialAccount();
         $access_token = $app->oauth->getAccessToken($request->code);

@@ -182,13 +182,12 @@ export default {
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
         console.log(res);
-
-        if(res.data.code == 0){
           sessionStorage.setItem("_token",res.data.data.token);
           Toast("登录成功");
-          
           self.$router.push("/index");
-        }
+      }).catch(function(err){
+        console.log(err);
+        Toast(err.data.message);
       });
     },
     commitName() {
