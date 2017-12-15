@@ -106,10 +106,18 @@ class AuthController extends BaseController {
      *     ),
      *   @SWG\Response(
      *     response=200,
-     *     description="A list with products",
+     *     description="ok",
+     *   @SWG\Schema(
+     *     type="object",
+     *     @SWG\Property(property="code", type="integer"),
+     *     @SWG\Property(property="message", type="string", description="some message"),
+     *     @SWG\Property(property="data", type="object",
+     *     )
+     *   ),
      *     examples={
-     *      "code":0,
-     *      "msg":"ok"
+     *      "code":1,
+     *      "message":"ok",
+     *      "data":[]
      *     }
      *   ),
      * )
