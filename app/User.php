@@ -77,7 +77,7 @@ class User extends Authenticatable
         return $this->hasOne('App\Admin', 'id', 'operator_id');
 
     }
-    
+
     /**
      * 我管理的店铺
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -91,12 +91,19 @@ class User extends Authenticatable
      * 我参与的店铺
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
-    public function in_shops() {
+    public function in_shops()
+    {
         return $this->belongsToMany(Shop::class, (new ShopUser)->getTable(), 'user_id', 'shop_id');
     }
 
-    public function wechat_user() {
+    public function wechat_user()
+    {
         return $this->hasOne(OauthUser::class, 'user_id');
+    }
+
+    public function paypwd_record()
+    {
+        return $this->hasMany('App\PaypwdValidateRecord', 'user_id');
     }
 
 }
