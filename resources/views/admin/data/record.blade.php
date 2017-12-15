@@ -108,16 +108,16 @@
                                 @endif
                             </td>
                             <td>{{$item->transfer_id}}</td>
-                            @if($item->shop && $item->shop->user)
+                            @if($item->shop && $item->shop->manager)
                                 <td>
                                     <div class="user-panel clearfix">
                                         <div class="pull-left">
-                                            <img src="{{$item->shop->user->avatar}}" width="40" height="40"
+                                            <img src="{{$item->shop->manager->avatar}}" width="40" height="40"
                                                  class="img-circle">
                                         </div>
                                         <div class="pull-left ml7">
-                                            <p>{{$item->shop->user->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->shop->user->id}}</span></span>
+                                            <p>{{$item->shop->manager->name}}</p>
+                                            <span>ID:<span class="text-yellow">{{$item->shop->manager->id}}</span></span>
                                         </div>
                                     </div>
                                 </td>
