@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Dingo\Api\Http\Response;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -49,7 +50,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($request->server->get('API_PREFIX')) {
-            return dd($exception);
+            return Response::make(['message' => $exception->getMessage()], 401);
         }
         return parent::render($request, $exception);
     }

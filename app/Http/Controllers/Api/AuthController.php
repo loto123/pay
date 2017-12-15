@@ -59,11 +59,11 @@ class AuthController extends BaseController {
         try {
             // attempt to verify the credentials and create a token for the user
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return $this->json([], '用户名密码错误', 401);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return $this->json([], '系统错误', 401);
         }
 
         // all good so return the token
