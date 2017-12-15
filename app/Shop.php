@@ -13,6 +13,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Shop extends Model
 {
+    const STATUS_NORMAL = 0;
+
+    const STATUS_CLOSED = 1;
+
+    const STATUS_FREEZE = 2;
+
     //店铺铺主
     public function manager()
     {

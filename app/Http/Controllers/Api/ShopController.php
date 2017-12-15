@@ -66,7 +66,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $shop  = new Shop();
         $shop->name = $request->name;
-        $shop->manager = $user->id;
+        $shop->manager_id = $user->id;
 //        $shop->percent =
         $shop->save();
         return $this->json([$shop]);
@@ -97,9 +97,9 @@ class ShopController extends BaseController {
      */
     public function lists() {
         $user = $this->auth->user();
-        $count = $user->in_shops()->count();
+        $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->in_shops as $_shop) {
+        foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->id,
@@ -135,9 +135,9 @@ class ShopController extends BaseController {
      */
     public function my_lists() {
         $user = $this->auth->user();
-        $count = $user->shop()->count();
+        $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->shop as $_shop) {
+        foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->id,
@@ -174,6 +174,9 @@ class ShopController extends BaseController {
     public function detail($id, Request $request) {
         $member_size = $request->input('member_size', 5);
         $shop = Shop::find($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         /* @var $shop Shop */
         $members = [];
         foreach ($shop->users()->limit($member_size)->get() as $_user) {

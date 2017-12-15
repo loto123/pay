@@ -91,6 +91,13 @@ class AuthController extends BaseController {
      *         type="string",
      *     ),
      *     @SWG\Parameter(
+     *         name="invite_mobile",
+     *         in="formData",
+     *         description="邀请人手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
      *         name="password",
      *         in="formData",
      *         description="密码",
@@ -99,10 +106,18 @@ class AuthController extends BaseController {
      *     ),
      *   @SWG\Response(
      *     response=200,
-     *     description="A list with products",
+     *     description="ok",
+     *   @SWG\Schema(
+     *     type="object",
+     *     @SWG\Property(property="code", type="integer"),
+     *     @SWG\Property(property="message", type="string", description="some message"),
+     *     @SWG\Property(property="data", type="object",
+     *     )
+     *   ),
      *     examples={
-     *      "code":0,
-     *      "msg":"ok"
+     *      "code":1,
+     *      "message":"ok",
+     *      "data":{}
      *     }
      *   ),
      * )
@@ -111,7 +126,8 @@ class AuthController extends BaseController {
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable(),
+            'invite_mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
             'password' => 'required',
         ]);
 

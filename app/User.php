@@ -84,7 +84,7 @@ class User extends Authenticatable
      */
     public function shop()
     {
-        return $this->hasMany('App\Shop', 'manager', 'id');
+        return $this->hasMany('App\Shop','manager_id','id');
     }
 
     /**
