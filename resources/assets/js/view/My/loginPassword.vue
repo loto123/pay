@@ -2,14 +2,14 @@
   <div id="settleInfo">
     <topBack title="修改登录密码"></topBack>
     <div class="settleInfo-container">
-      <mt-field label="原密码" placeholder="请填写原密码" v-model="oldPassword"></mt-field>
-      <mt-field label="新密码" placeholder="请填写新密码" type="email" v-model="newPassword"></mt-field>
-      <mt-field label="确认新密码" placeholder="请再次输入密码" type="password" v-model="affirmPassword"></mt-field>
+      <mt-field label="原密码" placeholder="请填写原密码"></mt-field>
+      <mt-field label="新密码" placeholder="请填写新密码" type="email"></mt-field>
+      <mt-field label="确认新密码" placeholder="请再次输入密码" type="password"></mt-field>
     </div>
     <div class="forget-password-box">
       <div class="notice">密码长度必须在6-16个字符之间个字符</div>
       <div class="forget-password">
-        <a href="javascript:;" @click="forgetPassWord">
+        <a href="javascript:;">
           忘记原密码?
         </a>
       </div>
