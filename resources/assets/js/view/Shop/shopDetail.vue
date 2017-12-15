@@ -387,9 +387,14 @@
 
 <script>
 import topBack from "../../components/topBack";
+import {Indicator} from "mint-ui"
+import request from "../../utils/userRequest"
 
 export default {
   name: "shopDetail",
+  mounted(){
+    this.init();
+  },
   components: { topBack },
   data() {
     return {
@@ -412,6 +417,20 @@ export default {
     },
     goShopOrder(){
       this.$router.push("/shop/shopOrder");
+      
+    },
+
+    init(){
+      Indicator.open("加载中...");
+      var self = this;
+      var _id = this.$route.query.id;
+      console.log(_id);
+
+      request.getInstance().getData("api/shop/detail/"+_id).then((res)=>{
+        console.log(res);
+      });
+
+      setTimeout(function(){Indicator.close();},500)
       
     }
 

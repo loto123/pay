@@ -24,7 +24,7 @@ class CreateShopsTable extends Migration
 //            $table->decimal("percent", 5)->defalut(0)->comment("收费比例百分比(%)");
             $table->decimal("balance", 15)->default(0)->comment("余额");
             $table->decimal("frozen_balance", 15)->default(0)->comment("冻结金额");
-            $table->unsignedInteger('manager')->index()->comment("群主id");
+            $table->unsignedInteger('manager_id')->index()->comment("群主id");
             $table->boolean("use_link")->default(1)->comment("是否开启邀请链接");
             $table->boolean("active")->default(1)->comment("是否开启交易");
             $table->timestamps();
