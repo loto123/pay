@@ -23,8 +23,8 @@
             <span>未完善</span>
           </mt-cell>
         </li>
-        <li>
-          <mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
+        <li @click="goBankCardManage">
+          <mt-cell title="银行卡管理" is-link>
             <img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
             <span><font>0</font>张</span>
           </mt-cell>
@@ -90,6 +90,7 @@
 
 
 <script>
+  import axios from "axios";
   import tabBar from "../../components/tabBar";
 
   export default {
@@ -97,6 +98,16 @@
     methods: {
       toReffrrer(){
         this.$router.push('/my/referrer');
+      },
+      goBankCardManage(){
+        axios.get('/api/card/index')
+        .then((res)=>{
+          console.log(res);
+        //   this.$router.push('/my/bankCardManage');
+		})
+		.catch((err)=>{
+          console.log(err);
+        })
       }
     }
   };
