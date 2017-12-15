@@ -79,7 +79,12 @@ class PayMethodController extends Controller
                 return [$item['id'] => $item['name']];
             }))->rules('required', ['required' => '必须选择所属平台']);
             $form->text('impl', '实现路径')->rules('required|max:255', ['required' => '必填项']);
-            $form->setWidth(4, 2);
+            $form->saving(function (Form $form) {
+                if (!class_exists($form->impl)) {
+                    throw new \Exception("支付接口 {$form->impl} 不存在");
+                }
+            });
+            $form->setWidth(8, 2);
         });
     }
 

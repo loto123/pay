@@ -12,7 +12,6 @@
 namespace App\Pay\Model;
 
 
-use App\Pay\ContainerTrait;
 use Illuminate\Support\Facades\DB;
 
 class SettleContainer extends Container
@@ -20,10 +19,10 @@ class SettleContainer extends Container
     /**
      * 状态
      */
-    const STATE_NORMAL = 0;
-    const STATE_CLOSED = 1; //正常
-    const STATE_EXTRACTED = 2; //关闭
-    protected $table = 'pay_settle_container'; //已提取
+    const STATE_NORMAL = 0;//正常
+    const STATE_CLOSED = 1; //关闭
+    const STATE_EXTRACTED = 2; //已提取
+    protected $table = 'pay_settle_container';
     protected $casts = [
         'state' => 'integer',
         'create_at' => 'datetime',

@@ -54,7 +54,7 @@ class InternetBank implements CashInterface
             $params['detail_data'] = $detail_data_des;
             $params['sign_type'] = 'MD5';
 
-            $res_xml = Heepay::send_post($config['batch_transfer_small_url'], http_build_query($params));
+            $res_xml = Heepay::send_post($config['batch_transfer_small_url'], http_build_query($params), $config['cert_path']);
             $res_xml = iconv("gbk//IGNORE", "utf-8", $res_xml);
             $response = simplexml_load_string($res_xml);
 

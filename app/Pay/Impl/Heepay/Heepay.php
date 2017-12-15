@@ -22,9 +22,9 @@ class Heepay implements PlatformInterface
      * @param string $send_type
      * @return bool|mixed
      */
-    public static function send_post($url, $data, $send_type = 'POST')
+    public static function send_post($url, $data, $cacert_url, $send_type = 'POST')
     {
-        $cacert_url = __DIR__ . '/cacert.pem';
+        $cacert_url = __DIR__ . $cacert_url;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
