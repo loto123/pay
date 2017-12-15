@@ -28,7 +28,7 @@
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
 
-        <div class="shop-item flex flex-v flex-align-center" @click="goDetail('hello')"  v-for="item in shopList">
+        <div class="shop-item flex flex-v flex-align-center" @click="goDetail(item.id)"  v-for="item in shopList" :key ="item.id">
           <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
             
@@ -44,7 +44,7 @@
             
           </div>
 
-          <h3>店铺1</h3>
+          <h3>{{item.name}}</h3>
           <p class="today-earn">今日收益:123456</p>
           <p class="all-earn">总收益:666666</p>
         </div>
@@ -375,7 +375,10 @@ export default {
       this.$router.push("/shop/message_list");
     },
     goDetail(e, evnet) {
-      this.$router.push("/shop/shop_detail");
+      console.log(e);
+      this.$store.dispatch("shop_setShopDetailId",e);
+      this.$router.push("/shop/shop_detail"+"?id="+e);
+      console.log(event);
     },
     addShop() {
       this.addShopTabStatus = true;

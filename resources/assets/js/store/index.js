@@ -2,13 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import registStore from './modules/regist'
+import shopStore from './modules/shop'
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   strict: true,// 生产环境记得关闭
   modules: {
-    regist: registStore
+    regist: registStore,
+    shop:shopStore
   }
   //  更改store必须执行mutations
   // mutations: {
