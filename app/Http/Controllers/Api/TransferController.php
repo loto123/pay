@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\PaypwdValidateRecord;
 use App\Profit;
 use App\Shop;
 use App\TipRecord;
@@ -227,7 +228,7 @@ class TransferController extends Controller
      *   @SWG\Parameter(
      *     name="action",
      *     in="formData",
-     *     description="action value:put or get",
+     *     description="action value:put(付钱) or get(拿钱)",
      *     required=true,
      *     type="string"
      *   ),
@@ -276,7 +277,17 @@ class TransferController extends Controller
                 if ($user->balance < $record->amount) {
                     return response()->json(['code' => 0, 'msg' => trans('trans.user_not_enough_money'), 'data' => []]);
                 }
+                //验证支付密码
+                $today = date('Y-m-d');
+                $times = $user->paypwd_record()->where('created_at','>=',$today)->where('created_at','<=',$today . '23:59:59')->count();
+                if($times >= config('pay_pwd_validate_times')) {
+                    return response()->json(['code' => 0,'msg' => trans('trans.user_check_pay_password_times_out'),'data' => []]);
+                }
                 if (!Hash::check($request->pay_password,$user->pay_password)) {
+                    //验证错误次数+1
+                    $paypwdRecord = new PaypwdValidateRecord();
+                    $paypwdRecord->user_id = $user->id;
+                    $paypwdRecord->save();
                     return response()->json(['code' => 0,'msg' => trans('trans.user_pay_password_error'),'data' => []]);
                 }
                 $record->stat = 1;
@@ -548,6 +559,13 @@ class TransferController extends Controller
      *     required=true,
      *     type="integer"
      *   ),
+     * *   @SWG\Parameter(
+     *     name="action",
+     *     in="formData",
+     *     description=" 0 验证  1 支付",
+     *     required=true,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -574,45 +592,52 @@ class TransferController extends Controller
         if ($transfer->status == 3) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
         }
-//        if ($transfer->tip_type != 1) {
-//            return response()->json(['code' => 0, 'msg' => trans('trans.trans_tip_type_error'), 'data' => []]);
-//        }
-//        if ($transfer->tip_status == 1) {
-//            return response()->json(['code' => 0, 'msg' => trans('trans.trans_tip_status_error'), 'data' => []]);
-//        }
-//        if ($request->fee < $transfer->tip_amount) {
-//            return response()->json(['code' => 0, 'msg' => trans('trans.trans_tip_fee_error'), 'data' => []]);
-//        }
         $user = JWTAuth::parseToken()->authenticate();
         if ($user->balance < $request->fee) {
             return response()->json(['code' => 0, 'msg' => trans('trans.user_not_enough_money'), 'data' => []]);
         }
-        DB::beginTransaction();
-        try {
-            //减用户余额
-            $user->balance = $user->balance - $request->fee;
-            $user->save();
-            //增加交易红包茶水费总额 交易红包茶水费状态改为已结清
-            $transfer->tip_amount = $transfer->tip_amount + $request->fee;
-            $transfer->tip_status = 1;
-            $transfer->save();
-            //增加店铺余额
-            $shop = Shop::find($transfer->shop_id);
-            $shop->frozen_balance = $shop->frozen_balance + $request->fee;
-            $shop->save();
-            //增加茶水费记录
-            $record = new TipRecord();
-            $record->shop_id = $transfer->shop_id;
-            $record->transfer_id = $transfer->id;
-            $record->user_id = $user->id;
-            $record->amount = $request->fee;
-            $record->record_id = 0;
-            $record->save();
-            return response()->json(['code' => 1, 'msg' => trans('trans.pay_fee_success'), 'data' => []]);
-        } catch (\Exception $e) {
-            DB::rollBack();
+        if($request->action) {
+            //验证支付密码
+            $today = date('Y-m-d');
+            $times = $user->paypwd_record()->where('created_at','>=',$today)->where('created_at','<=',$today . '23:59:59')->count();
+            if($times >= config('pay_pwd_validate_times')) {
+                return response()->json(['code' => 0,'msg' => trans('trans.user_check_pay_password_times_out'),'data' => []]);
+            }
+            if (!Hash::check($request->pay_password,$user->pay_password)) {
+                //验证错误次数+1
+                $paypwdRecord = new PaypwdValidateRecord();
+                $paypwdRecord->user_id = $user->id;
+                $paypwdRecord->save();
+                return response()->json(['code' => 0,'msg' => trans('trans.user_pay_password_error'),'data' => []]);
+            }
+            DB::beginTransaction();
+            try {
+                //减用户余额
+                $user->balance = $user->balance - $request->fee;
+                $user->save();
+                //增加交易红包茶水费总额 交易红包茶水费状态改为已结清
+                $transfer->tip_amount = $transfer->tip_amount + $request->fee;
+                $transfer->tip_status = 1;
+                $transfer->save();
+                //增加店铺余额
+                $shop = Shop::find($transfer->shop_id);
+                $shop->frozen_balance = $shop->frozen_balance + $request->fee;
+                $shop->save();
+                //增加茶水费记录
+                $record = new TipRecord();
+                $record->shop_id = $transfer->shop_id;
+                $record->transfer_id = $transfer->id;
+                $record->user_id = $user->id;
+                $record->amount = $request->fee;
+                $record->record_id = 0;
+                $record->save();
+                return response()->json(['code' => 1, 'msg' => trans('trans.pay_fee_success'), 'data' => []]);
+            } catch (\Exception $e) {
+                DB::rollBack();
+            }
+            return response()->json(['code' => 0, 'msg' => trans('trans.pay_fee_failed'), 'data' => []]);
         }
-        return response()->json(['code' => 0, 'msg' => trans('trans.pay_fee_failed'), 'data' => []]);
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => []]);
     }
 
     /**
