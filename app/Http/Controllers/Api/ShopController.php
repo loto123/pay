@@ -99,7 +99,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->in_shops as $_shop) {
+        foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->id,
@@ -137,7 +137,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->shop as $_shop) {
+        foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->id,
