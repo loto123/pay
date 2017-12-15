@@ -117,7 +117,7 @@ class AuthController extends BaseController {
      *     examples={
      *      "code":1,
      *      "message":"ok",
-     *      "data":[]
+     *      "data":{}
      *     }
      *   ),
      * )
