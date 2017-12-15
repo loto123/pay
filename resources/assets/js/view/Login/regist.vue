@@ -202,6 +202,7 @@
 <script>
 import topBack from "../../components/topBack";
 import request from "../../utils/userRequest.js"
+import { Toast } from 'mint-ui';
 
 export default {
   name: "regist",
@@ -233,6 +234,8 @@ export default {
     },
 
     goNextStep() {
+      var self = this;
+
       if (this.step >= 3) {
         var data = {
           mobile :this.userAccountName,
@@ -240,7 +243,14 @@ export default {
           name:"sangliang"
         }
 
-        request.getInstance().postData('api/auth/register',data,(res)=>{
+        request.getInstance().postData('api/auth/register',data).then(function(res){
+
+          if(res.data.code == 0){
+            sessionStorage.setItem("_token",res.data.data.token);
+            Toast("注册成功");
+            self.$router.push("/login");
+          }
+
           console.log(res);
         });
         return;
