@@ -58696,18 +58696,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		reffrrer: function reffrrer() {
 			//推荐人
 			this.$router.push('/my/referrer');
-		},
-		checkSettle: function checkSettle() {
-			//查看结算卡
-			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/my/GetPayCard').then(function (res) {
-				console.log(res);
-				//   this.$router.push('/my/checkSettle');
-			}).catch(function (err) {
-				Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])({
-					message: err.data.msg,
-					duration: 800
-				});
-			});
 		}
 	}
 });
@@ -58808,19 +58796,28 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
-            { on: { click: _vm.checkSettle } },
             [
-              _c("mt-cell", { attrs: { title: "查看结算卡", "is-link": "" } }, [
-                _c("img", {
+              _c(
+                "mt-cell",
+                {
                   attrs: {
-                    slot: "icon",
-                    src: "/images/bankCardManage.png",
-                    width: "30",
-                    height: "30"
-                  },
-                  slot: "icon"
-                })
-              ])
+                    title: "查看结算卡",
+                    "is-link": "",
+                    to: "/my/checkSettle"
+                  }
+                },
+                [
+                  _c("img", {
+                    attrs: {
+                      slot: "icon",
+                      src: "/images/bankCardManage.png",
+                      width: "30",
+                      height: "30"
+                    },
+                    slot: "icon"
+                  })
+                ]
+              )
             ],
             1
           ),
@@ -59379,11 +59376,13 @@ exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(72);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(610);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 //
 //
 //
@@ -59413,6 +59412,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
+
 
 
 
@@ -59420,29 +59422,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_3__components_password___default.a },
   data: function data() {
     return {
-      bankList: []
+      bankList: [],
+      showPasswordTag: false, // 密码弹出开关
+      isdel: false
     };
   },
-
   created: function created() {
-    var _this = this;
-    __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
-      console.log(res);
-      _this.bankList = res.data.data;
-    }).catch(function (err) {
-      console.log(err);
-    });
+    this.bank();
   },
+
   methods: {
-    del: function del() {
-      __WEBPACK_IMPORTED_MODULE_2_mint_ui__["MessageBox"].confirm("是否删除该银行卡?", "温馨提示").then(function () {
-        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])({
-          message: "删除成功",
-          iconClass: "icon icon-success",
-          duration: 800
+    //密码层弹出
+    showPassword: function showPassword() {
+      this.showPasswordTag = true;
+    },
+    hidePassword: function hidePassword() {
+      this.showPasswordTag = false;
+    },
+
+    //银行卡列表
+    bank: function bank() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
+        _this.bankList = res.data.data;
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    //删除银行卡
+    del: function del(card_id) {
+      var _this2 = this;
+
+      __WEBPACK_IMPORTED_MODULE_4_mint_ui__["MessageBox"].confirm("是否删除该银行卡?", "温馨提示").then(function () {
+        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/card/delete?card_id=" + card_id).then(function (res) {
+          Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])({
+            message: "删除成功",
+            duration: 800
+          });
+          _this2.bank();
+        }).catch(function (err) {
+          console.log(err);
         });
       }, function () {
         //取消操作
@@ -59491,19 +59514,41 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("button", { staticClass: "del", on: { click: _vm.del } }, [
-                  _c("i", { staticClass: "iconfont" }, [_vm._v("")])
-                ]),
+                _c(
+                  "button",
+                  {
+                    staticClass: "del",
+                    on: {
+                      click: function($event) {
+                        _vm.del(item.card_id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "iconfont" }, [_vm._v("")])]
+                ),
                 _vm._v(" "),
                 _c("div", { staticClass: "binding" }, [_vm._v("(已绑定)")])
               ])
             ])
           }),
           _vm._v(" "),
-          _vm._m(1, false, false)
+          _c(
+            "div",
+            { staticClass: "add-bankCard", on: { click: _vm.showPassword } },
+            [
+              _c("a", { attrs: { href: "javascript:;" } }, [
+                _vm._v("添加新银行卡")
+              ])
+            ]
+          )
         ],
         2
-      )
+      ),
+      _vm._v(" "),
+      _c("passWorld", {
+        attrs: { setSwitch: _vm.showPasswordTag },
+        on: { hidePassword: _vm.hidePassword }
+      })
     ],
     1
   )
@@ -59514,17 +59559,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-image" }, [
-      _c("img", { attrs: { src: "/images/personal.jpg", alt: "" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "add-bankCard" }, [
-      _c("a", { attrs: { href: "/#/my/bankCardManage/addBankCard" } }, [
-        _vm._v("添加新银行卡")
-      ])
+      _c("img", { attrs: { src: "/images/personal.jpg" } })
     ])
   }
 ]
@@ -59870,6 +59905,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_password__ = __webpack_require__(610);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_password__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -59907,6 +59945,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
+
 
 
 
@@ -59919,6 +59960,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
+  created: function created() {
+    var _this = this;
+    __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/my/GetPayCard').then(function (res) {
+      console.log(res);
+      //   this.$router.push('/my/checkSettle');
+    }).catch(function (err) {
+      Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])({
+        message: err.data.msg,
+        duration: 800
+      });
+    });
+  },
   methods: {
     showPassword: function showPassword() {
       this.showPasswordTag = true;
@@ -60016,7 +60069,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-0ca9c772],\n.slide-leave-active[data-v-0ca9c772] {\n  -webkit-transition: all 0.4s ease;\n  transition: all 0.4s ease;\n}\n.slide-enter[data-v-0ca9c772],\n.slide-leave-to[data-v-0ca9c772] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#pass-word-component[data-v-0ca9c772] {\n  height: 100vh;\n  width: 100%;\n  background: #efeff4;\n  position: absolute;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#pass-word-component .top[data-v-0ca9c772] {\n    padding-top: 2em;\n}\n#pass-word-component #content-wrap[data-v-0ca9c772] {\n    height: 6em;\n    width: 75%;\n    margin-top: 4em;\n}\n#pass-word-component #content-wrap h3[data-v-0ca9c772] {\n      font-size: 1.5em;\n}\n#pass-word-component #content-wrap ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 6em;\n      margin-top: 1.5em;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772] {\n        background: #fff;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-right: 1px solid #aaa;\n        border-top: 1px solid #aaa;\n        border-bottom: 1px solid #aaa;\n        font-weight: bold;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772]:nth-child(1) {\n          border-left: 1px solid #aaa;\n}\n#pass-word-component .keyboard[data-v-0ca9c772] {\n    width: 100%;\n    height: 15em;\n    position: fixed;\n    bottom: 0;\n    left: 0;\n}\n#pass-word-component .keyboard ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 100%;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772] {\n        background: #fff;\n        width: 33.33%;\n        height: 25%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-top: 1px solid #ccc;\n        border-right: 1px solid #ccc;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3n) {\n          border-right: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(1) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(2) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3) {\n          border-top: none;\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-0ca9c772],\n.slide-leave-active[data-v-0ca9c772] {\n  -webkit-transition: all 0.4s ease;\n  transition: all 0.4s ease;\n}\n.slide-enter[data-v-0ca9c772],\n.slide-leave-to[data-v-0ca9c772] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#pass-word-component[data-v-0ca9c772] {\n  height: 100vh;\n  width: 100%;\n  background: #efeff4;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#pass-word-component .top[data-v-0ca9c772] {\n    padding-top: 2em;\n}\n#pass-word-component #content-wrap[data-v-0ca9c772] {\n    height: 6em;\n    width: 75%;\n    margin-top: 4em;\n}\n#pass-word-component #content-wrap h3[data-v-0ca9c772] {\n      font-size: 1.5em;\n}\n#pass-word-component #content-wrap ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 6em;\n      margin-top: 1.5em;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772] {\n        background: #fff;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-right: 1px solid #aaa;\n        border-top: 1px solid #aaa;\n        border-bottom: 1px solid #aaa;\n        font-weight: bold;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772]:nth-child(1) {\n          border-left: 1px solid #aaa;\n}\n#pass-word-component .keyboard[data-v-0ca9c772] {\n    width: 100%;\n    height: 15em;\n    position: fixed;\n    bottom: 0;\n    left: 0;\n}\n#pass-word-component .keyboard ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 100%;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772] {\n        background: #fff;\n        width: 33.33%;\n        height: 25%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-top: 1px solid #ccc;\n        border-right: 1px solid #ccc;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3n) {\n          border-right: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(1) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(2) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3) {\n          border-top: none;\n}\n", ""]);
 
 // exports
 

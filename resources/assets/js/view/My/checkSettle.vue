@@ -39,12 +39,29 @@
 import topBack from "../../components/topBack";
 import passWorld from "../../components/password"
 
+import request from '../../utils/userRequest';
+import { Toast } from "mint-ui";
+
 export default {
   components: { topBack , passWorld},
   data(){
     return {
       showPasswordTag:false       // 密码弹出开关
     }
+  },
+  created:function(){
+    var _this=this;
+    request.getInstance().getData('api/my/GetPayCard')
+    .then((res) => {
+      console.log(res);
+      //   this.$router.push('/my/checkSettle');
+    })
+    .catch((err) => {
+      Toast({
+        message: err.data.msg,
+        duration: 800
+      });
+    })
   },
   methods:{
     showPassword(){

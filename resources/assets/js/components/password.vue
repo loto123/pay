@@ -56,7 +56,7 @@
   height: 100vh;
   width: 100%;
   background: #efeff4;
-  position: absolute;
+  position: fixed;
   top: 0em;
   left: 0em;
   z-index: 1001;
