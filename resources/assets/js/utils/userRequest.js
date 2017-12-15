@@ -16,7 +16,7 @@ export default class UserRequest {
     }
 
     // 发起请求 post
-    postData(url, data, callback) {
+    postData(url, data) {
         var tempUrl = this.baseUrl + url;
         var postData = data;
 
@@ -36,7 +36,12 @@ export default class UserRequest {
                 }
             })
                 .then(function (res) {
-                    resolve(res);
+                    if(res.data.code == 1){
+                        resolve(res);
+                    }
+                    else {
+                        reject(res);
+                    }
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -45,6 +50,35 @@ export default class UserRequest {
     }
 
     getData() {
+        var tempUrl = this.baseUrl + url;
+        var postData = data;
 
+        var _token = sessionStorage.getItem("_token");
+
+        if (_token != null) {
+            postData.token = sessionStorage.getItem("_token");
+        }
+
+        return new Promise(function (resolve, reject) {
+            Axios({
+                method: 'get',
+                url: tempUrl,
+                data: postData,
+                auth: {
+                    token: _token,
+                }
+            })
+                .then(function (res) {
+                    if(res.data.code == 1){
+                        resolve(res);
+                    }
+                    else {
+                        reject(res);
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        });
     }
 }

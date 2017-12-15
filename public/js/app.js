@@ -29695,7 +29695,7 @@ var UserRequest = function () {
 
     _createClass(UserRequest, [{
         key: 'postData',
-        value: function postData(url, data, callback) {
+        value: function postData(url, data) {
             var tempUrl = this.baseUrl + url;
             var postData = data;
 
@@ -29714,7 +29714,11 @@ var UserRequest = function () {
                         token: _token
                     }
                 }).then(function (res) {
-                    resolve(res);
+                    if (res.data.code == 1) {
+                        resolve(res);
+                    } else {
+                        reject(res);
+                    }
                 }).catch(function (error) {
                     console.error(error);
                 });
@@ -29722,7 +29726,35 @@ var UserRequest = function () {
         }
     }, {
         key: 'getData',
-        value: function getData() {}
+        value: function getData() {
+            var tempUrl = this.baseUrl + url;
+            var postData = data;
+
+            var _token = sessionStorage.getItem("_token");
+
+            if (_token != null) {
+                postData.token = sessionStorage.getItem("_token");
+            }
+
+            return new Promise(function (resolve, reject) {
+                __WEBPACK_IMPORTED_MODULE_0_axios___default()({
+                    method: 'get',
+                    url: tempUrl,
+                    data: postData,
+                    auth: {
+                        token: _token
+                    }
+                }).then(function (res) {
+                    if (res.data.code == 1) {
+                        resolve(res);
+                    } else {
+                        reject(res);
+                    }
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            });
+        }
     }]);
 
     return UserRequest;
@@ -46197,13 +46229,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
         console.log(res);
-
-        if (res.data.code == 0) {
-          sessionStorage.setItem("_token", res.data.data.token);
-          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功");
-
-          self.$router.push("/index");
-        }
+        sessionStorage.setItem("_token", res.data.data.token);
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功");
+        self.$router.push("/index");
+      }).catch(function (err) {
+        console.log(err);
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
       });
     },
     commitName: function commitName() {
