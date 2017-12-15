@@ -97,7 +97,7 @@ class ShopController extends BaseController {
      */
     public function lists() {
         $user = $this->auth->user();
-        $count = $user->in_shops()->count();
+        $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
         foreach ($user->in_shops as $_shop) {
             /* @var $_shop Shop */
@@ -135,7 +135,7 @@ class ShopController extends BaseController {
      */
     public function my_lists() {
         $user = $this->auth->user();
-        $count = $user->shop()->count();
+        $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
         foreach ($user->shop as $_shop) {
             /* @var $_shop Shop */
@@ -174,6 +174,9 @@ class ShopController extends BaseController {
     public function detail($id, Request $request) {
         $member_size = $request->input('member_size', 5);
         $shop = Shop::find($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         /* @var $shop Shop */
         $members = [];
         foreach ($shop->users()->limit($member_size)->get() as $_user) {
