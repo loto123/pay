@@ -48,7 +48,7 @@ Route::group([
     $router->post('setPayPassword','UserController@setPayPassword');
     $router->post('updatePayPassword','UserController@updatePayPassword');
     $router->post('updatePayCard','UserController@updatePayCard');
-    $router->get('GetPayCard','UserController@GetPayCard');
+    $router->get('getPayCard','UserController@getPayCard');
 
 });
 
@@ -59,6 +59,7 @@ Route::group([
     $router->get('index', 'CardController@index');
     $router->post('create', 'CardController@create');
     $router->post('delete', 'CardController@delete');
+    $router->get('getBanks','CardController@getBanks');
 });
 
 $api = app('Dingo\Api\Routing\Router');
@@ -81,6 +82,7 @@ $api->version('v1', function ($api) {
         $api->post('register', 'AuthController@register');
         $api->get("login/wechat/url", 'AuthController@wechat_login_url');
         $api->post("login/wechat", 'AuthController@wechat_login');
+        $api->post("valid", 'AuthController@valid');
     });
 });
 

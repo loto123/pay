@@ -93,13 +93,13 @@ class DataController extends Controller
         $count = Transfer::count();
         $amount = TransferRecord::where('stat', 1)->sum('amount');
 //        $listQuery = Transfer::query();
-        $listQuery = Transfer::with(['shop', 'shop.user', 'record' => function ($query) {
+        $listQuery = Transfer::with(['shop', 'shop.manager', 'record' => function ($query) {
             $query->where('stat', 1);
         }, 'tips'])->withCount('joiner');
         //店主ID
         $aid = $request->input('aid');
         if ($aid) {
-            $listQuery->whereHas('shop.user', function ($query) use ($aid) {
+            $listQuery->whereHas('shop.manager', function ($query) use ($aid) {
                 $query->where('id', $aid);
             });
         }
@@ -138,7 +138,7 @@ class DataController extends Controller
     //交易详情
     public function detail($id)
     {
-        $data = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.user')->where('id', $id)->first();
+        $data = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/profit', $data));
             $content->header("交易详情");
@@ -206,7 +206,7 @@ class DataController extends Controller
         $count = TransferRecord::count();
         $get_amount = TransferRecord::where('stat', 2)->sum('amount');
         $put_amount = TransferRecord::where('stat', 1)->sum('amount');
-        $listQuery = TransferRecord::with(['user', 'transfer', 'tip', 'transfer.shop', 'transfer.shop.user']);
+        $listQuery = TransferRecord::with(['user', 'transfer', 'tip', 'transfer.shop', 'transfer.shop.manager']);
         //用户ID
         $aid = $request->input('aid');
         if ($aid) {

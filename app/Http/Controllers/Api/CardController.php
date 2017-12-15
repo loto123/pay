@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Bank;
 use App\User;
 use App\UserCard;
 use Illuminate\Http\Request;
@@ -53,6 +54,7 @@ class CardController extends Controller
                     'bank' => $item->bank_name,
                     'card_type' => $card_type,
                     'card_logo' => $item->bank_logo,
+                    'is_pay_card' => ($item->id == $this->user->pay_card_id)? 1:0,
                 ];
             }
         }
@@ -88,7 +90,7 @@ class CardController extends Controller
      *   @SWG\Parameter(
      *     name="bank",
      *     in="formData",
-     *     description="开户银行名称",
+     *     description="银行id",
      *     required=true,
      *     type="string"
      *   ),
@@ -130,6 +132,7 @@ class CardController extends Controller
         $holder_name = $request->input('name');
         $holder_id = $request->input('id');
         $holder_mobile = $request->input('mobile');
+        $type = $request->input('type')??NULL;
 
         //验证卡号？身份证号？手机号？
 
@@ -146,6 +149,7 @@ class CardController extends Controller
         $cards->holder_name = $holder_name;
         $cards->holder_id = $holder_id;
         $cards->holder_mobile = $holder_mobile;
+        $cards->type= $type;
         $cards->save();
         if(empty($this->user->pay_card_id)) {
             $this->user->pay_card_id =$cards->id;
@@ -186,19 +190,41 @@ class CardController extends Controller
 
         $card_id = $request->input('card_id');
         $user_card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
-        if (!empty($user_card) && count($user_card)>0) {
-            $user_card->delete();
-            //如果银行卡都解绑了，要把结算卡清零
-            $user_card_count = UserCard::where('id',$this->user->id)->count();
-            if($user_card_count==0) {
+        if ( !empty($user_card) && count($user_card)>0 ) {
+            if (count($user_card) == 1){
+                $user_card->delete();
                 User::where('id',$this->user->id)->update(['pay_card_id'=>NULL]);
+                return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
+            } else if( $this->user->pay_card_id == $card_id) {
+                return response()->json(['code'=>0,'msg'=>'操作无效，请先更换结算卡','data'=>[]]);
             }
-            return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
-        } else {
-            return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
         }
+        return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
     }
 
+    /**
+     * @SWG\GET(
+     *   path="/card/getBanks",
+     *   summary="银行列表",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function getBanks() {
+        $query = Bank::query()->select()->get();
+        $data = [];
+        if(!empty($query) && count($query)>0) {
+            foreach ($query as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ];
+            }
+        }
+        Log::info($data);
+        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+    }
 
 
 

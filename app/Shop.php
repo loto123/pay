@@ -13,17 +13,25 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Shop extends Model
 {
-    //
+    const STATUS_NORMAL = 0;
+
+    const STATUS_CLOSED = 1;
+
+    const STATUS_FREEZE = 2;
+
+    //店铺铺主
     public function manager()
     {
-        return $this->hasOne('App\User','manager');
+        return $this->hasOne('App\User', 'id', 'manager_id');
     }
 
-    public function shop_user(){
-        return $this->hasMany('App\ShopUser','shop_id','id');
+    public function shop_user()
+    {
+        return $this->hasMany('App\ShopUser', 'shop_id', 'id');
     }
 
-    public function users() {
+    public function users()
+    {
         return $this->belongsToMany(User::class, (new ShopUser)->getTable(), 'shop_id', 'user_id');
     }
 

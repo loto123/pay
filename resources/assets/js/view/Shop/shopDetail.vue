@@ -15,8 +15,8 @@
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
         </div>
-        <h3 style="margin-top:0.5em;">店铺1111</h3>
-        <h3>店铺id:123123123</h3>
+        <h3 style="margin-top:0.5em;">{{shopName}}</h3>
+        <h3>店铺id:{{shopId}}</h3>
       </div>
 
       <div class="menu flex " v-if="isGroupMaster">
@@ -155,7 +155,7 @@
     </div>
 
     <div class="button-wrap">
-        <mt-button type="danger" size="large">解散店铺</mt-button>
+        <mt-button type="danger" size="large" @click = "dissShop">解散店铺</mt-button>
     </div>
 
   </div>
@@ -387,23 +387,34 @@
 
 <script>
 import topBack from "../../components/topBack";
-import {Indicator} from "mint-ui"
+import {Indicator,Toast} from "mint-ui"
 import request from "../../utils/userRequest"
 
 export default {
   name: "shopDetail",
-  mounted(){
+  beforeMount(){
+
+  },
+  created(){
     this.init();
+
+  },
+  mounted(){
+    
   },
   components: { topBack },
   data() {
     return {
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
-      isGroupMaster:true        // 是否是群主 
+      isGroupMaster:true,        // 是否是群主 
+
+      shopId:null,
+      shopName:null
     };
   },
   methods: {
+    // 跳转控制
     hide(){
     },
     goMember(){
@@ -420,18 +431,33 @@ export default {
       
     },
 
+    // 数据控制
     init(){
       Indicator.open("加载中...");
       var self = this;
       var _id = this.$route.query.id;
-      console.log(_id);
 
       request.getInstance().getData("api/shop/detail/"+_id).then((res)=>{
         console.log(res);
-      });
 
-      setTimeout(function(){Indicator.close();},500)
-      
+        this.shopId = res.data.data.id;
+        this.shopName = res.data.data.name;
+
+        Indicator.close();
+      }).catch((error)=>{
+        Toast("当前页面不存在");
+        this.$router.go(-1);
+        console.error(error);
+      });
+    },
+
+    dissShop(){
+      request.getInstance().postData("api/shop/close/"+this.shopId).then((res)=>{
+        console.log(res);
+        this.$router.push("/shop");
+      }).catch((error)=>{
+        console.error(error);
+      });
     }
 
   }
