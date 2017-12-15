@@ -31,15 +31,28 @@ class CardController extends Controller
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
-        $cards = UserCard::query()->where('user_id', '=', $this->user->id)->select()->get();
+        $user_card_table = (new UserCard)->getTable();
+        $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank')
+            ->where('user_id', '=', $this->user->id)
+            ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')->get();
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
-                Log::info($item);
+                $card_type = '';
+                switch ($item->type) {
+                    case 1:
+                        $card_type = '储蓄卡';
+                        break;
+                    case 2:
+                        $card_type = '信用卡';
+                        break;
+                }
                 $data[] = [
                     'card_id' => $item->id,
                     'card_num' => $this->formatNum($item->card_num), //做掩码处理
-                    'bank' => $item->bank,
+                    'bank' => $item->bank_name,
+                    'card_type' => $card_type,
+                    'card_logo' => $item->bank_logo,
                 ];
             }
         }
@@ -185,6 +198,9 @@ class CardController extends Controller
             return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
         }
     }
+
+
+
 
     //对字符串做掩码处理
     private function formatNum($num,$pre=0,$suf=4)
