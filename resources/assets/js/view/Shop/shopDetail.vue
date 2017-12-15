@@ -426,7 +426,7 @@ export default {
       var _id = this.$route.query.id;
       console.log(_id);
 
-      request.getInstance().postData("api/shop/detail/"+_id).then((res)=>{
+      request.getInstance().getData("api/shop/detail/"+_id).then((res)=>{
         console.log(res);
       });
 

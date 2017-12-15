@@ -63516,7 +63516,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _id = this.$route.query.id;
       console.log(_id);
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/detail/" + _id).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/detail/" + _id).then(function (res) {
         console.log(res);
       });
 
