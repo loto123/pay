@@ -155,7 +155,7 @@
     </div>
 
     <div class="button-wrap">
-        <mt-button type="danger" size="large">解散店铺</mt-button>
+        <mt-button type="danger" size="large" @click = "dissShop">解散店铺</mt-button>
     </div>
 
   </div>
@@ -414,6 +414,7 @@ export default {
     };
   },
   methods: {
+    // 跳转控制
     hide(){
     },
     goMember(){
@@ -430,6 +431,7 @@ export default {
       
     },
 
+    // 数据控制
     init(){
       Indicator.open("加载中...");
       var self = this;
@@ -443,7 +445,13 @@ export default {
 
         Indicator.close();
       });
+    },
 
+    dissShop(){
+      request.getInstance().postData("api/shop/close/"+this.shopId).then((res)=>{
+        console.log(res);
+        // this.$router.push("/shop");
+      });
     }
 
   }
