@@ -176,7 +176,7 @@ class ShopController extends BaseController {
         $shop = Shop::find($id);
         /* @var $shop Shop */
         $members = [];
-        foreach ($shop->users()->limit($member_size)->get as $_user) {
+        foreach ($shop->users()->limit($member_size)->get() as $_user) {
             /* @var $_user User */
             $members[] = [
                 'id' => $_user->id,
