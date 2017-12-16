@@ -22,20 +22,20 @@
 					</mt-cell>
 				</li>
 				<li>
-					<mt-cell title="实名认证" is-link to="">
+					<mt-cell title="实名认证" is-link to="/my/realAuth">
 						<img slot="icon" src="/images/realName.png" width="30" height="30">
 						<span>未完善</span>
 					</mt-cell>
 				</li>
-				<li @click="bankCardManage">
-					<mt-cell title="银行卡管理" is-link>
+				<li>
+					<mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 						<span>
 							<font>0</font>张</span>
 					</mt-cell>
 				</li>
-				<li @click="checkSettle">
-					<mt-cell title="查看结算卡" is-link>
+				<li>
+					<mt-cell title="查看结算卡" is-link to="/my/checkSettle">
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 					</mt-cell>
 				</li>
@@ -46,7 +46,7 @@
 				</li>
 			</ul>
 		</section>
-		<tabBar></tabBar>
+		<tabBar :status="'my'"></tabBar>
 	</div>
 </template>
 
@@ -104,36 +104,21 @@
 	export default {
 		data () {
 			return {
-				bankList:[]
+
 			}
 		},
+		created(){
+      this.personal();
+    },
 		components: { tabBar },
 		methods: {
-			reffrrer() {//推荐人
-				this.$router.push('/my/referrer');
-			},
-			bankCardManage() {//银行卡管理
-				request.getInstance().getData('api/card/index')
+			personal(){
+				request.getInstance().getData("api/my/info")
 					.then((res) => {
-						console.log(res);
-						this.bankList=res.data.data;
-						this.$router.push('/my/bankCardManage');
+						console.log(res)
 					})
 					.catch((err) => {
 						console.log(err);
-					})
-			},
-			checkSettle() {//查看结算卡
-				request.getInstance().getData('api/my/GetPayCard')
-					.then((res) => {
-						console.log(res);
-						//   this.$router.push('/my/checkSettle');
-					})
-					.catch((err) => {
-						Toast({
-							message: err.data.msg,
-							duration: 800
-						});
 					})
 			}
 		}
