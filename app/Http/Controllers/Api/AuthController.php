@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\OauthUser;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Swagger\Annotations as SWG;
 use PhpSms;
@@ -113,13 +115,6 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
-     *     @SWG\Parameter(
-     *         name="v_code",
-     *         in="formData",
-     *         description="手机验证码接口返回code",
-     *         required=true,
-     *         type="string",
-     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
@@ -143,15 +138,15 @@ class AuthController extends BaseController {
             'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable(),
             'invite_mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
             'password' => 'required',
-            'v_code' => 'required',
             'code' => 'required'
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-
-        if (!Hash::check($request->code, $request->v_code)) {
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return $this->json([], trans("error code"), 0);
         }
         $input = $request->all();
@@ -347,7 +342,7 @@ class AuthController extends BaseController {
      *     examples={
      *      "code":0,
      *      "msg":"",
-     *      "data": {"code": "code"}
+     *      "data": {}
      *     }
      *   ),
      * )
@@ -362,13 +357,22 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $code = join('', array_map(function () {
-            return mt_rand(0, 9);
-        }, range(1, 4)));
-        $result = PhpSms::make()->template(['Aliyun' => 'SMS_75755134'])->to($request->mobile)->data(['vcode' => $code])->send();
-        if ($result && $result['success']) {
-            return $this->json(['code' => Hash::make($code)]);//#todo
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if ($cache_value && isset($cache_value['code'])) {
+            $code = $cache_value['code'];
         } else {
+            $code = join('', array_map(function () {
+                return mt_rand(0, 9);
+            }, range(1, 4)));
+        }
+        $result = PhpSms::make()->template(['Aliyun' => 'SMS_75755134'])->to($request->mobile)->data(['vcode' => $code])->send();
+//        var_dump($result);
+        if ($result && $result['success']) {
+            Cache::put($cache_key, ['code' => $code, 'time' => time()], 5);
+            return $this->json();//#todo
+        } else {
+            Log::info("send sms error".var_export($result));
             return $this->json([], 'error', 0);
         }
     }
