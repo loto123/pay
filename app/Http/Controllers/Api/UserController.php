@@ -28,22 +28,22 @@ class UserController extends Controller
      * )
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index() {
         $this->user = JWTAuth::parseToken()->authenticate();
-        return response()->json(['code'=>1,'msg'=>'','data'=>[
-            'info'=>[
-                'thumb'=>'',
-                'name' => $this->user->name,
-                'mobile' => $this->user->mobile,
-            ],
-            'item'=>[
-                ['name'=>'推荐人', 'content'=>'', 'url'=>'',],
-                ['name'=>'银行卡管理', 'content'=>'', 'url'=>'',],
-                ['name'=>'实名认证', 'content'=>'', 'url'=>'',],
-                ['name'=>'查看结算卡', 'content'=>'', 'url'=>'',],
-                ['name'=>'更多设置', 'content'=>'', 'url'=>'',],
-            ],
-        ]]);
+        $user_card_count = UserCard::where('user_id',$this->user->id)->count();
+        $parent = User::find($this->user->parent_id);
+        $parent_name = '';
+        $parent_mobile = '';
+        if (!empty($parent) && count($parent)>0) {
+            $parent_name = $parent->name;
+            $parent_mobile = $parent->mobile;
+        }
+        return response()->json(['code'=>1,'msg'=>'','data'=>
+            [
+                'card_count'=> $user_card_count,
+                'parent_name' => $parent_name,
+                'parent_mobile' => $parent_mobile,
+            ]]);
     }
 
     /**
@@ -342,6 +342,28 @@ class UserController extends Controller
         return response()->json(['code' => 0, 'msg' =>'', 'data' => []]);
 
     }
+
+    /**
+     * @SWG\GET(
+     *   path="/my/info",
+     *   summary="用户信息",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function info()
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $data = [
+            'name' => $this->user->name,
+            'mobile' => $this->user->mobile,
+            'thumb' => '1.png',
+        ];
+        return response()->json(['code' => 1, 'msg' =>'', 'data' => $data]);
+    }
+
+
 
 
 
