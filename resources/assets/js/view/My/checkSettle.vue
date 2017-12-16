@@ -4,30 +4,30 @@
     <div class="settleInfo-container">
       <div class="account flex flex-align-center">
         <div class="account-title">账号</div>
-        <div class="account-number">321321321</div>
+        <div class="account-number">{{userMobile}}</div>
       </div>
       <ul class="info-content-list">
         <li>
           <div class="content-box flex flex-align-center">
             <div class="title">真实姓名</div>
-            <div class="content">刘立夫</div>
+            <div class="content">{{realName}}</div>
           </div>
           <div class="content-box flex flex-align-center">
             <div class="title">身份证号码</div>
-            <div class="content">430********21325132121</div>
+            <div class="content">{{idCard}}</div>
           </div>
           <div class="content-box flex flex-align-center">
             <div class="title">银行卡号(储蓄卡)</div>
-            <div class="content">6542*******3101321132</div>
+            <div class="content">{{bankCard}}</div>
           </div>
           <div class="content-box flex flex-align-center">
             <div class="title">所属银行</div>
-            <div class="content">中国工商银行</div>
+            <div class="content">{{bankName}}</div>
           </div>
         </li>
       </ul>
       <a href="javascript:;" class="btn" @click = "showPassword">
-        <mt-button type="primary" size="large" >更换结算卡</mt-button>
+        <mt-button type="primary" size="large">更换结算卡</mt-button>
       </a>
     </div>
 
@@ -39,12 +39,22 @@
 import topBack from "../../components/topBack";
 import passWorld from "../../components/password"
 
+import request from '../../utils/userRequest';
+import { Toast } from "mint-ui";
 export default {
   components: { topBack , passWorld},
   data(){
     return {
-      showPasswordTag:false       // 密码弹出开关
+      showPasswordTag:false,       // 密码弹出开关
+      userMobile:null,
+      realName:null,
+      idCard:null,
+      bankCard:null,
+      bankName:null
     }
+  },
+  created(){
+    this.getData();
   },
   methods:{
     showPassword(){
@@ -53,8 +63,25 @@ export default {
 
     hidePassword(){
       this.showPasswordTag = false;
+    },
+    getData(){
+      var _this=this;
+      request.getInstance().getData('api/my/getPayCard').then((res) => {
+        console.log(res);
+        //   this.$router.push('/my/checkSettle');
+        this.userMobile=res.data.data.user_mobile
+        this.realName=res.data.data.holder_name
+        this.idCard=res.data.data.holder_id
+        this.bankCard=res.data.data.card_num
+        this.bankName=res.data.data.bank
+      }).catch((err) => {
+        Toast({
+            message: err.data.msg,
+            duration: 800
+          });
+        this.$router.go(-1);
+      })
     }
-
   }
 };
 </script>

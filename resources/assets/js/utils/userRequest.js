@@ -12,8 +12,7 @@ export default class UserRequest {
     }
 
     constructor() {
-        this.baseUrl = '/';
-
+        this.baseUrl = '/'; 
     }
 
     // 发起请求 post

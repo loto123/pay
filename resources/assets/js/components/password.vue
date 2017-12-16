@@ -56,7 +56,7 @@
   height: 100vh;
   width: 100%;
   background: #efeff4;
-  position: absolute;
+  position: fixed;
   top: 0em;
   left: 0em;
   z-index: 1001;
@@ -97,11 +97,12 @@
 
   .keyboard {
     width: 100%;
-    height: 15em;
+    height: 9em;
     position: fixed;
     bottom: 0;
     left: 0;
-
+    font-size: 1.5em;
+    color: #888;
     ul {
       width: 100%;
       height: 100%;
@@ -128,9 +129,6 @@
         &:nth-child(3) {
           border-top: none;
         }
-
-        font-size: 1.5em;
-        color: #888;
       }
     }
   }
