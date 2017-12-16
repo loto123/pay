@@ -214,7 +214,7 @@ class ShopController extends BaseController {
      */
     public function close($id) {
         $shop = Shop::find($id);
-        $shop->status = 1;
+        $shop->status = Shop::STATUS_CLOSED;
         $shop->save();
         return $this->json();
     }
