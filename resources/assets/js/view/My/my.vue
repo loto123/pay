@@ -22,7 +22,7 @@
 					</mt-cell>
 				</li>
 				<li>
-					<mt-cell title="实名认证" is-link to="">
+					<mt-cell title="实名认证" is-link to="/my/realAuth">
 						<img slot="icon" src="/images/realName.png" width="30" height="30">
 						<span>未完善</span>
 					</mt-cell>
