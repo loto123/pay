@@ -104,12 +104,22 @@
 	export default {
 		data () {
 			return {
+
 			}
 		},
+		created(){
+      this.personal();
+    },
 		components: { tabBar },
 		methods: {
-			reffrrer() {//推荐人
-				this.$router.push('/my/referrer');
+			personal(){
+				request.getInstance().getData("api/my/info")
+					.then((res) => {
+						console.log(res)
+					})
+					.catch((err) => {
+						console.log(err);
+					})
 			}
 		}
 	};
