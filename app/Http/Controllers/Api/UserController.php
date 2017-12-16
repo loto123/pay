@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Bank;
 use App\User;
 use App\UserCard;
 use Illuminate\Http\Request;
@@ -276,15 +277,73 @@ class UserController extends Controller
            return response()->json(['code'=>0,'msg'=>'请先绑定银行卡','data'=>[]]);
         }
         $user_card = UserCard::find($this->user->pay_card_id);
+        $bank = Bank::find($user_card->bank);
         $data = [
             'user_mobile' => $this->user->mobile,
             'holder_name' => $user_card->holder_name,
             'holder_id' => $this->formatNum($user_card->holder_id,6,4),
             'card_num' => $this->formatNum($user_card->card_num,6,4),
-            'bank' => $user_card->bank
+            'bank' => $bank->name,
         ];
         return response()->json(['code' => 1,'msg' => '','data' => $data]);
     }
+
+    /**
+     * @SWG\Post(
+     *   path="/my/identify",
+     *   summary="实名认证",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="name",
+     *     in="formData",
+     *     description="姓名",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="id_number",
+     *     in="formData",
+     *     description="身份证号",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function identify(Request $request)
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $validator = Validator::make($request->all(),
+            [
+                'name' => 'bail|required',
+                'id_number' => 'bail|required|size:18',
+            ],
+            [
+                'required' => trans('trans.required'),
+                'digits' => trans('trans.size'),
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+        }
+        $name = $request->input('name');
+        $id_number = $request->input('id_number');
+        //调用实名认证接口
+
+        if(true) {
+            User::where('id',$this->user->id)->update([
+                'identify_status' => 1,
+                'name' => $name,
+                'id_number' => $id_number,
+            ]);
+            return response()->json(['code' => 1, 'msg' =>'', 'data' => []]);
+        }
+        return response()->json(['code' => 0, 'msg' =>'', 'data' => []]);
+
+    }
+
+
 
     //对字符串做掩码处理
     private function formatNum($num,$pre=0,$suf=4)
