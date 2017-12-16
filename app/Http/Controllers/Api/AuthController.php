@@ -14,7 +14,7 @@ use EasyWeChat;
 /**
  * @SWG\Swagger(
  *   basePath="/api",
- *   host="http://192.168.32.123:9999",
+ *   host="192.168.32.123:9999",
  *   @SWG\Info(
  *     title="游戏宝接口列表",
  *     version="0.0.1"
