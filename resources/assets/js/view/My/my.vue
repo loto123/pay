@@ -34,8 +34,8 @@
 							<font>0</font>张</span>
 					</mt-cell>
 				</li>
-				<li @click="checkSettle">
-					<mt-cell title="查看结算卡" is-link>
+				<li>
+					<mt-cell title="查看结算卡" is-link to="/my/checkSettle">
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 					</mt-cell>
 				</li>
@@ -110,19 +110,6 @@
 		methods: {
 			reffrrer() {//推荐人
 				this.$router.push('/my/referrer');
-			},
-			checkSettle() {//查看结算卡
-				request.getInstance().getData('api/my/GetPayCard')
-					.then((res) => {
-						console.log(res);
-						//   this.$router.push('/my/checkSettle');
-					})
-					.catch((err) => {
-						Toast({
-							message: err.data.msg,
-							duration: 800
-						});
-					})
 			}
 		}
 	};

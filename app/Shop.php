@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property string $name
  * @property string $logo
+ * @property boolean $use_link
+ * @property boolean $active
  */
 class Shop extends Model
 {
