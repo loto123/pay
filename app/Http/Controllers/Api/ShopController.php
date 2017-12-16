@@ -182,14 +182,16 @@ class ShopController extends BaseController {
         foreach ($shop->users()->limit($member_size)->get() as $_user) {
             /* @var $_user User */
             $members[] = [
-                'id' => $_user->id,
+                'id' => (int)$_user->id,
                 'name' => $_user->name,
-                'avatar' => asset("images/personal.jpg")
+                'avatar' => asset("images/personal.jpg"),
             ];
         }
         return $this->json([
             'id' => $shop->id,
             'name' => $shop->name,
+            'user_link' => $shop->use_link ? 1 : 0,
+            'active' => $shop->active ? 1 : 0,
             'members' => $members
         ]);
     }

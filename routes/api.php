@@ -49,6 +49,7 @@ Route::group([
     $router->post('updatePayPassword','UserController@updatePayPassword');
     $router->post('updatePayCard','UserController@updatePayCard');
     $router->get('getPayCard','UserController@getPayCard');
+    $router->post('identify','UserController@identify');
 
 });
 

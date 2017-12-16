@@ -32,10 +32,15 @@ class CardController extends Controller
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
+        if($this->user->identify_status != 1) {
+            return response()->json(['code'=>0,'msg'=>'未实名认证，该功能不可用','data'=>[]]);
+        }
+
         $user_card_table = (new UserCard)->getTable();
         $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank')
             ->where('user_id', '=', $this->user->id)
-            ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')->get();
+            ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')
+            ->orderBy('id')->get();
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
@@ -48,7 +53,7 @@ class CardController extends Controller
                         $card_type = '信用卡';
                         break;
                 }
-                $data[] = [
+                $data[$item->id] = [
                     'card_id' => $item->id,
                     'card_num' => $this->formatNum($item->card_num), //做掩码处理
                     'bank' => $item->bank_name,
@@ -56,6 +61,11 @@ class CardController extends Controller
                     'card_logo' => $item->bank_logo,
                     'is_pay_card' => ($item->id == $this->user->pay_card_id)? 1:0,
                 ];
+            }
+            if( isset($data[$this->user->pay_card_id]) ) {
+                $item = $data[$this->user->pay_card_id];
+                unset($data[$this->user->pay_card_id]);
+                array_unshift($data, $item);
             }
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
@@ -222,7 +232,6 @@ class CardController extends Controller
                 ];
             }
         }
-        Log::info($data);
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
 

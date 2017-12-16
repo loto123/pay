@@ -19,6 +19,8 @@ Route::group([
 
     $router->post('/excel/shop', 'ExcelController@shop');
     $router->post('/excel/user', 'ExcelController@user');
+
+    $router->resource('bank', BankController::class);
 });
 
 Route::group([

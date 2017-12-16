@@ -38,8 +38,8 @@ class ShopController extends Controller
                 ->where('t.status', '=', '3');
         })->leftJoin('transfer_record as tfr', function ($join) {
             $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=' , '2');
-        })->leftJoin('users as u', 'u.id', '=', $table_name .'.manager')
-            ->select( DB::raw($table_name.'.*'),'u.id as manager_id', 'u.name as manager_name',
+        })->leftJoin('users as u', 'u.id', '=', $table_name .'.manager_id')
+            ->select( DB::raw($table_name.'.*'), 'u.name as manager_name',
                 DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
                 DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
                 DB::raw('(SELECT SUM(amount) FROM tip_record WHERE tip_record.transfer_id = t.id ) as tip_amount_cnt'));
@@ -78,8 +78,8 @@ class ShopController extends Controller
                 ->where('t.status', '=', '3');
         })->leftJoin('transfer_record as tfr', function ($join) {
             $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=' , '2');
-        })->leftJoin('users as u', 'u.id', '=', $table_name .'.manager')
-            ->select( DB::raw($table_name.'.*'),'u.id as manager_id', 'u.name as manager_name',
+        })->leftJoin('users as u', 'u.id', '=', $table_name .'.manager_id')
+            ->select( DB::raw($table_name.'.*'), 'u.name as manager_name',
                 DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
                 DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
                 DB::raw('(SELECT SUM(amount) FROM tip_record WHERE tip_record.transfer_id = t.id ) as tip_amount_cnt'))
