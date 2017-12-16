@@ -5,15 +5,15 @@
 				<div class="imgWrap">
 					<img src="/images/avatar.jpg">
 				</div>
-				<h3>发起交易</h3>
+				<h3>{{personal.name}}</h3>
 				<div class="acc-number">账号:
-					<span>18674231689</span>
+					<span>{{personal.mobile}}</span>
 				</div>
 			</div>
 		</section>
 		<section>
 			<ul class="my-list">
-				<li @click="reffrrer">
+				<li>
 					<mt-cell title="推荐人" is-link>
 						<img slot="icon" src="/images/referrer.png" width="30" height="30">
 						<span>张三李四:
@@ -104,12 +104,49 @@
 	export default {
 		data () {
 			return {
+				personal:{
+					name:null,
+					mobile:null,
+					thumb:null
+				},
+				listContent:{
+					refName:null,
+					refMobile:null,
+					bankNumber:null,
+					status:null
+				}
+			
 			}
 		},
+		created(){
+      this.personalInfo();
+    },
 		components: { tabBar },
 		methods: {
-			reffrrer() {//推荐人
-				this.$router.push('/my/referrer');
+			//个人信息
+			personalInfo(){
+				request.getInstance().getData("api/my/info")
+					.then((res) => {
+						this.personal.name=res.data.data.name;
+						this.personal.mobile=res.data.data.mobile;
+						this.personal.thumb=res.data.data.thumb;
+					})
+					.catch((err) => {
+						console.log(err);
+					})
+			},
+			//列表信息
+			listInfo(){
+				request.getInstance().getData("api/my/index")
+					.then((res) => {
+						console.log(res);
+						// this.personal.name=res.data.data.name;
+						// this.personal.mobile=res.data.data.mobile;
+						// this.personal.thumb=res.data.data.thumb;
+					})
+					.catch((err) => {
+						console.log(err);
+					})
 			}
 		}
 	};

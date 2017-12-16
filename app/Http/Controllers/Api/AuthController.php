@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\OauthUser;
 use App\User;
-use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Swagger\Annotations as SWG;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use EasyWeChat;
+//use SmsManager;
 
 /**
  * @SWG\Swagger(
  *   basePath="/api",
+ *   host="192.168.32.123:9999",
  *   @SWG\Info(
  *     title="游戏宝接口列表",
  *     version="0.0.1"
@@ -107,16 +108,14 @@ class AuthController extends BaseController {
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
-     *   @SWG\Schema(
-     *     type="object",
-     *     @SWG\Property(property="code", type="integer"),
-     *     @SWG\Property(property="message", type="string", description="some message"),
-     *     @SWG\Property(property="data", type="object",
-     *     )
-     *   ),
      *     examples={
      *      "code":1,
      *      "message":"ok",
+     *      "data":{}
+     *     },
+     *     examples={
+     *      "code":0,
+     *      "message":"error mobile",
      *      "data":{}
      *     }
      *   ),
@@ -308,5 +307,10 @@ class AuthController extends BaseController {
         }
         return $this->json();
     }
+
+//    public function sms() {
+//        $result = Sms::make('SMS_75755134')->to('17673055987')->data(['vcode' => '12345'])->send();
+//        var_dump($result);
+//    }
 
 }
