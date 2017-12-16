@@ -14,13 +14,17 @@ class Loading {
     }
 
     open(value) {
+        if(!value){
+            value = "加载中...";
+        }
+
         Indicator.open(value);
 
         if (this._timer == null) {
             this._timer = setTimeout(() => {
                 Indicator.close();
                 this._timer = null;
-            }, 3000);
+            }, 5000);
         } else {
             return;
         }
