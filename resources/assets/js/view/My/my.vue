@@ -5,9 +5,9 @@
 				<div class="imgWrap">
 					<img src="/images/avatar.jpg">
 				</div>
-				<h3>{{name}}</h3>
+				<h3>{{personal.name}}</h3>
 				<div class="acc-number">账号:
-					<span>{{mobile}}</span>
+					<span>{{personal.mobile}}</span>
 				</div>
 			</div>
 		</section>
@@ -104,22 +104,45 @@
 	export default {
 		data () {
 			return {
-				name:null,
-				mobile:null,
-				thumb:null
+				personal:{
+					name:null,
+					mobile:null,
+					thumb:null
+				},
+				listContent:{
+					refName:null,
+					refMobile:null,
+					bankNumber:null,
+					status:null
+				}
+			
 			}
 		},
 		created(){
-      this.personal();
+      this.personalInfo();
     },
 		components: { tabBar },
 		methods: {
-			personal(){
+			//个人信息
+			personalInfo(){
 				request.getInstance().getData("api/my/info")
 					.then((res) => {
-						this.name=res.data.data.name;
-						this.mobile=res.data.data.mobile;
-						this.thumb=res.data.data.thumb;
+						this.personal.name=res.data.data.name;
+						this.personal.mobile=res.data.data.mobile;
+						this.personal.thumb=res.data.data.thumb;
+					})
+					.catch((err) => {
+						console.log(err);
+					})
+			},
+			//列表信息
+			listInfo(){
+				request.getInstance().getData("api/my/index")
+					.then((res) => {
+						console.log(res);
+						// this.personal.name=res.data.data.name;
+						// this.personal.mobile=res.data.data.mobile;
+						// this.personal.thumb=res.data.data.thumb;
 					})
 					.catch((err) => {
 						console.log(err);

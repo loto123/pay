@@ -58811,24 +58811,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
-			name: null,
-			mobile: null,
-			thumb: null
+			personal: {
+				name: null,
+				mobile: null,
+				thumb: null
+			},
+			listContent: {
+				refName: null,
+				refMobile: null,
+				bankNumber: null,
+				status: null
+			}
+
 		};
 	},
 	created: function created() {
-		this.personal();
+		this.personalInfo();
 	},
 
 	components: { tabBar: __WEBPACK_IMPORTED_MODULE_2__components_tabBar___default.a },
 	methods: {
-		personal: function personal() {
+		//个人信息
+		personalInfo: function personalInfo() {
 			var _this = this;
 
 			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
-				_this.name = res.data.data.name;
-				_this.mobile = res.data.data.mobile;
-				_this.thumb = res.data.data.thumb;
+				_this.personal.name = res.data.data.name;
+				_this.personal.mobile = res.data.data.mobile;
+				_this.personal.thumb = res.data.data.thumb;
+			}).catch(function (err) {
+				console.log(err);
+			});
+		},
+
+		//列表信息
+		listInfo: function listInfo() {
+			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/my/index").then(function (res) {
+				console.log(res);
+				// this.personal.name=res.data.data.name;
+				// this.personal.mobile=res.data.data.mobile;
+				// this.personal.thumb=res.data.data.thumb;
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -58852,11 +58874,11 @@ var render = function() {
         _c("div", { staticClass: "header" }, [
           _vm._m(0, false, false),
           _vm._v(" "),
-          _c("h3", [_vm._v(_vm._s(_vm.name))]),
+          _c("h3", [_vm._v(_vm._s(_vm.personal.name))]),
           _vm._v(" "),
           _c("div", { staticClass: "acc-number" }, [
             _vm._v("账号:\n\t\t\t\t"),
-            _c("span", [_vm._v(_vm._s(_vm.mobile))])
+            _c("span", [_vm._v(_vm._s(_vm.personal.mobile))])
           ])
         ])
       ]),
