@@ -97,7 +97,7 @@
 
   .keyboard {
     width: 100%;
-    height: 15em;
+    height: 9em;
     position: fixed;
     bottom: 0;
     left: 0;

@@ -1,6 +1,11 @@
 <template>
   <div id="index">
       <section id="top">
+          <div class="message flex flex-reverse flex-align-center" @click ="goInform">
+            <i class="iconfont" style="color:#fff; font-size:1.5em;">
+              &#xe626;
+            </i>
+          </div>
           <section class="transaction flex flex-justify-center">
             <a href="/#/myAccount">
               <div class="imggWrap flex flex-justify-center flex-align-center">
@@ -56,9 +61,15 @@ i {
 
 #top {
   height: 12em;
-  padding-top: 2.2em;
   background: #26a2ff;
   box-sizing: border-box;
+
+  .message{
+    height:2em;
+    width:100%;
+    padding-right:1em;
+    box-sizing: border-box;
+  }
 
   .transaction {
     width: 100%;
@@ -121,6 +132,11 @@ import tabBar from "../../components/tabBar";
 
 export default {
   name: "index",
-  components: { tabBar }
+  components: { tabBar },
+  methods:{
+    goInform(){
+      this.$router.push("/inform");
+    }
+  }
 };
 </script>

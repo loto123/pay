@@ -36,6 +36,8 @@
   import { MessageBox } from "mint-ui";
   import { Indicator,Toast } from "mint-ui";
 
+  import Loading from '../../utils/loading'
+
   export default {
     components: { topBack, passWorld },
     data() {
@@ -58,7 +60,9 @@
       },
       //银行卡列表
       bank:function(){
-        Indicator.open("加载中...");
+        // Indicator.open("加载中...");
+        Loading.getInstance().open("加载中...");
+        
         request.getInstance().getData('api/card/index')
           .then((res) => {
             this.bankList = res.data.data;

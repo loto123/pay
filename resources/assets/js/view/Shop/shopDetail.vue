@@ -9,7 +9,6 @@
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
-            
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
