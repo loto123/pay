@@ -58810,7 +58810,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
-		return {};
+		return {
+			name: null,
+			mobile: null,
+			thumb: null
+		};
 	},
 	created: function created() {
 		this.personal();
@@ -58819,8 +58823,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	components: { tabBar: __WEBPACK_IMPORTED_MODULE_2__components_tabBar___default.a },
 	methods: {
 		personal: function personal() {
+			var _this = this;
+
 			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
-				console.log(res);
+				_this.name = res.data.data.name;
+				_this.mobile = res.data.data.mobile;
+				_this.thumb = res.data.data.thumb;
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -58840,13 +58848,23 @@ var render = function() {
     "div",
     { attrs: { id: "my" } },
     [
-      _vm._m(0, false, false),
+      _c("section", { staticClass: "header-container" }, [
+        _c("div", { staticClass: "header" }, [
+          _vm._m(0, false, false),
+          _vm._v(" "),
+          _c("h3", [_vm._v(_vm._s(_vm.name))]),
+          _vm._v(" "),
+          _c("div", { staticClass: "acc-number" }, [
+            _vm._v("账号:\n\t\t\t\t"),
+            _c("span", [_vm._v(_vm._s(_vm.mobile))])
+          ])
+        ])
+      ]),
       _vm._v(" "),
       _c("section", [
         _c("ul", { staticClass: "my-list" }, [
           _c(
             "li",
-            { on: { click: _vm.reffrrer } },
             [
               _c("mt-cell", { attrs: { title: "推荐人", "is-link": "" } }, [
                 _c("img", {
@@ -58990,19 +59008,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "header-container" }, [
-      _c("div", { staticClass: "header" }, [
-        _c("div", { staticClass: "imgWrap" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg" } })
-        ]),
-        _vm._v(" "),
-        _c("h3", [_vm._v("发起交易")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "acc-number" }, [
-          _vm._v("账号:\n\t\t\t\t"),
-          _c("span", [_vm._v("18674231689")])
-        ])
-      ])
+    return _c("div", { staticClass: "imgWrap" }, [
+      _c("img", { attrs: { src: "/images/avatar.jpg" } })
     ])
   }
 ]
@@ -59557,7 +59564,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_3__components_password___default.a },
   data: function data() {
@@ -59584,12 +59590,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     bank: function bank() {
       var _this = this;
 
-      // Indicator.open("加载中...");
       __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
         _this.bankList = res.data.data;
-        __WEBPACK_IMPORTED_MODULE_4_mint_ui__["Indicator"].close();
+        __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.log(err);
       });

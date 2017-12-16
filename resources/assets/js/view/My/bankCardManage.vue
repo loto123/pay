@@ -33,8 +33,7 @@
   import request from '../../utils/userRequest';
   import topBack from "../../components/topBack";
   import passWorld from "../../components/password"
-  import { MessageBox } from "mint-ui";
-  import { Indicator,Toast } from "mint-ui";
+  import { MessageBox,Toast } from "mint-ui";
 
   import Loading from '../../utils/loading'
 
@@ -60,13 +59,12 @@
       },
       //银行卡列表
       bank:function(){
-        // Indicator.open("加载中...");
         Loading.getInstance().open("加载中...");
         
         request.getInstance().getData('api/card/index')
           .then((res) => {
             this.bankList = res.data.data;
-            Indicator.close();
+            Loading.getInstance().close();
           })
           .catch((err) => {
             console.log(err);

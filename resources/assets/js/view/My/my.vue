@@ -5,15 +5,15 @@
 				<div class="imgWrap">
 					<img src="/images/avatar.jpg">
 				</div>
-				<h3>发起交易</h3>
+				<h3>{{name}}</h3>
 				<div class="acc-number">账号:
-					<span>18674231689</span>
+					<span>{{mobile}}</span>
 				</div>
 			</div>
 		</section>
 		<section>
 			<ul class="my-list">
-				<li @click="reffrrer">
+				<li>
 					<mt-cell title="推荐人" is-link>
 						<img slot="icon" src="/images/referrer.png" width="30" height="30">
 						<span>张三李四:
@@ -104,7 +104,9 @@
 	export default {
 		data () {
 			return {
-
+				name:null,
+				mobile:null,
+				thumb:null
 			}
 		},
 		created(){
@@ -115,7 +117,9 @@
 			personal(){
 				request.getInstance().getData("api/my/info")
 					.then((res) => {
-						console.log(res)
+						this.name=res.data.data.name;
+						this.mobile=res.data.data.mobile;
+						this.thumb=res.data.data.thumb;
 					})
 					.catch((err) => {
 						console.log(err);
