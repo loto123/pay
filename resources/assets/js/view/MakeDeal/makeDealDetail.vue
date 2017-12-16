@@ -1,6 +1,8 @@
 <template>
     <div id="deal-detail">
-        <topBack style="background:#eee;"></topBack>
+        <topBack style="background:#eee;">
+          <div style="width:100%;padding-right:1em;box-sizing:border-box;" class="flex flex-reverse">撤销交易</div>
+        </topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
             <p>大赢家</p>
@@ -30,9 +32,20 @@
         
         <!-- 参与玩家记录 -->
         <section class="pay-record ">
-            <div class="title">
-                <span>交易记录</span>
+            <div class="title flex flex-v">
+              <div class="top flex flex-align-center">
+                <span>参与人</span>
+              </div>
+
+              <div class="bottom flex flex-align-center flex-justify-between">
+                <img src="/images/avatar.jpg" alt="">
+                <img src="/images/avatar.jpg" alt="">
+                <img src="/images/avatar.jpg" alt="">
+                <img src="/images/avatar.jpg" alt="">
+                <img src="/images/avatar.jpg" alt="">
+                
                 <span class="info-friend">提醒好友</span>
+              </div>
             </div>
             
             <ul class="flex flex-v flex-align-center">
@@ -150,17 +163,37 @@
 .pay-record {
   padding-top: 0.5em;
   .title {
-    width: 90%;
-    height: 2em;
-    line-height: 2em;
 
+    width: 90%;
+    height: 4.5em;
+    line-height: 2em;
+    background:#fff;
     margin: 0 auto;
-    > span {
-      float: left;
+    
+    .top{
+      height: 2em;
+      width:100%;
+      padding-left: 0.5em;
+      box-sizing: border-box;
+      span{
+        font-size:1em;
+        color:#555;
+      }
+    }
+
+    .bottom{
+      width:100%;
+      height:3.5em;
+      img{
+        width:2em;
+        height:2em;
+        display: block;
+        margin-left: 0.5em;
+      }
     }
 
     .info-friend {
-      float: right;
+      margin-right:0.5em;
       background: green;
       color: #fff;
       padding-left: 0.3em;
@@ -175,6 +208,7 @@
     li {
       margin-top: 0.2em;
       width: 90%;
+      overflow-x: hidden;
       .slider-item {
         box-sizing: border-box;
         padding-left: 0.5em;
@@ -194,8 +228,8 @@
           .title {
             font-size: 0.9em;
             height: 50%;
-            color: #999;
             width: 100%;
+            background:#fff;
           }
         }
 

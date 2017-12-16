@@ -13,7 +13,6 @@ export default class UserRequest {
 
     constructor() {
         this.baseUrl = '/';
-
     }
 
     // 发起请求 post

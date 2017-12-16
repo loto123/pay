@@ -55574,7 +55574,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1.2em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 2em;\n    line-height: 2em;\n    margin: 0 auto;\n}\n.pay-record .title > span[data-v-54aa27b5] {\n      float: left;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      float: right;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            color: #999;\n            width: 100%;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1.2em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
 
 // exports
 
@@ -55593,6 +55593,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dealContent__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_qrCode__ = __webpack_require__(570);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__utils_qrCode__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -57215,7 +57249,20 @@ var render = function() {
     "div",
     { attrs: { id: "deal-detail" } },
     [
-      _c("topBack", { staticStyle: { background: "#eee" } }),
+      _c("topBack", { staticStyle: { background: "#eee" } }, [
+        _c(
+          "div",
+          {
+            staticClass: "flex flex-reverse",
+            staticStyle: {
+              width: "100%",
+              "padding-right": "1em",
+              "box-sizing": "border-box"
+            }
+          },
+          [_vm._v("撤销交易")]
+        )
+      ]),
       _vm._v(" "),
       _c(
         "section",
@@ -57433,10 +57480,28 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "title" }, [
-      _c("span", [_vm._v("交易记录")]),
+    return _c("div", { staticClass: "title flex flex-v" }, [
+      _c("div", { staticClass: "top flex flex-align-center" }, [
+        _c("span", [_vm._v("参与人")])
+      ]),
       _vm._v(" "),
-      _c("span", { staticClass: "info-friend" }, [_vm._v("提醒好友")])
+      _c(
+        "div",
+        { staticClass: "bottom flex flex-align-center flex-justify-between" },
+        [
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("span", { staticClass: "info-friend" }, [_vm._v("提醒好友")])
+        ]
+      )
     ])
   }
 ]
@@ -58739,9 +58804,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
-		return {
-			bankList: []
-		};
+		return {};
 	},
 
 	components: { tabBar: __WEBPACK_IMPORTED_MODULE_2__components_tabBar___default.a },
@@ -58749,18 +58812,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		reffrrer: function reffrrer() {
 			//推荐人
 			this.$router.push('/my/referrer');
-		},
-		bankCardManage: function bankCardManage() {
-			var _this = this;
-
-			//银行卡管理
-			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
-				console.log(res);
-				_this.bankList = res.data.data;
-				_this.$router.push('/my/bankCardManage');
-			}).catch(function (err) {
-				console.log(err);
-			});
 		},
 		checkSettle: function checkSettle() {
 			//查看结算卡
@@ -58843,21 +58894,30 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
-            { on: { click: _vm.bankCardManage } },
             [
-              _c("mt-cell", { attrs: { title: "银行卡管理", "is-link": "" } }, [
-                _c("img", {
+              _c(
+                "mt-cell",
+                {
                   attrs: {
-                    slot: "icon",
-                    src: "/images/bankCardManage.png",
-                    width: "30",
-                    height: "30"
-                  },
-                  slot: "icon"
-                }),
-                _vm._v(" "),
-                _c("span", [_c("font", [_vm._v("0")]), _vm._v("张")], 1)
-              ])
+                    title: "银行卡管理",
+                    "is-link": "",
+                    to: "/my/bankCardManage"
+                  }
+                },
+                [
+                  _c("img", {
+                    attrs: {
+                      slot: "icon",
+                      src: "/images/bankCardManage.png",
+                      width: "30",
+                      height: "30"
+                    },
+                    slot: "icon"
+                  }),
+                  _vm._v(" "),
+                  _c("span", [_c("font", [_vm._v("0")]), _vm._v("张")], 1)
+                ]
+              )
             ],
             1
           ),
@@ -59433,10 +59493,13 @@ exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(53);
 //
 //
 //
@@ -59466,16 +59529,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack___default.a },
+  data: function data() {
+    return {
+      bankList: []
+    };
+  },
+
+  created: function created() {
+    var _this = this;
+    __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
+      console.log(res);
+      _this.bankList = res.data.data;
+    }).catch(function (err) {
+      console.log(err);
+    });
+  },
   methods: {
     del: function del() {
-      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm("是否删除该银行卡?", "温馨提示").then(function () {
-        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])({
+      __WEBPACK_IMPORTED_MODULE_2_mint_ui__["MessageBox"].confirm("是否删除该银行卡?", "温馨提示").then(function () {
+        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])({
           message: "删除成功",
           iconClass: "icon icon-success",
           duration: 800
@@ -59502,21 +59582,44 @@ var render = function() {
     [
       _c("topBack", { attrs: { title: "银行卡管理" } }),
       _vm._v(" "),
-      _c("div", { staticClass: "bankCard-container" }, [
-        _c("ul", { staticClass: "bankCard-list" }, [
-          _c("li", [
-            _vm._m(0, false, false),
-            _vm._v(" "),
-            _c("button", { staticClass: "del", on: { click: _vm.del } }, [
-              _c("i", { staticClass: "iconfont" }, [_vm._v("")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "binding" }, [_vm._v("(已绑定)")])
-          ])
-        ]),
-        _vm._v(" "),
-        _vm._m(1, false, false)
-      ])
+      _c(
+        "div",
+        { staticClass: "bankCard-container" },
+        [
+          _vm._l(_vm.bankList, function(item) {
+            return _c("ul", { staticClass: "bankCard-list" }, [
+              _c("li", [
+                _c("div", { staticClass: "bankCard-box flex" }, [
+                  _vm._m(0, true, false),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-info" }, [
+                    _c("div", { staticClass: "bank-name" }, [
+                      _vm._v(_vm._s(item.bank))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-type" }, [
+                      _vm._v(_vm._s(item.card_type))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-number" }, [
+                      _vm._v(_vm._s(item.card_num))
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("button", { staticClass: "del", on: { click: _vm.del } }, [
+                  _c("i", { staticClass: "iconfont" }, [_vm._v("")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "binding" }, [_vm._v("(已绑定)")])
+              ])
+            ])
+          }),
+          _vm._v(" "),
+          _vm._m(1, false, false)
+        ],
+        2
+      )
     ],
     1
   )
@@ -59526,18 +59629,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bankCard-box flex" }, [
-      _c("div", { staticClass: "card-image" }, [
-        _c("img", { attrs: { src: "/images/personal.jpg", alt: "" } })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-info" }, [
-        _c("div", { staticClass: "bank-name" }, [_vm._v("招商银行")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-type" }, [_vm._v("借记卡")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-number" }, [_vm._v("62120646545465454")])
-      ])
+    return _c("div", { staticClass: "card-image" }, [
+      _c("img", { attrs: { src: "/images/personal.jpg", alt: "" } })
     ])
   },
   function() {
