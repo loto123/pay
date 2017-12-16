@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <mt-button type="primary" size="large" >确认</mt-button>
+            <mt-button type="primary" size="large" @click="showPassword">确认</mt-button>
         </section>
         
         <!-- 参与玩家记录 -->
@@ -91,6 +91,8 @@
 
         <section id="qrcode" class="flex flex-justify-center"></section>
         <h3 class="notice">扫描二维码快速交易</h3>
+
+        <passwordPanel :setSwitch="passWordSwitch" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
     </div>
 </template>
 
@@ -269,11 +271,19 @@
 import topBack from "../../components/topBack";
 import slider from "../../components/slider";
 import dealContent from "./dealContent";
+import passwordPanel from '../../components/password'
 
 import qrCode from "../../utils/qrCode";
 
 export default {
   name: "makeDealDetail",
+  components: { topBack, slider, dealContent ,passwordPanel},
+  
+  data(){
+    return {
+      passWordSwitch:false
+    }
+  },
 
   mounted() {
     this._getQRCode();
@@ -286,6 +296,17 @@ export default {
     goTipPage() {
       this.$router.push("/makeDeal/deal_tip");
     },
+
+    showPassword(){
+      this.passWordSwitch = true;
+    },
+    hidePassword(){
+      this.passWordSwitch = false;
+    },
+
+    getResult(result){
+      console.log(result);
+    },
     _getQRCode: function() {
       var qrcode = new QRCode(document.getElementById("qrcode"), {
         width: 100, //设置宽高
@@ -294,8 +315,8 @@ export default {
 
       qrcode.makeCode("http://www.baidu.com");
     }
+
   },
-  components: { topBack, slider, dealContent }
 };
 </script>
 

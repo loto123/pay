@@ -55686,8 +55686,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_slider___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_slider__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dealContent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_qrCode__ = __webpack_require__(571);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__utils_qrCode__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_qrCode__ = __webpack_require__(571);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__utils_qrCode__);
 //
 //
 //
@@ -55955,6 +55957,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
 
 
 
@@ -55964,7 +55969,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "makeDealDetail",
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, slider: __WEBPACK_IMPORTED_MODULE_1__components_slider___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_2__dealContent___default.a, passwordPanel: __WEBPACK_IMPORTED_MODULE_3__components_password___default.a },
 
+  data: function data() {
+    return {
+      passWordSwitch: false
+    };
+  },
   mounted: function mounted() {
     this._getQRCode();
   },
@@ -55976,6 +55987,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     goTipPage: function goTipPage() {
       this.$router.push("/makeDeal/deal_tip");
     },
+    showPassword: function showPassword() {
+      this.passWordSwitch = true;
+    },
+    hidePassword: function hidePassword() {
+      this.passWordSwitch = false;
+    },
+    getResult: function getResult(result) {
+      console.log(result);
+    },
 
     _getQRCode: function _getQRCode() {
       var qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -55985,8 +56005,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       qrcode.makeCode("http://www.baidu.com");
     }
-  },
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, slider: __WEBPACK_IMPORTED_MODULE_1__components_slider___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_2__dealContent___default.a }
+
+  }
 });
 
 /***/ }),
@@ -57379,9 +57399,14 @@ var render = function() {
           _vm._v(" "),
           _vm._m(1, false, false),
           _vm._v(" "),
-          _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
-            _vm._v("确认")
-          ])
+          _c(
+            "mt-button",
+            {
+              attrs: { type: "primary", size: "large" },
+              on: { click: _vm.showPassword }
+            },
+            [_vm._v("确认")]
+          )
         ],
         1
       ),
@@ -57529,7 +57554,12 @@ var render = function() {
         attrs: { id: "qrcode" }
       }),
       _vm._v(" "),
-      _c("h3", { staticClass: "notice" }, [_vm._v("扫描二维码快速交易")])
+      _c("h3", { staticClass: "notice" }, [_vm._v("扫描二维码快速交易")]),
+      _vm._v(" "),
+      _c("passwordPanel", {
+        attrs: { setSwitch: _vm.passWordSwitch },
+        on: { hidePassword: _vm.hidePassword, callBack: _vm.getResult }
+      })
     ],
     1
   )
@@ -59910,6 +59940,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       if (this.password.length >= 6) {
         console.log(this.password);
+        this.doCallback();
       }
     },
     setPassword: function setPassword() {
@@ -59934,6 +59965,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     closePassword: function closePassword() {
       this.$emit("hidePassword");
       this.password = "";
+    },
+
+
+    // 走回调
+    doCallback: function doCallback() {
+      // if(this.$props.callBack){
+      this.$emit("callBack", "密码输入完毕");
+      // }
     }
   }
 });
