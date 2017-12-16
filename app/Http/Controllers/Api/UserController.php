@@ -40,6 +40,7 @@ class UserController extends Controller
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>
             [
+                'identify_status'=>$this->user->identify_status,
                 'card_count'=> $user_card_count,
                 'parent_name' => $parent_name,
                 'parent_mobile' => $parent_mobile,
