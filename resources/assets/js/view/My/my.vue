@@ -16,22 +16,20 @@
 				<li>
 					<mt-cell title="推荐人" is-link>
 						<img slot="icon" src="/images/referrer.png" width="30" height="30">
-						<span>张三李四:
-							<em>132131321321</em>
-						</span>
+						<span>{{listContent.parent_name}} <em>{{listContent.parent_mobile}}</em></span>
 					</mt-cell>
 				</li>
 				<li>
 					<mt-cell title="实名认证" is-link to="/my/realAuth">
 						<img slot="icon" src="/images/realName.png" width="30" height="30">
-						<span>未完善</span>
+						<span>{{listContent.identify_status ? "完善" : "未完善"}}</span>
 					</mt-cell>
 				</li>
 				<li>
 					<mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 						<span>
-							<font>0</font>张</span>
+							<font>{{listContent.card_count}}</font>张</span>
 					</mt-cell>
 				</li>
 				<li>
@@ -110,16 +108,17 @@
 					thumb:null
 				},
 				listContent:{
-					refName:null,
-					refMobile:null,
-					bankNumber:null,
-					status:null
+					parent_name:null,
+					parent_mobile:null,
+					card_count:null,
+					identify_status:null
 				}
 			
 			}
 		},
 		created(){
-      this.personalInfo();
+			this.personalInfo();
+			this.listInfo();
     },
 		components: { tabBar },
 		methods: {
@@ -137,12 +136,15 @@
 			},
 			//列表信息
 			listInfo(){
+				var self=this;
+
 				request.getInstance().getData("api/my/index")
 					.then((res) => {
 						console.log(res);
-						// this.personal.name=res.data.data.name;
-						// this.personal.mobile=res.data.data.mobile;
-						// this.personal.thumb=res.data.data.thumb;
+						self.listContent.parent_name=res.data.data.parent_name;
+						self.listContent.parent_mobile=res.data.data.parent_mobile;
+						self.listContent.card_count=res.data.data.card_count;
+						self.listContent.identify_status=res.data.data.identify_status;
 					})
 					.catch((err) => {
 						console.log(err);

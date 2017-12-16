@@ -252,4 +252,12 @@ class DataController extends Controller
         });
     }
 
+    public function test() {
+        $data = [];
+        return Admin::content(function (Content $content) use ($data) {
+            $content->body(view('admin/data/dealDetails', $data));
+            $content->header("交易详情");
+        });
+    }
+
 }
