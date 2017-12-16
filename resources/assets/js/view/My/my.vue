@@ -46,7 +46,7 @@
 				</li>
 			</ul>
 		</section>
-		<tabBar></tabBar>
+		<tabBar :status="'my'"></tabBar>
 	</div>
 </template>
 

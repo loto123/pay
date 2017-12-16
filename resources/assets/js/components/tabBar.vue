@@ -3,8 +3,8 @@
       <ul class="flex flex-align-center">
           <li class="flex-1 flex flex-v flex-justify-center flex-align-center">
               <a href="/#/index">
-                  <i class="iconfont index-icon comonIcon active">&#xe61f;</i>
-                  <p class="active">首页</p>
+                  <i class="iconfont index-icon comonIcon" v-bind:class="[status == 'index'?'active':'normal']">&#xe61f;</i>
+                  <p v-bind:class="[status == 'index'?'active':'normal']">首页</p>
               </a>
                 
           </li>
@@ -18,8 +18,8 @@
           </li>
           <li class="flex-1 flex flex-v flex-justify-center flex-align-center">
               <a href="/#/my">
-                <i class="iconfont account-icon comonIcon normal">&#xe6a3;</i>
-                <p class="normal">我的</p>
+                <i class="iconfont account-icon comonIcon" v-bind:class="[status == 'my'?'active':'normal']">&#xe6a3;</i>
+                <p v-bind:class="[status == 'my'?'active':'normal']">我的</p>
               </a>
           </li>
 
@@ -57,7 +57,6 @@ i {
       }
 
       .index-icon {
-        // font-size: 3em;
       }
 
       p {
@@ -89,8 +88,9 @@ i {
 }
 </style>
 
-
 <script>
-export default {};
+export default {
+  props:["status"]
+};
 </script>
 

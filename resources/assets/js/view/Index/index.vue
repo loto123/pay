@@ -49,7 +49,7 @@
           
         </ul>
       </section>
-      <tabBar></tabBar> 
+      <tabBar :status="'index'"></tabBar> 
   </div>
      
 </template>

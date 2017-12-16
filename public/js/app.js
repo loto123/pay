@@ -45834,10 +45834,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["status"]
+});
 
 /***/ }),
 /* 285 */
@@ -45847,77 +45847,82 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0, false, false)
+  return _c("div", { attrs: { id: "tabBar" } }, [
+    _c("ul", { staticClass: "flex flex-align-center" }, [
+      _c(
+        "li",
+        {
+          staticClass:
+            "flex-1 flex flex-v flex-justify-center flex-align-center"
+        },
+        [
+          _c("a", { attrs: { href: "/#/index" } }, [
+            _c(
+              "i",
+              {
+                staticClass: "iconfont index-icon comonIcon",
+                class: [_vm.status == "index" ? "active" : "normal"]
+              },
+              [_vm._v("")]
+            ),
+            _vm._v(" "),
+            _c("p", { class: [_vm.status == "index" ? "active" : "normal"] }, [
+              _vm._v("首页")
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm._m(0, false, false),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass:
+            "flex-1 flex flex-v flex-justify-center flex-align-center"
+        },
+        [
+          _c("a", { attrs: { href: "/#/my" } }, [
+            _c(
+              "i",
+              {
+                staticClass: "iconfont account-icon comonIcon",
+                class: [_vm.status == "my" ? "active" : "normal"]
+              },
+              [_vm._v("")]
+            ),
+            _vm._v(" "),
+            _c("p", { class: [_vm.status == "my" ? "active" : "normal"] }, [
+              _vm._v("我的")
+            ])
+          ])
+        ]
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { attrs: { id: "tabBar" } }, [
-      _c("ul", { staticClass: "flex flex-align-center" }, [
-        _c(
-          "li",
-          {
-            staticClass:
-              "flex-1 flex flex-v flex-justify-center flex-align-center"
-          },
-          [
-            _c("a", { attrs: { href: "/#/index" } }, [
-              _c("i", { staticClass: "iconfont index-icon comonIcon active" }, [
-                _vm._v("")
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "active" }, [_vm._v("首页")])
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass:
-              "flex-1 flex flex-v flex-justify-center flex-align-center"
-          },
-          [
-            _c(
-              "div",
-              { staticClass: "make-deal flex flex-v flex-align-center" },
-              [
-                _c("a", { attrs: { href: "/#/makeDeal" } }, [
-                  _c(
-                    "i",
-                    { staticClass: "iconfont message-icon comonIcon normal" },
-                    [_vm._v("")]
-                  ),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "normal" }, [_vm._v("发起交易")])
-                ])
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass:
-              "flex-1 flex flex-v flex-justify-center flex-align-center"
-          },
-          [
-            _c("a", { attrs: { href: "/#/my" } }, [
-              _c(
-                "i",
-                { staticClass: "iconfont account-icon comonIcon normal" },
-                [_vm._v("")]
-              ),
-              _vm._v(" "),
-              _c("p", { staticClass: "normal" }, [_vm._v("我的")])
-            ])
-          ]
-        )
-      ])
-    ])
+    return _c(
+      "li",
+      {
+        staticClass: "flex-1 flex flex-v flex-justify-center flex-align-center"
+      },
+      [
+        _c("div", { staticClass: "make-deal flex flex-v flex-align-center" }, [
+          _c("a", { attrs: { href: "/#/makeDeal" } }, [
+            _c("i", { staticClass: "iconfont message-icon comonIcon normal" }, [
+              _vm._v("")
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "normal" }, [_vm._v("发起交易")])
+          ])
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -45965,7 +45970,7 @@ var render = function() {
       _vm._v(" "),
       _vm._m(1, false, false),
       _vm._v(" "),
-      _c("tabBar")
+      _c("tabBar", { attrs: { status: "index" } })
     ],
     1
   )
@@ -59061,7 +59066,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("tabBar")
+      _c("tabBar", { attrs: { status: "my" } })
     ],
     1
   )
