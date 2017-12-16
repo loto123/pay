@@ -99,6 +99,8 @@
 	import { Toast } from 'mint-ui';
 	import tabBar from "../../components/tabBar";
 	import request from '../../utils/userRequest';
+	import Loading from '../../utils/loading'
+
 	export default {
 		data () {
 			return {
@@ -124,11 +126,15 @@
 		methods: {
 			//个人信息
 			personalInfo(){
+				Loading.getInstance().open("加载中...");
+
 				request.getInstance().getData("api/my/info")
 					.then((res) => {
 						this.personal.name=res.data.data.name;
 						this.personal.mobile=res.data.data.mobile;
 						this.personal.thumb=res.data.data.thumb;
+						Loading.getInstance().close();
+						
 					})
 					.catch((err) => {
 						console.log(err);

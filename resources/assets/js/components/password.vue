@@ -157,6 +157,7 @@ export default {
 
       if (this.password.length >= 6) {
         console.log(this.password);
+        this.doCallback();
       }
     },
 
@@ -182,7 +183,15 @@ export default {
     closePassword(){
         this.$emit("hidePassword");
         this.password = "";
+    },
+
+    // 走回调
+    doCallback(){
+      // if(this.$props.callBack){
+        this.$emit("callBack","密码输入完毕");
+      // }
     }
+
   }
 };
 </script>
