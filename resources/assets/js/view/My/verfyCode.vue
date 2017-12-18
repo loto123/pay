@@ -1,26 +1,24 @@
 <template>
   <div id="realAuth">
-    <topBack title="实名认证"></topBack>
+    <topBack title="修改支付密码"></topBack>
     <div class="realAuth-container">
       <div class="realAuth-box">
-        <mt-field label="姓名" placeholder="请填写本人真实姓名" type="text" v-model="realInfo.name"></mt-field>
-        <mt-field label="身份证号" placeholder="请填写本人身份证号" type="text" v-model="realInfo.id_number"></mt-field>
         <section class="account-container">
           <div class="account-box flex flex-align-center">
-            <span>账号:</span>
+            <span>手机号:</span>
             <em class="flex-1 number">18390939299</em>
           </div>
         </section>
         <section class="input-wrap-box">
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
-            <input type="text" placeholder="请输入验证码" class="flex-1" v-model="realInfo.code">
+            <input type="text" placeholder="请输入验证码" class="flex-1">
             <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime}}</mt-button>
           </div>
         </section>
       </div>
-      <div class="submit-button flex flex-justify-center">
-        <mt-button type="primary" size="large" @click="realAuth">确定</mt-button>
+      <div class="submit-button flex flex-justify-center" @click="nextBtn">
+        <mt-button type="primary" size="large">下一步</mt-button>
       </div>
     </div>
   </div>
@@ -36,25 +34,15 @@
       return {
         realInfo:{
           name :null,
-          id_number :null,
-          code:null
+          id_number :null
         },
-        computedTime:null  //倒数计时
+        computedTime:0  //倒数计时
       }
     },
     components: { topBack },
     methods: {
-      realAuth() {
-        var _this=this;
-        var data = this.realInfo;
-        request.getInstance().postData('api/my/identify',data).then((res) => {
-          console.log(res);
-        }).catch((err) => {
-          Toast({
-            message: err.data.msg,
-            duration: 800
-          });
-        })
+      nextBtn() {
+        this.$router.push('/my/pay_password');
       },
       sendYZM(){
         var _temp = {};
