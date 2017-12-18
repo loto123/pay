@@ -22,7 +22,7 @@ return [
      *
      */
     'scheme' => [
-        'Aliyun' => '100',
+        'YunTongXun' => '100',
     ],
 
     /*
@@ -56,11 +56,11 @@ return [
          */
         'YunTongXun' => [
             //主帐号
-            'accountSid'    => 'your_account_sid',
+            'accountSid'    => '8a216da8575110490157566474da0436',
             //主帐号令牌
-            'accountToken'  => 'your_account_token',
+            'accountToken'  => 'af3594c8120a433aab6959b961aa11e1',
             //应用Id
-            'appId'         => 'your_app_id',
+            'appId'         => '8a216da86058d6fa016059454a6b0038',
             //请求地址(不加协议前缀)
             'serverIP'      => 'app.cloopen.com',
             //请求端口
