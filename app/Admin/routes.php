@@ -11,6 +11,8 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
     $router->resource('users',UserController::class);
+    $router->resource('/roles', RoleController::class);
+    $router->resource('/permissions', PermissionController::class);
     $router->any('/user/detail/{id}','UserController@details');
 
     $router->any('shop','ShopController@index');
