@@ -25,8 +25,8 @@
 						<span>{{listContent.identify_status ? "完善" : "未完善"}}</span>
 					</mt-cell>
 				</li>
-				<li>
-					<mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
+				<li @click="bankCardManage">
+					<mt-cell title="银行卡管理" is-link>
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 						<span>
 							<font>{{listContent.card_count}}</font>张</span>
@@ -114,14 +114,15 @@
 					parent_mobile:null,
 					card_count:null,
 					identify_status:null
-				}
+				},
+				isBankCardManage:true
 			
 			}
 		},
 		created(){
 			this.personalInfo();
 			this.listInfo();
-    },
+    	},
 		components: { tabBar },
 		methods: {
 			//个人信息
@@ -157,6 +158,10 @@
 			},
 			realAuth(e){
 				this.$router.push("/my/realAuth"+"?mobile="+e);
+			},
+			//银行卡管理
+			bankCardManage(){
+				this.$router.push('/my/bankCardManage');
 			}
 		}
 	};
