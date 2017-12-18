@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Pay\Model\Withdraw;
+use App\Pay\Model\WithdrawException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,11 +19,6 @@ class SubmitWithdrawRequest implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * 禁止重试
-     * @var int
-     */
-    public $tries = 0;
     /**
      * @var Withdraw
      */
@@ -45,57 +41,43 @@ class SubmitWithdrawRequest implements ShouldQueue
      */
     public function handle()
     {
+        $this->job->delete();//失败禁止重试
+
         $withdraw = $this->withdraw;
-        if ($withdraw->state == Withdraw::STATE_QUEUED) {
-            $state = Withdraw::STATE_QUEUED;
-            $actual_withdraw_amount = round($withdraw->amount - $withdraw->system_fee, 2);
-            $prev_except = null;
-            $result = [];
-            try {
-                $result = $withdraw->method->getImplInstance()->withdraw($withdraw->getKey(), $actual_withdraw_amount, $withdraw->receiver_info, $withdraw->channel->getInterfaceConfigure(), $withdraw->channel->getNotifyUrl('withdraw'));
-                if (is_array($result) && array_key_exists('state', $result) && array_key_exists('raw_respon', $result)) {
-                    $state = $result['state'];
-                    //通道交易号
-                    if (isset($result['out_batch_no'])) {
-                        $withdraw->out_batch_no = $result['out_batch_no'];
-                    }
+        $prev_except = null;
+        $result = [];
 
-                    //通道手续费
-                    if (isset($result['fee'])) {
-                        $withdraw->channel_fee = $result['fee'];
-                    }
+        try {
+            $result = $withdraw->method->withdraw($withdraw);
+            if (is_array($result) && array_key_exists('state', $result) && array_key_exists('raw_response', $result)) {
+                $withdraw->state = $result['state'];
+                //通道交易号
+                if (isset($result['out_batch_no'])) {
+                    $withdraw->out_batch_no = $result['out_batch_no'];
                 }
-                $withdraw->sate = $state;
 
-            } catch (\Exception $e) {
-                $result['raw_response'] = 'Uncaught queue execution exception';
-                $state = Withdraw::STATE_SEND_FAIL;
-                $prev_except = $e;
+                //通道手续费
+                if (isset($result['fee'])) {
+                    $withdraw->channel_fee = $result['fee'];
+                }
             }
 
-            $withdraw->save();
-
-            if ($state == Withdraw::STATE_SEND_FAIL || $state == Withdraw::STATE_PROCESS_FAIL) {
-                throw new WithdrawException($result['raw_response'], $state, $prev_except);
-            }
+        } catch (\Exception $e) {
+            $result['raw_response'] = 'App exception';
+            $withdraw->state = Withdraw::STATE_SEND_FAIL;
+            $prev_except = $e;
         }
-    }
 
+        $withdraw->save();
 
-    /**
-     * 处理提现异常
-     * @param WithdrawException $e
-     */
-    public function fail(WithdrawException $e)
-    {
-        $this->withdraw->exceptions()->save(new \App\Pay\Model\WithdrawException([
-            'message' => $e->getMessage(),
-            'state' => $e->getCode(),
-            'exception' => $e->getPrevious() ? $e->getPrevious()->getMessage() : ''
-        ]));
+        if ($withdraw->state == Withdraw::STATE_SEND_FAIL || $withdraw->state == Withdraw::STATE_PROCESS_FAIL) {
+            $this->withdraw->exceptions()->save(new WithdrawException([
+                'message' => (string)$result['raw_response'],
+                'state' => $withdraw->state,
+                'exception' => $prev_except ? $prev_except->getMessage() : ''
+            ]));
+        }
+
     }
 }
 
-class WithdrawException extends \Exception
-{
-}

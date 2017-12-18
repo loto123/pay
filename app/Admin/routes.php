@@ -20,7 +20,8 @@ Route::group([
     $router->post('/excel/shop', 'ExcelController@shop');
 
     $router->resource('pay/platform', PayPlatformController::class);
-    $router->resource('pay/method', PayMethodController::class);
+    $router->resource('pay/deposit-method', DepositMethodController::class);
+    $router->resource('pay/withdraw-method', WithdrawMethodController::class);
     $router->resource('pay/entity', BusinessEntityController::class);
     $router->resource('pay/channel', PayChannelController::class);
 

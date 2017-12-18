@@ -39,14 +39,23 @@ class PayPlatformController extends Controller
     {
         return Admin::grid(Platform::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
-            $grid->column('name', '平台');
-            $grid->column('impl', '实现路径');
-            $grid->methods('支付方式')->display(function ($methods) {
+            $grid->column('name', '平台')->editable();
+            $grid->depositMethods('充值方式')->display(function ($depositMethods) {
 
-                return implode(',', array_column($methods, 'title'));
+                return implode('&nbsp;', array_map(function ($value) {
+                    return '<span class="label label-success">' . $value . '</span>';
+                }, array_column($depositMethods, 'title')));
             });
+
+            $grid->withdrawMethods('提现方式')->display(function ($withdrawMethods) {
+
+                return implode('&nbsp;', array_map(function ($value) {
+                    return '<span class="label label-primary">' . $value . '</span>';
+                }, array_column($withdrawMethods, 'title')));
+            });
+
             $grid->actions(function ($actions) {
-                $actions->disableDelete();
+                $actions->disableEdit();
             });
 
 
@@ -79,14 +88,14 @@ class PayPlatformController extends Controller
     {
         return Admin::form(Platform::class, function (Form $form) {
             $form->text('name', '平台名')->rules('between:2,10', ['between' => '填写2~10个字符']);
-            $form->text('impl', '实现路径')->rules('between:5,255', ['between' => '必填,不超过255个字符']);
-            $form->textarea('public_cfg', '公共参数')->rules('nullable|max:255', ['max' => '不能超过255个字符']);;
-            $form->saving(function (Form $form) {
-                if (!class_exists($form->impl)) {
-                    throw new \Exception("平台接口 {$form->impl} 不存在");
-                }
-            });
-            $form->setWidth(8, 2);
+            //$form->text('impl', '实现路径')->rules('between:5,255', ['between' => '必填,不超过255个字符']);
+            //$form->textarea('public_cfg', '公共参数')->rules('nullable|max:255', ['max' => '不能超过255个字符']);;
+//            $form->saving(function (Form $form) {
+//                if (!class_exists($form->impl)) {
+//                    throw new \Exception("平台接口 {$form->impl} 不存在");
+//                }
+//            });
+            $form->setWidth(4, 2);
             $form->disableReset();
         });
     }

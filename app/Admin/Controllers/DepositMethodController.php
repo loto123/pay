@@ -3,7 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Pay\Model\PayMethod;
+use App\Pay\DepositInterface;
+use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Platform;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
@@ -11,7 +12,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 
-class PayMethodController extends Controller
+class DepositMethodController extends Controller
 {
     use ModelForm;
 
@@ -38,14 +39,11 @@ class PayMethodController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(PayMethod::class, function (Grid $grid) {
+        return Admin::grid(DepositMethod::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-            $grid->column('title', '支付方式');
-            $grid->column('platform.name', '所属平台');
-            $grid->actions(function ($actions) {
-                $actions->disableDelete();
-            });
+            $grid->column('title', '充值方式');
+            $grid->column('platform.name', '支付平台');
         });
     }
 
@@ -73,15 +71,16 @@ class PayMethodController extends Controller
      */
     protected function form()
     {
-        return Admin::form(PayMethod::class, function (Form $form) {
+        return Admin::form(DepositMethod::class, function (Form $form) {
             $form->text('title', '支付方式')->placeholder('如扫码支付,银行卡支付..')->rules('required|max:255', ['required' => '必填项']);
             $form->select('platform_id', '所属平台')->options(Platform::all()->mapWithKeys(function ($item) {
                 return [$item['id'] => $item['name']];
             }))->rules('required', ['required' => '必须选择所属平台']);
             $form->text('impl', '实现路径')->rules('required|max:255', ['required' => '必填项']);
+            $form->textarea('config', '接口参数')->rules('nullable');
             $form->saving(function (Form $form) {
-                if (!class_exists($form->impl)) {
-                    throw new \Exception("支付接口 {$form->impl} 不存在");
+                if (!is_subclass_of($form->impl, DepositInterface::class)) {
+                    throw new \Exception("储值接口 {$form->impl} 未实现");
                 }
             });
             $form->setWidth(8, 2);

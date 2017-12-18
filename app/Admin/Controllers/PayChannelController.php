@@ -92,7 +92,7 @@ class PayChannelController extends Controller
             $form->select('entity_id', '签约主体')->options(BusinessEntity::all()->mapWithKeys(function ($item) {
                 return [$item['id'] => $item['company_name']];
             }))->rules('required', ['required' => '必须选择签约主体']);
-            $form->textarea('cfg', '通道参数')->placeholder("支付通道接口参数,如key,秘钥等一行一个:\r\n参数1=值1\r\n参数2=值2..")->rules('required|max:255', ['required' => '必须填写参数', 'max' => '最多255字符']);
+            $form->textarea('config', '通道参数')->placeholder("支付通道接口参数,如key,秘钥等一行一个:\r\n参数1=值1\r\n参数2=值2..")->rules('required|max:255', ['required' => '必须填写参数', 'max' => '最多255字符']);
 
             //备用通道
             $spare_channels_filter = [['id', '<>', $form->model()->id]];

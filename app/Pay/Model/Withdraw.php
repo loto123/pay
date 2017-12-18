@@ -29,6 +29,7 @@ class Withdraw extends Model
         'update_at' => 'datetime',
         'state' => 'integer'
     ];
+    protected $guarded = ['id'];
 
     public function getReceiverInfoAttribute($value)
     {
@@ -46,10 +47,10 @@ class Withdraw extends Model
      */
     public function method()
     {
-        return $this->belongsTo(PayMethod::class, 'method_id');
+        return $this->belongsTo(WithdrawMethod::class, 'method_id');
     }
 
-    /**
+    /**0
      * 提现通道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

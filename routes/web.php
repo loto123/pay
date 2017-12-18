@@ -1,7 +1,7 @@
 <?php
 use App\Pay\Model\Channel;
-use App\Pay\Model\Deposit;
-use App\Pay\Model\PayMethod;
+use App\Pay\Model\DepositMethod;
+use App\Pay\Model\WithdrawMethod;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,16 +18,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//支付通知接收
-Route::match(['get', 'post'], '/{type}-notify/channel{channel}/', function ($type, Channel $channel) {
-    return $channel->acceptNotify($type);
-})->name('pay_notify')->where(['type' => 'withdraw|deposit', 'channel' => '[0-9]+']);;
+//通知接收
+Route::match(['get', 'post'], '/{notify_type}-notify/c{channel}_m{method}', function ($notify_type, Channel $channel) {
+    $method = ['pay' => DepositMethod::class, 'withdraw' => WithdrawMethod::class][$notify_type];
+    $method = new $method;
+    return $method->acceptNotify($channel);
+})->name('common_notify')->where(['notify_type' => 'pay|withdraw', 'channel' => '[0-9]+', 'method' => '[0-9]+']);
 
 //支付跳回地址
-Route::match(['get', 'post'], '/pay-result/method{method}', function (PayMethod $method) {
-    $result = $method->getImplInstance()->displayReturn();
-    $result['state'] = Deposit::getStateText($result['state']);
-    return view('pay_result', $result);
+Route::match(['get', 'post'], '/pay-result/m{method}', function (DepositMethod $method) {
+    return $method->showDepositResult();
 })->name('pay_result');
 
 //Auth::routes();

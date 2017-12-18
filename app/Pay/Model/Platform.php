@@ -24,12 +24,21 @@ class Platform extends Model
     private $interface;
 
     /**
-     * 平台的支付方式
+     * 平台的充值方式
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function methods()
+    public function depositMethods()
     {
-        return $this->hasMany(PayMethod::class);
+        return $this->hasMany(DepositMethod::class);
+    }
+
+    /**
+     * 平台的提现方式
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function withdrawMethods()
+    {
+        return $this->hasMany(WithdrawMethod::class);
     }
 
     /**

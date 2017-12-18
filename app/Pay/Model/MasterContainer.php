@@ -72,10 +72,10 @@ class MasterContainer extends Container
      *
      * @param $amount float
      * @param $byChannel Channel 支付通道
-     * @param $byMethod PayMethod 支付方式
+     * @param DepositMethod $byMethod WithdrawMethod 支付方式
      * @return mixed 返回一个支付信息字符串或null
      */
-    public function initiateDeposit($amount, Channel $byChannel, PayMethod $byMethod)
+    public function initiateDeposit($amount, Channel $byChannel, DepositMethod $byMethod)
     {
         if ($byChannel->disabled) {
             $byChannel = $byChannel->spareChannel()->firstOrFail();
@@ -99,7 +99,7 @@ class MasterContainer extends Container
                 break;
             }
 
-            $response = $byMethod->getImplInstance()->deposit($order->getKey(), $amount, $this->getKey(), $byChannel->getInterfaceConfigure(), $byChannel->getNotifyUrl('deposit'), $byMethod->getReturnUrl());
+            $response = $byMethod->deposit($order);
 
             if ($response == null) {
                 $order->state = Deposit::STATE_API_ERR;
@@ -121,11 +121,11 @@ class MasterContainer extends Container
      * @param $amount
      * @param $receiver_info array
      * @param Channel $byChannel
-     * @param PayMethod $byMethod
+     * @param WithdrawMethod $byMethod
      * @param $system_fee
      * @return bool
      */
-    public function initiateWithdraw($amount, array $receiver_info, Channel $byChannel, PayMethod $byMethod, $system_fee)
+    public function initiateWithdraw($amount, array $receiver_info, Channel $byChannel, WithdrawMethod $byMethod, $system_fee)
     {
         //开始事务
         $commit = false;
@@ -147,7 +147,6 @@ class MasterContainer extends Container
             $withdraw->method()->associate($byMethod);
             $withdraw->channel()->associate($byChannel);
             $withdraw->masterContainer()->associate($this);
-
             //加入提现队列
             if ($withdraw->save()) {
                 DB::commit();

@@ -16,6 +16,7 @@ class WithdrawException extends Model
     protected $casts = [
         'create_at' => 'datetime'
     ];
+    protected $guarded = ['id', 'withdraw_id'];
 
     /**
      * 所属提现

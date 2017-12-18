@@ -65,7 +65,7 @@ class Deposit extends Model
      */
     public function method()
     {
-        return $this->belongsTo(PayMethod::class, 'method_id');
+        return $this->belongsTo(Deposit::class, 'method_id');
     }
 
     /**
