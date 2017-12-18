@@ -59439,8 +59439,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -59457,16 +59455,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				thumb: null
 			},
 			listContent: {
-				refName: null,
-				refMobile: null,
-				bankNumber: null,
-				status: null
+				parent_name: null,
+				parent_mobile: null,
+				card_count: null,
+				identify_status: null
 			}
 
 		};
 	},
 	created: function created() {
 		this.personalInfo();
+		this.listInfo();
 	},
 
 	components: { tabBar: __WEBPACK_IMPORTED_MODULE_2__components_tabBar___default.a },
@@ -59489,11 +59488,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//列表信息
 		listInfo: function listInfo() {
+			var self = this;
+
 			__WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/my/index").then(function (res) {
 				console.log(res);
-				// this.personal.name=res.data.data.name;
-				// this.personal.mobile=res.data.data.mobile;
-				// this.personal.thumb=res.data.data.thumb;
+				self.listContent.parent_name = res.data.data.parent_name;
+				self.listContent.parent_mobile = res.data.data.parent_mobile;
+				self.listContent.card_count = res.data.data.card_count;
+				self.listContent.identify_status = res.data.data.identify_status;
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -59543,8 +59545,8 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _c("span", [
-                  _vm._v("张三李四:\n\t\t\t\t\t\t"),
-                  _c("em", [_vm._v("132131321321")])
+                  _vm._v(_vm._s(_vm.listContent.parent_name) + " "),
+                  _c("em", [_vm._v(_vm._s(_vm.listContent.parent_mobile))])
                 ])
               ])
             ],
@@ -59574,7 +59576,13 @@ var render = function() {
                     slot: "icon"
                   }),
                   _vm._v(" "),
-                  _c("span", [_vm._v("未完善")])
+                  _c("span", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.listContent.identify_status ? "完善" : "未完善"
+                      )
+                    )
+                  ])
                 ]
               )
             ],
@@ -59604,7 +59612,14 @@ var render = function() {
                     slot: "icon"
                   }),
                   _vm._v(" "),
-                  _c("span", [_c("font", [_vm._v("0")]), _vm._v("张")], 1)
+                  _c(
+                    "span",
+                    [
+                      _c("font", [_vm._v(_vm._s(_vm.listContent.card_count))]),
+                      _vm._v("张")
+                    ],
+                    1
+                  )
                 ]
               )
             ],
