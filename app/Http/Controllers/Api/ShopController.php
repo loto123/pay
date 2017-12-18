@@ -134,11 +134,38 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function all() {
+    public function all(Request $request) {
+        $limit = $request->input('size', 10);
         $user = $this->auth->user();
-        $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        $shops = [];
+        $count = 0;
+        foreach ($user->transfer as $_transfer) {
+            $count += $_transfer->shop()->count();
+            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit)->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+        $count += $user->shop()->count();
+        if (count($shops) < $limit) {
+            foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+        $count += $user->in_shops()->count();
+        if (count($shops) < $limit) {
+            foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+
         $data = [];
-        foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+        foreach ($shops as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->en_id(),
