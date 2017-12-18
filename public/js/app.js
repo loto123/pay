@@ -59560,6 +59560,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}).catch(function (err) {
 				console.log(err);
 			});
+		},
+		realAuth: function realAuth(e) {
+			this.$router.push("/my/realAuth" + "?mobile=" + e);
 		}
 	}
 });
@@ -59616,36 +59619,31 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
+            {
+              on: {
+                click: function($event) {
+                  _vm.realAuth(_vm.personal.mobile)
+                }
+              }
+            },
             [
-              _c(
-                "mt-cell",
-                {
+              _c("mt-cell", { attrs: { title: "实名认证", "is-link": "" } }, [
+                _c("img", {
                   attrs: {
-                    title: "实名认证",
-                    "is-link": "",
-                    to: "/my/realAuth"
-                  }
-                },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/realName.png",
-                      width: "30",
-                      height: "30"
-                    },
-                    slot: "icon"
-                  }),
-                  _vm._v(" "),
-                  _c("span", [
-                    _vm._v(
-                      _vm._s(
-                        _vm.listContent.identify_status ? "完善" : "未完善"
-                      )
-                    )
-                  ])
-                ]
-              )
+                    slot: "icon",
+                    src: "/images/realName.png",
+                    width: "30",
+                    height: "30"
+                  },
+                  slot: "icon"
+                }),
+                _vm._v(" "),
+                _c("span", [
+                  _vm._v(
+                    _vm._s(_vm.listContent.identify_status ? "完善" : "未完善")
+                  )
+                ])
+              ])
             ],
             1
           ),
@@ -60360,7 +60358,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     callBack: function callBack(e) {
-      console.log(e);
+      console.log('密码输入完毕');
     }
   }
 });
@@ -60605,7 +60603,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       realInfo: {
         name: null,
-        id_number: null
+        id_number: null,
+        computedTime: 0 //倒数计时
       }
     };
   },
@@ -60615,13 +60614,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     realAuth: function realAuth() {
       var _this = this;
       var data = this.realInfo;
-      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', data).then(function (res) {
-        console.log(res);
-      }).catch(function (err) {
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', data).then(function (res) {}).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])({
           message: err.data.msg,
           duration: 800
         });
+      });
+    },
+    sendYZM: function sendYZM() {
+      var mobile = this.$route.query.mobile;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", mobile).then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
+        console.log(err);
       });
     }
   }
@@ -60692,7 +60698,11 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "mt-button",
-                    { staticClass: "flex-1", attrs: { type: "default" } },
+                    {
+                      staticClass: "flex-1",
+                      attrs: { type: "default" },
+                      on: { click: _vm.sendYZM }
+                    },
                     [_vm._v("发送验证码(10)")]
                   )
                 ],
@@ -60732,7 +60742,7 @@ var staticRenderFns = [
       _c("div", { staticClass: "account-box flex flex-align-center" }, [
         _c("span", [_vm._v("账号:")]),
         _vm._v(" "),
-        _c("em", { staticClass: "flex-1 number" }, [_vm._v("321321321")])
+        _c("em", { staticClass: "flex-1 number" }, [_vm._v("18390939299")])
       ])
     ])
   }
@@ -61351,7 +61361,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.forget-password-box[data-v-87f34208] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-87f34208] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-87f34208] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-87f34208] {\n    color: #26a2ff;\n}\n", ""]);
+exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.password-btn[data-v-87f34208] {\n  width: 96%;\n  margin: auto;\n  margin-top: 2em;\n}\n.forget-password-box[data-v-87f34208] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-87f34208] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-87f34208] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-87f34208] {\n    color: #26a2ff;\n}\n", ""]);
 
 // exports
 
@@ -61362,8 +61372,13 @@ exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #efeef4
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -61384,11 +61399,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  data: function data() {
+    return {
+      old_password: null, //旧密码
+      new_password: null, //新密码
+      confirm_password: null //确认密码
+    };
+  },
+
+  methods: {
+    affirm: function affirm() {
+      var _this = this;
+
+      var self = this;
+      var data = {
+        old_password: this.old_password,
+        new_password: this.new_password,
+        confirm_password: this.confirm_password
+      };
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePassword', data).then(function (res) {
+        console.log(res);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('密码修改成功');
+        _this.$router.push('/login'); //调转到登录页
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -61410,7 +61457,14 @@ var render = function() {
         { staticClass: "settleInfo-container" },
         [
           _c("mt-field", {
-            attrs: { label: "原密码", placeholder: "请填写原密码" }
+            attrs: { label: "原密码", placeholder: "请填写原密码" },
+            model: {
+              value: _vm.old_password,
+              callback: function($$v) {
+                _vm.old_password = $$v
+              },
+              expression: "old_password"
+            }
           }),
           _vm._v(" "),
           _c("mt-field", {
@@ -61418,6 +61472,13 @@ var render = function() {
               label: "新密码",
               placeholder: "请填写新密码",
               type: "email"
+            },
+            model: {
+              value: _vm.new_password,
+              callback: function($$v) {
+                _vm.new_password = $$v
+              },
+              expression: "new_password"
             }
           }),
           _vm._v(" "),
@@ -61426,8 +61487,31 @@ var render = function() {
               label: "确认新密码",
               placeholder: "请再次输入密码",
               type: "password"
+            },
+            model: {
+              value: _vm.confirm_password,
+              callback: function($$v) {
+                _vm.confirm_password = $$v
+              },
+              expression: "confirm_password"
             }
           })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "password-btn flex flex-justify-center" },
+        [
+          _c(
+            "mt-button",
+            {
+              attrs: { type: "primary", size: "large" },
+              on: { click: _vm.affirm }
+            },
+            [_vm._v("确认")]
+          )
         ],
         1
       ),

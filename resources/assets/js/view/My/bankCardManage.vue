@@ -24,7 +24,7 @@
         <a href="javascript:;">添加新银行卡</a>
       </div>
     </div>
-    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack = "callBack"></passWorld>
+    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
   </div>
 </template>
 
@@ -93,7 +93,7 @@
         );
       },
       callBack(e){
-        console.log(e);
+        console.log('密码输入完毕');
       }
     }
   };

@@ -19,8 +19,8 @@
 						<span>{{listContent.parent_name}} <em>{{listContent.parent_mobile}}</em></span>
 					</mt-cell>
 				</li>
-				<li>
-					<mt-cell title="实名认证" is-link to="/my/realAuth">
+				<li @click="realAuth(personal.mobile)">
+					<mt-cell title="实名认证" is-link>
 						<img slot="icon" src="/images/realName.png" width="30" height="30">
 						<span>{{listContent.identify_status ? "完善" : "未完善"}}</span>
 					</mt-cell>
@@ -155,6 +155,9 @@
 					.catch((err) => {
 						console.log(err);
 					})
+			},
+			realAuth(e){
+				this.$router.push("/my/realAuth"+"?mobile="+e);
 			}
 		}
 	};
