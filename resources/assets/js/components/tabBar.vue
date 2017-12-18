@@ -56,9 +56,6 @@ i {
         font-size: 2.3em;
       }
 
-      .index-icon {
-      }
-
       p {
         margin-top: 0.2em;
         text-align: center;
