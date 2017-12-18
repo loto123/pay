@@ -134,7 +134,6 @@
 						this.personal.mobile=res.data.data.mobile;
 						this.personal.thumb=res.data.data.thumb;
 						Loading.getInstance().close();
-						
 					})
 					.catch((err) => {
 						console.log(err);

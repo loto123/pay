@@ -98,10 +98,13 @@
         
         request.getInstance().postData('api/my/pay_password',temp)
           .then((res) => {
-            console.log(res);
+            console.log('789');
+            if(res.data.code=0){
+              this.showPassword();
+            }
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           })
       }
     }
