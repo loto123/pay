@@ -35,6 +35,9 @@ class CardController extends Controller
         if($this->user->identify_status != 1) {
             return response()->json(['code'=>0,'msg'=>'未实名认证，该功能不可用','data'=>[]]);
         }
+        if(empty($this->user->pay_password)) {
+            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+        }
 
         $user_card_table = (new UserCard)->getTable();
         $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank')
@@ -136,7 +139,9 @@ class CardController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-
+        if(empty($this->user->pay_password)) {
+            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+        }
         $card_num = $request->input('card_num');
         $bank = $request->input('bank');
         $holder_name = $request->input('name');
@@ -197,7 +202,9 @@ class CardController extends Controller
         if ($validator->fails()) {
             return response()->json(['code'=>0,'msg'=>$validator->errors()->first(),'data'=>[]]);
         }
-
+        if(empty($this->user->pay_password)) {
+            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+        }
         $card_id = $request->input('card_id');
         $user_card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
         if ( !empty($user_card) && count($user_card)>0 ) {

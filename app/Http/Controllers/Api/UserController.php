@@ -44,6 +44,7 @@ class UserController extends Controller
                 'card_count'=> $user_card_count,
                 'parent_name' => $parent_name,
                 'parent_mobile' => $parent_mobile,
+                'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
             ]]);
     }
 
@@ -205,6 +206,9 @@ class UserController extends Controller
         $old_password = $request->input('old_pay_password');
         $new_password = $request->input('new_pay_password');
         $confirm_password = $request->input('confirm_pay_password');
+        if(empty($this->user->pay_password)) {
+            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+        }
         //验证两次密码
         if(isset($confirm_password)) {
             if ($confirm_password != $new_password) {
@@ -251,6 +255,9 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
+        if(empty($this->user->pay_password)) {
+            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+        }
         $card_id = $request->input('card_id');
         $user_card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
         if (empty($user_card) || count($user_card)==0) {
@@ -276,6 +283,9 @@ class UserController extends Controller
         $this->user = JWTAuth::parseToken()->authenticate();
         if(empty($this->user->pay_card_id)) {
            return response()->json(['code'=>0,'msg'=>'请先绑定银行卡','data'=>[]]);
+        }
+        if(empty($this->user->pay_password)) {
+            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
         }
         $user_card = UserCard::find($this->user->pay_card_id);
         $bank = Bank::find($user_card->bank);
