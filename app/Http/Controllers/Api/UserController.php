@@ -286,9 +286,9 @@ class UserController extends Controller
         if(empty($this->user->pay_card_id)) {
            return response()->json(['code'=>0,'msg'=>'请先绑定银行卡','data'=>[]]);
         }
-        if(empty($this->user->pay_password)) {
-            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
-        }
+//        if(empty($this->user->pay_password)) {
+//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+//        }
         $user_card = UserCard::find($this->user->pay_card_id);
         $bank = Bank::find($user_card->bank);
         $data = [
