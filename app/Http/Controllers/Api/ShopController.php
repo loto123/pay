@@ -103,7 +103,7 @@ class ShopController extends BaseController {
         foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id,
+                'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => asset("images/personal.jpg")
             ];
@@ -141,7 +141,7 @@ class ShopController extends BaseController {
         foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id,
+                'id' => $_shop->en_id(),
                 'name' => $_shop->name,
             ];
         }
@@ -175,10 +175,11 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
+
         foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id,
+                'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => asset("images/personal.jpg")
             ];
@@ -211,7 +212,7 @@ class ShopController extends BaseController {
      */
     public function detail($id, Request $request) {
         $member_size = $request->input('member_size', 5);
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
@@ -227,7 +228,7 @@ class ShopController extends BaseController {
             ];
         }
         return $this->json([
-            'id' => $shop->id,
+            'id' => $shop->en_id(),
             'name' => $shop->name,
             'user_link' => $shop->use_link ? 1 : 0,
             'active' => $shop->active ? 1 : 0,
@@ -254,7 +255,7 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function close($id) {
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         $shop->status = Shop::STATUS_CLOSED;
         $shop->save();
         return $this->json();
@@ -279,7 +280,7 @@ class ShopController extends BaseController {
     public function quit($id) {
         $user = $this->auth->user();
 
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         ShopUser::where('shop_id', $shop->id)->where("user_id", $user->id)->delete();
         return $this->json();
     }
@@ -317,7 +318,7 @@ class ShopController extends BaseController {
     public function update($id, Request $request) {
         $user = $this->auth->user();
 
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         if ($request->name) {
             $shop->name = $request->name;
         }
