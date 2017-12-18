@@ -149,6 +149,7 @@ class AuthController extends BaseController {
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return $this->json([], trans("error code"), 0);
         }
+        Cache::forget($cache_key);
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -300,6 +301,13 @@ class AuthController extends BaseController {
      *         required=false,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="code",
+     *         in="formData",
+     *         description="手机验证码",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
@@ -313,12 +321,21 @@ class AuthController extends BaseController {
      */
     public function valid(Request $request) {
         $validator = Validator::make($request->all(), [
-            'mobile' => 'regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable(),
+            'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable(),
             'invite_mobile' => 'regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
+            'code' => 'regex:/^\d{4}$/',
         ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
+        }
+        if ($request->code) {
+            $cache_key = "SMS_".$request->mobile;
+            $cache_value = Cache::get($cache_key);
+            if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+                return $this->json([], trans("error code"), 0);
+            }
         }
         return $this->json();
     }
