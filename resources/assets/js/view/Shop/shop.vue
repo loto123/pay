@@ -1,7 +1,7 @@
 <template>
   <div id="shop">
       <div id="top">
-          <topBack :backUrl="'\/index\/'" style="color:#fff;">
+          <topBack :backUrl="'\/index\/'" style="color:#fff;background:#26a2ff;" >
               <div class="top-message flex flex-reverse" @click = "goMessagePage">
                 <i class="iconfont">&#xe626;</i>
                 <span class="notice">
@@ -73,7 +73,7 @@
           </div>
 
           <div class= "item">
-            <mt-field label="设置倍率" placeholder="请输入倍率(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
+            <mt-field label="设置单价" placeholder="请输入单价(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
           </div>
 
           <div class= "item">
@@ -340,14 +340,13 @@
 import topBack from "../../components/topBack"
 import {Indicator} from 'mint-ui'
 import request from '../../utils/userRequest'
+import Loading from '../../utils/loading'
 
 export default {
   components: { topBack },
 
   mounted(){
     this.getShopData();
-
-
   },
 
   data() {
@@ -404,14 +403,15 @@ export default {
     // 数据处理
     getShopData(){
       var self = this;
-      Indicator.open('加载中...');
+      Loading.getInstance().open();
       request.getInstance().getData("api/shop/lists/mine").then(function(res){
         self.shopList = res.data.data.data;
         console.log(res);
-        Indicator.close();
+        Loading.getInstance().close();
         
       }).catch(function(e){
-        console.log(e);
+        Loading.getInstance().close();
+        console.error(e);
       });
     }
 

@@ -51,6 +51,7 @@ Route::group([
     $router->get('getPayCard','UserController@getPayCard');
     $router->post('identify','UserController@identify');
     $router->get('info','UserController@info');
+    $router->post('pay_password','UserController@pay_password');
 });
 
 Route::group([
@@ -95,6 +96,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     ], function ($api) {
         $api->get('lists', 'ShopController@lists');
         $api->get('lists/mine', 'ShopController@my_lists');
+        $api->get('lists/all', 'ShopController@all');
         $api->get('detail/{id}', 'ShopController@detail');
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');

@@ -24,7 +24,11 @@
         <a href="javascript:;">添加新银行卡</a>
       </div>
     </div>
+<<<<<<< .mine
     <passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
+=======
+    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack = "callBack"></passWorld>
+>>>>>>> .theirs
   </div>
 </template>
 
@@ -91,9 +95,15 @@
             console.log("已经取消");
           }
         );
+<<<<<<< .mine
       },
       callBack(e){
         console.log('密码输入完毕');
+=======
+      },
+      callBack(e){
+        console.log(e);
+>>>>>>> .theirs
       }
     }
   };

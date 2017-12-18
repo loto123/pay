@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $logo
  * @property boolean $use_link
  * @property boolean $active
+ * @property double $price
+ * @property double $fee
  */
 class Shop extends Model
 {

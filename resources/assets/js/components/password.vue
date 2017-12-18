@@ -145,7 +145,8 @@ export default {
       password: ""
     };
   },
-  props: ["setSwitch"],
+  // validationData data url methond
+  props: ["setSwitch","validationData"],
   methods: {
     ipuntNumber(e) {
       if (this.password.length >= 6) {
@@ -187,9 +188,7 @@ export default {
 
     // 走回调
     doCallback(){
-      // if(this.$props.callBack){
         this.$emit("callBack","密码输入完毕");
-      // }
     }
 
   }

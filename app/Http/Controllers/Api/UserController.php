@@ -384,4 +384,35 @@ class UserController extends Controller
         return $maskBankCardNo;
     }
 
+    /**
+     * @SWG\Post(
+     *   path="/my/pay_password",
+     *   summary="支付密码验证",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="password",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function pay_password(Request $request) {
+        $validator = Validator::make($request->all(),
+            ['password' => 'bail|required']
+        );
+        if ($validator->fails()) {
+            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+        }
+        $user = $this->auth()->user;
+        if (!Hash::check($request->password, $user->pay_password)) {
+            return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => []]);
+        } else {
+            return response()->json(['code' => 1,'msg' => '','data' => []]);
+        }
+    }
+
 }

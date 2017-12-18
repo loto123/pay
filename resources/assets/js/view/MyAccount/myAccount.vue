@@ -1,6 +1,6 @@
 <template>
     <div id="myAccount" class="myAccount-container">
-        <topBack title="我的账户">
+        <topBack title="我的账户" style="background:#eee;">
             <div class= "flex flex-reverse flex-align-center header-right">
                 <a href="/#/myAccount/bill" class="recharge-btn ">账单明细</a>
             </div>
