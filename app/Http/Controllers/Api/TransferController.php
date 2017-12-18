@@ -232,6 +232,13 @@ class TransferController extends Controller
      *     required=true,
      *     type="string"
      *   ),
+     *   @SWG\Parameter(
+     *     name="pay_password",
+     *     in="formData",
+     *     description="支付密码 当action=put时必须存在此参数",
+     *     required=false,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -245,6 +252,7 @@ class TransferController extends Controller
                 'transfer_id' => 'bail|required',
                 'points' => 'bail|required|integer|between:1,99999',
                 'action' => ['bail', 'required', Rule::in(['put', 'get'])],
+                'pay_password' => 'required_if:action,put',
             ],
             [
                 'required' => trans('trans.required'),
@@ -566,6 +574,13 @@ class TransferController extends Controller
      *     required=true,
      *     type="integer"
      *   ),
+     * *    @SWG\Parameter(
+     *     name="pay_password",
+     *     in="formData",
+     *     description="支付密码 当action=1时必须存在此参数",
+     *     required=false,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -576,6 +591,8 @@ class TransferController extends Controller
             [
                 'transfer_id' => 'bail|required',
                 'fee' => 'bail|required|numeric|between:1,99999',
+                'action' => ['bail', 'required', Rule::in([0, 1])],
+                'pay_password' => 'required_if:action,1',
             ],
             [
                 'required' => trans('trans.required'),
