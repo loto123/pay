@@ -31,7 +31,7 @@
       </a>
     </div>
 
-    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword = "hidePassword"></passWorld>
+    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword = "hidePassword" v-on:callBack="callBack"></passWorld>
   </div>
 </template>
 
@@ -81,6 +81,18 @@ export default {
           });
         this.$router.go(-1);
       })
+    },
+    callBack(e){
+      console.log("321321");
+      var temp = {};
+      request.getInstance().postData('api/my/pay_password',_temp)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      
     }
   }
 };
