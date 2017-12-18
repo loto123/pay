@@ -6,6 +6,7 @@ import RealAuth from '../view/My/realAuth.vue'
 import AddBankCard from '../view/My/addBankCard.vue'
 import CheckSettle from '../view/My/checkSettle.vue'
 import LoginPassword from '../view/My/loginPassword.vue'
+import VerfyCode from '../view/My/verfyCode.vue'
 import PayPassword from '../view/My/payPassword.vue'
 export default [
     { path: '/my', name: 'my', component: My },
@@ -16,5 +17,6 @@ export default [
     { path:'/my/bankCardManage/addBankCard', name:'addBankCard', component: AddBankCard },
     { path:'/my/checkSettle', name:'checkSettle', component: CheckSettle },
     { path:'/my/login_password', name:'loginPassword', component: LoginPassword },
+    { path:'/my/verfy_code', name:'verfyCode', component: VerfyCode },
     { path:'/my/pay_password', name:'payPassword', component: PayPassword }
 ]

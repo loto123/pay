@@ -92,8 +92,20 @@
           }
         );
       },
-      callBack(e){
-        console.log('密码输入完毕');
+      callBack(password){
+        var temp = {};
+        temp.password=password;
+        
+        request.getInstance().postData('api/my/pay_password',temp)
+          .then((res) => {
+            console.log('789');
+            if(res.data.code=0){
+              this.showPassword();
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          })
       }
     }
   };

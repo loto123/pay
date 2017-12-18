@@ -15,7 +15,7 @@
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
             <input type="text" placeholder="请输入验证码" class="flex-1">
-            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码(10)</mt-button>
+            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime}}</mt-button>
           </div>
         </section>
       </div>
@@ -55,10 +55,18 @@
         })
       },
       sendYZM(){
-        var mobile = this.$route.query.mobile;
-        
-        request.getInstance().postData("api/auth/sms",mobile).then((res) => {
-          console.log(res); 
+        var _temp = {};
+        _temp.mobile = this.$route.query.mobile;
+        request.getInstance().postData("api/auth/sms",_temp).then((res) => {
+          console.log(res);
+          this.computedTime = 5;
+          this.timer = setInterval(() => {
+              this.computedTime --;
+              console.log(this.computedTime); 
+              if (this.computedTime == 0) {
+                clearInterval(this.timer)
+              }
+          }, 1000)
         }).catch((err) => {
          console.log(err);
         })
