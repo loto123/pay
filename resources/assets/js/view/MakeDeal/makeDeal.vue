@@ -146,12 +146,27 @@
 
 <script>
 import topBack from '../../components/topBack'
+import Loading from '../../utils/loading'
+import request from '../../utils/userRequest'
 
 export default {
   name:'makeDeal',
+  created(){
+      this.init();
+  },
   methods:{
       confirm(){
           this.$router.push({path:'/makeDeal/deal_detail'})
+      },
+      init(){
+          Loading.getInstance().open();
+          request.getInstance().getData('api/shop/lists/all').then((res)=>{
+              console.log(res);
+              Loading.getInstance().close();
+          }).catch((err)=>{
+              console.error(err);
+              Loading.getInstance().close();
+          });
       }
   },
   components:{ topBack }
