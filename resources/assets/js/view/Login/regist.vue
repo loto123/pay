@@ -254,6 +254,8 @@ export default {
           }
 
           console.log(res);
+        }).catch((err)=>{
+          console.log(err);
         });
         return;
       }
@@ -269,21 +271,27 @@ export default {
 
     // 验证用户名和邀请人手机号
     confirmMobileAndInvite(){
-      Loading.getInstance().open();
-      console.log(this.userAccountName,this.inviteMobile);
-      var _tempData = {
-        mobile:this.userAccountName,
-        invite_mobile:this.inviteMobile
-      };
+      //  普通注册模式
+      if(!this.findPasswordSwitch){
+        Loading.getInstance().open();
+        console.log(this.userAccountName,this.inviteMobile);
+        var _tempData = {
+          mobile:this.userAccountName,
+          invite_mobile:this.inviteMobile
+        };
 
-      request.getInstance().postData('api/auth/valid').then((res)=>{
-        console.log(res);
-        Loading.getInstance().close();
-      }).catch((err)=>{
-        console.error(err);
-        Toast(err.message);
-      }); 
+        request.getInstance().postData('api/auth/valid').then((res)=>{
+          console.log(res);
+          Loading.getInstance().close();
+          this.goNextStep();
+        }).catch((err)=>{
+          console.error(err);
+          Toast(err.message);
+        }); 
 
+      }else {
+        // 密码找回模式
+      }
       // this.goNextStep();
     }
   },
