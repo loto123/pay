@@ -147,7 +147,7 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $count += $user->shop()->count();
+        $count += $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         if (count($shops) < $limit) {
             foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
@@ -155,7 +155,7 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $count += $user->in_shops()->count();
+        $count += $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
         if (count($shops) < $limit) {
             foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
