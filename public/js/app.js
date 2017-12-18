@@ -42652,7 +42652,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.mint-indicator-mask {\n  z-index: 1001;\n}\n", ""]);
+exports.push([module.i, "\n.mint-indicator-mask {\n  z-index: 1999 !important;\n}\n.mint-indicator-wrapper {\n  z-index: 1998 !important;\n}\n", ""]);
 
 // exports
 
@@ -42696,6 +42696,12 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -55410,7 +55416,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  background: #eee;\n  width: 100%;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#makeDeal .mint-cell-wrapper[data-v-9177d678] {\n    background-image: none;\n}\n.mint-cell-wrapper[data-v-9177d678] {\n  background-image: none;\n}\n.mint-cell[data-v-9177d678]:last-child {\n  background-image: none;\n}\n.select-wrap[data-v-9177d678] {\n  width: 90%;\n  height: auto;\n  margin: 0 auto;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.select-wrap select[data-v-9177d678] {\n    display: block;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    color: #666;\n    padding-left: 1em;\n    padding-right: 1em;\n    border: 1px solid #999;\n    text-align: center;\n    font-size: 1em;\n    line-height: 1em;\n    outline: none;\n    height: 2.5em;\n    width: 100%;\n}\n.select-wrap option[data-v-9177d678] {\n    border: none;\n    outline: none;\n    text-align: center;\n    color: #000;\n}\n.price[data-v-9177d678] {\n  height: 2.5em;\n  margin: 0 auto;\n  margin-top: 1em;\n  width: 90%;\n  line-height: 2.5em;\n  border-bottom: 1px solid #eee;\n  background: #fff;\n}\n.price label[data-v-9177d678] {\n    padding-left: 1.2em;\n    font-size: 1em;\n}\n.price input[data-v-9177d678] {\n    display: block;\n    width: 30%;\n    font-size: 1.2em;\n    outline: none;\n    border: none;\n    color: #666;\n}\n.price span[data-v-9177d678] {\n    display: block;\n}\n.textareaWrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.textareaWrap textarea[data-v-9177d678] {\n    width: 100%;\n    outline: none;\n    border: none;\n    font-size: 1.2em;\n    padding: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.commit-btn[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.notice[data-v-9177d678] {\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 5.5em;\n  width: 80%;\n  font-size: 0.9em;\n}\n", ""]);
+exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  background: #eee;\n  width: 100%;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#makeDeal .mint-cell-wrapper[data-v-9177d678] {\n    background-image: none;\n}\n.mint-cell-wrapper[data-v-9177d678] {\n  background-image: none;\n}\n.mint-cell[data-v-9177d678]:last-child {\n  background-image: none;\n}\n.select-wrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  height: 2.5em;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.price[data-v-9177d678] {\n  height: 2.5em;\n  margin: 0 auto;\n  margin-top: 1em;\n  width: 90%;\n  line-height: 2.5em;\n  border-bottom: 1px solid #eee;\n  background: #fff;\n}\n.price label[data-v-9177d678] {\n    padding-left: 1.2em;\n    font-size: 1em;\n}\n.price input[data-v-9177d678] {\n    display: block;\n    width: 30%;\n    font-size: 1.2em;\n    outline: none;\n    border: none;\n    color: #666;\n}\n.price span[data-v-9177d678] {\n    display: block;\n}\n.textareaWrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.textareaWrap textarea[data-v-9177d678] {\n    width: 100%;\n    outline: none;\n    border: none;\n    font-size: 1.2em;\n    padding: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.commit-btn[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.notice[data-v-9177d678] {\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 5.5em;\n  width: 80%;\n  font-size: 0.9em;\n}\n", ""]);
 
 // exports
 
@@ -55423,8 +55429,10 @@ exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_inputList__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_inputList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_inputList__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(25);
 //
 //
 //
@@ -55554,23 +55562,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 
 
 
@@ -55581,23 +55574,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     created: function created() {
         this.init();
     },
+    data: function data() {
+        return {
+            dropListSwitch: true
+        };
+    },
+
 
     methods: {
         confirm: function confirm() {
             this.$router.push({ path: '/makeDeal/deal_detail' });
         },
         init: function init() {
-            __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
-            __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/lists/all').then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+            __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/lists/all').then(function (res) {
                 console.log(res);
-                __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
                 console.error(err);
-                __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             });
+        },
+        showDropList: function showDropList() {
+            this.dropListSwitch = true;
+        },
+        hideDropList: function hideDropList() {
+            this.dropListSwitch = false;
         }
     },
-    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_1__components_inputList___default.a }
 });
 
 /***/ }),
@@ -55617,11 +55622,18 @@ var render = function() {
         attrs: { title: "发起交易" }
       }),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "select-wrap flex flex-align-center",
+          on: { click: _vm.showDropList }
+        },
+        [_vm._v("\n      请选择您要发起交易的店铺\n\n  ")]
+      ),
+      _vm._v(" "),
       _vm._m(0, false, false),
       _vm._v(" "),
       _vm._m(1, false, false),
-      _vm._v(" "),
-      _vm._m(2, false, false),
       _vm._v(" "),
       _c(
         "div",
@@ -55641,30 +55653,14 @@ var render = function() {
       _vm._v(" "),
       _c("p", { staticClass: "notice" }, [
         _vm._v("你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。")
-      ])
+      ]),
+      _vm._v(" "),
+      _c("inputList", { attrs: { showSwitch: _vm.dropListSwitch } })
     ],
     1
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "select-wrap" }, [
-      _c("select", { attrs: { name: "", id: "" } }, [
-        _c("option", { staticStyle: { color: "#999" }, attrs: { value: "" } }, [
-          _vm._v("请选择您要发起交易的群")
-        ]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("1")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("2")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("3")])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -70278,6 +70274,276 @@ var shopStore = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 725 */,
+/* 726 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(727)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(729)
+/* template */
+var __vue_template__ = __webpack_require__(730)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-3cefe37e"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\inputList.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3cefe37e", Component.options)
+  } else {
+    hotAPI.reload("data-v-3cefe37e", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 727 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(728);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("4d2d8636", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3cefe37e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./inputList.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3cefe37e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./inputList.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 728 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-active[data-v-3cefe37e] {\n  -webkit-transition: all 0.3s ease;\n  transition: all 0.3s ease;\n}\n.slide-enter[data-v-3cefe37e],\n.slide-leave-to[data-v-3cefe37e] {\n  opacity: 0;\n}\n#drop-list-component[data-v-3cefe37e] {\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#drop-list-component .content[data-v-3cefe37e] {\n    width: 80%;\n    height: 70%;\n    background: #fff;\n    position: absolute;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#drop-list-component .content h3[data-v-3cefe37e] {\n      height: 3em;\n}\n#drop-list-component .content .list-wrap[data-v-3cefe37e] {\n      height: 20em;\n      overflow: scroll;\n}\n#drop-list-component .mask[data-v-3cefe37e] {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.4);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 729 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ["showSwitch"],
+
+    data: function data() {
+        return {
+            "options": [{
+                label: '被禁用',
+                value: '值F'
+                // disabled: true
+            }, {
+                label: '选项A',
+                value: '值A'
+            }, {
+                label: '选项B',
+                value: '值B'
+            }, {
+                label: '被禁用',
+                value: '值F'
+                // disabled: true
+            }, {
+                label: '选项A',
+                value: '值A'
+            }, {
+                label: '选项B',
+                value: '值B'
+            }, {
+                label: '被禁用',
+                value: '值F'
+                // disabled: true
+            }, {
+                label: '选项A',
+                value: '值A'
+            }, {
+                label: '选项B',
+                value: '值B'
+            }]
+        };
+    }
+});
+
+/***/ }),
+/* 730 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("transition", { attrs: { name: "slide" } }, [
+    _vm.showSwitch
+      ? _c(
+          "div",
+          {
+            staticClass: "flex flex-align-center flex-justify-center",
+            attrs: { id: "drop-list-component" }
+          },
+          [
+            _c("div", { staticClass: "mask" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "content" }, [
+              _c(
+                "h3",
+                { staticClass: "flex flex-align-center flex-justify-center" },
+                [_vm._v("\n              请选择您要发起交易的店铺\n          ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "list-wrap" },
+                [
+                  _c("mt-radio", {
+                    attrs: { align: "right", title: "", options: _vm.options }
+                  })
+                ],
+                1
+              )
+            ])
+          ]
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3cefe37e", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
