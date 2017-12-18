@@ -51,6 +51,7 @@ Route::group([
     $router->get('getPayCard','UserController@getPayCard');
     $router->post('identify','UserController@identify');
     $router->get('info','UserController@info');
+    $router->post('pay_password','UserController@pay_password');
 });
 
 Route::group([
