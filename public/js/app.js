@@ -52887,6 +52887,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(145);
 //
 //
 //
@@ -53088,6 +53089,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -53098,11 +53100,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       step: 0,
-      agrementState: false,
-      findPasswordSwitch: false,
+      agrementState: false, // 用户协议开关
+      findPasswordSwitch: false, // 找回密码开关
 
-      userAccountName: null,
-      userPassword: null
+      userAccountName: null, // 用户名
+      userPassword: null, // 密码
+      inviteMobile: null // 邀请人手机号
     };
   },
   mounted: function mounted() {
@@ -53150,6 +53153,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     closeAgreenment: function closeAgreenment() {
       this.agrementState = false;
+    },
+
+
+    // 验证用户名和邀请人手机号
+    confirmMobileAndInvite: function confirmMobileAndInvite() {
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      console.log(this.userAccountName, this.inviteMobile);
+      var _tempData = {
+        mobile: this.userAccountName,
+        invite_mobile: this.inviteMobile
+      };
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/valid').then(function (res) {
+        console.log(res);
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.message);
+      });
+
+      // this.goNextStep();
     }
   },
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
@@ -53320,6 +53344,13 @@ var render = function() {
                     label: "推荐码",
                     placeholder: "请输入推荐人手机号",
                     type: "tel"
+                  },
+                  model: {
+                    value: _vm.inviteMobile,
+                    callback: function($$v) {
+                      _vm.inviteMobile = $$v
+                    },
+                    expression: "inviteMobile"
                   }
                 })
               ],
@@ -53389,7 +53420,7 @@ var render = function() {
                     "mt-button",
                     {
                       attrs: { type: "primary", size: "large" },
-                      on: { click: _vm.goNextStep }
+                      on: { click: _vm.confirmMobileAndInvite }
                     },
                     [_vm._v(_vm._s(_vm.findPasswordSwitch ? "下一步" : "注册"))]
                   )
@@ -55363,7 +55394,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  background: #eee;\n  width: 100%;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#makeDeal .mint-cell-wrapper[data-v-9177d678] {\n    background-image: none;\n}\n.mint-cell-wrapper[data-v-9177d678] {\n  background-image: none;\n}\n.mint-cell[data-v-9177d678]:last-child {\n  background-image: none;\n}\n.select-wrap[data-v-9177d678] {\n  width: 90%;\n  height: auto;\n  margin: 0 auto;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.select-wrap select[data-v-9177d678] {\n    display: block;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    color: #666;\n    padding-left: 1em;\n    padding-right: 1em;\n    border: none;\n    border-top: 1px solid #eee;\n    border-bottom: 1px solid #eee;\n    text-align: center;\n    font-size: 1em;\n    line-height: 1em;\n    outline: none;\n    height: 2.5em;\n    width: 100%;\n}\n.select-wrap option[data-v-9177d678] {\n    border: none;\n    outline: none;\n    text-align: center;\n    color: #000;\n}\n.price[data-v-9177d678] {\n  height: 2.5em;\n  margin: 0 auto;\n  margin-top: 1em;\n  width: 90%;\n  line-height: 2.5em;\n  border-bottom: 1px solid #eee;\n  background: #fff;\n}\n.price label[data-v-9177d678] {\n    padding-left: 1.2em;\n    font-size: 1em;\n}\n.price input[data-v-9177d678] {\n    display: block;\n    width: 30%;\n    font-size: 1.2em;\n    outline: none;\n    border: none;\n    color: #666;\n}\n.price span[data-v-9177d678] {\n    display: block;\n}\n.textareaWrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.textareaWrap textarea[data-v-9177d678] {\n    width: 100%;\n    outline: none;\n    border: none;\n    font-size: 1.2em;\n    padding: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.commit-btn[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.notice[data-v-9177d678] {\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 5.5em;\n  width: 80%;\n  font-size: 0.9em;\n}\n", ""]);
+exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  background: #eee;\n  width: 100%;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#makeDeal .mint-cell-wrapper[data-v-9177d678] {\n    background-image: none;\n}\n.mint-cell-wrapper[data-v-9177d678] {\n  background-image: none;\n}\n.mint-cell[data-v-9177d678]:last-child {\n  background-image: none;\n}\n.select-wrap[data-v-9177d678] {\n  width: 90%;\n  height: auto;\n  margin: 0 auto;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.select-wrap select[data-v-9177d678] {\n    display: block;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    color: #666;\n    padding-left: 1em;\n    padding-right: 1em;\n    border: 1px solid #999;\n    text-align: center;\n    font-size: 1em;\n    line-height: 1em;\n    outline: none;\n    height: 2.5em;\n    width: 100%;\n}\n.select-wrap option[data-v-9177d678] {\n    border: none;\n    outline: none;\n    text-align: center;\n    color: #000;\n}\n.price[data-v-9177d678] {\n  height: 2.5em;\n  margin: 0 auto;\n  margin-top: 1em;\n  width: 90%;\n  line-height: 2.5em;\n  border-bottom: 1px solid #eee;\n  background: #fff;\n}\n.price label[data-v-9177d678] {\n    padding-left: 1.2em;\n    font-size: 1em;\n}\n.price input[data-v-9177d678] {\n    display: block;\n    width: 30%;\n    font-size: 1.2em;\n    outline: none;\n    border: none;\n    color: #666;\n}\n.price span[data-v-9177d678] {\n    display: block;\n}\n.textareaWrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.textareaWrap textarea[data-v-9177d678] {\n    width: 100%;\n    outline: none;\n    border: none;\n    font-size: 1.2em;\n    padding: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.commit-btn[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.notice[data-v-9177d678] {\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 5.5em;\n  width: 80%;\n  font-size: 0.9em;\n}\n", ""]);
 
 // exports
 
@@ -55376,12 +55407,6 @@ exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -55553,7 +55578,10 @@ var render = function() {
     "div",
     { attrs: { id: "makeDeal" } },
     [
-      _c("topBack", { attrs: { title: "发起交易" } }),
+      _c("topBack", {
+        staticStyle: { background: "#eee" },
+        attrs: { title: "发起交易" }
+      }),
       _vm._v(" "),
       _vm._m(0, false, false),
       _vm._v(" "),
@@ -59499,6 +59527,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}).catch(function (err) {
 				console.log(err);
 			});
+		},
+		realAuth: function realAuth(e) {
+			this.$router.push("/my/realAuth" + "?mobile=" + e);
 		}
 	}
 });
@@ -59555,36 +59586,31 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
+            {
+              on: {
+                click: function($event) {
+                  _vm.realAuth(_vm.personal.mobile)
+                }
+              }
+            },
             [
-              _c(
-                "mt-cell",
-                {
+              _c("mt-cell", { attrs: { title: "实名认证", "is-link": "" } }, [
+                _c("img", {
                   attrs: {
-                    title: "实名认证",
-                    "is-link": "",
-                    to: "/my/realAuth"
-                  }
-                },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/realName.png",
-                      width: "30",
-                      height: "30"
-                    },
-                    slot: "icon"
-                  }),
-                  _vm._v(" "),
-                  _c("span", [
-                    _vm._v(
-                      _vm._s(
-                        _vm.listContent.identify_status ? "完善" : "未完善"
-                      )
-                    )
-                  ])
-                ]
-              )
+                    slot: "icon",
+                    src: "/images/realName.png",
+                    width: "30",
+                    height: "30"
+                  },
+                  slot: "icon"
+                }),
+                _vm._v(" "),
+                _c("span", [
+                  _vm._v(
+                    _vm._s(_vm.listContent.identify_status ? "完善" : "未完善")
+                  )
+                ])
+              ])
             ],
             1
           ),
@@ -60299,7 +60325,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     callBack: function callBack(e) {
-      console.log(e);
+      console.log('密码输入完毕');
     }
   }
 });
@@ -60544,7 +60570,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       realInfo: {
         name: null,
-        id_number: null
+        id_number: null,
+        computedTime: 0 //倒数计时
       }
     };
   },
@@ -60554,13 +60581,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     realAuth: function realAuth() {
       var _this = this;
       var data = this.realInfo;
-      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', data).then(function (res) {
-        console.log(res);
-      }).catch(function (err) {
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', data).then(function (res) {}).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])({
           message: err.data.msg,
           duration: 800
         });
+      });
+    },
+    sendYZM: function sendYZM() {
+      var mobile = this.$route.query.mobile;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", mobile).then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
+        console.log(err);
       });
     }
   }
@@ -60631,7 +60665,11 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "mt-button",
-                    { staticClass: "flex-1", attrs: { type: "default" } },
+                    {
+                      staticClass: "flex-1",
+                      attrs: { type: "default" },
+                      on: { click: _vm.sendYZM }
+                    },
                     [_vm._v("发送验证码(10)")]
                   )
                 ],
@@ -60671,7 +60709,7 @@ var staticRenderFns = [
       _c("div", { staticClass: "account-box flex flex-align-center" }, [
         _c("span", [_vm._v("账号:")]),
         _vm._v(" "),
-        _c("em", { staticClass: "flex-1 number" }, [_vm._v("321321321")])
+        _c("em", { staticClass: "flex-1 number" }, [_vm._v("18390939299")])
       ])
     ])
   }
@@ -61290,7 +61328,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.forget-password-box[data-v-87f34208] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-87f34208] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-87f34208] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-87f34208] {\n    color: #26a2ff;\n}\n", ""]);
+exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.password-btn[data-v-87f34208] {\n  width: 96%;\n  margin: auto;\n  margin-top: 2em;\n}\n.forget-password-box[data-v-87f34208] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-87f34208] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-87f34208] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-87f34208] {\n    color: #26a2ff;\n}\n", ""]);
 
 // exports
 
@@ -61301,8 +61339,13 @@ exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #efeef4
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -61323,11 +61366,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  data: function data() {
+    return {
+      old_password: null, //旧密码
+      new_password: null, //新密码
+      confirm_password: null //确认密码
+    };
+  },
+
+  methods: {
+    affirm: function affirm() {
+      var _this = this;
+
+      var self = this;
+      var data = {
+        old_password: this.old_password,
+        new_password: this.new_password,
+        confirm_password: this.confirm_password
+      };
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePassword', data).then(function (res) {
+        console.log(res);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('密码修改成功');
+        _this.$router.push('/login'); //调转到登录页
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -61349,7 +61424,14 @@ var render = function() {
         { staticClass: "settleInfo-container" },
         [
           _c("mt-field", {
-            attrs: { label: "原密码", placeholder: "请填写原密码" }
+            attrs: { label: "原密码", placeholder: "请填写原密码" },
+            model: {
+              value: _vm.old_password,
+              callback: function($$v) {
+                _vm.old_password = $$v
+              },
+              expression: "old_password"
+            }
           }),
           _vm._v(" "),
           _c("mt-field", {
@@ -61357,6 +61439,13 @@ var render = function() {
               label: "新密码",
               placeholder: "请填写新密码",
               type: "email"
+            },
+            model: {
+              value: _vm.new_password,
+              callback: function($$v) {
+                _vm.new_password = $$v
+              },
+              expression: "new_password"
             }
           }),
           _vm._v(" "),
@@ -61365,8 +61454,31 @@ var render = function() {
               label: "确认新密码",
               placeholder: "请再次输入密码",
               type: "password"
+            },
+            model: {
+              value: _vm.confirm_password,
+              callback: function($$v) {
+                _vm.confirm_password = $$v
+              },
+              expression: "confirm_password"
             }
           })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "password-btn flex flex-justify-center" },
+        [
+          _c(
+            "mt-button",
+            {
+              attrs: { type: "primary", size: "large" },
+              on: { click: _vm.affirm }
+            },
+            [_vm._v("确认")]
+          )
         ],
         1
       ),
@@ -62159,7 +62271,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         console.log(res);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (e) {
-        console.log(e);
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        console.error(e);
       });
     }
   }
@@ -62318,8 +62431,8 @@ var render = function() {
                     _c("mt-field", {
                       staticStyle: { "margin-top": "0.4em" },
                       attrs: {
-                        label: "设置倍率",
-                        placeholder: "请输入倍率(数字)",
+                        label: "设置单价",
+                        placeholder: "请输入单价(数字)",
                         type: "number"
                       },
                       model: {
@@ -62778,7 +62891,7 @@ var render = function() {
       { attrs: { id: "top" } },
       [
         _c("topBack", {
-          staticStyle: { color: "#fff" },
+          staticStyle: { color: "#fff", background: "#26a2ff" },
           attrs: { backUrl: "/index/" }
         }),
         _vm._v(" "),

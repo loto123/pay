@@ -73,7 +73,7 @@
           </div>
 
           <div class= "item">
-            <mt-field label="设置倍率" placeholder="请输入倍率(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
+            <mt-field label="设置单价" placeholder="请输入单价(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
           </div>
 
           <div class= "item">
@@ -347,8 +347,6 @@ export default {
 
   mounted(){
     this.getShopData();
-
-
   },
 
   data() {
@@ -412,7 +410,8 @@ export default {
         Loading.getInstance().close();
         
       }).catch(function(e){
-        console.log(e);
+        Loading.getInstance().close();
+        console.error(e);
       });
     }
 

@@ -9,7 +9,7 @@
     <div class="logo-wrap flex flex-v flex-align-center" >
       <div class="circle-wrap flex flex-align-center">
         <img src="/images/logo.png" alt="logo">
-      </div>
+      </div> 
       <h3>游戏宝</h3>
     </div>
 

@@ -8,14 +8,14 @@
         <section class="account-container">
           <div class="account-box flex flex-align-center">
             <span>账号:</span>
-            <em class="flex-1 number">321321321</em>
+            <em class="flex-1 number">18390939299</em>
           </div>
         </section>
         <section class="input-wrap-box">
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
             <input type="text" placeholder="请输入验证码" class="flex-1">
-            <mt-button type="default" class="flex-1">发送验证码(10)</mt-button>
+            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码(10)</mt-button>
           </div>
         </section>
       </div>
@@ -36,7 +36,8 @@
       return {
         realInfo:{
           name :null,
-          id_number :null
+          id_number :null,
+          computedTime:0  //倒数计时
         }
       }
     },
@@ -46,12 +47,20 @@
         var _this=this;
         var data = this.realInfo;
         request.getInstance().postData('api/my/identify',data).then((res) => {
-          console.log(res);
         }).catch((err) => {
           Toast({
             message: err.data.msg,
             duration: 800
           });
+        })
+      },
+      sendYZM(){
+        var mobile = this.$route.query.mobile;
+        
+        request.getInstance().postData("api/auth/sms",mobile).then((res) => {
+          console.log(res); 
+        }).catch((err) => {
+         console.log(err);
         })
       }
     }

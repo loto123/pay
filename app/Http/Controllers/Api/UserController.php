@@ -417,7 +417,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-        $user = $this->auth()->user;
+        $user = JWTAuth::parseToken()->authenticate();
         if (!Hash::check($request->password, $user->pay_password)) {
             return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => []]);
         } else {
