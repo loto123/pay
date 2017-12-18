@@ -59505,7 +59505,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				parent_mobile: null,
 				card_count: null,
 				identify_status: null
-			}
+			},
+			isBankCardManage: true
 
 		};
 	},
@@ -59548,6 +59549,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		realAuth: function realAuth(e) {
 			this.$router.push("/my/realAuth" + "?mobile=" + e);
+		},
+
+		//银行卡管理
+		bankCardManage: function bankCardManage() {
+			this.$router.push('/my/bankCardManage');
 		}
 	}
 });
@@ -59635,37 +59641,28 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
+            { on: { click: _vm.bankCardManage } },
             [
-              _c(
-                "mt-cell",
-                {
+              _c("mt-cell", { attrs: { title: "银行卡管理", "is-link": "" } }, [
+                _c("img", {
                   attrs: {
-                    title: "银行卡管理",
-                    "is-link": "",
-                    to: "/my/bankCardManage"
-                  }
-                },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/bankCardManage.png",
-                      width: "30",
-                      height: "30"
-                    },
-                    slot: "icon"
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "span",
-                    [
-                      _c("font", [_vm._v(_vm._s(_vm.listContent.card_count))]),
-                      _vm._v("张")
-                    ],
-                    1
-                  )
-                ]
-              )
+                    slot: "icon",
+                    src: "/images/bankCardManage.png",
+                    width: "30",
+                    height: "30"
+                  },
+                  slot: "icon"
+                }),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  [
+                    _c("font", [_vm._v(_vm._s(_vm.listContent.card_count))]),
+                    _vm._v("张")
+                  ],
+                  1
+                )
+              ])
             ],
             1
           ),
