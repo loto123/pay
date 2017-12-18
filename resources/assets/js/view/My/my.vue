@@ -122,7 +122,7 @@
 		created(){
 			this.personalInfo();
 			this.listInfo();
-    },
+    	},
 		components: { tabBar },
 		methods: {
 			//个人信息
