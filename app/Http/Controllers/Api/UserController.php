@@ -352,7 +352,7 @@ class UserController extends Controller
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return response()->json([], trans("error code"), 0);
+            return response()->json(['code' => 0, 'msg' =>'', 'data' => []]);
         }
         //调用实名认证接口
 
