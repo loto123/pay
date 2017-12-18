@@ -8,6 +8,7 @@ use App\UserCard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use JWTAuth;
 use Validator;
 
@@ -329,10 +330,11 @@ class UserController extends Controller
             [
                 'name' => 'bail|required',
                 'id_number' => 'bail|required|size:18',
+                'code' => 'bail|required',
             ],
             [
                 'required' => trans('trans.required'),
-                'digits' => trans('trans.size'),
+                'size' => trans('trans.size'),
             ]
         );
         if ($validator->fails()) {
@@ -340,6 +342,11 @@ class UserController extends Controller
         }
         $name = $request->input('name');
         $id_number = $request->input('id_number');
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+            return $this->json([], trans("error code"), 0);
+        }
         //调用实名认证接口
 
         if(true) {
