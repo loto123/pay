@@ -60601,8 +60601,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       realInfo: {
         name: null,
         id_number: null,
-        computedTime: 0 //倒数计时
-      }
+        code: null
+      },
+      computedTime: null //倒数计时
     };
   },
 
@@ -60611,7 +60612,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     realAuth: function realAuth() {
       var _this = this;
       var data = this.realInfo;
-      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', data).then(function (res) {}).catch(function (err) {
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', data).then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])({
           message: err.data.msg,
           duration: 800
@@ -60699,8 +60702,25 @@ var render = function() {
                   _c("span", [_vm._v("验证码:")]),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.realInfo.code,
+                        expression: "realInfo.code"
+                      }
+                    ],
                     staticClass: "flex-1",
-                    attrs: { type: "text", placeholder: "请输入验证码" }
+                    attrs: { type: "text", placeholder: "请输入验证码" },
+                    domProps: { value: _vm.realInfo.code },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.realInfo, "code", $event.target.value)
+                      }
+                    }
                   }),
                   _vm._v(" "),
                   _c(
@@ -70127,9 +70147,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       realInfo: {
         name: null,
-        id_number: null,
-        computedTime: 0 //倒数计时
-      }
+        id_number: null
+      },
+      computedTime: 0 //倒数计时
     };
   },
 

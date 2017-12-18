@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Skip32;
 
 /**
  * Class Shop
@@ -40,4 +41,11 @@ class Shop extends Model
     }
 
 
+    public function en_id() {
+        return (int)Skip32::encrypt("0123456789abcdef0123", $this->id);
+    }
+
+    public static function findByEnId($en_id) {
+        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
+    }
 }
