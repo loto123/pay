@@ -67,7 +67,8 @@ class ShopController extends BaseController {
         $shop  = new Shop();
         $shop->name = $request->name;
         $shop->manager_id = $user->id;
-//        $shop->percent =
+        $shop->price = $request->rate;
+        $shop->fee = $request->percent;
         $shop->save();
         return $this->json([$shop]);
     }
@@ -105,6 +106,43 @@ class ShopController extends BaseController {
                 'id' => $_shop->id,
                 'name' => $_shop->name,
                 'logo' => asset("images/personal.jpg")
+            ];
+        }
+        return $this->json(['count' => $count, 'data' => $data]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/lists/all",
+     *   summary="我所有店铺（创建交易）",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页码",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function all() {
+        $user = $this->auth->user();
+        $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        $data = [];
+        foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+            /* @var $_shop Shop */
+            $data[] = [
+                'id' => $_shop->id,
+                'name' => $_shop->name,
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -185,6 +223,7 @@ class ShopController extends BaseController {
                 'id' => (int)$_user->id,
                 'name' => $_user->name,
                 'avatar' => asset("images/personal.jpg"),
+
             ];
         }
         return $this->json([
@@ -192,7 +231,9 @@ class ShopController extends BaseController {
             'name' => $shop->name,
             'user_link' => $shop->use_link ? 1 : 0,
             'active' => $shop->active ? 1 : 0,
-            'members' => $members
+            'members' => $members,
+            'rate' => $shop->price,
+            'percent' => $shop->fee,
         ]);
     }
 
