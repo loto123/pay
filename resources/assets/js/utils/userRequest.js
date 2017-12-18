@@ -22,9 +22,9 @@ export default class UserRequest {
 
         var _token = sessionStorage.getItem("_token");
 
-        if (_token != null) {
-            postData.token = sessionStorage.getItem("_token");
-        }
+        // if (_token != null) {
+        //     postData.token = sessionStorage.getItem("_token");
+        // }
 
         return new Promise(function (resolve, reject) {
             Axios({
@@ -59,9 +59,9 @@ export default class UserRequest {
 
         var _token = sessionStorage.getItem("_token");
 
-        if (_token != null) {
-            postData.token = sessionStorage.getItem("_token");
-        }
+        // if (_token != null) {
+        //     postData.token = sessionStorage.getItem("_token");
+        // }
 
         return new Promise(function (resolve, reject) {
             Axios({

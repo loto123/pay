@@ -9,7 +9,7 @@
             <p>推荐码为推荐人的手机号</p>
 
             <section class="input-wrap">
-                <mt-field label="推荐码" placeholder="请输入推荐人手机号" type="tel"></mt-field>
+                <mt-field label="推荐码" placeholder="请输入推荐人手机号" type="tel" v-model="inviteMobile"></mt-field>
             </section>
 
             <div class="submit-button flex flex-justify-center">
@@ -28,7 +28,7 @@
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
-                    <mt-button type="primary" size="large" v-on:click="goNextStep">{{findPasswordSwitch?"下一步":"注册"}}</mt-button>
+                    <mt-button type="primary" size="large" v-on:click="confirmMobileAndInvite">{{findPasswordSwitch?"下一步":"注册"}}</mt-button>
                 </div>
 
                 <p class="agreement-btn" v-if="!findPasswordSwitch">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
@@ -203,17 +203,19 @@
 import topBack from "../../components/topBack";
 import request from "../../utils/userRequest.js"
 import { Toast } from 'mint-ui';
+import Loading from '../../utils/loading'
 
 export default {
   name: "regist",
   data() {
     return {
       step: 0,
-      agrementState: false,
-      findPasswordSwitch: false,
+      agrementState: false,           // 用户协议开关
+      findPasswordSwitch: false,      // 找回密码开关
 
-      userAccountName:null,
-      userPassword:null
+      userAccountName:null,           // 用户名
+      userPassword:null,              // 密码
+      inviteMobile:null               // 邀请人手机号
     };
   },
 
@@ -263,6 +265,26 @@ export default {
     },
     closeAgreenment() {
       this.agrementState = false;
+    },
+
+    // 验证用户名和邀请人手机号
+    confirmMobileAndInvite(){
+      Loading.getInstance().open();
+      console.log(this.userAccountName,this.inviteMobile);
+      var _tempData = {
+        mobile:this.userAccountName,
+        invite_mobile:this.inviteMobile
+      };
+
+      request.getInstance().postData('api/auth/valid').then((res)=>{
+        console.log(res);
+        Loading.getInstance().close();
+      }).catch((err)=>{
+        console.error(err);
+        Toast(err.message);
+      }); 
+
+      // this.goNextStep();
     }
   },
   components: { topBack }

@@ -16359,9 +16359,9 @@ var UserRequest = function () {
 
             var _token = sessionStorage.getItem("_token");
 
-            if (_token != null) {
-                postData.token = sessionStorage.getItem("_token");
-            }
+            // if (_token != null) {
+            //     postData.token = sessionStorage.getItem("_token");
+            // }
 
             return new Promise(function (resolve, reject) {
                 __WEBPACK_IMPORTED_MODULE_0_axios___default()({
@@ -16394,9 +16394,9 @@ var UserRequest = function () {
 
             var _token = sessionStorage.getItem("_token");
 
-            if (_token != null) {
-                postData.token = sessionStorage.getItem("_token");
-            }
+            // if (_token != null) {
+            //     postData.token = sessionStorage.getItem("_token");
+            // }
 
             return new Promise(function (resolve, reject) {
                 __WEBPACK_IMPORTED_MODULE_0_axios___default()({
@@ -52902,6 +52902,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(145);
 //
 //
 //
@@ -53103,6 +53104,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -53113,11 +53115,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       step: 0,
-      agrementState: false,
-      findPasswordSwitch: false,
+      agrementState: false, // 用户协议开关
+      findPasswordSwitch: false, // 找回密码开关
 
-      userAccountName: null,
-      userPassword: null
+      userAccountName: null, // 用户名
+      userPassword: null, // 密码
+      inviteMobile: null // 邀请人手机号
     };
   },
   mounted: function mounted() {
@@ -53165,6 +53168,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     closeAgreenment: function closeAgreenment() {
       this.agrementState = false;
+    },
+
+
+    // 验证用户名和邀请人手机号
+    confirmMobileAndInvite: function confirmMobileAndInvite() {
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      console.log(this.userAccountName, this.inviteMobile);
+      var _tempData = {
+        mobile: this.userAccountName,
+        invite_mobile: this.inviteMobile
+      };
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/valid').then(function (res) {
+        console.log(res);
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.message);
+      });
+
+      // this.goNextStep();
     }
   },
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
@@ -53335,6 +53359,13 @@ var render = function() {
                     label: "推荐码",
                     placeholder: "请输入推荐人手机号",
                     type: "tel"
+                  },
+                  model: {
+                    value: _vm.inviteMobile,
+                    callback: function($$v) {
+                      _vm.inviteMobile = $$v
+                    },
+                    expression: "inviteMobile"
                   }
                 })
               ],
@@ -53404,7 +53435,7 @@ var render = function() {
                     "mt-button",
                     {
                       attrs: { type: "primary", size: "large" },
-                      on: { click: _vm.goNextStep }
+                      on: { click: _vm.confirmMobileAndInvite }
                     },
                     [_vm._v(_vm._s(_vm.findPasswordSwitch ? "下一步" : "注册"))]
                   )
@@ -62331,8 +62362,8 @@ var render = function() {
                     _c("mt-field", {
                       staticStyle: { "margin-top": "0.4em" },
                       attrs: {
-                        label: "设置倍率",
-                        placeholder: "请输入倍率(数字)",
+                        label: "设置单价",
+                        placeholder: "请输入单价(数字)",
                         type: "number"
                       },
                       model: {
