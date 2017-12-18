@@ -59271,6 +59271,8 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue__ = __webpack_require__(629);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_My_about_vue__ = __webpack_require__(731);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_My_about_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__view_My_about_vue__);
 
 
 
@@ -59281,7 +59283,8 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/my', name: 'my', component: __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default.a }, { path: '/my/set', name: 'set', component: __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default.a }, { path: '/my/referrer', name: 'referrer', component: __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default.a }, { path: '/my/bankCardManage', name: 'bankCardManage', component: __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default.a }, { path: '/my/realAuth', name: 'realAuth', component: __WEBPACK_IMPORTED_MODULE_4__view_My_realAuth_vue___default.a }, { path: '/my/bankCardManage/addBankCard', name: 'addBankCard', component: __WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue___default.a }, { path: '/my/checkSettle', name: 'checkSettle', component: __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue___default.a }, { path: '/my/login_password', name: 'loginPassword', component: __WEBPACK_IMPORTED_MODULE_7__view_My_loginPassword_vue___default.a }, { path: '/my/verfy_code', name: 'verfyCode', component: __WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue___default.a }, { path: '/my/pay_password', name: 'payPassword', component: __WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue___default.a }]);
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/my', name: 'my', component: __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default.a }, { path: '/my/set', name: 'set', component: __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default.a }, { path: '/my/set/about', name: 'about', component: __WEBPACK_IMPORTED_MODULE_10__view_My_about_vue___default.a }, { path: '/my/referrer', name: 'referrer', component: __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default.a }, { path: '/my/bankCardManage', name: 'bankCardManage', component: __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default.a }, { path: '/my/realAuth', name: 'realAuth', component: __WEBPACK_IMPORTED_MODULE_4__view_My_realAuth_vue___default.a }, { path: '/my/bankCardManage/addBankCard', name: 'addBankCard', component: __WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue___default.a }, { path: '/my/checkSettle', name: 'checkSettle', component: __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue___default.a }, { path: '/my/login_password', name: 'loginPassword', component: __WEBPACK_IMPORTED_MODULE_7__view_My_loginPassword_vue___default.a }, { path: '/my/verfy_code', name: 'verfyCode', component: __WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue___default.a }, { path: '/my/pay_password', name: 'payPassword', component: __WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue___default.a }]);
 
 /***/ }),
 /* 589 */
@@ -59505,8 +59508,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				parent_mobile: null,
 				card_count: null,
 				identify_status: null
-			},
-			isBankCardManage: true
+			}
 
 		};
 	},
@@ -59553,7 +59555,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//银行卡管理
 		bankCardManage: function bankCardManage() {
-			this.$router.push('/my/bankCardManage');
+			var _this2 = this;
+
+			if (this.listContent.identify_status == 0) {
+				__WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(function () {
+					_this2.$router.push('/my/realAuth');
+				}, function () {
+					//取消操作
+					console.log("已经取消");
+				});
+			} else {
+				this.$router.push('/my/bankCardManage');
+			}
+		},
+
+		//结算卡
+		checkSettle: function checkSettle() {
+			if (this.listContent.card_count <= 0) {
+				return;
+			} else {
+				this.$router.push('/my/checkSettle');
+			}
 		}
 	}
 });
@@ -59669,28 +59691,19 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
+            { on: { click: _vm.checkSettle } },
             [
-              _c(
-                "mt-cell",
-                {
+              _c("mt-cell", { attrs: { title: "查看结算卡", "is-link": "" } }, [
+                _c("img", {
                   attrs: {
-                    title: "查看结算卡",
-                    "is-link": "",
-                    to: "/my/checkSettle"
-                  }
-                },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/bankCardManage.png",
-                      width: "30",
-                      height: "30"
-                    },
-                    slot: "icon"
-                  })
-                ]
-              )
+                    slot: "icon",
+                    src: "/images/bankCardManage.png",
+                    width: "30",
+                    height: "30"
+                  },
+                  slot: "icon"
+                })
+              ])
             ],
             1
           ),
@@ -59830,7 +59843,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#set[data-v-6298473a] {\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.list[data-v-6298473a] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.list li .mint-cell[data-v-6298473a] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n", ""]);
+exports.push([module.i, "\n.mt1[data-v-6298473a] {\n  margin-top: 1em;\n}\n#set[data-v-6298473a] {\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  height: 100vh;\n}\n.list[data-v-6298473a] {\n  border-bottom: 1px solid #d9d9d9;\n}\n.list li .mint-cell[data-v-6298473a] {\n    background-image: none;\n    background-size: 100% 1px;\n    background-repeat: no-repeat;\n    background-position: top;\n}\n", ""]);
 
 // exports
 
@@ -59843,6 +59856,14 @@ exports.push([module.i, "\n#set[data-v-6298473a] {\n  background: #eee;\n  paddi
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -59879,7 +59900,7 @@ var render = function() {
     "div",
     { attrs: { id: "set" } },
     [
-      _c("topBack", { attrs: { title: "更多设置" } }),
+      _c("topBack", { attrs: { title: "更多" } }),
       _vm._v(" "),
       _c("section", [
         _c("ul", { staticClass: "list" }, [
@@ -59906,6 +59927,28 @@ var render = function() {
                   "is-link": "",
                   to: "/my/verfy_code"
                 }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("ul", { staticClass: "list mt1" }, [
+          _c(
+            "li",
+            [
+              _c("mt-cell", {
+                attrs: { title: "帮助与反馈", "is-link": "", to: "" }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            [
+              _c("mt-cell", {
+                attrs: { title: "关于", "is-link": "", to: "/my/set/about" }
               })
             ],
             1
@@ -60299,9 +60342,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    //密码层弹出
     showPassword: function showPassword() {
-      this.showPasswordTag = true;
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/my/info').then(function (res) {
+        if (res.data.data.has_pay_password == 0) {
+          //调转到设置支付密码
+        } else {
+          _this.showPasswordTag = true; //密码层弹出
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
     },
     hidePassword: function hidePassword() {
       this.showPasswordTag = false;
@@ -60309,12 +60361,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     //银行卡列表
     bank: function bank() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
-        _this.bankList = res.data.data;
+        _this2.bankList = res.data.data;
         __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.log(err);
@@ -60322,7 +60374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     //删除银行卡
     del: function del(card_id) {
-      var _this2 = this;
+      var _this3 = this;
 
       __WEBPACK_IMPORTED_MODULE_4_mint_ui__["MessageBox"].confirm("是否删除该银行卡?", "温馨提示").then(function () {
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/card/delete?card_id=" + card_id).then(function (res) {
@@ -60330,7 +60382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             message: "删除成功",
             duration: 800
           });
-          _this2.bank();
+          _this3.bank();
         }).catch(function (err) {
           console.log(err);
         });
@@ -60340,15 +60392,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     callBack: function callBack(password) {
-      var _this3 = this;
+      var _this4 = this;
 
       var temp = {};
       temp.password = password;
 
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp).then(function (res) {
-        console.log('789');
         if (res.data.code = 0) {
-          _this3.showPassword();
+          _this4.showPassword();
         }
       }).catch(function (err) {
         console.error(err);
@@ -70260,6 +70311,213 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-2d1c511b", module.exports)
+  }
+}
+
+/***/ }),
+/* 726 */,
+/* 727 */,
+/* 728 */,
+/* 729 */,
+/* 730 */,
+/* 731 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(732)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(734)
+/* template */
+var __vue_template__ = __webpack_require__(735)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-2cc65e36"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\My\\about.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2cc65e36", Component.options)
+  } else {
+    hotAPI.reload("data-v-2cc65e36", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 732 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(733);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("17aaf294", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cc65e36\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./about.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cc65e36\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./about.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 733 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.header-container[data-v-2cc65e36] {\n  padding-top: 2em;\n  padding-bottom: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  background: #eee;\n  height: 100vh;\n}\n.header[data-v-2cc65e36] {\n  text-align: center;\n  border-top: 1px solid #ccc;\n  padding-top: 2em;\n}\n.header .imgWrap > img[data-v-2cc65e36] {\n    width: 4em;\n    height: 4em;\n    display: block;\n    margin: auto;\n    border-radius: 50%;\n    padding: 1em;\n    background: #fff;\n}\n.header .versions[data-v-2cc65e36] {\n    font-size: 1em;\n    text-align: center;\n    margin-top: 0.5em;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 734 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {};
+	},
+
+	components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+});
+
+/***/ }),
+/* 735 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { attrs: { id: "my" } },
+    [
+      _c("topBack", { attrs: { title: "关于" } }),
+      _vm._v(" "),
+      _vm._m(0, false, false)
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "header-container" }, [
+      _c("div", { staticClass: "header" }, [
+        _c("div", { staticClass: "imgWrap" }, [
+          _c("img", { attrs: { src: "/images/logo.png" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "versions" }, [_vm._v("游戏宝 1.0.1")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2cc65e36", module.exports)
   }
 }
 

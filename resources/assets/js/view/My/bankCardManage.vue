@@ -47,12 +47,23 @@
       }
     },
     created(){
-      this.bank()
+      this.bank();
     },
     methods: {
-      //密码层弹出
       showPassword() {
-        this.showPasswordTag = true;
+        request.getInstance().getData('api/my/info')
+          .then((res) => {
+           if(res.data.data.has_pay_password==0){
+              //调转到设置支付密码
+           }else{
+            this.showPasswordTag = true;   //密码层弹出
+           }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+
+        
       },
       hidePassword() {
         this.showPasswordTag = false;
@@ -98,7 +109,6 @@
         
         request.getInstance().postData('api/my/pay_password',temp)
           .then((res) => {
-            console.log('789');
             if(res.data.code=0){
               this.showPassword();
             }
