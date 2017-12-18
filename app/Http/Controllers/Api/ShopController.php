@@ -168,7 +168,7 @@ class ShopController extends BaseController {
         foreach ($shops as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->en_id(),
+                'id' => $_shop->id,
                 'name' => $_shop->name,
             ];
         }
