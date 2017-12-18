@@ -319,6 +319,13 @@ class UserController extends Controller
      *     required=true,
      *     type="string"
      *   ),
+     *   @SWG\Parameter(
+     *     name="code",
+     *     in="formData",
+     *     description="验证码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -345,7 +352,7 @@ class UserController extends Controller
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return $this->json([], trans("error code"), 0);
+            return response()->json([], trans("error code"), 0);
         }
         //调用实名认证接口
 
