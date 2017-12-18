@@ -1,7 +1,7 @@
 <template>
   <!-- 发起交易 -->
   <div id = "makeDeal">
-    <topBack title="发起交易"></topBack>
+    <topBack title="发起交易" style="background:#eee;"></topBack>
 
     <div class="select-wrap">
         <select name="" id="">
@@ -60,19 +60,13 @@
     background :#fff;
 
     select{
-        // appearance:none;
-        // -moz-appearance:none;
-        // -webkit-appearance:none;
+       
         display: block;
         box-sizing: border-box;
         color:#666;
         padding-left:1em;
         padding-right:1em;
-
-        border:none;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        
+        border:1px solid #999;
         text-align: center;
         font-size:1em;
         line-height: 1em;

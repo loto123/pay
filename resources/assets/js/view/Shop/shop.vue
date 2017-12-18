@@ -412,7 +412,8 @@ export default {
         Loading.getInstance().close();
         
       }).catch(function(e){
-        console.log(e);
+        Loading.getInstance().close();
+        console.error(e);
       });
     }
 
