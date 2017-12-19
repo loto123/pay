@@ -127,7 +127,7 @@ class UserController extends Controller
             $form->text('mobile', '手机号码');
             $form->text('balance', '余额');
             $form->display('xxx', '身份');
-            $form->checkbox('sss', '解绑微信号')->options(User::where('id','1')->pluck('name','id'));
+//            $form->checkbox('sss', '解绑微信号')->options(User::where('id','1')->pluck('name','id'));
             $form->display('created_at', '账号创建时间');
             $form->switch('status', '冻结');
             $form->saving(function (Form $form) {
