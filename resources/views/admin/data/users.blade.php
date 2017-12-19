@@ -32,7 +32,7 @@
                         <select class="form-control" id="role" name="role">
                             <option value="0">全部</option>
                             @foreach($roles as $key => $item)
-                                <option value="{{$key}}" {{isset($role) && $role == $item->id ? 'selected' : ''}}>{{$item->display_name}}</option>
+                                <option value="{{$item->id}}" {{isset($role) && $role == $item->id ? 'selected' : ''}}>{{$item->display_name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -153,7 +153,7 @@
                             @else
                                 <td>无</td>
                             @endif
-                            <td>{{$item->trans_amount}}</td>
+                            <td>{{$item->trans_amount or 0}}</td>
                             <td>{{$item->transfer_record()->count()}}</td>
                             <td>{{$item->transfer_record()->where('stat',2)->sum('amount')}}</td>
                             <td>{{abs($item->transfer_record()->where('stat',1)->sum('amount'))}}</td>
