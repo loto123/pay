@@ -103,7 +103,7 @@ class ShopController extends BaseController {
         foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id,
+                'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => asset("images/personal.jpg")
             ];
@@ -134,14 +134,41 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function all() {
+    public function all(Request $request) {
+        $limit = $request->input('size', 10);
         $user = $this->auth->user();
-        $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        $shops = [];
+        $count = 0;
+        foreach ($user->transfer as $_transfer) {
+            $count += $_transfer->shop()->count();
+            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit)->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+        $count += $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
+        if (count($shops) < $limit) {
+            foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+        $count += $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        if (count($shops) < $limit) {
+            foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+
         $data = [];
-        foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+        foreach ($shops as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id,
+                'id' => $_shop->en_id(),
                 'name' => $_shop->name,
             ];
         }
@@ -175,10 +202,11 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
+
         foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id,
+                'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => asset("images/personal.jpg")
             ];
@@ -211,7 +239,7 @@ class ShopController extends BaseController {
      */
     public function detail($id, Request $request) {
         $member_size = $request->input('member_size', 5);
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
@@ -227,13 +255,65 @@ class ShopController extends BaseController {
             ];
         }
         return $this->json([
-            'id' => $shop->id,
+            'id' => $shop->en_id(),
             'name' => $shop->name,
             'user_link' => $shop->use_link ? 1 : 0,
             'active' => $shop->active ? 1 : 0,
             'members' => $members,
             'rate' => $shop->price,
             'percent' => $shop->fee,
+        ]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/members/{id}",
+     *   summary="店铺成员详情",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="成员数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页面",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function members($id, Request $request) {
+        $size = $request->input('size', 20);
+        $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $members = [];
+        foreach ($shop->users()->paginate($size) as $_user) {
+            /* @var $_user User */
+            $members[] = [
+                'id' => (string)$_user->id,
+                'name' => $_user->name,
+                'avatar' => asset("images/personal.jpg"),
+
+            ];
+        }
+        return $this->json([
+            'count' => (int)$shop->users()->count(),
+            'members' => $members,
         ]);
     }
 
@@ -254,7 +334,7 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function close($id) {
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         $shop->status = Shop::STATUS_CLOSED;
         $shop->save();
         return $this->json();
@@ -279,7 +359,7 @@ class ShopController extends BaseController {
     public function quit($id) {
         $user = $this->auth->user();
 
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         ShopUser::where('shop_id', $shop->id)->where("user_id", $user->id)->delete();
         return $this->json();
     }
@@ -317,7 +397,7 @@ class ShopController extends BaseController {
     public function update($id, Request $request) {
         $user = $this->auth->user();
 
-        $shop = Shop::find($id);
+        $shop = Shop::findByEnId($id);
         if ($request->name) {
             $shop->name = $request->name;
         }
@@ -332,4 +412,6 @@ class ShopController extends BaseController {
         $shop->save();
         return $this->json();
     }
+
+
 }

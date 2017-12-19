@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Skip32;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -123,4 +124,11 @@ class User extends Authenticatable
         });
     }
 
+    public function en_id() {
+        return Skip32::encrypt("0123456789abcdef0123", $this->id);
+    }
+
+    public static function findByEnId($en_id) {
+        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
+    }
 }

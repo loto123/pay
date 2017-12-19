@@ -309,7 +309,7 @@ export default {
     },
     _getQRCode: function() {
       var qrcode = new QRCode(document.getElementById("qrcode"), {
-        width: 100, //设置宽高
+        width: 100,     //设置宽高
         height: 100
       });
 

@@ -3,13 +3,14 @@
   <div id = "makeDeal">
     <topBack title="发起交易" style="background:#eee;"></topBack>
 
-    <div class="select-wrap">
-        <select name="" id="">
+    <div class="select-wrap flex flex-align-center" @click="showDropList">
+        <!-- <select name="" id="">
             <option value="" style="color:#999;">请选择您要发起交易的群</option>
             <option value="" >1</option>
             <option value="">2</option>
             <option value="">3</option>
-        </select>
+        </select> -->
+        请选择您要发起交易的店铺
 
     </div>
 
@@ -30,6 +31,8 @@
     </div>
 
     <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
+
+    <inputList :showSwitch = "dropListSwitch"></inputList>
 
   </div>
 </template>
@@ -53,34 +56,14 @@
 }
 .select-wrap{
     width:90%;
-    height: auto;
+    // height: auto;
     margin:0 auto;
-    
+    height:2.5em;
+    padding-left:1em;
+    box-sizing: border-box;
     margin-top:0.5em;
     background :#fff;
-
-    select{
-       
-        display: block;
-        box-sizing: border-box;
-        color:#666;
-        padding-left:1em;
-        padding-right:1em;
-        border:1px solid #999;
-        text-align: center;
-        font-size:1em;
-        line-height: 1em;
-        outline:none;
-        height: 2.5em;
-        width:100%;
-    }
-
-    option{
-        border:none;
-        outline:none;
-        text-align:center;
-        color:#000;
-    }
+    
 }
 
 .price{
@@ -146,15 +129,46 @@
 
 <script>
 import topBack from '../../components/topBack'
+import inputList from '../../components/inputList'
+
+import Loading from '../../utils/loading'
+import request from '../../utils/userRequest'
+
+
 
 export default {
   name:'makeDeal',
+  created(){
+      this.init();
+  },
+  data(){
+      return {
+          dropListSwitch:true
+      }
+  },
+
   methods:{
       confirm(){
           this.$router.push({path:'/makeDeal/deal_detail'})
+      },
+      init(){
+          Loading.getInstance().open();
+          request.getInstance().getData('api/shop/lists/all').then((res)=>{
+              console.log(res);
+              Loading.getInstance().close();
+          }).catch((err)=>{
+              console.error(err);
+              Loading.getInstance().close();
+          });
+      },
+      showDropList(){
+          this.dropListSwitch = true;
+      },
+      hideDropList(){
+          this.dropListSwitch = false;
       }
   },
-  components:{ topBack }
+  components:{ topBack , inputList}
 }
 </script>
 

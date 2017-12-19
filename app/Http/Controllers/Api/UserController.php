@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
 
@@ -285,9 +286,9 @@ class UserController extends Controller
         if(empty($this->user->pay_card_id)) {
            return response()->json(['code'=>0,'msg'=>'请先绑定银行卡','data'=>[]]);
         }
-        if(empty($this->user->pay_password)) {
-            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
-        }
+//        if(empty($this->user->pay_password)) {
+//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+//        }
         $user_card = UserCard::find($this->user->pay_card_id);
         $bank = Bank::find($user_card->bank);
         $data = [
@@ -319,6 +320,13 @@ class UserController extends Controller
      *     required=true,
      *     type="string"
      *   ),
+     *   @SWG\Parameter(
+     *     name="code",
+     *     in="formData",
+     *     description="验证码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -340,12 +348,14 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
+//        Log::info(['param'=>$request->all()]);
         $name = $request->input('name');
         $id_number = $request->input('id_number');
-        $cache_key = "SMS_".$request->mobile;
+        $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
+//        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return $this->json([], trans("error code"), 0);
+            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
         //调用实名认证接口
 
@@ -377,6 +387,7 @@ class UserController extends Controller
             'name' => $this->user->name,
             'mobile' => $this->user->mobile,
             'thumb' => '1.png',
+            'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
         ];
         return response()->json(['code' => 1, 'msg' =>'', 'data' => $data]);
     }
