@@ -88,47 +88,6 @@ export default {
 
   data(){
       return {
-        // "options":[
-        //     {
-        //         label: '被禁用',
-        //         value: '值F',
-        //         // disabled: true
-        //     },
-        //     {
-        //         label: '选项A',
-        //         value: '值A'
-        //     },
-        //     {
-        //         label: '选项B',
-        //         value: '值B'
-        //     },
-        //     {
-        //         label: '被禁用',
-        //         value: '值F',
-        //         // disabled: true
-        //     },
-        //     {
-        //         label: '选项A',
-        //         value: '值A'
-        //     },
-        //     {
-        //         label: '选项B',
-        //         value: '值B'
-        //     },
-        //     {
-        //         label: '被禁用',
-        //         value: '值F',
-        //         // disabled: true
-        //     },
-        //     {
-        //         label: '选项A',
-        //         value: '值A'
-        //     },
-        //     {
-        //         label: '选项B',
-        //         value: '值B'
-        //     }
-        // ],
         "choiseValue":null
       }
   },

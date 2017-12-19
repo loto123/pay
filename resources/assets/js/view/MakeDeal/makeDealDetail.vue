@@ -9,7 +9,7 @@
             <p>茶水费</p>
         </section>
         
-        <deal-content></deal-content>
+        <deal-content :renderData = "renderData"></deal-content>
 
         <section class="pay-wrap flex flex-v flex-align-center">
 
@@ -92,7 +92,7 @@
         <section id="qrcode" class="flex flex-justify-center"></section>
         <h3 class="notice">扫描二维码快速交易</h3>
 
-        <passwordPanel :setSwitch="passWordSwitch" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
+        <passwordPanel :setSwitch="passWordSwitch" :settingPasswordSwitch="true" :secondValid="false" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
     </div>
 </template>
 
@@ -141,7 +141,7 @@
       width: 60%;
       input {
         box-sizing: border-box;
-        font-size: 1.2em;
+        font-size: 1.0em;
         padding-left: 0.5em;
         width: 100%;
         border: none;
@@ -272,6 +272,9 @@ import topBack from "../../components/topBack";
 import slider from "../../components/slider";
 import dealContent from "./dealContent";
 import passwordPanel from '../../components/password'
+import request from '../../utils/userRequest'
+
+import Loading from '../../utils/loading'
 
 import qrCode from "../../utils/qrCode";
 
@@ -281,10 +284,20 @@ export default {
   
   data(){
     return {
-      passWordSwitch:false
+      passWordSwitch:false,
+      renderData :{
+        name:null,
+        moneyData:{
+          payMoney:null,
+          getMoney:null
+        }
+
+      }
     }
   },
-
+  created(){
+    this.init();
+  },
   mounted() {
     this._getQRCode();
   },
@@ -293,8 +306,26 @@ export default {
       console.log("i m ru");
     },
 
+    init(){
+      Loading.getInstance().open();
+      var _id = this.$route.query.id;
+      var _data ={
+        transfer_id :_id
+      }
+      request.getInstance().getData('api/transfer/show'+"?transfer_id="+_id).then(res=>{
+        console.log(res);
+
+        this.renderData = res.data.data;
+        Loading.getInstance().close();
+        
+      }).catch(err=>{
+        console.error(err);
+      });
+    },
+
     goTipPage() {
-      this.$router.push("/makeDeal/deal_tip");
+      var _id = this.$route.query.id;
+      this.$router.push("/makeDeal/deal_tip"+"?id="+_id);
     },
 
     showPassword(){

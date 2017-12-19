@@ -16,7 +16,7 @@
     </div>
     
     <div class="textareaWrap">
-        <textarea name="" id="" cols="20" rows="3" placeholder = "大吉大利 恭喜发财">
+        <textarea name="" id="" cols="20" rows="3" placeholder = "大吉大利 恭喜发财" v-model="commentMessage">
 
         </textarea>
     </div>
@@ -126,6 +126,8 @@ import inputList from "../../components/inputList";
 import Loading from "../../utils/loading";
 import request from "../../utils/userRequest";
 
+import {Toast} from 'mint-ui'
+
 export default {
   name: "makeDeal",
   created() {
@@ -137,15 +139,14 @@ export default {
       dealShop: null,
       shopList: null,
 
-      shopId:null,
-      price:10
+      shopId: null,
+      price: 10,
+      commentMessage: null
     };
   },
 
   methods: {
-    confirm() {
-      this.$router.push({ path: "/makeDeal/deal_detail" });
-    },
+    confirm() {},
     init() {
       Loading.getInstance().open();
       request
@@ -173,15 +174,14 @@ export default {
       this.shopList = _tempList;
     },
 
-    getShopName(id){
-        console.warn(id);
-        for(let i =0 ; i <this.shopList.length; i++){
-            if(this.shopList[i].value == id){
-                return this.shopList[i].label;
-            }
+    getShopName(id) {
+      for (let i = 0; i < this.shopList.length; i++) {
+        if (this.shopList[i].value == id) {
+          return this.shopList[i].label;
         }
+      }
 
-        return '没有这个店铺';
+      return "没有这个店铺";
     },
 
     showDropList() {
@@ -194,19 +194,42 @@ export default {
       this.shopId = data;
     },
 
-    submitData(){
-        var _data = {
-            shop_id:this.shopId,
-            price:this.price
-        };
+    // 提交数据
+    submitData() {
+      var _tempMessage = null;
+      if (this.commentMessage == null) {
+        _tempMessage = "大吉大利 恭喜发财";
+      } else {
+        _tempMessage = this.commentMessage;
+      }
 
-        request.getInstance().postData('api/transfer/create',_data).then(res=>{
-            console.log(res);
-        }).catch(err=>{ 
-            console.error(err);
+      var _data = {
+        shop_id: this.shopId,
+        price: this.price,
+        comment:_tempMessage
+      };
+
+      if(this.shopId == null){
+        Toast("请选择发起交易的店铺");
+        return 
+      }else if(this.price == ""){
+        Toast("请设置单价")
+        return
+      }
+
+      request
+        .getInstance()
+        .postData("api/transfer/create", _data)
+        .then(res => {
+          console.log(res);
+          this.$router.push(
+            "/makeDeal/deal_detail" + "?id=" + res.data.data.id
+          );
         })
+        .catch(err => {
+          console.error(err);
+        });
     }
-    
   },
   components: { topBack, inputList }
 };

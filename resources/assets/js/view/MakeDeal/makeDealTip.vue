@@ -1,12 +1,12 @@
 <template>
     <div id="makeDealTip">
         <topBack style="background:#eee;"></topBack>
-        <dealContent></dealContent>
+        <dealContent :renderData="renderData"></dealContent>
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
-            <label for="">大赢家茶水费</label>
-            <span style="color:#999;">请大家自觉缴纳</span>
-            <span><i style="color:#999; font-size: 1.2em;">100.0</i>元</span>
+            <label for="" class="flex-4" style="padding-left:1em;">大赢家茶水费</label>
+            <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击缴纳茶水费"  maxlength="6"></span>
         </div>
 
         <div class="button-wrap">
@@ -60,6 +60,15 @@
   background: #fff;
   border-radius: 0.2em;
   margin: 0 auto;
+
+  .tipMoney{
+      outline:none;
+      font-size:1em;
+      width:70%;
+      height: 100%;
+      display: block;
+      border: none;
+  }
 }
 
 .button-wrap {
@@ -105,11 +114,38 @@
 <script>
 import topBack from "../../components/topBack";
 import dealContent from "./dealContent";
+import Loading from '../../utils/loading'
+import request from '../../utils/userRequest'
 
 export default {
+  created(){
+    this.init();
+  },
   components: { topBack, dealContent },
+  data(){
+      return {
+          renderData :{
+            name:null,
+            moneyData:{
+                payMoney:null,
+                getMoney:null
+            }
+
+        }
+      }
+  },
   methods: {
-   
+   init(){
+       Loading.getInstance().open();
+       var _id = this.$route.query.id;
+       request.getInstance().getData('api/transfer/feerecord'+"?transfer_id="+_id).then(res=>{
+           console.log(res);
+           this.renderData = res.data.data;
+           Loading.getInstance().close();
+       }).catch(err=>{
+           console.error(err);
+       });
+   }
   }
 };
 </script>
