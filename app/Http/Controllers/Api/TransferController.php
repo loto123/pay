@@ -195,8 +195,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -267,8 +267,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -404,7 +404,7 @@ class TransferController extends Controller
         }
 
         $record = TransferRecord::find($request->record_id);
-        if ($record->isEmpty()) {
+        if (!$record) {
             return response()->json(['code' => 0, 'msg' => trans('trans.record_not_exist'), 'data' => []]);
         }
         if ($record->stat != 2) {
@@ -415,7 +415,7 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_user_error'), 'data' => []]);
         }
         $transfer = $record->transfer;
-        if ($transfer->isEmpty()) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -428,9 +428,9 @@ class TransferController extends Controller
             $record->save();
             //扣除商店茶水费
             $tip = $record->tip;
-            if (!$tip->isEmpty()) {
+            if ($tip) {
                 $shop = $transfer->shop;
-                if ($shop->isEmpty()) {
+                if (!$shop->isEmpty()) {
                     return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_error_3'), 'data' => []]);
                 }
                 if ($shop->frozen_balance < $tip->amount) {
@@ -490,8 +490,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if ($transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -604,8 +604,8 @@ class TransferController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -815,8 +815,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -835,7 +835,7 @@ class TransferController extends Controller
             if ($transfer->save()) {
                 //解冻店铺茶水费资金
                 $shop = $transfer->shop;
-                if (!$shop->isEmpty()) {
+                if ($shop) {
                     $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
                     $shop->balance = $shop->balance + $transfer->tip_amount;
                     $shop->save();
@@ -900,8 +900,8 @@ class TransferController extends Controller
         }
 
         $user = JWTAuth::parseToken()->authenticate();
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->user_id != $user->id) {
