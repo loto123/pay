@@ -55578,9 +55578,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
-    confirm: function confirm() {
-      this.$router.push({ path: "/makeDeal/deal_detail" });
-    },
+    confirm: function confirm() {},
     init: function init() {
       var _this = this;
 
@@ -55623,7 +55621,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       this.shopId = data;
     },
+
+
+    // 提交数据
     submitData: function submitData() {
+      var _this2 = this;
+
       var _data = {
         shop_id: this.shopId,
         price: this.price
@@ -55631,6 +55634,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/create', _data).then(function (res) {
         console.log(res);
+        _this2.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
       }).catch(function (err) {
         console.error(err);
       });
@@ -56179,8 +56183,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dealContent__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_qrCode__ = __webpack_require__(581);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__utils_qrCode__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_qrCode__ = __webpack_require__(581);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__utils_qrCode__);
 //
 //
 //
@@ -56450,6 +56455,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -56467,6 +56473,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       passWordSwitch: false
     };
   },
+  created: function created() {
+    this.init();
+  },
   mounted: function mounted() {
     this._getQRCode();
   },
@@ -56474,6 +56483,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     deleteIt: function deleteIt() {
       console.log("i m ru");
+    },
+    init: function init() {
+      // this.$route.query.id;
+      var _id = this.$route.query.id;
+      var _data = {
+        transfer_id: _id
+        // console.log(this.$router.query);
+      };__WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/show' + "?transfer_id=" + _id).then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
+        console.error(err);
+      });
     },
     goTipPage: function goTipPage() {
       this.$router.push("/makeDeal/deal_tip");

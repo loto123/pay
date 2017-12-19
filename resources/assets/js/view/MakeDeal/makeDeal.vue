@@ -144,7 +144,7 @@ export default {
 
   methods: {
     confirm() {
-      this.$router.push({ path: "/makeDeal/deal_detail" });
+      
     },
     init() {
       Loading.getInstance().open();
@@ -194,6 +194,7 @@ export default {
       this.shopId = data;
     },
 
+    // 提交数据
     submitData(){
         var _data = {
             shop_id:this.shopId,
@@ -202,6 +203,7 @@ export default {
 
         request.getInstance().postData('api/transfer/create',_data).then(res=>{
             console.log(res);
+            this.$router.push("/makeDeal/deal_detail"+"?id="+ res.data.data.id );
         }).catch(err=>{ 
             console.error(err);
         })

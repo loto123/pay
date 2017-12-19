@@ -272,6 +272,7 @@ import topBack from "../../components/topBack";
 import slider from "../../components/slider";
 import dealContent from "./dealContent";
 import passwordPanel from '../../components/password'
+import request from '../../utils/userRequest'
 
 import qrCode from "../../utils/qrCode";
 
@@ -284,13 +285,29 @@ export default {
       passWordSwitch:false
     }
   },
-
+  created(){
+    this.init();
+  },
   mounted() {
     this._getQRCode();
   },
   methods: {
     deleteIt() {
       console.log("i m ru");
+    },
+
+    init(){
+      // this.$route.query.id;
+      var _id = this.$route.query.id
+      var _data ={
+        transfer_id :_id
+      }
+      // console.log(this.$router.query);
+      request.getInstance().getData('api/transfer/show'+"?transfer_id="+_id).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.error(err);
+      });
     },
 
     goTipPage() {
