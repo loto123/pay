@@ -388,6 +388,7 @@
 import topBack from "../../components/topBack";
 import {Indicator,Toast} from "mint-ui"
 import request from "../../utils/userRequest"
+import Loading from "../../utils/loading"
 
 export default {
   name: "shopDetail",
@@ -432,7 +433,7 @@ export default {
 
     // 数据控制
     init(){
-      Indicator.open("加载中...");
+      Loading.getInstance().open();
       var self = this;
       var _id = this.$route.query.id;
 
@@ -442,7 +443,7 @@ export default {
         this.shopId = res.data.data.id;
         this.shopName = res.data.data.name;
 
-        Indicator.close();
+        Loading.getInstance().open();
       }).catch((error)=>{
         Toast("当前页面不存在");
         this.$router.go(-1);

@@ -56184,8 +56184,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_qrCode__ = __webpack_require__(581);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__utils_qrCode__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_loading__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode__ = __webpack_require__(581);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__utils_qrCode__);
 //
 //
 //
@@ -56455,6 +56456,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
@@ -56485,13 +56488,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log("i m ru");
     },
     init: function init() {
-      // this.$route.query.id;
+      __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open();
       var _id = this.$route.query.id;
       var _data = {
         transfer_id: _id
-        // console.log(this.$router.query);
-      };__WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/show' + "?transfer_id=" + _id).then(function (res) {
+      };
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/show' + "?transfer_id=" + _id).then(function (res) {
         console.log(res);
+        __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
       });
@@ -64946,6 +64950,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(58);
 //
 //
 //
@@ -65332,6 +65337,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -65378,7 +65384,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["Indicator"].open("加载中...");
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       var self = this;
       var _id = this.$route.query.id;
 
@@ -65388,7 +65394,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.shopId = res.data.data.id;
         _this.shopName = res.data.data.name;
 
-        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["Indicator"].close();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
         _this.$router.go(-1);
