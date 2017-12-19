@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Notice;
+use App\Profit;
 use App\Transfer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use JWTAuth;
+use PhpParser\Node\Expr\New_;
 use Validator;
 
 class NoticeController extends Controller
@@ -36,14 +38,13 @@ class NoticeController extends Controller
             foreach($notice as $item) {
                 $thumb = '';
                 if($item->type == 1) { //分润
-                    $transfer_table = (new Transfer)->getTable();
-                    $transfer_list = Transfer::join('users as u', 'u.id', '=', $transfer_table.'.user_id')
-                        ->where($transfer_table.'.id', $item->param)
-                        ->select('u.name as name')->first();
-                    if (empty($transfer_list)) {
+                    $profit_table = (new Profit)->getTable();
+                    $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
+                        ->where($profit_table.'.id',$item->param)->select('u.mobile as mobile')->first();
+                    if(empty($profit)) {
                         continue;
                     }
-                    $thumb = $transfer_list->name;
+                    $thumb = $profit->thumb??'default.png';
                 }
                 $list[$item->type][] = [
                     'notice_id' => $item->id,
@@ -110,7 +111,7 @@ class NoticeController extends Controller
      *   @SWG\Parameter(
      *     name="param",
      *     in="formData",
-     *     description="参数，当type=1时，代表交易id，必填",
+     *     description="参数，当type=1时，代表分润id，必填",
      *     required=false,
      *     type="string"
      *   ),
@@ -186,7 +187,7 @@ class NoticeController extends Controller
     /**
      * @SWG\Post(
      *   path="/notice/detail",
-     *   summary="分润通知的详情",
+     *   summary="详情",
      *   tags={"消息"},
      *   @SWG\Parameter(
      *     name="notice_id",
@@ -216,24 +217,38 @@ class NoticeController extends Controller
         }
         $notice_id = $request->input('notice_id');
         $notice = Notice::where('id', $notice_id)->where('user_id', $this->user->id)->first();
-        if (empty($notice) || $notice->type>1) {
-            return response()->json(['code' => 0,'msg' => '该消息不存在或不是您的分润通知','data' => []]);
+        if (empty($notice)) {
+            return response()->json(['code' => 0,'msg' => '消息不存在','data' => []]);
         }
-        $transfer_table = (new Transfer)->getTable();
-        $transfer_list = Transfer::join('users as u', 'u.id', '=', $transfer_table.'.user_id')
-            ->where($transfer_table.'.id', $notice->param)
-            ->select('u.mobile as mobile')->first();
-        if (empty($transfer_list)) {
-            return response()->json(['code' => 0,'msg' => '分润的交易id不存在','data' => []]);
+
+        $data = [];
+        if($notice->type == 1) {
+            $profit_table = (new Profit)->getTable();
+            $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
+                ->leftJoin('transfer_record as tr', 'tr.id', '=', $profit_table.'.record_id')
+                ->where($profit_table.'.id',$notice->param)
+                ->select($profit_table.'.*','u.mobile as mobile','tr.transfer_id as transfer_id')->first();
+            if (empty($profit)) {
+                return response()->json(['code' => 0,'msg' => '分润不存在','data' => []]);
+            }
+            $data = [
+                'amount' => $profit->proxy_amount,
+                'type' => $notice->type,
+                'time' => (string)$profit->created_at,
+                'transfer_id' => $profit->transfer_id,
+                'mobile' => $profit->mobile,
+                'thumb' => $profit->thumb??'default.png',
+            ];
+        } else {
+            $data = [
+                'time' => (string)$notice->created_at,
+                'content'=> $notice->content,
+                'title' => $notice->title
+            ];
         }
-        $data = [
-            ['title'=>'入账金额','content'=>$notice->content],
-            ['title'=>'类型','content'=>'分润'],
-            ['title'=>'时间','content'=>(string)$notice->created_at],
-            ['title'=>'交易单号','content'=>$notice->id],
-            ['title'=>'分润来源','content'=>$transfer_list->mobile],
-        ];
-        return response()->json(['code' => 0,'msg' => '','data' => $data]);
+
+
+        return response()->json(['code' => 1,'msg' => '','data' => $data]);
     }
 
     /**

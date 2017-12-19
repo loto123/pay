@@ -33,13 +33,6 @@ Route::group([
 });
 
 Route::group([
-    'prefix'        => '/transfer',
-    'namespace'     => 'Api',
-], function (Router $router) {
-    $router->post('create', 'TransferController@create');
-});
-
-Route::group([
     'prefix'       => '/my',
     'namespace'    => 'Api',
 ], function (Router $router){
@@ -89,6 +82,15 @@ $api->version('v1', function ($api) {
     });
 });
 
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => '/',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+//        $api->get('time', 'CommonController@time');
+    });
+});
+
 $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     $api->group([
         'prefix' => 'shop',
@@ -98,6 +100,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('lists/mine', 'ShopController@my_lists');
         $api->get('lists/all', 'ShopController@all');
         $api->get('detail/{id}', 'ShopController@detail');
+        $api->get('members/{id}', 'ShopController@members');
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
