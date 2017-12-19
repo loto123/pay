@@ -16,7 +16,7 @@
     </div>
     
     <div class="textareaWrap">
-        <textarea name="" id="" cols="20" rows="3" placeholder = "大吉大利 恭喜发财">
+        <textarea name="" id="" cols="20" rows="3" placeholder = "大吉大利 恭喜发财" v-model="commentMessage">
 
         </textarea>
     </div>
@@ -137,15 +137,14 @@ export default {
       dealShop: null,
       shopList: null,
 
-      shopId:null,
-      price:10
+      shopId: null,
+      price: 10,
+      commentMessage: null
     };
   },
 
   methods: {
-    confirm() {
-      
-    },
+    confirm() {},
     init() {
       Loading.getInstance().open();
       request
@@ -173,15 +172,15 @@ export default {
       this.shopList = _tempList;
     },
 
-    getShopName(id){
-        console.warn(id);
-        for(let i =0 ; i <this.shopList.length; i++){
-            if(this.shopList[i].value == id){
-                return this.shopList[i].label;
-            }
+    getShopName(id) {
+      console.warn(id);
+      for (let i = 0; i < this.shopList.length; i++) {
+        if (this.shopList[i].value == id) {
+          return this.shopList[i].label;
         }
+      }
 
-        return '没有这个店铺';
+      return "没有这个店铺";
     },
 
     showDropList() {
@@ -195,20 +194,33 @@ export default {
     },
 
     // 提交数据
-    submitData(){
-        var _data = {
-            shop_id:this.shopId,
-            price:this.price
-        };
+    submitData() {
+      var _tempMessage = null;
+      if (this.commentMessage == null) {
+        _tempMessage = "大吉大利 恭喜发财";
+      } else {
+        _tempMessage = this.commentMessage;
+      }
 
-        request.getInstance().postData('api/transfer/create',_data).then(res=>{
-            console.log(res);
-            this.$router.push("/makeDeal/deal_detail"+"?id="+ res.data.data.id );
-        }).catch(err=>{ 
-            console.error(err);
+      var _data = {
+        shop_id: this.shopId,
+        price: this.price,
+        comment:_tempMessage
+      };
+
+      request
+        .getInstance()
+        .postData("api/transfer/create", _data)
+        .then(res => {
+          console.log(res);
+          this.$router.push(
+            "/makeDeal/deal_detail" + "?id=" + res.data.data.id
+          );
         })
+        .catch(err => {
+          console.error(err);
+        });
     }
-    
   },
   components: { topBack, inputList }
 };

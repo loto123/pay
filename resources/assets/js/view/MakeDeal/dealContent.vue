@@ -2,18 +2,18 @@
     <div>
         <section class="content flex flex-v flex-align-center">
             <img src="/images/avatar.jpg" alt="" class="avatar">
-            <h3 class="user-name">看看我的名字是不是很长</h3>
-            <p class="message">玩家留言  大吉大利  晚上吃鸡</p>
+            <h3 class="user-name">用户名字</h3>
+            <p class="message">{{(renderData.comment==0)?'无消息':renderData.comment}}</p>
         </section>
 
         <section class="balance-wrap flex ">
             <div class="flex flex-v flex-align-center flex-justify-around">
                 <h3>当前倍率</h3>
-                <span>10</span>
+                <span>{{renderData.price}}</span>
             </div>
             <div class="flex flex-v flex-align-center flex-justify-around">
                 <h3>当前钱包中的余额</h3>
-                <span>288.66元</span>
+                <span>{{renderData.amount}}元</span>
             </div>
         </section>
 
@@ -63,5 +63,10 @@
   }
 }
 
-
 </style>
+
+<script>
+  export default {
+    props:["renderData"]
+  }
+</script>

@@ -9,7 +9,7 @@
             <p>茶水费</p>
         </section>
         
-        <deal-content></deal-content>
+        <deal-content :renderData = "renderData"></deal-content>
 
         <section class="pay-wrap flex flex-v flex-align-center">
 
@@ -284,7 +284,10 @@ export default {
   
   data(){
     return {
-      passWordSwitch:false
+      passWordSwitch:false,
+      renderData :{
+        name:null
+      }
     }
   },
   created(){
@@ -306,6 +309,8 @@ export default {
       }
       request.getInstance().getData('api/transfer/show'+"?transfer_id="+_id).then(res=>{
         console.log(res);
+
+        this.renderData = res.data.data;
         Loading.getInstance().close();
         
       }).catch(err=>{

@@ -30826,7 +30826,7 @@ function injectStyle (ssrContext) {
 }
 var normalizeComponent = __webpack_require__(4)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(746)
 /* template */
 var __vue_template__ = __webpack_require__(576)
 /* template functional */
@@ -55572,7 +55572,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       shopList: null,
 
       shopId: null,
-      price: 10
+      price: 10,
+      commentMessage: null
     };
   },
 
@@ -55610,7 +55611,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }
 
-      return '没有这个店铺';
+      return "没有这个店铺";
     },
     showDropList: function showDropList() {
       this.dropListSwitch = true;
@@ -55627,12 +55628,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     submitData: function submitData() {
       var _this2 = this;
 
+      var _tempMessage = null;
+      if (this.commentMessage == null) {
+        _tempMessage = "大吉大利 恭喜发财";
+      } else {
+        _tempMessage = this.commentMessage;
+      }
+
       var _data = {
         shop_id: this.shopId,
-        price: this.price
+        price: this.price,
+        comment: _tempMessage
       };
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/create', _data).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
         console.log(res);
         _this2.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
       }).catch(function (err) {
@@ -56020,7 +56029,34 @@ var render = function() {
         _c("span", { staticClass: "cancer" })
       ]),
       _vm._v(" "),
-      _vm._m(0, false, false),
+      _c("div", { staticClass: "textareaWrap" }, [
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.commentMessage,
+              expression: "commentMessage"
+            }
+          ],
+          attrs: {
+            name: "",
+            id: "",
+            cols: "20",
+            rows: "3",
+            placeholder: "大吉大利 恭喜发财"
+          },
+          domProps: { value: _vm.commentMessage },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.commentMessage = $event.target.value
+            }
+          }
+        })
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -56050,24 +56086,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "textareaWrap" }, [
-      _c("textarea", {
-        attrs: {
-          name: "",
-          id: "",
-          cols: "20",
-          rows: "3",
-          placeholder: "大吉大利 恭喜发财"
-        }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -56473,7 +56492,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
-      passWordSwitch: false
+      passWordSwitch: false,
+      renderData: {
+        name: null
+      }
     };
   },
   created: function created() {
@@ -56488,6 +56510,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log("i m ru");
     },
     init: function init() {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open();
       var _id = this.$route.query.id;
       var _data = {
@@ -56495,6 +56519,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/show' + "?transfer_id=" + _id).then(function (res) {
         console.log(res);
+
+        _this.renderData = res.data.data;
         __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -56869,53 +56895,48 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0, false, false)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("section", { staticClass: "content flex flex-v flex-align-center" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: { src: "/images/avatar.jpg", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("h3", { staticClass: "user-name" }, [
-          _vm._v("看看我的名字是不是很长")
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "message" }, [
-          _vm._v("玩家留言  大吉大利  晚上吃鸡")
-        ])
-      ]),
+  return _c("div", [
+    _c("section", { staticClass: "content flex flex-v flex-align-center" }, [
+      _c("img", {
+        staticClass: "avatar",
+        attrs: { src: "/images/avatar.jpg", alt: "" }
+      }),
       _vm._v(" "),
-      _c("section", { staticClass: "balance-wrap flex " }, [
-        _c(
-          "div",
-          { staticClass: "flex flex-v flex-align-center flex-justify-around" },
-          [
-            _c("h3", [_vm._v("当前倍率")]),
-            _vm._v(" "),
-            _c("span", [_vm._v("10")])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "flex flex-v flex-align-center flex-justify-around" },
-          [
-            _c("h3", [_vm._v("当前钱包中的余额")]),
-            _vm._v(" "),
-            _c("span", [_vm._v("288.66元")])
-          ]
+      _c("h3", { staticClass: "user-name" }, [_vm._v("用户名字")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "message" }, [
+        _vm._v(
+          _vm._s(
+            _vm.renderData.comment == 0 ? "无消息" : _vm.renderData.comment
+          )
         )
       ])
+    ]),
+    _vm._v(" "),
+    _c("section", { staticClass: "balance-wrap flex " }, [
+      _c(
+        "div",
+        { staticClass: "flex flex-v flex-align-center flex-justify-around" },
+        [
+          _c("h3", [_vm._v("当前倍率")]),
+          _vm._v(" "),
+          _c("span", [_vm._v(_vm._s(_vm.renderData.price))])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "flex flex-v flex-align-center flex-justify-around" },
+        [
+          _c("h3", [_vm._v("当前钱包中的余额")]),
+          _vm._v(" "),
+          _c("span", [_vm._v(_vm._s(_vm.renderData.amount) + "元")])
+        ]
+      )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -58377,7 +58398,7 @@ var render = function() {
         [_c("p", [_vm._v("大赢家")]), _vm._v(" "), _c("p", [_vm._v("茶水费")])]
       ),
       _vm._v(" "),
-      _c("deal-content"),
+      _c("deal-content", { attrs: { renderData: _vm.renderData } }),
       _vm._v(" "),
       _c(
         "section",
@@ -71186,6 +71207,84 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-96ec1830", module.exports)
   }
 }
+
+/***/ }),
+/* 746 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["renderData"]
+});
 
 /***/ })
 /******/ ]);
