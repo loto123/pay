@@ -37,6 +37,7 @@ class NoticeController extends Controller
         if (!empty($notice) && count($notice)>0) {
             foreach($notice as $item) {
                 $thumb = '';
+                $title = '';
                 if($item->type == 1) { //分润
                     $profit_table = (new Profit)->getTable();
                     $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
@@ -45,34 +46,19 @@ class NoticeController extends Controller
                         continue;
                     }
                     $thumb = $profit->thumb??'default.png';
+                    $title = $profit->mobile;
                 }
                 $list[$item->type][] = [
+                    'type' => $item->type,
                     'notice_id' => $item->id,
                     'thumb'=> $thumb,
                     'content' => $item->content,
-                    'title' => $item->title,
+                    'title' => $title??$item->title,
                     'created_at' => (string)$item->created_at,
                 ];
             }
         }
-        $data = [
-            [
-                'type'=>'1',
-                'name'=>'分润通知',
-                'notices'=> isset($list[1])?$list[1]:[],
-            ],
-            [
-                'type'=>'2',
-                'name'=>'用户注册',
-                'notices'=>isset($list[2])?$list[2]:[],
-            ],
-            [
-                'type'=>'3',
-                'name'=>'系统通知',
-                'notices'=>isset($list[3])?$list[3]:[],
-            ],
-        ];
-        return response()->json(['code' => 1,'msg' => '','data' => $data]);
+        return response()->json(['code' => 1,'msg' => '','data' => $list]);
     }
 
     /**
@@ -83,7 +69,7 @@ class NoticeController extends Controller
      *   @SWG\Parameter(
      *     name="user_id",
      *     in="formData",
-     *     description="接收消息的用户ID",
+     *     description="接收消息的用户ID,为0时，表示系统中的所有用户",
      *     required=true,
      *     type="integer"
      *   ),
