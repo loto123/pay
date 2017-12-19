@@ -7,7 +7,6 @@
 <style lang="scss">
 .mint-indicator-mask{
   z-index:1999 !important;
-  // display:none;
 }
 
 .mint-indicator-wrapper{

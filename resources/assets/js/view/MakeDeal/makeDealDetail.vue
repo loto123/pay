@@ -92,7 +92,7 @@
         <section id="qrcode" class="flex flex-justify-center"></section>
         <h3 class="notice">扫描二维码快速交易</h3>
 
-        <passwordPanel :setSwitch="passWordSwitch" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
+        <passwordPanel :setSwitch="passWordSwitch" :settingPasswordSwitch="true" :secondValid="false" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
     </div>
 </template>
 
