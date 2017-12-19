@@ -32,7 +32,7 @@
                         <select class="form-control" id="role" name="role">
                             <option value="0">全部</option>
                             @foreach($roles as $key => $item)
-                                <option value="{{$key}}" {{isset($role) && $role == $item->id ? 'selected' : ''}}>{{$item->display_name}}</option>
+                                <option value="{{$item->id}}" {{isset($role) && $role == $item->id ? 'selected' : ''}}>{{$item->display_name}}</option>
                             @endforeach
                         </select>
                     </div>
