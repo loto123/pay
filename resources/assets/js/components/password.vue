@@ -6,7 +6,9 @@
             </div>
 
             <div id="content-wrap" class="flex flex-v flex-align-center">
-                <h3>请输入支付密码</h3>
+                <h3 v-if="!settingPasswordSwitch">请输入支付密码</h3>
+                <h3 v-if="settingPasswordSwitch">请设置支付密码</h3>
+                <h4 v-if="settingPasswordSwitch&&secondValid">(二次验证)</h4>
                 <ul class="flex"  ref="showPassWord">
                     <li class="flex-1 flex flex-align-center flex-justify-center"></li>
                     <li class="flex-1 flex flex-align-center flex-justify-center"></li>
@@ -66,17 +68,23 @@
   }
 
   #content-wrap {
-    height: 6em;
+    height: auto;
     width: 75%;
     margin-top: 4em;
 
     h3 {
       font-size: 1.5em;
     }
+    
+    h4{
+      margin-top:0.5em;
+      color:#555;
+      font-size: 0.9em;
+    }
 
     ul {
       width: 100%;
-      height: 6em;
+      height: 3em;
       margin-top: 1.5em;
       li {
         background: #fff;
@@ -145,8 +153,12 @@ export default {
       password: ""
     };
   },
+  
   // validationData data url methond
-  props: ["setSwitch","validationData"],
+  // setSwitch : 组件显示开关
+  // validationData : 需要验证的数据
+  // settingPasswordSwitch : 设置密码开关
+  props: ["setSwitch","validationData","settingPasswordSwitch","secondValid"],
   methods: {
     ipuntNumber(e) {
       if (this.password.length >= 6) {

@@ -14,9 +14,11 @@ import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
 import '../../sass/iconfont.scss'
 
+// import Loading from '../utils/loading'
+
 Vue.use(Mint)
 Vue.use(Router)
-
+// Vue.use(Loading);
 var index = [
     { path: '/index', name: 'index', component: Index },
 ]

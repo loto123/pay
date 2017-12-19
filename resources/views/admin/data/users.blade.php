@@ -32,7 +32,7 @@
                         <select class="form-control" id="role" name="role">
                             <option value="0">全部</option>
                             @foreach($roles as $key => $item)
-                                <option value="{{$key}}" {{isset($role) && $role == $item->id ? 'selected' : ''}}>{{$item->display_name}}</option>
+                                <option value="{{$item->id}}" {{isset($role) && $role == $item->id ? 'selected' : ''}}>{{$item->display_name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -94,6 +94,7 @@
                         <th>余额</th>
                         <th>已付平台手续费</th>
                         <th>直属用户数</th>
+                        <td>直属代理数</td>
                         <th>代理业绩</th>
                         <th>代理分润收益</th>
                         {{--<th>持有VIP卡数</th>--}}
@@ -152,7 +153,7 @@
                             @else
                                 <td>无</td>
                             @endif
-                            <td>{{$item->trans_amount}}</td>
+                            <td>{{$item->trans_amount or 0}}</td>
                             <td>{{$item->transfer_record()->count()}}</td>
                             <td>{{$item->transfer_record()->where('stat',2)->sum('amount')}}</td>
                             <td>{{abs($item->transfer_record()->where('stat',1)->sum('amount'))}}</td>
@@ -160,8 +161,8 @@
                             <td>{{$item->output_profit()->sum('fee_amount')}}</td>
                             <td>{{$item->child_user_count}}</td>
                             <td>{{$item->child_proxy_count}}</td>
-                            <td>{{$item->proxy_fee_amount}}</td>
-                            <td>{{$item->profit_proxy_amount}}</td>
+                            <td>{{$item->proxy_fee_amount or 0}}</td>
+                            <td>{{$item->profit_proxy_amount or 0}}</td>
                             {{--<td>持有VIP卡数</td>--}}
                             {{--<td>已售VIP卡数</td>--}}
                         </tr>
