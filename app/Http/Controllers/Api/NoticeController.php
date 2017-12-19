@@ -32,12 +32,12 @@ class NoticeController extends Controller
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
-        $notice = Notice::whereIn('user_id', [$this->user->id,0])->select()->get();
+        $notice = Notice::whereIn('user_id', [$this->user->id,0])->orderBy('id','DESC')->select()->get();
         $list = [];
         if (!empty($notice) && count($notice)>0) {
             foreach($notice as $item) {
                 $thumb = '';
-                $title = '';
+                $title = $item->title;
                 if($item->type == 1) { //分润
                     $profit_table = (new Profit)->getTable();
                     $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
@@ -53,7 +53,7 @@ class NoticeController extends Controller
                     'notice_id' => $item->id,
                     'thumb'=> $thumb,
                     'content' => $item->content,
-                    'title' => $title??$item->title,
+                    'title' => $title,
                     'created_at' => (string)$item->created_at,
                 ];
             }
@@ -132,7 +132,7 @@ class NoticeController extends Controller
                     $title = '分润通知';
                     break;
                 case 2:
-                    $title = '用户注册';
+                    $title = '新用户注册通知';
                     break;
                 case 3:
                     $title = '系统通知';
@@ -159,13 +159,9 @@ class NoticeController extends Controller
                 'updated_at' => $time,
             ];
         }
-        DB::beginTransaction();
-        try {
-            DB::table('notices')->insert($data);
-            DB::commit();
+        if(DB::table('notices')->insert($data)) {
             return response()->json(['code' => 1,'msg' => '','data' => []]);
-        }catch (\Exception $e) {
-            DB::rollBack();
+        } else{
             return response()->json(['code' => 0,'msg' => '数据插入失败','data' => []]);
         }
     }
