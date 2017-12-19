@@ -459,4 +459,26 @@ class ShopController extends BaseController {
         return $this->json(['url' => url('storage/qrcode/'.$filename.'.png')]);
     }
 
+    /**
+     * @SWG\Post(
+     *   path="/shop/join/{id}",
+     *   summary="加入店铺",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function join($id) {
+        $user = $this->auth->user();
+        //#todo
+        return $this->json();
+    }
+
 }
