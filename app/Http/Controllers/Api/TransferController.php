@@ -81,7 +81,7 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
         $transfer = new Transfer();
-        $transfer->shop_id = $request->shop_id;
+        $transfer->shop_id = $shop->id;
         $transfer->user_id = $user->id;
         $transfer->price = $request->price;
         $transfer->comment = $request->input('comment', '');
@@ -96,7 +96,7 @@ class TransferController extends Controller
         $transfer->fee_percent = config('platform_fee_percent');
 
         if ($transfer->save()) {
-            return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => $transfer]);
+            return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => ['id' => $transfer->en_id()]]);
         } else {
             return response()->json(['code' => 0, 'msg' => trans('trans.save_failed'), 'data' => []]);
         }
