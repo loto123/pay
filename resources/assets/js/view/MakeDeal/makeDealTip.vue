@@ -6,11 +6,11 @@
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
             <label for="" class="flex-4" style="padding-left:1em;">大赢家茶水费</label>
             <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
-            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击缴纳茶水费"  maxlength="6"></span>
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击缴纳茶水费"  maxlength="6" v-model="renderData.moneyData"></span>
         </div>
 
         <div class="button-wrap">
-            <mt-button type="primary" size="large" class="green-color-bg">交纳</mt-button>
+            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">交纳</mt-button>
         </div>
 
         <div class="tip-record">
@@ -43,6 +43,8 @@
             </ul>
 
         </div>
+
+        <passwordTab :setSwitch = "passwordData.switch" v-on:hidePassword="hidePassword" v-on:callBack="getPassword"></passwordTab>
     </div>
 </template>
 
@@ -61,13 +63,13 @@
   border-radius: 0.2em;
   margin: 0 auto;
 
-  .tipMoney{
-      outline:none;
-      font-size:1em;
-      width:70%;
-      height: 100%;
-      display: block;
-      border: none;
+  .tipMoney {
+    outline: none;
+    font-size: 1em;
+    width: 70%;
+    height: 100%;
+    display: block;
+    border: none;
   }
 }
 
@@ -114,38 +116,95 @@
 <script>
 import topBack from "../../components/topBack";
 import dealContent from "./dealContent";
-import Loading from '../../utils/loading'
-import request from '../../utils/userRequest'
+import Loading from "../../utils/loading";
+import request from "../../utils/userRequest";
+import passwordTab from "../../components/password";
 
 export default {
-  created(){
+  created() {
     this.init();
   },
-  components: { topBack, dealContent },
-  data(){
-      return {
-          renderData :{
-            name:null,
-            moneyData:{
-                payMoney:null,
-                getMoney:null
-            }
-
-        }
+  components: { topBack, dealContent, passwordTab },
+  data() {
+    return {
+      renderData: {
+        name: null,
+        moneyData: null
+      },
+      passwordData: {
+        switch: false,
+        value: null
       }
+    };
   },
   methods: {
-   init(){
-       Loading.getInstance().open();
-       var _id = this.$route.query.id;
-       request.getInstance().getData('api/transfer/feerecord'+"?transfer_id="+_id).then(res=>{
-           console.log(res);
-           this.renderData = res.data.data;
-           Loading.getInstance().close();
-       }).catch(err=>{
-           console.error(err);
-       });
-   }
+    init() {
+      Loading.getInstance().open();
+      var _id = this.$route.query.id;
+      request
+        .getInstance()
+        .getData("api/transfer/feerecord" + "?transfer_id=" + _id)
+        .then(res => {
+          console.log(res);
+          this.renderData = res.data.data;
+          Loading.getInstance().close();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    payTip() {
+      Loading.getInstance().open();
+      var _id = this.$route.query.id;
+      //    Loading
+      var _data = {
+        transfer_id: _id,
+        fee: this.renderData.moneyData,
+        action: 0
+        // pay_password:this.passwordData.value
+      };
+
+      request
+        .getInstance()
+        .postData("api/transfer/payfee", _data)
+        .then(res => {
+          console.log(res);
+          this.passwordData.switch = true;
+          Loading.getInstance().close();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+
+    showPassWord() {
+      this.passwordData.switch = true;
+    },
+    hidePassword(e) {
+      this.passwordData.switch = false;
+    },
+    getPassword(e) {
+      console.log(e);
+      this.passwordData.value = e;
+      var _id = this.$route.query.id;
+
+      var _data = {
+        transfer_id: _id,
+        fee: this.renderData.moneyData,
+        action: 1,
+        pay_password: this.passwordData.value
+      };
+
+      request
+        .getInstance()
+        .postData("api/transfer/payfee", _data)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
   }
 };
 </script>

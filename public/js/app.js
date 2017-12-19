@@ -58734,6 +58734,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dealContent__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_password__);
 //
 //
 //
@@ -58847,6 +58849,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
 
 
 
@@ -58854,39 +58859,84 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    created: function created() {
-        this.init();
+  created: function created() {
+    this.init();
+  },
+
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a, passwordTab: __WEBPACK_IMPORTED_MODULE_4__components_password___default.a },
+  data: function data() {
+    return {
+      renderData: {
+        name: null,
+        moneyData: null
+      },
+      passwordData: {
+        switch: false,
+        value: null
+      }
+    };
+  },
+
+  methods: {
+    init: function init() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+      var _id = this.$route.query.id;
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/feerecord" + "?transfer_id=" + _id).then(function (res) {
+        console.log(res);
+        _this.renderData = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+      });
     },
+    payTip: function payTip() {
+      var _this2 = this;
 
-    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a },
-    data: function data() {
-        return {
-            renderData: {
-                name: null,
-                moneyData: {
-                    payMoney: null,
-                    getMoney: null
-                }
+      __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+      var _id = this.$route.query.id;
+      //    Loading
+      var _data = {
+        transfer_id: _id,
+        fee: this.renderData.moneyData,
+        action: 0
+        // pay_password:this.passwordData.value
+      };
 
-            }
-        };
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
+        console.log(res);
+        _this2.passwordData.switch = true;
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+      });
     },
+    showPassWord: function showPassWord() {
+      this.passwordData.switch = true;
+    },
+    hidePassword: function hidePassword(e) {
+      this.passwordData.switch = false;
+    },
+    getPassword: function getPassword(e) {
+      console.log(e);
+      this.passwordData.value = e;
+      var _id = this.$route.query.id;
 
-    methods: {
-        init: function init() {
-            var _this = this;
+      var _data = {
+        transfer_id: _id,
+        fee: this.renderData.moneyData,
+        action: 1,
+        pay_password: this.passwordData.value
+      };
 
-            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
-            var _id = this.$route.query.id;
-            __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/feerecord' + "?transfer_id=" + _id).then(function (res) {
-                console.log(res);
-                _this.renderData = res.data.data;
-                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
-            }).catch(function (err) {
-                console.error(err);
-            });
-        }
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
+        console.error(err);
+      });
     }
+  }
 });
 
 /***/ }),
@@ -58905,7 +58955,57 @@ var render = function() {
       _vm._v(" "),
       _c("dealContent", { attrs: { renderData: _vm.renderData } }),
       _vm._v(" "),
-      _vm._m(0, false, false),
+      _c(
+        "div",
+        { staticClass: "tip-wrap flex flex-align-center flex-justify-around" },
+        [
+          _c(
+            "label",
+            {
+              staticClass: "flex-4",
+              staticStyle: { "padding-left": "1em" },
+              attrs: { for: "" }
+            },
+            [_vm._v("大赢家茶水费")]
+          ),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass: "flex flex-align-center flex-6 flex-reverse",
+              staticStyle: { "padding-right": "1em" }
+            },
+            [
+              _vm._v("元"),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.renderData.moneyData,
+                    expression: "renderData.moneyData"
+                  }
+                ],
+                staticClass: "tipMoney",
+                attrs: {
+                  type: "text",
+                  placeholder: "点击缴纳茶水费",
+                  maxlength: "6"
+                },
+                domProps: { value: _vm.renderData.moneyData },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.renderData, "moneyData", $event.target.value)
+                  }
+                }
+              })
+            ]
+          )
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -58915,7 +59015,8 @@ var render = function() {
             "mt-button",
             {
               staticClass: "green-color-bg",
-              attrs: { type: "primary", size: "large" }
+              attrs: { type: "primary", size: "large" },
+              on: { click: _vm.payTip }
             },
             [_vm._v("交纳")]
           )
@@ -58923,51 +59024,17 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _vm._m(1, false, false)
+      _vm._m(0, false, false),
+      _vm._v(" "),
+      _c("passwordTab", {
+        attrs: { setSwitch: _vm.passwordData.switch },
+        on: { hidePassword: _vm.hidePassword, callBack: _vm.getPassword }
+      })
     ],
     1
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "tip-wrap flex flex-align-center flex-justify-around" },
-      [
-        _c(
-          "label",
-          {
-            staticClass: "flex-4",
-            staticStyle: { "padding-left": "1em" },
-            attrs: { for: "" }
-          },
-          [_vm._v("大赢家茶水费")]
-        ),
-        _vm._v(" "),
-        _c(
-          "span",
-          {
-            staticClass: "flex flex-align-center flex-6 flex-reverse",
-            staticStyle: { "padding-right": "1em" }
-          },
-          [
-            _vm._v("元"),
-            _c("input", {
-              staticClass: "tipMoney",
-              attrs: {
-                type: "text",
-                placeholder: "点击缴纳茶水费",
-                maxlength: "6"
-              }
-            })
-          ]
-        )
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
