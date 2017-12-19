@@ -30826,7 +30826,7 @@ function injectStyle (ssrContext) {
 }
 var normalizeComponent = __webpack_require__(4)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(741)
 /* template */
 var __vue_template__ = __webpack_require__(576)
 /* template functional */
@@ -42714,7 +42714,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'app'
@@ -42780,9 +42779,11 @@ if (false) {
 
 
 
+// import Loading from '../utils/loading'
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_mint_ui___default.a);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]);
-
+// Vue.use(Loading);
 var index = [{ path: '/index', name: 'index', component: __WEBPACK_IMPORTED_MODULE_3__view_Index_index_vue___default.a }];
 
 var routerList = {
@@ -53727,8 +53728,12 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(58);
 //
 //
 //
@@ -53756,14 +53761,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
-        return {};
+        return {
+            balance: null
+        };
+    },
+    created: function created() {
+        this.myAccount();
     },
 
-    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a }
+    components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
+    methods: {
+        myAccount: function myAccount() {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
+
+            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
+                _this.balance = res.data.data.balance;
+                __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -53799,7 +53827,15 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm._m(0, false, false)
+      _c("div", { staticClass: "myAccount-box" }, [
+        _c("div", { staticClass: "withDraw-money" }, [
+          _c("div", { staticClass: "money" }, [_vm._v(_vm._s(_vm.balance))]),
+          _vm._v(" "),
+          _c("div", { staticClass: "title" }, [_vm._v("当前可提现余额")])
+        ]),
+        _vm._v(" "),
+        _vm._m(0, false, false)
+      ])
     ],
     1
   )
@@ -53809,42 +53845,34 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "myAccount-box" }, [
-      _c("div", { staticClass: "withDraw-money" }, [
-        _c("div", { staticClass: "money" }, [_vm._v("88.88")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "title" }, [_vm._v("当前可用余额")])
-      ]),
+    return _c("div", { staticClass: "submit-btn" }, [
+      _c(
+        "a",
+        { staticClass: "mb15", attrs: { href: "/#/myAccount/recharge" } },
+        [
+          _c(
+            "button",
+            { staticClass: "recharge-btn", attrs: { type: "button" } },
+            [_vm._v("充值")]
+          )
+        ]
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "submit-btn" }, [
-        _c(
-          "a",
-          { staticClass: "mb15", attrs: { href: "/#/myAccount/recharge" } },
-          [
-            _c(
-              "button",
-              { staticClass: "recharge-btn", attrs: { type: "button" } },
-              [_vm._v("充值")]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          { staticClass: "mb15", attrs: { href: "/#/myAccount/withdraw" } },
-          [
-            _c(
-              "button",
-              { staticClass: "withdraw-btn", attrs: { type: "button" } },
-              [_vm._v("提现")]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c("a", { attrs: { href: "/#/myAccount/give" } }, [
-          _c("button", { staticClass: "give-btn", attrs: { type: "button" } }, [
-            _vm._v("转账到店铺")
-          ])
+      _c(
+        "a",
+        { staticClass: "mb15", attrs: { href: "/#/myAccount/withdraw" } },
+        [
+          _c(
+            "button",
+            { staticClass: "withdraw-btn", attrs: { type: "button" } },
+            [_vm._v("提现")]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("a", { attrs: { href: "/#/myAccount/give" } }, [
+        _c("button", { staticClass: "give-btn", attrs: { type: "button" } }, [
+          _vm._v("转账到店铺")
         ])
       ])
     ])
@@ -55433,6 +55461,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_inputList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_inputList__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 //
 //
 //
@@ -55554,6 +55584,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
@@ -55573,15 +55605,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       shopList: null,
 
       shopId: null,
-      price: 10
+      price: 10,
+      commentMessage: null
     };
   },
 
 
   methods: {
-    confirm: function confirm() {
-      this.$router.push({ path: "/makeDeal/deal_detail" });
-    },
+    confirm: function confirm() {},
     init: function init() {
       var _this = this;
 
@@ -55606,14 +55637,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.shopList = _tempList;
     },
     getShopName: function getShopName(id) {
-      console.warn(id);
       for (var i = 0; i < this.shopList.length; i++) {
         if (this.shopList[i].value == id) {
           return this.shopList[i].label;
         }
       }
 
-      return '没有这个店铺';
+      return "没有这个店铺";
     },
     showDropList: function showDropList() {
       this.dropListSwitch = true;
@@ -55624,14 +55654,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       this.shopId = data;
     },
+
+
+    // 提交数据
     submitData: function submitData() {
+      var _this2 = this;
+
+      var _tempMessage = null;
+      if (this.commentMessage == null) {
+        _tempMessage = "大吉大利 恭喜发财";
+      } else {
+        _tempMessage = this.commentMessage;
+      }
+
       var _data = {
         shop_id: this.shopId,
-        price: this.price
+        price: this.price,
+        comment: _tempMessage
       };
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/create', _data).then(function (res) {
+      if (this.shopId == null) {
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请选择发起交易的店铺");
+        return;
+      } else if (this.price == "") {
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请设置单价");
+        return;
+      }
+
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
         console.log(res);
+        _this2.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
       }).catch(function (err) {
         console.error(err);
       });
@@ -55828,47 +55880,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            // "options":[
-            //     {
-            //         label: '被禁用',
-            //         value: '值F',
-            //         // disabled: true
-            //     },
-            //     {
-            //         label: '选项A',
-            //         value: '值A'
-            //     },
-            //     {
-            //         label: '选项B',
-            //         value: '值B'
-            //     },
-            //     {
-            //         label: '被禁用',
-            //         value: '值F',
-            //         // disabled: true
-            //     },
-            //     {
-            //         label: '选项A',
-            //         value: '值A'
-            //     },
-            //     {
-            //         label: '选项B',
-            //         value: '值B'
-            //     },
-            //     {
-            //         label: '被禁用',
-            //         value: '值F',
-            //         // disabled: true
-            //     },
-            //     {
-            //         label: '选项A',
-            //         value: '值A'
-            //     },
-            //     {
-            //         label: '选项B',
-            //         value: '值B'
-            //     }
-            // ],
             "choiseValue": null
         };
     },
@@ -56017,7 +56028,34 @@ var render = function() {
         _c("span", { staticClass: "cancer" })
       ]),
       _vm._v(" "),
-      _vm._m(0, false, false),
+      _c("div", { staticClass: "textareaWrap" }, [
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.commentMessage,
+              expression: "commentMessage"
+            }
+          ],
+          attrs: {
+            name: "",
+            id: "",
+            cols: "20",
+            rows: "3",
+            placeholder: "大吉大利 恭喜发财"
+          },
+          domProps: { value: _vm.commentMessage },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.commentMessage = $event.target.value
+            }
+          }
+        })
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -56047,24 +56085,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "textareaWrap" }, [
-      _c("textarea", {
-        attrs: {
-          name: "",
-          id: "",
-          cols: "20",
-          rows: "3",
-          placeholder: "大吉大利 恭喜发财"
-        }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -56161,7 +56182,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1.2em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1.0em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
 
 // exports
 
@@ -56180,8 +56201,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dealContent__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_qrCode__ = __webpack_require__(581);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__utils_qrCode__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_loading__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode__ = __webpack_require__(581);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__utils_qrCode__);
 //
 //
 //
@@ -56451,6 +56474,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
+
 
 
 
@@ -56465,8 +56491,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
-      passWordSwitch: false
+      passWordSwitch: false,
+      renderData: {
+        name: null,
+        moneyData: {
+          payMoney: null,
+          getMoney: null
+        }
+
+      }
     };
+  },
+  created: function created() {
+    this.init();
   },
   mounted: function mounted() {
     this._getQRCode();
@@ -56476,8 +56513,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     deleteIt: function deleteIt() {
       console.log("i m ru");
     },
+    init: function init() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open();
+      var _id = this.$route.query.id;
+      var _data = {
+        transfer_id: _id
+      };
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/show' + "?transfer_id=" + _id).then(function (res) {
+        console.log(res);
+
+        _this.renderData = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+      });
+    },
     goTipPage: function goTipPage() {
-      this.$router.push("/makeDeal/deal_tip");
+      var _id = this.$route.query.id;
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
     },
     showPassword: function showPassword() {
       this.passWordSwitch = true;
@@ -56845,53 +56900,48 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0, false, false)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("section", { staticClass: "content flex flex-v flex-align-center" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: { src: "/images/avatar.jpg", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("h3", { staticClass: "user-name" }, [
-          _vm._v("看看我的名字是不是很长")
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "message" }, [
-          _vm._v("玩家留言  大吉大利  晚上吃鸡")
-        ])
-      ]),
+  return _c("div", [
+    _c("section", { staticClass: "content flex flex-v flex-align-center" }, [
+      _c("img", {
+        staticClass: "avatar",
+        attrs: { src: "/images/avatar.jpg", alt: "" }
+      }),
       _vm._v(" "),
-      _c("section", { staticClass: "balance-wrap flex " }, [
-        _c(
-          "div",
-          { staticClass: "flex flex-v flex-align-center flex-justify-around" },
-          [
-            _c("h3", [_vm._v("当前倍率")]),
-            _vm._v(" "),
-            _c("span", [_vm._v("10")])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "flex flex-v flex-align-center flex-justify-around" },
-          [
-            _c("h3", [_vm._v("当前钱包中的余额")]),
-            _vm._v(" "),
-            _c("span", [_vm._v("288.66元")])
-          ]
+      _c("h3", { staticClass: "user-name" }, [_vm._v("用户名字")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "message" }, [
+        _vm._v(
+          _vm._s(
+            _vm.renderData.comment == 0 ? "无消息" : _vm.renderData.comment
+          )
         )
       ])
+    ]),
+    _vm._v(" "),
+    _c("section", { staticClass: "balance-wrap flex " }, [
+      _c(
+        "div",
+        { staticClass: "flex flex-v flex-align-center flex-justify-around" },
+        [
+          _c("h3", [_vm._v("当前倍率")]),
+          _vm._v(" "),
+          _c("span", [_vm._v(_vm._s(_vm.renderData.price))])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "flex flex-v flex-align-center flex-justify-around" },
+        [
+          _c("h3", [_vm._v("当前钱包中的余额")]),
+          _vm._v(" "),
+          _c("span", [_vm._v(_vm._s(_vm.renderData.amount) + "元")])
+        ]
+      )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -56936,7 +56986,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-0ca9c772],\n.slide-leave-active[data-v-0ca9c772] {\n  -webkit-transition: all 0.4s ease;\n  transition: all 0.4s ease;\n}\n.slide-enter[data-v-0ca9c772],\n.slide-leave-to[data-v-0ca9c772] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#pass-word-component[data-v-0ca9c772] {\n  height: 100vh;\n  width: 100%;\n  background: #efeff4;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#pass-word-component .top[data-v-0ca9c772] {\n    padding-top: 2em;\n}\n#pass-word-component #content-wrap[data-v-0ca9c772] {\n    height: 6em;\n    width: 75%;\n    margin-top: 4em;\n}\n#pass-word-component #content-wrap h3[data-v-0ca9c772] {\n      font-size: 1.5em;\n}\n#pass-word-component #content-wrap ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 6em;\n      margin-top: 1.5em;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772] {\n        background: #fff;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-right: 1px solid #aaa;\n        border-top: 1px solid #aaa;\n        border-bottom: 1px solid #aaa;\n        font-weight: bold;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772]:nth-child(1) {\n          border-left: 1px solid #aaa;\n}\n#pass-word-component .keyboard[data-v-0ca9c772] {\n    width: 100%;\n    height: 9em;\n    position: fixed;\n    bottom: 0;\n    left: 0;\n    font-size: 1.5em;\n    color: #888;\n}\n#pass-word-component .keyboard ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 100%;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772] {\n        background: #fff;\n        width: 33.33%;\n        height: 25%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-top: 1px solid #ccc;\n        border-right: 1px solid #ccc;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3n) {\n          border-right: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(1) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(2) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3) {\n          border-top: none;\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-0ca9c772],\n.slide-leave-active[data-v-0ca9c772] {\n  -webkit-transition: all 0.4s ease;\n  transition: all 0.4s ease;\n}\n.slide-enter[data-v-0ca9c772],\n.slide-leave-to[data-v-0ca9c772] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#pass-word-component[data-v-0ca9c772] {\n  height: 100vh;\n  width: 100%;\n  background: #efeff4;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#pass-word-component .top[data-v-0ca9c772] {\n    padding-top: 2em;\n}\n#pass-word-component #content-wrap[data-v-0ca9c772] {\n    height: auto;\n    width: 75%;\n    margin-top: 4em;\n}\n#pass-word-component #content-wrap h3[data-v-0ca9c772] {\n      font-size: 1.5em;\n}\n#pass-word-component #content-wrap h4[data-v-0ca9c772] {\n      margin-top: 0.5em;\n      color: #555;\n      font-size: 0.9em;\n}\n#pass-word-component #content-wrap ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 3em;\n      margin-top: 1.5em;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772] {\n        background: #fff;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-right: 1px solid #aaa;\n        border-top: 1px solid #aaa;\n        border-bottom: 1px solid #aaa;\n        font-weight: bold;\n        font-size: 1.5em;\n        color: #888;\n}\n#pass-word-component #content-wrap ul li[data-v-0ca9c772]:nth-child(1) {\n          border-left: 1px solid #aaa;\n}\n#pass-word-component .keyboard[data-v-0ca9c772] {\n    width: 100%;\n    height: 9em;\n    position: fixed;\n    bottom: 0;\n    left: 0;\n    font-size: 1.5em;\n    color: #888;\n}\n#pass-word-component .keyboard ul[data-v-0ca9c772] {\n      width: 100%;\n      height: 100%;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772] {\n        background: #fff;\n        width: 33.33%;\n        height: 25%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        border-top: 1px solid #ccc;\n        border-right: 1px solid #ccc;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3n) {\n          border-right: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(1) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(2) {\n          border-top: none;\n}\n#pass-word-component .keyboard ul li[data-v-0ca9c772]:nth-child(3) {\n          border-top: none;\n}\n", ""]);
 
 // exports
 
@@ -57086,6 +57136,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -57097,8 +57155,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
+
   // validationData data url methond
-  props: ["setSwitch", "validationData"],
+  // setSwitch : 组件显示开关
+  // validationData : 需要验证的数据
+  // settingPasswordSwitch : 设置密码开关
+  props: ["setSwitch", "validationData", "settingPasswordSwitch", "secondValid"],
   methods: {
     ipuntNumber: function ipuntNumber(e) {
       if (this.password.length >= 6) {
@@ -57180,7 +57242,17 @@ var render = function() {
                 attrs: { id: "content-wrap" }
               },
               [
-                _c("h3", [_vm._v("请输入支付密码")]),
+                !_vm.settingPasswordSwitch
+                  ? _c("h3", [_vm._v("请输入支付密码")])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.settingPasswordSwitch
+                  ? _c("h3", [_vm._v("请设置支付密码")])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.settingPasswordSwitch && _vm.secondValid
+                  ? _c("h4", [_vm._v("(二次验证)")])
+                  : _vm._e(),
                 _vm._v(" "),
                 _c("ul", { ref: "showPassWord", staticClass: "flex" }, [
                   _c("li", {
@@ -58331,7 +58403,7 @@ var render = function() {
         [_c("p", [_vm._v("大赢家")]), _vm._v(" "), _c("p", [_vm._v("茶水费")])]
       ),
       _vm._v(" "),
-      _c("deal-content"),
+      _c("deal-content", { attrs: { renderData: _vm.renderData } }),
       _vm._v(" "),
       _c(
         "section",
@@ -58499,7 +58571,11 @@ var render = function() {
       _c("h3", { staticClass: "notice" }, [_vm._v("扫描二维码快速交易")]),
       _vm._v(" "),
       _c("passwordPanel", {
-        attrs: { setSwitch: _vm.passWordSwitch },
+        attrs: {
+          setSwitch: _vm.passWordSwitch,
+          settingPasswordSwitch: true,
+          secondValid: false
+        },
         on: { hidePassword: _vm.hidePassword, callBack: _vm.getResult }
       })
     ],
@@ -58668,7 +58744,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
+exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.tip-wrap .tipMoney[data-v-c166b832] {\n    outline: none;\n    font-size: 1em;\n    width: 70%;\n    height: 100%;\n    display: block;\n    border: none;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
 
 // exports
 
@@ -58683,6 +58759,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dealContent__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dealContent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(22);
 //
 //
 //
@@ -58787,13 +58865,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a },
-  methods: {}
+    created: function created() {
+        this.init();
+    },
+
+    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a },
+    data: function data() {
+        return {
+            renderData: {
+                name: null,
+                moneyData: {
+                    payMoney: null,
+                    getMoney: null
+                }
+
+            }
+        };
+    },
+
+    methods: {
+        init: function init() {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+            var _id = this.$route.query.id;
+            __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/feerecord' + "?transfer_id=" + _id).then(function (res) {
+                console.log(res);
+                _this.renderData = res.data.data;
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            }).catch(function (err) {
+                console.error(err);
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -58810,7 +58930,7 @@ var render = function() {
     [
       _c("topBack", { staticStyle: { background: "#eee" } }),
       _vm._v(" "),
-      _c("dealContent"),
+      _c("dealContent", { attrs: { renderData: _vm.renderData } }),
       _vm._v(" "),
       _vm._m(0, false, false),
       _vm._v(" "),
@@ -58844,18 +58964,34 @@ var staticRenderFns = [
       "div",
       { staticClass: "tip-wrap flex flex-align-center flex-justify-around" },
       [
-        _c("label", { attrs: { for: "" } }, [_vm._v("大赢家茶水费")]),
+        _c(
+          "label",
+          {
+            staticClass: "flex-4",
+            staticStyle: { "padding-left": "1em" },
+            attrs: { for: "" }
+          },
+          [_vm._v("大赢家茶水费")]
+        ),
         _vm._v(" "),
-        _c("span", { staticStyle: { color: "#999" } }, [
-          _vm._v("请大家自觉缴纳")
-        ]),
-        _vm._v(" "),
-        _c("span", [
-          _c("i", { staticStyle: { color: "#999", "font-size": "1.2em" } }, [
-            _vm._v("100.0")
-          ]),
-          _vm._v("元")
-        ])
+        _c(
+          "span",
+          {
+            staticClass: "flex flex-align-center flex-6 flex-reverse",
+            staticStyle: { "padding-right": "1em" }
+          },
+          [
+            _vm._v("元"),
+            _c("input", {
+              staticClass: "tipMoney",
+              attrs: {
+                type: "text",
+                placeholder: "点击缴纳茶水费",
+                maxlength: "6"
+              }
+            })
+          ]
+        )
       ]
     )
   },
@@ -64900,6 +65036,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(58);
 //
 //
 //
@@ -65286,6 +65423,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -65332,7 +65470,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["Indicator"].open("加载中...");
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       var self = this;
       var _id = this.$route.query.id;
 
@@ -65342,7 +65480,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.shopId = res.data.data.id;
         _this.shopName = res.data.data.name;
 
-        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["Indicator"].close();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
         _this.$router.go(-1);
@@ -71328,6 +71466,85 @@ var shopStore = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 740 */,
+/* 741 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["renderData"]
+});
 
 /***/ })
 /******/ ]);
