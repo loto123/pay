@@ -32,7 +32,7 @@ class NoticeController extends Controller
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
-        $notice = Notice::whereIn('user_id', [$this->user->id,0])->orderBy('id','DESC')->select()->get();
+        $notice = Notice::where('user_id', $this->user->id)->orderBy('id','DESC')->select()->get();
         $list = [];
         if (!empty($notice) && count($notice)>0) {
             foreach($notice as $item) {
@@ -69,9 +69,9 @@ class NoticeController extends Controller
      *   @SWG\Parameter(
      *     name="user_id",
      *     in="formData",
-     *     description="接收消息的用户ID,为0时，表示系统中的所有用户",
+     *     description="接收消息的用户ID数组",
      *     required=true,
-     *     type="integer"
+     *     type="array"
      *   ),
      *   @SWG\Parameter(
      *     name="type",
@@ -203,7 +203,6 @@ class NoticeController extends Controller
             return response()->json(['code' => 0,'msg' => '消息不存在','data' => []]);
         }
 
-        $data = [];
         if($notice->type == 1) {
             $profit_table = (new Profit)->getTable();
             $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
@@ -238,13 +237,40 @@ class NoticeController extends Controller
      *   path="/notice/delete",
      *   summary="清空消息",
      *   tags={"消息"},
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="formData",
+     *     description="消息类型",
+     *     required=true,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
      */
-    public function delete(){
+    public function delete(Request $request){
         $this->user = JWTAuth::parseToken()->authenticate();
-        Notice::where('user_id',$this->user->id)->where('created_at','<',date('Y-m-d H:i:s'))->delete();
-        return response()->json(['code' => 1,'msg' => '','data' => []]);
+        $validator = Validator::make($request->all(),
+            [
+                'type' => 'bail|required|numeric',
+            ],
+            [
+                'required' => trans('trans.required'),
+                'numeric' => trans('trans.numeric'),
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+        }
+
+        $res = Notice::where('user_id',$this->user->id)
+            ->where('created_at','<',date('Y-m-d H:i:s'))
+            ->where('type',$request->type)->delete();
+        if ($res) {
+            return response()->json(['code' => 1,'msg' => '','data' => []]);
+        } else {
+            return response()->json(['code' => 0,'msg' => '删除失败','data' => []]);
+        }
+
     }
 }
