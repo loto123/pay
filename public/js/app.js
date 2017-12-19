@@ -58717,7 +58717,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.tip-wrap .tipMoney[data-v-c166b832] {\n    outline: none;\n    width: 50%;\n    height: 100%;\n    display: block;\n    border: none;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
+exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.tip-wrap .tipMoney[data-v-c166b832] {\n    outline: none;\n    font-size: 1em;\n    width: 70%;\n    height: 100%;\n    display: block;\n    border: none;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
 
 // exports
 
@@ -58846,6 +58846,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -58858,12 +58859,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a },
+    data: function data() {
+        return {
+            renderData: {
+                name: null,
+                moneyData: {
+                    payMoney: null,
+                    getMoney: null
+                }
+
+            }
+        };
+    },
+
     methods: {
         init: function init() {
+            var _this = this;
+
             __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
             var _id = this.$route.query.id;
             __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/feerecord' + "?transfer_id=" + _id).then(function (res) {
                 console.log(res);
+                _this.renderData = res.data.data;
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
                 console.error(err);
@@ -58885,6 +58902,8 @@ var render = function() {
     { attrs: { id: "makeDealTip" } },
     [
       _c("topBack", { staticStyle: { background: "#eee" } }),
+      _vm._v(" "),
+      _c("dealContent", { attrs: { renderData: _vm.renderData } }),
       _vm._v(" "),
       _vm._m(0, false, false),
       _vm._v(" "),
@@ -58918,16 +58937,34 @@ var staticRenderFns = [
       "div",
       { staticClass: "tip-wrap flex flex-align-center flex-justify-around" },
       [
-        _c("label", { attrs: { for: "" } }, [_vm._v("大赢家茶水费")]),
+        _c(
+          "label",
+          {
+            staticClass: "flex-4",
+            staticStyle: { "padding-left": "1em" },
+            attrs: { for: "" }
+          },
+          [_vm._v("大赢家茶水费")]
+        ),
         _vm._v(" "),
-        _c("span", { staticStyle: { color: "#999" } }, [
-          _vm._v("请大家自觉缴纳")
-        ]),
-        _vm._v(" "),
-        _c("span", { staticClass: "flex flex-align-center" }, [
-          _c("input", { staticClass: "tipMoney", attrs: { type: "text" } }),
-          _vm._v("元")
-        ])
+        _c(
+          "span",
+          {
+            staticClass: "flex flex-align-center flex-6 flex-reverse",
+            staticStyle: { "padding-right": "1em" }
+          },
+          [
+            _vm._v("元"),
+            _c("input", {
+              staticClass: "tipMoney",
+              attrs: {
+                type: "text",
+                placeholder: "点击缴纳茶水费",
+                maxlength: "6"
+              }
+            })
+          ]
+        )
       ]
     )
   },
