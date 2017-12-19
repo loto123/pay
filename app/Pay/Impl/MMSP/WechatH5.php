@@ -10,8 +10,10 @@ namespace App\Pay\Impl\MMSP;
 
 
 use App\Pay\DepositInterface;
+use App\Pay\IdConfuse;
 use App\Pay\Impl\MMSP\SDK\base;
 use App\Pay\Model\Deposit;
+use App\Pay\Model\DepositMethod;
 use Illuminate\Support\Facades\Log;
 use Mockery\Exception;
 
@@ -21,6 +23,7 @@ class WechatH5 implements DepositInterface
 
     public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
     {
+        $outID = IdConfuse::mixUpDepositId($deposit_id, 20);
         $amount *= 100; //单位:分
         $wxh5payMod = new SDK\wxh5pay();
         $wxh5payMod->SetCommandID(hexdec('0x0911'));
@@ -35,16 +38,16 @@ class WechatH5 implements DepositInterface
         $wxh5payMod->SetCUR('CNY');
         $wxh5payMod->SetGOODSNAME(DepositInterface::GOOD_NAME);
         $wxh5payMod->SetNOTIFY_URL($notify_url);
-        $wxh5payMod->SetJUMP_URL($return_url . "?batch=$deposit_id");
+        $wxh5payMod->SetJUMP_URL($return_url . "?batch=$outID");
         //$wxh5payMod->SetTIME_END($_POST['TIME_END']);
         $wxh5payMod->SetIP(request()->getClientIp());
-        $wxh5payMod->SetMERORDERID($deposit_id);//订单号
+        $wxh5payMod->SetMERORDERID($outID);//订单号
         $wxh5payMod->SetRANDSTR(str_random(20));
         $wxh5payMod->SetLIMIT_PAY($config['LIMIT_PAY']);
         $wxh5payMod->BodyAes();
         $wxh5payMod->MakeSign($config['KEY']);
         $result = $wxh5payMod->send($config['URL'], $config['KEY']);
-        //Log::info($wxh5payMod->GetValues());
+        Log::info($wxh5payMod->GetValues());
         if ($result['STATUS'] == 1) {
             return $result['URL'];
         } else {
@@ -62,7 +65,7 @@ class WechatH5 implements DepositInterface
             $chkStatus = $resultMod->ckSign($params, $config['KEY']);
             if ($chkStatus) {
                 if ($params['STATUS'] == 1) {
-                    $deposit = Deposit::find((int)$params['MERORDERID']);
+                    $deposit = Deposit::find(IdConfuse::recoveryDepositId($params['MERORDERID']));
                     if ($deposit) {
                         //把支付结果更改商户自己的交易流水
                         $deposit->out_batch_no = $params['ORDERNO'];
@@ -76,10 +79,10 @@ class WechatH5 implements DepositInterface
         }
     }
 
-    public function parseReturn()
+    public function parseReturn(DepositMethod $method)
     {
-        $deposit_id = request()->query('batch');
-        $deposit = Deposit::find($deposit_id);
+        $outID = request()->query('batch');
+        $deposit = $method->deposits()->where('id', IdConfuse::recoveryDepositId($outID))->first();
         if (!$deposit) {
             throw new Exception('无效订单');
         }

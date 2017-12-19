@@ -3,6 +3,7 @@
 namespace App\Pay;
 
 use App\Pay\Model\Deposit;
+use App\Pay\Model\DepositMethod;
 
 /**
  * 支付接口
@@ -37,8 +38,9 @@ interface DepositInterface
     public function acceptNotify(array $config);
 
     /**
+     * @param $method DepositMethod 所属支付方式
      * 解析同步跳转的充值信息,展示用,无需验证
      * @return array ['out_batch_no' => xxx(可选), 'state' => Deposit::STATE_*, 'amount' => 充值金额]
      */
-    public function parseReturn();
+    public function parseReturn(DepositMethod $method);
 }

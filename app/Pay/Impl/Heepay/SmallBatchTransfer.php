@@ -10,6 +10,7 @@ namespace App\Pay\Impl\Heepay;
 
 
 use App\Pay\Crypt3Des;
+use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
 use App\Pay\WithdrawInterface;
 use Illuminate\Support\Facades\Log;
@@ -53,13 +54,13 @@ class SmallBatchTransfer implements WithdrawInterface
      */
     public function withdraw($withdraw_id, $amount, array $receiver_info, array $config, $notify_url)
     {
-        Log::info($notify_url);
+        //Log::info($notify_url);
         $result = ['state' => Withdraw::STATE_SEND_FAIL];
 
         do {
             //网银提现
-            $batch_no = sprintf('%030d', $withdraw_id); //对外统一30位长度
-            $sub_batch = sprintf('%020d', $withdraw_id);
+            $batch_no = IdConfuse::mixUpDepositId($withdraw_id, 30); //对外统一30位长度
+            $sub_batch = substr($batch_no, 0, 20);
             $params = [
                 'version' => 3,
                 'agent_id' => $config['agent_id'],
@@ -68,7 +69,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'batch_num' => 1,
                 'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^{$receiver_info['to_public']}^{$receiver_info['receiver_account']}^{$receiver_info['receiver_name']}^$amount^余额提现^{$receiver_info['province']}^{$receiver_info['city']}^{$receiver_info['branch_bank']}",
                 'notify_url' => $notify_url,
-                'ext_param1' => $withdraw_id,
+                'ext_param1' => $batch_no,
             ];
             Log::info($params);
             $params['key'] = $config['key'];
@@ -187,7 +188,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 break;
             }
 
-            $withdraw = Withdraw::where([['id', $params['ext_param1']], ['state', Withdraw::STATE_SUBMIT]])->lockForUpdate()->first();
+            $withdraw = Withdraw::where([['id', IdConfuse::recoveryDepositId($params['ext_param1'])], ['state', Withdraw::STATE_SUBMIT]])->lockForUpdate()->first();
             if (!$withdraw) {
                 break;
             }

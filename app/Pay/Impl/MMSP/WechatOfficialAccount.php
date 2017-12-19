@@ -10,6 +10,7 @@ namespace App\Pay\Impl\MMSP;
 
 
 use App\Pay\DepositInterface;
+use App\Pay\IdConfuse;
 use App\Pay\Impl\MMSP\SDK\wxscan;
 use Illuminate\Support\Facades\Log;
 
@@ -20,6 +21,7 @@ class WechatOfficialAccount extends WechatH5
     {
         //Log::info($config);
         $amount *= 100; //单位:分
+        $outID = IdConfuse::mixUpDepositId($deposit_id, 20);
         $wxscanMod = new wxscan();
         $wxscanMod->SetCommandID(hexdec($config['CommandID']));
 
@@ -39,7 +41,7 @@ class WechatOfficialAccount extends WechatH5
         //$wxscanMod->SetTIME_END($_POST['TIME_END']);
         $wxscanMod->SetIP(request()->getClientIp());
         //$wxscanMod->SetJUMP_URL($return_url);
-        $wxscanMod->SetMERORDERID($deposit_id);
+        $wxscanMod->SetMERORDERID($outID);
         $wxscanMod->SetRANDSTR(str_random(20));
         $wxscanMod->SetOPENID(request()->query('openid'));
         $wxscanMod->SetSUP_APPID($config['OFFICIAL_APPID']);
@@ -50,7 +52,7 @@ class WechatOfficialAccount extends WechatH5
             $wxscanMod->BodyAes();
             $wxscanMod->MakeSign($config['KEY']);
             $result = $wxscanMod->send($config['URL'], $config['KEY']);
-            Log::info($wxscanMod->GetValues());
+            //Log::info($wxscanMod->GetValues());
             if ($result['STATUS'] == 1) {
                 //Log::info($result);
                 return $result['URL'];

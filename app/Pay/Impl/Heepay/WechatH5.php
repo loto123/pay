@@ -9,7 +9,9 @@
 namespace App\Pay\Impl\Heepay;
 
 use App\Pay\DepositInterface;
+use App\Pay\IdConfuse;
 use App\Pay\Model\Deposit;
+use App\Pay\Model\DepositMethod;
 
 class WechatH5 implements DepositInterface
 {
@@ -24,7 +26,7 @@ class WechatH5 implements DepositInterface
             'is_frame' => (int)(strpos(request()->header('User-Agent'), 'MicroMessenger') !== false),
             'goods_name' => DepositInterface::GOOD_NAME,
             'agent_bill_time' => date('Ymdhis'),
-            'agent_bill_id' => $deposit_id,
+            'agent_bill_id' => IdConfuse::mixUpDepositId($deposit_id, 30),
             'notify_url' => $notify_url,
             'pay_amt' => $amount,
             'return_url' => $return_url,
@@ -78,7 +80,7 @@ class WechatH5 implements DepositInterface
      * 展示充值结果
      * @return array ['out_batch_no' => xxx(可选), 'state' => Deposit::STATE_*, 'amount' => 充值金额]
      */
-    public function parseReturn()
+    public function parseReturn(DepositMethod $method)
     {
         $request = request();
         return ['out_batch_no' => $request->get('jnet_bill_no'), 'state' => $request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_FAIL, 'amount' => $request->get('pay_amt')];
@@ -103,7 +105,7 @@ class WechatH5 implements DepositInterface
                 /*
                  *@var $deposit Deposit
                  */
-                $deposit = Deposit::where([['id', $params['agent_bill_id']], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
+                $deposit = Deposit::where([['id', IdConfuse::recoveryDepositId($params['agent_bill_id'])], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
                 if (!$deposit) {
                     return null;
                 }
