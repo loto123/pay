@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use JWTAuth;
+use Validator;
 
 class TransferController extends Controller
 {
@@ -57,7 +57,6 @@ class TransferController extends Controller
     public function create(Request $request)
     {
         $user = JWTAuth::parseToken()->authenticate();
-
         $validator = Validator::make($request->all(),
             [
                 'shop_id' => 'bail|required',
@@ -81,10 +80,10 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
         $transfer = new Transfer();
-        $transfer->shop_id = $request->shop_id;
+        $transfer->shop_id = $shop->id;
         $transfer->user_id = $user->id;
         $transfer->price = $request->price;
-        $transfer->comment = $request->comment;
+        $transfer->comment = $request->input('comment', '');
         if ($shop->type == 0) {
             $transfer->tip_type = 1;
             $transfer->tip_amount = $shop->type_value;
@@ -96,7 +95,7 @@ class TransferController extends Controller
         $transfer->fee_percent = config('platform_fee_percent');
 
         if ($transfer->save()) {
-            return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => $transfer]);
+            return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => ['id' => $transfer->en_id()]]);
         } else {
             return response()->json(['code' => 0, 'msg' => trans('trans.save_failed'), 'data' => []]);
         }
@@ -133,7 +132,12 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::where('id', $request->transfer_id)->withCount('joiner')->with(['user' => function ($query) {
+        $transferObj = Transfer::findByEnId($request->transfer_id);
+        if(!$transferObj) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
+        }
+
+        $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
             $query->select('name', 'avatar');
         }, 'record' => function ($query) {
             $query->select('id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
@@ -143,11 +147,8 @@ class TransferController extends Controller
             $query->select('name', 'avatar');
         }])->select('id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
 
-        if ($transfer->isEmpty()) {
-            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
-        } else {
-            return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer->toArray()]);
-        }
+        $transfer->id = $transferObj->en_id();
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
 
     /**
@@ -173,7 +174,8 @@ class TransferController extends Controller
      * )
      * @return \Illuminate\Http\Response
      */
-    public function valid(Request $request) {
+    public function valid(Request $request)
+    {
         $user = JWTAuth::parseToken()->authenticate();
 
         $validator = Validator::make($request->all(),
@@ -193,8 +195,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -265,8 +267,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -287,16 +289,16 @@ class TransferController extends Controller
                 }
                 //验证支付密码
                 $today = date('Y-m-d');
-                $times = $user->paypwd_record()->where('created_at','>=',$today)->where('created_at','<=',$today . '23:59:59')->count();
-                if($times >= config('pay_pwd_validate_times')) {
-                    return response()->json(['code' => 0,'msg' => trans('trans.user_check_pay_password_times_out'),'data' => []]);
+                $times = $user->paypwd_record()->where('created_at', '>=', $today)->where('created_at', '<=', $today . '23:59:59')->count();
+                if ($times >= config('pay_pwd_validate_times')) {
+                    return response()->json(['code' => 0, 'msg' => trans('trans.user_check_pay_password_times_out'), 'data' => []]);
                 }
-                if (!Hash::check($request->pay_password,$user->pay_password)) {
+                if (!Hash::check($request->pay_password, $user->pay_password)) {
                     //验证错误次数+1
                     $paypwdRecord = new PaypwdValidateRecord();
                     $paypwdRecord->user_id = $user->id;
                     $paypwdRecord->save();
-                    return response()->json(['code' => 0,'msg' => trans('trans.user_pay_password_error'),'data' => []]);
+                    return response()->json(['code' => 0, 'msg' => trans('trans.user_pay_password_error'), 'data' => []]);
                 }
                 $record->stat = 1;
                 $record->real_amount = $record->amount * -1;
@@ -402,7 +404,7 @@ class TransferController extends Controller
         }
 
         $record = TransferRecord::find($request->record_id);
-        if ($record->isEmpty()) {
+        if (!$record) {
             return response()->json(['code' => 0, 'msg' => trans('trans.record_not_exist'), 'data' => []]);
         }
         if ($record->stat != 2) {
@@ -413,7 +415,7 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_user_error'), 'data' => []]);
         }
         $transfer = $record->transfer;
-        if ($transfer->isEmpty()) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -426,9 +428,9 @@ class TransferController extends Controller
             $record->save();
             //扣除商店茶水费
             $tip = $record->tip;
-            if (!$tip->isEmpty()) {
+            if ($tip) {
                 $shop = $transfer->shop;
-                if ($shop->isEmpty()) {
+                if (!$shop->isEmpty()) {
                     return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_error_3'), 'data' => []]);
                 }
                 if ($shop->frozen_balance < $tip->amount) {
@@ -488,8 +490,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if ($transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -602,8 +604,8 @@ class TransferController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -613,19 +615,19 @@ class TransferController extends Controller
         if ($user->balance < $request->fee) {
             return response()->json(['code' => 0, 'msg' => trans('trans.user_not_enough_money'), 'data' => []]);
         }
-        if($request->action) {
+        if ($request->action) {
             //验证支付密码
             $today = date('Y-m-d');
-            $times = $user->paypwd_record()->where('created_at','>=',$today)->where('created_at','<=',$today . '23:59:59')->count();
-            if($times >= config('pay_pwd_validate_times')) {
-                return response()->json(['code' => 0,'msg' => trans('trans.user_check_pay_password_times_out'),'data' => []]);
+            $times = $user->paypwd_record()->where('created_at', '>=', $today)->where('created_at', '<=', $today . '23:59:59')->count();
+            if ($times >= config('pay_pwd_validate_times')) {
+                return response()->json(['code' => 0, 'msg' => trans('trans.user_check_pay_password_times_out'), 'data' => []]);
             }
-            if (!Hash::check($request->pay_password,$user->pay_password)) {
+            if (!Hash::check($request->pay_password, $user->pay_password)) {
                 //验证错误次数+1
                 $paypwdRecord = new PaypwdValidateRecord();
                 $paypwdRecord->user_id = $user->id;
                 $paypwdRecord->save();
-                return response()->json(['code' => 0,'msg' => trans('trans.user_pay_password_error'),'data' => []]);
+                return response()->json(['code' => 0, 'msg' => trans('trans.user_pay_password_error'), 'data' => []]);
             }
             DB::beginTransaction();
             try {
@@ -707,12 +709,12 @@ class TransferController extends Controller
         $user = JWTAuth::parseToken()->authenticate();
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
-        })->with(['transfer' => function($query) {
+        })->with(['transfer' => function ($query) {
             $query->select('transfer_id');
-        }, 'transfer.record' => function($query) {
+        }, 'transfer.record' => function ($query) {
             $query->sum('amount');
-        }, 'transfer.shop' => function($query) {
-            $query->select('id','name');
+        }, 'transfer.shop' => function ($query) {
+            $query->select('id', 'name');
         }])->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
         if ($request->limit && $request->offset) {
             $query->offset($request->offset)->limit($request->limit);
@@ -813,8 +815,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -824,7 +826,7 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_error'), 'data' => []]);
         }
         $user = JWTAuth::parseToken()->authenticate();
-        if($transfer->shop->manager != $user->id) {
+        if ($transfer->shop->manager != $user->id) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_error_shop_manager'), 'data' => []]);
         }
         DB::beginTransaction();
@@ -833,25 +835,25 @@ class TransferController extends Controller
             if ($transfer->save()) {
                 //解冻店铺茶水费资金
                 $shop = $transfer->shop;
-                if(!$shop->isEmpty()) {
+                if ($shop) {
                     $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
                     $shop->balance = $shop->balance + $transfer->tip_amount;
                     $shop->save();
                 }
                 //公司分润 代理分润 运营分润
-                $records = $transfer->record()->where('stat',2)->get();
-                foreach($records as $key => $value) {
+                $records = $transfer->record()->where('stat', 2)->get();
+                foreach ($records as $key => $value) {
                     $profit = new Profit();
                     $profit->record_id = $value->id;
                     $profit->user_id = $value->user_id;
                     $profit->fee_percent = $transfer->fee_percent;
                     $profit->fee_amount = $value->fee_amount;
-                    if($value->user->proxy) {
+                    if ($value->user->proxy) {
                         $profit->proxy = $value->user->proxy->id;
                         $profit->proxy_percent = $value->user->proxy->percent;
                         $profit->proxy_amount = ($value->fee_amount * $value->user->proxy->percent) / 100;
                     }
-                    if($value->user->operator) {
+                    if ($value->user->operator) {
                         $profit->operator = $value->user->operator->id;
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
@@ -882,7 +884,8 @@ class TransferController extends Controller
      * )
      * @return \Illuminate\Http\Response
      */
-    public function cancel(Request $request) {
+    public function cancel(Request $request)
+    {
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
@@ -897,8 +900,8 @@ class TransferController extends Controller
         }
 
         $user = JWTAuth::parseToken()->authenticate();
-        $transfer = Transfer::find($request->transfer_id);
-        if ($transfer->isEmpty()) {
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->user_id != $user->id) {
@@ -908,9 +911,9 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_allow_to_cancel'), 'data' => []]);
         }
         //删除交易
-        Transfer::where('id',$request->transfer_id)->delete();
+        Transfer::where('id', $request->transfer_id)->delete();
         //删除交易用户关联关系
-        TransferUserRelation::where('transfer_id',$request->transfer_id)->delete();
+        TransferUserRelation::where('transfer_id', $request->transfer_id)->delete();
         return response()->json(['code' => 1, 'msg' => trans('trans.trans_cancel_success'), 'data' => []]);
     }
 }

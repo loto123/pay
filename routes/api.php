@@ -24,13 +24,6 @@ use Illuminate\Routing\Router;
 //});
 
 Route::any('test', 'Api\TestController@index');
-Route::group([
-    'prefix'        => '/shop',
-    'namespace'     => 'Api',
-], function (Router $router) {
-    $router->post('create', 'ShopController@create');
-    $router->get('types', 'ShopController@types');
-});
 
 Route::group([
     'prefix'       => '/my',
