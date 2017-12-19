@@ -173,12 +173,8 @@ class TransferController extends Controller
      * )
      * @return \Illuminate\Http\Response
      */
-<<<<<<< HEAD
     public function valid(Request $request)
     {
-=======
-    public function valid(Request $request) {
->>>>>>> d201ec3f410a981c92954ff1ed19ef7bfd71d7ca
         $user = JWTAuth::parseToken()->authenticate();
 
         $validator = Validator::make($request->all(),
