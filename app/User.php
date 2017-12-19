@@ -109,7 +109,7 @@ class User extends Authenticatable
     }
 
     public function en_id() {
-        return (int)Skip32::encrypt("0123456789abcdef0123", $this->id);
+        return Skip32::encrypt("0123456789abcdef0123", $this->id);
     }
 
     public static function findByEnId($en_id) {
