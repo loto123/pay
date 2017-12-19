@@ -348,14 +348,12 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-
-        Log::info(['param'=>$request->all()]);
-
+//        Log::info(['param'=>$request->all()]);
         $name = $request->input('name');
         $id_number = $request->input('id_number');
-        $cache_key = "SMS_".$request->mobile;
+        $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
-        Log::info(['cache'=>$cache_value]);
+//        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
