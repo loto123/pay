@@ -11,6 +11,7 @@ namespace App\Pay\Model;
 
 use App\Pay\WithdrawInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class WithdrawMethod extends Model
 {
@@ -99,7 +100,40 @@ class WithdrawMethod extends Model
      */
     public function acceptNotify(Channel $channel)
     {
-        return (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
+        //启动事务
+        $commit = false;
+        DB::beginTransaction();
+        ob_start();
+
+        do {
+            $result = (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
+
+            if (!$result) {
+                break;
+            }
+
+            if ($result->state === Withdraw::STATE_PROCESS_FAIL) {
+                $result->exceptions()->save(new WithdrawException([
+                    'message' => json_encode(['query' => request()->query(), 'body' => file_get_contents('php://input')], JSON_UNESCAPED_UNICODE),
+                    'state' => $result->state,
+                ]));
+            }
+
+            if (!$result->save()) {
+                break;
+            }
+
+            $commit = true;
+        } while (false);
+
+        //结束事务
+        if ($commit) {
+            DB::commit();
+            return ob_get_clean();
+        } else {
+            DB::rollBack();
+            ob_end_clean();
+        }
     }
 
 }

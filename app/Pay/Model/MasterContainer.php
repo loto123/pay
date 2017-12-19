@@ -115,6 +115,9 @@ class MasterContainer extends Container
         } while (false);
 
         $commit ? DB::commit() : DB::rollBack();
+        if (!$response) {
+            throw new Exception('当前支付方式异常');
+        }
         return $response;
     }
 

@@ -41,17 +41,21 @@ class PayPlatformController extends Controller
             $grid->id('ID')->sortable();
             $grid->column('name', '平台')->editable();
             $grid->depositMethods('充值方式')->display(function ($depositMethods) {
-
-                return implode('&nbsp;', array_map(function ($value) {
-                    return '<span class="label label-success">' . $value . '</span>';
-                }, array_column($depositMethods, 'title')));
+                $mthods = array_column($depositMethods, 'disabled', 'title');
+                array_walk(
+                    $mthods, function (&$disabled, $title) {
+                    $disabled = '<span class="label label-' . ($disabled ? 'danger' : 'success') . '">' . $title . '</span>';
+                });
+                return implode('&nbsp;', $mthods);
             });
 
             $grid->withdrawMethods('提现方式')->display(function ($withdrawMethods) {
-
-                return implode('&nbsp;', array_map(function ($value) {
-                    return '<span class="label label-primary">' . $value . '</span>';
-                }, array_column($withdrawMethods, 'title')));
+                $mthods = array_column($withdrawMethods, 'disabled', 'title');
+                array_walk(
+                    $mthods, function (&$disabled, $title) {
+                    $disabled = '<span class="label label-' . ($disabled ? 'danger' : 'success') . '">' . $title . '</span>';
+                });
+                return implode('&nbsp;', $mthods);
             });
 
             $grid->actions(function ($actions) {

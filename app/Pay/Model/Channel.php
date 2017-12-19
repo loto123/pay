@@ -7,7 +7,6 @@
 
 namespace App\Pay\Model;
 
-use App\Pay\PlatformInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
@@ -25,6 +24,7 @@ class Channel extends Model
      * 获取通道通知地址
      * @param $type string
      * @return string
+     * @throws \Exception
      */
     public function getNotifyUrl($type)
     {

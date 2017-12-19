@@ -14,7 +14,7 @@ use App\Pay\Model\Deposit;
 class WechatH5 implements DepositInterface
 {
 
-    public function deposit($deposit_id, $amount, $master_container, array $config, $notify_url, $return_url)
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
     {
         $params = [
             'version' => 1,

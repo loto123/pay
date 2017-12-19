@@ -24,7 +24,6 @@ class DepositMethod extends Model
         return (new $this->impl)->deposit(
             $order->getKey(),
             $order->amount,
-            $order->masterContainer,
             array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($order->channel->config)),
             $this->getNotifyUrl($order->channel),
             $this->getReturnUrl()
@@ -64,7 +63,38 @@ class DepositMethod extends Model
      */
     public function acceptNotify(Channel $channel)
     {
-        return (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
+        //启动事务
+        $commit = false;
+        DB::beginTransaction();
+        ob_start();
+
+        do {
+            $result = (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
+            if (!$result) {
+                break;
+            }
+
+            if ($result->state === Deposit::STATE_COMPLETE) {
+                if (!$result->masterContainer->changeBalance($result->amount, 0)) {
+                    break;//到账失败
+                }
+            }
+
+            if (!$result->save()) {
+                break;
+            }
+
+            $commit = true;
+        } while (false);
+
+        //结束事务
+        if ($commit) {
+            DB::commit();
+            return ob_get_clean();
+        } else {
+            DB::rollBack();
+            ob_end_clean();
+        }
     }
 
     /**
