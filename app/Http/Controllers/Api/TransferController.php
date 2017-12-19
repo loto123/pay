@@ -61,13 +61,13 @@ class TransferController extends Controller
             [
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
-                'comment' => 'size:200'
+                'comment' => 'max:200'
             ],
             [
                 'required' => trans('trans.required'),
                 'numeric' => trans('trans.numeric'),
                 'between' => trans('trans.between'),
-                'size' => trans('trans.size')
+                'max' => trans('trans.comment.max')
             ]
         );
 
