@@ -94,6 +94,7 @@
                         <th>余额</th>
                         <th>已付平台手续费</th>
                         <th>直属用户数</th>
+                        <td>直属代理数</td>
                         <th>代理业绩</th>
                         <th>代理分润收益</th>
                         {{--<th>持有VIP卡数</th>--}}
@@ -160,8 +161,8 @@
                             <td>{{$item->output_profit()->sum('fee_amount')}}</td>
                             <td>{{$item->child_user_count}}</td>
                             <td>{{$item->child_proxy_count}}</td>
-                            <td>{{$item->proxy_fee_amount}}</td>
-                            <td>{{$item->profit_proxy_amount}}</td>
+                            <td>{{$item->proxy_fee_amount or 0}}</td>
+                            <td>{{$item->profit_proxy_amount or 0}}</td>
                             {{--<td>持有VIP卡数</td>--}}
                             {{--<td>已售VIP卡数</td>--}}
                         </tr>
