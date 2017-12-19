@@ -185,7 +185,6 @@ export default {
         this.$emit("hidePassword");
         this.password = "";
     },
-
     // 走回调
     doCallback(){
         this.$emit("callBack",this.password);

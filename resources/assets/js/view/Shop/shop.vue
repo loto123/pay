@@ -266,7 +266,6 @@
     h3{
       padding-top:0.3em;
       color:#999;
-      // padding-bottom:em;
     }
   }
 }
@@ -277,7 +276,7 @@
   background: #eee;
   padding-bottom: 2em;
   padding-top: 1em;
-  position: absolute;
+  position: fixed;
   top: 0em;
   left: 0em;
   z-index: 1001;
