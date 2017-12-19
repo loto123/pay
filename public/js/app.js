@@ -42779,9 +42779,11 @@ if (false) {
 
 
 
+// import Loading from '../utils/loading'
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_mint_ui___default.a);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]);
-
+// Vue.use(Loading);
 var index = [{ path: '/index', name: 'index', component: __WEBPACK_IMPORTED_MODULE_3__view_Index_index_vue___default.a }];
 
 var routerList = {
@@ -56502,7 +56504,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     goTipPage: function goTipPage() {
-      this.$router.push("/makeDeal/deal_tip");
+      var _id = this.$route.query.id;
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
     },
     showPassword: function showPassword() {
       this.passWordSwitch = true;
@@ -58714,7 +58717,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
+exports.push([module.i, "\n#makeDealTip[data-v-c166b832] {\n  min-height: 100vh;\n  background: #eee;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.tip-wrap[data-v-c166b832] {\n  width: 90%;\n  height: 2.5em;\n  background: #fff;\n  border-radius: 0.2em;\n  margin: 0 auto;\n}\n.tip-wrap .tipMoney[data-v-c166b832] {\n    outline: none;\n    width: 50%;\n    height: 100%;\n    display: block;\n    border: none;\n}\n.button-wrap[data-v-c166b832] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 0.5em;\n}\n.green-color-bg[data-v-c166b832] {\n  background: #11bb00;\n}\n.tip-record[data-v-c166b832] {\n  margin-top: 3em;\n}\n.tip-record h3[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    font-size: 0.9em;\n    color: #666;\n}\n.tip-record ul[data-v-c166b832] {\n    width: 90%;\n    margin: 0 auto;\n    margin-top: 0.5em;\n}\n.tip-record ul li[data-v-c166b832] {\n      border-bottom: 1px solid #ccc;\n      height: 3.2em;\n}\n.tip-record ul li > img[data-v-c166b832] {\n        width: 2.5em;\n        height: 2.5em;\n}\n.tip-record ul li > span[data-v-c166b832] {\n        color: #555;\n}\n", ""]);
 
 // exports
 
@@ -58729,6 +58732,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dealContent__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dealContent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(25);
 //
 //
 //
@@ -58833,13 +58838,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a },
-  methods: {}
+    created: function created() {
+        this.init();
+    },
+
+    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_1__dealContent___default.a },
+    methods: {
+        init: function init() {
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+            var _id = this.$route.query.id;
+            __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/feerecord' + "?transfer_id=" + _id).then(function (res) {
+                console.log(res);
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            }).catch(function (err) {
+                console.error(err);
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -58855,8 +58885,6 @@ var render = function() {
     { attrs: { id: "makeDealTip" } },
     [
       _c("topBack", { staticStyle: { background: "#eee" } }),
-      _vm._v(" "),
-      _c("dealContent"),
       _vm._v(" "),
       _vm._m(0, false, false),
       _vm._v(" "),
@@ -58896,10 +58924,8 @@ var staticRenderFns = [
           _vm._v("请大家自觉缴纳")
         ]),
         _vm._v(" "),
-        _c("span", [
-          _c("i", { staticStyle: { color: "#999", "font-size": "1.2em" } }, [
-            _vm._v("100.0")
-          ]),
+        _c("span", { staticClass: "flex flex-align-center" }, [
+          _c("input", { staticClass: "tipMoney", attrs: { type: "text" } }),
           _vm._v("元")
         ])
       ]

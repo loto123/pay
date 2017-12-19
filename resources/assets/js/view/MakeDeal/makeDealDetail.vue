@@ -308,7 +308,7 @@ export default {
 
     init(){
       Loading.getInstance().open();
-      var _id = this.$route.query.id
+      var _id = this.$route.query.id;
       var _data ={
         transfer_id :_id
       }
@@ -324,7 +324,8 @@ export default {
     },
 
     goTipPage() {
-      this.$router.push("/makeDeal/deal_tip");
+      var _id = this.$route.query.id;
+      this.$router.push("/makeDeal/deal_tip"+"?id="+_id);
     },
 
     showPassword(){

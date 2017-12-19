@@ -1,12 +1,12 @@
 <template>
     <div id="makeDealTip">
         <topBack style="background:#eee;"></topBack>
-        <dealContent></dealContent>
+        <!-- <dealContent></dealContent> -->
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
             <label for="">大赢家茶水费</label>
             <span style="color:#999;">请大家自觉缴纳</span>
-            <span><i style="color:#999; font-size: 1.2em;">100.0</i>元</span>
+            <span class="flex flex-align-center"><input type="text" class="tipMoney">元</span>
         </div>
 
         <div class="button-wrap">
@@ -60,6 +60,14 @@
   background: #fff;
   border-radius: 0.2em;
   margin: 0 auto;
+
+  .tipMoney{
+      outline:none;
+      width:50%;
+      height: 100%;
+      display: block;
+      border: none;
+  }
 }
 
 .button-wrap {
@@ -105,11 +113,25 @@
 <script>
 import topBack from "../../components/topBack";
 import dealContent from "./dealContent";
+import Loading from '../../utils/loading'
+import request from '../../utils/userRequest'
 
 export default {
+  created(){
+    this.init();
+  },
   components: { topBack, dealContent },
   methods: {
-   
+   init(){
+       Loading.getInstance().open();
+       var _id = this.$route.query.id;
+       request.getInstance().getData('api/transfer/feerecord'+"?transfer_id="+_id).then(res=>{
+           console.log(res);
+           Loading.getInstance().close();
+       }).catch(err=>{
+           console.error(err);
+       });
+   }
   }
 };
 </script>
