@@ -6,8 +6,10 @@ use App\Shop;
 use App\ShopUser;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
  *
@@ -260,8 +262,10 @@ class ShopController extends BaseController {
             'user_link' => $shop->use_link ? 1 : 0,
             'active' => $shop->active ? 1 : 0,
             'members' => $members,
+            'members_count' => (int)$shop->users()->count(),
             'rate' => $shop->price,
             'percent' => $shop->fee,
+            'created_at' => strtotime($shop->created_at)
         ]);
     }
 
@@ -413,5 +417,46 @@ class ShopController extends BaseController {
         return $this->json();
     }
 
+    /**
+     * @SWG\Get(
+     *   path="/shop/qrcode/{id}",
+     *   summary="店铺二维码",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="二维码尺寸",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function qrcode($id, Request $request) {
+//        $validator = Validator::make($request->all(), [
+//            'width' => 'required',
+//            'height' => 'required',
+//        ]);
+//
+//        if ($validator->fails()) {
+//            return $this->json([], $validator->errors()->first(), 0);
+//        }
+        $size = $request->input("size", 200);
+        $shop = Shop::findByEnId($id);
+        $user = $this->auth->user();
+        /* @var $user User */
+        $url = url(sprintf("/#/share/?shopId=%s&userId=%s", $shop->en_id(), $user->en_id()));
+        $filename = md5($url."_".$size);
+        Storage::disk('public')->put('qrcode/'.$filename.'.png', QrCode::format('png')->size($size)->margin(1)->generate($url));
+        return $this->json(['url' => url('storage/qrcode/'.$filename.'.png')]);
+    }
 
 }

@@ -106,6 +106,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
         $api->post('create', 'ShopController@create');
+        $api->get('qrcode/{id}', 'ShopController@qrcode');
     });
 });
 
