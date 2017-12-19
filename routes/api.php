@@ -94,7 +94,7 @@ $api->version('v1', function ($api) {
         'prefix' => '/',
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
-        $api->get('time', 'CommonController@time');
+//        $api->get('time', 'CommonController@time');
     });
 });
 
@@ -107,6 +107,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('lists/mine', 'ShopController@my_lists');
         $api->get('lists/all', 'ShopController@all');
         $api->get('detail/{id}', 'ShopController@detail');
+        $api->get('members/{id}', 'ShopController@members');
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
