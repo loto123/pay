@@ -14,6 +14,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property string $name
  * @property string $mobile
  * @property string $password
+ * @property float $balance
  */
 class User extends Authenticatable
 {

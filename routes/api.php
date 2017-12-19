@@ -124,6 +124,15 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     });
 });
 
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'account',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/', 'AccountController@index');
+    });
+});
+
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',
