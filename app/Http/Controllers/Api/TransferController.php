@@ -76,8 +76,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $shop = Shop::find($request->shop_id);
-        if ($shop->isEmpty()) {
+        $shop = Shop::findByEnId($request->shop_id);
+        if (!$shop) {
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
         $transfer = new Transfer();
@@ -173,7 +173,7 @@ class TransferController extends Controller
      * )
      * @return \Illuminate\Http\Response
      */
-    public function validate(Request $request) {
+    public function valid(Request $request) {
         $user = JWTAuth::parseToken()->authenticate();
 
         $validator = Validator::make($request->all(),
