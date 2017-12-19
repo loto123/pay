@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($request->server->get('API_PREFIX')) {
+        if (preg_match("#^/".$request->server->get('API_PREFIX')."/#", $request->getPathInfo())) {
             if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
                 return response()->json(['code'=>2, 'message' => 'token_expired', 'data'=> '']);
             } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
