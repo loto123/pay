@@ -21,7 +21,14 @@ class DepositMethod extends Model
      */
     public function deposit(Deposit $order)
     {
-        return (new $this->impl)->deposit($order->getKey(), $order->amount, $order->masterContainer, array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($order->channel->config)), $this->getNotifyUrl($order->channel), $this->getReturnUrl());
+        return (new $this->impl)->deposit(
+            $order->getKey(),
+            $order->amount,
+            $order->masterContainer,
+            array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($order->channel->config)),
+            $this->getNotifyUrl($order->channel),
+            $this->getReturnUrl()
+        );
     }
 
     /**

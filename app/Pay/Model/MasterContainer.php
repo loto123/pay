@@ -13,6 +13,7 @@ namespace App\Pay\Model;
 
 use App\Jobs\SubmitWithdrawRequest;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class MasterContainer extends Container
 {
@@ -78,7 +79,11 @@ class MasterContainer extends Container
     public function initiateDeposit($amount, Channel $byChannel, DepositMethod $byMethod)
     {
         if ($byChannel->disabled) {
-            $byChannel = $byChannel->spareChannel()->firstOrFail();
+            throw new Exception('该支付通道不可用');
+        }
+
+        if ($byMethod->disabled) {
+            throw new Exception('该支付方式不可用');
         }
 
         $order = new Deposit([
@@ -127,6 +132,10 @@ class MasterContainer extends Container
      */
     public function initiateWithdraw($amount, array $receiver_info, Channel $byChannel, WithdrawMethod $byMethod, $system_fee)
     {
+        if ($byMethod->disabled) {
+            throw new Exception('该提现方式不可用');
+        }
+
         //开始事务
         $commit = false;
         DB::beginTransaction();
