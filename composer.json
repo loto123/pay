@@ -21,7 +21,8 @@
         "proberts/skip32": "@dev",
         "toplan/phpsms": "~1.8",
         "tymon/jwt-auth": "^0.5.12",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "simplesoftwareio/simple-qrcode": "~2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",

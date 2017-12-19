@@ -34,4 +34,5 @@ Route::group([
     $router->any('transfer', "DataController@transfer");
     $router->any('record', "DataController@record");
     $router->any('test', "DataController@test");
+    $router->any('users', "DataController@users");
 });
