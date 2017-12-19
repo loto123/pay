@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use JWTAuth;
-use Skip32;
 use Validator;
 
 class TransferController extends Controller
@@ -81,7 +80,7 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
         $transfer = new Transfer();
-        $transfer->shop_id = $request->shop_id;
+        $transfer->shop_id = $shop->id;
         $transfer->user_id = $user->id;
         $transfer->price = $request->price;
         $transfer->comment = $request->input('comment', '');
@@ -96,7 +95,7 @@ class TransferController extends Controller
         $transfer->fee_percent = config('platform_fee_percent');
 
         if ($transfer->save()) {
-            return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => $transfer]);
+            return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => ['id' => $transfer->en_id()]]);
         } else {
             return response()->json(['code' => 0, 'msg' => trans('trans.save_failed'), 'data' => []]);
         }
@@ -133,7 +132,12 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::where('id', $request->transfer_id)->withCount('joiner')->with(['user' => function ($query) {
+        $transferObj = Transfer::findByEnId($request->transfer_id);
+        if(!$transferObj) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
+        }
+
+        $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
             $query->select('name', 'avatar');
         }, 'record' => function ($query) {
             $query->select('id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
@@ -143,11 +147,8 @@ class TransferController extends Controller
             $query->select('name', 'avatar');
         }])->select('id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
 
-        if ($transfer->isEmpty()) {
-            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
-        } else {
-            return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer->toArray()]);
-        }
+        $transfer->id = $transferObj->en_id();
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
 
     /**
