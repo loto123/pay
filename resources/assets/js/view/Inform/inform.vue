@@ -14,7 +14,7 @@
       </div>
       <div class="shareBenefit-box">
         <ul>
-          <li class="flex flex-align-center flex-justify-between">
+          <li class="flex flex-align-center flex-justify-between" @click="goDetails">
               <div class="left-content">
                 <div class="personal-info flex">
                   <div class="flex-1 flex"><div class="personal-img">从<img src="/images/avatar.jpg"><span>21321321</span>获得</div></div>
@@ -42,6 +42,9 @@ export default {
     },
     goSystemInfo(){
       this.$router.push('/systemInfo')
+    },
+    goDetails(){
+      this.$router.push('/inform/money_details');
     }
   }
 };

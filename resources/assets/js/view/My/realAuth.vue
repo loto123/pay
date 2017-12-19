@@ -48,7 +48,8 @@
         var _this=this;
         var data = this.realInfo;
         request.getInstance().postData('api/my/identify',data).then((res) => {
-          console.log(res);
+          Toast('认证成功');
+          this.$router.push('/my'); //认证成功，回到我的页面
         }).catch((err) => {
           Toast({
             message: err.data.msg,
@@ -56,6 +57,7 @@
           });
         })
       },
+      //短信验证码
       sendYZM(){
         var _temp = {};
         _temp.mobile = this.$route.query.mobile;
