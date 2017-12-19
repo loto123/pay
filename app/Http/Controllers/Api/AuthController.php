@@ -394,4 +394,68 @@ class AuthController extends BaseController {
         }
     }
 
+    /**
+     *
+     * @SWG\Post(
+     *   path="/auth/password/reset",
+     *   summary="忘记密码",
+     *     tags={"登录"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="用户手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="password",
+     *         in="formData",
+     *         description="新密码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="code",
+     *         in="formData",
+     *         description="验证码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="ok",
+     *     examples={
+     *      "code":0,
+     *      "msg":"",
+     *      "data": {}
+     *     }
+     *   ),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function reset_password(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exist:'.(new User)->getTable(),
+            'password' => 'required',
+            'code' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+            return $this->json([], trans("error code"), 0);
+        }
+        Cache::forget($cache_key);
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json([], trans("error user"), 0);
+        }
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return $this->json();
+    }
+
 }

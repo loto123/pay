@@ -45,7 +45,7 @@ export default {
       this.$router.push("/systemInfo");
     },
     goDetails(){
-      this.$router.push("/systemInfo/info_Details");
+      this.$router.push("/systemInfo/system_Details");
     }
   }
 };

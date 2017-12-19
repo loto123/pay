@@ -75,8 +75,8 @@ class TransferController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
-        $request->shop_id = Skip32::decrypt("0123456789abcdef0123", $request->shop_id);
-        $shop = Shop::where('id', $request->shop_id)->first();
+
+        $shop = Shop::findByEnId($request->shop_id);
         if (!$shop) {
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
@@ -173,8 +173,12 @@ class TransferController extends Controller
      * )
      * @return \Illuminate\Http\Response
      */
+<<<<<<< HEAD
     public function valid(Request $request)
     {
+=======
+    public function valid(Request $request) {
+>>>>>>> d201ec3f410a981c92954ff1ed19ef7bfd71d7ca
         $user = JWTAuth::parseToken()->authenticate();
 
         $validator = Validator::make($request->all(),

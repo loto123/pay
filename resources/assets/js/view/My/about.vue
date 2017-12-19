@@ -9,7 +9,6 @@
 				<div class="versions">游戏宝 1.0.1</div>
 			</div>
 		</section>
-		
 	</div>
 </template>
 
