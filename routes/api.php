@@ -89,6 +89,15 @@ $api->version('v1', function ($api) {
     });
 });
 
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => '/',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('time', 'CommonController@time');
+    });
+});
+
 $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     $api->group([
         'prefix' => 'shop',

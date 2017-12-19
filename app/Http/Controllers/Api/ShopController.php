@@ -168,7 +168,7 @@ class ShopController extends BaseController {
         foreach ($shops as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id,
+                'id' => $_shop->en_id(),
                 'name' => $_shop->name,
             ];
         }
@@ -262,6 +262,58 @@ class ShopController extends BaseController {
             'members' => $members,
             'rate' => $shop->price,
             'percent' => $shop->fee,
+        ]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/members/{id}",
+     *   summary="店铺成员详情",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="成员数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页面",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function members($id, Request $request) {
+        $size = $request->input('size', 20);
+        $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $members = [];
+        foreach ($shop->users()->paginate($size) as $_user) {
+            /* @var $_user User */
+            $members[] = [
+                'id' => (string)$_user->id,
+                'name' => $_user->name,
+                'avatar' => asset("images/personal.jpg"),
+
+            ];
+        }
+        return $this->json([
+            'count' => (int)$shop->users()->count(),
+            'members' => $members,
         ]);
     }
 
@@ -360,4 +412,6 @@ class ShopController extends BaseController {
         $shop->save();
         return $this->json();
     }
+
+
 }
