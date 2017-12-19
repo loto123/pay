@@ -68918,8 +68918,13 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -68951,25 +68956,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {};
-  },
+	data: function data() {
+		return {
+			moneyList: []
+		};
+	},
+	created: function created() {
+		this.moneyInfo();
+	},
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
-  methods: {
-    goUser: function goUser() {
-      this.$router.push("/userRegister");
-    },
-    goSystemInfo: function goSystemInfo() {
-      this.$router.push('/systemInfo');
-    },
-    goDetails: function goDetails() {
-      this.$router.push('/inform/money_details');
-    }
-  }
+	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
+	methods: {
+		goUser: function goUser() {
+			this.$router.push("/userRegister");
+		},
+		goSystemInfo: function goSystemInfo() {
+			this.$router.push('/systemInfo');
+		},
+		goDetails: function goDetails(e) {
+			this.$router.push("/inform/money_details" + "?notice_id=" + e);
+		},
+		moneyInfo: function moneyInfo() {
+			var self = this;
+
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/notice/index').then(function (res) {
+				self.moneyList = res.data.data[1];
+			}).catch(function (err) {
+				console.error(err);
+			});
+		},
+
+		//清空消息
+		del: function del(type) {
+			var _this = this;
+
+			__WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"].confirm("是否确认清空全部消息?", "温馨提示").then(function () {
+				__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/notice/delete?type=" + type).then(function (res) {
+					Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])({
+						message: "清空成功",
+						duration: 800
+					});
+					_this.moneyInfo();
+				}).catch(function (err) {
+					console.log(err);
+				});
+			}, function () {
+				//取消操作
+				console.log("已经取消");
+			});
+		}
+	}
 });
 
 /***/ }),
@@ -68988,8 +69035,15 @@ var render = function() {
         _c("topBack", { attrs: { title: "消息中心" } }, [
           _c(
             "div",
-            { staticClass: "clear-inform flex flex-reverse flex-align-center" },
-            [_vm._v("\n              清空消息\n            ")]
+            {
+              staticClass: "clear-inform flex flex-reverse flex-align-center",
+              on: {
+                click: function($event) {
+                  _vm.del(1)
+                }
+              }
+            },
+            [_vm._v("\n\t\t\t\t清空消息\n\t\t\t")]
           )
         ])
       ],
@@ -69026,47 +69080,51 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "shareBenefit-box" }, [
-      _c("ul", [
-        _c(
-          "li",
-          {
-            staticClass: "flex flex-align-center flex-justify-between",
-            on: { click: _vm.goDetails }
-          },
-          [
-            _vm._m(0, false, false),
-            _vm._v(" "),
-            _c("div", { staticClass: "shareBenefit-money active" }, [
-              _vm._v("+10")
-            ])
-          ]
-        )
-      ])
-    ])
+    _c(
+      "div",
+      { staticClass: "shareBenefit-box" },
+      _vm._l(_vm.moneyList, function(item) {
+        return _c("ul", [
+          _c(
+            "li",
+            {
+              staticClass: "flex flex-align-center flex-justify-between",
+              on: {
+                click: function($event) {
+                  _vm.goDetails(item.notice_id)
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "left-content" }, [
+                _c("div", { staticClass: "personal-info flex" }, [
+                  _c("div", { staticClass: "flex-1 flex" }, [
+                    _c("div", { staticClass: "personal-img" }, [
+                      _vm._v("从\n\t\t\t\t\t\t\t\t"),
+                      _c("img", { attrs: { src: "/images/avatar.jpg" } }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v(_vm._s(item.title))]),
+                      _vm._v("获得")
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "date" }, [
+                  _vm._v(_vm._s(item.created_at))
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "shareBenefit-money active" }, [
+                _vm._v(_vm._s(item.content))
+              ])
+            ]
+          )
+        ])
+      })
+    )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "left-content" }, [
-      _c("div", { staticClass: "personal-info flex" }, [
-        _c("div", { staticClass: "flex-1 flex" }, [
-          _c("div", { staticClass: "personal-img" }, [
-            _vm._v("从"),
-            _c("img", { attrs: { src: "/images/avatar.jpg" } }),
-            _c("span", [_vm._v("21321321")]),
-            _vm._v("获得")
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "date" }, [_vm._v("2017-11-23  19:44:31")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -69163,7 +69221,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-07afa5c9], body[data-v-07afa5c9], div[data-v-07afa5c9], span[data-v-07afa5c9], applet[data-v-07afa5c9], object[data-v-07afa5c9], iframe[data-v-07afa5c9],\nh1[data-v-07afa5c9], h2[data-v-07afa5c9], h3[data-v-07afa5c9], h4[data-v-07afa5c9], h5[data-v-07afa5c9], h6[data-v-07afa5c9], p[data-v-07afa5c9], blockquote[data-v-07afa5c9], pre[data-v-07afa5c9],\na[data-v-07afa5c9], abbr[data-v-07afa5c9], acronym[data-v-07afa5c9], address[data-v-07afa5c9], big[data-v-07afa5c9], cite[data-v-07afa5c9], code[data-v-07afa5c9],\ndel[data-v-07afa5c9], dfn[data-v-07afa5c9], em[data-v-07afa5c9], img[data-v-07afa5c9], ins[data-v-07afa5c9], kbd[data-v-07afa5c9], q[data-v-07afa5c9], s[data-v-07afa5c9], samp[data-v-07afa5c9],\nsmall[data-v-07afa5c9], strike[data-v-07afa5c9], strong[data-v-07afa5c9], sub[data-v-07afa5c9], sup[data-v-07afa5c9], tt[data-v-07afa5c9], var[data-v-07afa5c9],\nb[data-v-07afa5c9], u[data-v-07afa5c9], i[data-v-07afa5c9], center[data-v-07afa5c9],\ndl[data-v-07afa5c9], dt[data-v-07afa5c9], dd[data-v-07afa5c9], ol[data-v-07afa5c9], ul[data-v-07afa5c9], li[data-v-07afa5c9],\nfieldset[data-v-07afa5c9], form[data-v-07afa5c9], label[data-v-07afa5c9], legend[data-v-07afa5c9],\ntable[data-v-07afa5c9], caption[data-v-07afa5c9], tbody[data-v-07afa5c9], tfoot[data-v-07afa5c9], thead[data-v-07afa5c9], tr[data-v-07afa5c9], th[data-v-07afa5c9], td[data-v-07afa5c9],\narticle[data-v-07afa5c9], aside[data-v-07afa5c9], canvas[data-v-07afa5c9], details[data-v-07afa5c9], embed[data-v-07afa5c9],\nfigure[data-v-07afa5c9], figcaption[data-v-07afa5c9], footer[data-v-07afa5c9], header[data-v-07afa5c9], hgroup[data-v-07afa5c9],\nmenu[data-v-07afa5c9], nav[data-v-07afa5c9], output[data-v-07afa5c9], ruby[data-v-07afa5c9], section[data-v-07afa5c9], summary[data-v-07afa5c9],\ntime[data-v-07afa5c9], mark[data-v-07afa5c9], audio[data-v-07afa5c9], video[data-v-07afa5c9] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-07afa5c9], aside[data-v-07afa5c9], details[data-v-07afa5c9], figcaption[data-v-07afa5c9], figure[data-v-07afa5c9],\nfooter[data-v-07afa5c9], header[data-v-07afa5c9], hgroup[data-v-07afa5c9], menu[data-v-07afa5c9], nav[data-v-07afa5c9], section[data-v-07afa5c9] {\n  display: block;\n}\nbody[data-v-07afa5c9] {\n  line-height: 1;\n}\nol[data-v-07afa5c9], ul[data-v-07afa5c9] {\n  list-style: none;\n}\nblockquote[data-v-07afa5c9], q[data-v-07afa5c9] {\n  quotes: none;\n}\nblockquote[data-v-07afa5c9]:before, blockquote[data-v-07afa5c9]:after,\nq[data-v-07afa5c9]:before, q[data-v-07afa5c9]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-07afa5c9] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-07afa5c9] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-07afa5c9] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-07afa5c9] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-07afa5c9] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-07afa5c9] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-07afa5c9] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-07afa5c9] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-07afa5c9] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-07afa5c9] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-07afa5c9] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-07afa5c9] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-07afa5c9] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-07afa5c9] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-07afa5c9] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-07afa5c9] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-07afa5c9] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-07afa5c9] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-07afa5c9] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-07afa5c9] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-07afa5c9] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-07afa5c9] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-07afa5c9] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-07afa5c9] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-07afa5c9] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-07afa5c9] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-07afa5c9] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-07afa5c9] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-07afa5c9] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-07afa5c9] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-07afa5c9] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-07afa5c9] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-07afa5c9] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-07afa5c9] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-07afa5c9] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-07afa5c9] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#top[data-v-07afa5c9] {\n  width: 100%;\n  background: #26a2ff;\n  color: #fff;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top .clear-inform[data-v-07afa5c9] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n}\n.tab-menu[data-v-07afa5c9] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-07afa5c9] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-07afa5c9] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.userRegister-box[data-v-07afa5c9] {\n  margin-top: 1em;\n}\n.userRegister-box li[data-v-07afa5c9] {\n    border: 1px solid #ddd;\n    padding: 0.5em 1em;\n}\n.userRegister-box li .left-content .title[data-v-07afa5c9] {\n      margin-bottom: 0.7em;\n}\n.userRegister-box li .left-content .date[data-v-07afa5c9] {\n      color: #999;\n      font-size: 0.8em;\n}\n.userRegister-box li .status[data-v-07afa5c9] {\n      color: #999;\n      font-size: 0.8em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-07afa5c9], body[data-v-07afa5c9], div[data-v-07afa5c9], span[data-v-07afa5c9], applet[data-v-07afa5c9], object[data-v-07afa5c9], iframe[data-v-07afa5c9],\nh1[data-v-07afa5c9], h2[data-v-07afa5c9], h3[data-v-07afa5c9], h4[data-v-07afa5c9], h5[data-v-07afa5c9], h6[data-v-07afa5c9], p[data-v-07afa5c9], blockquote[data-v-07afa5c9], pre[data-v-07afa5c9],\na[data-v-07afa5c9], abbr[data-v-07afa5c9], acronym[data-v-07afa5c9], address[data-v-07afa5c9], big[data-v-07afa5c9], cite[data-v-07afa5c9], code[data-v-07afa5c9],\ndel[data-v-07afa5c9], dfn[data-v-07afa5c9], em[data-v-07afa5c9], img[data-v-07afa5c9], ins[data-v-07afa5c9], kbd[data-v-07afa5c9], q[data-v-07afa5c9], s[data-v-07afa5c9], samp[data-v-07afa5c9],\nsmall[data-v-07afa5c9], strike[data-v-07afa5c9], strong[data-v-07afa5c9], sub[data-v-07afa5c9], sup[data-v-07afa5c9], tt[data-v-07afa5c9], var[data-v-07afa5c9],\nb[data-v-07afa5c9], u[data-v-07afa5c9], i[data-v-07afa5c9], center[data-v-07afa5c9],\ndl[data-v-07afa5c9], dt[data-v-07afa5c9], dd[data-v-07afa5c9], ol[data-v-07afa5c9], ul[data-v-07afa5c9], li[data-v-07afa5c9],\nfieldset[data-v-07afa5c9], form[data-v-07afa5c9], label[data-v-07afa5c9], legend[data-v-07afa5c9],\ntable[data-v-07afa5c9], caption[data-v-07afa5c9], tbody[data-v-07afa5c9], tfoot[data-v-07afa5c9], thead[data-v-07afa5c9], tr[data-v-07afa5c9], th[data-v-07afa5c9], td[data-v-07afa5c9],\narticle[data-v-07afa5c9], aside[data-v-07afa5c9], canvas[data-v-07afa5c9], details[data-v-07afa5c9], embed[data-v-07afa5c9],\nfigure[data-v-07afa5c9], figcaption[data-v-07afa5c9], footer[data-v-07afa5c9], header[data-v-07afa5c9], hgroup[data-v-07afa5c9],\nmenu[data-v-07afa5c9], nav[data-v-07afa5c9], output[data-v-07afa5c9], ruby[data-v-07afa5c9], section[data-v-07afa5c9], summary[data-v-07afa5c9],\ntime[data-v-07afa5c9], mark[data-v-07afa5c9], audio[data-v-07afa5c9], video[data-v-07afa5c9] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-07afa5c9], aside[data-v-07afa5c9], details[data-v-07afa5c9], figcaption[data-v-07afa5c9], figure[data-v-07afa5c9],\nfooter[data-v-07afa5c9], header[data-v-07afa5c9], hgroup[data-v-07afa5c9], menu[data-v-07afa5c9], nav[data-v-07afa5c9], section[data-v-07afa5c9] {\n  display: block;\n}\nbody[data-v-07afa5c9] {\n  line-height: 1;\n}\nol[data-v-07afa5c9], ul[data-v-07afa5c9] {\n  list-style: none;\n}\nblockquote[data-v-07afa5c9], q[data-v-07afa5c9] {\n  quotes: none;\n}\nblockquote[data-v-07afa5c9]:before, blockquote[data-v-07afa5c9]:after,\nq[data-v-07afa5c9]:before, q[data-v-07afa5c9]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-07afa5c9] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-07afa5c9] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-07afa5c9] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-07afa5c9] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-07afa5c9] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-07afa5c9] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-07afa5c9] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-07afa5c9] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-07afa5c9] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-07afa5c9] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-07afa5c9] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-07afa5c9] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-07afa5c9] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-07afa5c9] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-07afa5c9] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-07afa5c9] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-07afa5c9] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-07afa5c9] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-07afa5c9] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-07afa5c9] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-07afa5c9] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-07afa5c9] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-07afa5c9] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-07afa5c9] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-07afa5c9] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-07afa5c9] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-07afa5c9] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-07afa5c9] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-07afa5c9] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-07afa5c9] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-07afa5c9] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-07afa5c9] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-07afa5c9] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-07afa5c9] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-07afa5c9] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-07afa5c9] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-07afa5c9] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#top[data-v-07afa5c9] {\n  width: 100%;\n  background: #26a2ff;\n  color: #fff;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top .clear-inform[data-v-07afa5c9] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n}\n.tab-menu[data-v-07afa5c9] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-07afa5c9] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-07afa5c9] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.userRegister-box[data-v-07afa5c9] {\n  margin-top: 1em;\n}\n.userRegister-box li[data-v-07afa5c9] {\n    border: 1px solid #ddd;\n    padding: 0.5em 1em;\n}\n.userRegister-box li .info-header[data-v-07afa5c9] {\n      margin-bottom: 0.7em;\n}\n.userRegister-box li .info-header .title[data-v-07afa5c9] {\n        color: #333;\n        font-size: 1em;\n}\n.userRegister-box li .info-header .date[data-v-07afa5c9] {\n        color: #999;\n        font-size: 0.8em;\n}\n.userRegister-box li .status[data-v-07afa5c9] {\n      color: #999;\n      font-size: 0.8em;\n}\n", ""]);
 
 // exports
 
@@ -69174,8 +69232,13 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -69205,25 +69268,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
+
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      registerList: []
+    };
+  },
+  created: function created() {
+    this.registerInfo();
   },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
   methods: {
     goshareBenefit: function goshareBenefit() {
       this.$router.push("/inform");
     },
-    goUser: function goUser() {
-      this.$router.push("/userRegister");
-    },
     goSystemInfo: function goSystemInfo() {
       this.$router.push("/systemInfo");
+    },
+    registerInfo: function registerInfo() {
+      var self = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/notice/index').then(function (res) {
+        self.registerList = res.data.data[2];
+      }).catch(function (err) {
+        console.error(err);
+      });
+    },
+
+    //清空消息
+    del: function del(type) {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"].confirm("是否确认清空全部消息?", "温馨提示").then(function () {
+        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/notice/delete?type=" + type).then(function (res) {
+          Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])({
+            message: "清空成功",
+            duration: 800
+          });
+          _this.registerInfo();
+        }).catch(function (err) {
+          console.log(err);
+        });
+      }, function () {
+        //取消操作
+        console.log("已经取消");
+      });
     }
   }
 });
@@ -69244,7 +69340,14 @@ var render = function() {
         _c("topBack", { attrs: { title: "消息中心", backUrl: "/index/" } }, [
           _c(
             "div",
-            { staticClass: "clear-inform flex flex-reverse flex-align-center" },
+            {
+              staticClass: "clear-inform flex flex-reverse flex-align-center",
+              on: {
+                click: function($event) {
+                  _vm.del(2)
+                }
+              }
+            },
             [_vm._v("\n        清空消息\n      ")]
           )
         ])
@@ -69282,43 +69385,37 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _vm._m(0, false, false)
+    _c(
+      "div",
+      { staticClass: "userRegister-box" },
+      _vm._l(_vm.registerList, function(item) {
+        return _c("ul", [
+          _c("li", [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "info-header flex flex-align-end flex-justify-between"
+              },
+              [
+                _c("div", { staticClass: "title" }, [
+                  _vm._v(_vm._s(item.title))
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "date" }, [
+                  _vm._v(_vm._s(item.created_at))
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "status" }, [_vm._v(_vm._s(item.content))])
+          ])
+        ])
+      })
+    )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "userRegister-box" }, [
-      _c("ul", [
-        _c(
-          "li",
-          { staticClass: "flex flex-align-center flex-justify-between" },
-          [
-            _c("div", { staticClass: "left-content" }, [
-              _c("div", { staticClass: "title flex" }, [
-                _c("div", { staticClass: "flex-1 flex" }, [
-                  _vm._v("新用户注册通知")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "date" }, [
-                _vm._v("2017-11-23  19:44:31")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "status" }, [
-              _vm._v("您推荐的"),
-              _c("span", [_vm._v("18676456235")]),
-              _vm._v("成功注册")
-            ])
-          ]
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -69415,7 +69512,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-062d0a10], body[data-v-062d0a10], div[data-v-062d0a10], span[data-v-062d0a10], applet[data-v-062d0a10], object[data-v-062d0a10], iframe[data-v-062d0a10],\nh1[data-v-062d0a10], h2[data-v-062d0a10], h3[data-v-062d0a10], h4[data-v-062d0a10], h5[data-v-062d0a10], h6[data-v-062d0a10], p[data-v-062d0a10], blockquote[data-v-062d0a10], pre[data-v-062d0a10],\na[data-v-062d0a10], abbr[data-v-062d0a10], acronym[data-v-062d0a10], address[data-v-062d0a10], big[data-v-062d0a10], cite[data-v-062d0a10], code[data-v-062d0a10],\ndel[data-v-062d0a10], dfn[data-v-062d0a10], em[data-v-062d0a10], img[data-v-062d0a10], ins[data-v-062d0a10], kbd[data-v-062d0a10], q[data-v-062d0a10], s[data-v-062d0a10], samp[data-v-062d0a10],\nsmall[data-v-062d0a10], strike[data-v-062d0a10], strong[data-v-062d0a10], sub[data-v-062d0a10], sup[data-v-062d0a10], tt[data-v-062d0a10], var[data-v-062d0a10],\nb[data-v-062d0a10], u[data-v-062d0a10], i[data-v-062d0a10], center[data-v-062d0a10],\ndl[data-v-062d0a10], dt[data-v-062d0a10], dd[data-v-062d0a10], ol[data-v-062d0a10], ul[data-v-062d0a10], li[data-v-062d0a10],\nfieldset[data-v-062d0a10], form[data-v-062d0a10], label[data-v-062d0a10], legend[data-v-062d0a10],\ntable[data-v-062d0a10], caption[data-v-062d0a10], tbody[data-v-062d0a10], tfoot[data-v-062d0a10], thead[data-v-062d0a10], tr[data-v-062d0a10], th[data-v-062d0a10], td[data-v-062d0a10],\narticle[data-v-062d0a10], aside[data-v-062d0a10], canvas[data-v-062d0a10], details[data-v-062d0a10], embed[data-v-062d0a10],\nfigure[data-v-062d0a10], figcaption[data-v-062d0a10], footer[data-v-062d0a10], header[data-v-062d0a10], hgroup[data-v-062d0a10],\nmenu[data-v-062d0a10], nav[data-v-062d0a10], output[data-v-062d0a10], ruby[data-v-062d0a10], section[data-v-062d0a10], summary[data-v-062d0a10],\ntime[data-v-062d0a10], mark[data-v-062d0a10], audio[data-v-062d0a10], video[data-v-062d0a10] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-062d0a10], aside[data-v-062d0a10], details[data-v-062d0a10], figcaption[data-v-062d0a10], figure[data-v-062d0a10],\nfooter[data-v-062d0a10], header[data-v-062d0a10], hgroup[data-v-062d0a10], menu[data-v-062d0a10], nav[data-v-062d0a10], section[data-v-062d0a10] {\n  display: block;\n}\nbody[data-v-062d0a10] {\n  line-height: 1;\n}\nol[data-v-062d0a10], ul[data-v-062d0a10] {\n  list-style: none;\n}\nblockquote[data-v-062d0a10], q[data-v-062d0a10] {\n  quotes: none;\n}\nblockquote[data-v-062d0a10]:before, blockquote[data-v-062d0a10]:after,\nq[data-v-062d0a10]:before, q[data-v-062d0a10]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-062d0a10] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-062d0a10] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-062d0a10] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-062d0a10] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-062d0a10] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-062d0a10] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-062d0a10] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-062d0a10] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-062d0a10] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-062d0a10] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-062d0a10] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-062d0a10] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-062d0a10] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-062d0a10] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-062d0a10] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-062d0a10] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-062d0a10] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-062d0a10] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-062d0a10] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-062d0a10] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-062d0a10] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-062d0a10] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-062d0a10] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-062d0a10] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-062d0a10] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-062d0a10] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-062d0a10] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-062d0a10] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-062d0a10] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-062d0a10] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-062d0a10] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-062d0a10] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-062d0a10] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-062d0a10] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-062d0a10] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-062d0a10] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#top[data-v-062d0a10] {\n  width: 100%;\n  background: #26a2ff;\n  color: #fff;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top .clear-inform[data-v-062d0a10] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n}\n.tab-menu[data-v-062d0a10] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-062d0a10] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-062d0a10] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.systemInfo-box[data-v-062d0a10] {\n  margin-top: 1em;\n}\n.systemInfo-box li[data-v-062d0a10] {\n    border: 1px solid #ddd;\n    padding: 0.5em 1em;\n}\n.systemInfo-box li .info-header[data-v-062d0a10] {\n      margin-bottom: 0.7em;\n}\n.systemInfo-box li .info-header .date[data-v-062d0a10] {\n        color: #999;\n        font-size: 0.8em;\n}\n.systemInfo-box li .info-header .title[data-v-062d0a10] {\n        color: #333;\n        font-size: 1em;\n}\n.systemInfo-box li .content[data-v-062d0a10] {\n      color: #999;\n      font-size: 0.8em;\n      width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-062d0a10], body[data-v-062d0a10], div[data-v-062d0a10], span[data-v-062d0a10], applet[data-v-062d0a10], object[data-v-062d0a10], iframe[data-v-062d0a10],\nh1[data-v-062d0a10], h2[data-v-062d0a10], h3[data-v-062d0a10], h4[data-v-062d0a10], h5[data-v-062d0a10], h6[data-v-062d0a10], p[data-v-062d0a10], blockquote[data-v-062d0a10], pre[data-v-062d0a10],\na[data-v-062d0a10], abbr[data-v-062d0a10], acronym[data-v-062d0a10], address[data-v-062d0a10], big[data-v-062d0a10], cite[data-v-062d0a10], code[data-v-062d0a10],\ndel[data-v-062d0a10], dfn[data-v-062d0a10], em[data-v-062d0a10], img[data-v-062d0a10], ins[data-v-062d0a10], kbd[data-v-062d0a10], q[data-v-062d0a10], s[data-v-062d0a10], samp[data-v-062d0a10],\nsmall[data-v-062d0a10], strike[data-v-062d0a10], strong[data-v-062d0a10], sub[data-v-062d0a10], sup[data-v-062d0a10], tt[data-v-062d0a10], var[data-v-062d0a10],\nb[data-v-062d0a10], u[data-v-062d0a10], i[data-v-062d0a10], center[data-v-062d0a10],\ndl[data-v-062d0a10], dt[data-v-062d0a10], dd[data-v-062d0a10], ol[data-v-062d0a10], ul[data-v-062d0a10], li[data-v-062d0a10],\nfieldset[data-v-062d0a10], form[data-v-062d0a10], label[data-v-062d0a10], legend[data-v-062d0a10],\ntable[data-v-062d0a10], caption[data-v-062d0a10], tbody[data-v-062d0a10], tfoot[data-v-062d0a10], thead[data-v-062d0a10], tr[data-v-062d0a10], th[data-v-062d0a10], td[data-v-062d0a10],\narticle[data-v-062d0a10], aside[data-v-062d0a10], canvas[data-v-062d0a10], details[data-v-062d0a10], embed[data-v-062d0a10],\nfigure[data-v-062d0a10], figcaption[data-v-062d0a10], footer[data-v-062d0a10], header[data-v-062d0a10], hgroup[data-v-062d0a10],\nmenu[data-v-062d0a10], nav[data-v-062d0a10], output[data-v-062d0a10], ruby[data-v-062d0a10], section[data-v-062d0a10], summary[data-v-062d0a10],\ntime[data-v-062d0a10], mark[data-v-062d0a10], audio[data-v-062d0a10], video[data-v-062d0a10] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-062d0a10], aside[data-v-062d0a10], details[data-v-062d0a10], figcaption[data-v-062d0a10], figure[data-v-062d0a10],\nfooter[data-v-062d0a10], header[data-v-062d0a10], hgroup[data-v-062d0a10], menu[data-v-062d0a10], nav[data-v-062d0a10], section[data-v-062d0a10] {\n  display: block;\n}\nbody[data-v-062d0a10] {\n  line-height: 1;\n}\nol[data-v-062d0a10], ul[data-v-062d0a10] {\n  list-style: none;\n}\nblockquote[data-v-062d0a10], q[data-v-062d0a10] {\n  quotes: none;\n}\nblockquote[data-v-062d0a10]:before, blockquote[data-v-062d0a10]:after,\nq[data-v-062d0a10]:before, q[data-v-062d0a10]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-062d0a10] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-062d0a10] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-062d0a10] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-062d0a10] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-062d0a10] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-062d0a10] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-062d0a10] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-062d0a10] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-062d0a10] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-062d0a10] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-062d0a10] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-062d0a10] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-062d0a10] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-062d0a10] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-062d0a10] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-062d0a10] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-062d0a10] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-062d0a10] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-062d0a10] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-062d0a10] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-062d0a10] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-062d0a10] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-062d0a10] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-062d0a10] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-062d0a10] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-062d0a10] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-062d0a10] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-062d0a10] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-062d0a10] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-062d0a10] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-062d0a10] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-062d0a10] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-062d0a10] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-062d0a10] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-062d0a10] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-062d0a10] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-062d0a10] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#top[data-v-062d0a10] {\n  width: 100%;\n  background: #26a2ff;\n  color: #fff;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top .clear-inform[data-v-062d0a10] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n}\n.tab-menu[data-v-062d0a10] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-062d0a10] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-062d0a10] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.systemInfo-box[data-v-062d0a10] {\n  margin-top: 1em;\n}\n.systemInfo-box li[data-v-062d0a10] {\n    border: 1px solid #ddd;\n    padding: 0.5em 1em;\n}\n.systemInfo-box li .info-header[data-v-062d0a10] {\n      margin-bottom: 0.7em;\n}\n.systemInfo-box li .info-header .date[data-v-062d0a10] {\n        color: #999;\n        font-size: 0.8em;\n}\n.systemInfo-box li .info-header .title[data-v-062d0a10] {\n        color: #333;\n        font-size: 1em;\n}\n.systemInfo-box li .content[data-v-062d0a10] {\n      color: #999;\n      font-size: 0.8em;\n      width: 100%;\n      text-overflow: ellipsis;\n      overflow: hidden;\n      white-space: nowrap;\n}\n", ""]);
 
 // exports
 
@@ -69426,8 +69523,13 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -69457,14 +69559,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      systemList: []
+    };
+  },
+  created: function created() {
+    this.systemInfo();
   },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
   methods: {
     goShareBenefit: function goShareBenefit() {
       this.$router.push("/inform");
@@ -69472,11 +69583,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     goUser: function goUser() {
       this.$router.push("/userRegister");
     },
-    goSystemInfo: function goSystemInfo() {
-      this.$router.push("/systemInfo");
+    goDetails: function goDetails(e) {
+      //详情
+      this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
     },
-    goDetails: function goDetails() {
-      this.$router.push("/systemInfo/system_Details");
+    systemInfo: function systemInfo() {
+      //列表
+      var self = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/notice/index').then(function (res) {
+        self.systemList = res.data.data[3];
+        // console.log(systemInfo);
+      }).catch(function (err) {
+        console.error(err);
+      });
+    },
+
+    //清空消息
+    del: function del(type) {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"].confirm("是否确认清空全部消息?", "温馨提示").then(function () {
+        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/notice/delete?type=" + type).then(function (res) {
+          Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])({
+            message: "清空成功",
+            duration: 800
+          });
+          _this.systemInfo();
+        }).catch(function (err) {
+          console.log(err);
+        });
+      }, function () {
+        //取消操作
+        console.log("已经取消");
+      });
     }
   }
 });
@@ -69497,8 +69637,15 @@ var render = function() {
         _c("topBack", { attrs: { title: "消息中心", backUrl: "/index/" } }, [
           _c(
             "div",
-            { staticClass: "clear-inform flex flex-reverse flex-align-center" },
-            [_vm._v("\n              清空消息\n            ")]
+            {
+              staticClass: "clear-inform flex flex-reverse flex-align-center",
+              on: {
+                click: function($event) {
+                  _vm.del(3)
+                }
+              }
+            },
+            [_vm._v("\n        清空消息\n      ")]
           )
         ])
       ],
@@ -69529,42 +69676,55 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          {
-            staticClass: "flex flex-align-center flex-justify-center active",
-            on: { click: _vm.goSystemInfo }
-          },
+          { staticClass: "flex flex-align-center flex-justify-center active" },
           [_vm._v("系统通知")]
         )
       ]
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "systemInfo-box" }, [
-      _c("ul", [
-        _c("li", { on: { click: _vm.goDetails } }, [
-          _vm._m(0, false, false),
-          _vm._v(" "),
-          _c("div", { staticClass: "content" }, [_vm._v("321321")])
+    _c(
+      "div",
+      { staticClass: "systemInfo-box" },
+      _vm._l(_vm.systemList, function(item) {
+        return _c("ul", [
+          _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  _vm.goDetails(item.notice_id)
+                }
+              }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "info-header flex flex-align-end flex-justify-between"
+                },
+                [
+                  _c("div", { staticClass: "title" }, [
+                    _vm._v(_vm._s(item.title))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "date" }, [
+                    _vm._v(_vm._s(item.created_at))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "content" }, [
+                _vm._v(_vm._s(item.content))
+              ])
+            ]
+          )
         ])
-      ])
-    ])
+      })
+    )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "info-header flex flex-align-end  flex-justify-between" },
-      [
-        _c("div", { staticClass: "title" }, [_vm._v("系统消息")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "date" }, [_vm._v("2017-11-23 19:44:31")])
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -70996,7 +71156,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5111299d], body[data-v-5111299d], div[data-v-5111299d], span[data-v-5111299d], applet[data-v-5111299d], object[data-v-5111299d], iframe[data-v-5111299d],\nh1[data-v-5111299d], h2[data-v-5111299d], h3[data-v-5111299d], h4[data-v-5111299d], h5[data-v-5111299d], h6[data-v-5111299d], p[data-v-5111299d], blockquote[data-v-5111299d], pre[data-v-5111299d],\na[data-v-5111299d], abbr[data-v-5111299d], acronym[data-v-5111299d], address[data-v-5111299d], big[data-v-5111299d], cite[data-v-5111299d], code[data-v-5111299d],\ndel[data-v-5111299d], dfn[data-v-5111299d], em[data-v-5111299d], img[data-v-5111299d], ins[data-v-5111299d], kbd[data-v-5111299d], q[data-v-5111299d], s[data-v-5111299d], samp[data-v-5111299d],\nsmall[data-v-5111299d], strike[data-v-5111299d], strong[data-v-5111299d], sub[data-v-5111299d], sup[data-v-5111299d], tt[data-v-5111299d], var[data-v-5111299d],\nb[data-v-5111299d], u[data-v-5111299d], i[data-v-5111299d], center[data-v-5111299d],\ndl[data-v-5111299d], dt[data-v-5111299d], dd[data-v-5111299d], ol[data-v-5111299d], ul[data-v-5111299d], li[data-v-5111299d],\nfieldset[data-v-5111299d], form[data-v-5111299d], label[data-v-5111299d], legend[data-v-5111299d],\ntable[data-v-5111299d], caption[data-v-5111299d], tbody[data-v-5111299d], tfoot[data-v-5111299d], thead[data-v-5111299d], tr[data-v-5111299d], th[data-v-5111299d], td[data-v-5111299d],\narticle[data-v-5111299d], aside[data-v-5111299d], canvas[data-v-5111299d], details[data-v-5111299d], embed[data-v-5111299d],\nfigure[data-v-5111299d], figcaption[data-v-5111299d], footer[data-v-5111299d], header[data-v-5111299d], hgroup[data-v-5111299d],\nmenu[data-v-5111299d], nav[data-v-5111299d], output[data-v-5111299d], ruby[data-v-5111299d], section[data-v-5111299d], summary[data-v-5111299d],\ntime[data-v-5111299d], mark[data-v-5111299d], audio[data-v-5111299d], video[data-v-5111299d] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5111299d], aside[data-v-5111299d], details[data-v-5111299d], figcaption[data-v-5111299d], figure[data-v-5111299d],\nfooter[data-v-5111299d], header[data-v-5111299d], hgroup[data-v-5111299d], menu[data-v-5111299d], nav[data-v-5111299d], section[data-v-5111299d] {\n  display: block;\n}\nbody[data-v-5111299d] {\n  line-height: 1;\n}\nol[data-v-5111299d], ul[data-v-5111299d] {\n  list-style: none;\n}\nblockquote[data-v-5111299d], q[data-v-5111299d] {\n  quotes: none;\n}\nblockquote[data-v-5111299d]:before, blockquote[data-v-5111299d]:after,\nq[data-v-5111299d]:before, q[data-v-5111299d]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5111299d] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5111299d] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5111299d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5111299d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5111299d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5111299d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5111299d] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5111299d] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5111299d] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5111299d] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5111299d] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5111299d] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5111299d] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5111299d] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5111299d] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5111299d] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5111299d] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5111299d] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5111299d] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5111299d] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5111299d] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5111299d] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5111299d] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5111299d] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5111299d] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5111299d] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5111299d] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5111299d] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5111299d] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5111299d] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5111299d] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5111299d] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5111299d] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5111299d] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5111299d] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5111299d] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#billDetails[data-v-5111299d] {\n  padding-top: 2em;\n  background: #eee;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.details-content[data-v-5111299d] {\n  background: #fff;\n  padding-bottom: 7em;\n}\n.money-box[data-v-5111299d] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: .5em .7em 0 .7em;\n}\n.billDetails-list li[data-v-5111299d] {\n  margin-top: 1em;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: 0 0.7em;\n}\n.billDetails-list li .title[data-v-5111299d] {\n    color: #333;\n}\n.billDetails-list li .content[data-v-5111299d] {\n    color: #555;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5111299d], body[data-v-5111299d], div[data-v-5111299d], span[data-v-5111299d], applet[data-v-5111299d], object[data-v-5111299d], iframe[data-v-5111299d],\nh1[data-v-5111299d], h2[data-v-5111299d], h3[data-v-5111299d], h4[data-v-5111299d], h5[data-v-5111299d], h6[data-v-5111299d], p[data-v-5111299d], blockquote[data-v-5111299d], pre[data-v-5111299d],\na[data-v-5111299d], abbr[data-v-5111299d], acronym[data-v-5111299d], address[data-v-5111299d], big[data-v-5111299d], cite[data-v-5111299d], code[data-v-5111299d],\ndel[data-v-5111299d], dfn[data-v-5111299d], em[data-v-5111299d], img[data-v-5111299d], ins[data-v-5111299d], kbd[data-v-5111299d], q[data-v-5111299d], s[data-v-5111299d], samp[data-v-5111299d],\nsmall[data-v-5111299d], strike[data-v-5111299d], strong[data-v-5111299d], sub[data-v-5111299d], sup[data-v-5111299d], tt[data-v-5111299d], var[data-v-5111299d],\nb[data-v-5111299d], u[data-v-5111299d], i[data-v-5111299d], center[data-v-5111299d],\ndl[data-v-5111299d], dt[data-v-5111299d], dd[data-v-5111299d], ol[data-v-5111299d], ul[data-v-5111299d], li[data-v-5111299d],\nfieldset[data-v-5111299d], form[data-v-5111299d], label[data-v-5111299d], legend[data-v-5111299d],\ntable[data-v-5111299d], caption[data-v-5111299d], tbody[data-v-5111299d], tfoot[data-v-5111299d], thead[data-v-5111299d], tr[data-v-5111299d], th[data-v-5111299d], td[data-v-5111299d],\narticle[data-v-5111299d], aside[data-v-5111299d], canvas[data-v-5111299d], details[data-v-5111299d], embed[data-v-5111299d],\nfigure[data-v-5111299d], figcaption[data-v-5111299d], footer[data-v-5111299d], header[data-v-5111299d], hgroup[data-v-5111299d],\nmenu[data-v-5111299d], nav[data-v-5111299d], output[data-v-5111299d], ruby[data-v-5111299d], section[data-v-5111299d], summary[data-v-5111299d],\ntime[data-v-5111299d], mark[data-v-5111299d], audio[data-v-5111299d], video[data-v-5111299d] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5111299d], aside[data-v-5111299d], details[data-v-5111299d], figcaption[data-v-5111299d], figure[data-v-5111299d],\nfooter[data-v-5111299d], header[data-v-5111299d], hgroup[data-v-5111299d], menu[data-v-5111299d], nav[data-v-5111299d], section[data-v-5111299d] {\n  display: block;\n}\nbody[data-v-5111299d] {\n  line-height: 1;\n}\nol[data-v-5111299d], ul[data-v-5111299d] {\n  list-style: none;\n}\nblockquote[data-v-5111299d], q[data-v-5111299d] {\n  quotes: none;\n}\nblockquote[data-v-5111299d]:before, blockquote[data-v-5111299d]:after,\nq[data-v-5111299d]:before, q[data-v-5111299d]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5111299d] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5111299d] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5111299d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5111299d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5111299d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5111299d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5111299d] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5111299d] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5111299d] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5111299d] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5111299d] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5111299d] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5111299d] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5111299d] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5111299d] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5111299d] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5111299d] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5111299d] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5111299d] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5111299d] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5111299d] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5111299d] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5111299d] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5111299d] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5111299d] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5111299d] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5111299d] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5111299d] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5111299d] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5111299d] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5111299d] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5111299d] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5111299d] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5111299d] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5111299d] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5111299d] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5111299d] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#billDetails[data-v-5111299d] {\n  padding-top: 2em;\n  background: #eee;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.details-content[data-v-5111299d] {\n  background: #fff;\n  padding-bottom: 7em;\n}\n.money-box[data-v-5111299d] {\n  height: 40px;\n  line-height: 40px;\n  border-bottom: 1px solid #ccc;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: .5em .7em 0 .7em;\n}\n.billDetails-list li[data-v-5111299d] {\n  margin-top: 1em;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  padding: 0 0.7em;\n}\n.billDetails-list li .title[data-v-5111299d] {\n    color: #333;\n}\n.billDetails-list li .content[data-v-5111299d] {\n    color: #555;\n}\n.billDetails-list li .content img[data-v-5111299d] {\n      border-radius: 50%;\n      margin-left: 0.5em;\n}\n", ""]);
 
 // exports
 
@@ -71007,8 +71167,11 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
 //
 //
 //
@@ -71038,25 +71201,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      showAlert: false
+      amount: null,
+      mobile: null,
+      thumb: null,
+      time: null,
+      transfer_id: null,
+      type: null
     };
+  },
+  created: function created() {
+    this.details();
   },
 
   methods: {
-    show: function show() {
-      this.showAlert = true;
-    },
-    cancel: function cancel() {
-      this.showAlert = false;
+    details: function details() {
+      var _this = this;
+
+      var _temp = {};
+      _temp.notice_id = this.$route.query.notice_id;
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/notice/detail', _temp).then(function (res) {
+        _this.amount = res.data.data.amount;
+        _this.mobile = res.data.data.mobile;
+        _this.thumb = res.data.data.thumb;
+        _this.time = res.data.data.time;
+        _this.transfer_id = res.data.data.transfer_id;
+        _this.type = res.data.data.type;
+      }).catch(function (err) {
+        console.error(err);
+      });
     }
   },
   components: {
-    topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a
+    topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a
   }
 });
 
@@ -71074,7 +71263,45 @@ var render = function() {
     [
       _c("topBack", { attrs: { title: "详情" } }),
       _vm._v(" "),
-      _vm._m(0, false, false)
+      _c("div", { staticClass: "details-content" }, [
+        _c("div", { staticClass: "money-box" }, [
+          _c("span", [_vm._v("入账金额")]),
+          _vm._v(" "),
+          _c("em", [_vm._v(_vm._s(_vm.amount))])
+        ]),
+        _vm._v(" "),
+        _c("ul", { staticClass: "billDetails-list" }, [
+          _c("li", [
+            _c("div", { staticClass: "title" }, [_vm._v("类型")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "content" }, [_vm._v(_vm._s(_vm.type))])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("div", { staticClass: "title" }, [_vm._v("时间")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "content" }, [_vm._v(_vm._s(_vm.time))])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("div", { staticClass: "title" }, [_vm._v("交易单号")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "content" }, [
+              _vm._v(_vm._s(_vm.transfer_id))
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("div", { staticClass: "title" }, [_vm._v("分润来源")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "content flex flex-align-center" }, [
+              _c("div", [_vm._v(_vm._s(_vm.mobile))]),
+              _vm._v(" "),
+              _vm._m(0, false, false)
+            ])
+          ])
+        ])
+      ])
     ],
     1
   )
@@ -71084,39 +71311,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "details-content" }, [
-      _c("div", { staticClass: "money-box" }, [
-        _c("span", [_vm._v("入账金额")]),
-        _vm._v(" "),
-        _c("em", [_vm._v("10")])
-      ]),
-      _vm._v(" "),
-      _c("ul", { staticClass: "billDetails-list" }, [
-        _c("li", [
-          _c("div", { staticClass: "title" }, [_vm._v("类型")]),
-          _c("div", { staticClass: "content" }, [_vm._v("收入")])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("div", { staticClass: "title" }, [_vm._v("时间")]),
-          _c("div", { staticClass: "content" }, [_vm._v("2017-11-21 16:25:36")])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("div", { staticClass: "title" }, [_vm._v("交易单号")]),
-          _c("div", { staticClass: "content" }, [_vm._v("21321321321321321")])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("div", { staticClass: "title" }, [_vm._v("账户余钱")]),
-          _c("div", { staticClass: "content" }, [_vm._v("100.79")])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("div", { staticClass: "title" }, [_vm._v("备注")]),
-          _c("div", { staticClass: "content" }, [_vm._v("交易")])
-        ])
-      ])
+    return _c("div", { staticClass: "personal-img" }, [
+      _c("img", {
+        attrs: { src: "/images/avatar.jpg", width: "40", height: "40" }
+      })
     ])
   }
 ]
@@ -71227,8 +71425,11 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
 //
 //
 //
@@ -71243,24 +71444,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      title: null,
+      time: null,
+      content: null
+    };
+  },
+  created: function created() {
+    this.details();
   },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
   methods: {
-    goUser: function goUser() {
-      this.$router.push("/userRegister");
-    },
-    goSystemInfo: function goSystemInfo() {
-      this.$router.push('/systemInfo');
+    details: function details() {
+      var _this = this;
+
+      var _temp = {};
+      _temp.notice_id = this.$route.query.notice_id;
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/notice/detail', _temp).then(function (res) {
+        _this.title = res.data.data.title;
+        _this.time = res.data.data.time;
+        _this.content = res.data.data.content;
+      }).catch(function (err) {
+        console.error(err);
+      });
     }
   }
 });
@@ -71281,29 +71494,16 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _vm._m(0, false, false)
+    _c("div", { staticClass: "details-content" }, [
+      _c("h2", [_vm._v(_vm._s(_vm.title))]),
+      _vm._v(" "),
+      _c("div", { staticClass: "details-date" }, [_vm._v(_vm._s(_vm.time))]),
+      _vm._v(" "),
+      _c("div", { staticClass: "content" }, [_vm._v(_vm._s(_vm.content))])
+    ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "details-content" }, [
-      _c("h2", [_vm._v("系统消息")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "details-date" }, [
-        _vm._v("2017-11-23 19:44:31")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "content" }, [
-        _vm._v(
-          "\n        的房间思考对方即可赶紧放开打开了房贷款开关对两个\n        客服附近的司法几点开始开个房都看过了富可敌国理发\n        店开关大概开关佛牌的客观佛跑得快。\n      "
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
