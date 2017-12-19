@@ -86,7 +86,7 @@ class User extends Authenticatable
      */
     public function shop()
     {
-        return $this->hasMany('App\Shop','manager_id','id');
+        return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
 
     /**
@@ -108,8 +108,24 @@ class User extends Authenticatable
         return $this->hasMany('App\PaypwdValidateRecord', 'user_id');
     }
 
+    //子代理
+    public function child_proxy()
+    {
+        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
+            $query->where('name','like', 'agent%');
+        });
+    }
+
+    //子用户
+    public function child_user()
+    {
+        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        });
+    }
+
     public function en_id() {
-        return (int)Skip32::encrypt("0123456789abcdef0123", $this->id);
+        return Skip32::encrypt("0123456789abcdef0123", $this->id);
     }
 
     public static function findByEnId($en_id) {

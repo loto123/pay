@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div id = "drop-list-component" class="flex flex-align-center flex-justify-center" v-if="showSwitch">
-        <div class="mask">
+        <div class="mask" @click="hideTab">
 
         </div>
         <div class="content">
@@ -12,16 +12,14 @@
                  <mt-radio
                     align="right"
                     title=""
-                    :options="options">
+                    v-model="choiseValue"
+                    :options="optionsList">
                 </mt-radio>
             </div>
-           
-
-            <!-- <ul>
-                <li>
-                    啦啦啦啦啦啦
-                </li>
-            </ul> -->
+            
+            <div class="loading-more flex flex-align-center flex-justify-center">
+                加载更多...
+            </div>
         </div>
 
         
@@ -61,10 +59,16 @@
         }
         
         .list-wrap{
-            height: 20em;
+            height:70%;
             overflow: scroll;
         }
         
+        .loading-more{
+            height:3em;
+            width:100%;
+            padding-left: 1em;
+            box-sizing: border-box;
+        }
     }
 
     .mask{
@@ -78,52 +82,63 @@
 
 <script>
 export default {
-  props:["showSwitch"],
+  // showSwitch:组件显示开关
+  // optionsList:渲染选择对象
+  props:["showSwitch","optionsList"],
 
   data(){
       return {
-        "options":[
-            {
-                label: '被禁用',
-                value: '值F',
-                // disabled: true
-            },
-            {
-                label: '选项A',
-                value: '值A'
-            },
-            {
-                label: '选项B',
-                value: '值B'
-            },
-            {
-                label: '被禁用',
-                value: '值F',
-                // disabled: true
-            },
-            {
-                label: '选项A',
-                value: '值A'
-            },
-            {
-                label: '选项B',
-                value: '值B'
-            },
-            {
-                label: '被禁用',
-                value: '值F',
-                // disabled: true
-            },
-            {
-                label: '选项A',
-                value: '值A'
-            },
-            {
-                label: '选项B',
-                value: '值B'
-            }
-        ]
+        // "options":[
+        //     {
+        //         label: '被禁用',
+        //         value: '值F',
+        //         // disabled: true
+        //     },
+        //     {
+        //         label: '选项A',
+        //         value: '值A'
+        //     },
+        //     {
+        //         label: '选项B',
+        //         value: '值B'
+        //     },
+        //     {
+        //         label: '被禁用',
+        //         value: '值F',
+        //         // disabled: true
+        //     },
+        //     {
+        //         label: '选项A',
+        //         value: '值A'
+        //     },
+        //     {
+        //         label: '选项B',
+        //         value: '值B'
+        //     },
+        //     {
+        //         label: '被禁用',
+        //         value: '值F',
+        //         // disabled: true
+        //     },
+        //     {
+        //         label: '选项A',
+        //         value: '值A'
+        //     },
+        //     {
+        //         label: '选项B',
+        //         value: '值B'
+        //     }
+        // ],
+        "choiseValue":null
       }
+  },
+  methods:{
+      hideTab(){
+          this.$emit("hideDropList",this.choiseValue);
+      }
+  },
+  watch:{
+      "choiseValue":'hideTab'
   }
 }
 </script>

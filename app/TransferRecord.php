@@ -25,4 +25,12 @@ class TransferRecord extends Model
     {
         return $this->hasOne('App\TipRecord', 'record_id', 'id');
     }
+
+//    public function en_id() {
+//        return Skip32::encrypt("0123456789abcdef0123", $this->id);
+//    }
+//
+//    public static function findByEnId($en_id) {
+//        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
+//    }
 }

@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use JWTAuth;
-use Validator;
 
 class TransferController extends Controller
 {
@@ -299,7 +299,7 @@ class TransferController extends Controller
                     return response()->json(['code' => 0,'msg' => trans('trans.user_pay_password_error'),'data' => []]);
                 }
                 $record->stat = 1;
-                $record->real_amount = $record->amount;
+                $record->real_amount = $record->amount * -1;
                 //用户减钱
                 $user->balance = $user->balance - $record->real_amount;
                 //红包加钱
