@@ -24,13 +24,6 @@ use Illuminate\Routing\Router;
 //});
 
 Route::any('test', 'Api\TestController@index');
-Route::group([
-    'prefix'        => '/shop',
-    'namespace'     => 'Api',
-], function (Router $router) {
-    $router->post('create', 'ShopController@create');
-    $router->get('types', 'ShopController@types');
-});
 
 Route::group([
     'prefix'       => '/my',
@@ -79,6 +72,7 @@ $api->version('v1', function ($api) {
         $api->post("login/wechat", 'AuthController@wechat_login');
         $api->post("valid", 'AuthController@valid');
         $api->post("sms", 'AuthController@sms');
+        $api->post("password/reset", 'AuthController@reset_password');
     });
 });
 
