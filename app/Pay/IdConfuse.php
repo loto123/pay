@@ -36,7 +36,7 @@ class IdConfuse
 
         $result = '';
         if ($pad_length > 0) {
-            $checksum = $number_only ? crc32($mixed) : md5($mixed);
+            $checksum = $number_only ? '1' . crc32($mixed) : md5($mixed);
             $result = substr($checksum, 0, $pad_length);
         }
 
@@ -59,7 +59,7 @@ class IdConfuse
         $mixed = substr($mixed, $pad_length, $mixed_length);
 
         $hash_alrigm = $number_only ? 'crc32' : 'md5';
-        if ($pad_length == 0 || substr($hash_alrigm($mixed), 0, $pad_length) === $pad) {
+        if ($pad_length == 0 || substr($hash_alrigm($mixed), 0, $pad_length - ($number_only ? 1 : 0)) === substr($pad, $number_only ? 1 : 0)) {
             if (!$number_only) {
                 $mixed = hexdec($mixed);
             }
@@ -69,6 +69,7 @@ class IdConfuse
             return $mixed ^ self::RANDOM_SEED;
 
         } else {
+            //dump([substr($hash_alrigm($mixed), 0, $pad_length - $number_only ? 1:0), substr($pad, $number_only ? 1:0)]);
             return 0;
         }
     }
