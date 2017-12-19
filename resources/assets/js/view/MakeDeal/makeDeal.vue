@@ -126,6 +126,8 @@ import inputList from "../../components/inputList";
 import Loading from "../../utils/loading";
 import request from "../../utils/userRequest";
 
+import {Toast} from 'mint-ui'
+
 export default {
   name: "makeDeal",
   created() {
@@ -173,7 +175,6 @@ export default {
     },
 
     getShopName(id) {
-      console.warn(id);
       for (let i = 0; i < this.shopList.length; i++) {
         if (this.shopList[i].value == id) {
           return this.shopList[i].label;
@@ -207,6 +208,14 @@ export default {
         price: this.price,
         comment:_tempMessage
       };
+
+      if(this.shopId == null){
+        Toast("请选择发起交易的店铺");
+        return 
+      }else if(this.price == ""){
+        Toast("请设置单价")
+        return
+      }
 
       request
         .getInstance()

@@ -141,7 +141,7 @@
       width: 60%;
       input {
         box-sizing: border-box;
-        font-size: 1.2em;
+        font-size: 1.0em;
         padding-left: 0.5em;
         width: 100%;
         border: none;
@@ -286,7 +286,12 @@ export default {
     return {
       passWordSwitch:false,
       renderData :{
-        name:null
+        name:null,
+        moneyData:{
+          payMoney:null,
+          getMoney:null
+        }
+
       }
     }
   },
