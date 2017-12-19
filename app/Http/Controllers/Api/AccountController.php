@@ -15,8 +15,8 @@ class AccountController extends BaseController {
     /**
      * @SWG\Get(
      *   path="/account",
-     *   summary="账号余额",
-     *   tags={"店铺"},
+     *   summary="账户余额",
+     *   tags={"账户"},
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
