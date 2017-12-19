@@ -44,17 +44,17 @@ class DataController extends Controller
         //用户ID
         $aid = $request->input('aid');
         if ($aid) {
-            $query->where('id', $aid);
+            $query->where('users.id', $aid);
         }
         //推荐人ID
         $parent = $request->input('parent');
         if ($parent) {
-            $query->where('parent_id', $parent);
+            $query->where('users.parent_id', $parent);
         }
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $query->where('operator_id', $operator);
+            $query->where('users.operator_id', $operator);
         }
         $date_time = $request->input('date_time');
         if (!empty($date_time)) {
@@ -292,7 +292,7 @@ class DataController extends Controller
             $end = $date_time_arr[1] . ' 23:59:59';
         }
 
-        $listQuery = User::with(['parent', 'operator',
+        $listQuery = User::with(['roles','parent', 'operator',
             'transfer_record' => function ($query) use ($begin, $end) {
                 $query->where('stat', '>', 0)->where('stat', '<>', 3);
                 if ($begin && $end) {
@@ -321,22 +321,22 @@ class DataController extends Controller
                 }
             })
             ->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'))
-            ->addSelect(DB::raw('sum(proxy_amount) as profit_proxy_amount'), DB::raw('sum(fee_amount) as proxy_fee_amount'))
+            ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
             ->groupBy('users.id');
         //用户ID
         $aid = $request->input('aid');
         if ($aid) {
-            $listQuery->where('id', $aid);
+            $listQuery->where('users.id', $aid);
         }
         //上级代理ID
         $parent = $request->input('parent');
         if ($parent) {
-            $listQuery->where('parent_id', $parent);
+            $listQuery->where('users.parent_id', $parent);
         }
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $listQuery->where('operator_id', $operator);
+            $listQuery->where('users.operator_id', $operator);
         }
         //role 身份
         $role = $request->input('role');

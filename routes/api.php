@@ -98,6 +98,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
+        $api->post('join/{id}', 'ShopController@join');
         $api->post('create', 'ShopController@create');
         $api->get('qrcode/{id}', 'ShopController@qrcode');
     });
@@ -120,6 +121,15 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('create', 'TransferController@create');
         $api->post('close', 'TransferController@close');
         $api->post('cancel', 'TransferController@cancel');
+    });
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'account',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/', 'AccountController@index');
     });
 });
 

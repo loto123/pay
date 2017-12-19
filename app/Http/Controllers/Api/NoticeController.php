@@ -71,7 +71,11 @@ class NoticeController extends Controller
      *     in="formData",
      *     description="接收消息的用户ID数组",
      *     required=true,
-     *     type="array"
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
      *   ),
      *   @SWG\Parameter(
      *     name="type",
@@ -107,7 +111,6 @@ class NoticeController extends Controller
      */
     public function create(Request $request)
     {
-        $this->user = JWTAuth::parseToken()->authenticate();
         $validator = Validator::make($request->all(),
             [
                 'user_id' => 'bail|required|array',
@@ -159,9 +162,13 @@ class NoticeController extends Controller
                 'updated_at' => $time,
             ];
         }
-        if(DB::table('notices')->insert($data)) {
+        DB::beginTransaction();
+        try {
+            DB::table('notices')->insert($data);
+            DB::commit();
             return response()->json(['code' => 1,'msg' => '','data' => []]);
-        } else{
+        }catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['code' => 0,'msg' => '数据插入失败','data' => []]);
         }
     }
@@ -214,7 +221,7 @@ class NoticeController extends Controller
             }
             $data = [
                 'amount' => $profit->proxy_amount,
-                'type' => $notice->type,
+                'type' => '分润',
                 'time' => (string)$profit->created_at,
                 'transfer_id' => $profit->transfer_id,
                 'mobile' => $profit->mobile,

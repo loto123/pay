@@ -36,3 +36,12 @@ Route::group([
     $router->any('test', "DataController@test");
     $router->any('users', "DataController@users");
 });
+
+Route::group([
+    'prefix'        => config('admin.route.prefix').'/agent',
+    'namespace'     => config('admin.route.namespace'),
+    'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+    $router->get('relation', 'AgentController@relation');
+    $router->post('relation/update', 'AgentController@relation_update');
+});
