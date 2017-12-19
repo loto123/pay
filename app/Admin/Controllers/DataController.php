@@ -75,8 +75,8 @@ class DataController extends Controller
             $with[] = 'output_profit';
         }
         $list = $query->with($with)->leftJoin('profit_record', 'users.id', '=', 'profit_record.user_id')
-            ->select('users.*',DB::raw('SUM(profit_record.fee_amount) as fee_amount_total'))
-            ->orderBy('fee_amount_total','DESC')->groupBy('users.id')->paginate(self::PAGE_SIZE);
+            ->select('users.*', DB::raw('SUM(profit_record.fee_amount) as fee_amount_total'))
+            ->orderBy('fee_amount_total', 'DESC')->groupBy('users.id')->paginate(self::PAGE_SIZE);
 //            ->sortByDesc(function ($item) {
 //            return $item->output_profit->sum('fee_amount');
 //        });
@@ -252,11 +252,100 @@ class DataController extends Controller
         });
     }
 
-    public function test() {
+    public function test()
+    {
         $data = [];
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/dealDetails', $data));
             $content->header("交易详情");
+        });
+    }
+
+    public function users(Request $request)
+    {
+        $today = date('Y-m-d');
+        $user_count = User::whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        })->count();
+        $user_new = User::whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        })->where('created_at', '>=', $today)->count();
+        $promoter_count = User::whereHas('roles', function ($query) {
+            $query->where('name', 'promoter');
+        })->count();
+        $promoter_new = User::whereHas('roles', function ($query) {
+            $query->where('name', 'promoter');
+        })->where('created_at', '>=', $today)->count();
+        $proxy_count = User::whereHas('roles', function ($query) {
+            $query->where('name', 'like', 'agent%');
+        })->count();
+        $proxy_new = User::whereHas('roles', function ($query) {
+            $query->where('name', 'like', 'agent%');
+        })->where('created_at', '>=', $today)->count();
+
+        $date_time = $request->input('date_time');
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $request->input('date_time'));
+            $begin = $date_time_arr[0];
+            $end = $date_time_arr[1] . ' 23:59:59';
+        }
+
+        $listQuery = User::with(['parent', 'operator',
+            'transfer_record' => function () {
+
+            },
+            'output_profit' => function () {
+
+            }
+        ])->withCount(['child_proxy', 'child_user'])
+            ->leftJoin('transfer_record', function ($join) use ($begin, $end) {
+                $join->on('users.id', '=', 'transfer_record.user_id');
+                if ($begin && $end) {
+                    $join->where('transfer_record.created_at', '>=', $begin)->where('transfer_record.created_at', '<=', $end);
+                }
+            })
+            ->leftJoin('profit_record', function ($join) use ($begin, $end) {
+                $join->on('users.id', '=', 'profit_record.proxy');
+                if ($begin && $end) {
+                    $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+                }
+            })
+            ->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'))
+            ->addSelect(DB::raw('sum(proxy_amount) as profit_proxy_amount'), DB::raw('sum(fee_amount) as proxy_fee_amount'))
+            ->groupBy('user.id');
+        //用户ID
+        $aid = $request->input('aid');
+        if ($aid) {
+            $listQuery->where('id', $aid);
+        }
+        //上级代理ID
+        $parent = $request->input('parent');
+        if ($parent) {
+            $listQuery->where('parent_id', $parent);
+        }
+        //运营ID
+        $operator = $request->input('operator');
+        if ($operator) {
+            $listQuery->where('operator_id', $operator);
+        }
+        //role 身份
+        $role = $request->input('role');
+        if ($role) {
+            $listQuery->whereHas('roles', function ($query) use ($role) {
+                $query->where('name', $role);
+            });
+        }
+        //排序方式
+        $orderby = $request->input('orderby');
+        if ($orderby) {
+            $listQuery->orderBy($orderby, 'DESC');
+        }
+
+        $list = $listQuery->orderBy('created_at', 'DESC')->paginate(self::PAGE_SIZE);
+        $data = compact('aid', 'date_time', 'shop_id', 'owner_id', 'id', 'stat', 'count', 'get_amount', 'put_amount', 'list');
+        return Admin::content(function (Content $content) use ($data) {
+            $content->body(view('admin/data/users', $data));
+            $content->header("用户统计");
         });
     }
 
