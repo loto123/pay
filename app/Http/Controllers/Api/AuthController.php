@@ -84,7 +84,7 @@ class AuthController extends BaseController {
      *         name="name",
      *         in="formData",
      *         description="用户名",
-     *         required=true,
+     *         required=false,
      *         type="string",
      *     ),
      *     @SWG\Parameter(
@@ -134,7 +134,6 @@ class AuthController extends BaseController {
      */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
             'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable(),
             'invite_mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
             'password' => 'required',
@@ -152,6 +151,7 @@ class AuthController extends BaseController {
         Cache::forget($cache_key);
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
+        $input['name'] = $request->name ? $request->name : $request->mobile;
         $user = User::create($input);
 
         $success['token'] = JWTAuth::fromUser($user);
