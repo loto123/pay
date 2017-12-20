@@ -55444,7 +55444,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  background: #eee;\n  width: 100%;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#makeDeal .mint-cell-wrapper[data-v-9177d678] {\n    background-image: none;\n}\n.mint-cell-wrapper[data-v-9177d678] {\n  background-image: none;\n}\n.mint-cell[data-v-9177d678]:last-child {\n  background-image: none;\n}\n.select-wrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  height: 2.5em;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.price[data-v-9177d678] {\n  height: 2.5em;\n  margin: 0 auto;\n  margin-top: 1em;\n  width: 90%;\n  line-height: 2.5em;\n  border-bottom: 1px solid #eee;\n  background: #fff;\n}\n.price label[data-v-9177d678] {\n    padding-left: 1.2em;\n    font-size: 1em;\n}\n.price input[data-v-9177d678] {\n    display: block;\n    width: 30%;\n    font-size: 1.2em;\n    outline: none;\n    border: none;\n    color: #666;\n}\n.price span[data-v-9177d678] {\n    display: block;\n}\n.textareaWrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.textareaWrap textarea[data-v-9177d678] {\n    width: 100%;\n    outline: none;\n    border: none;\n    font-size: 1.2em;\n    padding: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.commit-btn[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.notice[data-v-9177d678] {\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 5.5em;\n  width: 80%;\n  font-size: 0.9em;\n}\n", ""]);
+exports.push([module.i, "\n#makeDeal[data-v-9177d678] {\n  padding-top: 2em;\n  background: #eee;\n  width: 100%;\n  height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#makeDeal .mint-cell-wrapper[data-v-9177d678] {\n    background-image: none;\n}\n.mint-cell-wrapper[data-v-9177d678] {\n  background-image: none;\n}\n.mint-cell[data-v-9177d678]:last-child {\n  background-image: none;\n}\n.select-wrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  height: 2.5em;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.price[data-v-9177d678] {\n  height: 2.5em;\n  margin: 0 auto;\n  margin-top: 1em;\n  width: 90%;\n  line-height: 2.5em;\n  border-bottom: 1px solid #eee;\n  background: #fff;\n}\n.price label[data-v-9177d678] {\n    padding-left: 1.2em;\n    font-size: 1em;\n}\n.price input[data-v-9177d678] {\n    display: block;\n    width: 30%;\n    font-size: 1.2em;\n    outline: none;\n    border: none;\n    color: #666;\n}\n.price span[data-v-9177d678] {\n    display: block;\n}\n.textareaWrap[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.textareaWrap textarea[data-v-9177d678] {\n    width: 100%;\n    outline: none;\n    border: none;\n    font-size: 1.2em;\n    padding: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.notice-wrap[data-v-9177d678] {\n  width: 90%;\n  height: auto;\n  margin: 0 auto;\n  margin-top: 1em;\n  background: #fff;\n}\n.notice-wrap h3[data-v-9177d678] {\n    height: 1.5em;\n    padding-left: 1em;\n    color: #555;\n    font-size: 0.9em;\n}\n.notice-wrap > div[data-v-9177d678] {\n    min-height: 4em;\n    width: 100%;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.notice-wrap > div img[data-v-9177d678] {\n      width: 2.5em;\n      height: 2.5em;\n      border-radius: 50%;\n      padding: 0.3em;\n}\n.notice-wrap > div .add[data-v-9177d678] {\n      width: 2.5em;\n      height: 2.5em;\n      border-radius: 50%;\n      border: 1px solid #bbb;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.commit-btn[data-v-9177d678] {\n  width: 90%;\n  margin: 0 auto;\n  margin-top: 1em;\n}\n.notice[data-v-9177d678] {\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 5.5em;\n  width: 80%;\n  font-size: 0.9em;\n}\n", ""]);
 
 // exports
 
@@ -55459,10 +55459,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_inputList__ = __webpack_require__(559);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_inputList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_inputList__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__choiseMember_vue__ = __webpack_require__(748);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__choiseMember_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
 //
 //
 //
@@ -55584,6 +55586,69 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -55612,17 +55677,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
-    confirm: function confirm() {},
     init: function init() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
-      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/all").then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/all").then(function (res) {
         _this.setShopList(res);
-        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
-        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       });
     },
     setShopList: function setShopList(res) {
@@ -55674,14 +55738,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
 
       if (this.shopId == null) {
-        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请选择发起交易的店铺");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请选择发起交易的店铺");
         return;
       } else if (this.price == "") {
-        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请设置单价");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请设置单价");
         return;
       }
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
         console.log(res);
         _this2.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
       }).catch(function (err) {
@@ -55689,7 +55753,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     }
   },
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_1__components_inputList___default.a }
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_1__components_inputList___default.a, choiseMember: __WEBPACK_IMPORTED_MODULE_2__choiseMember_vue___default.a }
 });
 
 /***/ }),
@@ -56057,6 +56121,8 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
+      _vm._m(0, false, false),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "commit-btn" },
@@ -56065,7 +56131,7 @@ var render = function() {
             "mt-button",
             {
               attrs: { type: "primary", size: "large" },
-              on: { click: [_vm.confirm, _vm.submitData] }
+              on: { click: _vm.submitData }
             },
             [_vm._v("确认")]
           )
@@ -56080,12 +56146,56 @@ var render = function() {
       _c("inputList", {
         attrs: { showSwitch: _vm.dropListSwitch, optionsList: _vm.shopList },
         on: { hideDropList: _vm.hideDropList }
-      })
+      }),
+      _vm._v(" "),
+      _c("choiseMember")
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "notice-wrap flex flex-v" }, [
+      _c("h3", { staticClass: "flex flex-align-center" }, [
+        _vm._v("添加参与人")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex flex-align-center flex-wrap-on " }, [
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+        _vm._v(" "),
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+        _vm._v(" "),
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+        _vm._v(" "),
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+        _vm._v(" "),
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+        _vm._v(" "),
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+        _vm._v(" "),
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "add flex flex-align-center flex-justify-center" },
+          [
+            _c(
+              "i",
+              {
+                staticClass: "iconfont",
+                staticStyle: { "font-size": "1.5em", color: "#bbb" }
+              },
+              [_vm._v("\n          \n        ")]
+            )
+          ]
+        )
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -56498,7 +56608,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         payMoney: null,
         getMoney: null
       },
-      payType: "get" // 支付方式，取钱get 放钱put
+      payType: null // 支付方式，取钱get 放钱put
     };
   },
   created: function created() {
@@ -56554,10 +56664,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   watch: {
     "moneyData.payMoney": function moneyDataPayMoney() {
+      // 放钱
       this.moneyData.getMoney = null;
+      this.payType = "put";
     },
     "moneyData.getMoney": function moneyDataGetMoney() {
+      // 拿钱
       this.moneyData.payMoney = null;
+      this.payType = "get";
     }
   }
 });
@@ -56904,10 +57018,6 @@ exports.push([module.i, "\n.content .avatar[data-v-2b519d93] {\n  display: block
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
 //
 //
 //
@@ -58978,22 +59088,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -59014,6 +59108,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         name: null,
         moneyData: null
       },
+      // hasPayList:[],
       passwordData: {
         switch: false,
         value: null
@@ -59061,6 +59156,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           return Promise.resolve(true);
         }
       }).then(function (res) {
+        // 验证支付的数据
         if (res == true) {
           var _id = _this2.$route.query.id;
           var _data = {
@@ -59075,6 +59171,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
           }).catch(function (err) {
             console.error(err);
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
           });
         }
         console.log(res);
@@ -59109,6 +59207,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this3.init();
       }).catch(function (err) {
         console.error(err);
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
       });
     }
   }
@@ -59199,7 +59299,44 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _vm._m(0, false, false),
+      _c("div", { staticClass: "tip-record" }, [
+        _c("h3", [_vm._v("茶水费记录")]),
+        _vm._v(" "),
+        _c(
+          "ul",
+          { staticClass: "flex flex-v" },
+          _vm._l(_vm.renderData.tips, function(item) {
+            return _c(
+              "li",
+              { staticClass: "flex flex-justify-between flex-align-center" },
+              [
+                _c("img", {
+                  attrs: {
+                    src: item.user.avatar
+                      ? item.user.avatar
+                      : "/images/default_avatar.jpg",
+                    alt: ""
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", [_vm._v(_vm._s(item.user.name))]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex flex-v flex-align-center" }, [
+                  _c("div", { staticStyle: { "font-size": "1.4em" } }, [
+                    _vm._v(_vm._s(item.amount))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticStyle: { "font-size": "0.8em", color: "#999" } },
+                    [_vm._v("已交纳")]
+                  )
+                ])
+              ]
+            )
+          })
+        )
+      ]),
       _vm._v(" "),
       _c("passwordTab", {
         attrs: { setSwitch: _vm.passwordData.switch },
@@ -59209,84 +59346,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "tip-record" }, [
-      _c("h3", [_vm._v("茶水费记录")]),
-      _vm._v(" "),
-      _c("ul", { staticClass: "flex flex-v" }, [
-        _c(
-          "li",
-          { staticClass: "flex flex-justify-between flex-align-center" },
-          [
-            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-            _vm._v(" "),
-            _c("span", [_vm._v("玩家名字最多7格子")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "flex flex-v flex-align-center" }, [
-              _c("div", { staticStyle: { "font-size": "1.4em" } }, [
-                _vm._v("2")
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticStyle: { "font-size": "0.8em", color: "#999" } },
-                [_vm._v("已交纳")]
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          { staticClass: "flex flex-justify-between flex-align-center" },
-          [
-            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-            _vm._v(" "),
-            _c("span", [_vm._v("玩家名字最多7格子")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "flex flex-v flex-align-center" }, [
-              _c("div", { staticStyle: { "font-size": "1.4em" } }, [
-                _vm._v("2")
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticStyle: { "font-size": "0.8em", color: "#999" } },
-                [_vm._v("已交纳")]
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          { staticClass: "flex flex-justify-between flex-align-center" },
-          [
-            _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-            _vm._v(" "),
-            _c("span", [_vm._v("玩家名字最多7格子")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "flex flex-v flex-align-center" }, [
-              _c("div", { staticStyle: { "font-size": "1.4em" } }, [
-                _vm._v("2")
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticStyle: { "font-size": "0.8em", color: "#999" } },
-                [_vm._v("已交纳")]
-              )
-            ])
-          ]
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -63181,7 +63241,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-active[data-v-2cbc9344] {\n  -webkit-transition: all 0.5s ease;\n  transition: all 0.5s ease;\n}\n.slide-enter[data-v-2cbc9344],\n.slide-leave-to[data-v-2cbc9344] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 30%;\n      height: 30%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .add-shop[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .add-shop > div[data-v-2cbc9344] {\n    border-radius: 0.4em;\n    width: 85%;\n    height: 85%;\n    border: 1px dashed #eee;\n}\n.shop-list .add-shop > div > i[data-v-2cbc9344] {\n      font-size: 4em;\n      color: #bbb;\n}\n.shop-list .add-shop h3[data-v-2cbc9344] {\n    padding-top: 0.3em;\n    color: #999;\n}\n.add-shop-tab[data-v-2cbc9344] {\n  width: 100%;\n  height: 100vh;\n  background: #eee;\n  padding-bottom: 2em;\n  padding-top: 1em;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.add-shop-tab h3[data-v-2cbc9344] {\n    font-size: 1.8em;\n    text-align: center;\n    padding-top: 0.5em;\n    padding-bottom: 0.5em;\n}\n.add-shop-tab p[data-v-2cbc9344] {\n    line-height: 1.5;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-left: 1em;\n    padding-right: 1em;\n    text-indent: 2em;\n}\n.add-shop-tab .item[data-v-2cbc9344] {\n    width: 95%;\n    margin: 0 auto;\n}\n.add-shop-tab .open-deal-switch[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 2.9em;\n    background: #fff;\n    border-top: 1px solid #ddd;\n    border-bottom: 1px solid #ddd;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.add-shop-tab .pay-wrap[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 3em;\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n.add-shop-tab .pay-wrap .origin[data-v-2cbc9344] {\n      margin-right: 1em;\n}\n.add-shop-tab .btn-wrap[data-v-2cbc9344] {\n    margin: 0 auto;\n    margin-top: 2em;\n    width: 95%;\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-active[data-v-2cbc9344] {\n  -webkit-transition: all 0.5s ease;\n  transition: all 0.5s ease;\n}\n.slide-enter[data-v-2cbc9344],\n.slide-leave-to[data-v-2cbc9344] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 100%;\n      height: 100%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .add-shop[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .add-shop > div[data-v-2cbc9344] {\n    border-radius: 0.4em;\n    width: 85%;\n    height: 85%;\n    border: 1px dashed #eee;\n}\n.shop-list .add-shop > div > i[data-v-2cbc9344] {\n      font-size: 4em;\n      color: #bbb;\n}\n.shop-list .add-shop h3[data-v-2cbc9344] {\n    padding-top: 0.3em;\n    color: #999;\n}\n.add-shop-tab[data-v-2cbc9344] {\n  width: 100%;\n  height: 100vh;\n  background: #eee;\n  padding-bottom: 2em;\n  padding-top: 1em;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.add-shop-tab h3[data-v-2cbc9344] {\n    font-size: 1.8em;\n    text-align: center;\n    padding-top: 0.5em;\n    padding-bottom: 0.5em;\n}\n.add-shop-tab p[data-v-2cbc9344] {\n    line-height: 1.5;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-left: 1em;\n    padding-right: 1em;\n    text-indent: 2em;\n}\n.add-shop-tab .item[data-v-2cbc9344] {\n    width: 95%;\n    margin: 0 auto;\n}\n.add-shop-tab .open-deal-switch[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 2.9em;\n    background: #fff;\n    border-top: 1px solid #ddd;\n    border-bottom: 1px solid #ddd;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.add-shop-tab .pay-wrap[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 3em;\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n.add-shop-tab .pay-wrap .origin[data-v-2cbc9344] {\n      margin-right: 1em;\n}\n.add-shop-tab .btn-wrap[data-v-2cbc9344] {\n    margin: 0 auto;\n    margin-top: 2em;\n    width: 95%;\n}\n", ""]);
 
 // exports
 
@@ -63198,15 +63258,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(36);
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -63705,7 +63756,18 @@ var render = function() {
                 }
               },
               [
-                _vm._m(1, true, false),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "img-wrap flex flex-justify-around flex-wrap-on flex-align-around"
+                  },
+                  [
+                    _c("div", { staticClass: "notice" }),
+                    _vm._v(" "),
+                    _c("img", { attrs: { src: item.logo, alt: "" } })
+                  ]
+                ),
                 _vm._v(" "),
                 _c("h3", [_vm._v(_vm._s(item.name))]),
                 _vm._v(" "),
@@ -63725,7 +63787,7 @@ var render = function() {
                 "add-shop flex flex-v flex-align-center flex-justify-center",
               on: { click: _vm.addShop }
             },
-            [_vm._m(2, false, false), _vm._v(" "), _c("h3", [_vm._v("开新店")])]
+            [_vm._m(1, false, false), _vm._v(" "), _c("h3", [_vm._v("开新店")])]
           )
         ],
         2
@@ -63903,39 +63965,6 @@ var staticRenderFns = [
         _c("i", { staticClass: "iconfont myShop-icon common-icon" }, [
           _vm._v("\n            \n          ")
         ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "img-wrap flex flex-justify-around flex-wrap-on flex-align-around"
-      },
-      [
-        _c("div", { staticClass: "notice" }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
       ]
     )
   },
@@ -71935,6 +71964,138 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-cf5fe93a", module.exports)
+  }
+}
+
+/***/ }),
+/* 747 */,
+/* 748 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(749)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(751)
+/* template */
+var __vue_template__ = __webpack_require__(752)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-1aa3d155"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\MakeDeal\\choiseMember.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1aa3d155", Component.options)
+  } else {
+    hotAPI.reload("data-v-1aa3d155", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 749 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(750);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("195a6864", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1aa3d155\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./choiseMember.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1aa3d155\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./choiseMember.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 750 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 751 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 752 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "choise-member" } })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1aa3d155", module.exports)
   }
 }
 

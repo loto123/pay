@@ -16,11 +16,7 @@
                 <span>{{renderData.amount}}元</span>
             </div>
         </section>
-
-       
     </div>
-
-    
 </template>
 
 <style lang="scss" scoped>
