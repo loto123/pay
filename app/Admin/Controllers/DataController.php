@@ -142,7 +142,7 @@ class DataController extends Controller
     {
         $data = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
         return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/profit', $data));
+            $content->body(view('admin/data/dealDetails', $data));
             $content->header("交易详情");
         });
     }
@@ -251,15 +251,6 @@ class DataController extends Controller
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/record', $data));
             $content->header("支付流水");
-        });
-    }
-
-    public function test()
-    {
-        $data = [];
-        return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/data/dealDetails', $data));
-            $content->header("交易详情");
         });
     }
 
