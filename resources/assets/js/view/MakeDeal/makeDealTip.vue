@@ -212,7 +212,7 @@ export default {
     showPassWord() {
       this.passwordData.switch = true;
     },
-    hidePassword(e) {
+    hidePassword() {
       this.passwordData.switch = false;
     },
     getPassword(e) {
@@ -226,6 +226,7 @@ export default {
         pay_password: this.passwordData.value
       };
 
+      // 支付茶水费接口
       request
         .getInstance()
         .postData("api/transfer/payfee", _data)
@@ -233,6 +234,7 @@ export default {
           console.log(res);
           Toast("茶水费缴纳成功");
           this.hidePassword();
+          this.init();
         })
         .catch(err => {
           console.error(err);
