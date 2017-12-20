@@ -119,6 +119,7 @@ import dealContent from "./dealContent";
 import Loading from "../../utils/loading";
 import request from "../../utils/userRequest";
 import passwordTab from "../../components/password";
+import { Toast } from "mint-ui";
 
 export default {
   created() {
@@ -154,23 +155,54 @@ export default {
         });
     },
     payTip() {
+      if (this.renderData.moneyData == null) {
+        Toast("请输入茶水费金额");
+        return;
+      }
+
       Loading.getInstance().open();
-      var _id = this.$route.query.id;
-      //    Loading
-      var _data = {
-        transfer_id: _id,
-        fee: this.renderData.moneyData,
-        action: 0
-        // pay_password:this.passwordData.value
-      };
 
       request
         .getInstance()
-        .postData("api/transfer/payfee", _data)
+        .getData("api/my/info")
         .then(res => {
           console.log(res);
-          this.passwordData.switch = true;
-          Loading.getInstance().close();
+
+          // 判断是否已经设置了支付密码
+          if (!res.data.data.has_pay_password) {
+            Toast("您还未设置支付密码，即将跳转设置页面");
+            setTimeout(() => {
+            Loading.getInstance().close();
+              
+              this.$router.push("/my/setting_password");
+            }, 2000);
+            return Promise.resolve(false);
+          } else {
+            return Promise.resolve(true);
+          }
+        })
+        .then(res => {
+          if (res == true) {
+            var _id = this.$route.query.id;
+            var _data = {
+              transfer_id: _id,
+              fee: this.renderData.moneyData,
+              action: 0
+            };
+
+            request
+              .getInstance()
+              .postData("api/transfer/payfee", _data)
+              .then(res => {
+                console.log(res);
+                this.passwordData.switch = true;
+                Loading.getInstance().close();
+              })
+              .catch(err => {
+                console.error(err);
+              });
+          }
+          console.log(res);
         })
         .catch(err => {
           console.error(err);
@@ -184,7 +216,6 @@ export default {
       this.passwordData.switch = false;
     },
     getPassword(e) {
-      console.log(e);
       this.passwordData.value = e;
       var _id = this.$route.query.id;
 
@@ -200,6 +231,8 @@ export default {
         .postData("api/transfer/payfee", _data)
         .then(res => {
           console.log(res);
+          Toast("茶水费缴纳成功");
+          this.hidePassword();
         })
         .catch(err => {
           console.error(err);

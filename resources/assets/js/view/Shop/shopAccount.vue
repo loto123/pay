@@ -21,7 +21,7 @@
         <div class="content flex flex-v flex-align-center">
             <div class="rest-money flex flex-v flex-align-center flex-justify-start">
                 <div class="money-text">
-                    0.00
+                    {{balance}}
                 </div>
                 <h3>当前店铺余额</h3>
                 <h4>单位(元)</h4>
@@ -156,15 +156,36 @@
 
 <script>
 import topBack from "../../components/topBack";
+import Loading from "../../utils/loading"
+import request from "../../utils/userRequest"
 
 export default {
   components: { topBack },
+  created(){
+    this.init();
+  },
+
+  data(){
+    return {
+      balance:null
+    }
+  },
   methods: {
     goWithdraw(){
       this.$router.push('/shop/shopAccount/withdraw');
     },
     goGive(){
       this.$router.push('/shop/shopAccount/give');
+    },
+
+    init(){
+      // Loading.getInstance().open();
+      // request.getInstance().getData("api/account").then(res=>{
+      //     console.log(res);
+      //     this.balance = res.data.data.balance;
+      // }).catch(err=>{
+      //     console.error(err);
+      // });
     }
   }
 };

@@ -9,6 +9,8 @@ import LoginPassword from '../view/My/loginPassword.vue'
 import VerfyCode from '../view/My/verfyCode.vue'
 import PayPassword from '../view/My/payPassword.vue'
 import About from '../view/My/about.vue'
+import SettingPassword from '../view/My/settingPassword.vue'
+
 export default [
     { path: '/my', name: 'my', component: My },
     { path:'/my/set', name:'set', component: Set },
@@ -20,5 +22,7 @@ export default [
     { path:'/my/checkSettle', name:'checkSettle', component: CheckSettle },
     { path:'/my/login_password', name:'loginPassword', component: LoginPassword },
     { path:'/my/verfy_code', name:'verfyCode', component: VerfyCode },
-    { path:'/my/pay_password', name:'payPassword', component: PayPassword }
+    { path:'/my/pay_password', name:'payPassword', component: PayPassword },
+    { path:'/my/setting_password', name:'settingPassword', component: SettingPassword }
+    
 ]
