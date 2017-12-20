@@ -61752,7 +61752,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n.account-container[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.account-container .account-box[data-v-192ddef6] {\n    width: 100%;\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n}\n.account-container .account-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.account-container .account-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n", ""]);
+exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n.account-container[data-v-192ddef6] {\n  background: #fff;\n}\n.account-container .account-box[data-v-192ddef6] {\n    width: 100%;\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n    padding-left: 10px;\n}\n.account-container .account-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.account-container .account-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n.select-wrap[data-v-192ddef6] {\n  width: 90%;\n  margin: 0 auto;\n  height: 2.5em;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.input-wrap-box[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.input-wrap[data-v-192ddef6] {\n  width: 100%;\n  height: 3em;\n  border-top: 1px solid #D9D9D9;\n}\n.input-wrap span[data-v-192ddef6] {\n    display: inline-block;\n    width: 105px;\n}\n.input-wrap .mint-button[data-v-192ddef6] {\n    font-size: 0.9em;\n}\n.input-wrap .mint-button--default[data-v-192ddef6] {\n    background: #fff;\n}\n.input-wrap input[data-v-192ddef6] {\n    border: none;\n    outline: none;\n    text-rendering: auto;\n    color: initial;\n    letter-spacing: normal;\n    word-spacing: normal;\n    text-transform: none;\n    text-indent: 0px;\n    text-shadow: none;\n    display: inline-block;\n    text-align: start;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 20%;\n    font-size: inherit;\n}\n", ""]);
 
 // exports
 
@@ -61768,7 +61768,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_inputList__ = __webpack_require__(559);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_inputList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_inputList__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(38);
 //
 //
 //
@@ -61801,6 +61803,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -61811,29 +61828,116 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      dropListSwitch: false,
+      shopList: null,
       name: null,
-      id_number: null
+      id_number: null,
+      dealShop: null,
+      bankInfo: {
+        card_num: null,
+        bank_id: null,
+        mobile: null,
+        code: null
+      }
     };
   },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_3__components_inputList___default.a },
   created: function created() {
     this.personalInfo();
+    this.init();
   },
 
   methods: {
     //个人信息
     personalInfo: function personalInfo() {
-      var _this = this;
+      var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
-        _this.name = res.data.data.name;
-        _this.id_number = res.data.data.id_number;
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        _this2.name = res.data.data.name;
+        _this2.id_number = res.data.data.id_number;
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
+      });
+    },
+    init: function init() {
+      var _this3 = this;
+
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/card/getBanks").then(function (res) {
+        console.log(res);
+        _this3.setBankList(res);
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      });
+    },
+    setBankList: function setBankList(res) {
+      var _tempList = [];
+      for (var i = 0; i < res.data.data.length; i++) {
+        var _t = {};
+        _t.value = res.data.data[i].id;
+        _t.label = res.data.data[i].name;
+        _tempList.push(_t);
+      }
+
+      this.shopList = _tempList;
+    },
+    getShopName: function getShopName(id) {
+      for (var i = 0; i < this.shopList.length; i++) {
+        if (this.shopList[i].value == id) {
+          return this.shopList[i].label;
+        }
+      }
+      return "没有这个银行";
+    },
+    showDropList: function showDropList() {
+      this.dropListSwitch = true;
+    },
+    hideDropList: function hideDropList(data) {
+      this.dropListSwitch = false;
+      this.dealShop = this.getShopName(data);
+
+      this.shopId = data;
+    },
+    nextBtn: function nextBtn() {
+      var _this = this;
+      this.bankInfo.bank_id = this.shopId;
+      var data = this.bankInfo;
+
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/card/create", data).then(function (res) {
+        console.log(res);
+
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      });
+    },
+
+    //短信验证码
+    sendYZM: function sendYZM() {
+      var _this4 = this;
+
+      var _temp = {};
+      _temp.mobile = this.bankInfo.mobile;
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
+        console.log(res);
+        _this4.computedTime = 5;
+        _this4.timer = setInterval(function () {
+          _this4.computedTime--;
+          console.log(_this4.computedTime);
+          if (_this4.computedTime == 0) {
+            clearInterval(_this4.timer);
+          }
+        }, 1000);
+      }).catch(function (err) {
+        console.log(err);
       });
     }
   }
@@ -61880,19 +61984,35 @@ var render = function() {
           "div",
           { staticClass: "bank-info flex flex-v flex-justify-center" },
           [
-            _c("mt-field", {
-              attrs: {
-                label: "所属银行",
-                placeholder: "请选择银行卡所属银行",
-                type: "text"
-              }
-            }),
+            _c(
+              "div",
+              {
+                staticClass: "select-wrap flex flex-align-center",
+                on: { click: _vm.showDropList }
+              },
+              [
+                _vm._v(
+                  "\n\n        " +
+                    _vm._s(
+                      _vm.dealShop ? _vm.dealShop : "请选择银行卡所属银行"
+                    ) +
+                    "\n\n      "
+                )
+              ]
+            ),
             _vm._v(" "),
             _c("mt-field", {
               attrs: {
                 label: "银行卡号",
                 placeholder: "请填写银行卡号",
                 type: "number"
+              },
+              model: {
+                value: _vm.bankInfo.card_num,
+                callback: function($$v) {
+                  _vm.$set(_vm.bankInfo, "card_num", $$v)
+                },
+                expression: "bankInfo.card_num"
               }
             })
           ],
@@ -61907,24 +62027,88 @@ var render = function() {
               attrs: {
                 label: "预留手机号",
                 placeholder: "请填写银行卡预留手机号",
-                type: "number"
+                type: "number",
+                maxlength: "11"
+              },
+              model: {
+                value: _vm.bankInfo.mobile,
+                callback: function($$v) {
+                  _vm.$set(_vm.bankInfo, "mobile", $$v)
+                },
+                expression: "bankInfo.mobile"
               }
             })
           ],
           1
-        )
+        ),
+        _vm._v(" "),
+        _c("section", { staticClass: "input-wrap-box" }, [
+          _c(
+            "div",
+            { staticClass: "input-wrap flex flex-align-center" },
+            [
+              _c("span", [_vm._v("验证码:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.bankInfo.code,
+                    expression: "bankInfo.code"
+                  }
+                ],
+                staticClass: "flex-1",
+                attrs: { type: "text", placeholder: "请输入验证码" },
+                domProps: { value: _vm.bankInfo.code },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.bankInfo, "code", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "mt-button",
+                {
+                  staticClass: "flex-1",
+                  attrs: { type: "default" },
+                  on: { click: _vm.sendYZM }
+                },
+                [_vm._v("发送验证码")]
+              )
+            ],
+            1
+          )
+        ])
       ]),
       _vm._v(" "),
       _c(
         "a",
-        { staticClass: "btn", attrs: { href: "javascript:;" } },
+        {
+          staticClass: "btn next-btn",
+          attrs: { href: "javascript:;" },
+          on: {
+            click: function($event) {
+              _vm.nextBtn()
+            }
+          }
+        },
         [
           _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
             _vm._v("下一步")
           ])
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("inputList", {
+        attrs: { showSwitch: _vm.dropListSwitch, optionsList: _vm.shopList },
+        on: { hideDropList: _vm.hideDropList }
+      })
     ],
     1
   )

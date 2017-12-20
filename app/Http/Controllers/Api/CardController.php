@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use JWTAuth;
 use Validator;
+use Illuminate\Support\Facades\Log;
 
 class CardController extends Controller
 {
@@ -122,11 +123,18 @@ class CardController extends Controller
                 'mobile.regex'=>trans("api.error_mobile_format"),
             ]
         );
+        
+        
+        Log::info(['param'=>$request->all()]);
+        
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-        $cache_key = "SMS_".$this->user->mobile;
+        $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
+
+        Log::info(['cache'=>[$cache_key=>$cache_value]]);
+
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
