@@ -34,7 +34,7 @@ class WechatOfficialAccount extends WechatH5
         $wxscanMod->SetTERMNO($config['TERMNO']);
         $wxscanMod->SetTRADETYPE($config['TRADETYPE']);
         $wxscanMod->SetIST0($config['IST0']);
-        $wxscanMod->SetAMT($amount);
+        $wxscanMod->SetAMT((int)$amount);
         $wxscanMod->SetCUR('CNY');
         $wxscanMod->SetGOODSNAME(DepositInterface::GOOD_NAME);
         $wxscanMod->SetNOTIFY_URL($notify_url);

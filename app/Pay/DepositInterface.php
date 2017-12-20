@@ -4,6 +4,7 @@ namespace App\Pay;
 
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
+use App\Pay\Model\DepositResult;
 
 /**
  * 支付接口
@@ -24,7 +25,6 @@ interface DepositInterface
      * @param $notify_url string 通知地址
      * @param $return_url
      * @return mixed 返回储值信息,失败返回null
-     * @internal param int $master_container
      */
     public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url);
 
@@ -40,7 +40,7 @@ interface DepositInterface
     /**
      * @param $method DepositMethod 所属支付方式
      * 解析同步跳转的充值信息,展示用,无需验证
-     * @return array ['out_batch_no' => xxx(可选), 'state' => Deposit::STATE_*, 'amount' => 充值金额]
+     * @return DepositResult
      */
     public function parseReturn(DepositMethod $method);
 }

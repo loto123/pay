@@ -12,6 +12,7 @@ use App\Pay\DepositInterface;
 use App\Pay\IdConfuse;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
+use App\Pay\Model\DepositResult;
 
 class WechatH5 implements DepositInterface
 {
@@ -78,12 +79,12 @@ class WechatH5 implements DepositInterface
 
     /**
      * 展示充值结果
-     * @return array ['out_batch_no' => xxx(可选), 'state' => Deposit::STATE_*, 'amount' => 充值金额]
+     * @return DepositResult
      */
     public function parseReturn(DepositMethod $method)
     {
         $request = request();
-        return ['out_batch_no' => $request->get('jnet_bill_no'), 'state' => $request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_FAIL, 'amount' => $request->get('pay_amt')];
+        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_FAIL, $request->get('pay_amt'), $request->get('jnet_bill_no'));
     }
 
     public function acceptNotify(array $config)
