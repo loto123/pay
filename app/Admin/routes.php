@@ -45,6 +45,7 @@ Route::group([
     $router->any('users', "DataController@users");
     $router->any('area', 'DataController@area');
     $router->any('areaDetail/{operatorId?}', 'DataController@areaDetail');
+    $router->get('transfer/close/{id}', 'DataController@close');
 });
 
 Route::group([

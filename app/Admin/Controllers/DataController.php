@@ -31,7 +31,7 @@ class DataController extends Controller
         //交易总笔数
         $transfer_count = Transfer::count();
         //总收款
-        $amount = TransferRecord::where('stat', 1)->sum('amount');
+        $amount = abs(TransferRecord::where('stat', 1)->sum('amount'));
         //店铺分润
         $shop_amount = TipRecord::sum('amount');
         //茶水费
@@ -140,7 +140,8 @@ class DataController extends Controller
     //交易详情
     public function detail($id)
     {
-        $data = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
+        $transfer = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
+        $data['transfer'] = $transfer;
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/dealDetails', $data));
             $content->header("交易详情");
@@ -151,7 +152,7 @@ class DataController extends Controller
     public function close($id)
     {
         $transfer = Transfer::find($id);
-        if ($transfer->isEmpty()) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -170,7 +171,7 @@ class DataController extends Controller
             if ($transfer->save()) {
                 //解冻店铺茶水费资金
                 $shop = $transfer->shop;
-                if (!$shop->isEmpty()) {
+                if ($shop) {
                     $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
                     $shop->balance = $shop->balance + $transfer->tip_amount;
                     $shop->save();
@@ -195,6 +196,7 @@ class DataController extends Controller
                     }
                     $profit->save();
                 }
+                DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
             }
         } catch (\Exception $e) {

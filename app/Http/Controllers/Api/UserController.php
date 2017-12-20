@@ -388,6 +388,7 @@ class UserController extends Controller
             'mobile' => $this->user->mobile,
             'thumb' => '1.png',
             'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
+            'id_number' => str_replace(' ','',$this->formatNum($this->user->id_number,4,4)),
         ];
         return response()->json(['code' => 1, 'msg' =>'', 'data' => $data]);
     }

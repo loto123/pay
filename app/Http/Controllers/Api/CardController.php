@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Bank;
 use App\User;
 use App\UserCard;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use JWTAuth;
-use phpDocumentor\Reflection\Types\Null_;
 use Validator;
 
 class CardController extends Controller
@@ -35,12 +33,8 @@ class CardController extends Controller
         if($this->user->identify_status != 1) {
             return response()->json(['code'=>0,'msg'=>'未实名认证，该功能不可用','data'=>[]]);
         }
-//        if(empty($this->user->pay_password)) {
-//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
-//        }
-
         $user_card_table = (new UserCard)->getTable();
-        $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank')
+        $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank_id')
             ->where('user_id', '=', $this->user->id)
             ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')
             ->orderBy('id')->get();
@@ -87,21 +81,7 @@ class CardController extends Controller
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="name",
-     *     in="formData",
-     *     description="持卡人姓名",
-     *     required=true,
-     *     type="string"
-     *   ),
-     *   @SWG\Parameter(
-     *     name="id",
-     *     in="formData",
-     *     description="持卡人身份证ID",
-     *     required=true,
-     *     type="string"
-     *   ),
-     *   @SWG\Parameter(
-     *     name="bank",
+     *     name="bank_id",
      *     in="formData",
      *     description="银行id",
      *     required=true,
@@ -114,6 +94,13 @@ class CardController extends Controller
      *     required=true,
      *     type="integer"
      *   ),
+     *   @SWG\Parameter(
+     *     name="code",
+     *     in="formData",
+     *     description="手机验证码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -125,31 +112,28 @@ class CardController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'card_num' => 'bail|required|digits_between:16,19',
-                'name' => 'bail|required',
-                'id' => 'bail|required|size:18',
-                'bank' => 'bail|required',
-                'mobile' => 'bail|required|digits:11',
+                'bank_id' => 'bail|required',
+                'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
+                'code' => 'bail|required',
             ],
             [
                 'required' => trans('trans.required'),
                 'digits_between' =>trans('trans.digits_between'),
-                'size' => trans('trans.size'),
+                'mobile.regex'=>trans("api.error_mobile_format"),
             ]
         );
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-//        if(empty($this->user->pay_password)) {
-//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
-//        }
-        $card_num = $request->input('card_num');
-        $bank = $request->input('bank');
-        $holder_name = $request->input('name');
-        $holder_id = $request->input('id');
-        $holder_mobile = $request->input('mobile');
-        $type = $request->input('type')??NULL;
+        $cache_key = "SMS_".$this->user->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
+        }
 
-        //验证卡号？身份证号？手机号？
+        $card_num = $request->input('card_num');
+        $bank_id = $request->input('bank_id');
+        $holder_mobile = $request->input('mobile');
 
         //同一用户只能绑定一次
         $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$card_num)->first();
@@ -160,11 +144,10 @@ class CardController extends Controller
         $cards = new UserCard();
         $cards->user_id = $this->user->id;
         $cards->card_num = $card_num;
-        $cards->bank = $bank;
-        $cards->holder_name = $holder_name;
-        $cards->holder_id = $holder_id;
+        $cards->bank_id = $bank_id;
+        $cards->holder_name = $this->user->name;
+        $cards->holder_id = $this->user->id_number;
         $cards->holder_mobile = $holder_mobile;
-        $cards->type= $type;
         $cards->save();
         if(empty($this->user->pay_card_id)) {
             $this->user->pay_card_id =$cards->id;
@@ -202,21 +185,24 @@ class CardController extends Controller
         if ($validator->fails()) {
             return response()->json(['code'=>0,'msg'=>$validator->errors()->first(),'data'=>[]]);
         }
-//        if(empty($this->user->pay_password)) {
-//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
-//        }
         $card_id = $request->input('card_id');
-        $user_card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
-        if ( !empty($user_card) && count($user_card)>0 ) {
-            if (count($user_card) == 1){
-                $user_card->delete();
+
+        $card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
+        $user_card_count = UserCard::where('user_id',$this->user->id)->count();
+        if ( !empty($card) && count($card)>0 && $user_card_count>0) {
+            if ($user_card_count == 1){
+                $card->delete();
                 User::where('id',$this->user->id)->update(['pay_card_id'=>NULL]);
                 return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
-            } else if( $this->user->pay_card_id == $card_id) {
+            }else if($this->user->pay_card_id == $card_id) {
                 return response()->json(['code'=>0,'msg'=>'操作无效，请先更换结算卡','data'=>[]]);
+            }else {
+                $card->delete();
+                return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
             }
+        } else {
+            return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
         }
-        return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
     }
 
     /**
@@ -241,7 +227,6 @@ class CardController extends Controller
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
-
 
 
     //对字符串做掩码处理
