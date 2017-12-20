@@ -131,7 +131,7 @@ class SmallBatchTransfer implements WithdrawInterface
      */
     public static function send_post($url, $data, $cacert_url, $send_type = 'POST')
     {
-        $cacert_url = __DIR__ . $cacert_url;
+        $cacert_url = storage_path('app/pay/'. $cacert_url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
