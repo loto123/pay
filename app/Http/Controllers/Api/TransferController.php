@@ -444,6 +444,7 @@ class TransferController extends Controller
                 //删除茶水费记录
                 TipRecord::where('id', $tip->id)->delete();
             }
+            DB::commit();
             return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -663,6 +664,7 @@ class TransferController extends Controller
                 $record->amount = $request->fee;
                 $record->record_id = 0;
                 $record->save();
+                DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.pay_fee_success'), 'data' => []]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -873,6 +875,7 @@ class TransferController extends Controller
                     }
                     $profit->save();
                 }
+                DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
             }
         } catch (\Exception $e) {
