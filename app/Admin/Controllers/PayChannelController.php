@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Displayers\SwitchDisplay;
 use App\Exceptions\ChannelDisableException;
 use App\Http\Controllers\Controller;
 use App\Pay\Model\BusinessEntity;
@@ -40,6 +41,7 @@ class PayChannelController extends Controller
      */
     protected function grid()
     {
+        \Encore\Admin\Grid\Column::$displayers["switch"] = SwitchDisplay::class;
         return Admin::grid(Channel::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->name('通道名称');
