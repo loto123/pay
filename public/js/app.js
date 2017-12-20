@@ -56182,7 +56182,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1.0em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
 
 // exports
 
@@ -56473,7 +56473,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -56493,13 +56492,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       passWordSwitch: false,
       renderData: {
-        name: null,
-        moneyData: {
-          payMoney: null,
-          getMoney: null
-        }
-
-      }
+        name: null
+      },
+      moneyData: {
+        payMoney: null,
+        getMoney: null
+      },
+      payType: "get" // 支付方式，取钱get 放钱put
     };
   },
   created: function created() {
@@ -56521,7 +56520,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _data = {
         transfer_id: _id
       };
-      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/show' + "?transfer_id=" + _id).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + _id).then(function (res) {
         console.log(res);
 
         _this.renderData = res.data.data;
@@ -56552,7 +56551,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       qrcode.makeCode("http://www.baidu.com");
     }
-
+  },
+  watch: {
+    "moneyData.payMoney": function moneyDataPayMoney() {
+      this.moneyData.getMoney = null;
+    },
+    "moneyData.getMoney": function moneyDataGetMoney() {
+      this.moneyData.payMoney = null;
+    }
   }
 });
 
@@ -57280,6 +57286,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // 走回调
     doCallback: function doCallback() {
       this.$emit("callBack", this.password);
+      this.password = "";
+      this.setPassword();
     }
   }
 });
@@ -58487,9 +58495,73 @@ var render = function() {
         "section",
         { staticClass: "pay-wrap flex flex-v flex-align-center" },
         [
-          _vm._m(0, false, false),
+          _c(
+            "div",
+            {
+              staticClass:
+                "pay-money flex flex-align-center flex-justify-around"
+            },
+            [
+              _c("label", { attrs: { for: "" } }, [_vm._v("我要付钱")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "input-wrap" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.moneyData.payMoney,
+                      expression: "moneyData.payMoney"
+                    }
+                  ],
+                  attrs: { type: "text", placeholder: "请输入您的分数" },
+                  domProps: { value: _vm.moneyData.payMoney },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.moneyData, "payMoney", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]
+          ),
           _vm._v(" "),
-          _vm._m(1, false, false),
+          _c(
+            "div",
+            {
+              staticClass:
+                "get-money flex flex-align-center flex-justify-around"
+            },
+            [
+              _c("label", { attrs: { for: "" } }, [_vm._v("我要拿钱")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "input-wrap" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.moneyData.getMoney,
+                      expression: "moneyData.getMoney"
+                    }
+                  ],
+                  attrs: { type: "text", placeholder: "请输入您的分数" },
+                  domProps: { value: _vm.moneyData.getMoney },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.moneyData, "getMoney", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]
+          ),
           _vm._v(" "),
           _c(
             "mt-button",
@@ -58504,7 +58576,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("section", { staticClass: "pay-record " }, [
-        _vm._m(2, false, false),
+        _vm._m(0, false, false),
         _vm._v(" "),
         _c("ul", { staticClass: "flex flex-v flex-align-center" }, [
           _c(
@@ -58665,42 +58737,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "pay-money flex flex-align-center flex-justify-around" },
-      [
-        _c("label", { attrs: { for: "" } }, [_vm._v("我要付钱")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-wrap" }, [
-          _c("input", {
-            attrs: { type: "text", placeholder: "请输入您的分数" }
-          })
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "get-money flex flex-align-center flex-justify-around" },
-      [
-        _c("label", { attrs: { for: "" } }, [_vm._v("我要拿钱")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-wrap" }, [
-          _c("input", {
-            attrs: { type: "text", placeholder: "请输入您的分数" }
-          })
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "title flex flex-v" }, [
       _c("div", { staticClass: "top flex flex-align-center" }, [
         _c("span", [_vm._v("参与人")])
@@ -58841,6 +58877,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_password__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
 //
 //
 //
@@ -58956,6 +58994,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -58999,20 +59038,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     payTip: function payTip() {
       var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
-      var _id = this.$route.query.id;
-      //    Loading
-      var _data = {
-        transfer_id: _id,
-        fee: this.renderData.moneyData,
-        action: 0
-        // pay_password:this.passwordData.value
-      };
+      if (this.renderData.moneyData == null) {
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请输入茶水费金额");
+        return;
+      }
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
         console.log(res);
-        _this2.passwordData.switch = true;
-        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+
+        // 判断是否已经设置了支付密码
+        if (!res.data.data.has_pay_password) {
+          Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("您还未设置支付密码，即将跳转设置页面");
+          setTimeout(function () {
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+
+            _this2.$router.push("/my/setting_password");
+          }, 2000);
+          return Promise.resolve(false);
+        } else {
+          return Promise.resolve(true);
+        }
+      }).then(function (res) {
+        if (res == true) {
+          var _id = _this2.$route.query.id;
+          var _data = {
+            transfer_id: _id,
+            fee: _this2.renderData.moneyData,
+            action: 0
+          };
+
+          __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
+            console.log(res);
+            _this2.passwordData.switch = true;
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+          }).catch(function (err) {
+            console.error(err);
+          });
+        }
+        console.log(res);
       }).catch(function (err) {
         console.error(err);
       });
@@ -59024,7 +59089,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.passwordData.switch = false;
     },
     getPassword: function getPassword(e) {
-      console.log(e);
+      var _this3 = this;
+
       this.passwordData.value = e;
       var _id = this.$route.query.id;
 
@@ -59037,6 +59103,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
         console.log(res);
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("茶水费缴纳成功");
+        _this3.hidePassword();
       }).catch(function (err) {
         console.error(err);
       });
@@ -59930,14 +59998,18 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue__ = __webpack_require__(625);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__view_My_loginPassword_vue__ = __webpack_require__(630);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__view_My_loginPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__view_My_loginPassword_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue__ = __webpack_require__(635);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue__ = __webpack_require__(640);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_My_about_vue__ = __webpack_require__(645);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_My_about_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__view_My_about_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__view_My_checkSettleList_vue__ = __webpack_require__(747);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__view_My_checkSettleList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__view_My_checkSettleList_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__view_My_loginPassword_vue__ = __webpack_require__(630);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__view_My_loginPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__view_My_loginPassword_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_My_verfyCode_vue__ = __webpack_require__(635);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_My_verfyCode_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__view_My_verfyCode_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_My_payPassword_vue__ = __webpack_require__(640);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_My_payPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__view_My_payPassword_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__view_My_about_vue__ = __webpack_require__(645);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__view_My_about_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__view_My_about_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue__ = __webpack_require__(742);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue__);
 
 
 
@@ -59949,7 +60021,10 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/my', name: 'my', component: __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default.a }, { path: '/my/set', name: 'set', component: __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default.a }, { path: '/my/set/about', name: 'about', component: __WEBPACK_IMPORTED_MODULE_10__view_My_about_vue___default.a }, { path: '/my/referrer', name: 'referrer', component: __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default.a }, { path: '/my/bankCardManage', name: 'bankCardManage', component: __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default.a }, { path: '/my/realAuth', name: 'realAuth', component: __WEBPACK_IMPORTED_MODULE_4__view_My_realAuth_vue___default.a }, { path: '/my/bankCardManage/addBankCard', name: 'addBankCard', component: __WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue___default.a }, { path: '/my/checkSettle', name: 'checkSettle', component: __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue___default.a }, { path: '/my/login_password', name: 'loginPassword', component: __WEBPACK_IMPORTED_MODULE_7__view_My_loginPassword_vue___default.a }, { path: '/my/verfy_code', name: 'verfyCode', component: __WEBPACK_IMPORTED_MODULE_8__view_My_verfyCode_vue___default.a }, { path: '/my/pay_password', name: 'payPassword', component: __WEBPACK_IMPORTED_MODULE_9__view_My_payPassword_vue___default.a }]);
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/my', name: 'my', component: __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default.a }, { path: '/my/set', name: 'set', component: __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default.a }, { path: '/my/set/about', name: 'about', component: __WEBPACK_IMPORTED_MODULE_11__view_My_about_vue___default.a }, { path: '/my/referrer', name: 'referrer', component: __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default.a }, { path: '/my/bankCardManage', name: 'bankCardManage', component: __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default.a }, { path: '/my/realAuth', name: 'realAuth', component: __WEBPACK_IMPORTED_MODULE_4__view_My_realAuth_vue___default.a }, { path: '/my/bankCardManage/addBankCard', name: 'addBankCard', component: __WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue___default.a }, { path: '/my/checkSettle', name: 'checkSettle', component: __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue___default.a }, { path: '/my/checkSettle/list', name: 'checkSettleList', component: __WEBPACK_IMPORTED_MODULE_7__view_My_checkSettleList_vue___default.a }, { path: '/my/login_password', name: 'loginPassword', component: __WEBPACK_IMPORTED_MODULE_8__view_My_loginPassword_vue___default.a }, { path: '/my/verfy_code', name: 'verfyCode', component: __WEBPACK_IMPORTED_MODULE_9__view_My_verfyCode_vue___default.a }, { path: '/my/pay_password', name: 'payPassword', component: __WEBPACK_IMPORTED_MODULE_10__view_My_payPassword_vue___default.a }, { path: '/my/setting_password', name: 'settingPassword', component: __WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue___default.a }]);
 
 /***/ }),
 /* 595 */
@@ -60237,6 +60312,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//结算卡
 		checkSettle: function checkSettle() {
 			if (this.listContent.card_count <= 0) {
+				Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])('请添加银行卡');
 				return;
 			} else {
 				this.$router.push('/my/checkSettle');
@@ -61013,6 +61089,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/my/info').then(function (res) {
         if (res.data.data.has_pay_password == 0) {
           //调转到设置支付密码
+          _this.$router.push('/my/setting_password');
         } else {
           _this.showPasswordTag = true; //密码层弹出
         }
@@ -61020,6 +61097,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         console.log(err);
       });
     },
+
+    //支付密码验证
+    payPasswordVal: function payPasswordVal() {},
     hidePassword: function hidePassword() {
       this.showPasswordTag = false;
     },
@@ -61056,6 +61136,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         console.log("已经取消");
       });
     },
+
+    //支付密码验证
     callBack: function callBack(password) {
       var _this4 = this;
 
@@ -61063,11 +61145,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       temp.password = password;
 
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp).then(function (res) {
-        if (res.data.code = 0) {
-          _this4.showPassword();
+        if (res.data.code == 1) {
+          _this4.$router.push('/my/bankCardManage/addBankCard');
         }
       }).catch(function (err) {
-        console.error(err);
+        console.error(err.data.msg);
       });
     }
   }
@@ -61923,13 +62005,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.$router.go(-1);
       });
     },
-    callBack: function callBack(e) {
-      console.log("321321");
+
+    //支付密码验证
+    callBack: function callBack(password) {
+      var _this3 = this;
+
       var temp = {};
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', _temp).then(function (res) {
-        console.log(res);
+      temp.password = password;
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp).then(function (res) {
+        if (res.data.code == 1) {
+          _this3.$router.push('/my/checkSettle/list');
+        }
       }).catch(function (err) {
-        console.log(err);
+        console.error(err.data.msg);
       });
     }
   }
@@ -62222,11 +62311,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("mt-field", {
-            attrs: {
-              label: "新密码",
-              placeholder: "请填写新密码",
-              type: "email"
-            },
+            attrs: { label: "新密码", placeholder: "请填写新密码" },
             model: {
               value: _vm.new_password,
               callback: function($$v) {
@@ -62240,7 +62325,7 @@ var render = function() {
             attrs: {
               label: "确认新密码",
               placeholder: "请再次输入密码",
-              type: "password"
+              type: "text"
             },
             model: {
               value: _vm.confirm_password,
@@ -62647,7 +62732,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#settleInfo[data-v-17eeec8a] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.forget-password-box[data-v-17eeec8a] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-17eeec8a] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-17eeec8a] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-17eeec8a] {\n    color: #26a2ff;\n}\n", ""]);
+exports.push([module.i, "\n#settleInfo[data-v-17eeec8a] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.forget-password-box[data-v-17eeec8a] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-17eeec8a] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-17eeec8a] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-17eeec8a] {\n    color: #26a2ff;\n}\n.password-btn[data-v-17eeec8a] {\n  width: 96%;\n  margin: auto;\n  margin-top: 2em;\n}\n", ""]);
 
 // exports
 
@@ -62658,8 +62743,13 @@ exports.push([module.i, "\n#settleInfo[data-v-17eeec8a] {\n  background: #efeef4
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -62680,11 +62770,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  data: function data() {
+    return {
+      old_pay_password: null, //旧密码
+      new_pay_password: null, //新密码
+      confirm_pay_password: null //确认密码
+    };
+  },
+
+  methods: {
+    affirm: function affirm() {
+      var _this = this;
+
+      var self = this;
+      var data = {
+        old_pay_password: this.old_pay_password,
+        new_pay_password: this.new_pay_password,
+        confirm_pay_password: this.confirm_pay_password
+      };
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePayPassword', data).then(function (res) {
+        console.log(res);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('密码修改成功');
+        _this.$router.push('/my/set');
+      }).catch(function (err) {
+        console.err(err.data.msg);
+      });
+    }
+  }
+
 });
 
 /***/ }),
@@ -62706,14 +62829,24 @@ var render = function() {
         { staticClass: "settleInfo-container" },
         [
           _c("mt-field", {
-            attrs: { label: "原密码", placeholder: "请填写原支付密码" }
+            attrs: { label: "原密码", placeholder: "请填写原支付密码" },
+            model: {
+              value: _vm.old_pay_password,
+              callback: function($$v) {
+                _vm.old_pay_password = $$v
+              },
+              expression: "old_pay_password"
+            }
           }),
           _vm._v(" "),
           _c("mt-field", {
-            attrs: {
-              label: "新密码",
-              placeholder: "请填写新支付密码",
-              type: "email"
+            attrs: { label: "新密码", placeholder: "请填写新支付密码" },
+            model: {
+              value: _vm.new_pay_password,
+              callback: function($$v) {
+                _vm.new_pay_password = $$v
+              },
+              expression: "new_pay_password"
             }
           }),
           _vm._v(" "),
@@ -62721,9 +62854,32 @@ var render = function() {
             attrs: {
               label: "确认新密码",
               placeholder: "请再次输入新支付密码",
-              type: "password"
+              type: "text"
+            },
+            model: {
+              value: _vm.confirm_pay_password,
+              callback: function($$v) {
+                _vm.confirm_pay_password = $$v
+              },
+              expression: "confirm_pay_password"
             }
           })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "password-btn flex flex-justify-center" },
+        [
+          _c(
+            "mt-button",
+            {
+              attrs: { type: "primary", size: "large" },
+              on: { click: _vm.affirm }
+            },
+            [_vm._v("确定")]
+          )
         ],
         1
       ),
@@ -65587,10 +65743,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       inviteLinkStatus: true, // 邀请链接状态
       tradeStatus: true, // 交易状态
-      isGroupMaster: true, // 是否是群主 
+      isGroupMaster: true, // 是否是群主
 
       shopId: null,
-      shopName: null
+      shopName: null,
+      rate: null,
+      percent: null,
+      membersCount: null,
+      active: null
     };
   },
 
@@ -65624,8 +65784,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         _this.shopId = res.data.data.id;
         _this.shopName = res.data.data.name;
+        _this.rate = res.data.data.rate;
+        _this.percent = res.data.data.percent;
+        _this.membersCount = res.data.data.members_count;
+        if (res.data.data.active == 1) {
+          _this.tradeStatus = true;
+        } else {
+          _this.tradeStatus = false;
+        }
 
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
         _this.$router.go(-1);
@@ -65734,12 +65902,25 @@ var render = function() {
           _vm._v(" "),
           _vm._m(3, false, false),
           _vm._v(" "),
-          _vm._m(4, false, false)
+          _c("div", { staticClass: "flex-4 flex flex-reverse" }, [
+            _c(
+              "i",
+              {
+                staticClass: "iconfont",
+                staticStyle: { "padding-right": "1em" }
+              },
+              [_vm._v("\n              \n          ")]
+            ),
+            _vm._v(" "),
+            _c("span", { staticStyle: { color: "#666" } }, [
+              _vm._v(_vm._s(_vm.membersCount) + "名成员")
+            ])
+          ])
         ]
       ),
       _vm._v(" "),
       _c("div", { staticClass: "invite-wrap" }, [
-        _vm._m(5, false, false),
+        _vm._m(4, false, false),
         _vm._v(" "),
         _vm.isGroupMaster
           ? _c(
@@ -65789,12 +65970,34 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _vm._m(6, false, false)
+        _c(
+          "div",
+          { staticClass: "flex flex-align-center flex-justify-between" },
+          [
+            _c("span", { staticClass: "title flex-9" }, [_vm._v(" 默认单价 ")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "text flex-1" }, [
+              _vm._v(_vm._s(_vm.rate))
+            ])
+          ]
+        )
       ]),
       _vm._v(" "),
       _vm.isGroupMaster
         ? _c("div", { staticClass: "commission" }, [
-            _vm._m(7, false, false),
+            _c(
+              "div",
+              { staticClass: "flex flex-align-center flex-justify-between" },
+              [
+                _c("span", { staticClass: "title flex-9" }, [
+                  _vm._v(" 抽水比例 ")
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "text flex-1" }, [
+                  _vm._v(_vm._s(_vm.percent) + "%")
+                ])
+              ]
+            ),
             _vm._v(" "),
             _c(
               "div",
@@ -65826,7 +66029,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       !_vm.isGroupMaster
-        ? _c("div", { staticClass: "complaint" }, [_vm._m(8, false, false)])
+        ? _c("div", { staticClass: "complaint" }, [_vm._m(5, false, false)])
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -66003,20 +66206,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex-4 flex flex-reverse" }, [
-      _c(
-        "i",
-        { staticClass: "iconfont", staticStyle: { "padding-right": "1em" } },
-        [_vm._v("\n              \n          ")]
-      ),
-      _vm._v(" "),
-      _c("span", { staticStyle: { color: "#666" } }, [_vm._v("0名成员")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c(
       "div",
       { staticClass: "flex flex-align-center flex-justify-between" },
@@ -66026,34 +66215,6 @@ var staticRenderFns = [
         _c("i", { staticClass: "iconfont flex-1" }, [
           _vm._v("\n              \n          ")
         ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "flex flex-align-center flex-justify-between" },
-      [
-        _c("span", { staticClass: "title flex-9" }, [_vm._v(" 默认单价 ")]),
-        _vm._v(" "),
-        _c("span", { staticClass: "text flex-1" }, [_vm._v("10")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "flex flex-align-center flex-justify-between" },
-      [
-        _c("span", { staticClass: "title flex-9" }, [_vm._v(" 抽水比例 ")]),
-        _vm._v(" "),
-        _c("span", { staticClass: "text flex-1" }, [_vm._v("5%")])
       ]
     )
   },
@@ -67151,6 +67312,8 @@ exports.push([module.i, "\n#shop-account[data-v-ad7d680e] {\n  padding-top: 2em;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(14);
 //
 //
 //
@@ -67307,17 +67470,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  created: function created() {
+    this.init();
+  },
+  data: function data() {
+    return {
+      balance: null
+    };
+  },
+
   methods: {
     goWithdraw: function goWithdraw() {
       this.$router.push('/shop/shopAccount/withdraw');
     },
     goGive: function goGive() {
       this.$router.push('/shop/shopAccount/give');
+    },
+    init: function init() {
+      // Loading.getInstance().open();
+      // request.getInstance().getData("api/account").then(res=>{
+      //     console.log(res);
+      //     this.balance = res.data.data.balance;
+      // }).catch(err=>{
+      //     console.error(err);
+      // });
     }
   }
 });
@@ -67363,7 +67546,24 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "content flex flex-v flex-align-center" }, [
-      _vm._m(1, false, false),
+      _c(
+        "div",
+        {
+          staticClass:
+            "rest-money flex flex-v flex-align-center flex-justify-start"
+        },
+        [
+          _c("div", { staticClass: "money-text" }, [
+            _vm._v(
+              "\n                " + _vm._s(_vm.balance) + "\n            "
+            )
+          ]),
+          _vm._v(" "),
+          _c("h3", [_vm._v("当前店铺余额")]),
+          _vm._v(" "),
+          _c("h4", [_vm._v("单位(元)")])
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -67392,7 +67592,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _vm._m(2, false, false)
+      _vm._m(1, false, false)
     ])
   ])
 }
@@ -67426,27 +67626,6 @@ var staticRenderFns = [
         ]
       )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "rest-money flex flex-v flex-align-center flex-justify-start"
-      },
-      [
-        _c("div", { staticClass: "money-text" }, [
-          _vm._v("\n                0.00\n            ")
-        ]),
-        _vm._v(" "),
-        _c("h3", [_vm._v("当前店铺余额")]),
-        _vm._v(" "),
-        _c("h4", [_vm._v("单位(元)")])
-      ]
-    )
   },
   function() {
     var _vm = this
@@ -71611,6 +71790,443 @@ var shopStore = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 741 */,
+/* 742 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(743)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(745)
+/* template */
+var __vue_template__ = __webpack_require__(746)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-cf5fe93a"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\My\\settingPassword.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-cf5fe93a", Component.options)
+  } else {
+    hotAPI.reload("data-v-cf5fe93a", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 743 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(744);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("4e70b757", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-cf5fe93a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./settingPassword.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-cf5fe93a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./settingPassword.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 744 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 745 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_password__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            passwordSwitch: true,
+            firstPassword: null,
+            secondPassword: null,
+            valideTimes: false
+        };
+    },
+
+    components: { password: __WEBPACK_IMPORTED_MODULE_2__components_password___default.a },
+    methods: {
+        getPassword: function getPassword(value) {
+            var _this = this;
+
+            console.log(value);
+
+            if (this.valideTimes == false) {
+                this.firstPassword = value;
+                this.valideTimes = true;
+            } else {
+                this.secondPassword = value;
+                if (this.firstPassword == this.secondPassword) {
+                    __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+                    var _data = {
+                        pay_password: this.firstPassword
+                    };
+                    __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/my/setPayPassword", _data).then(function (res) {
+                        console.log(res);
+                        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("支付密码设置成功，正在跳转...");
+                        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+
+                        setTimeout(function () {
+                            _this.backToLastPage();
+                        }, 1500);
+                    }).catch(function (err) {
+                        console.error(err);
+                    });
+                }
+            }
+        },
+        backToLastPage: function backToLastPage() {
+            this.$router.go(-1);
+        }
+    }
+});
+
+/***/ }),
+/* 746 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { attrs: { id: "setting-password" } },
+    [
+      _c("password", {
+        attrs: {
+          setSwitch: _vm.passwordSwitch,
+          settingPasswordSwitch: true,
+          secondValid: _vm.valideTimes
+        },
+        on: { callBack: _vm.getPassword, hidePassword: _vm.backToLastPage }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-cf5fe93a", module.exports)
+  }
+}
+
+/***/ }),
+/* 747 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(748)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(750)
+/* template */
+var __vue_template__ = __webpack_require__(751)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-059b1b09"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\My\\checkSettleList.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-059b1b09", Component.options)
+  } else {
+    hotAPI.reload("data-v-059b1b09", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 748 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(749);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("af1200ba", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-059b1b09\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./checkSettleList.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-059b1b09\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./checkSettleList.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 749 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n#bankManage[data-v-059b1b09] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-container[data-v-059b1b09] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-059b1b09] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-059b1b09] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-059b1b09],\n    .bankCard-list li .binding[data-v-059b1b09] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-059b1b09] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-059b1b09] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-059b1b09] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-059b1b09] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-059b1b09] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-059b1b09] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .card-number[data-v-059b1b09] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-059b1b09] {\n    font-size: 1em;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 750 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(38);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  data: function data() {
+    return {
+      bankList: []
+    };
+  },
+  created: function created() {
+    this.bank();
+  },
+
+  methods: {
+    //银行卡列表
+    bank: function bank() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
+        _this.bankList = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }
+});
+
+/***/ }),
+/* 751 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { attrs: { id: "bankManage" } },
+    [
+      _c("topBack", { attrs: { title: "更换结算卡" } }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "bankCard-container" },
+        _vm._l(_vm.bankList, function(item) {
+          return _c("ul", { staticClass: "bankCard-list" }, [
+            _c("li", [
+              _c("div", { staticClass: "bankCard-box flex" }, [
+                _vm._m(0, true, false),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-info" }, [
+                  _c("div", { staticClass: "bank-name" }, [
+                    _vm._v(_vm._s(item.bank))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-type" }, [
+                    _vm._v(_vm._s(item.card_type))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-number" }, [
+                    _vm._v(_vm._s(item.card_num))
+                  ])
+                ])
+              ])
+            ])
+          ])
+        })
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-image" }, [
+      _c("img", { attrs: { src: "/images/personal.jpg" } })
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-059b1b09", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
