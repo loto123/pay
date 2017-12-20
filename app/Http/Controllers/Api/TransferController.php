@@ -50,6 +50,17 @@ class TransferController extends Controller
      *     required=false,
      *     type="string"
      *   ),
+     *    @SWG\Parameter(
+     *     name="joiner",
+     *     in="formData",
+     *     description="参与交易人",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -61,7 +72,8 @@ class TransferController extends Controller
             [
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
-                'comment' => 'max:200'
+                'comment' => 'bail|max:200',
+                'joiner' => 'bail||array',
             ],
             [
                 'required' => trans('trans.required'),
@@ -94,13 +106,18 @@ class TransferController extends Controller
         }
         $transfer->fee_percent = config('platform_fee_percent');
 
+        //交易关系包含自己
+        $joiners = $request->joiner;
+        array_push($joiners,$user->id);
         if ($transfer->save()) {
             //保存交易关系
-            if (!$transfer->joiner()->where('user_id', $user->id)->exists()) {
-                $relation = new TransferUserRelation();
-                $relation->transfer_id = $transfer->id;
-                $relation->user_id = $user->id;
-                $relation->save();
+            foreach($joiners as $item) {
+                if (!$transfer->joiner()->where('user_id', $item)->exists()) {
+                    $relation = new TransferUserRelation();
+                    $relation->transfer_id = $transfer->id;
+                    $relation->user_id = $item;
+                    $relation->save();
+                }
             }
             return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => ['id' => $transfer->en_id()]]);
         } else {

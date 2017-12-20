@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawException;
+use App\Pay\Model\WithdrawResult;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -45,25 +46,29 @@ class SubmitWithdrawRequest implements ShouldQueue
 
         $withdraw = $this->withdraw;
         $prev_except = null;
-        $result = [];
+
+        /**
+         * @var $result WithdrawResult
+         */
+        $result = new WithdrawResult();
 
         try {
             $result = $withdraw->method->withdraw($withdraw);
-            if (is_array($result) && array_key_exists('state', $result) && array_key_exists('raw_response', $result)) {
-                $withdraw->state = $result['state'];
+            if ($result->raw_response) {
+                $withdraw->state = $result->state;
                 //通道交易号
-                if (isset($result['out_batch_no'])) {
-                    $withdraw->out_batch_no = $result['out_batch_no'];
+                if ($result->out_batch_no) {
+                    $withdraw->out_batch_no = $result->out_batch_no;
                 }
 
                 //通道手续费
-                if (isset($result['fee'])) {
-                    $withdraw->channel_fee = $result['fee'];
+                if ($result->fee !== null) {
+                    $withdraw->channel_fee = $result->fee;
                 }
             }
 
         } catch (\Exception $e) {
-            $result['raw_response'] = 'App exception';
+            $result->raw_response = 'App exception';
             $withdraw->state = Withdraw::STATE_SEND_FAIL;
             $prev_except = $e;
         }
@@ -72,7 +77,7 @@ class SubmitWithdrawRequest implements ShouldQueue
 
         if ($withdraw->state == Withdraw::STATE_SEND_FAIL || $withdraw->state == Withdraw::STATE_PROCESS_FAIL) {
             $this->withdraw->exceptions()->save(new WithdrawException([
-                'message' => (string)$result['raw_response'],
+                'message' => (string)$result->raw_response,
                 'state' => $withdraw->state,
                 'exception' => $prev_except ? $prev_except->getMessage() : ''
             ]));

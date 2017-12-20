@@ -14,6 +14,7 @@ use App\Pay\IdConfuse;
 use App\Pay\Impl\MMSP\SDK\base;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
+use App\Pay\Model\DepositResult;
 use Illuminate\Support\Facades\Log;
 use Mockery\Exception;
 
@@ -34,7 +35,7 @@ class WechatH5 implements DepositInterface
         $wxh5payMod->SetAGENTNO($config['AGENTNO']);//不传代理商就默认是商户交易
         $wxh5payMod->SetMERNO($config['MERNO']);
         $wxh5payMod->SetTERMNO($config['TERMNO']);
-        $wxh5payMod->SetAMT($amount);
+        $wxh5payMod->SetAMT((int)$amount);
         $wxh5payMod->SetCUR('CNY');
         $wxh5payMod->SetGOODSNAME(DepositInterface::GOOD_NAME);
         $wxh5payMod->SetNOTIFY_URL($notify_url);
@@ -87,7 +88,6 @@ class WechatH5 implements DepositInterface
             throw new Exception('无效订单');
         }
 
-        return ['out_batch_no' => $deposit->out_batch_no, 'state' => $deposit->state, 'amount' => $deposit->amount];
-
+        return new DepositResult($deposit->state, $deposit->amount, $deposit->out_batch_no);
     }
 }
