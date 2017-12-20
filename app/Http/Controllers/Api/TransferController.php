@@ -95,6 +95,13 @@ class TransferController extends Controller
         $transfer->fee_percent = config('platform_fee_percent');
 
         if ($transfer->save()) {
+            //保存交易关系
+            if (!$transfer->joiner()->where('user_id', $user->id)->exists()) {
+                $relation = new TransferUserRelation();
+                $relation->transfer_id = $transfer->id;
+                $relation->user_id = $user->id;
+                $relation->save();
+            }
             return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => ['id' => $transfer->en_id()]]);
         } else {
             return response()->json(['code' => 0, 'msg' => trans('trans.save_failed'), 'data' => []]);
