@@ -101,6 +101,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('join/{id}', 'ShopController@join');
         $api->post('create', 'ShopController@create');
         $api->get('qrcode/{id}', 'ShopController@qrcode');
+        $api->get('account/{id}', 'ShopController@account');
     });
 });
 
