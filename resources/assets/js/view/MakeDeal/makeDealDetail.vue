@@ -291,7 +291,7 @@ export default {
         payMoney: null,
         getMoney: null
       },
-      payType: "get" // 支付方式，取钱get 放钱put
+      payType: null // 支付方式，取钱get 放钱put
     };
   },
   created() {
@@ -351,10 +351,14 @@ export default {
   },
   watch: {
     "moneyData.payMoney": function() {
+      // 放钱
       this.moneyData.getMoney = null;
+      this.payType = "put";
     },
     "moneyData.getMoney": function() {
+      // 拿钱
       this.moneyData.payMoney = null;
+      this.payType = "get";
     }
   }
 };
