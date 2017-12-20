@@ -133,7 +133,7 @@
             },
             success: function (data) {
                 _btn.attr("disabled", false);
-                if (data.code == 0) {
+                if (data.code == 1) {
                     toastr.success(data.msg);
                     $.pjax.reload('#pjax-container');
                 } else {
