@@ -42,6 +42,8 @@ Route::group([
     $router->any('record', "DataController@record");
     $router->any('test', "DataController@test");
     $router->any('users', "DataController@users");
+    $router->any('area', 'DataController@area');
+    $router->any('areaDetail/{operatorId?}', 'DataController@areaDetail');
 });
 
 Route::group([
