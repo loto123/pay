@@ -59,7 +59,7 @@ export default class UserRequest {
             Axios({
                 method: 'get',
                 url: tempUrl,
-                data: postData,
+                params: postData,
                 headers:{Authorization:"Bearer "+_token}
             })
                 .then(function (res) {

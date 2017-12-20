@@ -213,9 +213,14 @@
 
 <script>
 import topBack from "../../components/topBack";
+import request from "../../utils/userRequest"
+import Loading from "../../utils/loading"
 
 export default {
   components: { topBack },
+  created(){
+    this.init();
+  },
   data() {
     return {
       tabItem: [true, false, false],
@@ -236,6 +241,21 @@ export default {
     },
     mark(){
       console.log('mark');
+    },
+
+    init(){
+      Loading.getInstance().open();
+      var _data = {
+        status:1,
+        limit:50,
+        offset :0
+      }
+      request.getInstance().getData('api/transfer/record',_data).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.error(err);
+      });
+      
     }
   }
 };

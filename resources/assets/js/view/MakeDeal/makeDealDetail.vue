@@ -16,14 +16,14 @@
             <div class="pay-money flex flex-align-center flex-justify-around">
                 <label for="">我要付钱</label>
                 <div class="input-wrap">
-                    <input type="text" placeholder="请输入您的分数">
+                    <input type="text" placeholder="请输入您的分数" v-model="moneyData.payMoney">
                 </div>
             </div>
 
             <div class="get-money flex flex-align-center flex-justify-around">
                 <label for="">我要拿钱</label>
                 <div class="input-wrap">
-                    <input type="text" placeholder="请输入您的分数">
+                    <input type="text" placeholder="请输入您的分数" v-model="moneyData.getMoney">
                 </div>
             </div>
 
@@ -141,7 +141,7 @@
       width: 60%;
       input {
         box-sizing: border-box;
-        font-size: 1.0em;
+        font-size: 1em;
         padding-left: 0.5em;
         width: 100%;
         border: none;
@@ -165,37 +165,36 @@
 .pay-record {
   padding-top: 0.5em;
   .title {
-
     width: 90%;
     height: 4.5em;
     line-height: 2em;
-    background:#fff;
+    background: #fff;
     margin: 0 auto;
-    
-    .top{
+
+    .top {
       height: 2em;
-      width:100%;
+      width: 100%;
       padding-left: 0.5em;
       box-sizing: border-box;
-      span{
-        font-size:1em;
-        color:#555;
+      span {
+        font-size: 1em;
+        color: #555;
       }
     }
 
-    .bottom{
-      width:100%;
-      height:3.5em;
-      img{
-        width:2em;
-        height:2em;
+    .bottom {
+      width: 100%;
+      height: 3.5em;
+      img {
+        width: 2em;
+        height: 2em;
         display: block;
         margin-left: 0.5em;
       }
     }
 
     .info-friend {
-      margin-right:0.5em;
+      margin-right: 0.5em;
       background: green;
       color: #fff;
       padding-left: 0.3em;
@@ -231,7 +230,7 @@
             font-size: 0.9em;
             height: 50%;
             width: 100%;
-            background:#fff;
+            background: #fff;
           }
         }
 
@@ -271,31 +270,31 @@
 import topBack from "../../components/topBack";
 import slider from "../../components/slider";
 import dealContent from "./dealContent";
-import passwordPanel from '../../components/password'
-import request from '../../utils/userRequest'
+import passwordPanel from "../../components/password";
+import request from "../../utils/userRequest";
 
-import Loading from '../../utils/loading'
+import Loading from "../../utils/loading";
 
 import qrCode from "../../utils/qrCode";
 
 export default {
   name: "makeDealDetail",
-  components: { topBack, slider, dealContent ,passwordPanel},
-  
-  data(){
-    return {
-      passWordSwitch:false,
-      renderData :{
-        name:null,
-        moneyData:{
-          payMoney:null,
-          getMoney:null
-        }
+  components: { topBack, slider, dealContent, passwordPanel },
 
-      }
-    }
+  data() {
+    return {
+      passWordSwitch: false,
+      renderData: {
+        name: null
+      },
+      moneyData: {
+        payMoney: null,
+        getMoney: null
+      },
+      payType: "get" // 支付方式，取钱get 放钱put
+    };
   },
-  created(){
+  created() {
     this.init();
   },
   mounted() {
@@ -306,48 +305,58 @@ export default {
       console.log("i m ru");
     },
 
-    init(){
+    init() {
       Loading.getInstance().open();
       var _id = this.$route.query.id;
-      var _data ={
-        transfer_id :_id
-      }
-      request.getInstance().getData('api/transfer/show'+"?transfer_id="+_id).then(res=>{
-        console.log(res);
+      var _data = {
+        transfer_id: _id
+      };
+      request
+        .getInstance()
+        .getData("api/transfer/show" + "?transfer_id=" + _id)
+        .then(res => {
+          console.log(res);
 
-        this.renderData = res.data.data;
-        Loading.getInstance().close();
-        
-      }).catch(err=>{
-        console.error(err);
-      });
+          this.renderData = res.data.data;
+          Loading.getInstance().close();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
 
     goTipPage() {
       var _id = this.$route.query.id;
-      this.$router.push("/makeDeal/deal_tip"+"?id="+_id);
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
     },
 
-    showPassword(){
+    showPassword() {
       this.passWordSwitch = true;
     },
-    hidePassword(){
+    hidePassword() {
       this.passWordSwitch = false;
     },
 
-    getResult(result){
+    getResult(result) {
       console.log(result);
     },
     _getQRCode: function() {
       var qrcode = new QRCode(document.getElementById("qrcode"), {
-        width: 100,     //设置宽高
+        width: 100, //设置宽高
         height: 100
       });
 
       qrcode.makeCode("http://www.baidu.com");
     }
-
   },
+  watch: {
+    "moneyData.payMoney": function() {
+      this.moneyData.getMoney = null;
+    },
+    "moneyData.getMoney": function() {
+      this.moneyData.payMoney = null;
+    }
+  }
 };
 </script>
 

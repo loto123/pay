@@ -481,4 +481,25 @@ class ShopController extends BaseController {
         return $this->json();
     }
 
+    /**
+     * @SWG\Get(
+     *   path="/shop/account/{id}",
+     *   summary="店铺帐户信息",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function account($id) {
+        $shop = Shop::findByEnId($id);
+        return $this->json(['balance' => (double)$shop->balance, 'today_profit' => 0, 'yesterday_profit' => 0, 'total_profit' => 0]);
+    }
+
 }

@@ -186,7 +186,7 @@ abstract class Container extends Model
 
             //分润
             foreach ($profit_shares as $profit_share) {
-                if (!$profit_share->receiveContainer->isNormalForUpdate() || !$profit_share->receiveContainer->changeBalance(
+                if (!$profit_share->receiveContainer->changeBalance(
                     $profit_share->is_frozen ? 0 : $profit_share->amount,
                     $profit_share->is_frozen ? $profit_share->amount : 0
                 )

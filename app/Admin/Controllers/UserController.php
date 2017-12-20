@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers;
 
-use App\Shop;
 use App\TransferRecord;
 use App\User;
 
@@ -14,7 +13,6 @@ use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use function foo\func;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 class UserController extends Controller

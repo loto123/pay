@@ -39,9 +39,13 @@ Route::group([
 ], function (Router $router) {
     $router->any('profit', "DataController@profit");
     $router->any('transfer', "DataController@transfer");
+    $router->any('transfer/detail/{operatorId}', "DataController@detail");
     $router->any('record', "DataController@record");
     $router->any('test', "DataController@test");
     $router->any('users', "DataController@users");
+    $router->any('area', 'DataController@area');
+    $router->any('areaDetail/{operatorId?}', 'DataController@areaDetail');
+    $router->get('transfer/close/{id}', 'DataController@close');
 });
 
 Route::group([
