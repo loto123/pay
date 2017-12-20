@@ -3,7 +3,7 @@
     <!--查询开始-->
     <div class="box box-primary">
         <div class="box-body">
-            <form class="form-horizontal" method="post" action="{{Request::url()}}">
+            <form class="form-horizontal" method="post" action="{{Request::url()}}" pjax-container>
                 {{csrf_field()}}
                 <div class="form-group">
                     <label class="col-sm-1 control-label">用户ID：</label>
