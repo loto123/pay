@@ -422,7 +422,7 @@ class DataController extends Controller
             if ($begin && $end) {
                 $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
             }
-        })->withCount(['child_proxy', 'child_user', 'promoter'])->where('id', $operatorId)
+        })->withCount(['child_proxy', 'child_user', 'promoter'])->where('admin_users.id', $operatorId)
             ->addSelect(DB::raw('sum(profit_record.fee_amount) as operator_fee_amount'))
             ->groupBy('admin_users.id')->first();
 
@@ -432,7 +432,8 @@ class DataController extends Controller
             if ($begin && $end) {
                 $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
             }
-        })->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
+        })->where('users.operator_id',$operatorId)
+            ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
             ->groupBy('users.id')->orderBy('proxy_fee_amount', 'DESC');
 
         $aid = $request->input('aid');
@@ -448,9 +449,10 @@ class DataController extends Controller
             });
         }
         $roles = Role::get();
+        $list = $listQuery->paginate(self::PAGE_SIZE);
         $data = compact('list', 'date_time', 'aid', 'operatorInfo', 'operatorId', 'roles', 'role');
         return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/operatorDetail', $data));
+            $content->body(view('admin/data/operatorDetail', $data));
             $content->header("运营业绩详情");
         });
     }
