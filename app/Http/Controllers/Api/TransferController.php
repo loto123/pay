@@ -133,7 +133,7 @@ class TransferController extends Controller
         }
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
-        if(!$transferObj) {
+        if (!$transferObj) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
 
@@ -543,23 +543,18 @@ class TransferController extends Controller
         }
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
-        if(!$transferObj) {
+        if (!$transferObj) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->with(['user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
         }, 'tips' => function ($query) {
-            $query->select('amount', 'created_at')->orderBy('created_at', 'DESC');
+            $query->select('transfer_id', 'user_id', 'amount', 'created_at')->orderBy('created_at', 'DESC');
         }, 'tips.user' => function ($query) {
-            $query->select('name', 'avatar');
-        }])->select('id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
-
-//        $list = TipRecord::with(['user' => function ($query) {
-//            $query->select('name', 'avatar');
-//        }])->where('transfer_id', $request->transfer_id)
-//            ->select('amount', 'created_at')
-//            ->orderBy('created_at', 'DESC')->get();
+            $query->select('id', 'name', 'avatar');
+        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+        debug($transfer);
 
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
