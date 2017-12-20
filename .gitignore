@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+!/vendor/encore/laravel-admin/src
 /vendor
 /.idea
 /.vagrant

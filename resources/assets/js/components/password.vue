@@ -200,6 +200,8 @@ export default {
     // 走回调
     doCallback(){
         this.$emit("callBack",this.password);
+        this.password = "";
+        this.setPassword();
     }
 
   }

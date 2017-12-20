@@ -7,8 +7,8 @@
         </topBack>
         <div class="myAccount-box">
             <div class="withDraw-money">
-                <div class="money">88.88</div>
-                <div class="title">当前可用余额</div>
+                <div class="money">{{balance}}</div>
+                <div class="title">当前可提现余额</div>
             </div>
             <div class="submit-btn">
                 <a href="/#/myAccount/recharge" class="mb15">
@@ -26,108 +26,114 @@
 </template>
 
 <script>
-import topBack from "../../components/topBack.vue"
-import Loading from "../../utils/loading"
-import request from "../../utils/userRequest"
+    import axios from "axios";
+	import request from '../../utils/userRequest';
+    import topBack from '../../components/topBack.vue'
+    import Loading from '../../utils/loading'
 
-export default {
-  created(){
-      this.init();
-  },
-  data() {
-    return {};
-  },
-  methods:{
-      init(){
-    //   Loading.getInstance().open();
-    //   request.getInstance().getData("api/account").then(res=>{
-    //       console.log(res);
-    //   }).catch(err=>{
-    //       console.error(err);
-    //   });
-      }
-  },
-  components: { topBack }
-};
+    export default {
+        data () {
+            return {
+                balance:null
+            }
+        },
+        created(){
+			this.myAccount();
+    	},
+        components: {topBack},
+        methods: {
+            myAccount(){
+                Loading.getInstance().open("加载中...");
+
+				request.getInstance().getData("api/account")
+					.then((res) => {
+                        this.balance=res.data.data.balance;
+                        Loading.getInstance().close();
+					})
+					.catch((err) => {
+						console.log(err);
+					})
+            }
+        }
+    }
 </script>
 
 <style lang="scss" scoped>
-@import "../../../sass/oo_flex.scss";
-.mb15 {
-  margin-bottom: 1.5em;
-}
-#myAccount {
-  background: #eee;
-  height: 100vh;
-  padding-top: 2em;
-  box-sizing: border-box;
-  .header-right {
-    width: 100%;
-    padding-right: 1em;
-    height: 2em;
-    box-sizing: border-box;
-  }
-}
-.myAccount-box {
-  margin-top: 2em;
-}
-.withDraw-money {
-  width: 13em;
-  height: 13em;
-  border: 1px solid #aaa;
-  border-radius: 50%;
-  margin: 0 auto 3em auto;
-  background: #199ed8;
-  position: relative;
-  text-align: center;
-  .money,
-  .title {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-  }
-  .money {
-    top: 30%;
-    color: #fff;
-    font-size: 2em;
-  }
-  .title {
-    top: 50%;
-    color: #ddd;
-  }
-}
-.submit-btn {
-  width: 90%;
-  margin: auto;
-  a {
-    display: block;
-    button {
-      border: none;
-      height: 2.8em;
-      line-height: 2.8em;
-      text-align: center;
-      width: 100%;
-      margin: auto;
-      border-radius: 5px;
-      font-size: 1em;
+    @import "../../../sass/oo_flex.scss";
+    .mb15{
+        margin-bottom:1.5em;
     }
-    .recharge-btn {
-      background: #00cc00;
-      color: #fff;
+    #myAccount {
+        background: #eee;
+        height: 100vh;
+        padding-top: 2em;
+        box-sizing: border-box;
+        .header-right{
+            width:100%;
+            padding-right:1em;
+            height:2em;
+            box-sizing:border-box;
+        }
     }
-    .withdraw-btn {
-      background: #fff;
-      color: #333;
+    .myAccount-box{
+        margin-top: 2em;
     }
-    .give-btn {
-      background: #199ed8;
-      color: #fff;
+    .withDraw-money{
+        width: 13em;
+        height: 13em;
+        border: 1px solid #aaa;
+        border-radius: 50%;
+        margin: 0 auto 3em auto;
+        background: #199ED8;
+        position: relative;
+        text-align: center;
+        .money,.title{
+            position: absolute;
+            width:100%;
+            text-align: center;
+        }
+        .money{
+            top: 30%;
+            color: #fff;
+            font-size: 2em;
+        }
+        .title{
+            top: 50%;
+            color:#ddd;
+        }
     }
-  }
-}
-.mint-button--danger {
-  background: #fff !important;
-}
+    .submit-btn{
+        width: 90%;
+        margin:auto;
+        a{
+            display: block;
+            button{
+                border: none;
+                height: 2.8em;
+                line-height: 2.8em;
+                text-align: center;
+                width: 100%;
+                margin: auto;
+                border-radius: 5px;
+                font-size: 1em;
+            }
+            .recharge-btn{
+                background:#00CC00;
+                color: #fff;
+            }
+            .withdraw-btn{
+                background:#fff;
+                color: #333;
+            }
+            .give-btn{
+                background:#199ED8;
+                color:#fff;
+            }
+        }
+    }
+    .mint-button--danger{
+        background:#fff !important;
+    }
 </style>
 
 
