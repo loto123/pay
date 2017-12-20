@@ -1,22 +1,24 @@
 <template>
   <div id="referrer">
-    <topBack title="推荐人信息"></topBack>
-    <div class="referrer-container">
-      <div class="header flex">
-        <div class="referrer-image">
-          <img src="/images/personal.jpg">
+    <topBack title="推荐人信息" style="color:#fff"></topBack>
+    <div class="flex flex-align-center flex-justify-center" style="height:100%;">
+      <div class="referrer-container">
+        <div class="header flex">
+          <div class="referrer-image">
+            <img src="/images/personal.jpg">
+          </div>
+          <div class="referrer-info">
+            <h2>牛大王</h2>
+            <div class="tel">电话:<span>31231321321</span></div>
+            <div class="wx-number">微信号:<span>31231321321</span></div>
+          </div>
         </div>
-        <div class="referrer-info">
-          <h2>牛大王</h2>
-          <div class="tel">电话:<span>31231321321</span></div>
-          <div class="wx-number">微信号:<span>31231321321</span></div>
+        <div class="code">
+          <div class="code-image">
+            <img src="/images/code.png">
+          </div>
+          <div class="add-referrer">用微信识别二维码添加您的推荐人</div>
         </div>
-      </div>
-      <div class="code">
-        <div class="code-image">
-          <img src="/images/code.png">
-        </div>
-        <div class="add-referrer">用微信识别二维码添加您的推荐人</div>
       </div>
     </div>
   </div>
@@ -33,16 +35,15 @@ export default {
 
 <style lang="scss" scoped>
 #referrer {
-  background: #38c3ec;
+  background: #26a2ff;
   height: 100vh;
+  padding-top:2em;
+  box-sizing: border-box; 
 }
 .referrer-container {
   background: #fff;
-  width: 94%;
-  margin: auto;
-  height: auto;
+  width: 92%;
   border-radius: 0.7em;
-  margin-top: 4em;
 }
 
 .header {
@@ -75,7 +76,6 @@ export default {
   }
 }
 .code {
-  padding: 1em;
   padding-bottom: 2.5em;
   .code-image {
     max-width: 150px;

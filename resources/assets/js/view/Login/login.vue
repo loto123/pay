@@ -9,13 +9,13 @@
     <div class="logo-wrap flex flex-v flex-align-center" >
       <div class="circle-wrap flex flex-align-center">
         <img src="/images/logo.png" alt="logo">
-      </div>
+      </div> 
       <h3>游戏宝</h3>
     </div>
 
     <div class="text-area flex flex-v flex-justify-center">
-      <mt-field label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
-      <mt-field label="密码" placeholder="请输入密码" type="password"></mt-field>
+      <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="mobile"></mt-field>
+      <mt-field label="密码" placeholder="请输入密码" type="password" v-model="password"></mt-field>
     </div>
     
     <div class="login-button flex flex-justify-center">
@@ -145,12 +145,15 @@
 <script>
 import axios from "axios";
 import { Toast } from "mint-ui";
+import request from '../../utils/userRequest'
 
 export default {
   name: "login",
   data() {
     return {
-      name: null
+      name: null,
+      mobile:null,
+      password:null
     };
   },
   computed: {
@@ -170,22 +173,25 @@ export default {
     },
 
     login() {
-      axios
-        .post("/api/auth/login", {
-          mobile: "18173610305",
-          password: "asdasd22"
-        })
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-          Toast(error.toString());
-        });
+      var self = this;
+
+      var data = {
+        mobile: this.mobile,
+        password:this.password
+      }
+
+      request.getInstance().postData('api/auth/login',data).then(function(res){
+        console.log(res);
+          sessionStorage.setItem("_token",res.data.data.token);
+          Toast("登录成功");
+          self.$router.push("/index");
+      }).catch(function(err){
+        console.log(err);
+        Toast(err.data.message);
+      });
     },
     commitName() {
       this.$store.dispatch("changeName", this.name);
-      Mint.Toast("提示信息");
     },
 
     regist(){

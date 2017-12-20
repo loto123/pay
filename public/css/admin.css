@@ -1,0 +1,63 @@
+ul{
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+.fs16{
+    font-size: 16px;
+}
+.radius{
+    border-radius: 50%;
+}
+.dealDetails-container{
+    background: #fff;
+}
+.dealDetails-container .title{
+    width: 30%;
+    text-align: right;
+    margin-right:5%;
+    font-size: 16px;
+}
+.dealDetails-content li{
+    height: 100%;
+    width: 100%;
+    border-bottom:1px solid #eee;
+    padding:10px 0;
+}
+.list{
+    margin-left: 35%;
+    height: 200px;
+    overflow-y: scroll;
+    width: 50%;
+}
+.list .money{
+    margin-left:15%;
+}
+.list .list-content{
+    margin-bottom: 10px;
+}
+
+.dealDetails-btn{
+    width:500px;
+    margin: 30px auto;
+}
+.dealDetails-btn a{
+    display: inline-block;
+    width: 120px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius:5px; 
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+.confirm-btn{
+    background: #169BD5;
+    border: 1px solid #169BD5;
+    color:#fff !important;
+}
+.back-btn{
+    color:#333 !important;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+}

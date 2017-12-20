@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Shop;
+use App\ShopUser;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
  *
@@ -59,13 +63,14 @@ class ShopController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->json([], $validator->errors()->first());
+            return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
         $shop  = new Shop();
         $shop->name = $request->name;
-        $shop->manager = $user->id;
-//        $shop->percent =
+        $shop->manager_id = $user->id;
+        $shop->price = $request->rate;
+        $shop->fee = $request->percent;
         $shop->save();
         return $this->json([$shop]);
     }
@@ -95,11 +100,78 @@ class ShopController extends BaseController {
      */
     public function lists() {
         $user = $this->auth->user();
-        $count = $user->in_shops()->count();
+        $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->in_shops as $_shop) {
+        foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+            /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id
+                'id' => $_shop->en_id(),
+                'name' => $_shop->name,
+                'logo' => asset("images/personal.jpg")
+            ];
+        }
+        return $this->json(['count' => $count, 'data' => $data]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/lists/all",
+     *   summary="我所有店铺（创建交易）",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页码",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function all(Request $request) {
+        $limit = $request->input('size', 10);
+        $user = $this->auth->user();
+        $shops = [];
+        $count = 0;
+        foreach ($user->transfer as $_transfer) {
+            $count += $_transfer->shop()->count();
+            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit)->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+        $count += $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
+        if (count($shops) < $limit) {
+            foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+        $count += $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        if (count($shops) < $limit) {
+            foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+                if (!isset($shops[$_shop->id])) {
+                    $shops[$_shop->id] = $_shop;
+                }
+            }
+        }
+
+        $data = [];
+        foreach ($shops as $_shop) {
+            /* @var $_shop Shop */
+            $data[] = [
+                'id' => $_shop->en_id(),
+                'name' => $_shop->name,
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -130,11 +202,15 @@ class ShopController extends BaseController {
      */
     public function my_lists() {
         $user = $this->auth->user();
-        $count = $user->shop()->count();
+        $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->shop as $_shop) {
+
+        foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+            /* @var $_shop Shop */
             $data[] = [
-                'id' => $_shop->id
+                'id' => $_shop->en_id(),
+                'name' => $_shop->name,
+                'logo' => asset("images/personal.jpg")
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -164,8 +240,85 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function detail($id, Request $request) {
-        $shop = Shop::find($id);
-        return $this->json(['name' => $shop->name, 'members' => []]);
+        $member_size = $request->input('member_size', 5);
+        $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        /* @var $shop Shop */
+        $members = [];
+        foreach ($shop->users()->limit($member_size)->get() as $_user) {
+            /* @var $_user User */
+            $members[] = [
+                'id' => (int)$_user->id,
+                'name' => $_user->name,
+                'avatar' => asset("images/personal.jpg"),
+
+            ];
+        }
+        return $this->json([
+            'id' => $shop->en_id(),
+            'name' => $shop->name,
+            'user_link' => $shop->use_link ? 1 : 0,
+            'active' => $shop->active ? 1 : 0,
+            'members' => $members,
+            'members_count' => (int)$shop->users()->count(),
+            'rate' => $shop->price,
+            'percent' => $shop->fee,
+            'created_at' => strtotime($shop->created_at)
+        ]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/members/{id}",
+     *   summary="店铺成员详情",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="成员数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页面",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function members($id, Request $request) {
+        $size = $request->input('size', 20);
+        $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $members = [];
+        foreach ($shop->users()->paginate($size) as $_user) {
+            /* @var $_user User */
+            $members[] = [
+                'id' => (string)$_user->id,
+                'name' => $_user->name,
+                'avatar' => asset("images/personal.jpg"),
+
+            ];
+        }
+        return $this->json([
+            'count' => (int)$shop->users()->count(),
+            'members' => $members,
+        ]);
     }
 
     /**
@@ -184,8 +337,11 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function close() {
-
+    public function close($id) {
+        $shop = Shop::findByEnId($id);
+        $shop->status = Shop::STATUS_CLOSED;
+        $shop->save();
+        return $this->json();
     }
 
     /**
@@ -204,8 +360,12 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function quit() {
+    public function quit($id) {
+        $user = $this->auth->user();
 
+        $shop = Shop::findByEnId($id);
+        ShopUser::where('shop_id', $shop->id)->where("user_id", $user->id)->delete();
+        return $this->json();
     }
 
     /**
@@ -238,7 +398,87 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function update() {
+    public function update($id, Request $request) {
+        $user = $this->auth->user();
 
+        $shop = Shop::findByEnId($id);
+        if ($request->name) {
+            $shop->name = $request->name;
+        }
+        if ($request->use_link) {
+            $shop->use_link = $request->use_link ? 1 : 0;
+        }
+
+        if ($request->active) {
+            $shop->active = $request->active ? 1 : 0;
+        }
+
+        $shop->save();
+        return $this->json();
     }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/qrcode/{id}",
+     *   summary="店铺二维码",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="二维码尺寸",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function qrcode($id, Request $request) {
+//        $validator = Validator::make($request->all(), [
+//            'width' => 'required',
+//            'height' => 'required',
+//        ]);
+//
+//        if ($validator->fails()) {
+//            return $this->json([], $validator->errors()->first(), 0);
+//        }
+        $size = $request->input("size", 200);
+        $shop = Shop::findByEnId($id);
+        $user = $this->auth->user();
+        /* @var $user User */
+        $url = url(sprintf("/#/share/?shopId=%s&userId=%s", $shop->en_id(), $user->en_id()));
+        $filename = md5($url."_".$size);
+        Storage::disk('public')->put('qrcode/'.$filename.'.png', QrCode::format('png')->size($size)->margin(1)->generate($url));
+        return $this->json(['url' => url('storage/qrcode/'.$filename.'.png')]);
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/join/{id}",
+     *   summary="加入店铺",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function join($id) {
+        $user = $this->auth->user();
+        //#todo
+        return $this->json();
+    }
+
 }

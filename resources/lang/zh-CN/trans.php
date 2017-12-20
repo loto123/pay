@@ -10,6 +10,7 @@ return [
     'numeric' => ':attribute必须是数字',
     'between' => ':attribute必须在:min - :max之间',
     'size' => ':attribute不能超过:size字',
+    'comment.max' => ':attribute不能超过:max字',
     'shop_not_exist' => '店铺不存在',
     'save_success' => '发起交易成功',
     'save_failed' => '发起交易失败',
@@ -47,4 +48,6 @@ return [
     'max' => ':attribute的长度不能超过:max位',
     'digits_between' => ':attribute必须为数字，且长度在:min到:max之间',
     'digits' => ':attribute必须为数字，且长度必须是:value位',
+    'user_pay_password_error' => '支付密码错误',
+    'user_check_pay_password_times_out' => '超出支付密码错误次数上限',
 ];

@@ -24,20 +24,6 @@ use Illuminate\Routing\Router;
 //});
 
 Route::any('test', 'Api\TestController@index');
-Route::group([
-    'prefix'        => '/shop',
-    'namespace'     => 'Api',
-], function (Router $router) {
-    $router->post('create', 'ShopController@create');
-    $router->get('types', 'ShopController@types');
-});
-
-Route::group([
-    'prefix'        => '/transfer',
-    'namespace'     => 'Api',
-], function (Router $router) {
-    $router->post('create', 'TransferController@create');
-});
 
 Route::group([
     'prefix'       => '/my',
@@ -48,8 +34,10 @@ Route::group([
     $router->post('setPayPassword','UserController@setPayPassword');
     $router->post('updatePayPassword','UserController@updatePayPassword');
     $router->post('updatePayCard','UserController@updatePayCard');
-    $router->get('GetPayCard','UserController@GetPayCard');
-
+    $router->get('getPayCard','UserController@getPayCard');
+    $router->post('identify','UserController@identify');
+    $router->get('info','UserController@info');
+    $router->post('pay_password','UserController@pay_password');
 });
 
 Route::group([
@@ -59,6 +47,7 @@ Route::group([
     $router->get('index', 'CardController@index');
     $router->post('create', 'CardController@create');
     $router->post('delete', 'CardController@delete');
+    $router->get('getBanks','CardController@getBanks');
 });
 
 $api = app('Dingo\Api\Routing\Router');
@@ -68,6 +57,10 @@ $api = app('Dingo\Api\Routing\Router');
 //app('Dingo\Api\Auth\Auth')->extend('jwt', function ($app) {
 //    return new Dingo\Api\Auth\Provider\JWT($app['Tymon\JWTAuth\JWTAuth']);
 //});
+app('api.exception')->register(function (Exception $exception) {
+    $request = Illuminate\Http\Request::capture();
+    return app('App\Exceptions\Handler')->render($request, $exception);
+});
 $api->version('v1', function ($api) {
     $api->group([
         'prefix' => 'auth',
@@ -75,6 +68,20 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         $api->post('login', 'AuthController@login');
         $api->post('register', 'AuthController@register');
+        $api->get("login/wechat/url", 'AuthController@wechat_login_url');
+        $api->post("login/wechat", 'AuthController@wechat_login');
+        $api->post("valid", 'AuthController@valid');
+        $api->post("sms", 'AuthController@sms');
+        $api->post("password/reset", 'AuthController@reset_password');
+    });
+});
+
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => '/',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+//        $api->get('time', 'CommonController@time');
     });
 });
 
@@ -85,13 +92,47 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     ], function ($api) {
         $api->get('lists', 'ShopController@lists');
         $api->get('lists/mine', 'ShopController@my_lists');
+        $api->get('lists/all', 'ShopController@all');
         $api->get('detail/{id}', 'ShopController@detail');
+        $api->get('members/{id}', 'ShopController@members');
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
+        $api->post('join/{id}', 'ShopController@join');
         $api->post('create', 'ShopController@create');
+        $api->get('qrcode/{id}', 'ShopController@qrcode');
     });
 });
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'transfer',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('show', 'TransferController@show');
+        $api->get('feerecord', 'TransferController@feeRecord');
+        $api->get('record', 'TransferController@record');
+        $api->post('mark', 'TransferController@mark');
+        $api->post('payfee', 'TransferController@payFee');
+        $api->post('notice', 'TransferController@notice');
+        $api->post('withdraw', 'TransferController@withdraw');
+        $api->post('trade', 'TransferController@trade');
+        $api->post('validate', 'TransferController@valid');
+        $api->post('create', 'TransferController@create');
+        $api->post('close', 'TransferController@close');
+        $api->post('cancel', 'TransferController@cancel');
+    });
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'account',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/', 'AccountController@index');
+    });
+});
+
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',

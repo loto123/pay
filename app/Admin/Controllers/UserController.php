@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Shop;
+use App\TransferRecord;
 use App\User;
 
 use Encore\Admin\Form;
@@ -11,6 +12,8 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use function foo\func;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
@@ -75,17 +78,27 @@ class UserController extends Controller
     {
         return Admin::grid(User::class, function (Grid $grid) {
 
+            $user_table = (new User)->getTable();
+            $grid->model()->leftJoin('transfer_record as tfr', 'tfr.user_id', '=', $user_table .'.id')
+                ->select($user_table.'.*',
+                    DB::raw('SUM( CASE WHEN stat=1 THEN amount ELSE 0 END) AS payment'),
+                    DB::raw('SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END) AS profit'),
+                    DB::raw('COUNT(*) AS transfer_count'));
             if (Request::input('user_id')) {
                 $grid->model()->where('id', Request::input('user_id'));
             }
+            $grid->model()->groupBy($user_table.'.id');
 
             $grid->id('编号');
             $grid->name('用户');
-            $grid->xxx('交易笔数')->sortable();
-            $grid->xxx('余额');
-            $grid->xxx('收益');
-            $grid->xxx('收款');
-            $grid->xxx('付款');
+            $grid->mobile('手机号');
+            $grid->transfer_count('交易笔数');
+            $grid->balance('余额');
+            $grid->column('pure_profit', '收益')->display(function(){
+                return number_format($this->profit - $this->payment,2);
+            });
+            $grid->profit('收款');
+            $grid->payment('付款');
             $grid->xxx('上级运营');
             $grid->xxx('上级代理');
             $grid->xxx('支付渠道');
@@ -110,33 +123,33 @@ class UserController extends Controller
         return Admin::form(User::class, function (Form $form) {
 
             $form->display('id', '编号');
-            $form->display('name','用户名');
-            $form->text('mobile','手机号码');
-            $form->checkbox('menu.id','解绑微信号')->options(User::where('id','1')->pluck('name','id'));
-            $form->select('menu.name','支付方式')->options(['0'=>'xx','1'=>'xxxx']);
-            $form->select('openid','')->options(['0'=>'xx','1'=>'xxxx','2'=>'tt','3'=>'tttt']);
-            $form->display('created_at','账号创建时间');
-            $form->switch('status','冻结');
-
+            $form->display('name', '用户名');
+            $form->text('mobile', '手机号码');
+            $form->text('balance', '余额');
+            $form->display('xxx', '身份');
+//            $form->checkbox('sss', '解绑微信号')->options(User::where('id','1')->pluck('name','id'));
+            $form->display('created_at', '账号创建时间');
+            $form->switch('status', '冻结');
             $form->saving(function (Form $form) {
-                Log::info(['model'=>[
-                    'id' => $form->model()->id,
-                    'name' => $form->model()->name,
-                    'mobile' => $form->model()->mobile,
-                    'openid' => $form->model()->openid,
-                    'menu.name' => $form->model()->menu->name,
-                    'menu.id' => $form->model()->menu->id,
-                    'status' => $form->model()->status,
-                ]]);
-                Log::info(['form'=>[
-                    'id' => $form->id,
-                    'name' => $form->name,
-                    'mobile' => $form->mobile,
-                    'openid' => $form->openid,
-                    'menu.name' => $form->menu['name'],
-                    'menu.id' => $form->menu['id'],
-                    'status' => $form->status,
-                ]]);
+                /*
+                 * 提交前需要做一些处理：
+                 * 1.解绑微信号，需要弹出一个js确认框
+                 * 2.验证手机号的唯一性
+                 * */
+//                Log::info(['model'=>[
+//                    'id' => $form->model()->id,
+//                    'name' => $form->model()->name,
+//                    'mobile' => $form->model()->mobile,
+//                    'balance' => $form->model()->balance,
+//                    'status' => $form->model()->status,
+//                ]]);
+//                Log::info(['form'=>[
+//                    'id' => $form->id,
+//                    'name' => $form->name,
+//                    'mobile' => $form->mobile,
+//                    'balance' => $form->balance,
+//                    'status' => $form->status,
+//                ]]);
             });
         });
     }
@@ -145,8 +158,13 @@ class UserController extends Controller
     {
         return Admin::content(function (Content $content) use($id) {
             $list = User::find($id);
-            $data = compact('list');
-            $content->row(view('admin/userDetail',$data));
+            $transfer_record = TransferRecord::where('user_id', $id)
+                ->select(DB::raw('SUM( CASE WHEN  stat=1 THEN amount ELSE 0 END) AS payment'),
+                    DB::raw('SUM( CASE WHEN  stat=2 THEN real_amount ELSE 0 END) AS profit'),
+                    DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(fee_amount) AS fee_amount_count'))
+                ->first();
+            $data = compact('list', 'transfer_record');
+            $content->row(view('admin/userDetail', $data));
             $content->header("用户详情");
         });
     }

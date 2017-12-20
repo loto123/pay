@@ -1,7 +1,7 @@
 <template>
   <div id="shop">
       <div id="top">
-          <topBack :backUrl="'\/index\/'" style="color:#fff;">
+          <topBack :backUrl="'\/index\/'" style="color:#fff;background:#26a2ff;" >
               <div class="top-message flex flex-reverse" @click = "goMessagePage">
                 <i class="iconfont">&#xe626;</i>
                 <span class="notice">
@@ -28,7 +28,7 @@
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
 
-        <div class="shop-item flex flex-v flex-align-center" @click="goDetail('hello')">
+        <div class="shop-item flex flex-v flex-align-center" @click="goDetail(item.id)"  v-for="item in shopList" :key ="item.id">
           <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
             
@@ -44,7 +44,7 @@
             
           </div>
 
-          <h3>店铺1</h3>
+          <h3>{{item.name}}</h3>
           <p class="today-earn">今日收益:123456</p>
           <p class="all-earn">总收益:666666</p>
         </div>
@@ -63,25 +63,27 @@
       </div>
 
     <transition name="slide">
+
+      <!-- 创建店铺拉起 -->
        <section class="add-shop-tab" v-if="addShopTabStatus" >
           <top-back :title= "'填写店铺信息'" :userAction = "'hide'"  v-on:hide="hide"></top-back>
 
           <div class= "item">
-            <mt-field label="店铺名称" placeholder="请设置店铺名称" ></mt-field>
+            <mt-field label="店铺名称" placeholder="请设置店铺名称"  v-model="openNewShop.name"></mt-field>
           </div>
 
           <div class= "item">
-            <mt-field label="设置倍率" placeholder="请输入倍率(数字)" type="number" style="margin-top:0.4em;"></mt-field>
+            <mt-field label="设置单价" placeholder="请输入单价(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
           </div>
 
           <div class= "item">
-            <mt-field label="设置抽水比率" placeholder="设置抽水比率(小数)" type="number" style="margin-top:0.4em;"></mt-field>
+            <mt-field label="设置抽水比率" placeholder="设置抽水比率(小数)" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
           </div>
 
           <div class="item open-deal-switch flex flex-align-center">
             <label for="" class="flex-7" style="padding-left:0.8em;">是否开启交易</label>
             <span class="flex-3 flex flex-reverse" style="padding-right:1em;">
-              <mt-switch v-model="dealStatus"></mt-switch>
+              <mt-switch v-model="openNewShop.active"></mt-switch>
             </span>
           </div>
 
@@ -91,7 +93,7 @@
           </div>
 
           <div class="btn-wrap">
-            <mt-button type="primary" size = "large">完成</mt-button>
+            <mt-button type="primary" size = "large" @click="createShop">完成</mt-button>
           </div>
         </section>
     </transition>
@@ -264,7 +266,6 @@
     h3{
       padding-top:0.3em;
       color:#999;
-      // padding-bottom:em;
     }
   }
 }
@@ -275,7 +276,7 @@
   background: #eee;
   padding-bottom: 2em;
   padding-top: 1em;
-  position: absolute;
+  position: fixed;
   top: 0em;
   left: 0em;
   z-index: 1001;
@@ -336,16 +337,35 @@
 
 <script>
 import topBack from "../../components/topBack"
+import {Indicator} from 'mint-ui'
+import request from '../../utils/userRequest'
+import Loading from '../../utils/loading'
 
 export default {
   components: { topBack },
+
+  mounted(){
+    this.getShopData();
+  },
+
   data() {
     return {
       addShopTabStatus: false,      // 创建店铺拉起状态
-      dealStatus: true              // 是否开启交易(创建店铺tab)
+      dealStatus: true,             // 是否开启交易(创建店铺tab)
+
+      openNewShop:{
+        name :null,
+        rate :null,
+        percent :null,
+        active :true
+      },
+
+      shopList:[]
     };
   },
   methods: {
+
+    // 路由跳转
     goMyCollection() {
       this.$router.push("/shop/my_collection");
     },
@@ -353,14 +373,47 @@ export default {
       this.$router.push("/shop/message_list");
     },
     goDetail(e, evnet) {
-      this.$router.push("/shop/shop_detail");
+      console.log(e);
+      this.$store.dispatch("shop_setShopDetailId",e);
+      this.$router.push("/shop/shop_detail"+"?id="+e);
+      console.log(event);
     },
     addShop() {
       this.addShopTabStatus = true;
     },
     hide() {
       this.addShopTabStatus = false;
+    },
+
+    // 创建店铺
+    createShop(){
+      var self = this;
+      var data = this.openNewShop;
+
+      request.getInstance().postData("api/shop/create",data).then(function(res){
+        console.log(res);
+        self.addShopTabStatus = false;
+        self.getShopData();
+      }).catch((err)=>{
+        console.error(err);
+      });
+    },
+
+    // 数据处理
+    getShopData(){
+      var self = this;
+      Loading.getInstance().open();
+      request.getInstance().getData("api/shop/lists/mine").then(function(res){
+        self.shopList = res.data.data.data;
+        console.log(res);
+        Loading.getInstance().close();
+        
+      }).catch(function(e){
+        Loading.getInstance().close();
+        console.error(e);
+      });
     }
+
   }
 };
 </script>

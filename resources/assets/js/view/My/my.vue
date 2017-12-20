@@ -1,105 +1,188 @@
 <template>
-  <div id="my">
-    <section class="header-container">
-      <div class="header">
-        <div class="imgWrap">
-            <img src="/images/logo.png">
-        </div>
-        <h3>发起交易</h3>
-        <div class="acc-number">账号:<span>18674231689</span></div>
-      </div>
-    </section>
-    <section>
-      <ul class="my-list">
-        <li>
-          <mt-cell title="推荐人" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
-          </mt-cell>
-        </li>
-        <li>
-          <mt-cell title="银行卡管理" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
-          </mt-cell>
-        </li>
-        <li>
-          <mt-cell title="实名认证" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
-          </mt-cell>
-        </li>
-        <li>
-          <mt-cell title="查看那结算卡" is-link to="">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
-          </mt-cell>
-        </li>
-        <li>
-          <mt-cell title="更多设置" is-link to="/#/my/set">
-            <img slot="icon" src="/images/logo.png" width="24" height="24">
-            <span>icon 是图片</span>
-          </mt-cell>
-        </li>
-      </ul>
-    </section>
-    <tabBar></tabBar> 
-  </div>
+	<div id="my">
+		<section class="header-container">
+			<div class="header">
+				<div class="imgWrap">
+					<img src="/images/avatar.jpg">
+				</div>
+				<h3>{{personal.name}}</h3>
+				<div class="acc-number">账号:
+					<span>{{personal.mobile}}</span>
+				</div>
+			</div>
+		</section>
+		<section>
+			<ul class="my-list">
+				<li>
+					<mt-cell title="推荐人" is-link>
+						<img slot="icon" src="/images/referrer.png" width="30" height="30">
+						<span>{{listContent.parent_name}} <em>{{listContent.parent_mobile}}</em></span>
+					</mt-cell>
+				</li>
+				<li @click="realAuth(personal.mobile)">
+					<mt-cell title="实名认证" is-link>
+						<img slot="icon" src="/images/realName.png" width="30" height="30">
+						<span>{{listContent.identify_status ? "完善" : "未完善"}}</span>
+					</mt-cell>
+				</li>
+				<li @click="bankCardManage">
+					<mt-cell title="银行卡管理" is-link>
+						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
+						<span>
+							<font>{{listContent.card_count}}</font>张</span>
+					</mt-cell>
+				</li>
+				<li @click="checkSettle">
+					<mt-cell title="查看结算卡" is-link>
+						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
+					</mt-cell>
+				</li>
+				<li>
+					<mt-cell title="更多设置" is-link to="/my/set">
+						<img slot="icon" src="/images/moreSet.png" width="30" height="30">
+					</mt-cell>
+				</li>
+			</ul>
+		</section>
+		<tabBar :status="'my'"></tabBar>
+	</div>
 </template>
 
 <style lang="scss" scoped>
-.header-container {
-  height: 12em;
-  padding-top: 4em;
-  box-sizing: border-box;
-  // border-bottom: 1px solid #ccc;
-}
-.header {
-  text-align: center;
-  .imgWrap {
-    width: 100%;
-    background: #fff;
-    > img {
-      width: 4.5em;
-      height: 4.5em;
-      display: block;
-      margin: auto;
-      border-radius: 50%;
-    }
-  }
+	.header-container {
+		padding-top: 4em;
+		padding-bottom: 1em;
+		box-sizing: border-box;
+		background: #26a2ff;
+		color: #fff;
+	}
 
-  h3,.acc-number{
-    font-size: 1em;
-    text-align: center;
-    margin-top: 0.5em;
-    color:#616161;
-  }
-  .acc-number {
-    color:#333;
-    span{
-      color:#616161;
-    }
-  }
-}
-.my-list{
-  border-bottom: 1px solid #d9d9d9;
-  li{
-    .mint-cell{
-      background-image: none;
-      background-size: 100% 1px;
-      background-repeat: no-repeat;
-      background-position: top;
-    }
-  }
-}
+	.header {
+		text-align: center;
+		.imgWrap {
+			width: 100%;
+			>img {
+				width: 4.5em;
+				height: 4.5em;
+				display: block;
+				margin: auto;
+				border-radius: 50%;
+			}
+		}
+		h3,
+		.acc-number {
+			font-size: 1em;
+			text-align: center;
+			margin-top: 0.5em;
+		}
+	}
 
+	.my-list {
+		border-bottom: 1px solid #d9d9d9;
+		li {
+			.mint-cell {
+				background-image: none;
+				background-size: 100% 1px;
+				background-repeat: no-repeat;
+				background-position: top;
+				span {
+					font-size: 0.9em;
+				}
+			}
+		}
+	}
 </style>
 
 
 <script>
-  import tabBar from "../../components/tabBar";
+	import axios from "axios";
+	import { Toast,MessageBox } from 'mint-ui';
+	import tabBar from "../../components/tabBar";
+	import request from '../../utils/userRequest';
+	import Loading from '../../utils/loading'
 
-  export default {
-    components: { tabBar }
-  };
+	export default {
+		data () {
+			return {
+				personal:{
+					name:null,
+					mobile:null,
+					thumb:null
+				},
+				listContent:{
+					parent_name:null,
+					parent_mobile:null,
+					card_count:null,
+					identify_status:null
+				}
+				
+			}
+		},
+		created(){
+			this.personalInfo();
+			this.listInfo();
+    	},
+		components: { tabBar },
+		methods: {
+			//个人信息
+			personalInfo(){
+				Loading.getInstance().open("加载中...");
+
+				request.getInstance().getData("api/my/info")
+					.then((res) => {
+						this.personal.name=res.data.data.name;
+						this.personal.mobile=res.data.data.mobile;
+						this.personal.thumb=res.data.data.thumb;
+						Loading.getInstance().close();
+					})
+					.catch((err) => {
+						console.log(err);
+					})
+			},
+			//列表信息
+			listInfo(){
+				var self=this;
+
+				request.getInstance().getData("api/my/index")
+					.then((res) => {
+						console.log(res);
+						self.listContent.parent_name=res.data.data.parent_name;
+						self.listContent.parent_mobile=res.data.data.parent_mobile;
+						self.listContent.card_count=res.data.data.card_count;
+						self.listContent.identify_status=res.data.data.identify_status;
+					})
+					.catch((err) => {
+						console.log(err);
+					})
+			},
+			realAuth(e){
+				this.$router.push("/my/realAuth"+"?mobile="+e);
+			},
+			//银行卡管理
+			bankCardManage(){
+				if(this.listContent.identify_status==0){
+					MessageBox.confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(
+						() => {
+							this.$router.push('/my/realAuth');
+						},
+						() => {
+							//取消操作
+							console.log("已经取消");
+						}
+					);
+				}else{
+					this.$router.push('/my/bankCardManage');
+				}
+				
+			},
+			//结算卡
+			checkSettle(){
+				if(this.listContent.card_count<=0){
+					return;
+				}else{
+					this.$router.push('/my/checkSettle');
+				}
+			}
+		}
+	};
 </script>

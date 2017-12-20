@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Bank;
 use App\User;
 use App\UserCard;
 use Illuminate\Http\Request;
@@ -14,31 +15,109 @@ use Validator;
 
 class CardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("jwt.auth");
-    }
+//    public function __construct()
+//    {
+//        $this->middleware("jwt.auth");
+//    }
 
-    //银行卡列表
+    /**
+     * @SWG\GET(
+     *   path="/card/index",
+     *   summary="银行卡列表",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
-        $cards = UserCard::query()->where('user_id', '=', $this->user->id)->select()->get();
+        if($this->user->identify_status != 1) {
+            return response()->json(['code'=>0,'msg'=>'未实名认证，该功能不可用','data'=>[]]);
+        }
+//        if(empty($this->user->pay_password)) {
+//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+//        }
+
+        $user_card_table = (new UserCard)->getTable();
+        $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank')
+            ->where('user_id', '=', $this->user->id)
+            ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')
+            ->orderBy('id')->get();
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
-                Log::info($item);
-                $data[] = [
+                $card_type = '';
+                switch ($item->type) {
+                    case 1:
+                        $card_type = '储蓄卡';
+                        break;
+                    case 2:
+                        $card_type = '信用卡';
+                        break;
+                }
+                $data[$item->id] = [
                     'card_id' => $item->id,
                     'card_num' => $this->formatNum($item->card_num), //做掩码处理
-                    'bank' => $item->bank,
+                    'bank' => $item->bank_name,
+                    'card_type' => $card_type,
+                    'card_logo' => $item->bank_logo,
+                    'is_pay_card' => ($item->id == $this->user->pay_card_id)? 1:0,
                 ];
+            }
+            if( isset($data[$this->user->pay_card_id]) ) {
+                $item = $data[$this->user->pay_card_id];
+                unset($data[$this->user->pay_card_id]);
+                array_unshift($data, $item);
             }
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
 
-    //绑定银行卡
+    /**
+     * @SWG\Post(
+     *   path="/card/create",
+     *   summary="绑定银行卡",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="card_num",
+     *     in="formData",
+     *     description="银行卡号",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="name",
+     *     in="formData",
+     *     description="持卡人姓名",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="formData",
+     *     description="持卡人身份证ID",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="bank",
+     *     in="formData",
+     *     description="银行id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="mobile",
+     *     in="formData",
+     *     description="银行卡绑定手机号",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function create(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -47,25 +126,28 @@ class CardController extends Controller
             [
                 'card_num' => 'bail|required|digits_between:16,19',
                 'name' => 'bail|required',
-                'id' => 'bail|required|digits:18',
+                'id' => 'bail|required|size:18',
                 'bank' => 'bail|required',
                 'mobile' => 'bail|required|digits:11',
             ],
             [
                 'required' => trans('trans.required'),
                 'digits_between' =>trans('trans.digits_between'),
-                'digits' => trans('trans.digits'),
+                'size' => trans('trans.size'),
             ]
         );
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-
+//        if(empty($this->user->pay_password)) {
+//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+//        }
         $card_num = $request->input('card_num');
         $bank = $request->input('bank');
         $holder_name = $request->input('name');
         $holder_id = $request->input('id');
         $holder_mobile = $request->input('mobile');
+        $type = $request->input('type')??NULL;
 
         //验证卡号？身份证号？手机号？
 
@@ -82,6 +164,7 @@ class CardController extends Controller
         $cards->holder_name = $holder_name;
         $cards->holder_id = $holder_id;
         $cards->holder_mobile = $holder_mobile;
+        $cards->type= $type;
         $cards->save();
         if(empty($this->user->pay_card_id)) {
             $this->user->pay_card_id =$cards->id;
@@ -90,7 +173,22 @@ class CardController extends Controller
         return response()->json(['code' => 1,'msg' => '','data' => []]);
     }
 
-    //解绑银行卡
+    /**
+     * @SWG\Post(
+     *   path="/card/delete",
+     *   summary="解绑银行卡",
+     *   tags={"我的"},
+     *   @SWG\Parameter(
+     *     name="card_id",
+     *     in="formData",
+     *     description="银行卡ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function delete(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -104,21 +202,47 @@ class CardController extends Controller
         if ($validator->fails()) {
             return response()->json(['code'=>0,'msg'=>$validator->errors()->first(),'data'=>[]]);
         }
-
+//        if(empty($this->user->pay_password)) {
+//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+//        }
         $card_id = $request->input('card_id');
         $user_card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
-        if (!empty($user_card) && count($user_card)>0) {
-            $user_card->delete();
-            //如果银行卡都解绑了，要把结算卡清零
-            $user_card_count = UserCard::where('id',$this->user->id)->count();
-            if($user_card_count==0) {
+        if ( !empty($user_card) && count($user_card)>0 ) {
+            if (count($user_card) == 1){
+                $user_card->delete();
                 User::where('id',$this->user->id)->update(['pay_card_id'=>NULL]);
+                return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
+            } else if( $this->user->pay_card_id == $card_id) {
+                return response()->json(['code'=>0,'msg'=>'操作无效，请先更换结算卡','data'=>[]]);
             }
-            return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
-        } else {
-            return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
         }
+        return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
     }
+
+    /**
+     * @SWG\GET(
+     *   path="/card/getBanks",
+     *   summary="银行列表",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function getBanks() {
+        $query = Bank::query()->select()->get();
+        $data = [];
+        if(!empty($query) && count($query)>0) {
+            foreach ($query as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ];
+            }
+        }
+        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+    }
+
+
 
     //对字符串做掩码处理
     private function formatNum($num,$pre=0,$suf=4)

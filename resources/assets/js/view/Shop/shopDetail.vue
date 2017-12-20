@@ -9,18 +9,17 @@
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
-            
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
         </div>
-        <h3 style="margin-top:0.5em;">店铺1111</h3>
-        <h3>店铺id:123123123</h3>
+        <h3 style="margin-top:0.5em;">{{shopName}}</h3>
+        <h3>店铺id:{{shopId}}</h3>
       </div>
 
       <div class="menu flex " v-if="isGroupMaster">
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around">
+          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopAccount">
               <i class="iconfont">
                   &#xe61e;
               </i>
@@ -33,7 +32,7 @@
               </i>
               <h3>交易管理</h3>
           </div>
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around">
+          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopOrder">
               <i class="iconfont">
                   &#xe603;
               </i>
@@ -155,7 +154,7 @@
     </div>
 
     <div class="button-wrap">
-        <mt-button type="danger" size="large">解散店铺</mt-button>
+        <mt-button type="danger" size="large" @click = "dissShop">解散店铺</mt-button>
     </div>
 
   </div>
@@ -310,12 +309,12 @@
     margin-top: 0.5em;
 
     > div {
+      height: 2.5em;
+      padding-left: 1em;
+      box-sizing: border-box;
       &:nth-child(1) {
         border-bottom: 0.05em solid #eee;
       }
-      box-sizing: border-box;
-      height: 2.5em;
-      padding-left: 1em;
       i {
         text-align: right;
         padding-right: 1em;
@@ -387,18 +386,35 @@
 
 <script>
 import topBack from "../../components/topBack";
+import {Indicator,Toast} from "mint-ui"
+import request from "../../utils/userRequest"
+import Loading from "../../utils/loading"
 
 export default {
   name: "shopDetail",
+  beforeMount(){
+
+  },
+  created(){
+    this.init();
+
+  },
+  mounted(){
+    
+  },
   components: { topBack },
   data() {
     return {
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
-      isGroupMaster:true        // 是否是群主 
+      isGroupMaster:true,        // 是否是群主 
+
+      shopId:null,
+      shopName:null
     };
   },
   methods: {
+    // 跳转控制
     hide(){
     },
     goMember(){
@@ -406,7 +422,44 @@ export default {
     },
     goDealManagement(){
       this.$router.push("/shop/deal_management");
+    },
+    goShopAccount(){
+      this.$router.push("/shop/shopAccount");
+    },
+    goShopOrder(){
+      this.$router.push("/shop/shopOrder");
+      
+    },
+
+    // 数据控制
+    init(){
+      Loading.getInstance().open();
+      var self = this;
+      var _id = this.$route.query.id;
+
+      request.getInstance().getData("api/shop/detail/"+_id).then((res)=>{
+        console.log(res);
+
+        this.shopId = res.data.data.id;
+        this.shopName = res.data.data.name;
+
+        Loading.getInstance().open();
+      }).catch((error)=>{
+        Toast("当前页面不存在");
+        this.$router.go(-1);
+        console.error(error);
+      });
+    },
+
+    dissShop(){
+      request.getInstance().postData("api/shop/close/"+this.shopId).then((res)=>{
+        console.log(res);
+        this.$router.push("/shop");
+      }).catch((error)=>{
+        console.error(error);
+      });
     }
+
   }
 };
 </script>

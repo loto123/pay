@@ -1,7 +1,7 @@
 <template>
   <div id="my-collection">
       <div id="top">
-          <topBack :backUrl="'\/index\/'" style="color:#fff;">
+          <topBack :backUrl="'\/index\/'" style="color:#fff;background:#26a2ff;">
               
           </topBack>
 

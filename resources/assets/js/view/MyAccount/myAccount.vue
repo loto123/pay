@@ -1,14 +1,14 @@
 <template>
     <div id="myAccount" class="myAccount-container">
-        <topBack title="我的账户">
-            <div style="width:100%; padding-right:1em; height:2em; box-sizing:border-box;" class= "flex flex-reverse flex-align-center">
-                <a  style="width:4em;" href="/#/myAccount/bill" class="recharge-btn ">账单明细</a>
+        <topBack title="我的账户" style="background:#eee;">
+            <div class= "flex flex-reverse flex-align-center header-right">
+                <a href="/#/myAccount/bill" class="recharge-btn ">账单明细</a>
             </div>
         </topBack>
         <div class="myAccount-box">
             <div class="withDraw-money">
-                <div class="money">88.88</div>
-                <div class="title">当前可用余额</div>
+                <div class="money">{{balance}}</div>
+                <div class="title">当前可提现余额</div>
             </div>
             <div class="submit-btn">
                 <a href="/#/myAccount/recharge" class="mb15">
@@ -26,14 +26,35 @@
 </template>
 
 <script>
+    import axios from "axios";
+	import request from '../../utils/userRequest';
     import topBack from '../../components/topBack.vue'
+    import Loading from '../../utils/loading'
+
     export default {
         data () {
             return {
-                
+                balance:null
             }
         },
-        components: {topBack}
+        created(){
+			this.myAccount();
+    	},
+        components: {topBack},
+        methods: {
+            myAccount(){
+                Loading.getInstance().open("加载中...");
+
+				request.getInstance().getData("api/account")
+					.then((res) => {
+                        this.balance=res.data.data.balance;
+                        Loading.getInstance().close();
+					})
+					.catch((err) => {
+						console.log(err);
+					})
+            }
+        }
     }
 </script>
 
@@ -46,10 +67,20 @@
         background: #eee;
         height: 100vh;
         padding-top: 2em;
+        box-sizing: border-box;
+        .header-right{
+            width:100%;
+            padding-right:1em;
+            height:2em;
+            box-sizing:border-box;
+        }
+    }
+    .myAccount-box{
+        margin-top: 2em;
     }
     .withDraw-money{
-        width: 14em;
-        height: 14em;
+        width: 13em;
+        height: 13em;
         border: 1px solid #aaa;
         border-radius: 50%;
         margin: 0 auto 3em auto;

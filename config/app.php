@@ -177,6 +177,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class,
+        Dingo\Api\Provider\DingoServiceProvider::class,
+        Toplan\PhpSms\PhpSmsServiceProvider::class,
     ],
 
     /*
@@ -227,6 +230,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'EasyWeChat' => Overtrue\LaravelWeChat\Facade::class,
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'PhpSms' => Toplan\PhpSms\Facades\Sms::class,
     ],
 
 ];

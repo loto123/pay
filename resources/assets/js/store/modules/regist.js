@@ -3,8 +3,12 @@
 const registStore = {
     state: {
         "step": 0,
-        "refindPassword":false
+        "refindPassword":false,
+        "name":"sangliang",
+        "password":null,
+        "mobile":null
     },
+
     mutations: {
         addStep(state) {
             state.step += 1;
@@ -14,7 +18,15 @@ const registStore = {
         },
         setRefindPassWordState(state,value){
             state.refindPassword = value;
+        },
+
+        setPassword(state,value){
+            state.password = value
+        },
+        setAccountName(state,value){
+            state.password = value
         }
+
     },
     actions: {
         addStep({ commit, state }) {
@@ -25,6 +37,12 @@ const registStore = {
         },
         setRefindPassWordState({ commit, state },value){
             commit("setRefindPassWordState",value);
+        },
+        regist_setPassword({ commit, state },value){
+            commit("setPassword",value);
+        },
+        regist_setAccountName({ commit, state },value){
+            commit("setAccountName",value);
         }
     }
 }

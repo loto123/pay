@@ -4,11 +4,22 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Skip32;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
+/**
+ * Class User
+ * @package App
+ * @property integer $id
+ * @property string $name
+ * @property string $mobile
+ * @property string $password
+ * @property float $balance
+ */
 class User extends Authenticatable
 {
     use Notifiable;
-
+    use EntrustUserTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -69,22 +80,56 @@ class User extends Authenticatable
         return $this->hasOne('App\Admin', 'id', 'operator_id');
 
     }
-    
+
     /**
      * 我管理的店铺
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function shop()
     {
-        return $this->hasMany('App\Shop','manager','id');
+        return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
 
     /**
      * 我参与的店铺
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
-    public function in_shops() {
+    public function in_shops()
+    {
         return $this->belongsToMany(Shop::class, (new ShopUser)->getTable(), 'user_id', 'shop_id');
     }
 
+    public function wechat_user()
+    {
+        return $this->hasOne(OauthUser::class, 'user_id');
+    }
+
+    public function paypwd_record()
+    {
+        return $this->hasMany('App\PaypwdValidateRecord', 'user_id');
+    }
+
+    //子代理
+    public function child_proxy()
+    {
+        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
+            $query->where('name','like', 'agent%');
+        });
+    }
+
+    //子用户
+    public function child_user()
+    {
+        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        });
+    }
+
+    public function en_id() {
+        return Skip32::encrypt("0123456789abcdef0123", $this->id);
+    }
+
+    public static function findByEnId($en_id) {
+        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
+    }
 }

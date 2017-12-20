@@ -8,14 +8,17 @@ import MyAccount from './myAccount'
 import MakeDeal from './makeDeal'
 import My from './my'
 import Shop from './shop'
+import Inform from './inform'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
 import '../../sass/iconfont.scss'
 
+// import Loading from '../utils/loading'
+
 Vue.use(Mint)
 Vue.use(Router)
-
+// Vue.use(Loading);
 var index = [
     { path: '/index', name: 'index', component: Index },
 ]
@@ -29,10 +32,12 @@ var routerList = {
     myAccount:MyAccount,
     // 发起交易
     makedeal:MakeDeal,
-
+    //我的
     my:My,
-    
-    shop:Shop
+
+    shop:Shop,
+    //消息
+    inform:Inform
 };
 
 var router = [];

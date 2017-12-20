@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Skip32;
 
 class Transfer extends Model
 {
@@ -21,7 +22,7 @@ class Transfer extends Model
 
     //交易所属店铺
     public function shop() {
-        return $this->belongsTo('App\Shop', 'id', 'shop_id');
+        return $this->belongsTo('App\Shop','shop_id', 'id');
     }
 
     //参与交易人
@@ -32,5 +33,17 @@ class Transfer extends Model
     //红包茶水费记录
     public function tips() {
         return $this->hasMany('App\TipRecord', 'transfer_id', 'id');
+    }
+
+    public function en_id() {
+        return Skip32::encrypt("0123456789abcdef0123", $this->id);
+    }
+
+    public function en_shop_id() {
+        return Skip32::encrypt("0123456789abcdef0123", $this->shop_ip);
+    }
+
+    public static function findByEnId($en_id) {
+        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
     }
 }

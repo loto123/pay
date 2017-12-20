@@ -1,16 +1,16 @@
 <template>
   <div id="settleInfo">
-    <topBack title="修改密码"></topBack>
+    <topBack title="修改支付密码"></topBack>
     <div class="settleInfo-container">
-      <mt-field label="原密码" placeholder="请填写原密码" v-model="oldPassword"></mt-field>
-      <mt-field label="新密码" placeholder="请填写新密码" type="email" v-model="newPassword"></mt-field>
-      <mt-field label="确认新密码" placeholder="请再次输入密码" type="password" v-model="affirmPassword"></mt-field>
+      <mt-field label="原密码" placeholder="请填写原支付密码"></mt-field>
+      <mt-field label="新密码" placeholder="请填写新支付密码" type="email"></mt-field>
+      <mt-field label="确认新密码" placeholder="请再次输入新支付密码" type="password"></mt-field>
     </div>
     <div class="forget-password-box">
-      <div class="notice">密码长度必须在6-16个字符之间个字符</div>
+      <div class="notice">支付密码必须为6位纯数字</div>
       <div class="forget-password">
-        <a href="javascript:;" @click="forgetPassWord">
-          忘记原密码?
+        <a href="javascript:;">
+          忘记原支付密码？
         </a>
       </div>
     </div>
