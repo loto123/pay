@@ -178,6 +178,7 @@
 			//结算卡
 			checkSettle(){
 				if(this.listContent.card_count<=0){
+					Toast('请添加银行卡');
 					return;
 				}else{
 					this.$router.push('/my/checkSettle');

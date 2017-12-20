@@ -82,17 +82,20 @@ export default {
         this.$router.go(-1);
       })
     },
-    callBack(e){
-      console.log("321321");
+     //支付密码验证
+     callBack(password){
       var temp = {};
-      request.getInstance().postData('api/my/pay_password',_temp)
+      temp.password=password;
+      
+      request.getInstance().postData('api/my/pay_password',temp)
         .then((res) => {
-          console.log(res);
+          if(res.data.code==1){
+            this.$router.push('/my/checkSettle/list');
+          }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err.data.msg);
         })
-      
     }
   }
 };
