@@ -3,8 +3,8 @@
     <topBack title="修改登录密码"></topBack>
     <div class="settleInfo-container">
       <mt-field label="原密码" placeholder="请填写原密码" v-model="old_password"></mt-field>
-      <mt-field label="新密码" placeholder="请填写新密码" type="email" v-model="new_password"></mt-field>
-      <mt-field label="确认新密码" placeholder="请再次输入密码" type="password" v-model="confirm_password"></mt-field>
+      <mt-field label="新密码" placeholder="请填写新密码" v-model="new_password"></mt-field>
+      <mt-field label="确认新密码" placeholder="请再次输入密码" type="text" v-model="confirm_password"></mt-field>
     </div>
     <div class="password-btn flex flex-justify-center">
       <mt-button type="primary" size="large" @click="affirm">确认</mt-button>
