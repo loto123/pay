@@ -16,27 +16,11 @@
         <div class="tip-record">
             <h3>茶水费记录</h3>
             <ul class="flex flex-v">
-                <li class="flex flex-justify-between flex-align-center">
-                    <img src="/images/avatar.jpg" alt="">
-                    <span>玩家名字最多7格子</span>
+                <li class="flex flex-justify-between flex-align-center" v-for="item in renderData.tips">
+                    <img :src="item.user.avatar?item.user.avatar:'/images/default_avatar.jpg'" alt="">
+                    <span>{{item.user.name}}</span>
                     <div class="flex flex-v flex-align-center">
-                        <div style="font-size: 1.4em;">2</div>
-                        <div style="font-size: 0.8em;color:#999;">已交纳</div>
-                    </div>
-                </li>
-                <li class="flex flex-justify-between flex-align-center">
-                    <img src="/images/avatar.jpg" alt="">
-                    <span>玩家名字最多7格子</span>
-                    <div class="flex flex-v flex-align-center">
-                        <div style="font-size: 1.4em;">2</div>
-                        <div style="font-size: 0.8em;color:#999;">已交纳</div>
-                    </div>
-                </li>
-                <li class="flex flex-justify-between flex-align-center">
-                    <img src="/images/avatar.jpg" alt="">
-                    <span>玩家名字最多7格子</span>
-                    <div class="flex flex-v flex-align-center">
-                        <div style="font-size: 1.4em;">2</div>
+                        <div style="font-size: 1.4em;">{{item.amount}}</div>
                         <div style="font-size: 0.8em;color:#999;">已交纳</div>
                     </div>
                 </li>
@@ -130,8 +114,9 @@ export default {
     return {
       renderData: {
         name: null,
-        moneyData: null
+        moneyData: null,
       },
+      // hasPayList:[],
       passwordData: {
         switch: false,
         value: null
@@ -182,6 +167,7 @@ export default {
           }
         })
         .then(res => {
+          // 验证支付的数据
           if (res == true) {
             var _id = this.$route.query.id;
             var _data = {
@@ -200,6 +186,8 @@ export default {
               })
               .catch(err => {
                 console.error(err);
+                Loading.getInstance().close();
+                Toast(err.data.msg);       
               });
           }
           console.log(res);
@@ -212,7 +200,7 @@ export default {
     showPassWord() {
       this.passwordData.switch = true;
     },
-    hidePassword(e) {
+    hidePassword() {
       this.passwordData.switch = false;
     },
     getPassword(e) {
@@ -226,6 +214,7 @@ export default {
         pay_password: this.passwordData.value
       };
 
+      // 支付茶水费接口
       request
         .getInstance()
         .postData("api/transfer/payfee", _data)
@@ -233,9 +222,12 @@ export default {
           console.log(res);
           Toast("茶水费缴纳成功");
           this.hidePassword();
+          this.init();
         })
         .catch(err => {
           console.error(err);
+          Loading.getInstance().close();
+          Toast(err.data.msg);
         });
     }
   }

@@ -36,7 +36,7 @@ export default class UserRequest {
                         reject(res);
                         Toast("用户未登录,即将跳转登录...");
                         setTimeout(function(){
-                            window.location.href = "/#/login"
+                            window.location.href = "/#/login";
                         },1000);
                     }
                     else {
@@ -59,7 +59,7 @@ export default class UserRequest {
             Axios({
                 method: 'get',
                 url: tempUrl,
-                data: postData,
+                params: postData,
                 headers:{Authorization:"Bearer "+_token}
             })
                 .then(function (res) {

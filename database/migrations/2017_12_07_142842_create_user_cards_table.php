@@ -20,7 +20,7 @@ class CreateUserCardsTable extends Migration
             $table->char('holder_id', 18)->comment('持卡人身份证号');
             $table->string('holder_mobile', 20)->comment('持卡人银行预留手机号');
             $table->string('card_num','19')->comment('银行卡号');
-            $table->string('bank','30')->comment('所属银行');
+            $table->string('bank_id','30')->comment('所属银行');
             $table->timestamps();
         });
     }

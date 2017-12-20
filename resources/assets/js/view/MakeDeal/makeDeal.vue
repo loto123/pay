@@ -20,15 +20,40 @@
 
         </textarea>
     </div>
+    
+    <div class="notice-wrap flex flex-v">
+
+      <h3 class="flex flex-align-center">添加参与人</h3>
+      <div class="flex flex-align-center flex-wrap-on ">
+        <img src="/images/avatar.jpg" alt="" >
+        <img src="/images/avatar.jpg" alt="" >
+        <img src="/images/avatar.jpg" alt="" >
+        <img src="/images/avatar.jpg" alt="" >
+        <img src="/images/avatar.jpg" alt="" >
+        <img src="/images/avatar.jpg" alt="" >
+        <img src="/images/avatar.jpg" alt="" >
+
+        <div class="add flex flex-align-center flex-justify-center">
+          <i class="iconfont" style="font-size: 1.5em;color:#bbb;">
+            &#xe600;
+          </i>
+        </div>
+      </div>
+
+    </div>
 
     <div class="commit-btn">
-        <mt-button type="primary" size="large" v-on:click = "confirm" @click="submitData">确认</mt-button>
+        <mt-button type="primary" size="large" @click="submitData">确认</mt-button>
     </div>
 
     <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
 
-    <inputList :showSwitch = "dropListSwitch" v-on:hideDropList="hideDropList" :optionsList = "shopList"></inputList>
-
+    <inputList 
+      :showSwitch = "dropListSwitch" 
+      v-on:hideDropList="hideDropList" 
+      :optionsList = "shopList">
+    </inputList>
+    <choiseMember></choiseMember>  
   </div>
 </template>
 
@@ -91,7 +116,6 @@
 .textareaWrap {
   width: 90%;
   margin: 0 auto;
-
   margin-top: 1em;
 
   textarea {
@@ -101,6 +125,44 @@
     font-size: 1.2em;
     padding: 1em;
     box-sizing: border-box;
+  }
+}
+
+.notice-wrap{
+  width: 90%;
+  height:auto;
+  margin:0 auto;
+  margin-top:1em;
+  background: #fff;
+
+  h3{
+    height:1.5em;
+    padding-left: 1em;
+    color:#555;
+    font-size: 0.9em;
+  }
+
+  >div{
+    min-height: 4em;
+    width:100%;
+    padding-left: 1em;
+    padding-right: 1em;
+    box-sizing: border-box;
+
+    img{
+      width:2.5em;
+      height: 2.5em;
+      border-radius: 50%;
+      padding:0.3em;
+    }
+
+    .add{
+      width:2.5em;
+      height:2.5em;
+      border-radius: 50%;
+      border:1px solid #bbb;
+      box-sizing: border-box;
+    }
   }
 }
 
@@ -122,6 +184,7 @@
 <script>
 import topBack from "../../components/topBack";
 import inputList from "../../components/inputList";
+import choiseMember from "./choiseMember.vue"
 
 import Loading from "../../utils/loading";
 import request from "../../utils/userRequest";
@@ -146,7 +209,6 @@ export default {
   },
 
   methods: {
-    confirm() {},
     init() {
       Loading.getInstance().open();
       request
@@ -231,7 +293,7 @@ export default {
         });
     }
   },
-  components: { topBack, inputList }
+  components: { topBack, inputList , choiseMember }
 };
 </script>
 

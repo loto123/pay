@@ -31,16 +31,7 @@
         <div class="shop-item flex flex-v flex-align-center" @click="goDetail(item.id)"  v-for="item in shopList" :key ="item.id">
           <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
-            
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
-            <img src="/images/avatar.jpg" alt="">
+            <img :src="item.logo" alt="">
             
           </div>
 
@@ -214,8 +205,8 @@
       }
 
       > img {
-        width: 30%;
-        height: 30%;
+        width: 100%;
+        height: 100%;
         display: block;
         margin-left: 1%;
         margin-top: 1%;

@@ -31,7 +31,7 @@ class DataController extends Controller
         //交易总笔数
         $transfer_count = Transfer::count();
         //总收款
-        $amount = TransferRecord::where('stat', 1)->sum('amount');
+        $amount = abs(TransferRecord::where('stat', 1)->sum('amount'));
         //店铺分润
         $shop_amount = TipRecord::sum('amount');
         //茶水费
@@ -140,9 +140,10 @@ class DataController extends Controller
     //交易详情
     public function detail($id)
     {
-        $data = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
+        $transfer = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
+        $data['transfer'] = $transfer;
         return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/profit', $data));
+            $content->body(view('admin/data/dealDetails', $data));
             $content->header("交易详情");
         });
     }
@@ -151,7 +152,7 @@ class DataController extends Controller
     public function close($id)
     {
         $transfer = Transfer::find($id);
-        if ($transfer->isEmpty()) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -170,7 +171,7 @@ class DataController extends Controller
             if ($transfer->save()) {
                 //解冻店铺茶水费资金
                 $shop = $transfer->shop;
-                if (!$shop->isEmpty()) {
+                if ($shop) {
                     $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
                     $shop->balance = $shop->balance + $transfer->tip_amount;
                     $shop->save();
@@ -195,6 +196,7 @@ class DataController extends Controller
                     }
                     $profit->save();
                 }
+                DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
             }
         } catch (\Exception $e) {
@@ -251,15 +253,6 @@ class DataController extends Controller
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/record', $data));
             $content->header("支付流水");
-        });
-    }
-
-    public function test()
-    {
-        $data = [];
-        return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/data/dealDetails', $data));
-            $content->header("交易详情");
         });
     }
 
@@ -422,7 +415,7 @@ class DataController extends Controller
             if ($begin && $end) {
                 $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
             }
-        })->withCount(['child_proxy', 'child_user', 'promoter'])->where('id', $operatorId)
+        })->withCount(['child_proxy', 'child_user', 'promoter'])->where('admin_users.id', $operatorId)
             ->addSelect(DB::raw('sum(profit_record.fee_amount) as operator_fee_amount'))
             ->groupBy('admin_users.id')->first();
 
@@ -432,7 +425,8 @@ class DataController extends Controller
             if ($begin && $end) {
                 $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
             }
-        })->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
+        })->where('users.operator_id',$operatorId)
+            ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
             ->groupBy('users.id')->orderBy('proxy_fee_amount', 'DESC');
 
         $aid = $request->input('aid');
@@ -448,9 +442,10 @@ class DataController extends Controller
             });
         }
         $roles = Role::get();
+        $list = $listQuery->paginate(self::PAGE_SIZE);
         $data = compact('list', 'date_time', 'aid', 'operatorInfo', 'operatorId', 'roles', 'role');
         return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/operatorDetail', $data));
+            $content->body(view('admin/data/operatorDetail', $data));
             $content->header("运营业绩详情");
         });
     }

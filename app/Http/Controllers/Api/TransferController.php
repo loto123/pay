@@ -50,6 +50,17 @@ class TransferController extends Controller
      *     required=false,
      *     type="string"
      *   ),
+     *    @SWG\Parameter(
+     *     name="joiner",
+     *     in="formData",
+     *     description="参与交易人",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -61,7 +72,8 @@ class TransferController extends Controller
             [
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
-                'comment' => 'max:200'
+                'comment' => 'bail|max:200',
+                'joiner' => 'bail||array',
             ],
             [
                 'required' => trans('trans.required'),
@@ -94,7 +106,19 @@ class TransferController extends Controller
         }
         $transfer->fee_percent = config('platform_fee_percent');
 
+        //交易关系包含自己
+        $joiners = $request->joiner;
+        array_push($joiners,$user->id);
         if ($transfer->save()) {
+            //保存交易关系
+            foreach($joiners as $item) {
+                if (!$transfer->joiner()->where('user_id', $item)->exists()) {
+                    $relation = new TransferUserRelation();
+                    $relation->transfer_id = $transfer->id;
+                    $relation->user_id = $item;
+                    $relation->save();
+                }
+            }
             return response()->json(['code' => 1, 'msg' => trans('trans.save_success'), 'data' => ['id' => $transfer->en_id()]]);
         } else {
             return response()->json(['code' => 0, 'msg' => trans('trans.save_failed'), 'data' => []]);
@@ -133,7 +157,7 @@ class TransferController extends Controller
         }
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
-        if(!$transferObj) {
+        if (!$transferObj) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
 
@@ -444,6 +468,7 @@ class TransferController extends Controller
                 //删除茶水费记录
                 TipRecord::where('id', $tip->id)->delete();
             }
+            DB::commit();
             return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -542,23 +567,18 @@ class TransferController extends Controller
         }
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
-        if(!$transferObj) {
+        if (!$transferObj) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->with(['user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
         }, 'tips' => function ($query) {
-            $query->select('amount', 'created_at')->orderBy('created_at', 'DESC');
+            $query->select('transfer_id', 'user_id', 'amount', 'created_at')->orderBy('created_at', 'DESC');
         }, 'tips.user' => function ($query) {
-            $query->select('name', 'avatar');
-        }])->select('id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
-
-//        $list = TipRecord::with(['user' => function ($query) {
-//            $query->select('name', 'avatar');
-//        }])->where('transfer_id', $request->transfer_id)
-//            ->select('amount', 'created_at')
-//            ->orderBy('created_at', 'DESC')->get();
+            $query->select('id', 'name', 'avatar');
+        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+        debug($transfer);
 
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
@@ -663,6 +683,7 @@ class TransferController extends Controller
                 $record->amount = $request->fee;
                 $record->record_id = 0;
                 $record->save();
+                DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.pay_fee_success'), 'data' => []]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -873,6 +894,7 @@ class TransferController extends Controller
                     }
                     $profit->save();
                 }
+                DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
             }
         } catch (\Exception $e) {
