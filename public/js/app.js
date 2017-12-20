@@ -53717,7 +53717,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5a753464], body[data-v-5a753464], div[data-v-5a753464], span[data-v-5a753464], applet[data-v-5a753464], object[data-v-5a753464], iframe[data-v-5a753464],\nh1[data-v-5a753464], h2[data-v-5a753464], h3[data-v-5a753464], h4[data-v-5a753464], h5[data-v-5a753464], h6[data-v-5a753464], p[data-v-5a753464], blockquote[data-v-5a753464], pre[data-v-5a753464],\na[data-v-5a753464], abbr[data-v-5a753464], acronym[data-v-5a753464], address[data-v-5a753464], big[data-v-5a753464], cite[data-v-5a753464], code[data-v-5a753464],\ndel[data-v-5a753464], dfn[data-v-5a753464], em[data-v-5a753464], img[data-v-5a753464], ins[data-v-5a753464], kbd[data-v-5a753464], q[data-v-5a753464], s[data-v-5a753464], samp[data-v-5a753464],\nsmall[data-v-5a753464], strike[data-v-5a753464], strong[data-v-5a753464], sub[data-v-5a753464], sup[data-v-5a753464], tt[data-v-5a753464], var[data-v-5a753464],\nb[data-v-5a753464], u[data-v-5a753464], i[data-v-5a753464], center[data-v-5a753464],\ndl[data-v-5a753464], dt[data-v-5a753464], dd[data-v-5a753464], ol[data-v-5a753464], ul[data-v-5a753464], li[data-v-5a753464],\nfieldset[data-v-5a753464], form[data-v-5a753464], label[data-v-5a753464], legend[data-v-5a753464],\ntable[data-v-5a753464], caption[data-v-5a753464], tbody[data-v-5a753464], tfoot[data-v-5a753464], thead[data-v-5a753464], tr[data-v-5a753464], th[data-v-5a753464], td[data-v-5a753464],\narticle[data-v-5a753464], aside[data-v-5a753464], canvas[data-v-5a753464], details[data-v-5a753464], embed[data-v-5a753464],\nfigure[data-v-5a753464], figcaption[data-v-5a753464], footer[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464],\nmenu[data-v-5a753464], nav[data-v-5a753464], output[data-v-5a753464], ruby[data-v-5a753464], section[data-v-5a753464], summary[data-v-5a753464],\ntime[data-v-5a753464], mark[data-v-5a753464], audio[data-v-5a753464], video[data-v-5a753464] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5a753464], aside[data-v-5a753464], details[data-v-5a753464], figcaption[data-v-5a753464], figure[data-v-5a753464],\nfooter[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464], menu[data-v-5a753464], nav[data-v-5a753464], section[data-v-5a753464] {\n  display: block;\n}\nbody[data-v-5a753464] {\n  line-height: 1;\n}\nol[data-v-5a753464], ul[data-v-5a753464] {\n  list-style: none;\n}\nblockquote[data-v-5a753464], q[data-v-5a753464] {\n  quotes: none;\n}\nblockquote[data-v-5a753464]:before, blockquote[data-v-5a753464]:after,\nq[data-v-5a753464]:before, q[data-v-5a753464]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5a753464] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5a753464] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5a753464] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5a753464] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5a753464] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5a753464] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5a753464] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5a753464] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5a753464] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5a753464] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5a753464] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5a753464] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5a753464] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5a753464] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5a753464] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5a753464] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5a753464] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5a753464] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5a753464] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5a753464] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5a753464] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5a753464] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5a753464] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5a753464] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5a753464] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5a753464] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5a753464] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5a753464] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5a753464] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5a753464] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5a753464] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5a753464] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.mb15[data-v-5a753464] {\n  margin-bottom: 1.5em;\n}\n#myAccount[data-v-5a753464] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#myAccount .header-right[data-v-5a753464] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.myAccount-box[data-v-5a753464] {\n  margin-top: 2em;\n}\n.withDraw-money[data-v-5a753464] {\n  width: 13em;\n  height: 13em;\n  border: 1px solid #aaa;\n  border-radius: 50%;\n  margin: 0 auto 3em auto;\n  background: #199ED8;\n  position: relative;\n  text-align: center;\n}\n.withDraw-money .money[data-v-5a753464], .withDraw-money .title[data-v-5a753464] {\n    position: absolute;\n    width: 100%;\n    text-align: center;\n}\n.withDraw-money .money[data-v-5a753464] {\n    top: 30%;\n    color: #fff;\n    font-size: 2em;\n}\n.withDraw-money .title[data-v-5a753464] {\n    top: 50%;\n    color: #ddd;\n}\n.submit-btn[data-v-5a753464] {\n  width: 90%;\n  margin: auto;\n}\n.submit-btn a[data-v-5a753464] {\n    display: block;\n}\n.submit-btn a button[data-v-5a753464] {\n      border: none;\n      height: 2.8em;\n      line-height: 2.8em;\n      text-align: center;\n      width: 100%;\n      margin: auto;\n      border-radius: 5px;\n      font-size: 1em;\n}\n.submit-btn a .recharge-btn[data-v-5a753464] {\n      background: #00CC00;\n      color: #fff;\n}\n.submit-btn a .withdraw-btn[data-v-5a753464] {\n      background: #fff;\n      color: #333;\n}\n.submit-btn a .give-btn[data-v-5a753464] {\n      background: #199ED8;\n      color: #fff;\n}\n.mint-button--danger[data-v-5a753464] {\n  background: #fff !important;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5a753464], body[data-v-5a753464], div[data-v-5a753464], span[data-v-5a753464], applet[data-v-5a753464], object[data-v-5a753464], iframe[data-v-5a753464],\nh1[data-v-5a753464], h2[data-v-5a753464], h3[data-v-5a753464], h4[data-v-5a753464], h5[data-v-5a753464], h6[data-v-5a753464], p[data-v-5a753464], blockquote[data-v-5a753464], pre[data-v-5a753464],\na[data-v-5a753464], abbr[data-v-5a753464], acronym[data-v-5a753464], address[data-v-5a753464], big[data-v-5a753464], cite[data-v-5a753464], code[data-v-5a753464],\ndel[data-v-5a753464], dfn[data-v-5a753464], em[data-v-5a753464], img[data-v-5a753464], ins[data-v-5a753464], kbd[data-v-5a753464], q[data-v-5a753464], s[data-v-5a753464], samp[data-v-5a753464],\nsmall[data-v-5a753464], strike[data-v-5a753464], strong[data-v-5a753464], sub[data-v-5a753464], sup[data-v-5a753464], tt[data-v-5a753464], var[data-v-5a753464],\nb[data-v-5a753464], u[data-v-5a753464], i[data-v-5a753464], center[data-v-5a753464],\ndl[data-v-5a753464], dt[data-v-5a753464], dd[data-v-5a753464], ol[data-v-5a753464], ul[data-v-5a753464], li[data-v-5a753464],\nfieldset[data-v-5a753464], form[data-v-5a753464], label[data-v-5a753464], legend[data-v-5a753464],\ntable[data-v-5a753464], caption[data-v-5a753464], tbody[data-v-5a753464], tfoot[data-v-5a753464], thead[data-v-5a753464], tr[data-v-5a753464], th[data-v-5a753464], td[data-v-5a753464],\narticle[data-v-5a753464], aside[data-v-5a753464], canvas[data-v-5a753464], details[data-v-5a753464], embed[data-v-5a753464],\nfigure[data-v-5a753464], figcaption[data-v-5a753464], footer[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464],\nmenu[data-v-5a753464], nav[data-v-5a753464], output[data-v-5a753464], ruby[data-v-5a753464], section[data-v-5a753464], summary[data-v-5a753464],\ntime[data-v-5a753464], mark[data-v-5a753464], audio[data-v-5a753464], video[data-v-5a753464] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5a753464], aside[data-v-5a753464], details[data-v-5a753464], figcaption[data-v-5a753464], figure[data-v-5a753464],\nfooter[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464], menu[data-v-5a753464], nav[data-v-5a753464], section[data-v-5a753464] {\n  display: block;\n}\nbody[data-v-5a753464] {\n  line-height: 1;\n}\nol[data-v-5a753464], ul[data-v-5a753464] {\n  list-style: none;\n}\nblockquote[data-v-5a753464], q[data-v-5a753464] {\n  quotes: none;\n}\nblockquote[data-v-5a753464]:before, blockquote[data-v-5a753464]:after,\nq[data-v-5a753464]:before, q[data-v-5a753464]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5a753464] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5a753464] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5a753464] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5a753464] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5a753464] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5a753464] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5a753464] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5a753464] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5a753464] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5a753464] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5a753464] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5a753464] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5a753464] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5a753464] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5a753464] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5a753464] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5a753464] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5a753464] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5a753464] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5a753464] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5a753464] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5a753464] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5a753464] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5a753464] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5a753464] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5a753464] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5a753464] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5a753464] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5a753464] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5a753464] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5a753464] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5a753464] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.mb15[data-v-5a753464] {\n  margin-bottom: 1.5em;\n}\n#myAccount[data-v-5a753464] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#myAccount .header-right[data-v-5a753464] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.myAccount-box[data-v-5a753464] {\n  margin-top: 2em;\n}\n.withDraw-money[data-v-5a753464] {\n  width: 13em;\n  height: 13em;\n  border: 1px solid #aaa;\n  border-radius: 50%;\n  margin: 0 auto 3em auto;\n  background: #199ed8;\n  position: relative;\n  text-align: center;\n}\n.withDraw-money .money[data-v-5a753464],\n  .withDraw-money .title[data-v-5a753464] {\n    position: absolute;\n    width: 100%;\n    text-align: center;\n}\n.withDraw-money .money[data-v-5a753464] {\n    top: 30%;\n    color: #fff;\n    font-size: 2em;\n}\n.withDraw-money .title[data-v-5a753464] {\n    top: 50%;\n    color: #ddd;\n}\n.submit-btn[data-v-5a753464] {\n  width: 90%;\n  margin: auto;\n}\n.submit-btn a[data-v-5a753464] {\n    display: block;\n}\n.submit-btn a button[data-v-5a753464] {\n      border: none;\n      height: 2.8em;\n      line-height: 2.8em;\n      text-align: center;\n      width: 100%;\n      margin: auto;\n      border-radius: 5px;\n      font-size: 1em;\n}\n.submit-btn a .recharge-btn[data-v-5a753464] {\n      background: #00cc00;\n      color: #fff;\n}\n.submit-btn a .withdraw-btn[data-v-5a753464] {\n      background: #fff;\n      color: #333;\n}\n.submit-btn a .give-btn[data-v-5a753464] {\n      background: #199ed8;\n      color: #fff;\n}\n.mint-button--danger[data-v-5a753464] {\n  background: #fff !important;\n}\n", ""]);
 
 // exports
 
@@ -53730,6 +53730,8 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(25);
 //
 //
 //
@@ -53757,14 +53759,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {};
-    },
+  created: function created() {
+    this.init();
+  },
+  data: function data() {
+    return {};
+  },
 
-    components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a }
+  methods: {
+    init: function init() {
+      //   Loading.getInstance().open();
+      //   request.getInstance().getData("api/account").then(res=>{
+      //       console.log(res);
+      //   }).catch(err=>{
+      //       console.error(err);
+      //   });
+    }
+  },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a }
 });
 
 /***/ }),
@@ -56155,7 +56173,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1.0em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
 
 // exports
 
@@ -56446,7 +56464,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -56466,13 +56483,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       passWordSwitch: false,
       renderData: {
-        name: null,
-        moneyData: {
-          payMoney: null,
-          getMoney: null
-        }
-
-      }
+        name: null
+      },
+      moneyData: {
+        payMoney: null,
+        getMoney: null
+      },
+      payType: "get" // 支付方式，取钱get 放钱put
     };
   },
   created: function created() {
@@ -56494,7 +56511,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _data = {
         transfer_id: _id
       };
-      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/show' + "?transfer_id=" + _id).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + _id).then(function (res) {
         console.log(res);
 
         _this.renderData = res.data.data;
@@ -56525,7 +56542,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       qrcode.makeCode("http://www.baidu.com");
     }
-
+  },
+  watch: {
+    "moneyData.payMoney": function moneyDataPayMoney() {
+      this.moneyData.getMoney = null;
+    },
+    "moneyData.getMoney": function moneyDataGetMoney() {
+      this.moneyData.payMoney = null;
+    }
   }
 });
 
@@ -58382,9 +58406,73 @@ var render = function() {
         "section",
         { staticClass: "pay-wrap flex flex-v flex-align-center" },
         [
-          _vm._m(0, false, false),
+          _c(
+            "div",
+            {
+              staticClass:
+                "pay-money flex flex-align-center flex-justify-around"
+            },
+            [
+              _c("label", { attrs: { for: "" } }, [_vm._v("我要付钱")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "input-wrap" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.moneyData.payMoney,
+                      expression: "moneyData.payMoney"
+                    }
+                  ],
+                  attrs: { type: "text", placeholder: "请输入您的分数" },
+                  domProps: { value: _vm.moneyData.payMoney },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.moneyData, "payMoney", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]
+          ),
           _vm._v(" "),
-          _vm._m(1, false, false),
+          _c(
+            "div",
+            {
+              staticClass:
+                "get-money flex flex-align-center flex-justify-around"
+            },
+            [
+              _c("label", { attrs: { for: "" } }, [_vm._v("我要拿钱")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "input-wrap" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.moneyData.getMoney,
+                      expression: "moneyData.getMoney"
+                    }
+                  ],
+                  attrs: { type: "text", placeholder: "请输入您的分数" },
+                  domProps: { value: _vm.moneyData.getMoney },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.moneyData, "getMoney", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]
+          ),
           _vm._v(" "),
           _c(
             "mt-button",
@@ -58399,7 +58487,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("section", { staticClass: "pay-record " }, [
-        _vm._m(2, false, false),
+        _vm._m(0, false, false),
         _vm._v(" "),
         _c("ul", { staticClass: "flex flex-v flex-align-center" }, [
           _c(
@@ -58556,42 +58644,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "pay-money flex flex-align-center flex-justify-around" },
-      [
-        _c("label", { attrs: { for: "" } }, [_vm._v("我要付钱")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-wrap" }, [
-          _c("input", {
-            attrs: { type: "text", placeholder: "请输入您的分数" }
-          })
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "get-money flex flex-align-center flex-justify-around" },
-      [
-        _c("label", { attrs: { for: "" } }, [_vm._v("我要拿钱")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-wrap" }, [
-          _c("input", {
-            attrs: { type: "text", placeholder: "请输入您的分数" }
-          })
-        ])
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -58896,12 +58948,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
       var _id = this.$route.query.id;
-      //    Loading
       var _data = {
         transfer_id: _id,
         fee: this.renderData.moneyData,
         action: 0
-        // pay_password:this.passwordData.value
       };
 
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
@@ -65482,10 +65532,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       inviteLinkStatus: true, // 邀请链接状态
       tradeStatus: true, // 交易状态
-      isGroupMaster: true, // 是否是群主 
+      isGroupMaster: true, // 是否是群主
 
       shopId: null,
-      shopName: null
+      shopName: null,
+      rate: null,
+      percent: null,
+      membersCount: null,
+      active: null
     };
   },
 
@@ -65519,8 +65573,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         _this.shopId = res.data.data.id;
         _this.shopName = res.data.data.name;
+        _this.rate = res.data.data.rate;
+        _this.percent = res.data.data.percent;
+        _this.membersCount = res.data.data.members_count;
+        if (res.data.data.active == 1) {
+          _this.tradeStatus = true;
+        } else {
+          _this.tradeStatus = false;
+        }
 
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
         _this.$router.go(-1);
@@ -65629,12 +65691,25 @@ var render = function() {
           _vm._v(" "),
           _vm._m(3, false, false),
           _vm._v(" "),
-          _vm._m(4, false, false)
+          _c("div", { staticClass: "flex-4 flex flex-reverse" }, [
+            _c(
+              "i",
+              {
+                staticClass: "iconfont",
+                staticStyle: { "padding-right": "1em" }
+              },
+              [_vm._v("\n              \n          ")]
+            ),
+            _vm._v(" "),
+            _c("span", { staticStyle: { color: "#666" } }, [
+              _vm._v(_vm._s(_vm.membersCount) + "名成员")
+            ])
+          ])
         ]
       ),
       _vm._v(" "),
       _c("div", { staticClass: "invite-wrap" }, [
-        _vm._m(5, false, false),
+        _vm._m(4, false, false),
         _vm._v(" "),
         _vm.isGroupMaster
           ? _c(
@@ -65684,12 +65759,34 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _vm._m(6, false, false)
+        _c(
+          "div",
+          { staticClass: "flex flex-align-center flex-justify-between" },
+          [
+            _c("span", { staticClass: "title flex-9" }, [_vm._v(" 默认单价 ")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "text flex-1" }, [
+              _vm._v(_vm._s(_vm.rate))
+            ])
+          ]
+        )
       ]),
       _vm._v(" "),
       _vm.isGroupMaster
         ? _c("div", { staticClass: "commission" }, [
-            _vm._m(7, false, false),
+            _c(
+              "div",
+              { staticClass: "flex flex-align-center flex-justify-between" },
+              [
+                _c("span", { staticClass: "title flex-9" }, [
+                  _vm._v(" 抽水比例 ")
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "text flex-1" }, [
+                  _vm._v(_vm._s(_vm.percent) + "%")
+                ])
+              ]
+            ),
             _vm._v(" "),
             _c(
               "div",
@@ -65721,7 +65818,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       !_vm.isGroupMaster
-        ? _c("div", { staticClass: "complaint" }, [_vm._m(8, false, false)])
+        ? _c("div", { staticClass: "complaint" }, [_vm._m(5, false, false)])
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -65898,20 +65995,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex-4 flex flex-reverse" }, [
-      _c(
-        "i",
-        { staticClass: "iconfont", staticStyle: { "padding-right": "1em" } },
-        [_vm._v("\n              \n          ")]
-      ),
-      _vm._v(" "),
-      _c("span", { staticStyle: { color: "#666" } }, [_vm._v("0名成员")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c(
       "div",
       { staticClass: "flex flex-align-center flex-justify-between" },
@@ -65921,34 +66004,6 @@ var staticRenderFns = [
         _c("i", { staticClass: "iconfont flex-1" }, [
           _vm._v("\n              \n          ")
         ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "flex flex-align-center flex-justify-between" },
-      [
-        _c("span", { staticClass: "title flex-9" }, [_vm._v(" 默认单价 ")]),
-        _vm._v(" "),
-        _c("span", { staticClass: "text flex-1" }, [_vm._v("10")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "flex flex-align-center flex-justify-between" },
-      [
-        _c("span", { staticClass: "title flex-9" }, [_vm._v(" 抽水比例 ")]),
-        _vm._v(" "),
-        _c("span", { staticClass: "text flex-1" }, [_vm._v("5%")])
       ]
     )
   },
@@ -67046,6 +67101,8 @@ exports.push([module.i, "\n#shop-account[data-v-ad7d680e] {\n  padding-top: 2em;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(25);
 //
 //
 //
@@ -67202,17 +67259,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  created: function created() {
+    this.init();
+  },
+  data: function data() {
+    return {
+      balance: null
+    };
+  },
+
   methods: {
     goWithdraw: function goWithdraw() {
       this.$router.push('/shop/shopAccount/withdraw');
     },
     goGive: function goGive() {
       this.$router.push('/shop/shopAccount/give');
+    },
+    init: function init() {
+      // Loading.getInstance().open();
+      // request.getInstance().getData("api/account").then(res=>{
+      //     console.log(res);
+      //     this.balance = res.data.data.balance;
+      // }).catch(err=>{
+      //     console.error(err);
+      // });
     }
   }
 });
@@ -67258,7 +67335,24 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "content flex flex-v flex-align-center" }, [
-      _vm._m(1, false, false),
+      _c(
+        "div",
+        {
+          staticClass:
+            "rest-money flex flex-v flex-align-center flex-justify-start"
+        },
+        [
+          _c("div", { staticClass: "money-text" }, [
+            _vm._v(
+              "\n                " + _vm._s(_vm.balance) + "\n            "
+            )
+          ]),
+          _vm._v(" "),
+          _c("h3", [_vm._v("当前店铺余额")]),
+          _vm._v(" "),
+          _c("h4", [_vm._v("单位(元)")])
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -67287,7 +67381,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _vm._m(2, false, false)
+      _vm._m(1, false, false)
     ])
   ])
 }
@@ -67321,27 +67415,6 @@ var staticRenderFns = [
         ]
       )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "rest-money flex flex-v flex-align-center flex-justify-start"
-      },
-      [
-        _c("div", { staticClass: "money-text" }, [
-          _vm._v("\n                0.00\n            ")
-        ]),
-        _vm._v(" "),
-        _c("h3", [_vm._v("当前店铺余额")]),
-        _vm._v(" "),
-        _c("h4", [_vm._v("单位(元)")])
-      ]
-    )
   },
   function() {
     var _vm = this

@@ -97,7 +97,7 @@
             <i class="iconfont" style="padding-right:1em;">
                 &#xe62e;
             </i>
-            <span style="color:#666;">0名成员</span>
+            <span style="color:#666;">{{membersCount}}名成员</span>
         </div>
 
     </div>
@@ -127,7 +127,7 @@
 
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 默认单价 </span>
-            <span class="text flex-1">10</span>
+            <span class="text flex-1">{{rate}}</span>
         </div>
         
     </div>
@@ -135,13 +135,13 @@
     <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 抽水比例 </span>
-            <span class="text flex-1">5%</span>
+            <span class="text flex-1">{{percent}}%</span>
         </div>
 
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 是否开启交易功能 </span>
             <span class="text flex-1 flex flex-reverse">
-                <mt-switch v-model="tradeStatus" ></mt-switch>
+                <mt-switch v-model="tradeStatus"></mt-switch>
             </span>
         </div>
     </div>
@@ -208,7 +208,7 @@
       > i {
         display: block;
         font-size: 2.8em;
-        color:#555;
+        color: #555;
       }
 
       h3 {
@@ -278,7 +278,7 @@
           width: 2.3em;
           border-radius: 0.4em;
           height: 2.3em;
-          margin-left:0.2em;
+          margin-left: 0.2em;
         }
       }
 
@@ -287,12 +287,12 @@
         width: 2.3em;
         border-radius: 0.4em;
         height: 2.3em;
-        border:0.1em solid #ccc;
+        border: 0.1em solid #ccc;
         margin-left: 0.2em;
 
-        >i{
-            font-size: 2em;
-            color:#ccc;
+        > i {
+          font-size: 2em;
+          color: #ccc;
         }
       }
     }
@@ -371,7 +371,7 @@
     }
   }
 
-  .complaint{
+  .complaint {
     @extend .commission;
   }
 
@@ -386,80 +386,92 @@
 
 <script>
 import topBack from "../../components/topBack";
-import {Indicator,Toast} from "mint-ui"
-import request from "../../utils/userRequest"
-import Loading from "../../utils/loading"
+import { Indicator, Toast } from "mint-ui";
+import request from "../../utils/userRequest";
+import Loading from "../../utils/loading";
 
 export default {
   name: "shopDetail",
-  beforeMount(){
-
-  },
-  created(){
+  beforeMount() {},
+  created() {
     this.init();
-
   },
-  mounted(){
-    
-  },
+  mounted() {},
   components: { topBack },
   data() {
     return {
-      inviteLinkStatus: true,    // 邀请链接状态
-      tradeStatus: true,         // 交易状态
-      isGroupMaster:true,        // 是否是群主 
+      inviteLinkStatus: true, // 邀请链接状态
+      tradeStatus: true, // 交易状态
+      isGroupMaster: true, // 是否是群主
 
-      shopId:null,
-      shopName:null
+      shopId: null,
+      shopName: null,
+      rate: null,
+      percent: null,
+      membersCount: null,
+      active: null
     };
   },
   methods: {
     // 跳转控制
-    hide(){
-    },
-    goMember(){
+    hide() {},
+    goMember() {
       this.$router.push("/shop/shop_member");
     },
-    goDealManagement(){
+    goDealManagement() {
       this.$router.push("/shop/deal_management");
     },
-    goShopAccount(){
+    goShopAccount() {
       this.$router.push("/shop/shopAccount");
     },
-    goShopOrder(){
+    goShopOrder() {
       this.$router.push("/shop/shopOrder");
-      
     },
 
     // 数据控制
-    init(){
+    init() {
       Loading.getInstance().open();
       var self = this;
       var _id = this.$route.query.id;
 
-      request.getInstance().getData("api/shop/detail/"+_id).then((res)=>{
-        console.log(res);
+      request
+        .getInstance()
+        .getData("api/shop/detail/" + _id)
+        .then(res => {
+          console.log(res);
 
-        this.shopId = res.data.data.id;
-        this.shopName = res.data.data.name;
+          this.shopId = res.data.data.id;
+          this.shopName = res.data.data.name;
+          this.rate = res.data.data.rate;
+          this.percent = res.data.data.percent;
+          this.membersCount = res.data.data.members_count;
+          if (res.data.data.active == 1) {
+            this.tradeStatus = true;
+          } else {
+            this.tradeStatus = false;
+          }
 
-        Loading.getInstance().open();
-      }).catch((error)=>{
-        Toast("当前页面不存在");
-        this.$router.go(-1);
-        console.error(error);
-      });
+          Loading.getInstance().close();
+        })
+        .catch(error => {
+          Toast("当前页面不存在");
+          this.$router.go(-1);
+          console.error(error);
+        });
     },
 
-    dissShop(){
-      request.getInstance().postData("api/shop/close/"+this.shopId).then((res)=>{
-        console.log(res);
-        this.$router.push("/shop");
-      }).catch((error)=>{
-        console.error(error);
-      });
+    dissShop() {
+      request
+        .getInstance()
+        .postData("api/shop/close/" + this.shopId)
+        .then(res => {
+          console.log(res);
+          this.$router.push("/shop");
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
-
   }
 };
 </script>

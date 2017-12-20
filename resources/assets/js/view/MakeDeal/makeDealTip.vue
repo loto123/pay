@@ -156,13 +156,11 @@ export default {
     payTip() {
       Loading.getInstance().open();
       var _id = this.$route.query.id;
-      //    Loading
       var _data = {
         transfer_id: _id,
         fee: this.renderData.moneyData,
         action: 0
-        // pay_password:this.passwordData.value
-      };
+      }; 
 
       request
         .getInstance()

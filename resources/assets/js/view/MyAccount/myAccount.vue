@@ -26,93 +26,108 @@
 </template>
 
 <script>
-    import topBack from '../../components/topBack.vue'
-    export default {
-        data () {
-            return {
-                
-            }
-        },
-        components: {topBack}
-    }
+import topBack from "../../components/topBack.vue"
+import Loading from "../../utils/loading"
+import request from "../../utils/userRequest"
+
+export default {
+  created(){
+      this.init();
+  },
+  data() {
+    return {};
+  },
+  methods:{
+      init(){
+    //   Loading.getInstance().open();
+    //   request.getInstance().getData("api/account").then(res=>{
+    //       console.log(res);
+    //   }).catch(err=>{
+    //       console.error(err);
+    //   });
+      }
+  },
+  components: { topBack }
+};
 </script>
 
 <style lang="scss" scoped>
-    @import "../../../sass/oo_flex.scss";
-    .mb15{
-        margin-bottom:1.5em;
+@import "../../../sass/oo_flex.scss";
+.mb15 {
+  margin-bottom: 1.5em;
+}
+#myAccount {
+  background: #eee;
+  height: 100vh;
+  padding-top: 2em;
+  box-sizing: border-box;
+  .header-right {
+    width: 100%;
+    padding-right: 1em;
+    height: 2em;
+    box-sizing: border-box;
+  }
+}
+.myAccount-box {
+  margin-top: 2em;
+}
+.withDraw-money {
+  width: 13em;
+  height: 13em;
+  border: 1px solid #aaa;
+  border-radius: 50%;
+  margin: 0 auto 3em auto;
+  background: #199ed8;
+  position: relative;
+  text-align: center;
+  .money,
+  .title {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+  }
+  .money {
+    top: 30%;
+    color: #fff;
+    font-size: 2em;
+  }
+  .title {
+    top: 50%;
+    color: #ddd;
+  }
+}
+.submit-btn {
+  width: 90%;
+  margin: auto;
+  a {
+    display: block;
+    button {
+      border: none;
+      height: 2.8em;
+      line-height: 2.8em;
+      text-align: center;
+      width: 100%;
+      margin: auto;
+      border-radius: 5px;
+      font-size: 1em;
     }
-    #myAccount {
-        background: #eee;
-        height: 100vh;
-        padding-top: 2em;
-        box-sizing: border-box;
-        .header-right{
-            width:100%;
-            padding-right:1em;
-            height:2em;
-            box-sizing:border-box;
-        }
+    .recharge-btn {
+      background: #00cc00;
+      color: #fff;
     }
-    .myAccount-box{
-        margin-top: 2em;
+    .withdraw-btn {
+      background: #fff;
+      color: #333;
     }
-    .withDraw-money{
-        width: 13em;
-        height: 13em;
-        border: 1px solid #aaa;
-        border-radius: 50%;
-        margin: 0 auto 3em auto;
-        background: #199ED8;
-        position: relative;
-        text-align: center;
-        .money,.title{
-            position: absolute;
-            width:100%;
-            text-align: center;
-        }
-        .money{
-            top: 30%;
-            color: #fff;
-            font-size: 2em;
-        }
-        .title{
-            top: 50%;
-            color:#ddd;
-        }
+    .give-btn {
+      background: #199ed8;
+      color: #fff;
     }
-    .submit-btn{
-        width: 90%;
-        margin:auto;
-        a{
-            display: block;
-            button{
-                border: none;
-                height: 2.8em;
-                line-height: 2.8em;
-                text-align: center;
-                width: 100%;
-                margin: auto;
-                border-radius: 5px;
-                font-size: 1em;
-            }
-            .recharge-btn{
-                background:#00CC00;
-                color: #fff;
-            }
-            .withdraw-btn{
-                background:#fff;
-                color: #333;
-            }
-            .give-btn{
-                background:#199ED8;
-                color:#fff;
-            }
-        }
-    }
-    .mint-button--danger{
-        background:#fff !important;
-    }
+  }
+}
+.mint-button--danger {
+  background: #fff !important;
+}
 </style>
 
 
