@@ -222,7 +222,7 @@ class NoticeController extends Controller
             $data = [
                 'amount' => $profit->proxy_amount,
                 'type' => '分润',
-                'time' => (string)$profit->created_at,
+                'time' => (string)$notice->created_at,
                 'transfer_id' => $profit->transfer_id,
                 'mobile' => $profit->mobile,
                 'thumb' => $profit->thumb??'default.png',

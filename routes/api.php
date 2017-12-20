@@ -130,6 +130,8 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/', 'AccountController@index');
+        $api->post('charge', 'AccountController@charge');
+        $api->post('withdraw', 'AccountController@withdraw');
     });
 });
 

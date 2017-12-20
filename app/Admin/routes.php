@@ -20,6 +20,13 @@ Route::group([
     $router->any('/shop/updates','ShopController@updates');
 
     $router->post('/excel/shop', 'ExcelController@shop');
+
+    $router->resource('pay/platform', PayPlatformController::class);
+    $router->resource('pay/deposit-method', DepositMethodController::class);
+    $router->resource('pay/withdraw-method', WithdrawMethodController::class);
+    $router->resource('pay/entity', BusinessEntityController::class);
+    $router->resource('pay/channel', PayChannelController::class);
+
     $router->post('/excel/user', 'ExcelController@user');
 
     $router->resource('bank', BankController::class);

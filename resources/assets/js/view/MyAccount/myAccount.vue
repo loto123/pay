@@ -7,8 +7,8 @@
         </topBack>
         <div class="myAccount-box">
             <div class="withDraw-money">
-                <div class="money">88.88</div>
-                <div class="title">当前可用余额</div>
+                <div class="money">{{balance}}</div>
+                <div class="title">当前可提现余额</div>
             </div>
             <div class="submit-btn">
                 <a href="/#/myAccount/recharge" class="mb15">
@@ -26,14 +26,35 @@
 </template>
 
 <script>
+    import axios from "axios";
+	import request from '../../utils/userRequest';
     import topBack from '../../components/topBack.vue'
+    import Loading from '../../utils/loading'
+
     export default {
         data () {
             return {
-                
+                balance:null
             }
         },
-        components: {topBack}
+        created(){
+			this.myAccount();
+    	},
+        components: {topBack},
+        methods: {
+            myAccount(){
+                Loading.getInstance().open("加载中...");
+
+				request.getInstance().getData("api/account")
+					.then((res) => {
+                        this.balance=res.data.data.balance;
+                        Loading.getInstance().close();
+					})
+					.catch((err) => {
+						console.log(err);
+					})
+            }
+        }
     }
 </script>
 

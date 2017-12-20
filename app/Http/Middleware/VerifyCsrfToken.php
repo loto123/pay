@@ -13,5 +13,8 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
+        '/withdraw-notify/*',//支付通知不验证
+        '/deposit-notify/*',//支付通知不验证
+        '/pay-result/*',//支付返回不验证
     ];
 }
