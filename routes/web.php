@@ -1,4 +1,7 @@
 <?php
+use App\Pay\Model\Channel;
+use App\Pay\Model\DepositMethod;
+use App\Pay\Model\WithdrawMethod;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +18,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//通知接收
+Route::match(['get', 'post'], '/{notify_type}-notify/c{channel}_m{method}', function ($notify_type, Channel $channel) {
+    $method = ['pay' => DepositMethod::class, 'withdraw' => WithdrawMethod::class][$notify_type];
+    $method = new $method;
+    return $method->acceptNotify($channel);
+})->name('common_notify')->where(['notify_type' => 'pay|withdraw', 'channel' => '[0-9]+', 'method' => '[0-9]+']);
+
+//支付跳回地址
+Route::match(['get', 'post'], '/pay-result/m{method}', function (DepositMethod $method) {
+    return $method->showDepositResult();
+})->name('pay_result');
+
 //Auth::routes();
 //
-//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
