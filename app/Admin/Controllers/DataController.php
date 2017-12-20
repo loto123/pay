@@ -31,7 +31,7 @@ class DataController extends Controller
         //交易总笔数
         $transfer_count = Transfer::count();
         //总收款
-        $amount = TransferRecord::where('stat', 1)->sum('amount');
+        $amount = abs(TransferRecord::where('stat', 1)->sum('amount'));
         //店铺分润
         $shop_amount = TipRecord::sum('amount');
         //茶水费
