@@ -62,8 +62,6 @@
           .catch((err) => {
             console.log(err);
           })
-
-        
       },
       hidePassword() {
         this.showPasswordTag = false;
