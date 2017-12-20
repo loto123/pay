@@ -33,7 +33,7 @@
         <img src="/images/avatar.jpg" alt="" >
         <img src="/images/avatar.jpg" alt="" >
 
-        <div class="add flex flex-align-center flex-justify-center">
+        <div class="add flex flex-align-center flex-justify-center" @click="showMemberChoise">
           <i class="iconfont" style="font-size: 1.5em;color:#bbb;">
             &#xe600;
           </i>
@@ -53,7 +53,12 @@
       v-on:hideDropList="hideDropList" 
       :optionsList = "shopList">
     </inputList>
-    <choiseMember></choiseMember>  
+
+    <choiseMember 
+      :isShow = "choiseMemberSwitch"
+      v-on:hide = "hideMemberChoise"
+    >
+    </choiseMember>  
   </div>
 </template>
 
@@ -76,7 +81,6 @@
 }
 .select-wrap {
   width: 90%;
-  // height: auto;
   margin: 0 auto;
   height: 2.5em;
   padding-left: 1em;
@@ -198,7 +202,8 @@ export default {
   },
   data() {
     return {
-      dropListSwitch: false,
+      dropListSwitch: false,       // 下拉框开关
+      choiseMemberSwitch:true,    // 选择提醒玩家开关
       dealShop: null,
       shopList: null,
 
@@ -254,6 +259,14 @@ export default {
       this.dealShop = this.getShopName(data);
 
       this.shopId = data;
+    },
+
+    showMemberChoise(){
+      this.choiseMemberSwitch = true;
+      console.log(1);
+    },
+    hideMemberChoise(){
+      this.choiseMemberSwitch = false;
     },
 
     // 提交数据

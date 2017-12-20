@@ -55648,6 +55648,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -55665,7 +55669,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   data: function data() {
     return {
-      dropListSwitch: false,
+      dropListSwitch: false, // 下拉框开关
+      choiseMemberSwitch: true, // 选择提醒玩家开关
       dealShop: null,
       shopList: null,
 
@@ -55717,6 +55722,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.dealShop = this.getShopName(data);
 
       this.shopId = data;
+    },
+    showMemberChoise: function showMemberChoise() {
+      this.choiseMemberSwitch = true;
+      console.log(1);
+    },
+    hideMemberChoise: function hideMemberChoise() {
+      this.choiseMemberSwitch = false;
     },
 
 
@@ -56121,7 +56133,45 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _vm._m(0, false, false),
+      _c("div", { staticClass: "notice-wrap flex flex-v" }, [
+        _c("h3", { staticClass: "flex flex-align-center" }, [
+          _vm._v("添加参与人")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex flex-align-center flex-wrap-on " }, [
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "add flex flex-align-center flex-justify-center",
+              on: { click: _vm.showMemberChoise }
+            },
+            [
+              _c(
+                "i",
+                {
+                  staticClass: "iconfont",
+                  staticStyle: { "font-size": "1.5em", color: "#bbb" }
+                },
+                [_vm._v("\n          \n        ")]
+              )
+            ]
+          )
+        ])
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -56148,54 +56198,15 @@ var render = function() {
         on: { hideDropList: _vm.hideDropList }
       }),
       _vm._v(" "),
-      _c("choiseMember")
+      _c("choiseMember", {
+        attrs: { isShow: _vm.choiseMemberSwitch },
+        on: { hide: _vm.hideMemberChoise }
+      })
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "notice-wrap flex flex-v" }, [
-      _c("h3", { staticClass: "flex flex-align-center" }, [
-        _vm._v("添加参与人")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "flex flex-align-center flex-wrap-on " }, [
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "add flex flex-align-center flex-justify-center" },
-          [
-            _c(
-              "i",
-              {
-                staticClass: "iconfont",
-                staticStyle: { "font-size": "1.5em", color: "#bbb" }
-              },
-              [_vm._v("\n          \n        ")]
-            )
-          ]
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -70738,7 +70749,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_0x7cdpomxkgctyb9.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_0x7cdpomxkgctyb9.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_0x7cdpomxkgctyb9.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_0x7cdpomxkgctyb9.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_0x7cdpomxkgctyb9.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_3upi8l5ybd9rudi.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_3upi8l5ybd9rudi.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_3upi8l5ybd9rudi.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_3upi8l5ybd9rudi.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_3upi8l5ybd9rudi.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
 
 // exports
 
@@ -72139,7 +72150,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-1aa3d155],\n.slide-leave-active[data-v-1aa3d155] {\n  -webkit-transition: all 0.4s ease;\n  transition: all 0.4s ease;\n}\n.slide-enter[data-v-1aa3d155],\n.slide-leave-to[data-v-1aa3d155] {\n  -webkit-transform: translateX(100vw);\n          transform: translateX(100vw);\n}\n#choise-member[data-v-1aa3d155] {\n  width: 100%;\n  height: 100vh;\n  position: fixed;\n  background: #eee;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#choise-member .top[data-v-1aa3d155] {\n    height: 2em;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n}\n#choise-member .top h3[data-v-1aa3d155] {\n      text-align: center;\n}\n#choise-member .search-wrap[data-v-1aa3d155] {\n    width: 100%;\n    height: 4em;\n    border-bottom: 1px solid #ccc;\n}\n#choise-member .search-wrap > div[data-v-1aa3d155] {\n      width: 90%;\n      height: 2.5em;\n      background: #fff;\n      border-radius: 0.4em;\n}\n#choise-member .search-wrap > div .input-wrap[data-v-1aa3d155] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-right: 1em;\n        height: 100%;\n}\n#choise-member .search-wrap > div .input-wrap > input[data-v-1aa3d155] {\n          height: 2.4em;\n          border: none;\n          outline: none;\n          width: 100%;\n}\n#choise-member ul[data-v-1aa3d155] {\n    width: 100%;\n    height: 68%;\n    overflow-y: scroll;\n}\n#choise-member ul li[data-v-1aa3d155] {\n      width: 100%;\n      height: 3em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding-left: 1em;\n      padding-right: 1em;\n      background: #fff;\n      margin-top: 1em;\n}\n#choise-member ul li .img-wrap > img[data-v-1aa3d155] {\n        width: 2.5em;\n        height: 2.5em;\n        border-radius: 50%;\n}\n#choise-member ul li i[data-v-1aa3d155] {\n        width: 1.5em;\n        height: 1.5em;\n        border-radius: 50%;\n        border: 1px solid #eee;\n}\n#choise-member .submit[data-v-1aa3d155] {\n    width: 95%;\n    margin: 0 auto;\n    margin-top: 0.6em;\n}\n", ""]);
 
 // exports
 
@@ -72160,8 +72171,278 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ["isShow"],
+    methods: {
+        hidePage: function hidePage() {
+            this.$emit("hide");
+        }
+    }
+});
 
 /***/ }),
 /* 752 */
@@ -72171,7 +72452,338 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "choise-member" } })
+  return _c("transition", { attrs: { name: "slide" } }, [
+    _vm.isShow
+      ? _c("div", { attrs: { id: "choise-member" } }, [
+          _c("div", { staticClass: "top flex flex-align-center" }, [
+            _c("span", { staticClass: "flex-1", on: { click: _vm.hidePage } }, [
+              _vm._v("返回")
+            ]),
+            _vm._v(" "),
+            _c("h3", { staticClass: "flex-4" }, [_vm._v("选择要提醒的群友")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "flex-1" })
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "search-wrap flex flex-v flex-align-center flex-justify-center"
+            },
+            [
+              _c("div", { staticClass: "flex flex-align-center" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass: "iconfont flex-2",
+                    staticStyle: {
+                      "font-size": "1.7em",
+                      "padding-left": "1em",
+                      color: "#777",
+                      "margin-top": "-0.1em"
+                    }
+                  },
+                  [_vm._v("\n                    \n                ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "input-wrap flex-8 flex flex-align-center" },
+                  [
+                    _c("input", {
+                      attrs: { type: "text", placeholder: "搜索" }
+                    })
+                  ]
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("ul", [
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "flex flex-align-center" }, [
+              _c("span", { staticClass: "img-wrap flex-2" }, [
+                _c("img", { attrs: { src: "/images/avatar.jpg" } })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "user-name flex-6" }, [
+                _vm._v("用户名字啦啦啦啦")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                _c(
+                  "i",
+                  {
+                    staticClass:
+                      "iconfont flex flex-align-center flex-justify-center",
+                    staticStyle: { color: "#00cc00" }
+                  },
+                  [_vm._v("\n                        \n                    ")]
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "submit" },
+            [
+              _c(
+                "mt-button",
+                {
+                  attrs: { type: "primary", size: "large" },
+                  on: { click: _vm.submitData }
+                },
+                [_vm._v("确认添加")]
+              )
+            ],
+            1
+          )
+        ])
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
