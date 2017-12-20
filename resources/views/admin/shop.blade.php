@@ -62,7 +62,7 @@
                     <tbody>
                     @foreach ($list as $key => $item)
                         <tr>
-                            <td>{{$key+1}}</td>
+                            <td>{{$key+$offset+1}}</td>
                             <td>{{$item->name}}<br/>ID：{{$item->id}}</td>
                             <td>
                                 <div class="user-panel clearfix">
