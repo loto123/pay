@@ -14,7 +14,7 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 class ShopController extends Controller
 {
 
-    private $limit = 10;
+    private $limit = 20;
 
     //店铺管理
     public function index(Request $request)
@@ -62,7 +62,8 @@ class ShopController extends Controller
 
         $count = $countQuery->count();
         $list = $listQuery->paginate($this->limit);
-        $data = compact('list','count','date_time','manager_id','shop_id','shop_name');
+        $offset = ($request->page>1 ? $request->page-1 : 0 ) * $this->limit;
+        $data = compact('list','count','date_time','manager_id','shop_id','shop_name','offset');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shop',$data));
             $content->header("店铺管理");

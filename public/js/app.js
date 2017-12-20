@@ -61763,7 +61763,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n", ""]);
+exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n.account-container[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.account-container .account-box[data-v-192ddef6] {\n    width: 100%;\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n}\n.account-container .account-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.account-container .account-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n", ""]);
 
 // exports
 
@@ -61774,8 +61774,12 @@ exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(36);
 //
 //
 //
@@ -61801,11 +61805,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+  data: function data() {
+    return {
+      name: null,
+      id_number: null
+    };
+  },
+
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  created: function created() {
+    this.personalInfo();
+  },
+
+  methods: {
+    //个人信息
+    personalInfo: function personalInfo() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
+        _this.name = res.data.data.name;
+        _this.id_number = res.data.data.id_number;
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -61825,24 +61867,25 @@ var render = function() {
       _c("div", { staticClass: "addBankCard-box" }, [
         _c("h2", [_vm._v("请绑定持卡人本人的银行卡")]),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "flex flex-v flex-justify-center" },
-          [
-            _c("mt-field", {
-              attrs: { label: "姓名", placeholder: "请输入姓名", type: "text" }
-            }),
+        _c("div", { staticClass: "flex flex-v flex-justify-center" }, [
+          _c("section", { staticClass: "account-container" }, [
+            _c("div", { staticClass: "account-box flex flex-align-center" }, [
+              _c("span", [_vm._v("姓名:")]),
+              _vm._v(" "),
+              _c("em", { staticClass: "flex-1 number" }, [
+                _vm._v(_vm._s(_vm.name))
+              ])
+            ]),
             _vm._v(" "),
-            _c("mt-field", {
-              attrs: {
-                label: "身份证号",
-                placeholder: "请输入身份证号",
-                type: "text"
-              }
-            })
-          ],
-          1
-        ),
+            _c("div", { staticClass: "account-box flex flex-align-center" }, [
+              _c("span", [_vm._v("身份证号:")]),
+              _vm._v(" "),
+              _c("em", { staticClass: "flex-1 number" }, [
+                _vm._v(_vm._s(_vm.id_number))
+              ])
+            ])
+          ])
+        ]),
         _vm._v(" "),
         _c(
           "div",

@@ -12,6 +12,7 @@ namespace App\Pay\Impl\Heepay;
 use App\Pay\Crypt3Des;
 use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
+use App\Pay\Model\WithdrawResult;
 use App\Pay\WithdrawInterface;
 use Illuminate\Support\Facades\Log;
 
@@ -55,7 +56,7 @@ class SmallBatchTransfer implements WithdrawInterface
     public function withdraw($withdraw_id, $amount, array $receiver_info, array $config, $notify_url)
     {
         //Log::info($notify_url);
-        $result = ['state' => Withdraw::STATE_SEND_FAIL];
+        $result = new WithdrawResult();
 
         do {
             //网银提现
@@ -86,7 +87,7 @@ class SmallBatchTransfer implements WithdrawInterface
 
             $res_xml = self::send_post($config['url'], http_build_query($params), $config['cert_path']);
             $res_xml = iconv("gbk//IGNORE", "utf-8", $res_xml);
-            $result['raw_response'] = $res_xml;
+            $result->raw_response = $res_xml;
             $response = simplexml_load_string($res_xml);
 
             if (empty($response)) {
@@ -94,9 +95,9 @@ class SmallBatchTransfer implements WithdrawInterface
             }
 
             if ($response->ret_code == '0000') {
-                $result['state'] = Withdraw::STATE_SUBMIT;
+                $result->state = Withdraw::STATE_SUBMIT;
             } else {
-                $result['raw_response'] = json_encode($response->ret_msg, JSON_UNESCAPED_UNICODE);
+                $result->raw_response = json_encode($response->ret_msg, JSON_UNESCAPED_UNICODE);
                 break;
             }
 
@@ -138,7 +139,9 @@ class SmallBatchTransfer implements WithdrawInterface
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $send_type);
-        curl_setopt($ch, CURLOPT_CAINFO, $cacert_url);     //证书地址
+        if ($cacert_url) {
+            curl_setopt($ch, CURLOPT_CAINFO, $cacert_url);     //证书地址
+        }
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 

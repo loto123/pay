@@ -14,7 +14,7 @@
                             </div>
                         </div>
                     </h4>
-                    <h4 class="widget-user-desc">店铺会员（{{$users_arr->count()}}）：
+                    <h4 class="widget-user-desc">店铺会员（{{$users_arr->count()}}）
                         @if (!empty($users_arr) && $users_arr->count()>0 )
                         <div class="user-panel clearfix">
                             @foreach($users_arr as $user_item)
@@ -33,7 +33,7 @@
                     </h4>
                     <h4 class="widget-user-desc">店铺交易笔数：<span>{{$list->transfer_cnt}}</span></h4>
                     <h4 class="widget-user-desc">平台交易费率：<span>{{config('platform_fee_percent') . '%'}}</span></h4>
-                    <h4 class="widget-user-desc">已付平台交易费：<span>{{$list->fee_amount_cnt}}</span></h4>
+                    <h4 class="widget-user-desc">已付平台交易费：<span>{{$list->fee_amount_cnt??0}}</span></h4>
                     <h4 class="widget-user-desc">店铺手续费率：<span>{{(int)$list->fee . '%'}}</span>
                     <h4 class="widget-user-desc">店铺默认单价：<span>{{$list->price}}</span></h4>
                     <h4 class="widget-user-desc">总交易额：<span>{{$list->summary??0}}</span></h4>
