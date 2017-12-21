@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\OauthUser;
+use App\Pay\Model\PayFactory;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -155,7 +156,11 @@ class AuthController extends BaseController {
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
         $input['container_id'] = $wallet->id;
-        $user = User::create($input);
+        try {
+            $user = User::create($input);
+        } catch (\Exception $e){
+            return $this->json();
+        }
 
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
