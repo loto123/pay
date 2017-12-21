@@ -107,11 +107,11 @@ class TransferController extends Controller
         $transfer->fee_percent = config('platform_fee_percent');
 
         //交易关系包含自己
-        $joiners = $request->input('joiner',[]);
-        array_push($joiners,$user->id);
+        $joiners = $request->input('joiner', []);
+        array_push($joiners, $user->id);
         if ($transfer->save()) {
             //保存交易关系
-            foreach($joiners as $item) {
+            foreach ($joiners as $item) {
                 if (!$transfer->joiner()->where('user_id', $item)->exists()) {
                     $relation = new TransferUserRelation();
                     $relation->transfer_id = $transfer->id;
@@ -744,17 +744,31 @@ class TransferController extends Controller
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
         })->with(['transfer' => function ($query) {
-            $query->select('transfer_id');
-        }, 'transfer.record' => function ($query) {
-            $query->sum('amount');
-        }, 'transfer.shop' => function ($query) {
-            $query->select('id', 'name');
-        }])->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
+            $query->select('id', 'shop_id');
+        },
+//        }])
+//        }, 'transfer.record' => function ($query) {
+//            $query->sum('amount');
+//        },
+            'transfer.shop' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
         if ($request->limit && $request->offset) {
             $query->offset($request->offset)->limit($request->limit);
         }
         $list = $query->get();
-        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $list]);
+        $data = [];
+        foreach ($list as $key => $item) {
+            $data[$key]['id'] = $item->id;
+            $data[$key]['transfer_id'] = $item->transfer ? $item->transfer->en_id() : 0;
+            $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
+            $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
+            $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
+                ->where('stat', '<>', 3)->where('stat', '<>', 0)->sum('amount') : 0;
+            $data[$key]['makr'] = $item->mark;
+        }
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
     }
 
     /**
