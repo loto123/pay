@@ -141,6 +141,6 @@ class User extends Authenticatable
     }
 
     public function container() {
-        return $this->hasOne(MasterContainer::class, 'container_id');
+        return $this->hasOne(MasterContainer::class, 'id', 'container_id');
     }
 }
