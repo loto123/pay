@@ -1,7 +1,7 @@
 <template>
   <div id="my-deal">
       <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
-        <div class="mark-wrap flex flex-reverse">
+        <div class="mark-wrap flex flex-reverse" @click = "mark">
           标记
         </div>
       </top-back>
@@ -19,71 +19,19 @@
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail">
+                 <li class="deal-item flex flex-align-center" @click="goDetail" v-for="item in dataList" >
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
-                        <div class="title">交易来源:无敌先生的小店</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
+                        <div class="title">{{item.shop_name}}</div>
+                        <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
                         <!-- <div class="title">手续费收益</div> -->
-                        <div class="m-text">￥168</div>
+                        <div class="m-text">￥{{item.amount}}</div>
                     </div>
-                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1">
-                      <i class="iconfont ">
-                        &#xe708;
-                      </i>
-                    </div>
-                </li>
-
-                <li class="deal-item flex flex-align-center" @click="goDetail">
-                    
-                    <div class="content-wrap flex flex-v flex-align-center flex-6">
-                        <div class="title">交易来源:无敌先生的小店</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
-                    </div>
-                    <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
-                        <!-- <div class="title">手续费收益</div> -->
-                        <div class="m-text">￥168</div>
-                    </div>
-                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1">
-                      <i class="iconfont ">
-                        &#xe708;
-                      </i>
-                    </div>
-                </li>
-
-                <li class="deal-item flex flex-align-center" @click="goDetail">
-                    
-                    <div class="content-wrap flex flex-v flex-align-center flex-6">
-                        <div class="title">交易来源:无敌先生的小店</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
-                    </div>
-                    <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
-                        <!-- <div class="title">手续费收益</div> -->
-                        <div class="m-text">￥168</div>
-                    </div>
-                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1">
-                      <i class="iconfont ">
-                        &#xe708;
-                      </i>
-                    </div>
-                </li>
-
-                <li class="deal-item flex flex-align-center" @click="goDetail">
-                    
-                    <div class="content-wrap flex flex-v flex-align-center flex-6">
-                        <div class="title">交易来源:无敌先生的小店</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
-                    </div>
-                    <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
-                        <!-- <div class="title">手续费收益</div> -->
-                        <div class="m-text">￥168</div>
-                    </div>
-
-                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1" @click.stop="mark">
-                      <i class="iconfont ">
-                        {{isStar?'&#xe708;':''}}
+                    <div class="star-wrap flex flex-align-center flex-justify-center flex-1" @click.stop="markItem(item.id)">
+                      <i class="iconfont " v-bind:class="{'edit':isStar}" >
+                       {{item.makr?"&#xe708;":""}}
                       </i>
                     </div>
                 </li>
@@ -187,10 +135,14 @@
             width: 1.5em;
             height: 1.5em;
             border-radius: 50%;
-            background: #26a2ff;
+            // background: #26a2ff;
             text-align: center;
             line-height: 1.5em;
-            color:#fff;
+            color:#26a2ff;
+          }
+
+          .edit{
+            border: 1px solid #eee;
           }
         }
 
@@ -224,7 +176,8 @@ export default {
   data() {
     return {
       tabItem: [true, false, false],
-      isStar:false
+      isStar:false,
+      dataList:[]
     };
   },
   methods: {
@@ -239,10 +192,23 @@ export default {
     goDetail() {
       this.$router.push("/makeDeal/deal_detail");
     },
+
     mark(){
-      console.log('mark');
+      console.log(this.isStar);
+      if(!this.isStar){
+        this.isStar = true;
+      }else {
+        this.isStar = false;
+      }
     },
 
+    markItem(id){
+      if(!this.isStar){
+        return;
+      }
+      console.log(id);
+      
+    },
     init(){
       Loading.getInstance().open();
       var _data = {
@@ -252,11 +218,16 @@ export default {
       }
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
         console.log(res);
+        this.dataList = res.data.data;
+        Loading.getInstance().close();
+        
       }).catch(err=>{
         console.error(err);
+        Loading.getInstance().close();
+        
       });
       
-    }
+    },
   }
 };
 </script>
