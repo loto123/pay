@@ -20,13 +20,13 @@
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
 
-        <div class="list-wrap" v-for="item in shopList" :key = "item">
+        <div class="list-wrap" v-for="item in shopList" :key = "item.id">
           <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
-            <img src="/images/avatar.jpg" alt="">
+            <img :src="item.logo"  alt="">
           </div>
 
-          <h3>店铺111</h3>
+          <h3>{{item.name}}</h3>
         </div>
         <!-- <div class="list-wrap">
           <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
@@ -112,8 +112,8 @@
       }
 
       > img {
-        width: 30%;
-        height: 30%;
+        width: 100%;
+        height: 100%;
         display: block;
         margin-left: 1%;
         margin-top: 1%;
@@ -154,6 +154,7 @@ export default {
       Loading.getInstance().open();
       request.getInstance().getData("api/shop/lists").then(res=>{
         Loading.getInstance().close();
+        this.shopList = res.data.data.data;
       }).catch(err=>{
         console.error(err);
         Loading.getInstance().close();

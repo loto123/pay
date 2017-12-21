@@ -455,7 +455,6 @@ export default {
         .catch(error => {
           Toast("当前页面不存在");
           this.$router.go(-1);
-          console.error(error);
         });
     },
 

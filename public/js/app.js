@@ -5156,9 +5156,11 @@ module.exports = function (it) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_polyfill__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading__ = __webpack_require__(19);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -5203,11 +5205,12 @@ var UserRequest = function () {
                     if (res.data.code == 1) {
                         resolve(res);
                     } else if (res.data.code == 2) {
-                        reject(res);
+                        __WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */].getInstance().close();
                         Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户未登录,即将跳转登录...");
                         setTimeout(function () {
                             window.location.href = "/#/login";
                         }, 1000);
+                        reject(res);
                     } else {
                         reject(res);
                     }
@@ -5234,11 +5237,13 @@ var UserRequest = function () {
                     if (res.data.code == 1) {
                         resolve(res);
                     } else if (res.data.code == 2) {
-                        reject(res);
+
+                        __WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */].getInstance().close();
                         Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户未登录,即将跳转登录...");
                         setTimeout(function () {
                             window.location.href = "/#/login";
-                        }, 1500);
+                        }, 2000);
+                        reject(res);
                     } else {
                         reject(res);
                     }
@@ -15311,7 +15316,7 @@ var Loading = function () {
                 this._timer = setTimeout(function () {
                     __WEBPACK_IMPORTED_MODULE_0_mint_ui__["Indicator"].close();
                     _this._timer = null;
-                }, 5000);
+                }, 10000);
             } else {
                 return;
             }
@@ -54165,19 +54170,7 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0, false, false),
         _vm._v(" "),
-        _c("div", { staticClass: "all-money flex" }, [
-          _vm._m(1, false, false),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "all-withdraw",
-              attrs: { href: "javascript:;" },
-              on: { click: _vm.allWithdraw }
-            },
-            [_vm._v("全部提现")]
-          )
-        ]),
+        _vm._m(1, false, false),
         _vm._v(" "),
         _vm._m(2, false, false),
         _vm._v(" "),
@@ -54215,10 +54208,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "money" }, [
-      _vm._v("可提现余额 ¥"),
-      _c("span", [_vm._v("231321")]),
-      _vm._v(", ")
+    return _c("div", { staticClass: "all-money flex" }, [
+      _c("div", { staticClass: "money" }, [
+        _vm._v("可提现余额 ¥"),
+        _c("span", [_vm._v("231321")]),
+        _vm._v(", ")
+      ]),
+      _vm._v(" "),
+      _c(
+        "a",
+        { staticClass: "all-withdraw", attrs: { href: "javascript:;" } },
+        [_vm._v("全部提现")]
+      )
     ])
   },
   function() {
@@ -56139,15 +56140,6 @@ var render = function() {
                   })
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "loading-more flex flex-align-center flex-justify-center"
-                },
-                [_vm._v("\n              加载更多...\n          ")]
               )
             ])
           ]
@@ -57143,6 +57135,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -57171,7 +57166,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
       payType: null, // 支付方式，取钱get 放钱put
       transfer_id: "", // 交易id
-      password: ""
+      password: "", // 支付密码
+
+      joiner: [] // 交易的参与者，需要提醒的人
     };
   },
   created: function created() {
@@ -57195,7 +57192,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id).then(function (res) {
         console.log(res);
-
+        _this.joiner = res.data.data.joiner;
         _this.renderData = res.data.data;
         __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
@@ -57212,9 +57209,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.passWordSwitch = false;
     },
     callPassword: function callPassword() {
+      var _this2 = this;
 
       if (this.payType == "put") {
-        this.showPassword();
+        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
+          var _passwordStatus = res.data.data.has_pay_password;
+
+          if (!_passwordStatus) {
+            __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+            Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("您还未设置支付密码，即将跳转设置页面");
+            setTimeout(function () {
+              _this2.$router.push("/my/setting_password");
+            }, 2000);
+          } else {
+            __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+            _this2.showPassword();
+          }
+        }).catch(function (err) {});
       } else if (this.payType == "get") {
         this.submitData();
       } else {
@@ -57225,7 +57237,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 提交交易  拿钱或者付钱
     submitData: function submitData(password) {
-      var _this2 = this;
+      var _this3 = this;
 
       // 放钱
       if (this.payType == "put") {
@@ -57238,9 +57250,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
           console.log(res);
-          _this2.init();
+          _this3.init();
         }).catch(function (err) {
           console.error(err);
+          Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
         });
 
         this.hidePassword();
@@ -59289,7 +59302,31 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("section", { staticClass: "pay-record " }, [
-        _vm._m(0, false, false),
+        _c("div", { staticClass: "title flex flex-v" }, [
+          _vm._m(0, false, false),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "bottom flex flex-align-center flex-justify-between"
+            },
+            [
+              _vm._l(_vm.joiner, function(item) {
+                return _c("img", {
+                  attrs: {
+                    src: item.user.avatar
+                      ? item.user.avatar
+                      : "/images/avatar.jpg",
+                    alt: ""
+                  }
+                })
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "info-friend" }, [_vm._v("提醒好友")])
+            ],
+            2
+          )
+        ]),
         _vm._v(" "),
         _c("ul", { staticClass: "flex flex-v flex-align-center" }, [
           _c(
@@ -59436,7 +59473,7 @@ var render = function() {
       _c("passwordPanel", {
         attrs: {
           setSwitch: _vm.passWordSwitch,
-          settingPasswordSwitch: true,
+          settingPasswordSwitch: false,
           secondValid: false
         },
         on: { hidePassword: _vm.hidePassword, callBack: _vm.submitData }
@@ -59450,28 +59487,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "title flex flex-v" }, [
-      _c("div", { staticClass: "top flex flex-align-center" }, [
-        _c("span", [_vm._v("参与人")])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "bottom flex flex-align-center flex-justify-between" },
-        [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("span", { staticClass: "info-friend" }, [_vm._v("提醒好友")])
-        ]
-      )
+    return _c("div", { staticClass: "top flex flex-align-center" }, [
+      _c("span", [_vm._v("参与人")])
     ])
   }
 ]
@@ -60046,7 +60063,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#my-deal[data-v-6a1cc302] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-deal .mark-wrap[data-v-6a1cc302] {\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n#my-deal #tab-menu[data-v-6a1cc302] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#my-deal #tab-menu .menu-item[data-v-6a1cc302] {\n      height: 100%;\n      width: 33.33%;\n}\n#my-deal #tab-menu .active[data-v-6a1cc302] {\n      border-bottom: 4px solid #26a2ff;\n}\n#my-deal .deal-wrap[data-v-6a1cc302] {\n    width: 100%;\n}\n#my-deal .deal-wrap ul .timer[data-v-6a1cc302] {\n      width: 100%;\n      height: 3em;\n      margin-top: 0.1em;\n}\n#my-deal .deal-wrap ul .timer > div[data-v-6a1cc302] {\n        display: inline-block;\n        font-size: 0.8em;\n        background: #aaa;\n        color: #fff;\n        padding-left: 0.4em;\n        padding-right: 0.4em;\n        padding-top: 0.4em;\n        padding-bottom: 0.4em;\n        border-radius: 0.2em;\n}\n#my-deal .deal-wrap ul .deal-item[data-v-6a1cc302] {\n      height: 4em;\n      background: #fff;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      margin-top: 0.1em;\n      /*border-bottom:1px solid #eee;*/\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap[data-v-6a1cc302] {\n        height: 100%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.8em;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .title[data-v-6a1cc302] {\n          margin-top: 0.8em;\n          width: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .date[data-v-6a1cc302] {\n          color: #999;\n          font-size: 0.9em;\n          margin-top: 1em;\n          width: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .star-wrap[data-v-6a1cc302] {\n        width: 100%;\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .star-wrap i[data-v-6a1cc302] {\n          display: block;\n          width: 1.5em;\n          height: 1.5em;\n          border-radius: 50%;\n          background: #26a2ff;\n          text-align: center;\n          line-height: 1.5em;\n          color: #fff;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap[data-v-6a1cc302] {\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-6a1cc302] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-6a1cc302] {\n          font-size: 1.1em;\n          color: #00cc00;\n}\n", ""]);
+exports.push([module.i, "\n#my-deal[data-v-6a1cc302] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-deal .mark-wrap[data-v-6a1cc302] {\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n#my-deal #tab-menu[data-v-6a1cc302] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#my-deal #tab-menu .menu-item[data-v-6a1cc302] {\n      height: 100%;\n      width: 33.33%;\n}\n#my-deal #tab-menu .active[data-v-6a1cc302] {\n      border-bottom: 4px solid #26a2ff;\n}\n#my-deal .deal-wrap[data-v-6a1cc302] {\n    width: 100%;\n}\n#my-deal .deal-wrap ul .timer[data-v-6a1cc302] {\n      width: 100%;\n      height: 3em;\n      margin-top: 0.1em;\n}\n#my-deal .deal-wrap ul .timer > div[data-v-6a1cc302] {\n        display: inline-block;\n        font-size: 0.8em;\n        background: #aaa;\n        color: #fff;\n        padding-left: 0.4em;\n        padding-right: 0.4em;\n        padding-top: 0.4em;\n        padding-bottom: 0.4em;\n        border-radius: 0.2em;\n}\n#my-deal .deal-wrap ul .deal-item[data-v-6a1cc302] {\n      height: 4em;\n      background: #fff;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      margin-top: 0.1em;\n      /*border-bottom:1px solid #eee;*/\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap[data-v-6a1cc302] {\n        height: 100%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.8em;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .title[data-v-6a1cc302] {\n          margin-top: 0.8em;\n          width: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .content-wrap .date[data-v-6a1cc302] {\n          color: #999;\n          font-size: 0.9em;\n          margin-top: 1em;\n          width: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .star-wrap[data-v-6a1cc302] {\n        width: 100%;\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .star-wrap i[data-v-6a1cc302] {\n          display: block;\n          width: 1.5em;\n          height: 1.5em;\n          border-radius: 50%;\n          text-align: center;\n          line-height: 1.5em;\n          color: #26a2ff;\n}\n#my-deal .deal-wrap ul .deal-item .star-wrap .edit[data-v-6a1cc302] {\n          border: 1px solid #eee;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap[data-v-6a1cc302] {\n        height: 100%;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-6a1cc302] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#my-deal .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-6a1cc302] {\n          font-size: 1.1em;\n          color: #00cc00;\n}\n", ""]);
 
 // exports
 
@@ -60226,54 +60243,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -60287,7 +60256,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       tabItem: [true, false, false],
-      isStar: false
+      isStar: false,
+      dataList: []
     };
   },
 
@@ -60304,9 +60274,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$router.push("/makeDeal/deal_detail");
     },
     mark: function mark() {
-      console.log('mark');
+      console.log(this.isStar);
+      if (!this.isStar) {
+        this.isStar = true;
+      } else {
+        this.isStar = false;
+      }
+    },
+    markItem: function markItem(id) {
+      if (!this.isStar) {
+        return;
+      }
+      console.log(id);
     },
     init: function init() {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         status: 1,
@@ -60315,8 +60298,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/record', _data).then(function (res) {
         console.log(res);
+        _this.dataList = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       });
     }
   }
@@ -60341,9 +60327,14 @@ var render = function() {
           attrs: { title: "交易管理" }
         },
         [
-          _c("div", { staticClass: "mark-wrap flex flex-reverse" }, [
-            _vm._v("\n        标记\n      ")
-          ])
+          _c(
+            "div",
+            {
+              staticClass: "mark-wrap flex flex-reverse",
+              on: { click: _vm.mark }
+            },
+            [_vm._v("\n        标记\n      ")]
+          )
         ]
       ),
       _vm._v(" "),
@@ -60399,262 +60390,82 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "deal-wrap" }, [
-        _c("ul", [
-          _c(
-            "li",
-            {
-              staticClass: "deal-item flex flex-align-center",
-              on: { click: _vm.goDetail }
-            },
-            [
-              _vm._m(0, false, false),
-              _vm._v(" "),
-              _vm._m(1, false, false),
-              _vm._v(" "),
-              _vm._m(2, false, false)
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "deal-item flex flex-align-center",
-              on: { click: _vm.goDetail }
-            },
-            [
-              _vm._m(3, false, false),
-              _vm._v(" "),
-              _vm._m(4, false, false),
-              _vm._v(" "),
-              _vm._m(5, false, false)
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "deal-item flex flex-align-center",
-              on: { click: _vm.goDetail }
-            },
-            [
-              _vm._m(6, false, false),
-              _vm._v(" "),
-              _vm._m(7, false, false),
-              _vm._v(" "),
-              _vm._m(8, false, false)
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "deal-item flex flex-align-center",
-              on: { click: _vm.goDetail }
-            },
-            [
-              _vm._m(9, false, false),
-              _vm._v(" "),
-              _vm._m(10, false, false),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "star-wrap flex flex-align-center flex-justify-center flex-1",
-                  on: {
-                    click: function($event) {
-                      $event.stopPropagation()
-                      _vm.mark($event)
+        _c(
+          "ul",
+          _vm._l(_vm.dataList, function(item) {
+            return _c(
+              "li",
+              {
+                staticClass: "deal-item flex flex-align-center",
+                on: { click: _vm.goDetail }
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "content-wrap flex flex-v flex-align-center flex-6"
+                  },
+                  [
+                    _c("div", { staticClass: "title" }, [
+                      _vm._v(_vm._s(item.shop_name))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "date" }, [
+                      _vm._v(_vm._s(item.created_at))
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
+                  },
+                  [
+                    _c("div", { staticClass: "m-text" }, [
+                      _vm._v("￥" + _vm._s(item.amount))
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "star-wrap flex flex-align-center flex-justify-center flex-1",
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation()
+                        _vm.markItem(item.id)
+                      }
                     }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "iconfont " }, [
-                    _vm._v(
-                      "\n                      " +
-                        _vm._s(_vm.isStar ? "" : "") +
-                        "\n                    "
+                  },
+                  [
+                    _c(
+                      "i",
+                      { staticClass: "iconfont ", class: { edit: _vm.isStar } },
+                      [
+                        _vm._v(
+                          "\n                     " +
+                            _vm._s(item.makr ? "" : "") +
+                            "\n                    "
+                        )
+                      ]
                     )
-                  ])
-                ]
-              )
-            ]
-          )
-        ])
+                  ]
+                )
+              ]
+            )
+          })
+        )
       ])
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
-      [
-        _c("div", { staticClass: "title" }, [
-          _vm._v("交易来源:无敌先生的小店")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
-      },
-      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "star-wrap flex flex-align-center flex-justify-center flex-1"
-      },
-      [
-        _c("i", { staticClass: "iconfont " }, [
-          _vm._v("\n                      \n                    ")
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
-      [
-        _c("div", { staticClass: "title" }, [
-          _vm._v("交易来源:无敌先生的小店")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
-      },
-      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "star-wrap flex flex-align-center flex-justify-center flex-1"
-      },
-      [
-        _c("i", { staticClass: "iconfont " }, [
-          _vm._v("\n                      \n                    ")
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
-      [
-        _c("div", { staticClass: "title" }, [
-          _vm._v("交易来源:无敌先生的小店")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
-      },
-      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "star-wrap flex flex-align-center flex-justify-center flex-1"
-      },
-      [
-        _c("i", { staticClass: "iconfont " }, [
-          _vm._v("\n                      \n                    ")
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "content-wrap flex flex-v flex-align-center flex-6" },
-      [
-        _c("div", { staticClass: "title" }, [
-          _vm._v("交易来源:无敌先生的小店")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "pay-detail-wrap flex flex-align-center flex-justify-center flex-3"
-      },
-      [_c("div", { staticClass: "m-text" }, [_vm._v("￥168")])]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -63810,7 +63621,15 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "realAuth-container" }, [
         _c("div", { staticClass: "realAuth-box" }, [
-          _vm._m(0, false, false),
+          _c("section", { staticClass: "account-container" }, [
+            _c("div", { staticClass: "account-box flex flex-align-center" }, [
+              _c("span", [_vm._v("手机号:")]),
+              _vm._v(" "),
+              _c("em", { staticClass: "flex-1 number" }, [
+                _vm._v(_vm._s(_vm.mobile))
+              ])
+            ])
+          ]),
           _vm._v(" "),
           _c("section", { staticClass: "input-wrap-box" }, [
             _c(
@@ -63820,8 +63639,25 @@ var render = function() {
                 _c("span", [_vm._v("验证码:")]),
                 _vm._v(" "),
                 _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.code,
+                      expression: "code"
+                    }
+                  ],
                   staticClass: "flex-1",
-                  attrs: { type: "text", placeholder: "请输入验证码" }
+                  attrs: { type: "text", placeholder: "请输入验证码" },
+                  domProps: { value: _vm.code },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.code = $event.target.value
+                    }
+                  }
                 }),
                 _vm._v(" "),
                 _c(
@@ -63857,20 +63693,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "account-container" }, [
-      _c("div", { staticClass: "account-box flex flex-align-center" }, [
-        _c("span", [_vm._v("手机号:")]),
-        _vm._v(" "),
-        _c("em", { staticClass: "flex-1 number" }, [_vm._v("18390939299")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -65534,7 +65357,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#top[data-v-7328b9b8] {\n  height: 10em;\n  padding-top: 2em;\n  width: 100%;\n  background: #26a2ff;\n}\n#top .imgwrap[data-v-7328b9b8] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-7328b9b8] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-7328b9b8] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-7328b9b8] {\n    margin-top: 1em;\n    color: #fff;\n    text-align: center;\n    font-size: 1.2em;\n}\n.tab-menu[data-v-7328b9b8] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-7328b9b8] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-7328b9b8] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list[data-v-7328b9b8] {\n  padding-top: 0.7em;\n}\n.shop-list .list-wrap .shop-item[data-v-7328b9b8] {\n    width: 4em;\n    height: 4em;\n    margin-left: 1em;\n    margin-right: 1em;\n    margin-top: 0.5em;\n    background: #eee;\n    border-radius: 0.4em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding: 0.2em;\n    position: relative;\n}\n.shop-list .list-wrap .shop-item .notice[data-v-7328b9b8] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .list-wrap .shop-item > img[data-v-7328b9b8] {\n      width: 30%;\n      height: 30%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list h3[data-v-7328b9b8] {\n    font-size: 0.9em;\n    text-align: center;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n", ""]);
+exports.push([module.i, "\n#top[data-v-7328b9b8] {\n  height: 10em;\n  padding-top: 2em;\n  width: 100%;\n  background: #26a2ff;\n}\n#top .imgwrap[data-v-7328b9b8] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-7328b9b8] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-7328b9b8] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-7328b9b8] {\n    margin-top: 1em;\n    color: #fff;\n    text-align: center;\n    font-size: 1.2em;\n}\n.tab-menu[data-v-7328b9b8] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-7328b9b8] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-7328b9b8] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list[data-v-7328b9b8] {\n  padding-top: 0.7em;\n}\n.shop-list .list-wrap .shop-item[data-v-7328b9b8] {\n    width: 4em;\n    height: 4em;\n    margin-left: 1em;\n    margin-right: 1em;\n    margin-top: 0.5em;\n    background: #eee;\n    border-radius: 0.4em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding: 0.2em;\n    position: relative;\n}\n.shop-list .list-wrap .shop-item .notice[data-v-7328b9b8] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .list-wrap .shop-item > img[data-v-7328b9b8] {\n      width: 100%;\n      height: 100%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list h3[data-v-7328b9b8] {\n    font-size: 0.9em;\n    text-align: center;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n", ""]);
 
 // exports
 
@@ -65702,9 +65525,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$router.push("/shop/");
     },
     init: function init() {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists").then(function (res) {
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        _this.shopList = res.data.data.data;
       }).catch(function (err) {
         console.error(err);
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
@@ -65767,10 +65593,21 @@ var render = function() {
       "div",
       { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
       _vm._l(_vm.shopList, function(item) {
-        return _c("div", { key: item, staticClass: "list-wrap" }, [
-          _vm._m(1, true, false),
+        return _c("div", { key: item.id, staticClass: "list-wrap" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
+            },
+            [
+              _c("div", { staticClass: "notice" }),
+              _vm._v(" "),
+              _c("img", { attrs: { src: item.logo, alt: "" } })
+            ]
+          ),
           _vm._v(" "),
-          _c("h3", [_vm._v("店铺111")])
+          _c("h3", [_vm._v(_vm._s(item.name))])
         ])
       })
     )
@@ -65788,23 +65625,6 @@ var staticRenderFns = [
         _c("i", { staticClass: "iconfont myShop-icon common-icon" }, [
           _vm._v("\n            \n          ")
         ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
-      },
-      [
-        _c("div", { staticClass: "notice" }),
-        _vm._v(" "),
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
       ]
     )
   }
@@ -67222,7 +67042,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
         _this.$router.go(-1);
-        console.error(error);
       });
     },
     dissShop: function dissShop() {

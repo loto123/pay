@@ -17,9 +17,9 @@
                 </mt-radio>
             </div>
             
-            <div class="loading-more flex flex-align-center flex-justify-center">
+            <!-- <div class="loading-more flex flex-align-center flex-justify-center">
                 加载更多...
-            </div>
+            </div> -->
         </div>
 
         
