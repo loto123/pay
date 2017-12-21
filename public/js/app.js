@@ -53208,6 +53208,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           console.log(res);
         }).catch(function (err) {
           console.log(err);
+          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册失败");
         });
         return;
       }

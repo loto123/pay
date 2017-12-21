@@ -304,6 +304,7 @@ export default {
           console.log(res);
         }).catch((err)=>{
           console.log(err);
+          Toast("注册失败");
         });
         return;
       }
