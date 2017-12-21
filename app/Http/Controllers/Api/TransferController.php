@@ -162,16 +162,31 @@ class TransferController extends Controller
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
         }, 'record' => function ($query) {
-            $query->select('id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
+            $query->select('id', 'transfer_id', 'user_id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
         }, 'record.user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
+        }, 'joiner' => function ($query) {
+            $query->select('transfer_id', 'user_id');
         }, 'joiner.user' => function ($query) {
-            $query->select('name', 'avatar');
-        }])->select('id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+            $query->select('id', 'name', 'avatar');
+        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
 
-        $transfer->id = $transferObj->en_id();
+        //装填响应数据
+        $transfer->id = $transfer->en_id();
+        unset($transfer->user_id);
+        $transfer->user->id = $transfer->user->en_id();
+        foreach ($transfer->record as $key => $record) {
+            $transfer->record[$key]->user->id = $record->user->en_id();
+            unset($transfer->record[$key]->transfer_id);
+            unset($transfer->record[$key]->user_id);
+        }
+        foreach ($transfer->joiner as $key => $item) {
+            $transfer->joiner[$key]->user->id = $item->user->en_id();
+            unset($transfer->joiner[$key]->transfer_id);
+            unset($transfer->joiner[$key]->user_id);
+        }
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
 
@@ -325,11 +340,11 @@ class TransferController extends Controller
                     return response()->json(['code' => 0, 'msg' => trans('trans.user_pay_password_error'), 'data' => []]);
                 }
                 $record->stat = 1;
-                $record->real_amount = $record->amount * -1;
                 //用户减钱
                 $user->balance = $user->balance - $record->real_amount;
                 //红包加钱
                 $transfer->amount = $transfer->amount + $record->amount;
+                $record->real_amount = $record->amount * -1;
                 $record->amount = $record->amount * -1;
             }
             //拿钱

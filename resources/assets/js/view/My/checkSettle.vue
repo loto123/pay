@@ -60,7 +60,6 @@ export default {
     showPassword(){
       this.showPasswordTag = true;
     },
-
     hidePassword(){
       this.showPasswordTag = false;
     },
@@ -76,7 +75,7 @@ export default {
       }).catch((err) => {
         Toast({
             message: err.data.msg,
-            duration: 800
+            duration: 500
           });
         this.$router.go(-1);
       })

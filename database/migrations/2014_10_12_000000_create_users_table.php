@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->char('id_number','18')->comment('身份证号')->nullable();
             $table->unsignedInteger('parent_id')->nullable()->default(0);
             $table->unsignedInteger('operator_id')->nullable()->default(0);
+            $table->unsignedInteger('container_id');
             $table->rememberToken();
             $table->timestamps();
         });
