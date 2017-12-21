@@ -28,7 +28,7 @@
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
-                    <mt-button type="primary" size="large" v-on:click="confirmMobileAndInvite">{{findPasswordSwitch?"下一步":"注册"}}</mt-button>
+                    <mt-button type="primary" size="large" v-on:click="comfirm">{{findPasswordSwitch?"下一步":"注册"}}</mt-button>
                 </div>
 
                 <p class="agreement-btn" v-if="!findPasswordSwitch">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
@@ -45,13 +45,13 @@
 
                 <section class="input-wrap flex flex-align-center">
                     <span class="flex-1">验证码:</span>
-                    <input type="text" placeholder="请输入验证码" class="flex-1">
-                    <mt-button type="default" class="flex-1" @click="sendSMS">发送验证码(10)</mt-button>
+                    <input type="text" placeholder="请输入验证码" class="flex-1" v-model="validCode">
+                    <mt-button type="default" class="flex-1" @click="sendSMS">发送验证码{{smsTimer?"("+smsTimer+")":""}}</mt-button>
                     
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
-                    <mt-button type="primary" size="large" v-on:click="goNextStep">确定</mt-button>
+                    <mt-button type="primary" size="large" v-on:click="comfirm">确定</mt-button>
                 </div>
 
             </section>
@@ -216,7 +216,9 @@ export default {
       userAccountName:null,           // 用户名
       userPassword:null,              // 密码
       inviteMobile:null,              // 邀请人手机号
-      validCode:null                  // 验证码
+      validCode:null,                 // 验证码
+
+      smsTimer:null                     //短信验证倒计时
     };
   },
 
@@ -258,12 +260,25 @@ export default {
           this.goNextStep();
         }).catch(err=>{
           Loading.getInstance().close();
-          Toast("推荐人手机号有误");
+          Toast("注册手机号输入有误");
           console.error(err);
         });
       }else if(this.step == 2){
         // 验证手机号
-
+        var _data = {
+          mobile:this.userAccountName,
+          code:this.validCode
+        }
+        Loading.getInstance().open();
+        request.getInstance().postData("api/auth/valid",_data).then(res=>{
+          console.dir(res);
+          Loading.getInstance().close();
+          this.goNextStep();
+        }).catch(err=>{
+          console.error(err);
+          Loading.getInstance().close();
+          Toast("验证码输入有误");
+        });
       }
     },
 
@@ -274,7 +289,8 @@ export default {
         var data = {
           mobile :this.userAccountName,
           password :this.userPassword,
-          name:"sangliang"
+          code:this.validCode,
+          invite_mobile:this.inviteMobile
         }
 
         request.getInstance().postData('api/auth/register',data).then(function(res){
@@ -328,9 +344,23 @@ export default {
     },
 
     sendSMS(){
+      if(this.smsTimer !=null){
+        return;
+      }
       var _data = {
         mobile:this.userAccountName
       };
+
+      this.smsTimer = 60;
+      var timer = setInterval(()=>{
+        this.smsTimer--;
+
+        if(this.smsTimer == 0){
+          this.smsTimer = null;
+          clearInterval(timer);
+        }
+      },1000);
+
       Loading.getInstance().open();
       request.getInstance().postData("api/auth/sms",_data).then(res=>{
         console.dir(res);
