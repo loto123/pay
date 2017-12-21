@@ -53146,7 +53146,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/valid", _data).then(function (res) {
-          console.dir(res);
           __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
           _this.goNextStep();
         }).catch(function (err) {
@@ -53160,7 +53159,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/valid", _data).then(function (res) {
-          console.dir(res);
           __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
           _this.goNextStep();
         }).catch(function (err) {
@@ -53176,7 +53174,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/valid", _data).then(function (res) {
-          console.dir(res);
           __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
           _this.goNextStep();
         }).catch(function (err) {
@@ -53198,14 +53195,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
 
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/register', data).then(function (res) {
-
-          if (res.data.code == 0) {
-            sessionStorage.setItem("_token", res.data.data.token);
-            Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册成功");
-            self.$router.push("/login");
-          }
-
-          console.log(res);
+          sessionStorage.setItem("_token", res.data.data.token);
+          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册成功");
+          self.$router.push("/login");
         }).catch(function (err) {
           console.log(err);
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册失败");
@@ -53220,36 +53212,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     closeAgreenment: function closeAgreenment() {
       this.agrementState = false;
     },
-
-
-    // 验证用户名和邀请人手机号
-    confirmMobileAndInvite: function confirmMobileAndInvite() {
-      var _this2 = this;
-
-      //  普通注册模式
-      if (!this.findPasswordSwitch) {
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
-        console.log(this.userAccountName, this.inviteMobile);
-        var _tempData = {
-          mobile: this.userAccountName,
-          invite_mobile: this.inviteMobile
-        };
-
-        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/valid').then(function (res) {
-          console.log(res);
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
-          _this2.goNextStep();
-        }).catch(function (err) {
-          console.error(err);
-          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.message);
-        });
-      } else {}
-      // 密码找回模式
-
-      // this.goNextStep();
-    },
     sendSMS: function sendSMS() {
-      var _this3 = this;
+      var _this2 = this;
 
       if (this.smsTimer != null) {
         return;
@@ -53260,17 +53224,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       this.smsTimer = 60;
       var timer = setInterval(function () {
-        _this3.smsTimer--;
+        _this2.smsTimer--;
 
-        if (_this3.smsTimer == 0) {
-          _this3.smsTimer = null;
+        if (_this2.smsTimer == 0) {
+          _this2.smsTimer = null;
           clearInterval(timer);
         }
       }, 1000);
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/sms", _data).then(function (res) {
-        console.dir(res);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -65120,10 +65083,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$router.push("/shop/message_list");
     },
     goDetail: function goDetail(e, evnet) {
-      console.log(e);
       this.$store.dispatch("shop_setShopDetailId", e);
       this.$router.push("/shop/shop_detail" + "?id=" + e);
-      console.log(event);
     },
     addShop: function addShop() {
       this.addShopTabStatus = true;
@@ -65139,7 +65100,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var data = this.openNewShop;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/create", data).then(function (res) {
-        console.log(res);
         self.addShopTabStatus = false;
         self.getShopData();
       }).catch(function (err) {
@@ -65154,7 +65114,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine").then(function (res) {
         self.shopList = res.data.data.data;
-        console.log(res);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (e) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
@@ -65745,7 +65704,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists").then(function (res) {
-        console.dir(res);
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -67248,7 +67206,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _id = this.$route.query.id;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/detail/" + _id).then(function (res) {
-        console.log(res);
 
         _this.shopId = res.data.data.id;
         _this.shopName = res.data.data.name;
@@ -67272,7 +67229,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + this.shopId).then(function (res) {
-        console.log(res);
         _this2.$router.push("/shop");
       }).catch(function (error) {
         console.error(error);

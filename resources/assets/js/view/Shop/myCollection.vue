@@ -153,7 +153,6 @@ export default {
     init(){
       Loading.getInstance().open();
       request.getInstance().getData("api/shop/lists").then(res=>{
-        console.dir(res);
         Loading.getInstance().close();
       }).catch(err=>{
         console.error(err);
