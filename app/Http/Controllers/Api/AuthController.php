@@ -159,6 +159,7 @@ class AuthController extends BaseController {
         try {
             $user = User::create($input);
         } catch (\Exception $e){
+            return $this->json();
         }
 
         $success['token'] = JWTAuth::fromUser($user);
