@@ -78,11 +78,10 @@
 
   .account-container {
     background: #fff;
-    padding-left: 10px;
     .account-box {
-      width: 100%;
       height: 3em;
       border-top: 1px solid #d9d9d9;
+      padding-left: 10px;
       span {
         display: inline-block;
         width: 105px;
