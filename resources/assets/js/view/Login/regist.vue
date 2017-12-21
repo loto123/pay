@@ -241,7 +241,6 @@ export default {
         };
         Loading.getInstance().open();
         request.getInstance().postData("api/auth/valid",_data).then(res=>{
-          console.dir(res);
           Loading.getInstance().close();
           this.goNextStep();
         }).catch(err=>{
@@ -255,7 +254,6 @@ export default {
         };
         Loading.getInstance().open();
         request.getInstance().postData("api/auth/valid",_data).then(res=>{
-          console.dir(res);
           Loading.getInstance().close();
           this.goNextStep();
         }).catch(err=>{
@@ -271,7 +269,6 @@ export default {
         }
         Loading.getInstance().open();
         request.getInstance().postData("api/auth/valid",_data).then(res=>{
-          console.dir(res);
           Loading.getInstance().close();
           this.goNextStep();
         }).catch(err=>{
@@ -294,14 +291,9 @@ export default {
         }
 
         request.getInstance().postData('api/auth/register',data).then(function(res){
-
-          if(res.data.code == 0){
-            sessionStorage.setItem("_token",res.data.data.token);
-            Toast("注册成功");
-            self.$router.push("/login");
-          }
-
-          console.log(res);
+          sessionStorage.setItem("_token",res.data.data.token);
+          Toast("注册成功");
+          self.$router.push("/login");
         }).catch((err)=>{
           console.log(err);
           Toast("注册失败");
@@ -316,32 +308,6 @@ export default {
     },
     closeAgreenment() {
       this.agrementState = false;
-    },
-
-    // 验证用户名和邀请人手机号
-    confirmMobileAndInvite(){
-      //  普通注册模式
-      if(!this.findPasswordSwitch){
-        Loading.getInstance().open();
-        console.log(this.userAccountName,this.inviteMobile);
-        var _tempData = {
-          mobile:this.userAccountName,
-          invite_mobile:this.inviteMobile
-        };
-
-        request.getInstance().postData('api/auth/valid').then((res)=>{
-          console.log(res);
-          Loading.getInstance().close();
-          this.goNextStep();
-        }).catch((err)=>{
-          console.error(err);
-          Toast(err.message);
-        }); 
-
-      }else {
-        // 密码找回模式
-      }
-      // this.goNextStep();
     },
 
     sendSMS(){
@@ -364,7 +330,6 @@ export default {
 
       Loading.getInstance().open();
       request.getInstance().postData("api/auth/sms",_data).then(res=>{
-        console.dir(res);
         Loading.getInstance().close();
       }).catch(err=>{
         console.error(err);
