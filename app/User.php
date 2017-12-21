@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -142,5 +143,9 @@ class User extends Authenticatable
 
     public function container() {
         return $this->hasOne(MasterContainer::class, 'id', 'container_id');
+    }
+
+    public function channel() {
+        return $this->hasOne(Channel::class, 'id', 'channel_id');
     }
 }
