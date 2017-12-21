@@ -37,8 +37,8 @@
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 					</mt-cell>
 				</li>
-				<li>
-					<mt-cell title="更多设置" is-link to="/my/set">
+				<li @click="set(personal.mobile)">
+					<mt-cell title="更多设置" is-link>
 						<img slot="icon" src="/images/moreSet.png" width="30" height="30">
 					</mt-cell>
 				</li>
@@ -178,13 +178,14 @@
 			//查看结算卡
 			checkSettle(){
 				if(this.listContent.card_count>0){
-					console.log('进来了1');
 					this.$router.push('/my/checkSettle');
 				}else{
-					// Toast('请添加银行卡');
-					console.log('进来了2');
+					Toast('请添加银行卡');
 				}
-			}
+			},
+			set(e){
+				this.$router.push("/my/set"+"?mobile="+e);
+			},
 		}
 	};
 </script>

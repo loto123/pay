@@ -54097,7 +54097,19 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0, false, false),
         _vm._v(" "),
-        _vm._m(1, false, false),
+        _c("div", { staticClass: "all-money flex" }, [
+          _vm._m(1, false, false),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "all-withdraw",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.allWithdraw }
+            },
+            [_vm._v("全部提现")]
+          )
+        ]),
         _vm._v(" "),
         _vm._m(2, false, false),
         _vm._v(" "),
@@ -54135,18 +54147,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "all-money flex" }, [
-      _c("div", { staticClass: "money" }, [
-        _vm._v("可提现余额 ¥"),
-        _c("span", [_vm._v("231321")]),
-        _vm._v(", ")
-      ]),
-      _vm._v(" "),
-      _c(
-        "a",
-        { staticClass: "all-withdraw", attrs: { href: "javascript:;" } },
-        [_vm._v("全部提现")]
-      )
+    return _c("div", { staticClass: "money" }, [
+      _vm._v("可提现余额 ¥"),
+      _c("span", [_vm._v("231321")]),
+      _vm._v(", ")
     ])
   },
   function() {
@@ -54297,7 +54301,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-35d4264a], body[data-v-35d4264a], div[data-v-35d4264a], span[data-v-35d4264a], applet[data-v-35d4264a], object[data-v-35d4264a], iframe[data-v-35d4264a],\nh1[data-v-35d4264a], h2[data-v-35d4264a], h3[data-v-35d4264a], h4[data-v-35d4264a], h5[data-v-35d4264a], h6[data-v-35d4264a], p[data-v-35d4264a], blockquote[data-v-35d4264a], pre[data-v-35d4264a],\na[data-v-35d4264a], abbr[data-v-35d4264a], acronym[data-v-35d4264a], address[data-v-35d4264a], big[data-v-35d4264a], cite[data-v-35d4264a], code[data-v-35d4264a],\ndel[data-v-35d4264a], dfn[data-v-35d4264a], em[data-v-35d4264a], img[data-v-35d4264a], ins[data-v-35d4264a], kbd[data-v-35d4264a], q[data-v-35d4264a], s[data-v-35d4264a], samp[data-v-35d4264a],\nsmall[data-v-35d4264a], strike[data-v-35d4264a], strong[data-v-35d4264a], sub[data-v-35d4264a], sup[data-v-35d4264a], tt[data-v-35d4264a], var[data-v-35d4264a],\nb[data-v-35d4264a], u[data-v-35d4264a], i[data-v-35d4264a], center[data-v-35d4264a],\ndl[data-v-35d4264a], dt[data-v-35d4264a], dd[data-v-35d4264a], ol[data-v-35d4264a], ul[data-v-35d4264a], li[data-v-35d4264a],\nfieldset[data-v-35d4264a], form[data-v-35d4264a], label[data-v-35d4264a], legend[data-v-35d4264a],\ntable[data-v-35d4264a], caption[data-v-35d4264a], tbody[data-v-35d4264a], tfoot[data-v-35d4264a], thead[data-v-35d4264a], tr[data-v-35d4264a], th[data-v-35d4264a], td[data-v-35d4264a],\narticle[data-v-35d4264a], aside[data-v-35d4264a], canvas[data-v-35d4264a], details[data-v-35d4264a], embed[data-v-35d4264a],\nfigure[data-v-35d4264a], figcaption[data-v-35d4264a], footer[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a],\nmenu[data-v-35d4264a], nav[data-v-35d4264a], output[data-v-35d4264a], ruby[data-v-35d4264a], section[data-v-35d4264a], summary[data-v-35d4264a],\ntime[data-v-35d4264a], mark[data-v-35d4264a], audio[data-v-35d4264a], video[data-v-35d4264a] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-35d4264a], aside[data-v-35d4264a], details[data-v-35d4264a], figcaption[data-v-35d4264a], figure[data-v-35d4264a],\nfooter[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a], menu[data-v-35d4264a], nav[data-v-35d4264a], section[data-v-35d4264a] {\n  display: block;\n}\nbody[data-v-35d4264a] {\n  line-height: 1;\n}\nol[data-v-35d4264a], ul[data-v-35d4264a] {\n  list-style: none;\n}\nblockquote[data-v-35d4264a], q[data-v-35d4264a] {\n  quotes: none;\n}\nblockquote[data-v-35d4264a]:before, blockquote[data-v-35d4264a]:after,\nq[data-v-35d4264a]:before, q[data-v-35d4264a]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-35d4264a] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-35d4264a] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-35d4264a] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-35d4264a] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-35d4264a] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-35d4264a] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-35d4264a] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-35d4264a] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-35d4264a] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-35d4264a] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-35d4264a] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-35d4264a] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-35d4264a] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-35d4264a] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-35d4264a] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-35d4264a] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-35d4264a] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-35d4264a] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-35d4264a] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-35d4264a] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-35d4264a] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-35d4264a] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-35d4264a] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-35d4264a] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-35d4264a] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-35d4264a] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-35d4264a] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-35d4264a] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-35d4264a] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-35d4264a] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-35d4264a] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-35d4264a] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.recharge-container[data-v-35d4264a] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.recharge-box[data-v-35d4264a] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.recharge-box .tltle[data-v-35d4264a] {\n    font-size: 1em;\n    color: #999;\n}\n.recharge-money[data-v-35d4264a] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 2em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.recharge-money input[data-v-35d4264a] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.recharge-way[data-v-35d4264a] {\n  margin-top: 2em;\n}\n.recharge-way .title[data-v-35d4264a] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.list[data-v-35d4264a] {\n  background-color: #fff;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  color: inherit;\n  min-height: 48px;\n  display: block;\n  border-bottom: 1px solid #d9d9d9;\n}\n.list-title[data-v-35d4264a] {\n  width: 100%;\n}\n.list-wrapper[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  min-height: inherit;\n  padding: 0 10px;\n}\n.radio-core[data-v-35d4264a] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  display: inline-block;\n  background-color: #fff;\n  border-radius: 100%;\n  border: 1px solid #ccc;\n  position: relative;\n  width: 20px;\n  height: 20px;\n  vertical-align: middle;\n}\n.radio-core[data-v-35d4264a]::after {\n    content: \" \";\n    border-radius: 100%;\n    top: 5px;\n    left: 5px;\n    position: absolute;\n    width: 8px;\n    height: 8px;\n}\n.radiolist-label[data-v-35d4264a] {\n  display: block;\n  width: 100%;\n}\n.radio-input[data-v-35d4264a] {\n  display: none;\n}\n.radio-label[data-v-35d4264a] {\n  vertical-align: middle;\n}\n.radio-input:checked + .radio-core[data-v-35d4264a] {\n  background-color: #26a2ff;\n  border-color: #26a2ff;\n}\n.radio-input:checked + .radio-core[data-v-35d4264a]::after {\n    background-color: #fff;\n}\n.recharge-btn[data-v-35d4264a] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-35d4264a], body[data-v-35d4264a], div[data-v-35d4264a], span[data-v-35d4264a], applet[data-v-35d4264a], object[data-v-35d4264a], iframe[data-v-35d4264a],\nh1[data-v-35d4264a], h2[data-v-35d4264a], h3[data-v-35d4264a], h4[data-v-35d4264a], h5[data-v-35d4264a], h6[data-v-35d4264a], p[data-v-35d4264a], blockquote[data-v-35d4264a], pre[data-v-35d4264a],\na[data-v-35d4264a], abbr[data-v-35d4264a], acronym[data-v-35d4264a], address[data-v-35d4264a], big[data-v-35d4264a], cite[data-v-35d4264a], code[data-v-35d4264a],\ndel[data-v-35d4264a], dfn[data-v-35d4264a], em[data-v-35d4264a], img[data-v-35d4264a], ins[data-v-35d4264a], kbd[data-v-35d4264a], q[data-v-35d4264a], s[data-v-35d4264a], samp[data-v-35d4264a],\nsmall[data-v-35d4264a], strike[data-v-35d4264a], strong[data-v-35d4264a], sub[data-v-35d4264a], sup[data-v-35d4264a], tt[data-v-35d4264a], var[data-v-35d4264a],\nb[data-v-35d4264a], u[data-v-35d4264a], i[data-v-35d4264a], center[data-v-35d4264a],\ndl[data-v-35d4264a], dt[data-v-35d4264a], dd[data-v-35d4264a], ol[data-v-35d4264a], ul[data-v-35d4264a], li[data-v-35d4264a],\nfieldset[data-v-35d4264a], form[data-v-35d4264a], label[data-v-35d4264a], legend[data-v-35d4264a],\ntable[data-v-35d4264a], caption[data-v-35d4264a], tbody[data-v-35d4264a], tfoot[data-v-35d4264a], thead[data-v-35d4264a], tr[data-v-35d4264a], th[data-v-35d4264a], td[data-v-35d4264a],\narticle[data-v-35d4264a], aside[data-v-35d4264a], canvas[data-v-35d4264a], details[data-v-35d4264a], embed[data-v-35d4264a],\nfigure[data-v-35d4264a], figcaption[data-v-35d4264a], footer[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a],\nmenu[data-v-35d4264a], nav[data-v-35d4264a], output[data-v-35d4264a], ruby[data-v-35d4264a], section[data-v-35d4264a], summary[data-v-35d4264a],\ntime[data-v-35d4264a], mark[data-v-35d4264a], audio[data-v-35d4264a], video[data-v-35d4264a] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-35d4264a], aside[data-v-35d4264a], details[data-v-35d4264a], figcaption[data-v-35d4264a], figure[data-v-35d4264a],\nfooter[data-v-35d4264a], header[data-v-35d4264a], hgroup[data-v-35d4264a], menu[data-v-35d4264a], nav[data-v-35d4264a], section[data-v-35d4264a] {\n  display: block;\n}\nbody[data-v-35d4264a] {\n  line-height: 1;\n}\nol[data-v-35d4264a], ul[data-v-35d4264a] {\n  list-style: none;\n}\nblockquote[data-v-35d4264a], q[data-v-35d4264a] {\n  quotes: none;\n}\nblockquote[data-v-35d4264a]:before, blockquote[data-v-35d4264a]:after,\nq[data-v-35d4264a]:before, q[data-v-35d4264a]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-35d4264a] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-35d4264a] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-35d4264a] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-35d4264a] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-35d4264a] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-35d4264a] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-35d4264a] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-35d4264a] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-35d4264a] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-35d4264a] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-35d4264a] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-35d4264a] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-35d4264a] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-35d4264a] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-35d4264a] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-35d4264a] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-35d4264a] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-35d4264a] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-35d4264a] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-35d4264a] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-35d4264a] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-35d4264a] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-35d4264a] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-35d4264a] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-35d4264a] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-35d4264a] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-35d4264a] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-35d4264a] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-35d4264a] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-35d4264a] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-35d4264a] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-35d4264a] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-35d4264a] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-35d4264a] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-35d4264a] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.recharge-container[data-v-35d4264a] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.recharge-box[data-v-35d4264a] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.recharge-box .tltle[data-v-35d4264a] {\n    font-size: 1em;\n    color: #999;\n}\n.recharge-money[data-v-35d4264a] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 2em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.recharge-money input[data-v-35d4264a] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.recharge-btn[data-v-35d4264a] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
 
 // exports
 
@@ -54308,8 +54312,11 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
 //
 //
 //
@@ -54337,39 +54344,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      money: null,
+      rechargeWay: null,
+      "choiseValue": null
+    };
   },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
+  props: ["showSwitch", "optionsList"],
   methods: {
+    hideTab: function hideTab() {
+      this.$emit("hideDropList", this.choiseValue);
+    },
     goIndex: function goIndex() {
       this.$router.push("/index");
+    },
+    recharge: function recharge() {
+      var self = this;
+      var temp = {};
+      temp.money = money;
+      temp.rechargeWay = rechargeWay;
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance.postData('api/account/charge', temp).then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
+        console.err(err);
+      });
+    },
+
+    watch: {
+      "choiseValue": 'hideTab'
     }
   }
 });
@@ -54416,14 +54427,42 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0, false, false),
         _vm._v(" "),
-        _vm._m(1, false, false),
+        _c("div", { staticClass: "recharge-way" }, [
+          _c("div", { staticClass: "title" }, [_vm._v("选择充值方式")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "list-wrap" },
+            [
+              _c("mt-radio", {
+                attrs: {
+                  align: "right",
+                  title: "",
+                  options: ["选项A", "选项B", "选项C"]
+                },
+                model: {
+                  value: _vm.choiseValue,
+                  callback: function($$v) {
+                    _vm.choiseValue = $$v
+                  },
+                  expression: "choiseValue"
+                }
+              })
+            ],
+            1
+          )
+        ]),
         _vm._v(" "),
         _c(
           "a",
-          { staticClass: "recharge-btn", attrs: { href: "javascript:;" } },
+          {
+            staticClass: "recharge-btn",
+            attrs: { href: "javascript:;" },
+            on: { click: _vm.recharge }
+          },
           [
             _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
-              _vm._v("提现")
+              _vm._v("充值")
             ])
           ],
           1
@@ -54447,57 +54486,6 @@ var staticRenderFns = [
         _c("input", { attrs: { type: "text", placeholder: "请输入金额" } })
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "recharge-way" }, [
-      _c("div", { staticClass: "title" }, [_vm._v("选择充值方式")]),
-      _vm._v(" "),
-      _c("a", { staticClass: "list" }, [
-        _c("div", { staticClass: "list-wrapper" }, [
-          _c("div", { staticClass: "list-title" }, [
-            _c("label", { staticClass: "radiolist-label" }, [
-              _c("span", { staticClass: "mint-radio is-right" }, [
-                _c("input", {
-                  staticClass: "radio-input",
-                  attrs: {
-                    type: "radio",
-                    checked: "",
-                    name: "tool",
-                    value: "银行卡"
-                  }
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "radio-core" })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio-label" }, [_vm._v("银行卡")])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "list" }, [
-        _c("div", { staticClass: "list-wrapper" }, [
-          _c("div", { staticClass: "list-title" }, [
-            _c("label", { staticClass: "radiolist-label" }, [
-              _c("span", { staticClass: "mint-radio is-right" }, [
-                _c("input", {
-                  staticClass: "radio-input",
-                  attrs: { type: "radio", name: "tool", value: "微信" }
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "radio-core" })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "radio-label" }, [_vm._v("微信")])
-            ])
-          ])
-        ])
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -55670,13 +55658,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       dropListSwitch: false, // 下拉框开关
-      choiseMemberSwitch: true, // 选择提醒玩家开关
+      choiseMemberSwitch: false, // 选择提醒玩家开关
       dealShop: null,
       shopList: null,
 
       shopId: null,
       price: 10,
-      commentMessage: null
+      commentMessage: null,
+
+      memberList: [] //成员数组
     };
   },
 
@@ -55687,6 +55677,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/all").then(function (res) {
+        console.log(res);
         _this.setShopList(res);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
@@ -55720,12 +55711,57 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     hideDropList: function hideDropList(data) {
       this.dropListSwitch = false;
       this.dealShop = this.getShopName(data);
-
       this.shopId = data;
+
+      this.memberList = []; // 清空店铺成员列表
     },
+
+
+    // 获取所有要提醒的成员名单
     showMemberChoise: function showMemberChoise() {
-      this.choiseMemberSwitch = true;
-      console.log(1);
+      var _this2 = this;
+
+      if (this.shopId == null) {
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请选择发起交易的店铺");
+        return;
+      }
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/members/' + this.shopId).then(function (res) {
+        console.log(res);
+        _this2.initMemberList(res);
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+
+        if (res.data.data.members.length == 0) {
+          Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("当前店铺无成员");
+          return;
+        }
+
+        _this2.choiseMemberSwitch = true;
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      });
+    },
+    getMemberData: function getMemberData(data) {
+      this.memberList = data;
+    },
+
+    // 初始化提醒玩家列表
+    initMemberList: function initMemberList(res) {
+
+      if (this.memberList.length > 0) {
+        return;
+      }
+
+      for (var i = 0; i < res.data.data.members.length; i++) {
+        var _temp = {};
+        _temp = res.data.data.members[i];
+        _temp.checked = false;
+        this.memberList.push(_temp);
+      }
+
+      console.log("======= 店铺会员列表 ======");
+      console.log(this.memberList);
     },
     hideMemberChoise: function hideMemberChoise() {
       this.choiseMemberSwitch = false;
@@ -55734,7 +55770,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 提交数据
     submitData: function submitData() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _tempMessage = null;
       if (this.commentMessage == null) {
@@ -55759,7 +55795,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
         console.log(res);
-        _this2.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
+        _this3.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
       }).catch(function (err) {
         console.error(err);
       });
@@ -56138,39 +56174,39 @@ var render = function() {
           _vm._v("添加参与人")
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "flex flex-align-center flex-wrap-on " }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "add flex flex-align-center flex-justify-center",
-              on: { click: _vm.showMemberChoise }
-            },
-            [
-              _c(
-                "i",
-                {
-                  staticClass: "iconfont",
-                  staticStyle: { "font-size": "1.5em", color: "#bbb" }
-                },
-                [_vm._v("\n          \n        ")]
-              )
-            ]
-          )
-        ])
+        _c(
+          "div",
+          { staticClass: "flex flex-align-center flex-wrap-on " },
+          [
+            _vm._l(_vm.memberList, function(item) {
+              return item.checked == true
+                ? _c("img", {
+                    key: item.id,
+                    attrs: { src: item.avatar, alt: "" }
+                  })
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "add flex flex-align-center flex-justify-center",
+                on: { click: _vm.showMemberChoise }
+              },
+              [
+                _c(
+                  "i",
+                  {
+                    staticClass: "iconfont",
+                    staticStyle: { "font-size": "1.5em", color: "#bbb" }
+                  },
+                  [_vm._v("\n          \n        ")]
+                )
+              ]
+            )
+          ],
+          2
+        )
       ]),
       _vm._v(" "),
       _c(
@@ -56199,7 +56235,11 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("choiseMember", {
-        attrs: { isShow: _vm.choiseMemberSwitch },
+        attrs: {
+          isShow: _vm.choiseMemberSwitch,
+          dataList: _vm.memberList,
+          submit: _vm.getMemberData
+        },
         on: { hide: _vm.hideMemberChoise }
       })
     ],
@@ -60406,12 +60446,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//查看结算卡
 		checkSettle: function checkSettle() {
 			if (this.listContent.card_count > 0) {
-				console.log('进来了1');
 				this.$router.push('/my/checkSettle');
 			} else {
-				// Toast('请添加银行卡');
-				console.log('进来了2');
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请添加银行卡');
 			}
+		},
+		set: function set(e) {
+			this.$router.push("/my/set" + "?mobile=" + e);
 		}
 	}
 });
@@ -60546,22 +60587,25 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
+            {
+              on: {
+                click: function($event) {
+                  _vm.set(_vm.personal.mobile)
+                }
+              }
+            },
             [
-              _c(
-                "mt-cell",
-                { attrs: { title: "更多设置", "is-link": "", to: "/my/set" } },
-                [
-                  _c("img", {
-                    attrs: {
-                      slot: "icon",
-                      src: "/images/moreSet.png",
-                      width: "30",
-                      height: "30"
-                    },
-                    slot: "icon"
-                  })
-                ]
-              )
+              _c("mt-cell", { attrs: { title: "更多设置", "is-link": "" } }, [
+                _c("img", {
+                  attrs: {
+                    slot: "icon",
+                    src: "/images/moreSet.png",
+                    width: "30",
+                    height: "30"
+                  },
+                  slot: "icon"
+                })
+              ])
             ],
             1
           )
@@ -60721,7 +60765,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+  data: function data() {
+    return {
+      mobile: null
+    };
+  },
+
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  methods: {
+    verfyCode: function verfyCode() {
+      this.mobile = this.$route.query.mobile;
+      this.$router.push('/my/verfy_code?' + 'mobile=' + this.mobile);
+    }
+  }
 });
 
 /***/ }),
@@ -60756,14 +60812,9 @@ var render = function() {
           _vm._v(" "),
           _c(
             "li",
+            { on: { click: _vm.verfyCode } },
             [
-              _c("mt-cell", {
-                attrs: {
-                  title: "修改支付密码",
-                  "is-link": "",
-                  to: "/my/verfy_code"
-                }
-              })
+              _c("mt-cell", { attrs: { title: "修改支付密码", "is-link": "" } })
             ],
             1
           )
@@ -61488,23 +61539,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      realInfo: {
-        name: null,
-        id_number: null,
-        code: null
-      },
+      name: null,
+      id_number: null,
+      code: null,
+      mobile: null,
+
       computedTime: null //倒数计时
     };
+  },
+  created: function created() {
+    this.getMobile();
   },
 
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
   methods: {
+    //实名认证
     realAuth: function realAuth() {
       var _this2 = this;
 
       var _this = this;
-      var data = this.realInfo;
-      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', data).then(function (res) {
+      var _data = {
+        name: this.name,
+        id_number: this.id_number,
+        code: this.code
+      };
+
+      if (!this.name) {
+        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("请填写本人真实姓名");
+        return;
+      } else if (!this.id_number) {
+        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("请填写本人身份证号");
+        return;
+      } else if (!this.code) {
+        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("请输入验证码");
+        return;
+      }
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/identify', _data).then(function (res) {
         Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('认证成功');
         _this2.$router.push('/my'); //认证成功，回到我的页面
       }).catch(function (err) {
@@ -61514,6 +61585,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
       });
     },
+    getMobile: function getMobile() {
+      this.mobile = this.$route.query.mobile;
+    },
 
     //短信验证码
     sendYZM: function sendYZM() {
@@ -61521,6 +61595,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       var _temp = {};
       _temp.mobile = this.$route.query.mobile;
+
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
         console.log(res);
         _this3.computedTime = 5;
@@ -61564,11 +61639,11 @@ var render = function() {
                 type: "text"
               },
               model: {
-                value: _vm.realInfo.name,
+                value: _vm.name,
                 callback: function($$v) {
-                  _vm.$set(_vm.realInfo, "name", $$v)
+                  _vm.name = $$v
                 },
-                expression: "realInfo.name"
+                expression: "name"
               }
             }),
             _vm._v(" "),
@@ -61579,15 +61654,23 @@ var render = function() {
                 type: "text"
               },
               model: {
-                value: _vm.realInfo.id_number,
+                value: _vm.id_number,
                 callback: function($$v) {
-                  _vm.$set(_vm.realInfo, "id_number", $$v)
+                  _vm.id_number = $$v
                 },
-                expression: "realInfo.id_number"
+                expression: "id_number"
               }
             }),
             _vm._v(" "),
-            _vm._m(0, false, false),
+            _c("section", { staticClass: "account-container" }, [
+              _c("div", { staticClass: "account-box flex flex-align-center" }, [
+                _c("span", [_vm._v("账号:")]),
+                _vm._v(" "),
+                _c("em", { staticClass: "flex-1 number" }, [
+                  _vm._v(_vm._s(_vm.mobile))
+                ])
+              ])
+            ]),
             _vm._v(" "),
             _c("section", { staticClass: "input-wrap-box" }, [
               _c(
@@ -61601,19 +61684,19 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.realInfo.code,
-                        expression: "realInfo.code"
+                        value: _vm.code,
+                        expression: "code"
                       }
                     ],
                     staticClass: "flex-1",
                     attrs: { type: "text", placeholder: "请输入验证码" },
-                    domProps: { value: _vm.realInfo.code },
+                    domProps: { value: _vm.code },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.realInfo, "code", $event.target.value)
+                        _vm.code = $event.target.value
                       }
                     }
                   }),
@@ -61655,20 +61738,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "account-container" }, [
-      _c("div", { staticClass: "account-box flex flex-align-center" }, [
-        _c("span", [_vm._v("账号:")]),
-        _vm._v(" "),
-        _c("em", { staticClass: "flex-1 number" }, [_vm._v("18390939299")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -61852,12 +61922,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			name: null,
 			id_number: null,
 			dealShop: null,
-			bankInfo: {
-				card_num: null,
-				bank_id: null,
-				mobile: null,
-				code: null
-			}
+
+			card_num: null,
+			bank_id: null,
+			mobile: null,
+			code: null
 		};
 	},
 
@@ -61870,25 +61939,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	methods: {
 		//个人信息
 		personalInfo: function personalInfo() {
-			var _this2 = this;
+			var _this = this;
 
 			__WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
 			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
-				_this2.name = res.data.data.name;
-				_this2.id_number = res.data.data.id_number;
+				_this.name = res.data.data.name;
+				_this.id_number = res.data.data.id_number;
 				__WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
 			});
 		},
 		init: function init() {
-			var _this3 = this;
+			var _this2 = this;
 
 			__WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open();
 			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/card/getBanks").then(function (res) {
 				console.log(res);
-				_this3.setBankList(res);
+				_this2.setBankList(res);
 				__WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
@@ -61912,7 +61981,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					return this.shopList[i].label;
 				}
 			}
-			return "没有这个银行";
+			return "";
 		},
 		showDropList: function showDropList() {
 			this.dropListSwitch = true;
@@ -61924,17 +61993,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.shopId = data;
 		},
 		affirmAdd: function affirmAdd() {
-			var _this4 = this;
+			var _this3 = this;
 
-			var _this = this;
-			this.bankInfo.bank_id = this.shopId;
-			var data = this.bankInfo;
+			var self = this;
+			var _data = {
+				bank_id: this.shopId,
+				card_num: this.card_num,
+				mobile: this.mobile,
+				code: this.code
+			};
+
+			if (this.shopId == null) {
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请选择银行卡所属银行");
+				return;
+			} else if (!this.card_num) {
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请填写银行卡号");
+				return;
+			} else if (!this.mobile) {
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请填写银行卡预留手机号");
+				return;
+			} else if (!this.code) {
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请输入验证码");
+				return;
+			}
 
 			__WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open();
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/card/create", data).then(function (res) {
-				console.log(res);
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/card/create", _data).then(function (res) {
 				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])('添加成功');
-				_this4.$router.push('/my/bankCardManage');
+				_this3.$router.push('/my/bankCardManage');
 				__WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
@@ -61944,18 +62030,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//短信验证码
 		sendYZM: function sendYZM() {
-			var _this5 = this;
+			var _this4 = this;
 
 			var _temp = {};
-			_temp.mobile = this.bankInfo.mobile;
+			_temp.mobile = this.mobile;
+
+			if (!this.mobile) {
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("请填写银行卡预留手机号");
+				return;
+			}
+
 			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
-				console.log(res);
-				_this5.computedTime = 5;
-				_this5.timer = setInterval(function () {
-					_this5.computedTime--;
-					console.log(_this5.computedTime);
-					if (_this5.computedTime == 0) {
-						clearInterval(_this5.timer);
+				_this4.computedTime = 5;
+				_this4.timer = setInterval(function () {
+					_this4.computedTime--;
+					console.log(_this4.computedTime);
+					if (_this4.computedTime == 0) {
+						clearInterval(_this4.timer);
 					}
 				}, 1000);
 			}).catch(function (err) {
@@ -62034,11 +62125,11 @@ var render = function() {
                 type: "number"
               },
               model: {
-                value: _vm.bankInfo.card_num,
+                value: _vm.card_num,
                 callback: function($$v) {
-                  _vm.$set(_vm.bankInfo, "card_num", $$v)
+                  _vm.card_num = $$v
                 },
-                expression: "bankInfo.card_num"
+                expression: "card_num"
               }
             })
           ],
@@ -62057,11 +62148,11 @@ var render = function() {
                 maxlength: "11"
               },
               model: {
-                value: _vm.bankInfo.mobile,
+                value: _vm.mobile,
                 callback: function($$v) {
-                  _vm.$set(_vm.bankInfo, "mobile", $$v)
+                  _vm.mobile = $$v
                 },
-                expression: "bankInfo.mobile"
+                expression: "mobile"
               }
             })
           ],
@@ -62080,19 +62171,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.bankInfo.code,
-                    expression: "bankInfo.code"
+                    value: _vm.code,
+                    expression: "code"
                   }
                 ],
                 staticClass: "flex-1",
                 attrs: { type: "text", placeholder: "请输入验证码" },
-                domProps: { value: _vm.bankInfo.code },
+                domProps: { value: _vm.code },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.bankInfo, "code", $event.target.value)
+                    _vm.code = $event.target.value
                   }
                 }
               }),
@@ -62334,7 +62425,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])({
           message: err.data.msg,
-          duration: 800
+          duration: 500
         });
         _this2.$router.go(-1);
       });
@@ -62604,12 +62695,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         new_password: this.new_password,
         confirm_password: this.confirm_password
       };
+      if (!this.old_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请填写原密码');
+        return;
+      } else if (!this.new_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请填写新密码');
+        return;
+      } else if (!this.confirm_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请确认新密码');
+        return;
+      } else if (this.new_password !== this.confirm_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('两次输入的密码不一致');
+        return;
+      } else if (this.old_password == this.new_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('新密码不能跟原密码一样');
+        return;
+      }
+
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePassword', data).then(function (res) {
         console.log(res);
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('密码修改成功');
         _this.$router.push('/login'); //调转到登录页
       }).catch(function (err) {
-        console.log(err);
+        console.error(err);
       });
     }
   }
@@ -62658,7 +62766,7 @@ var render = function() {
           _c("mt-field", {
             attrs: {
               label: "确认新密码",
-              placeholder: "请再次输入密码",
+              placeholder: "请确认新密码",
               type: "text"
             },
             model: {
@@ -62819,11 +62927,13 @@ exports.push([module.i, "\n#realAuth[data-v-2d1c511b] {\n  background: #efeef4;\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -62850,7 +62960,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
+
+
 
 
 
@@ -62858,25 +62969,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      realInfo: {
-        name: null,
-        id_number: null
-      },
+      mobile: null,
+      code: null,
       computedTime: 0 //倒数计时
     };
   },
+  created: function created() {
+    this.getMobile();
+  },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack___default.a },
   methods: {
     nextBtn: function nextBtn() {
-      this.$router.push('/my/pay_password');
+      if (!this.code) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请填写验证码');
+        return;
+      } else {
+        this.$router.push('/my/pay_password');
+      }
+    },
+    getMobile: function getMobile() {
+      this.mobile = this.$route.query.mobile;
     },
     sendYZM: function sendYZM() {
       var _this = this;
 
       var _temp = {};
       _temp.mobile = this.$route.query.mobile;
-      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
         console.log(res);
         _this.computedTime = 5;
         _this.timer = setInterval(function () {
@@ -62887,7 +63008,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }
         }, 1000);
       }).catch(function (err) {
-        console.log(err);
+        console.error(err);
       });
     }
   }
@@ -63127,17 +63248,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       var self = this;
-      var data = {
+      var _data = {
         old_pay_password: this.old_pay_password,
         new_pay_password: this.new_pay_password,
         confirm_pay_password: this.confirm_pay_password
       };
-      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePayPassword', data).then(function (res) {
-        console.log(res);
+
+      if (!this.old_pay_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请填写原支付密码');
+        return;
+      } else if (!this.new_pay_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请填写新支付密码');
+        return;
+      } else if (!this.confirm_pay_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请确认新支付密码');
+        return;
+      } else if (this.new_pay_password !== this.confirm_pay_password) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('两次输入的新支付密码不一致');
+        return;
+      }
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePayPassword', _data).then(function (res) {
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('密码修改成功');
         _this.$router.push('/my/set');
       }).catch(function (err) {
-        console.log(err);
+        console.error(err);
       });
     }
   }
@@ -72772,142 +72907,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ["isShow"],
+    /**
+     *  参数数据结构
+     *  dataList : [
+     *      {
+     *           avatar:"/images/avatar.jpg",
+     *          checked:true
+     *          id:1
+     *          name:"sa"
+     *       }
+     *  ]
+     */
+    data: function data() {
+        return {
+            _dataList: []
+        };
+    },
+
+    props: ["isShow", "dataList"],
     methods: {
         hidePage: function hidePage() {
             this.$emit("hide");
+        },
+        submitData: function submitData() {
+            this.$emit("submit", this._dataList);
+            this.hidePage();
+        },
+        makeMark: function makeMark(id) {
+            this._dataList = [].concat(this.$props.dataList);
+
+            for (var i = 0; i < this._dataList.length; i++) {
+                if (this._dataList[i].id == id) {
+                    this._dataList[i].checked = !this._dataList[i].checked;
+                }
+            }
         }
     }
 });
@@ -72968,271 +73003,53 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("ul", [
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "flex flex-align-center" }, [
-              _c("span", { staticClass: "img-wrap flex-2" }, [
-                _c("img", { attrs: { src: "/images/avatar.jpg" } })
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "user-name flex-6" }, [
-                _vm._v("用户名字啦啦啦啦")
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
-                _c(
-                  "i",
-                  {
-                    staticClass:
-                      "iconfont flex flex-align-center flex-justify-center",
-                    staticStyle: { color: "#00cc00" }
-                  },
-                  [_vm._v("\n                        \n                    ")]
-                )
-              ])
-            ])
-          ]),
+          _c(
+            "ul",
+            _vm._l(_vm.dataList, function(item) {
+              return _c(
+                "li",
+                { key: item.id, staticClass: "flex flex-align-center" },
+                [
+                  _c("span", { staticClass: "img-wrap flex-2" }, [
+                    _c("img", { attrs: { src: item.avatar } })
+                  ]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "user-name flex-6" }, [
+                    _vm._v(_vm._s(item.name))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass: "flex-2 flex flex-reverse",
+                      on: {
+                        click: function($event) {
+                          _vm.makeMark(item.id)
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "i",
+                        {
+                          staticClass:
+                            "iconfont flex flex-align-center flex-justify-center",
+                          staticStyle: { color: "#00cc00" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(item.checked ? "" : "") +
+                              "\n                    "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
+            })
+          ),
           _vm._v(" "),
           _c(
             "div",
