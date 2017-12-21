@@ -53119,7 +53119,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       userAccountName: null, // 用户名
       userPassword: null, // 密码
-      inviteMobile: null // 邀请人手机号
+      inviteMobile: null, // 邀请人手机号
+      validCode: null // 验证码
     };
   },
   mounted: function mounted() {
@@ -53134,8 +53135,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     comfirm: function comfirm() {
+      var _this = this;
+
       if (this.step == 0) {
-        this.step = 1;
+        // 输入推荐人手机号
+        var _data = {
+          invite_mobile: this.inviteMobile
+        };
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/valid", _data).then(function (res) {
+          console.dir(res);
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          _this.goNextStep();
+        }).catch(function (err) {
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("推荐人手机号有误");
+        });
+      } else if (this.step == 1) {
+        // 输入注册手机号
+        var _data = {
+          mobile: this.userAccountName
+        };
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/valid", _data).then(function (res) {
+          console.dir(res);
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          _this.goNextStep();
+        }).catch(function (err) {
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("推荐人手机号有误");
+          console.error(err);
+        });
+      } else if (this.step == 2) {
+        // 验证手机号
+
       }
     },
     goNextStep: function goNextStep() {
@@ -53174,7 +53207,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 验证用户名和邀请人手机号
     confirmMobileAndInvite: function confirmMobileAndInvite() {
-      var _this = this;
+      var _this2 = this;
 
       //  普通注册模式
       if (!this.findPasswordSwitch) {
@@ -53188,7 +53221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/valid').then(function (res) {
           console.log(res);
           __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
-          _this.goNextStep();
+          _this2.goNextStep();
         }).catch(function (err) {
           console.error(err);
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.message);
@@ -53197,6 +53230,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // 密码找回模式
 
       // this.goNextStep();
+    },
+    sendSMS: function sendSMS() {
+      var _data = {
+        mobile: this.userAccountName
+      };
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/sms", _data).then(function (res) {
+        console.dir(res);
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      });
     }
   },
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
@@ -53492,7 +53538,11 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "mt-button",
-                    { staticClass: "flex-1", attrs: { type: "default" } },
+                    {
+                      staticClass: "flex-1",
+                      attrs: { type: "default" },
+                      on: { click: _vm.sendSMS }
+                    },
                     [_vm._v("发送验证码(10)")]
                   )
                 ],

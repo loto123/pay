@@ -46,7 +46,7 @@
                 <section class="input-wrap flex flex-align-center">
                     <span class="flex-1">验证码:</span>
                     <input type="text" placeholder="请输入验证码" class="flex-1">
-                    <mt-button type="default" class="flex-1">发送验证码(10)</mt-button>
+                    <mt-button type="default" class="flex-1" @click="sendSMS">发送验证码(10)</mt-button>
                     
                 </section>
 
@@ -72,7 +72,7 @@
                 <div class="submit-button flex flex-justify-center">
                     <mt-button type="primary" size="large" v-on:click="goNextStep">确定</mt-button>
                 </div>
-
+ 
             </section>
         </transition>  
 
@@ -215,7 +215,8 @@ export default {
 
       userAccountName:null,           // 用户名
       userPassword:null,              // 密码
-      inviteMobile:null               // 邀请人手机号
+      inviteMobile:null,              // 邀请人手机号
+      validCode:null                  // 验证码
     };
   },
 
@@ -230,14 +231,45 @@ export default {
   },
   methods: {
     comfirm() {
+
       if (this.step == 0) {
-        this.step = 1;
+        // 输入推荐人手机号
+        var _data = {
+          invite_mobile:this.inviteMobile
+        };
+        Loading.getInstance().open();
+        request.getInstance().postData("api/auth/valid",_data).then(res=>{
+          console.dir(res);
+          Loading.getInstance().close();
+          this.goNextStep();
+        }).catch(err=>{
+          Loading.getInstance().close();
+          Toast("推荐人手机号有误");
+        });
+      }else if(this.step == 1){
+        // 输入注册手机号
+        var _data = {
+          mobile:this.userAccountName
+        };
+        Loading.getInstance().open();
+        request.getInstance().postData("api/auth/valid",_data).then(res=>{
+          console.dir(res);
+          Loading.getInstance().close();
+          this.goNextStep();
+        }).catch(err=>{
+          Loading.getInstance().close();
+          Toast("推荐人手机号有误");
+          console.error(err);
+        });
+      }else if(this.step == 2){
+        // 验证手机号
+
       }
     },
 
     goNextStep() {
       var self = this;
-
+      
       if (this.step >= 3) {
         var data = {
           mobile :this.userAccountName,
@@ -293,6 +325,21 @@ export default {
         // 密码找回模式
       }
       // this.goNextStep();
+    },
+
+    sendSMS(){
+      var _data = {
+        mobile:this.userAccountName
+      };
+      Loading.getInstance().open();
+      request.getInstance().postData("api/auth/sms",_data).then(res=>{
+        console.dir(res);
+        Loading.getInstance().close();
+      }).catch(err=>{
+        console.error(err);
+        Loading.getInstance().close();
+        
+      });
     }
   },
   components: { topBack }
