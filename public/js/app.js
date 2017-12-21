@@ -55677,7 +55677,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/all").then(function (res) {
-        console.log(res);
         _this.setShopList(res);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
@@ -55768,7 +55767,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
-    // 提交数据
+    // 提交发起交易的数据
     submitData: function submitData() {
       var _this3 = this;
 
@@ -55779,10 +55778,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _tempMessage = this.commentMessage;
       }
 
+      var _members = this.getMembersId();
+
       var _data = {
         shop_id: this.shopId,
         price: this.price,
-        comment: _tempMessage
+        comment: _tempMessage,
+        joiner: _members
       };
 
       if (this.shopId == null) {
@@ -55799,6 +55801,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (err) {
         console.error(err);
       });
+    },
+    getMembersId: function getMembersId() {
+      console.log(this.memberList);
+      if (this.memberList.length == 0) {
+        return [];
+      }
+
+      var _tempIdList = [];
+
+      for (var i = 0; i < this.memberList.length; i++) {
+        if (this.memberList[i].checked) {
+          _tempIdList.push(this.memberList[i].id);
+        }
+      }
+
+      console.log(_tempIdList);
+      return _tempIdList;
     }
   },
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_1__components_inputList___default.a, choiseMember: __WEBPACK_IMPORTED_MODULE_2__choiseMember_vue___default.a }
@@ -56363,9 +56382,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_loading__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode__ = __webpack_require__(582);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__utils_qrCode__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_loading__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_qrCode__ = __webpack_require__(582);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__utils_qrCode__);
 //
 //
 //
@@ -56634,6 +56655,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -56659,7 +56687,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         payMoney: null,
         getMoney: null
       },
-      payType: null // 支付方式，取钱get 放钱put
+      payType: null, // 支付方式，取钱get 放钱put
+      transfer_id: "", // 交易id
+      password: ""
     };
   },
   created: function created() {
@@ -56676,23 +56706,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open();
-      var _id = this.$route.query.id;
+      __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().open();
+      this.transfer_id = this.$route.query.id;
       var _data = {
-        transfer_id: _id
+        transfer_id: this.transfer_id
       };
-      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + _id).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id).then(function (res) {
         console.log(res);
 
         _this.renderData = res.data.data;
-        __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
       });
     },
     goTipPage: function goTipPage() {
-      var _id = this.$route.query.id;
-      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + this.transfer_id);
     },
     showPassword: function showPassword() {
       this.passWordSwitch = true;
@@ -56700,8 +56729,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     hidePassword: function hidePassword() {
       this.passWordSwitch = false;
     },
+    callPassword: function callPassword() {
+
+      if (this.payType == "put") {
+        this.showPassword();
+      } else if (this.payType == "get") {
+        this.submitData();
+      } else {
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请填写拿钱数额或取钱数额");
+      }
+    },
+
+
+    // 提交交易  拿钱或者付钱
+    submitData: function submitData(password) {
+      var _this2 = this;
+
+      // 放钱
+      if (this.payType == "put") {
+        var _data = {
+          transfer_id: this.transfer_id,
+          points: this.moneyData.payMoney,
+          action: "put",
+          pay_password: password
+        };
+
+        __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
+          console.log(res);
+          _this2.init();
+        }).catch(function (err) {
+          console.error(err);
+        });
+
+        this.hidePassword();
+      } else if (this.payType == "get") {
+        // 拿钱
+        var _data = {
+          transfer_id: 0,
+          points: 0,
+          action: "put"
+        };
+      }
+    },
     getResult: function getResult(result) {
       console.log(result);
+      this.password = result;
     },
 
     _getQRCode: function _getQRCode() {
@@ -56926,7 +56998,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //起始位置减去 实时的滑动的距离，得到手指实时偏移距离
         this.disX = this.startX - this.moveX;
-        // console.log(this.disX);
         // 如果是向右滑动或者不滑动，不改变滑块的位置
         if (this.disX < 0 || this.disX == 0) {
           this.deleteSlider = "transform:translateX(0px)";
@@ -56953,7 +57024,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var endX = ev.changedTouches[0].clientX;
 
         this.disX = this.startX - endX;
-        // console.log(this.disX);
         //如果距离小于删除按钮一半,强行回到起点
 
         if (this.disX * 5 < wd / 1) {
@@ -58728,7 +58798,7 @@ var render = function() {
             "mt-button",
             {
               attrs: { type: "primary", size: "large" },
-              on: { click: _vm.showPassword }
+              on: { click: _vm.callPassword }
             },
             [_vm._v("确认")]
           )
@@ -58887,7 +58957,7 @@ var render = function() {
           settingPasswordSwitch: true,
           secondValid: false
         },
-        on: { hidePassword: _vm.hidePassword, callBack: _vm.getResult }
+        on: { hidePassword: _vm.hidePassword, callBack: _vm.submitData }
       })
     ],
     1
@@ -63030,7 +63100,15 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "realAuth-container" }, [
         _c("div", { staticClass: "realAuth-box" }, [
-          _vm._m(0, false, false),
+          _c("section", { staticClass: "account-container" }, [
+            _c("div", { staticClass: "account-box flex flex-align-center" }, [
+              _c("span", [_vm._v("手机号:")]),
+              _vm._v(" "),
+              _c("em", { staticClass: "flex-1 number" }, [
+                _vm._v(_vm._s(_vm.mobile))
+              ])
+            ])
+          ]),
           _vm._v(" "),
           _c("section", { staticClass: "input-wrap-box" }, [
             _c(
@@ -63040,8 +63118,25 @@ var render = function() {
                 _c("span", [_vm._v("验证码:")]),
                 _vm._v(" "),
                 _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.code,
+                      expression: "code"
+                    }
+                  ],
                   staticClass: "flex-1",
-                  attrs: { type: "text", placeholder: "请输入验证码" }
+                  attrs: { type: "text", placeholder: "请输入验证码" },
+                  domProps: { value: _vm.code },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.code = $event.target.value
+                    }
+                  }
                 }),
                 _vm._v(" "),
                 _c(
@@ -63077,20 +63172,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "account-container" }, [
-      _c("div", { staticClass: "account-box flex flex-align-center" }, [
-        _c("span", [_vm._v("手机号:")]),
-        _vm._v(" "),
-        _c("em", { staticClass: "flex-1 number" }, [_vm._v("18390939299")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -64563,6 +64645,8 @@ exports.push([module.i, "\n#top[data-v-7328b9b8] {\n  height: 10em;\n  padding-t
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(38);
 //
 //
 //
@@ -64695,22 +64779,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      shopList: []
+    };
+  },
+  created: function created() {
+    this.init();
+  },
+
+
   methods: {
     goMyShop: function goMyShop() {
       this.$router.push("/shop/");
+    },
+    init: function init() {
+      __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists").then(function (res) {
+        console.dir(res);
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+      });
     }
   },
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
@@ -64765,7 +64862,17 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _vm._m(1, false, false)
+    _c(
+      "div",
+      { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
+      _vm._l(_vm.shopList, function(item) {
+        return _c("div", { key: item, staticClass: "list-wrap" }, [
+          _vm._m(1, true, false),
+          _vm._v(" "),
+          _c("h3", [_vm._v("店铺111")])
+        ])
+      })
+    )
   ])
 }
 var staticRenderFns = [
@@ -64789,34 +64896,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
+      {
+        staticClass:
+          "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
+      },
       [
-        _c("div", { staticClass: "list-wrap" }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
-            },
-            [
-              _c("div", { staticClass: "notice" }),
-              _vm._v(" "),
-              _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-            ]
-          ),
-          _vm._v(" "),
-          _c("h3", [_vm._v("店铺111")])
-        ]),
+        _c("div", { staticClass: "notice" }),
         _vm._v(" "),
-        _c("div", { staticClass: "shop-item" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "shop-item" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "shop-item" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "shop-item" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "shop-item" })
+        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
       ]
     )
   }
