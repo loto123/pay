@@ -156,7 +156,10 @@ class AuthController extends BaseController {
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
         $input['container_id'] = $wallet->id;
-        $user = User::create($input);
+        try {
+            $user = User::create($input);
+        } catch (\Exception $e){
+        }
 
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
