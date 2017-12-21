@@ -6,7 +6,12 @@
 
 <style lang="scss">
 .mint-indicator-mask{
-  z-index:1001;
+  z-index:1999 !important;
+}
+
+.mint-indicator-wrapper{
+  z-index:1998 !important;
+  
 }
 </style>
 

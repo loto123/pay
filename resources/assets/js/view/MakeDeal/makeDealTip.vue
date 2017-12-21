@@ -1,48 +1,34 @@
 <template>
     <div id="makeDealTip">
         <topBack style="background:#eee;"></topBack>
-        <dealContent></dealContent>
+        <dealContent :renderData="renderData"></dealContent>
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
-            <label for="">大赢家茶水费</label>
-            <span style="color:#999;">请大家自觉缴纳</span>
-            <span><i style="color:#999; font-size: 1.2em;">100.0</i>元</span>
+            <label for="" class="flex-4" style="padding-left:1em;">大赢家茶水费</label>
+            <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击缴纳茶水费"  maxlength="6" v-model="renderData.moneyData"></span>
         </div>
 
         <div class="button-wrap">
-            <mt-button type="primary" size="large" class="green-color-bg">交纳</mt-button>
+            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">交纳</mt-button>
         </div>
 
         <div class="tip-record">
             <h3>茶水费记录</h3>
             <ul class="flex flex-v">
-                <li class="flex flex-justify-between flex-align-center">
-                    <img src="/images/avatar.jpg" alt="">
-                    <span>玩家名字最多7格子</span>
+                <li class="flex flex-justify-between flex-align-center" v-for="item in renderData.tips">
+                    <img :src="item.user.avatar?item.user.avatar:'/images/default_avatar.jpg'" alt="">
+                    <span>{{item.user.name}}</span>
                     <div class="flex flex-v flex-align-center">
-                        <div style="font-size: 1.4em;">2</div>
-                        <div style="font-size: 0.8em;color:#999;">已交纳</div>
-                    </div>
-                </li>
-                <li class="flex flex-justify-between flex-align-center">
-                    <img src="/images/avatar.jpg" alt="">
-                    <span>玩家名字最多7格子</span>
-                    <div class="flex flex-v flex-align-center">
-                        <div style="font-size: 1.4em;">2</div>
-                        <div style="font-size: 0.8em;color:#999;">已交纳</div>
-                    </div>
-                </li>
-                <li class="flex flex-justify-between flex-align-center">
-                    <img src="/images/avatar.jpg" alt="">
-                    <span>玩家名字最多7格子</span>
-                    <div class="flex flex-v flex-align-center">
-                        <div style="font-size: 1.4em;">2</div>
+                        <div style="font-size: 1.4em;">{{item.amount}}</div>
                         <div style="font-size: 0.8em;color:#999;">已交纳</div>
                     </div>
                 </li>
             </ul>
 
         </div>
+
+        <passwordTab :setSwitch = "passwordData.switch" v-on:hidePassword="hidePassword" v-on:callBack="getPassword"></passwordTab>
     </div>
 </template>
 
@@ -60,6 +46,15 @@
   background: #fff;
   border-radius: 0.2em;
   margin: 0 auto;
+
+  .tipMoney {
+    outline: none;
+    font-size: 1em;
+    width: 70%;
+    height: 100%;
+    display: block;
+    border: none;
+  }
 }
 
 .button-wrap {
@@ -105,11 +100,136 @@
 <script>
 import topBack from "../../components/topBack";
 import dealContent from "./dealContent";
+import Loading from "../../utils/loading";
+import request from "../../utils/userRequest";
+import passwordTab from "../../components/password";
+import { Toast } from "mint-ui";
 
 export default {
-  components: { topBack, dealContent },
+  created() {
+    this.init();
+  },
+  components: { topBack, dealContent, passwordTab },
+  data() {
+    return {
+      renderData: {
+        name: null,
+        moneyData: null,
+      },
+      // hasPayList:[],
+      passwordData: {
+        switch: false,
+        value: null
+      }
+    };
+  },
   methods: {
-   
+    init() {
+      Loading.getInstance().open();
+      var _id = this.$route.query.id;
+      request
+        .getInstance()
+        .getData("api/transfer/feerecord" + "?transfer_id=" + _id)
+        .then(res => {
+          console.log(res);
+          this.renderData = res.data.data;
+          Loading.getInstance().close();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    payTip() {
+      if (this.renderData.moneyData == null) {
+        Toast("请输入茶水费金额");
+        return;
+      }
+
+      Loading.getInstance().open();
+
+      request
+        .getInstance()
+        .getData("api/my/info")
+        .then(res => {
+          console.log(res);
+
+          // 判断是否已经设置了支付密码
+          if (!res.data.data.has_pay_password) {
+            Toast("您还未设置支付密码，即将跳转设置页面");
+            setTimeout(() => {
+            Loading.getInstance().close();
+              
+              this.$router.push("/my/setting_password");
+            }, 2000);
+            return Promise.resolve(false);
+          } else {
+            return Promise.resolve(true);
+          }
+        })
+        .then(res => {
+          // 验证支付的数据
+          if (res == true) {
+            var _id = this.$route.query.id;
+            var _data = {
+              transfer_id: _id,
+              fee: this.renderData.moneyData,
+              action: 0
+            };
+
+            request
+              .getInstance()
+              .postData("api/transfer/payfee", _data)
+              .then(res => {
+                console.log(res);
+                this.passwordData.switch = true;
+                Loading.getInstance().close();
+              })
+              .catch(err => {
+                console.error(err);
+                Loading.getInstance().close();
+                Toast(err.data.msg);       
+              });
+          }
+          console.log(res);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+
+    showPassWord() {
+      this.passwordData.switch = true;
+    },
+    hidePassword() {
+      this.passwordData.switch = false;
+    },
+    getPassword(e) {
+      this.passwordData.value = e;
+      var _id = this.$route.query.id;
+
+      var _data = {
+        transfer_id: _id,
+        fee: this.renderData.moneyData,
+        action: 1,
+        pay_password: this.passwordData.value
+      };
+
+      // 支付茶水费接口
+      request
+        .getInstance()
+        .postData("api/transfer/payfee", _data)
+        .then(res => {
+          console.log(res);
+          Toast("茶水费缴纳成功");
+          this.hidePassword();
+          this.init();
+        })
+        .catch(err => {
+          console.error(err);
+          Loading.getInstance().close();
+          Toast(err.data.msg);
+        });
+    }
   }
 };
 </script>

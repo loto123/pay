@@ -9,21 +9,21 @@
             <p>茶水费</p>
         </section>
         
-        <deal-content></deal-content>
+        <deal-content :renderData = "renderData"></deal-content>
 
         <section class="pay-wrap flex flex-v flex-align-center">
 
             <div class="pay-money flex flex-align-center flex-justify-around">
                 <label for="">我要付钱</label>
                 <div class="input-wrap">
-                    <input type="text" placeholder="请输入您的分数">
+                    <input type="text" placeholder="请输入您的分数" v-model="moneyData.payMoney">
                 </div>
             </div>
 
             <div class="get-money flex flex-align-center flex-justify-around">
                 <label for="">我要拿钱</label>
                 <div class="input-wrap">
-                    <input type="text" placeholder="请输入您的分数">
+                    <input type="text" placeholder="请输入您的分数" v-model="moneyData.getMoney">
                 </div>
             </div>
 
@@ -92,7 +92,7 @@
         <section id="qrcode" class="flex flex-justify-center"></section>
         <h3 class="notice">扫描二维码快速交易</h3>
 
-        <passwordPanel :setSwitch="passWordSwitch" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
+        <passwordPanel :setSwitch="passWordSwitch" :settingPasswordSwitch="true" :secondValid="false" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
     </div>
 </template>
 
@@ -141,7 +141,7 @@
       width: 60%;
       input {
         box-sizing: border-box;
-        font-size: 1.2em;
+        font-size: 1em;
         padding-left: 0.5em;
         width: 100%;
         border: none;
@@ -165,37 +165,36 @@
 .pay-record {
   padding-top: 0.5em;
   .title {
-
     width: 90%;
     height: 4.5em;
     line-height: 2em;
-    background:#fff;
+    background: #fff;
     margin: 0 auto;
-    
-    .top{
+
+    .top {
       height: 2em;
-      width:100%;
+      width: 100%;
       padding-left: 0.5em;
       box-sizing: border-box;
-      span{
-        font-size:1em;
-        color:#555;
+      span {
+        font-size: 1em;
+        color: #555;
       }
     }
 
-    .bottom{
-      width:100%;
-      height:3.5em;
-      img{
-        width:2em;
-        height:2em;
+    .bottom {
+      width: 100%;
+      height: 3.5em;
+      img {
+        width: 2em;
+        height: 2em;
         display: block;
         margin-left: 0.5em;
       }
     }
 
     .info-friend {
-      margin-right:0.5em;
+      margin-right: 0.5em;
       background: green;
       color: #fff;
       padding-left: 0.3em;
@@ -231,7 +230,7 @@
             font-size: 0.9em;
             height: 50%;
             width: 100%;
-            background:#fff;
+            background: #fff;
           }
         }
 
@@ -271,20 +270,33 @@
 import topBack from "../../components/topBack";
 import slider from "../../components/slider";
 import dealContent from "./dealContent";
-import passwordPanel from '../../components/password'
+import passwordPanel from "../../components/password";
+import request from "../../utils/userRequest";
+
+import Loading from "../../utils/loading";
 
 import qrCode from "../../utils/qrCode";
 
 export default {
   name: "makeDealDetail",
-  components: { topBack, slider, dealContent ,passwordPanel},
-  
-  data(){
-    return {
-      passWordSwitch:false
-    }
-  },
+  components: { topBack, slider, dealContent, passwordPanel },
 
+  data() {
+    return {
+      passWordSwitch: false,
+      renderData: {
+        name: null
+      },
+      moneyData: {
+        payMoney: null,
+        getMoney: null
+      },
+      payType: null // 支付方式，取钱get 放钱put
+    };
+  },
+  created() {
+    this.init();
+  },
   mounted() {
     this._getQRCode();
   },
@@ -293,18 +305,39 @@ export default {
       console.log("i m ru");
     },
 
-    goTipPage() {
-      this.$router.push("/makeDeal/deal_tip");
+    init() {
+      Loading.getInstance().open();
+      var _id = this.$route.query.id;
+      var _data = {
+        transfer_id: _id
+      };
+      request
+        .getInstance()
+        .getData("api/transfer/show" + "?transfer_id=" + _id)
+        .then(res => {
+          console.log(res);
+
+          this.renderData = res.data.data;
+          Loading.getInstance().close();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
 
-    showPassword(){
+    goTipPage() {
+      var _id = this.$route.query.id;
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
+    },
+
+    showPassword() {
       this.passWordSwitch = true;
     },
-    hidePassword(){
+    hidePassword() {
       this.passWordSwitch = false;
     },
 
-    getResult(result){
+    getResult(result) {
       console.log(result);
     },
     _getQRCode: function() {
@@ -315,8 +348,19 @@ export default {
 
       qrcode.makeCode("http://www.baidu.com");
     }
-
   },
+  watch: {
+    "moneyData.payMoney": function() {
+      // 放钱
+      this.moneyData.getMoney = null;
+      this.payType = "put";
+    },
+    "moneyData.getMoney": function() {
+      // 拿钱
+      this.moneyData.payMoney = null;
+      this.payType = "get";
+    }
+  }
 };
 </script>
 

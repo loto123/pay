@@ -25,15 +25,15 @@
 						<span>{{listContent.identify_status ? "完善" : "未完善"}}</span>
 					</mt-cell>
 				</li>
-				<li>
-					<mt-cell title="银行卡管理" is-link to="/my/bankCardManage">
+				<li @click="bankCardManage">
+					<mt-cell title="银行卡管理" is-link>
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 						<span>
 							<font>{{listContent.card_count}}</font>张</span>
 					</mt-cell>
 				</li>
-				<li>
-					<mt-cell title="查看结算卡" is-link to="/my/checkSettle">
+				<li @click="checkSettle">
+					<mt-cell title="查看结算卡" is-link>
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 					</mt-cell>
 				</li>
@@ -96,7 +96,7 @@
 
 <script>
 	import axios from "axios";
-	import { Toast } from 'mint-ui';
+	import { Toast,MessageBox } from 'mint-ui';
 	import tabBar from "../../components/tabBar";
 	import request from '../../utils/userRequest';
 	import Loading from '../../utils/loading'
@@ -115,13 +115,13 @@
 					card_count:null,
 					identify_status:null
 				}
-			
+				
 			}
 		},
 		created(){
 			this.personalInfo();
 			this.listInfo();
-    },
+    	},
 		components: { tabBar },
 		methods: {
 			//个人信息
@@ -134,7 +134,6 @@
 						this.personal.mobile=res.data.data.mobile;
 						this.personal.thumb=res.data.data.thumb;
 						Loading.getInstance().close();
-						
 					})
 					.catch((err) => {
 						console.log(err);
@@ -158,6 +157,32 @@
 			},
 			realAuth(e){
 				this.$router.push("/my/realAuth"+"?mobile="+e);
+			},
+			//银行卡管理
+			bankCardManage(){
+				if(this.listContent.identify_status==0){
+					MessageBox.confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(
+						() => {
+							this.$router.push('/my/realAuth');
+						},
+						() => {
+							//取消操作
+							console.log("已经取消");
+						}
+					);
+				}else{
+					this.$router.push('/my/bankCardManage');
+				}
+				
+			},
+			//结算卡
+			checkSettle(){
+				if(this.listContent.card_count<=0){
+					Toast('请添加银行卡');
+					return;
+				}else{
+					this.$router.push('/my/checkSettle');
+				}
 			}
 		}
 	};

@@ -14,8 +14,8 @@
         <section class="input-wrap-box">
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
-            <input type="text" placeholder="请输入验证码" class="flex-1">
-            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码(10)</mt-button>
+            <input type="text" placeholder="请输入验证码" class="flex-1" v-model="realInfo.code">
+            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime}}</mt-button>
           </div>
         </section>
       </div>
@@ -37,8 +37,9 @@
         realInfo:{
           name :null,
           id_number :null,
-          computedTime:0  //倒数计时
-        }
+          code:null
+        },
+        computedTime:null  //倒数计时
       }
     },
     components: { topBack },
@@ -47,6 +48,8 @@
         var _this=this;
         var data = this.realInfo;
         request.getInstance().postData('api/my/identify',data).then((res) => {
+          Toast('认证成功');
+          this.$router.push('/my'); //认证成功，回到我的页面
         }).catch((err) => {
           Toast({
             message: err.data.msg,
@@ -54,11 +57,20 @@
           });
         })
       },
+      //短信验证码
       sendYZM(){
-        var mobile = this.$route.query.mobile;
-        
-        request.getInstance().postData("api/auth/sms",mobile).then((res) => {
-          console.log(res); 
+        var _temp = {};
+        _temp.mobile = this.$route.query.mobile;
+        request.getInstance().postData("api/auth/sms",_temp).then((res) => {
+          console.log(res);
+          this.computedTime = 5;
+          this.timer = setInterval(() => {
+              this.computedTime --;
+              console.log(this.computedTime); 
+              if (this.computedTime == 0) {
+                clearInterval(this.timer)
+              }
+          }, 1000)
         }).catch((err) => {
          console.log(err);
         })

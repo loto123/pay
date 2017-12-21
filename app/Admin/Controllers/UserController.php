@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers;
 
-use App\Shop;
 use App\TransferRecord;
 use App\User;
 
@@ -14,7 +13,6 @@ use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use function foo\func;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 class UserController extends Controller
@@ -91,6 +89,7 @@ class UserController extends Controller
 
             $grid->id('编号');
             $grid->name('用户');
+            $grid->mobile('手机号');
             $grid->transfer_count('交易笔数');
             $grid->balance('余额');
             $grid->column('pure_profit', '收益')->display(function(){
@@ -124,8 +123,9 @@ class UserController extends Controller
             $form->display('id', '编号');
             $form->display('name', '用户名');
             $form->text('mobile', '手机号码');
+            $form->text('balance', '余额');
             $form->display('xxx', '身份');
-            $form->checkbox('sss', '解绑微信号')->options(User::where('id','1')->pluck('name','id'));
+//            $form->checkbox('sss', '解绑微信号')->options(User::where('id','1')->pluck('name','id'));
             $form->display('created_at', '账号创建时间');
             $form->switch('status', '冻结');
             $form->saving(function (Form $form) {

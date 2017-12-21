@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Skip32;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
  * Class User
@@ -12,11 +14,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $name
  * @property string $mobile
  * @property string $password
+ * @property float $balance
  */
 class User extends Authenticatable
 {
     use Notifiable;
-
+    use EntrustUserTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -84,7 +87,7 @@ class User extends Authenticatable
      */
     public function shop()
     {
-        return $this->hasMany('App\Shop','manager_id','id');
+        return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
 
     /**
@@ -106,4 +109,27 @@ class User extends Authenticatable
         return $this->hasMany('App\PaypwdValidateRecord', 'user_id');
     }
 
+    //子代理
+    public function child_proxy()
+    {
+        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
+            $query->where('name','like', 'agent%');
+        });
+    }
+
+    //子用户
+    public function child_user()
+    {
+        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        });
+    }
+
+    public function en_id() {
+        return Skip32::encrypt("0123456789abcdef0123", $this->id);
+    }
+
+    public static function findByEnId($en_id) {
+        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
+    }
 }

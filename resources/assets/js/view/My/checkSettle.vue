@@ -31,7 +31,7 @@
       </a>
     </div>
 
-    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword = "hidePassword"></passWorld>
+    <passWorld :setSwitch="showPasswordTag" v-on:hidePassword = "hidePassword" v-on:callBack="callBack"></passWorld>
   </div>
 </template>
 
@@ -81,6 +81,21 @@ export default {
           });
         this.$router.go(-1);
       })
+    },
+     //支付密码验证
+     callBack(password){
+      var temp = {};
+      temp.password=password;
+      
+      request.getInstance().postData('api/my/pay_password',temp)
+        .then((res) => {
+          if(res.data.code==1){
+            this.$router.push('/my/checkSettle/list');
+          }
+        })
+        .catch((err) => {
+          console.error(err.data.msg);
+        })
     }
   }
 };

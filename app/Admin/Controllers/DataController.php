@@ -10,6 +10,7 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Profit;
+use App\Role;
 use App\TipRecord;
 use App\Transfer;
 use App\TransferRecord;
@@ -17,6 +18,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Encore\Admin\Facades\Admin;
+use App\Admin as AdminUser;
 use Encore\Admin\Layout\Content;
 
 class DataController extends Controller
@@ -29,7 +31,7 @@ class DataController extends Controller
         //交易总笔数
         $transfer_count = Transfer::count();
         //总收款
-        $amount = TransferRecord::where('stat', 1)->sum('amount');
+        $amount = abs(TransferRecord::where('stat', 1)->sum('amount'));
         //店铺分润
         $shop_amount = TipRecord::sum('amount');
         //茶水费
@@ -43,17 +45,17 @@ class DataController extends Controller
         //用户ID
         $aid = $request->input('aid');
         if ($aid) {
-            $query->where('id', $aid);
+            $query->where('users.id', $aid);
         }
         //推荐人ID
         $parent = $request->input('parent');
         if ($parent) {
-            $query->where('parent_id', $parent);
+            $query->where('users.parent_id', $parent);
         }
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $query->where('operator_id', $operator);
+            $query->where('users.operator_id', $operator);
         }
         $date_time = $request->input('date_time');
         if (!empty($date_time)) {
@@ -75,8 +77,8 @@ class DataController extends Controller
             $with[] = 'output_profit';
         }
         $list = $query->with($with)->leftJoin('profit_record', 'users.id', '=', 'profit_record.user_id')
-            ->select('users.*',DB::raw('SUM(profit_record.fee_amount) as fee_amount_total'))
-            ->orderBy('fee_amount_total','DESC')->groupBy('users.id')->paginate(self::PAGE_SIZE);
+            ->select('users.*', DB::raw('SUM(profit_record.fee_amount) as fee_amount_total'))
+            ->orderBy('fee_amount_total', 'DESC')->groupBy('users.id')->paginate(self::PAGE_SIZE);
 //            ->sortByDesc(function ($item) {
 //            return $item->output_profit->sum('fee_amount');
 //        });
@@ -138,9 +140,10 @@ class DataController extends Controller
     //交易详情
     public function detail($id)
     {
-        $data = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
+        $transfer = Transfer::with('user', 'record', 'record.user', 'shop', 'shop.manager')->where('id', $id)->first();
+        $data['transfer'] = $transfer;
         return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/profit', $data));
+            $content->body(view('admin/data/dealDetails', $data));
             $content->header("交易详情");
         });
     }
@@ -149,7 +152,7 @@ class DataController extends Controller
     public function close($id)
     {
         $transfer = Transfer::find($id);
-        if ($transfer->isEmpty()) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
@@ -168,7 +171,7 @@ class DataController extends Controller
             if ($transfer->save()) {
                 //解冻店铺茶水费资金
                 $shop = $transfer->shop;
-                if (!$shop->isEmpty()) {
+                if ($shop) {
                     $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
                     $shop->balance = $shop->balance + $transfer->tip_amount;
                     $shop->save();
@@ -193,6 +196,7 @@ class DataController extends Controller
                     }
                     $profit->save();
                 }
+                DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
             }
         } catch (\Exception $e) {
@@ -252,11 +256,197 @@ class DataController extends Controller
         });
     }
 
-    public function test() {
-        $data = [];
+    public function users(Request $request)
+    {
+        $today = date('Y-m-d');
+        $user_count = User::whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        })->count();
+        $user_new = User::whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        })->where('created_at', '>=', $today)->count();
+        $promoter_count = User::whereHas('roles', function ($query) {
+            $query->where('name', 'promoter');
+        })->count();
+        $promoter_new = User::whereHas('roles', function ($query) {
+            $query->where('name', 'promoter');
+        })->where('created_at', '>=', $today)->count();
+        $proxy_count = User::whereHas('roles', function ($query) {
+            $query->where('name', 'like', 'agent%');
+        })->count();
+        $proxy_new = User::whereHas('roles', function ($query) {
+            $query->where('name', 'like', 'agent%');
+        })->where('created_at', '>=', $today)->count();
+
+        $date_time = $request->input('date_time');
+        $begin = $end = '';
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $request->input('date_time'));
+            $begin = $date_time_arr[0];
+            $end = $date_time_arr[1] . ' 23:59:59';
+        }
+
+        $listQuery = User::with(['roles', 'parent', 'operator',
+            'transfer_record' => function ($query) use ($begin, $end) {
+                $query->where('stat', '>', 0)->where('stat', '<>', 3);
+                if ($begin && $end) {
+                    $query->where('transfer_record.created_at', '>=', $begin)
+                        ->where('transfer_record.created_at', '<=', $end);
+                }
+            },
+            'output_profit' => function ($query) use ($begin, $end) {
+                if ($begin && $end) {
+                    $query->where('transfer_record.created_at', '>=', $begin)->where('transfer_record.created_at', '<=', $end);
+                }
+            }
+        ])
+            ->withCount(['child_proxy', 'child_user'])
+            ->leftJoin('transfer_record', function ($join) use ($begin, $end) {
+                $join->on('users.id', '=', 'transfer_record.user_id');
+                $join->where('stat', '>', 0)->where('stat', '<>', 3);
+                if ($begin && $end) {
+                    $join->where('transfer_record.created_at', '>=', $begin)->where('transfer_record.created_at', '<=', $end);
+                }
+            })
+            ->leftJoin('profit_record', function ($join) use ($begin, $end) {
+                $join->on('users.id', '=', 'profit_record.proxy');
+                if ($begin && $end) {
+                    $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+                }
+            })
+            ->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'))
+            ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
+            ->groupBy('users.id');
+        //用户ID
+        $aid = $request->input('aid');
+        if ($aid) {
+            $listQuery->where('users.id', $aid);
+        }
+        //上级代理ID
+        $parent = $request->input('parent');
+        if ($parent) {
+            $listQuery->where('users.parent_id', $parent);
+        }
+        //运营ID
+        $operator = $request->input('operator');
+        if ($operator) {
+            $listQuery->where('users.operator_id', $operator);
+        }
+        //role 身份
+        $role = $request->input('role');
+        if ($role) {
+            $listQuery->whereHas('roles', function ($query) use ($role) {
+                $query->where('name', $role);
+            });
+        }
+        //排序方式
+        $orderby = $request->input('orderby', 'trans_amount');
+        if ($orderby) {
+            $listQuery->orderBy($orderby, 'DESC');
+        }
+        $roles = Role::get();
+        $list = $listQuery->orderBy('created_at', 'DESC')->paginate(self::PAGE_SIZE);
+        $data = compact('aid', 'date_time', 'parent', 'operator', 'role', 'roles', 'orderby', 'list',
+            'put_amount', 'list', 'user_count', 'user_new', 'promoter_count', 'promoter_new', 'proxy_count', 'proxy_new');
         return Admin::content(function (Content $content) use ($data) {
-            $content->body(view('admin/data/dealDetails', $data));
-            $content->header("交易详情");
+            $content->body(view('admin/data/users', $data));
+            $content->header("用户统计");
+        });
+    }
+
+    //运营业绩
+    public function area(Request $request)
+    {
+        $date_time = $request->input('date_time');
+        $begin = '';
+        $end = '';
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $request->input('date_time'));
+            $begin = $date_time_arr[0];
+            $end = $date_time_arr[1];
+        }
+        //获取所有运营
+        $listQuery = AdminUser::leftJoin('profit_record', function ($join) use ($begin, $end) {
+            $join->on('admin_users.id', '=', 'profit_record.operator');
+            if ($begin && $end) {
+                $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+            }
+        })->withCount(['child_proxy', 'child_user', 'promoter'])
+            ->whereHas('roles', function ($query) {
+                $query->where('slug', 'operator');
+            })
+            ->addSelect(DB::raw('sum(profit_record.fee_amount) as operator_fee_amount'))
+            ->groupBy('admin_users.id')->orderBy('operator_fee_amount', 'DESC');
+        $aid = $request->input('aid');
+        if (!empty($aid)) {
+            $listQuery->where('admin_users.username', $aid);
+        }
+        $list = $listQuery->paginate(self::PAGE_SIZE);
+        $data = compact('list', 'date_time', 'aid');
+        return Admin::content(function (Content $content) use ($data) {
+            $content->body(view('admin/data/operator', $data));
+            $content->header("运营业绩");
+        });
+    }
+
+    //运营业绩详情
+    public function areaDetail($operatorId = '', Request $request)
+    {
+        if (empty($operatorId)) {
+            if (Admin::user()->isRole('operator')) {
+                $operatorId = Admin::user()->id;
+            } else {
+                abort(404);
+            }
+        }
+
+        $begin = '';
+        $end = '';
+        $date_time = $request->input('date_time');
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $request->input('date_time'));
+            $begin = $date_time_arr[0];
+            $end = $date_time_arr[1];
+        }
+
+        //运营详情
+        $operatorInfo = AdminUser::leftJoin('profit_record', function ($join) use ($begin, $end) {
+            $join->on('admin_users.id', '=', 'profit_record.operator');
+            if ($begin && $end) {
+                $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+            }
+        })->withCount(['child_proxy', 'child_user', 'promoter'])->where('admin_users.id', $operatorId)
+            ->addSelect(DB::raw('sum(profit_record.fee_amount) as operator_fee_amount'))
+            ->groupBy('admin_users.id')->first();
+
+        //获取运营所有代理
+        $listQuery = User::with(['roles', 'parent'])->withCount('child_user')->leftJoin('profit_record', function ($join) use ($begin, $end) {
+            $join->on('users.id', '=', 'profit_record.proxy');
+            if ($begin && $end) {
+                $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+            }
+        })->where('users.operator_id',$operatorId)
+            ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
+            ->groupBy('users.id')->orderBy('proxy_fee_amount', 'DESC');
+
+        $aid = $request->input('aid');
+        if (!empty($aid)) {
+            $listQuery->where('users.id', $aid);
+        }
+
+        //role 身份
+        $role = $request->input('role');
+        if ($role) {
+            $listQuery->whereHas('roles', function ($query) use ($role) {
+                $query->where('name', $role);
+            });
+        }
+        $roles = Role::get();
+        $list = $listQuery->paginate(self::PAGE_SIZE);
+        $data = compact('list', 'date_time', 'aid', 'operatorInfo', 'operatorId', 'roles', 'role');
+        return Admin::content(function (Content $content) use ($data) {
+            $content->body(view('admin/data/operatorDetail', $data));
+            $content->header("运营业绩详情");
         });
     }
 

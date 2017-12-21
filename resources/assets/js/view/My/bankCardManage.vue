@@ -47,12 +47,27 @@
       }
     },
     created(){
-      this.bank()
+      this.bank();
     },
     methods: {
-      //密码层弹出
       showPassword() {
-        this.showPasswordTag = true;
+        request.getInstance().getData('api/my/info')
+          .then((res) => {
+           if(res.data.data.has_pay_password==0){
+              //调转到设置支付密码
+              this.$router.push('/my/setting_password');
+           }else{
+            this.showPasswordTag = true;   //密码层弹出
+
+           }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      },
+      //支付密码验证
+      payPasswordVal(){
+
       },
       hidePassword() {
         this.showPasswordTag = false;
@@ -92,8 +107,20 @@
           }
         );
       },
-      callBack(e){
-        console.log('密码输入完毕');
+      //支付密码验证
+      callBack(password){
+        var temp = {};
+        temp.password=password;
+        
+        request.getInstance().postData('api/my/pay_password',temp)
+          .then((res) => {
+            if(res.data.code==1){
+              this.$router.push('/my/bankCardManage/addBankCard');
+            }
+          })
+          .catch((err) => {
+            console.error(err.data.msg);
+          })
       }
     }
   };

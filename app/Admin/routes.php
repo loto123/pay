@@ -11,6 +11,8 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
     $router->resource('users',UserController::class);
+    $router->resource('/roles', RoleController::class);
+    $router->resource('/permissions', PermissionController::class);
     $router->any('/user/detail/{id}','UserController@details');
 
     $router->any('shop','ShopController@index');
@@ -18,6 +20,13 @@ Route::group([
     $router->any('/shop/updates','ShopController@updates');
 
     $router->post('/excel/shop', 'ExcelController@shop');
+
+    $router->resource('pay/platform', PayPlatformController::class);
+    $router->resource('pay/deposit-method', DepositMethodController::class);
+    $router->resource('pay/withdraw-method', WithdrawMethodController::class);
+    $router->resource('pay/entity', BusinessEntityController::class);
+    $router->resource('pay/channel', PayChannelController::class);
+
     $router->post('/excel/user', 'ExcelController@user');
 
     $router->resource('bank', BankController::class);
@@ -30,6 +39,20 @@ Route::group([
 ], function (Router $router) {
     $router->any('profit', "DataController@profit");
     $router->any('transfer', "DataController@transfer");
+    $router->any('transfer/detail/{operatorId}', "DataController@detail");
     $router->any('record', "DataController@record");
     $router->any('test', "DataController@test");
+    $router->any('users', "DataController@users");
+    $router->any('area', 'DataController@area');
+    $router->any('areaDetail/{operatorId?}', 'DataController@areaDetail');
+    $router->get('transfer/close/{id}', 'DataController@close');
+});
+
+Route::group([
+    'prefix'        => config('admin.route.prefix').'/agent',
+    'namespace'     => config('admin.route.namespace'),
+    'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+    $router->get('relation', 'AgentController@relation');
+    $router->post('relation/update', 'AgentController@relation_update');
 });

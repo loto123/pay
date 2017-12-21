@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Notice;
+use App\Profit;
 use App\Transfer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use JWTAuth;
+use PhpParser\Node\Expr\New_;
 use Validator;
 
 class NoticeController extends Controller
@@ -30,48 +32,33 @@ class NoticeController extends Controller
     public function index()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
-        $notice = Notice::whereIn('user_id', [$this->user->id,0])->select()->get();
+        $notice = Notice::where('user_id', $this->user->id)->orderBy('id','DESC')->select()->get();
         $list = [];
         if (!empty($notice) && count($notice)>0) {
             foreach($notice as $item) {
                 $thumb = '';
+                $title = $item->title;
                 if($item->type == 1) { //分润
-                    $transfer_table = (new Transfer)->getTable();
-                    $transfer_list = Transfer::join('users as u', 'u.id', '=', $transfer_table.'.user_id')
-                        ->where($transfer_table.'.id', $item->param)
-                        ->select('u.name as name')->first();
-                    if (empty($transfer_list)) {
+                    $profit_table = (new Profit)->getTable();
+                    $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
+                        ->where($profit_table.'.id',$item->param)->select('u.mobile as mobile')->first();
+                    if(empty($profit)) {
                         continue;
                     }
-                    $thumb = $transfer_list->name;
+                    $thumb = $profit->thumb??'default.png';
+                    $title = $profit->mobile;
                 }
                 $list[$item->type][] = [
+                    'type' => $item->type,
                     'notice_id' => $item->id,
                     'thumb'=> $thumb,
                     'content' => $item->content,
-                    'title' => $item->title,
+                    'title' => $title,
                     'created_at' => (string)$item->created_at,
                 ];
             }
         }
-        $data = [
-            [
-                'type'=>'1',
-                'name'=>'分润通知',
-                'notices'=> isset($list[1])?$list[1]:[],
-            ],
-            [
-                'type'=>'2',
-                'name'=>'用户注册',
-                'notices'=>isset($list[2])?$list[2]:[],
-            ],
-            [
-                'type'=>'3',
-                'name'=>'系统通知',
-                'notices'=>isset($list[3])?$list[3]:[],
-            ],
-        ];
-        return response()->json(['code' => 1,'msg' => '','data' => $data]);
+        return response()->json(['code' => 1,'msg' => '','data' => $list]);
     }
 
     /**
@@ -82,9 +69,13 @@ class NoticeController extends Controller
      *   @SWG\Parameter(
      *     name="user_id",
      *     in="formData",
-     *     description="接收消息的用户ID",
+     *     description="接收消息的用户ID数组",
      *     required=true,
-     *     type="integer"
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
      *   ),
      *   @SWG\Parameter(
      *     name="type",
@@ -110,7 +101,7 @@ class NoticeController extends Controller
      *   @SWG\Parameter(
      *     name="param",
      *     in="formData",
-     *     description="参数，当type=1时，代表交易id，必填",
+     *     description="参数，当type=1时，代表分润id，必填",
      *     required=false,
      *     type="string"
      *   ),
@@ -120,7 +111,6 @@ class NoticeController extends Controller
      */
     public function create(Request $request)
     {
-        $this->user = JWTAuth::parseToken()->authenticate();
         $validator = Validator::make($request->all(),
             [
                 'user_id' => 'bail|required|array',
@@ -145,7 +135,7 @@ class NoticeController extends Controller
                     $title = '分润通知';
                     break;
                 case 2:
-                    $title = '用户注册';
+                    $title = '新用户注册通知';
                     break;
                 case 3:
                     $title = '系统通知';
@@ -186,7 +176,7 @@ class NoticeController extends Controller
     /**
      * @SWG\Post(
      *   path="/notice/detail",
-     *   summary="分润通知的详情",
+     *   summary="详情",
      *   tags={"消息"},
      *   @SWG\Parameter(
      *     name="notice_id",
@@ -216,24 +206,37 @@ class NoticeController extends Controller
         }
         $notice_id = $request->input('notice_id');
         $notice = Notice::where('id', $notice_id)->where('user_id', $this->user->id)->first();
-        if (empty($notice) || $notice->type>1) {
-            return response()->json(['code' => 0,'msg' => '该消息不存在或不是您的分润通知','data' => []]);
+        if (empty($notice)) {
+            return response()->json(['code' => 0,'msg' => '消息不存在','data' => []]);
         }
-        $transfer_table = (new Transfer)->getTable();
-        $transfer_list = Transfer::join('users as u', 'u.id', '=', $transfer_table.'.user_id')
-            ->where($transfer_table.'.id', $notice->param)
-            ->select('u.mobile as mobile')->first();
-        if (empty($transfer_list)) {
-            return response()->json(['code' => 0,'msg' => '分润的交易id不存在','data' => []]);
+
+        if($notice->type == 1) {
+            $profit_table = (new Profit)->getTable();
+            $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
+                ->leftJoin('transfer_record as tr', 'tr.id', '=', $profit_table.'.record_id')
+                ->where($profit_table.'.id',$notice->param)
+                ->select($profit_table.'.*','u.mobile as mobile','tr.transfer_id as transfer_id')->first();
+            if (empty($profit)) {
+                return response()->json(['code' => 0,'msg' => '分润不存在','data' => []]);
+            }
+            $data = [
+                'amount' => $profit->proxy_amount,
+                'type' => '分润',
+                'time' => (string)$notice->created_at,
+                'transfer_id' => $profit->transfer_id,
+                'mobile' => $profit->mobile,
+                'thumb' => $profit->thumb??'default.png',
+            ];
+        } else {
+            $data = [
+                'time' => (string)$notice->created_at,
+                'content'=> $notice->content,
+                'title' => $notice->title
+            ];
         }
-        $data = [
-            ['title'=>'入账金额','content'=>$notice->content],
-            ['title'=>'类型','content'=>'分润'],
-            ['title'=>'时间','content'=>(string)$notice->created_at],
-            ['title'=>'交易单号','content'=>$notice->id],
-            ['title'=>'分润来源','content'=>$transfer_list->mobile],
-        ];
-        return response()->json(['code' => 0,'msg' => '','data' => $data]);
+
+
+        return response()->json(['code' => 1,'msg' => '','data' => $data]);
     }
 
     /**
@@ -241,13 +244,40 @@ class NoticeController extends Controller
      *   path="/notice/delete",
      *   summary="清空消息",
      *   tags={"消息"},
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="formData",
+     *     description="消息类型",
+     *     required=true,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
      */
-    public function delete(){
+    public function delete(Request $request){
         $this->user = JWTAuth::parseToken()->authenticate();
-        Notice::where('user_id',$this->user->id)->where('created_at','<',date('Y-m-d H:i:s'))->delete();
-        return response()->json(['code' => 1,'msg' => '','data' => []]);
+        $validator = Validator::make($request->all(),
+            [
+                'type' => 'bail|required|numeric',
+            ],
+            [
+                'required' => trans('trans.required'),
+                'numeric' => trans('trans.numeric'),
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+        }
+
+        $res = Notice::where('user_id',$this->user->id)
+            ->where('created_at','<',date('Y-m-d H:i:s'))
+            ->where('type',$request->type)->delete();
+        if ($res) {
+            return response()->json(['code' => 1,'msg' => '','data' => []]);
+        } else {
+            return response()->json(['code' => 0,'msg' => '删除失败','data' => []]);
+        }
+
     }
 }

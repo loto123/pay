@@ -24,20 +24,6 @@ use Illuminate\Routing\Router;
 //});
 
 Route::any('test', 'Api\TestController@index');
-Route::group([
-    'prefix'        => '/shop',
-    'namespace'     => 'Api',
-], function (Router $router) {
-    $router->post('create', 'ShopController@create');
-    $router->get('types', 'ShopController@types');
-});
-
-Route::group([
-    'prefix'        => '/transfer',
-    'namespace'     => 'Api',
-], function (Router $router) {
-    $router->post('create', 'TransferController@create');
-});
 
 Route::group([
     'prefix'       => '/my',
@@ -86,6 +72,16 @@ $api->version('v1', function ($api) {
         $api->post("login/wechat", 'AuthController@wechat_login');
         $api->post("valid", 'AuthController@valid');
         $api->post("sms", 'AuthController@sms');
+        $api->post("password/reset", 'AuthController@reset_password');
+    });
+});
+
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => '/',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+//        $api->get('time', 'CommonController@time');
     });
 });
 
@@ -98,10 +94,14 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('lists/mine', 'ShopController@my_lists');
         $api->get('lists/all', 'ShopController@all');
         $api->get('detail/{id}', 'ShopController@detail');
+        $api->get('members/{id}', 'ShopController@members');
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
+        $api->post('join/{id}', 'ShopController@join');
         $api->post('create', 'ShopController@create');
+        $api->get('qrcode/{id}', 'ShopController@qrcode');
+        $api->get('account/{id}', 'ShopController@account');
     });
 });
 
@@ -118,10 +118,21 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('notice', 'TransferController@notice');
         $api->post('withdraw', 'TransferController@withdraw');
         $api->post('trade', 'TransferController@trade');
-        $api->post('validate', 'TransferController@validate');
+        $api->post('validate', 'TransferController@valid');
         $api->post('create', 'TransferController@create');
         $api->post('close', 'TransferController@close');
         $api->post('cancel', 'TransferController@cancel');
+    });
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'account',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/', 'AccountController@index');
+        $api->post('charge', 'AccountController@charge');
+        $api->post('withdraw', 'AccountController@withdraw');
     });
 });
 
