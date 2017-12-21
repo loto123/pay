@@ -18,7 +18,6 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('mobile')->unique();
             $table->string('password');
-            $table->decimal('balance', 15)->default(0);
             $table->string('avatar');
             $table->tinyInteger('status')->comment('状态 0：正常 1：冻结')->default(0);
             $table->integer('pay_card_id')->comment('结算卡id')->nullable();
@@ -28,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('parent_id')->nullable()->default(0);
             $table->unsignedInteger('operator_id')->nullable()->default(0);
             $table->unsignedInteger('container_id');
+            $table->unsignedSmallInteger('channel_id')->nullable()->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\OauthUser;
+use App\Pay\Model\PayFactory;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
