@@ -381,19 +381,19 @@ class UserController extends Controller
     public function info()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
+        $parent = User::find($this->user->parent_id);
         $data = [
             'name' => $this->user->name,
             'mobile' => $this->user->mobile,
-            'thumb' => '1.png',
+            'thumb' => $this->user->avatar,
             'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
             'id_number' => str_replace(' ','',$this->formatNum($this->user->id_number,4,4)),
+            'has_parent'=> $this->user->parent_id>0 ? 1 : 0,
+            'parent_name' => $parent->name??'',
+            'parent_mobile' => $parent->mobile??'',
         ];
         return response()->json(['code' => 1, 'msg' =>'', 'data' => $data]);
     }
-
-
-
-
 
     //对字符串做掩码处理
     private function formatNum($num,$pre=0,$suf=4)
