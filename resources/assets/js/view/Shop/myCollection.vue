@@ -19,32 +19,23 @@
       </div>
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
-        <div class="list-wrap">
+
+        <div class="list-wrap" v-for="item in shopList" :key = "item">
           <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
             <img src="/images/avatar.jpg" alt="">
-           
           </div>
 
-        <h3>店铺111</h3>
-      </div>
-
-        
-        <div class="shop-item">
-
+          <h3>店铺111</h3>
         </div>
-        <div class="shop-item">
+        <!-- <div class="list-wrap">
+          <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
+            <div class="notice"></div>
+            <img src="/images/avatar.jpg" alt="">
+          </div>
 
-        </div>
-        <div class="shop-item">
-
-        </div>
-        <div class="shop-item">
-
-        </div>
-        <div class="shop-item">
-
-        </div>
+          <h3>店铺111</h3>
+        </div> -->
       </div>
   </div>
 </template>
@@ -140,12 +131,35 @@
 
 
 <script>
-import topBack from "../../components/topBack";
+import topBack from "../../components/topBack"
+import request from "../../utils/userRequest"
+import Loading from "../../utils/loading"
 
 export default {
+  data(){
+    return {
+      shopList:[]
+    }
+  },
+
+  created(){
+    this.init();
+  },
+
   methods: {
     goMyShop() {
       this.$router.push("/shop/");
+    },
+    init(){
+      Loading.getInstance().open();
+      request.getInstance().getData("api/shop/lists").then(res=>{
+        console.dir(res);
+        Loading.getInstance().close();
+      }).catch(err=>{
+        console.error(err);
+        Loading.getInstance().close();
+        
+      });
     }
   },
   components: { topBack }
