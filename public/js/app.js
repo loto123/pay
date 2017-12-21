@@ -55689,7 +55689,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/all").then(function (res) {
-        console.log(res);
         _this.setShopList(res);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
@@ -55780,7 +55779,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
-    // 提交数据
+    // 提交发起交易的数据
     submitData: function submitData() {
       var _this3 = this;
 
@@ -55791,10 +55790,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _tempMessage = this.commentMessage;
       }
 
+      var _members = this.getMembersId();
+
       var _data = {
         shop_id: this.shopId,
         price: this.price,
-        comment: _tempMessage
+        comment: _tempMessage,
+        joiner: _members
       };
 
       if (this.shopId == null) {
@@ -55811,6 +55813,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (err) {
         console.error(err);
       });
+    },
+    getMembersId: function getMembersId() {
+      console.log(this.memberList);
+      if (this.memberList.length == 0) {
+        return [];
+      }
+
+      var _tempIdList = [];
+
+      for (var i = 0; i < this.memberList.length; i++) {
+        if (this.memberList[i].checked) {
+          _tempIdList.push(this.memberList[i].id);
+        }
+      }
+
+      console.log(_tempIdList);
+      return _tempIdList;
     }
   },
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_1__components_inputList___default.a, choiseMember: __WEBPACK_IMPORTED_MODULE_2__choiseMember_vue___default.a }
@@ -56789,9 +56808,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_loading__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode__ = __webpack_require__(587);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__utils_qrCode__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_loading__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_qrCode__ = __webpack_require__(587);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__utils_qrCode__);
 //
 //
 //
@@ -57060,6 +57081,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -57085,7 +57113,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         payMoney: null,
         getMoney: null
       },
-      payType: null // 支付方式，取钱get 放钱put
+      payType: null, // 支付方式，取钱get 放钱put
+      transfer_id: "", // 交易id
+      password: ""
     };
   },
   created: function created() {
@@ -57102,23 +57132,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().open();
-      var _id = this.$route.query.id;
+      __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().open();
+      this.transfer_id = this.$route.query.id;
       var _data = {
-        transfer_id: _id
+        transfer_id: this.transfer_id
       };
-      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + _id).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id).then(function (res) {
         console.log(res);
 
         _this.renderData = res.data.data;
-        __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
       });
     },
     goTipPage: function goTipPage() {
-      var _id = this.$route.query.id;
-      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + this.transfer_id);
     },
     showPassword: function showPassword() {
       this.passWordSwitch = true;
@@ -57126,8 +57155,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     hidePassword: function hidePassword() {
       this.passWordSwitch = false;
     },
+    callPassword: function callPassword() {
+
+      if (this.payType == "put") {
+        this.showPassword();
+      } else if (this.payType == "get") {
+        this.submitData();
+      } else {
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请填写拿钱数额或取钱数额");
+      }
+    },
+
+
+    // 提交交易  拿钱或者付钱
+    submitData: function submitData(password) {
+      var _this2 = this;
+
+      // 放钱
+      if (this.payType == "put") {
+        var _data = {
+          transfer_id: this.transfer_id,
+          points: this.moneyData.payMoney,
+          action: "put",
+          pay_password: password
+        };
+
+        __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
+          console.log(res);
+          _this2.init();
+        }).catch(function (err) {
+          console.error(err);
+        });
+
+        this.hidePassword();
+      } else if (this.payType == "get") {
+        // 拿钱
+        var _data = {
+          transfer_id: 0,
+          points: 0,
+          action: "put"
+        };
+      }
+    },
     getResult: function getResult(result) {
       console.log(result);
+      this.password = result;
     },
 
     _getQRCode: function _getQRCode() {
@@ -57352,7 +57424,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //起始位置减去 实时的滑动的距离，得到手指实时偏移距离
         this.disX = this.startX - this.moveX;
-        // console.log(this.disX);
         // 如果是向右滑动或者不滑动，不改变滑块的位置
         if (this.disX < 0 || this.disX == 0) {
           this.deleteSlider = "transform:translateX(0px)";
@@ -57379,7 +57450,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var endX = ev.changedTouches[0].clientX;
 
         this.disX = this.startX - endX;
-        // console.log(this.disX);
         //如果距离小于删除按钮一半,强行回到起点
 
         if (this.disX * 5 < wd / 1) {
@@ -59154,7 +59224,7 @@ var render = function() {
             "mt-button",
             {
               attrs: { type: "primary", size: "large" },
-              on: { click: _vm.showPassword }
+              on: { click: _vm.callPassword }
             },
             [_vm._v("确认")]
           )
@@ -59313,7 +59383,7 @@ var render = function() {
           settingPasswordSwitch: true,
           secondValid: false
         },
-        on: { hidePassword: _vm.hidePassword, callBack: _vm.getResult }
+        on: { hidePassword: _vm.hidePassword, callBack: _vm.submitData }
       })
     ],
     1
@@ -62229,7 +62299,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n.account-container[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.account-container .account-box[data-v-192ddef6] {\n    width: 100%;\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n}\n.account-container .account-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.account-container .account-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n", ""]);
+exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.btn[data-v-192ddef6] {\n  display: block;\n  margin-top: 1em;\n  width: 90%;\n  margin: auto;\n  margin-top: 2em;\n}\n.account-container[data-v-192ddef6] {\n  background: #fff;\n}\n.account-container .account-box[data-v-192ddef6] {\n    width: 100%;\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n    padding-left: 10px;\n}\n.account-container .account-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.account-container .account-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n.select-wrap[data-v-192ddef6] {\n  width: 90%;\n  margin: 0 auto;\n  height: 2.5em;\n  padding-left: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.input-wrap-box[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.input-wrap[data-v-192ddef6] {\n  width: 100%;\n  height: 3em;\n  border-top: 1px solid #D9D9D9;\n}\n.input-wrap span[data-v-192ddef6] {\n    display: inline-block;\n    width: 105px;\n}\n.input-wrap .mint-button[data-v-192ddef6] {\n    font-size: 0.9em;\n}\n.input-wrap .mint-button--default[data-v-192ddef6] {\n    background: #fff;\n}\n.input-wrap input[data-v-192ddef6] {\n    border: none;\n    outline: none;\n    text-rendering: auto;\n    color: initial;\n    letter-spacing: normal;\n    word-spacing: normal;\n    text-transform: none;\n    text-indent: 0px;\n    text-shadow: none;\n    display: inline-block;\n    text-align: start;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 20%;\n    font-size: inherit;\n}\n", ""]);
 
 // exports
 
@@ -62245,7 +62315,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_inputList__ = __webpack_require__(559);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_inputList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_inputList__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(19);
 //
 //
 //
@@ -62278,6 +62350,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -62288,29 +62375,116 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      dropListSwitch: false,
+      shopList: null,
       name: null,
-      id_number: null
+      id_number: null,
+      dealShop: null,
+      bankInfo: {
+        card_num: null,
+        bank_id: null,
+        mobile: null,
+        code: null
+      }
     };
   },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_3__components_inputList___default.a },
   created: function created() {
     this.personalInfo();
+    this.init();
   },
 
   methods: {
     //个人信息
     personalInfo: function personalInfo() {
-      var _this = this;
+      var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
-        _this.name = res.data.data.name;
-        _this.id_number = res.data.data.id_number;
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        _this2.name = res.data.data.name;
+        _this2.id_number = res.data.data.id_number;
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
+      });
+    },
+    init: function init() {
+      var _this3 = this;
+
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/card/getBanks").then(function (res) {
+        console.log(res);
+        _this3.setBankList(res);
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      });
+    },
+    setBankList: function setBankList(res) {
+      var _tempList = [];
+      for (var i = 0; i < res.data.data.length; i++) {
+        var _t = {};
+        _t.value = res.data.data[i].id;
+        _t.label = res.data.data[i].name;
+        _tempList.push(_t);
+      }
+
+      this.shopList = _tempList;
+    },
+    getShopName: function getShopName(id) {
+      for (var i = 0; i < this.shopList.length; i++) {
+        if (this.shopList[i].value == id) {
+          return this.shopList[i].label;
+        }
+      }
+      return "没有这个银行";
+    },
+    showDropList: function showDropList() {
+      this.dropListSwitch = true;
+    },
+    hideDropList: function hideDropList(data) {
+      this.dropListSwitch = false;
+      this.dealShop = this.getShopName(data);
+
+      this.shopId = data;
+    },
+    nextBtn: function nextBtn() {
+      var _this = this;
+      this.bankInfo.bank_id = this.shopId;
+      var data = this.bankInfo;
+
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/card/create", data).then(function (res) {
+        console.log(res);
+
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+      });
+    },
+
+    //短信验证码
+    sendYZM: function sendYZM() {
+      var _this4 = this;
+
+      var _temp = {};
+      _temp.mobile = this.bankInfo.mobile;
+      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
+        console.log(res);
+        _this4.computedTime = 5;
+        _this4.timer = setInterval(function () {
+          _this4.computedTime--;
+          console.log(_this4.computedTime);
+          if (_this4.computedTime == 0) {
+            clearInterval(_this4.timer);
+          }
+        }, 1000);
+      }).catch(function (err) {
+        console.log(err);
       });
     }
   }
@@ -62357,19 +62531,35 @@ var render = function() {
           "div",
           { staticClass: "bank-info flex flex-v flex-justify-center" },
           [
-            _c("mt-field", {
-              attrs: {
-                label: "所属银行",
-                placeholder: "请选择银行卡所属银行",
-                type: "text"
-              }
-            }),
+            _c(
+              "div",
+              {
+                staticClass: "select-wrap flex flex-align-center",
+                on: { click: _vm.showDropList }
+              },
+              [
+                _vm._v(
+                  "\n\n        " +
+                    _vm._s(
+                      _vm.dealShop ? _vm.dealShop : "请选择银行卡所属银行"
+                    ) +
+                    "\n\n      "
+                )
+              ]
+            ),
             _vm._v(" "),
             _c("mt-field", {
               attrs: {
                 label: "银行卡号",
                 placeholder: "请填写银行卡号",
                 type: "number"
+              },
+              model: {
+                value: _vm.bankInfo.card_num,
+                callback: function($$v) {
+                  _vm.$set(_vm.bankInfo, "card_num", $$v)
+                },
+                expression: "bankInfo.card_num"
               }
             })
           ],
@@ -62384,24 +62574,88 @@ var render = function() {
               attrs: {
                 label: "预留手机号",
                 placeholder: "请填写银行卡预留手机号",
-                type: "number"
+                type: "number",
+                maxlength: "11"
+              },
+              model: {
+                value: _vm.bankInfo.mobile,
+                callback: function($$v) {
+                  _vm.$set(_vm.bankInfo, "mobile", $$v)
+                },
+                expression: "bankInfo.mobile"
               }
             })
           ],
           1
-        )
+        ),
+        _vm._v(" "),
+        _c("section", { staticClass: "input-wrap-box" }, [
+          _c(
+            "div",
+            { staticClass: "input-wrap flex flex-align-center" },
+            [
+              _c("span", [_vm._v("验证码:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.bankInfo.code,
+                    expression: "bankInfo.code"
+                  }
+                ],
+                staticClass: "flex-1",
+                attrs: { type: "text", placeholder: "请输入验证码" },
+                domProps: { value: _vm.bankInfo.code },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.bankInfo, "code", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "mt-button",
+                {
+                  staticClass: "flex-1",
+                  attrs: { type: "default" },
+                  on: { click: _vm.sendYZM }
+                },
+                [_vm._v("发送验证码")]
+              )
+            ],
+            1
+          )
+        ])
       ]),
       _vm._v(" "),
       _c(
         "a",
-        { staticClass: "btn", attrs: { href: "javascript:;" } },
+        {
+          staticClass: "btn next-btn",
+          attrs: { href: "javascript:;" },
+          on: {
+            click: function($event) {
+              _vm.nextBtn()
+            }
+          }
+        },
         [
           _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
             _vm._v("下一步")
           ])
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("inputList", {
+        attrs: { showSwitch: _vm.dropListSwitch, optionsList: _vm.shopList },
+        on: { hideDropList: _vm.hideDropList }
+      })
     ],
     1
   )

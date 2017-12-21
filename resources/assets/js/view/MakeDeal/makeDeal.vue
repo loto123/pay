@@ -222,7 +222,6 @@ export default {
         .getInstance()
         .getData("api/shop/lists/all")
         .then(res => {
-          console.log(res);
           this.setShopList(res);
           Loading.getInstance().close();
         })
@@ -316,7 +315,7 @@ export default {
       this.choiseMemberSwitch = false;
     },
 
-    // 提交数据
+    // 提交发起交易的数据
     submitData() {
       var _tempMessage = null;
       if (this.commentMessage == null) {
@@ -325,10 +324,13 @@ export default {
         _tempMessage = this.commentMessage;
       }
 
+      var _members = this.getMembersId();
+
       var _data = {
         shop_id: this.shopId,
         price: this.price,
-        comment:_tempMessage
+        comment:_tempMessage,
+        joiner:_members
       };
 
       if(this.shopId == null){
@@ -351,6 +353,24 @@ export default {
         .catch(err => {
           console.error(err);
         });
+    },
+
+    getMembersId(){
+      console.log(this.memberList);
+      if(this.memberList.length == 0){
+        return [];
+      }
+
+      var _tempIdList = [];
+
+      for(let i = 0; i< this.memberList.length; i++){
+        if(this.memberList[i].checked){
+          _tempIdList.push(this.memberList[i].id);
+        }
+      }
+
+      console.log(_tempIdList);
+      return _tempIdList;
     }
   },
   components: { topBack, inputList , choiseMember }
