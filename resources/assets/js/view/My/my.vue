@@ -96,9 +96,10 @@
 
 <script>
 	import axios from "axios";
-	import { Toast,MessageBox } from 'mint-ui';
 	import tabBar from "../../components/tabBar";
 	import request from '../../utils/userRequest';
+	import { Toast,MessageBox } from 'mint-ui';
+
 	import Loading from '../../utils/loading'
 
 	export default {
@@ -173,15 +174,15 @@
 				}else{
 					this.$router.push('/my/bankCardManage');
 				}
-				
 			},
-			//结算卡
+			//查看结算卡
 			checkSettle(){
-				if(this.listContent.card_count<=0){
-					Toast('请添加银行卡');
-					return;
-				}else{
+				if(this.listContent.card_count>0){
+					console.log('进来了1');
 					this.$router.push('/my/checkSettle');
+				}else{
+					// Toast('请添加银行卡');
+					console.log('进来了2');
 				}
 			}
 		}
