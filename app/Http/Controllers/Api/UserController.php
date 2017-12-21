@@ -66,7 +66,7 @@ class UserController extends Controller
      *     name="confirm_password",
      *     in="formData",
      *     description="确认密码",
-     *     required=false,
+     *     required=true,
      *     type="string"
      *   ),
      *   @SWG\Parameter(
@@ -86,6 +86,7 @@ class UserController extends Controller
             [
                 'old_password' => 'bail|required',
                 'new_password' => 'bail|required|min:6|max:16',
+                'confirm_password' => 'bail|required|min:6|max:16',
             ],
             [
                 'required' => trans('trans.required'),
@@ -102,10 +103,8 @@ class UserController extends Controller
         $new_password = $request->input('new_password');
         $confirm_password = $request->input('confirm_password');
         //验证两次密码
-        if(isset($confirm_password)) {
-            if ($confirm_password != $new_password) {
-                return response()->json(['code' => 0,'msg' => '两次新密码输入不一致！','data' => []]);
-            }
+        if ($confirm_password != $new_password) {
+            return response()->json(['code' => 0,'msg' => '两次新密码输入不一致！','data' => []]);
         }
         //验证旧密码
         if (!Hash::check($old_password,$this->user->password)) {
@@ -174,7 +173,7 @@ class UserController extends Controller
      *     name="confirm_pay_password",
      *     in="formData",
      *     description="确认支付密码",
-     *     required=false,
+     *     required=true,
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
@@ -195,6 +194,7 @@ class UserController extends Controller
             [
                 'old_pay_password' => 'bail|required|digits:6',
                 'new_pay_password' => 'bail|required|digits:6',
+                'confirm_pay_password' => 'bail|required|digits:6',
             ],
             [
                 'required' => trans('trans.required'),
@@ -212,10 +212,8 @@ class UserController extends Controller
             return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
         }
         //验证两次密码
-        if(isset($confirm_password)) {
-            if ($confirm_password != $new_password) {
-                return response()->json(['code' => 0,'msg' => '两次新密码输入不一致！','data' => []]);
-            }
+        if ($confirm_password != $new_password) {
+            return response()->json(['code' => 0,'msg' => '两次新密码输入不一致！','data' => []]);
         }
         //验证旧密码
         if (!Hash::check($old_password,$this->user->pay_password)) {
@@ -290,7 +288,7 @@ class UserController extends Controller
 //            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
 //        }
         $user_card = UserCard::find($this->user->pay_card_id);
-        $bank = Bank::find($user_card->bank);
+        $bank = Bank::find($user_card->bank_id);
         $data = [
             'user_mobile' => $this->user->mobile,
             'holder_name' => $user_card->holder_name,
@@ -383,19 +381,19 @@ class UserController extends Controller
     public function info()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
+        $parent = User::find($this->user->parent_id);
         $data = [
             'name' => $this->user->name,
             'mobile' => $this->user->mobile,
-            'thumb' => '1.png',
+            'thumb' => $this->user->avatar,
             'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
             'id_number' => str_replace(' ','',$this->formatNum($this->user->id_number,4,4)),
+            'has_parent'=> $this->user->parent_id>0 ? 1 : 0,
+            'parent_name' => $parent->name??'',
+            'parent_mobile' => $parent->mobile??'',
         ];
         return response()->json(['code' => 1, 'msg' =>'', 'data' => $data]);
     }
-
-
-
-
 
     //对字符串做掩码处理
     private function formatNum($num,$pre=0,$suf=4)

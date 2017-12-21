@@ -50,7 +50,7 @@
             this.$router.push('/my/set');
           })
           .catch((err) => {
-            console.err(err.data.msg);
+            console.log(err);
           })
       }
     }

@@ -17,7 +17,6 @@
     
     <div class="textareaWrap">
         <textarea name="" id="" cols="20" rows="3" placeholder = "大吉大利 恭喜发财" v-model="commentMessage">
-
         </textarea>
     </div>
     
@@ -25,15 +24,14 @@
 
       <h3 class="flex flex-align-center">添加参与人</h3>
       <div class="flex flex-align-center flex-wrap-on ">
+        <!-- <img src="/images/avatar.jpg" alt="" >
         <img src="/images/avatar.jpg" alt="" >
         <img src="/images/avatar.jpg" alt="" >
         <img src="/images/avatar.jpg" alt="" >
         <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" >
-
-        <div class="add flex flex-align-center flex-justify-center">
+        <img src="/images/avatar.jpg" alt="" > -->
+        <img :src="item.avatar" alt="" v-for="item in memberList" :key = "item.id" v-if="item.checked == true">
+        <div class="add flex flex-align-center flex-justify-center" @click="showMemberChoise">
           <i class="iconfont" style="font-size: 1.5em;color:#bbb;">
             &#xe600;
           </i>
@@ -53,7 +51,14 @@
       v-on:hideDropList="hideDropList" 
       :optionsList = "shopList">
     </inputList>
-    <choiseMember></choiseMember>  
+
+    <choiseMember 
+      :isShow = "choiseMemberSwitch"
+      v-on:hide = "hideMemberChoise"
+      :dataList = "memberList"
+      :submit  ="getMemberData"
+    >
+    </choiseMember>  
   </div>
 </template>
 
@@ -76,7 +81,6 @@
 }
 .select-wrap {
   width: 90%;
-  // height: auto;
   margin: 0 auto;
   height: 2.5em;
   padding-left: 1em;
@@ -198,13 +202,16 @@ export default {
   },
   data() {
     return {
-      dropListSwitch: false,
+      dropListSwitch: false,       // 下拉框开关
+      choiseMemberSwitch:false,    // 选择提醒玩家开关
       dealShop: null,
       shopList: null,
 
       shopId: null,
       price: 10,
-      commentMessage: null
+      commentMessage: null,
+
+      memberList:[]              //成员数组
     };
   },
 
@@ -215,6 +222,7 @@ export default {
         .getInstance()
         .getData("api/shop/lists/all")
         .then(res => {
+          console.log(res);
           this.setShopList(res);
           Loading.getInstance().close();
         })
@@ -252,8 +260,60 @@ export default {
     hideDropList(data) {
       this.dropListSwitch = false;
       this.dealShop = this.getShopName(data);
-
       this.shopId = data;
+
+      this.memberList = [];    // 清空店铺成员列表
+    },
+
+    // 获取所有要提醒的成员名单
+    showMemberChoise(){
+      if(this.shopId == null){
+        Toast("请选择发起交易的店铺");
+        return;
+      }
+      Loading.getInstance().open();
+      request.getInstance().getData('api/shop/members/'+this.shopId).then(res=>{
+        console.log(res);
+        this.initMemberList(res);
+        Loading.getInstance().close();
+
+        if(res.data.data.members.length == 0){
+          Toast("当前店铺无成员");
+          return;
+        }
+
+        this.choiseMemberSwitch = true;
+        
+      }).catch(err=>{
+        console.error(err);
+        Loading.getInstance().close();
+      });
+
+    },
+
+    getMemberData(data){
+      this.memberList = data;
+    },
+    // 初始化提醒玩家列表
+    initMemberList(res){
+
+      if(this.memberList.length>0){
+        return;
+      }
+
+      for(let i = 0; i<res.data.data.members.length; i++){
+          var _temp = {};
+          _temp = res.data.data.members[i];
+          _temp.checked = false;
+          this.memberList.push(_temp);
+        }
+
+        console.log("======= 店铺会员列表 ======");
+        console.log(this.memberList);
+    },
+
+    hideMemberChoise(){
+      this.choiseMemberSwitch = false;
     },
 
     // 提交数据
