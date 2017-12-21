@@ -73,7 +73,7 @@ class TransferController extends Controller
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
                 'comment' => 'bail|max:200',
-                'joiner' => 'bail||array',
+                'joiner' => 'bail|array',
             ],
             [
                 'required' => trans('trans.required'),
@@ -107,7 +107,7 @@ class TransferController extends Controller
         $transfer->fee_percent = config('platform_fee_percent');
 
         //交易关系包含自己
-        $joiners = $request->joiner;
+        $joiners = $request->input('joiner',[]);
         array_push($joiners,$user->id);
         if ($transfer->save()) {
             //保存交易关系
