@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\PayFactory;
 use App\Shop;
 use App\ShopUser;
 use App\User;
@@ -66,11 +67,14 @@ class ShopController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
+        $wallet = PayFactory::MasterContainer();
+        $wallet->save();
         $shop  = new Shop();
         $shop->name = $request->name;
         $shop->manager_id = $user->id;
         $shop->price = $request->rate;
         $shop->fee = $request->percent;
+        $shop->container_id = $wallet->id;
         $shop->save();
         return $this->json([$shop]);
     }
@@ -309,7 +313,7 @@ class ShopController extends BaseController {
         foreach ($shop->users()->paginate($size) as $_user) {
             /* @var $_user User */
             $members[] = [
-                'id' => (string)$_user->id,
+                'id' => (string)$_user->en_id(),
                 'name' => $_user->name,
                 'avatar' => asset("images/personal.jpg"),
 

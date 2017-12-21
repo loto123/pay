@@ -24,15 +24,15 @@
 					</div>
 					
 				</div>
-				<mt-field label="银行卡号" placeholder="请填写银行卡号" type="number" v-model="bankInfo.card_num"></mt-field>
+				<mt-field label="银行卡号" placeholder="请填写银行卡号" type="number" v-model="card_num"></mt-field>
 			</div>
 			<div class="bank-info flex flex-v flex-justify-center">
-				<mt-field label="预留手机号" placeholder="请填写银行卡预留手机号" type="number" maxlength="11" v-model="bankInfo.mobile"></mt-field>
+				<mt-field label="预留手机号" placeholder="请填写银行卡预留手机号" type="number" maxlength="11" v-model="mobile"></mt-field>
 			</div>
 			<section class="input-wrap-box">
 				<div class="input-wrap flex flex-align-center">
 					<span>验证码:</span>
-					<input type="text" placeholder="请输入验证码" class="flex-1" v-model="bankInfo.code">
+					<input type="text" placeholder="请输入验证码" class="flex-1" v-model="code">
 					<mt-button type="default" class="flex-1" @click="sendYZM">发送验证码</mt-button>
 				</div>
 			</section>
@@ -64,12 +64,11 @@
 				name: null,
 				id_number: null,
 				dealShop: null,
-				bankInfo: {
-					card_num: null,
-					bank_id: null,
-					mobile: null,
-					code: null
-				}
+
+				card_num: null,
+				bank_id: null,
+				mobile: null,
+				code: null
 			}
 		},
 		components: { topBack, inputList },
@@ -127,7 +126,7 @@
 						return this.shopList[i].label;
 					}
 				}
-				return "没有这个银行";
+				return "";
 			},
 
 			showDropList() {
@@ -140,31 +139,51 @@
 				this.shopId = data;
 			},
 			affirmAdd() {
-				var _this = this;
-				this.bankInfo.bank_id = this.shopId;
-				var data = this.bankInfo;
+				var self = this;
+				var _data = {
+					bank_id: this.shopId,
+					card_num: this.card_num,
+					mobile: this.mobile,
+					code: this.code
+				}
+
+				if(this.shopId == null){
+					Toast("请选择银行卡所属银行");
+					return 
+				}else if(!this.card_num){
+					Toast("请填写银行卡号");
+					return 
+				}else if(!this.mobile){
+					Toast("请填写银行卡预留手机号");
+					return 
+				}else if(!this.code){
+					Toast("请输入验证码");
+					return 
+				} 
 
 				Loading.getInstance().open();
-				request
-					.getInstance()
-					.postData("api/card/create", data)
-					.then(res => {
-						console.log(res);
-						Toast('添加成功');
-						this.$router.push('/my/bankCardManage');	
-						Loading.getInstance().close();
-					})
-					.catch(err => {
-						console.error(err);
-						Loading.getInstance().close();
-					});
+				request.getInstance().postData("api/card/create", _data).then(res => {
+					Toast('添加成功');
+					this.$router.push('/my/bankCardManage');	
+					Loading.getInstance().close();
+				}).catch(err => {
+					console.error(err);
+					Loading.getInstance().close();
+				});
 			},
 			//短信验证码
 			sendYZM() {
 				var _temp = {};
-				_temp.mobile = this.bankInfo.mobile;
+				_temp.mobile = this.mobile;
+
+				if(!this.mobile){
+					Toast("请填写银行卡预留手机号");
+					return 
+				}
+
+
+
 				request.getInstance().postData("api/auth/sms", _temp).then((res) => {
-					console.log(res);
 					this.computedTime = 5;
 					this.timer = setInterval(() => {
 						this.computedTime--;

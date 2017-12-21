@@ -152,6 +152,9 @@ class AuthController extends BaseController {
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input['name'] = $request->name ? $request->name : $request->mobile;
+        $wallet = PayFactory::MasterContainer();
+        $wallet->save();
+        $input['container_id'] = $wallet->id;
         $user = User::create($input);
 
         $success['token'] = JWTAuth::fromUser($user);

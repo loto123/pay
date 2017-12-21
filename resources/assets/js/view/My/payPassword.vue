@@ -38,19 +38,33 @@
     methods: {
       affirm() {
         var self = this;
-        var data = {
+        var _data = {
           old_pay_password: this.old_pay_password,
           new_pay_password: this.new_pay_password,
           confirm_pay_password: this.confirm_pay_password
         }
-        request.getInstance().postData('api/my/updatePayPassword', data)
+
+        if(!this.old_pay_password){
+          Toast('请填写原支付密码')
+          return
+        }else if(!this.new_pay_password){
+          Toast('请填写新支付密码')
+          return
+        }else if(!this.confirm_pay_password){
+          Toast('请确认新支付密码')
+          return
+        }else if(this.new_pay_password !== this.confirm_pay_password){
+          Toast('两次输入的新支付密码不一致')
+          return
+        }
+
+        request.getInstance().postData('api/my/updatePayPassword', _data)
           .then((res) => {
-            console.log(res);
             Toast('密码修改成功');
             this.$router.push('/my/set');
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           })
       }
     }

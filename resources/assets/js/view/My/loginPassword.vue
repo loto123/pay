@@ -4,7 +4,7 @@
     <div class="settleInfo-container">
       <mt-field label="原密码" placeholder="请填写原密码" v-model="old_password"></mt-field>
       <mt-field label="新密码" placeholder="请填写新密码" v-model="new_password"></mt-field>
-      <mt-field label="确认新密码" placeholder="请再次输入密码" type="text" v-model="confirm_password"></mt-field>
+      <mt-field label="确认新密码" placeholder="请确认新密码" type="text" v-model="confirm_password"></mt-field>
     </div>
     <div class="password-btn flex flex-justify-center">
       <mt-button type="primary" size="large" @click="affirm">确认</mt-button>
@@ -43,6 +43,23 @@
           new_password:this.new_password,
           confirm_password:this.confirm_password
         }  
+        if(!this.old_password){
+          Toast('请填写原密码')
+          return
+        }else if(!this.new_password){
+          Toast('请填写新密码')
+          return
+        }else if(!this.confirm_password){
+          Toast('请确认新密码')
+          return
+        }else if(this.new_password !== this.confirm_password){
+          Toast('两次输入的密码不一致')
+          return
+        }else if(this.old_password == this.new_password){
+          Toast('新密码不能跟原密码一样')
+          return
+        }
+
         request.getInstance().postData('api/my/updatePassword',data)
           .then((res) => {
             console.log(res);
@@ -50,7 +67,7 @@
             this.$router.push('/login');  //调转到登录页
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           })
       }
     }

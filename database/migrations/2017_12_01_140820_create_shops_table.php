@@ -27,6 +27,7 @@ class CreateShopsTable extends Migration
             $table->unsignedInteger('manager_id')->index()->comment("群主id");
             $table->boolean("use_link")->default(1)->comment("是否开启邀请链接");
             $table->boolean("active")->default(1)->comment("是否开启交易");
+            $table->unsignedInteger('container_id');
             $table->timestamps();
         });
     }

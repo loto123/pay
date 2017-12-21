@@ -6,8 +6,8 @@
         <li>
           <mt-cell title="修改登录密码" is-link to="/my/login_password"></mt-cell>
         </li>
-        <li>
-          <mt-cell title="修改支付密码" is-link to="/my/verfy_code"></mt-cell>
+        <li @click="verfyCode">
+          <mt-cell title="修改支付密码" is-link></mt-cell>
         </li>
       </ul>
       <ul class="list mt1">
@@ -27,7 +27,18 @@
  import topBack from '../../components/topBack'
 
  export default{
-  components: { topBack }
+  data () {
+    return {
+      mobile:null
+    }
+  },
+  components: { topBack },
+  methods: {
+    verfyCode(){
+      this.mobile=this.$route.query.mobile;
+      this.$router.push('/my/verfy_code?'+'mobile='+this.mobile);
+    }
+  }
  }
 </script>
 

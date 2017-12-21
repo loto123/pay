@@ -3,18 +3,18 @@
     <topBack title="实名认证"></topBack>
     <div class="realAuth-container">
       <div class="realAuth-box">
-        <mt-field label="姓名" placeholder="请填写本人真实姓名" type="text" v-model="realInfo.name"></mt-field>
-        <mt-field label="身份证号" placeholder="请填写本人身份证号" type="text" v-model="realInfo.id_number"></mt-field>
+        <mt-field label="姓名" placeholder="请填写本人真实姓名" type="text" v-model="name"></mt-field>
+        <mt-field label="身份证号" placeholder="请填写本人身份证号" type="text" v-model="id_number"></mt-field>
         <section class="account-container">
           <div class="account-box flex flex-align-center">
             <span>账号:</span>
-            <em class="flex-1 number">18390939299</em>
+            <em class="flex-1 number">{{mobile}}</em>
           </div>
         </section>
         <section class="input-wrap-box">
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
-            <input type="text" placeholder="请输入验证码" class="flex-1" v-model="realInfo.code">
+            <input type="text" placeholder="请输入验证码" class="flex-1" v-model="code">
             <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime}}</mt-button>
           </div>
         </section>
@@ -34,20 +34,40 @@
   export default {
     data () {
       return {
-        realInfo:{
-          name :null,
-          id_number :null,
-          code:null
-        },
+        name :null,
+        id_number :null,
+        code:null,
+        mobile:null,
+
         computedTime:null  //倒数计时
       }
     },
+    created(){
+      this.getMobile();
+    },
     components: { topBack },
     methods: {
+      //实名认证
       realAuth() {
         var _this=this;
-        var data = this.realInfo;
-        request.getInstance().postData('api/my/identify',data).then((res) => {
+        var _data={
+          name :this.name,
+          id_number :this.id_number,
+          code:this.code
+        }
+
+        if(!this.name){
+          Toast("请填写本人真实姓名");
+					return 
+        }else if(!this.id_number){
+          Toast("请填写本人身份证号");
+					return 
+        }else if(!this.code){
+          Toast("请输入验证码");
+					return 
+        }
+
+        request.getInstance().postData('api/my/identify',_data).then((res) => {
           Toast('认证成功');
           this.$router.push('/my'); //认证成功，回到我的页面
         }).catch((err) => {
@@ -57,10 +77,14 @@
           });
         })
       },
+      getMobile(){
+        this.mobile=this.$route.query.mobile;
+      },
       //短信验证码
       sendYZM(){
         var _temp = {};
         _temp.mobile = this.$route.query.mobile;
+
         request.getInstance().postData("api/auth/sms",_temp).then((res) => {
           console.log(res);
           this.computedTime = 5;
