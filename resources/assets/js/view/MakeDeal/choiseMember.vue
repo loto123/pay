@@ -20,149 +20,19 @@
             </div>
 
              <ul>
-                <li class="flex flex-align-center">
+                <li class="flex flex-align-center" v-for="item in dataList" :key="item.id">
                     <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
+                        <img :src="item.avatar" >
                     </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
+                    <span class="user-name flex-6">{{item.name}}</span>
+                    <span class="flex-2 flex flex-reverse" @click="makeMark(item.id)">
                         <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-                
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
+                            {{item.checked? "&#xe6cc;":""}}
                         </i>
                     </span>
                 </li>
 
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-
-                <li class="flex flex-align-center">
-                    <span class="img-wrap flex-2">
-                        <img src="/images/avatar.jpg" >
-                    </span>
-                    <span class="user-name flex-6">用户名字啦啦啦啦</span>
-                    <span class="flex-2 flex flex-reverse">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
-                            &#xe6cc;
-                        </i>
-                    </span>
-                </li>
-                
+                <!-- <h3 v-if="dataList.length == 0">无数据</h3> -->
             </ul>
 
             <div class="submit">
@@ -273,10 +143,39 @@
 
 <script>
 export default{
-    props:["isShow"],
+    /**
+     *  参数数据结构
+     *  dataList : [
+     *      {
+     *           avatar:"/images/avatar.jpg",
+     *          checked:true
+     *          id:1
+     *          name:"sa"
+     *       }
+     *  ]
+     */
+    data(){
+        return {
+            _dataList:[]
+        }
+    },
+    props:["isShow","dataList"],
     methods:{
         hidePage(){
             this.$emit("hide");
+        },
+        submitData(){
+            this.$emit("submit",this._dataList);
+            this.hidePage();
+        },
+        makeMark(id){
+            this._dataList = [].concat(this.$props.dataList);
+
+            for(let i = 0; i< this._dataList.length; i++){
+                if(this._dataList[i].id == id){
+                    this._dataList[i].checked = !this._dataList[i].checked;
+                }
+            }
         }
     }
 }

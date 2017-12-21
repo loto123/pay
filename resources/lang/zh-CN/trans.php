@@ -9,7 +9,7 @@ return [
     'required' => '缺少:attribute',
     'numeric' => ':attribute必须是数字',
     'between' => ':attribute必须在:min - :max之间',
-    'size' => ':attribute不能超过:size字',
+    'size' => ':attribute必须为:size位',
     'comment.max' => ':attribute不能超过:max字',
     'shop_not_exist' => '店铺不存在',
     'save_success' => '发起交易成功',
