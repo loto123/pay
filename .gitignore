@@ -5,6 +5,7 @@
 /storage/app/pay
 /vendor
 /.idea
+*/.idea
 /.vagrant
 Homestead.json
 Homestead.yaml

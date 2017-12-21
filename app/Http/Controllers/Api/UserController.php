@@ -385,9 +385,9 @@ class UserController extends Controller
         $data = [
             'name' => $this->user->name,
             'mobile' => $this->user->mobile,
-            'thumb' => $this->user->avatar,
+            'thumb' => $this->user->avatar??'',
             'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
-            'id_number' => str_replace(' ','',$this->formatNum($this->user->id_number,4,4)),
+            'id_number' => $this->user->id_number ? str_replace(' ','',$this->formatNum($this->user->id_number,4,4)) : '',
             'has_parent'=> $this->user->parent_id>0 ? 1 : 0,
             'parent_name' => $parent->name??'',
             'parent_mobile' => $parent->mobile??'',
