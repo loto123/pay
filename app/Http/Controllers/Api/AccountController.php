@@ -24,7 +24,7 @@ class AccountController extends BaseController {
     public function index(){
         $user = $this->auth->user();
         /* @var $user User */
-        return $this->json(['balance' => (float)$user->balance]);
+        return $this->json(['balance' => (float)$user->container->balance]);
     }
 
     /**
@@ -36,7 +36,14 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function charge() {
+    public function charge(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         return $this->json();
     }
 
