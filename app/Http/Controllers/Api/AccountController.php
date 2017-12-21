@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
+use Illuminate\Support\Facades\Validator;
 
 /**
  *
