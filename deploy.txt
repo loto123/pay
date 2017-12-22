@@ -24,11 +24,18 @@ DB_DATABASE=rotate_mahjong
 DB_USERNAME=dev
 DB_PASSWORD=123456
 
-依次执行以下命令
-php composer.phar install
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 
-php artisan migrate
+APP_URL=https://实际域名
+API_DOMAIN=实际域名(不含http://和端口)
+
+运行以下命令
+php composer.phar install
 
 php artisan key:generate
 
-php artisan jwt:generate
+运行以下命令
+php artisan key:generate --show
+生成类似base64:RxlUe7FP7vWS5Npl3hqsQuuUaCQ9CN5qIPZfJ4y8z5Y=这样的key设置.env中的JWT_SECRET的值
