@@ -2,7 +2,7 @@
   <div id="my-deal">
       <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
         <div class="mark-wrap flex flex-reverse" @click = "mark">
-          标记
+          {{isStar?"关闭编辑":"标记"}}
         </div>
       </top-back>
         <div id="tab-menu" class=" flex flex-align-center">
@@ -199,6 +199,35 @@ export default {
         this.isStar = true;
       }else {
         this.isStar = false;
+
+        Loading.getInstance().open();
+
+        var _mark = [];
+        var _disMark = [];
+        for(let i = 0; i < this.dataList.length; i++ ){
+          if(this.dataList[i].makr == true){
+            _mark.push(this.dataList[i].id);
+          }else {
+            _disMark.push(this.dataList[i].id);
+          }
+        }
+
+        var _data = {
+          mark : _mark,
+          dismark :_disMark
+        };
+
+        request.getInstance().postData("api/transfer/mark",_data).then(res=>{
+          this.init();
+          Loading.getInstance().close();
+          
+        }).catch(err=>{
+        Loading.getInstance().close();
+
+        });
+
+        console.log(_mark);
+        console.log(_disMark);
       }
     },
 
@@ -206,6 +235,15 @@ export default {
       if(!this.isStar){
         return;
       }
+      var _temp = [].concat(this.dataList);
+
+      for(let i = 0; i < _temp.length; i++){
+        if(id == _temp[i].id){
+          _temp[i].makr = !_temp[i].makr;
+        }
+      }     
+
+      this.dataList = _temp;
       console.log(id);
       
     },
