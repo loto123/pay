@@ -46,6 +46,36 @@ class SmallBatchTransfer implements WithdrawInterface
     }
 
     /**
+     * 查询省市
+     */
+    public static function queryProvincesAndCities($force = false)
+    {
+        $cacheKey = 'heepay_areas';
+        if ($force) {
+            Cache::forget($cacheKey);
+        }
+        $options = Cache::get($cacheKey, function () use ($cacheKey) {
+            $xmlObj = simplexml_load_string(iconv("gbk//IGNORE", "utf-8", file_get_contents('https://pay.heepay.com/API/PayTransit/QueryProvincesAndCities.aspx')));
+            $xmlObj = self::xmlToArr($xmlObj);
+            $options = array_column(array_map(function ($area) {
+                //dump($area);
+                return ['city' => (array)$area['city'], 'province' => $area['@attributes']['name']];
+
+            }, $xmlObj['province']), 'city', 'province');
+            $options = json_encode($options, JSON_UNESCAPED_UNICODE);
+            Cache::forever($cacheKey, $options);
+            return $options;
+        });
+        return json_decode($options, true);
+
+    }
+
+    public static function xmlToArr(\SimpleXMLElement $xml)
+    {
+        return json_decode(json_encode($xml, JSON_UNESCAPED_UNICODE), true);
+    }
+
+    /**
      * 银行卡提现
      * @param string $withdraw_id
      * @param float $amount
