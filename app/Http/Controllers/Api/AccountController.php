@@ -25,7 +25,10 @@ class AccountController extends BaseController {
     public function index(){
         $user = $this->auth->user();
         /* @var $user User */
-        return $this->json(['balance' => (float)$user->container->balance]);
+        return $this->json([
+            'balance' => (float)$user->container->balance,
+            'has_pay_password' => empty($user->pay_password) ? 0 : 1,
+            ]);
     }
 
     /**
