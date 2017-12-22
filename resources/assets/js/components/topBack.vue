@@ -19,10 +19,7 @@
   top: 0em;
   left: 0em;
   z-index: 1000;
-  // a {
-  //   display: block;
-  //   width: 33.33%;
-  // }
+
   h3 {
     text-align: center;
     width: 33.33%;
