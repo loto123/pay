@@ -60297,8 +60297,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.tabItem[item] = true;
       }
     },
-    goDetail: function goDetail() {
-      this.$router.push("/makeDeal/deal_detail");
+    goDetail: function goDetail(id) {
+      this.$router.push("/makeDeal/deal_detail" + "?id=" + id);
     },
     mark: function mark() {
       var _this = this;
@@ -60314,7 +60314,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _mark = [];
         var _disMark = [];
         for (var i = 0; i < this.dataList.length; i++) {
-          if (this.dataList[i].makr == true) {
+          if (this.dataList[i].makr == 1) {
             _mark.push(this.dataList[i].id);
           } else {
             _disMark.push(this.dataList[i].id);
@@ -60345,7 +60345,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       for (var i = 0; i < _temp.length; i++) {
         if (id == _temp[i].id) {
-          _temp[i].makr = !_temp[i].makr;
+          if (_temp[i].makr == 0) {
+            _temp[i].makr = 1;
+          } else if (_temp[i].makr == 1) {
+            _temp[i].makr = 0;
+          }
+          // _temp[i].makr = !_temp[i].makr;
         }
       }
 
@@ -60468,7 +60473,11 @@ var render = function() {
               "li",
               {
                 staticClass: "deal-item flex flex-align-center",
-                on: { click: _vm.goDetail }
+                on: {
+                  click: function($event) {
+                    _vm.goDetail(item.id)
+                  }
+                }
               },
               [
                 _c(

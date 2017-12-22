@@ -19,7 +19,7 @@
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail" v-for="item in dataList" >
+                 <li class="deal-item flex flex-align-center" @click="goDetail(item.id)" v-for="item in dataList" >
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{item.shop_name}}</div>
@@ -189,8 +189,8 @@ export default {
         this.tabItem[item] = true;
       }
     },
-    goDetail() {
-      this.$router.push("/makeDeal/deal_detail");
+    goDetail(id) {
+      this.$router.push("/makeDeal/deal_detail"+"?id="+id);
     },
 
     mark(){
@@ -205,7 +205,7 @@ export default {
         var _mark = [];
         var _disMark = [];
         for(let i = 0; i < this.dataList.length; i++ ){
-          if(this.dataList[i].makr == true){
+          if(this.dataList[i].makr == 1){
             _mark.push(this.dataList[i].id);
           }else {
             _disMark.push(this.dataList[i].id);
@@ -239,7 +239,12 @@ export default {
 
       for(let i = 0; i < _temp.length; i++){
         if(id == _temp[i].id){
-          _temp[i].makr = !_temp[i].makr;
+          if(_temp[i].makr == 0){
+            _temp[i].makr = 1;
+          }else if(_temp[i].makr == 1){
+            _temp[i].makr = 0;
+          }
+          // _temp[i].makr = !_temp[i].makr;
         }
       }     
 
