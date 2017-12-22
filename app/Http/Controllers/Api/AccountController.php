@@ -63,4 +63,17 @@ class AccountController extends BaseController {
     public function withdraw() {
         return $this->json();
     }
+
+    /**
+     * @SWG\Post(
+     *   path="/account/transfer",
+     *   summary="转账到店铺",
+     *   tags={"账户"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function transfer() {
+        return $this->json();
+    }
 }
