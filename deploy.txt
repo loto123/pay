@@ -7,6 +7,8 @@ Mbstring PHP Extension
 Tokenizer PHP Extension
 XML PHP Extension
 
+redis服务
+
 程序主目录：public
 伪静态规则:
 location / {
