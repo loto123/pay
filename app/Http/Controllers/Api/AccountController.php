@@ -7,8 +7,8 @@ use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\User;
 use Illuminate\Http\Request;
-use JWTAuth;
 use Illuminate\Support\Facades\Validator;
+use JWTAuth;
 
 /**
  *
@@ -58,6 +58,9 @@ class AccountController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function charge(Request $request) {
+        $stdClass = new \stdClass();
+        $stdClass->pay_info = 'http://www.alipay.com';
+        return $this->json($stdClass);
         $validator = Validator::make($request->all(), [
             'amount' => 'required',
             'way' => 'required'
@@ -75,6 +78,22 @@ class AccountController extends BaseController {
         }
 
         return $this->json(['redirect_url' => $result]);
+    }
+
+    /**
+     * 提现字段信息
+     */
+    public function withdrawFieldsInfo()
+    {
+        return $this->json([
+            ['fields' => [['name' => '姓名']]],
+            ['fields' => [['id_card' => '身份证']]],
+            ['fields' => [['main_bank' => '所属银行']], 'select' => [['1' => '	中国银行', '2' => '中国农业银行']]],
+            ['fields' => [['branch_bank' => '支行名']]],
+            ['fields' => [['province' => '省'], ['city' => '市'], 'select' => [['value' => '1', 'label' => '湖南', 'select' => ['1' => '长沙', '2' => '常德']], ['value' => '2', 'label' => '广东', 'select' => ['1' => '韶关', '2' => '清远']]]]],
+            ['fields' => [['card_no' => '卡号']]],
+            ['fields' => [['bank_mobile' => '预留手机号']]],
+        ]);
     }
 
     /**
@@ -100,7 +119,15 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function withdraw() {
+    public function withdraw(Request $request)
+    {
+        return $this->json([], '提现申请已提交');
+        //判断通道
+        $bindChannel = $this->user->channel;
+        $bindChannel = $request->use_spare == 1 ? $bindChannel->spareChannel : $bindChannel;
+
+
+        //return $this->user->container->initiateWithdraw($request->amount, array $receiver_info, Channel $byChannel, WithdrawMethod $byMethod, $system_fee)
         return $this->json();
     }
 
@@ -142,22 +169,27 @@ class AccountController extends BaseController {
         /**
          * @var $channelBind Channel
          */
+        return $this->json([
+            'use_spare' => false,
+            'methods' => ['1' => '微信']
+        ]);
         $os = $os == 'unknown' ? $os : ['ios' => DepositMethod::OS_IOS, 'andriod' => DepositMethod::OS_ANDRIOD][$os];
 
         $scene = Scene::find($scene);
         if ($os && $scene) {
+            $use_spare = false;
             $channelBind = $this->user->channel;
-            $channelBind = $channelBind ? $channelBind : Channel::find(1);
             if ($channelBind->disabled) {
                 //被禁用则启用备用通道
+                $use_spare = true;
                 $channelBind = $channelBind->spareChannel;
             }
 
             $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label')->get();
 
-            return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
+            return $this->json(['use_spare' => $use_spare, 'methods' => $methods->filter(function ($method) use ($scene, $os) {
                 return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
-                    ($os == 'unknown' || $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统,或不限系统,或系统匹配
+                    ($os == 'unknown' && $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统且不限系统,或系统匹配
             })->mapWithKeys(function ($item) {
                 return [$item['id'] => $item['show_label']];
             })]);
@@ -166,19 +198,24 @@ class AccountController extends BaseController {
         }
     }
 
+    /**
+     * 充值方式列表
+     * @return mixed
+     */
     public function withdrawMethods()
     {
         /**
          * @var $channelBind Channel
          */
+        $use_spare = false;
         $channelBind = $this->user->channel;
         $channelBind = $channelBind ? $channelBind : Channel::find(1);
         if ($channelBind->disabled) {
             //被禁用则启用备用通道
+            $use_spare = true;
             $channelBind = $channelBind->spareChannel;
         }
 
-        return $this->json($channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get());
-
+        return $this->json(['use_spare' => $use_spare, 'methods' => $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get()]);
     }
 }

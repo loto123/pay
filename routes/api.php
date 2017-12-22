@@ -135,6 +135,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('withdraw-methods', 'AccountController@withdrawMethods');
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
+        $api->get('withdraw-fields', 'AccountController@withdrawFieldsInfo');
     });
 });
 
