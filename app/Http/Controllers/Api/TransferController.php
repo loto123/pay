@@ -323,6 +323,7 @@ class TransferController extends Controller
             $record->fee_amount = 0;
             //放钱
             if ($request->action == 'put') {
+                debug($user->balance);
                 if ($user->balance < $record->amount) {
                     return response()->json(['code' => 0, 'msg' => trans('trans.user_not_enough_money'), 'data' => []]);
                 }

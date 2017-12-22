@@ -148,4 +148,8 @@ class User extends Authenticatable
     public function channel() {
         return $this->hasOne(Channel::class, 'id', 'channel_id');
     }
+
+    public function balance() {
+        return $this->container->balance;
+    }
 }
