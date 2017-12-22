@@ -83,7 +83,7 @@
         height: 13em;
         border: 1px solid #aaa;
         border-radius: 50%;
-        margin: 0 auto 3em auto;
+        margin: 0 auto 2em auto;
         background: #199ED8;
         position: relative;
         text-align: center;
