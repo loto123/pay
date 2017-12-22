@@ -792,13 +792,6 @@ class TransferController extends Controller
      *   summary="标记",
      *   tags={"交易"},
      *   @SWG\Parameter(
-     *     name="record_id",
-     *     in="formData",
-     *     description="交易记录ID",
-     *     required=true,
-     *     type="integer"
-     *   ),
-     *   @SWG\Parameter(
      *     name="mark",
      *     in="formData",
      *     description="标记的交易记录ID 数组",
@@ -828,7 +821,6 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'record_id' => 'bail|required',
                 'mark' => 'bail|required|array',
                 'dismark' => 'bail|required|array'
             ],
