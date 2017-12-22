@@ -81,7 +81,7 @@ class SettleContainer extends Container
         if ($commit) {
             $this->state = self::STATE_EXTRACTED;
         }
-        return $commit;
+        return $commit ? $toExtract : $commit;
     }
 
     /**

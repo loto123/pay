@@ -26,6 +26,7 @@ Route::group([
     $router->resource('pay/withdraw-method', WithdrawMethodController::class);
     $router->resource('pay/entity', BusinessEntityController::class);
     $router->resource('pay/channel', PayChannelController::class);
+    $router->resource('pay/scene', PaySceneController::class);
 
     $router->post('/excel/user', 'ExcelController@user');
 
