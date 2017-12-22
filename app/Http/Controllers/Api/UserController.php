@@ -391,6 +391,7 @@ class UserController extends Controller
             'has_parent'=> $this->user->parent_id>0 ? 1 : 0,
             'parent_name' => $parent->name??'',
             'parent_mobile' => $parent->mobile??'',
+            'pay_card_id' => $this->user->pay_card_id??'',
         ];
         return response()->json(['code' => 1, 'msg' =>'', 'data' => $data]);
     }
