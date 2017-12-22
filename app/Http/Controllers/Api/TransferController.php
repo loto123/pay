@@ -833,8 +833,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        TransferRecord::whereIn('id', $request->mark)->update(['mark' => 1]);
-        TransferRecord::whereIn('id', $request->dismark)->update(['mark' => 0]);
+        TransferUserRelation::whereIn('id', $request->mark)->update(['mark' => 1]);
+        TransferUserRelation::whereIn('id', $request->dismark)->update(['mark' => 0]);
 
         return response()->json(['code' => 1, 'msg' => trans('trans.mark_success'), 'data' => []]);
     }
