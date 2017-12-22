@@ -63,7 +63,7 @@
                     设置登录密码
                 </h3>
 
-                <p>密码又8-16位数字、字母或符号组成</p>
+                <p>密码由8-16位数字、字母或符号组成</p>
 
                 <section class="input-wrap ">
                     <mt-field label="密码" placeholder="请输入登录密码" type="password" v-model="userPassword"></mt-field>

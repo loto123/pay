@@ -306,9 +306,6 @@ export default {
           _temp.checked = false;
           this.memberList.push(_temp);
         }
-
-        console.log("======= 店铺会员列表 ======");
-        console.log(this.memberList);
     },
 
     hideMemberChoise(){

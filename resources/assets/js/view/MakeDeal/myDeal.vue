@@ -2,7 +2,7 @@
   <div id="my-deal">
       <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
         <div class="mark-wrap flex flex-reverse" @click = "mark">
-          标记
+          {{isStar?"关闭编辑":"标记"}}
         </div>
       </top-back>
         <div id="tab-menu" class=" flex flex-align-center">
@@ -19,7 +19,7 @@
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail" v-for="item in dataList" >
+                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" >
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{item.shop_name}}</div>
@@ -187,18 +187,57 @@ export default {
       } else {
         this.tabItem = [false, false, false];
         this.tabItem[item] = true;
+
+          Loading.getInstance().open();
+          var _data = {
+            status:(item+1),
+            limit:50,
+            offset :0
+          }
+          request.getInstance().getData('api/transfer/record',_data).then(res=>{
+            this.dataList = res.data.data;
+            Loading.getInstance().close();
+            
+          }).catch(err=>{
+            Loading.getInstance().close();
+          });
       }
     },
-    goDetail() {
-      this.$router.push("/makeDeal/deal_detail");
+    goDetail(id) {
+      this.$router.push("/makeDeal/deal_detail"+"?id="+id);
     },
 
     mark(){
-      console.log(this.isStar);
       if(!this.isStar){
         this.isStar = true;
       }else {
         this.isStar = false;
+
+        Loading.getInstance().open();
+
+        var _mark = [];
+        var _disMark = [];
+        for(let i = 0; i < this.dataList.length; i++ ){
+          if(this.dataList[i].makr == 1){
+            _mark.push(this.dataList[i].id);
+          }else {
+            _disMark.push(this.dataList[i].id);
+          }
+        }
+
+        var _data = {
+          mark : _mark,
+          dismark :_disMark
+        };
+
+        request.getInstance().postData("api/transfer/mark",_data).then(res=>{
+          this.init();
+          Loading.getInstance().close();
+          
+        }).catch(err=>{
+        Loading.getInstance().close();
+
+        });
       }
     },
 
@@ -206,7 +245,19 @@ export default {
       if(!this.isStar){
         return;
       }
-      console.log(id);
+      var _temp = [].concat(this.dataList);
+
+      for(let i = 0; i < _temp.length; i++){
+        if(id == _temp[i].id){
+          if(_temp[i].makr == 0){
+            _temp[i].makr = 1;
+          }else if(_temp[i].makr == 1){
+            _temp[i].makr = 0;
+          }
+        }
+      }     
+
+      this.dataList = _temp;
       
     },
     init(){
@@ -217,14 +268,11 @@ export default {
         offset :0
       }
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
-        console.log(res);
         this.dataList = res.data.data;
         Loading.getInstance().close();
         
       }).catch(err=>{
-        console.error(err);
         Loading.getInstance().close();
-        
       });
       
     },

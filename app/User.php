@@ -19,6 +19,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property float $balance
  * @property integer $container_id
  * @property MasterContainer $container
+ * @property Channel $channel
  */
 class User extends Authenticatable
 {
@@ -147,5 +148,9 @@ class User extends Authenticatable
 
     public function channel() {
         return $this->hasOne(Channel::class, 'id', 'channel_id');
+    }
+
+    public function pay_card() {
+        return $this->hasOne(UserCard::class, 'id', 'pay_card_id');
     }
 }

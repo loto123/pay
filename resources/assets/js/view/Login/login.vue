@@ -60,7 +60,6 @@
 .logo-wrap {
   width: 100%;
   height: auto;
-  margin-top: 2em;
 
   .circle-wrap {
     width: 7em;
@@ -107,8 +106,8 @@
 
 .bottom {
   width: 100%;
-  margin-top: 5em;
-  height: 10em;
+  // margin-top: 5em;
+  height: 5em;
 
   hr {
     border: none;
