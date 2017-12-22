@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Pay\Model\Channel;
+use App\Pay\Model\MasterContainer;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Skip32;
@@ -15,6 +17,8 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property string $mobile
  * @property string $password
  * @property float $balance
+ * @property integer $container_id
+ * @property MasterContainer $container
  */
 class User extends Authenticatable
 {
@@ -26,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'mobile', 'password',
+        'name', 'mobile', 'password', 'container_id',
     ];
 
     /**
@@ -131,5 +135,17 @@ class User extends Authenticatable
 
     public static function findByEnId($en_id) {
         return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
+    }
+
+    public function funds() {
+        return $this->hasMany(UserFund::class, 'user_id');
+    }
+
+    public function container() {
+        return $this->hasOne(MasterContainer::class, 'id', 'container_id');
+    }
+
+    public function channel() {
+        return $this->hasOne(Channel::class, 'id', 'channel_id');
     }
 }

@@ -24,7 +24,7 @@ class Loading {
             this._timer = setTimeout(() => {
                 Indicator.close();
                 this._timer = null;
-            }, 5000);
+            }, 10000);
         } else {
             return;
         }

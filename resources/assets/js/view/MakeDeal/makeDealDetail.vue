@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <mt-button type="primary" size="large" @click="showPassword">确认</mt-button>
+            <mt-button type="primary" size="large" @click="callPassword">确认</mt-button>
         </section>
         
         <!-- 参与玩家记录 -->
@@ -38,11 +38,14 @@
               </div>
 
               <div class="bottom flex flex-align-center flex-justify-between">
+                <img :src="item.user.avatar?item.user.avatar:'/images/avatar.jpg'" 
+                  alt="" 
+                  v-for="item in joiner" 
+                >
+                <!-- <img src="/images/avatar.jpg" alt="">
                 <img src="/images/avatar.jpg" alt="">
                 <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
+                <img src="/images/avatar.jpg" alt=""> -->
                 
                 <span class="info-friend">提醒好友</span>
               </div>
@@ -92,7 +95,13 @@
         <section id="qrcode" class="flex flex-justify-center"></section>
         <h3 class="notice">扫描二维码快速交易</h3>
 
-        <passwordPanel :setSwitch="passWordSwitch" :settingPasswordSwitch="true" :secondValid="false" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
+        <passwordPanel 
+          :setSwitch="passWordSwitch" 
+          :settingPasswordSwitch="false" 
+          :secondValid="false" 
+          v-on:hidePassword="hidePassword" 
+          v-on:callBack ="submitData">
+        </passwordPanel>
     </div>
 </template>
 
@@ -272,6 +281,7 @@ import slider from "../../components/slider";
 import dealContent from "./dealContent";
 import passwordPanel from "../../components/password";
 import request from "../../utils/userRequest";
+import {Toast} from "mint-ui"
 
 import Loading from "../../utils/loading";
 
@@ -291,7 +301,11 @@ export default {
         payMoney: null,
         getMoney: null
       },
-      payType: null // 支付方式，取钱get 放钱put
+      payType: null,    // 支付方式，取钱get 放钱put
+      transfer_id:"",   // 交易id
+      password:"",       // 支付密码
+
+      joiner:[]         // 交易的参与者，需要提醒的人
     };
   },
   created() {
@@ -307,16 +321,16 @@ export default {
 
     init() {
       Loading.getInstance().open();
-      var _id = this.$route.query.id;
+      this.transfer_id = this.$route.query.id;
       var _data = {
-        transfer_id: _id
+        transfer_id: this.transfer_id
       };
       request
         .getInstance()
-        .getData("api/transfer/show" + "?transfer_id=" + _id)
+        .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
         .then(res => {
           console.log(res);
-
+          this.joiner = res.data.data.joiner;
           this.renderData = res.data.data;
           Loading.getInstance().close();
         })
@@ -326,8 +340,7 @@ export default {
     },
 
     goTipPage() {
-      var _id = this.$route.query.id;
-      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + this.transfer_id);
     },
 
     showPassword() {
@@ -337,8 +350,69 @@ export default {
       this.passWordSwitch = false;
     },
 
+    callPassword(){
+
+      if(this.payType == "put"){
+        Loading.getInstance().open();
+        request.getInstance().getData("api/my/info").then(res=>{
+          var _passwordStatus = res.data.data.has_pay_password;
+
+          if(!_passwordStatus){
+            Loading.getInstance().close();
+            Toast("您还未设置支付密码，即将跳转设置页面");
+            setTimeout(() => {
+              this.$router.push("/my/setting_password");
+            }, 2000);
+          }else {
+            Loading.getInstance().close();
+            this.showPassword();
+          }
+
+        }).catch(err=>{
+        });
+
+      }else if(this.payType == "get"){
+        this.submitData();
+      }else {
+        Toast("请填写拿钱数额或取钱数额");
+      }
+    },
+
+    // 提交交易  拿钱或者付钱
+    submitData(password){
+      // 放钱
+      if(this.payType == "put"){
+        var _data = {
+          transfer_id :this.transfer_id,
+          points :this.moneyData.payMoney,
+          action :"put",
+          pay_password:password
+        }
+
+        request.getInstance().postData("api/transfer/trade",_data).then(res=>{
+          console.log(res);
+          this.init();
+        }).catch(err=>{
+          console.error(err);
+          Toast(err.data.msg);
+          
+        });
+
+        this.hidePassword();
+
+      }else if(this.payType == "get"){
+        // 拿钱
+        var _data = {
+          transfer_id :0,
+          points :0,
+          action :"put",
+        }
+      }
+    },
+
     getResult(result) {
       console.log(result);
+      this.password = result;
     },
     _getQRCode: function() {
       var qrcode = new QRCode(document.getElementById("qrcode"), {

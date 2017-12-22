@@ -438,7 +438,6 @@ export default {
         .getInstance()
         .getData("api/shop/detail/" + _id)
         .then(res => {
-          console.log(res);
 
           this.shopId = res.data.data.id;
           this.shopName = res.data.data.name;
@@ -456,7 +455,6 @@ export default {
         .catch(error => {
           Toast("当前页面不存在");
           this.$router.go(-1);
-          console.error(error);
         });
     },
 
@@ -465,7 +463,6 @@ export default {
         .getInstance()
         .postData("api/shop/close/" + this.shopId)
         .then(res => {
-          console.log(res);
           this.$router.push("/shop");
         })
         .catch(error => {

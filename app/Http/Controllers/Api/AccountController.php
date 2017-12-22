@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
+use Illuminate\Support\Facades\Validator;
 
 /**
  *
@@ -24,7 +25,10 @@ class AccountController extends BaseController {
     public function index(){
         $user = $this->auth->user();
         /* @var $user User */
-        return $this->json(['balance' => (float)$user->balance]);
+        return $this->json([
+            'balance' => (float)$user->container->balance,
+            'has_pay_password' => empty($user->pay_password) ? 0 : 1,
+            ]);
     }
 
     /**
@@ -36,7 +40,14 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function charge() {
+    public function charge(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         return $this->json();
     }
 

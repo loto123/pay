@@ -73,7 +73,7 @@ class TransferController extends Controller
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
                 'comment' => 'bail|max:200',
-                'joiner' => 'bail||array',
+                'joiner' => 'bail|array',
             ],
             [
                 'required' => trans('trans.required'),
@@ -107,11 +107,11 @@ class TransferController extends Controller
         $transfer->fee_percent = config('platform_fee_percent');
 
         //交易关系包含自己
-        $joiners = $request->joiner;
-        array_push($joiners,$user->id);
+        $joiners = $request->input('joiner', []);
+        array_push($joiners, $user->id);
         if ($transfer->save()) {
             //保存交易关系
-            foreach($joiners as $item) {
+            foreach ($joiners as $item) {
                 if (!$transfer->joiner()->where('user_id', $item)->exists()) {
                     $relation = new TransferUserRelation();
                     $relation->transfer_id = $transfer->id;
@@ -162,16 +162,31 @@ class TransferController extends Controller
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
         }, 'record' => function ($query) {
-            $query->select('id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
+            $query->select('id', 'transfer_id', 'user_id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
         }, 'record.user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
+        }, 'joiner' => function ($query) {
+            $query->select('transfer_id', 'user_id');
         }, 'joiner.user' => function ($query) {
-            $query->select('name', 'avatar');
-        }])->select('id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+            $query->select('id', 'name', 'avatar');
+        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
 
-        $transfer->id = $transferObj->en_id();
+        //装填响应数据
+        $transfer->id = $transfer->en_id();
+        unset($transfer->user_id);
+        $transfer->user->id = $transfer->user->en_id();
+        foreach ($transfer->record as $key => $record) {
+            $transfer->record[$key]->user->id = $record->user->en_id();
+            unset($transfer->record[$key]->transfer_id);
+            unset($transfer->record[$key]->user_id);
+        }
+        foreach ($transfer->joiner as $key => $item) {
+            $transfer->joiner[$key]->user->id = $item->user->en_id();
+            unset($transfer->joiner[$key]->transfer_id);
+            unset($transfer->joiner[$key]->user_id);
+        }
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
 
@@ -325,11 +340,11 @@ class TransferController extends Controller
                     return response()->json(['code' => 0, 'msg' => trans('trans.user_pay_password_error'), 'data' => []]);
                 }
                 $record->stat = 1;
-                $record->real_amount = $record->amount * -1;
                 //用户减钱
                 $user->balance = $user->balance - $record->real_amount;
                 //红包加钱
                 $transfer->amount = $transfer->amount + $record->amount;
+                $record->real_amount = $record->amount * -1;
                 $record->amount = $record->amount * -1;
             }
             //拿钱
@@ -744,17 +759,31 @@ class TransferController extends Controller
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
         })->with(['transfer' => function ($query) {
-            $query->select('transfer_id');
-        }, 'transfer.record' => function ($query) {
-            $query->sum('amount');
-        }, 'transfer.shop' => function ($query) {
-            $query->select('id', 'name');
-        }])->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
+            $query->select('id', 'shop_id');
+        },
+//        }])
+//        }, 'transfer.record' => function ($query) {
+//            $query->sum('amount');
+//        },
+            'transfer.shop' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
         if ($request->limit && $request->offset) {
             $query->offset($request->offset)->limit($request->limit);
         }
         $list = $query->get();
-        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $list]);
+        $data = [];
+        foreach ($list as $key => $item) {
+            $data[$key]['id'] = $item->id;
+            $data[$key]['transfer_id'] = $item->transfer ? $item->transfer->en_id() : 0;
+            $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
+            $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
+            $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
+                ->where('stat', '<>', 3)->where('stat', '<>', 0)->sum('amount') : 0;
+            $data[$key]['makr'] = $item->mark;
+        }
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
     }
 
     /**
@@ -762,13 +791,6 @@ class TransferController extends Controller
      *   path="/transfer/mark",
      *   summary="标记",
      *   tags={"交易"},
-     *   @SWG\Parameter(
-     *     name="record_id",
-     *     in="formData",
-     *     description="交易记录ID",
-     *     required=true,
-     *     type="integer"
-     *   ),
      *   @SWG\Parameter(
      *     name="mark",
      *     in="formData",
@@ -799,7 +821,6 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'record_id' => 'bail|required',
                 'mark' => 'bail|required|array',
                 'dismark' => 'bail|required|array'
             ],
@@ -812,8 +833,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        TransferRecord::whereIn('id', $request->mark)->update(['mark' => 1]);
-        TransferRecord::whereIn('id', $request->dismark)->update(['mark' => 0]);
+        TransferUserRelation::whereIn('id', $request->mark)->update(['mark' => 1]);
+        TransferUserRelation::whereIn('id', $request->dismark)->update(['mark' => 0]);
 
         return response()->json(['code' => 1, 'msg' => trans('trans.mark_success'), 'data' => []]);
     }

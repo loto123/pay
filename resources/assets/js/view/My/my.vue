@@ -37,8 +37,8 @@
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 					</mt-cell>
 				</li>
-				<li>
-					<mt-cell title="更多设置" is-link to="/my/set">
+				<li @click="set(personal.mobile)">
+					<mt-cell title="更多设置" is-link>
 						<img slot="icon" src="/images/moreSet.png" width="30" height="30">
 					</mt-cell>
 				</li>
@@ -164,7 +164,7 @@
 				if(this.listContent.identify_status==0){
 					MessageBox.confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(
 						() => {
-							this.$router.push('/my/realAuth');
+							this.$router.push("/my/realAuth"+"?mobile="+this.personal.mobile);
 						},
 						() => {
 							//取消操作
@@ -178,13 +178,14 @@
 			//查看结算卡
 			checkSettle(){
 				if(this.listContent.card_count>0){
-					console.log('进来了1');
 					this.$router.push('/my/checkSettle');
 				}else{
-					// Toast('请添加银行卡');
-					console.log('进来了2');
+					Toast('请添加银行卡');
 				}
-			}
+			},
+			set(e){
+				this.$router.push("/my/set"+"?mobile="+e);
+			},
 		}
 	};
 </script>
