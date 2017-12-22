@@ -5261,7 +5261,6 @@ var UserRequest = function () {
         key: 'validToken',
         value: function validToken(token) {
             var url = window.location.href.indexOf("/#/login");
-            console.log(url);
             if (!token && url == -1) {
                 __WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */].getInstance().close();
                 Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户未登录,即将跳转登录...");
@@ -46269,7 +46268,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.top[data-v-5c93fb5e] {\n  height: 2em;\n  width: 100%;\n  padding-right: 0.8em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.top > a[data-v-5c93fb5e] {\n    font-size: 1em;\n}\n.logo-wrap[data-v-5c93fb5e] {\n  width: 100%;\n  height: auto;\n  margin-top: 2em;\n}\n.logo-wrap .circle-wrap[data-v-5c93fb5e] {\n    width: 7em;\n    height: 7em;\n    border-radius: 50%;\n    border: 1px solid #eee;\n}\n.logo-wrap img[data-v-5c93fb5e] {\n    display: block;\n    width: 5em;\n    height: 5em;\n    margin: 0 auto;\n}\n.logo-wrap h3[data-v-5c93fb5e] {\n    font-size: 1.3em;\n    text-align: center;\n    margin-top: 0.7em;\n}\n.text-area[data-v-5c93fb5e] {\n  margin-left: auto;\n  margin-right: auto;\n  margin-top: 2em;\n  width: 95%;\n}\n.login-button[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 3em;\n}\n.forget-password[data-v-5c93fb5e] {\n  height: 2em;\n  padding-right: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-5c93fb5e] {\n    color: #26a2ff;\n}\n.bottom[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 5em;\n  height: 10em;\n}\n.bottom hr[data-v-5c93fb5e] {\n    border: none;\n    border-top: 1px solid #eee;\n    height: 0;\n    width: 100%;\n}\n.bottom .text[data-v-5c93fb5e] {\n    margin-top: -1.2em;\n    width: 8em;\n    height: 1em;\n    background: #fff;\n    text-align: center;\n    color: #999;\n}\n.bottom .login-type[data-v-5c93fb5e] {\n    margin-top: 1em;\n    width: 100%;\n}\n.bottom .login-type img[data-v-5c93fb5e] {\n      width: 2em;\n      display: block;\n}\n.bottom .login-type p[data-v-5c93fb5e] {\n      text-align: center;\n      font-size: 0.8em;\n      color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.top[data-v-5c93fb5e] {\n  height: 2em;\n  width: 100%;\n  padding-right: 0.8em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.top > a[data-v-5c93fb5e] {\n    font-size: 1em;\n}\n.logo-wrap[data-v-5c93fb5e] {\n  width: 100%;\n  height: auto;\n}\n.logo-wrap .circle-wrap[data-v-5c93fb5e] {\n    width: 7em;\n    height: 7em;\n    border-radius: 50%;\n    border: 1px solid #eee;\n}\n.logo-wrap img[data-v-5c93fb5e] {\n    display: block;\n    width: 5em;\n    height: 5em;\n    margin: 0 auto;\n}\n.logo-wrap h3[data-v-5c93fb5e] {\n    font-size: 1.3em;\n    text-align: center;\n    margin-top: 0.7em;\n}\n.text-area[data-v-5c93fb5e] {\n  margin-left: auto;\n  margin-right: auto;\n  margin-top: 2em;\n  width: 95%;\n}\n.login-button[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 3em;\n}\n.forget-password[data-v-5c93fb5e] {\n  height: 2em;\n  padding-right: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-5c93fb5e] {\n    color: #26a2ff;\n}\n.bottom[data-v-5c93fb5e] {\n  width: 100%;\n  height: 5em;\n}\n.bottom hr[data-v-5c93fb5e] {\n    border: none;\n    border-top: 1px solid #eee;\n    height: 0;\n    width: 100%;\n}\n.bottom .text[data-v-5c93fb5e] {\n    margin-top: -1.2em;\n    width: 8em;\n    height: 1em;\n    background: #fff;\n    text-align: center;\n    color: #999;\n}\n.bottom .login-type[data-v-5c93fb5e] {\n    margin-top: 1em;\n    width: 100%;\n}\n.bottom .login-type img[data-v-5c93fb5e] {\n      width: 2em;\n      display: block;\n}\n.bottom .login-type p[data-v-5c93fb5e] {\n      text-align: center;\n      font-size: 0.8em;\n      color: #999;\n}\n", ""]);
 
 // exports
 
@@ -46285,7 +46284,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(10);
-//
 //
 //
 //
@@ -53346,9 +53344,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "topBack",
@@ -55872,9 +55867,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _temp.checked = false;
         this.memberList.push(_temp);
       }
-
-      console.log("======= 店铺会员列表 ======");
-      console.log(this.memberList);
     },
     hideMemberChoise: function hideMemberChoise() {
       this.choiseMemberSwitch = false;
@@ -67127,6 +67119,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     goShopOrder: function goShopOrder() {
       this.$router.push("/shop/shopOrder");
     },
+    invite: function invite() {
+      this.$router.push("/shop/shopShare");
+    },
     addMember: function addMember() {
       console.log("添加成员");
     },
@@ -67248,7 +67243,27 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._m(1, false, false),
+      _c("div", { staticClass: "shop-info" }, [
+        _vm._m(1, false, false),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "shop-qrcode flex flex-align-center flex-justify-between",
+            on: { click: _vm.invite }
+          },
+          [
+            _c("span", { staticClass: "title flex-8" }, [_vm._v("店铺二维码")]),
+            _vm._v(" "),
+            _vm._m(2, false, false),
+            _vm._v(" "),
+            _c("i", { staticClass: "iconfont flex-1" }, [
+              _vm._v("\n          \n          ")
+            ])
+          ]
+        )
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -67257,7 +67272,7 @@ var render = function() {
           on: { click: _vm.goMember }
         },
         [
-          _vm._m(2, false, false),
+          _vm._m(3, false, false),
           _vm._v(" "),
           _c(
             "div",
@@ -67309,7 +67324,22 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "invite-wrap" }, [
-        _vm._m(3, false, false),
+        _c(
+          "div",
+          {
+            staticClass: "flex flex-align-center flex-justify-between",
+            on: { click: _vm.invite }
+          },
+          [
+            _c("span", { staticClass: "title flex-9" }, [
+              _vm._v(" 邀请新会员 ")
+            ]),
+            _vm._v(" "),
+            _c("i", { staticClass: "iconfont flex-1" }, [
+              _vm._v("\n              \n          ")
+            ])
+          ]
+        ),
         _vm._v(" "),
         _vm.isGroupMaster
           ? _c(
@@ -67503,44 +67533,28 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "shop-info" }, [
-      _c(
-        "div",
-        {
-          staticClass: "info-item flex flex-align-center flex-justify-between"
-        },
-        [
-          _c("span", { staticClass: "title flex-4" }, [_vm._v(" 店铺名称 ")]),
-          _vm._v(" "),
-          _c("span", { staticClass: "name flex-5" }, [
-            _vm._v("热血牛牛玩家群1")
-          ]),
-          _vm._v(" "),
-          _c("i", { staticClass: "iconfont flex-1" }, [
-            _vm._v("\n          \n          ")
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "shop-qrcode flex flex-align-center flex-justify-between"
-        },
-        [
-          _c("span", { staticClass: "title flex-8" }, [_vm._v("店铺二维码")]),
-          _vm._v(" "),
-          _c("span", { staticClass: "qr-code flex-1" }, [
-            _c("i", { staticClass: "iconfont" }, [
-              _vm._v("\n                  \n              ")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("i", { staticClass: "iconfont flex-1" }, [
-            _vm._v("\n          \n          ")
-          ])
-        ]
-      )
+    return _c(
+      "div",
+      { staticClass: "info-item flex flex-align-center flex-justify-between" },
+      [
+        _c("span", { staticClass: "title flex-4" }, [_vm._v(" 店铺名称 ")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "name flex-5" }, [_vm._v("热血牛牛玩家群1")]),
+        _vm._v(" "),
+        _c("i", { staticClass: "iconfont flex-1" }, [
+          _vm._v("\n          \n          ")
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "qr-code flex-1" }, [
+      _c("i", { staticClass: "iconfont" }, [
+        _vm._v("\n                  \n              ")
+      ])
     ])
   },
   function() {
@@ -67553,22 +67567,6 @@ var staticRenderFns = [
       [
         _c("i", { staticClass: "iconfont icon" }, [
           _vm._v("\n              \n          ")
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "flex flex-align-center flex-justify-between" },
-      [
-        _c("span", { staticClass: "title flex-9" }, [_vm._v(" 邀请新会员 ")]),
-        _vm._v(" "),
-        _c("i", { staticClass: "iconfont flex-1" }, [
-          _vm._v("\n              \n          ")
         ])
       ]
     )
@@ -73239,7 +73237,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n#shop-share[data-v-6e9cc5ab] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  padding-top: 2em;\n  height: 100vh;\n  width: 100%;\n  background: #26a2ff;\n}\n#shop-share .content-wrap-shop[data-v-6e9cc5ab] {\n    margin-top: -3.5em;\n    width: 90%;\n    height: 22em;\n    background: #fff;\n    border-radius: 1em;\n}\n#shop-share .content-wrap-shop .info[data-v-6e9cc5ab] {\n      height: 5em;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding: 1em;\n}\n#shop-share .content-wrap-shop .info > img[data-v-6e9cc5ab] {\n        width: 4em;\n        height: 4em;\n        border-radius: 0.6em;\n        display: block;\n}\n#shop-share .content-wrap-shop .info > h3[data-v-6e9cc5ab] {\n        margin-left: 1em;\n        font-size: 1.2em;\n        font-weight: bold;\n}\n#shop-share .content-wrap-shop .qr-code[data-v-6e9cc5ab] {\n      width: 13em;\n      height: 13em;\n      background: #eee;\n      border-radius: 0.6em;\n}\n#shop-share .content-wrap-shop .qr-code > img[data-v-6e9cc5ab] {\n        width: 90%;\n        height: 90%;\n}\n#shop-share .content-wrap-shop > h3[data-v-6e9cc5ab] {\n      margin-top: 1em;\n      font-size: 0.9em;\n      color: #555;\n      text-align: center;\n}\n#shop-share .content-wrap-user[data-v-6e9cc5ab] {\n    margin-top: -3.5em;\n    width: 90%;\n    height: 22em;\n    background: #fff;\n    border-radius: 1em;\n}\n#shop-share .content-wrap-user .info[data-v-6e9cc5ab] {\n      height: auto;\n      width: 100%;\n      padding-top: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#shop-share .content-wrap-user .info > img[data-v-6e9cc5ab] {\n        width: 4.5em;\n        height: 4.5em;\n        border-radius: 0.6em;\n}\n#shop-share .content-wrap-user .info h1[data-v-6e9cc5ab] {\n        margin-top: 0.4em;\n}\n#shop-share .content-wrap-user .info h2[data-v-6e9cc5ab] {\n        margin-top: 0.4em;\n        color: #777;\n}\n#shop-share .content-wrap-user .submit[data-v-6e9cc5ab] {\n      margin: 0 auto;\n      width: 80%;\n      margin-top: 5em;\n}\n", ""]);
 
 // exports
 
@@ -73252,6 +73250,123 @@ exports.push([module.i, "", ""]);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -73269,7 +73384,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  data: function data() {
+    return {
+      isUser: false // false ：商户分享界面  true ：用户加入界面
+    };
+  }
+});
 
 /***/ }),
 /* 766 */
@@ -73279,9 +73402,90 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "shop-share" } })
+  return _c(
+    "div",
+    {
+      staticClass: "flex flex-justify-center flex-align-center",
+      attrs: { id: "shop-share" }
+    },
+    [
+      _c("topBack", {
+        staticStyle: { background: "#26a2ff", color: "#fff" },
+        attrs: { title: !_vm.isUser ? "邀请新会员" : "加入店铺" }
+      }),
+      _vm._v(" "),
+      !_vm.isUser
+        ? _c(
+            "div",
+            { staticClass: "content-wrap-shop flex flex-v flex-align-center" },
+            [
+              _vm._m(0, false, false),
+              _vm._v(" "),
+              _vm._m(1, false, false),
+              _vm._v(" "),
+              _c("h3", [
+                _vm._v(
+                  "\n        该二维码7天内（12月12日前）有效，重新进入将更新\n      "
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.isUser
+        ? _c("div", { staticClass: "content-wrap-user" }, [
+            _vm._m(2, false, false),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "submit" },
+              [
+                _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
+                  _vm._v("申请加入")
+                ])
+              ],
+              1
+            )
+          ])
+        : _vm._e()
+    ],
+    1
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "info flex flex-align-center" }, [
+      _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+      _vm._v(" "),
+      _c("h3", [_vm._v("斗牛小店")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "qr-code flex flex-align-center flex-justify-center" },
+      [_c("img", { attrs: { src: "/images/code.png", alt: "" } })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "info flex flex-v flex-align-center" }, [
+      _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+      _vm._v(" "),
+      _c("h1", [_vm._v("斗牛小铺（68人")]),
+      _vm._v(" "),
+      _c("h2", [_vm._v("Leaf 创建于 2017- 11-22")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

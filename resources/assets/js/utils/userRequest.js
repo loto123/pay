@@ -92,7 +92,6 @@ export default class UserRequest {
     // 验证token是否存在
     validToken(token){
         var url = window.location.href.indexOf("/#/login");
-        console.log(url);
         if(!token && url==-1){
             Loading.getInstance().close();
             Toast("用户未登录,即将跳转登录...");

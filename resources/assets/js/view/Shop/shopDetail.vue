@@ -52,7 +52,7 @@
             </i>
         </div>
 
-        <div class="shop-qrcode flex flex-align-center flex-justify-between">
+        <div class="shop-qrcode flex flex-align-center flex-justify-between" @click="invite">
             <span class="title flex-8">店铺二维码</span>
             <span class="qr-code flex-1">
                 <i class="iconfont">
@@ -102,7 +102,7 @@
     </div>
 
     <div class="invite-wrap">
-        <div class="flex flex-align-center flex-justify-between">
+        <div class="flex flex-align-center flex-justify-between" @click="invite">
             <span class="title flex-9"> 邀请新会员 </span>
             <i class="iconfont flex-1">
                 &#xe62e;
@@ -430,6 +430,10 @@ export default {
     },
     goShopOrder() {
       this.$router.push("/shop/shopOrder");
+    },
+
+    invite(){
+      this.$router.push("/shop/shopShare");
     },
 
     addMember(){
