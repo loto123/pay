@@ -36,6 +36,20 @@ class AccountController extends BaseController {
      *   path="/account/charge",
      *   summary="账户充值",
      *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="way",
+     *     in="formData",
+     *     description="充值方式",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="amount",
+     *     in="formData",
+     *     description="转账金额",
+     *     required=true,
+     *     type="number"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -48,6 +62,7 @@ class AccountController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
+
         return $this->json();
     }
 
@@ -56,6 +71,20 @@ class AccountController extends BaseController {
      *   path="/account/withdraw",
      *   summary="账户提现",
      *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="way",
+     *     in="formData",
+     *     description="提现方式",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="amount",
+     *     in="formData",
+     *     description="转账金额",
+     *     required=true,
+     *     type="number"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -69,6 +98,20 @@ class AccountController extends BaseController {
      *   path="/account/transfer",
      *   summary="转账到店铺",
      *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="formData",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="amount",
+     *     in="formData",
+     *     description="转账金额",
+     *     required=true,
+     *     type="number"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
