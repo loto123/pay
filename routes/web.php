@@ -23,7 +23,7 @@ Route::match(['get', 'post'], '/{notify_type}-notify/c{channel}_m{method}', func
     $method = ['pay' => DepositMethod::class, 'withdraw' => WithdrawMethod::class][$notify_type];
     $method = new $method;
     return $method->acceptNotify($channel);
-})->name('common_notify')->where(['notify_type' => 'pay|withdraw', 'channel' => '[0-9]+', 'method' => '[0-9]+']);
+})->name('common_notify')->where(['notify_type' => 'pay|withdraw', 'channel' => '\d+', 'method' => '\d+']);
 
 //支付跳回地址
 Route::match(['get', 'post'], '/pay-result/m{method}', function (DepositMethod $method) {

@@ -79,6 +79,7 @@ class WithdrawMethodController extends Controller
     {
         return Admin::form(WithdrawMethod::class, function (Form $form) {
             $form->text('title', '提现方式')->placeholder('如小额批量付款')->rules('required|max:255', ['required' => '必填项']);
+            $form->text('show_label', '展示文本')->placeholder('用于提现方式列表显示')->rules('required|max:10', ['required' => '必填项']);
             $form->select('platform_id', '所属平台')->options(Platform::all()->mapWithKeys(function ($item) {
                 return [$item['id'] => $item['name']];
             }))->rules('required', ['required' => '必须选择所属平台']);

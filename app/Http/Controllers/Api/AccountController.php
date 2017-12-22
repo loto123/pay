@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
+use App\Pay\Model\WithdrawMethod;
+use App\Pay\Model\Scene;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -98,7 +101,36 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function withdraw() {
+    public function withdraw(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required',
+            'way' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = $this->auth->user();
+
+        try {
+            $result = $user->container->initiateWithdraw(
+                $request->amount,
+                [
+                    'branch_bank' => $user->pay_card->bank->name,
+                    'bank_no' => $user->pay_card->bank_id,
+                    'city' => '广州市',
+                    'province' => '广东省',
+                    'receiver_account' => $user->pay_card->card_num,
+                    'receiver_name' => $user->pay_card->holder_name,
+                    'to_public' => 0
+                ],
+                $user->channel,
+                WithdrawMethod::find($request->way),
+                0.1
+            );
+        } catch (\Exception $e) {
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 
@@ -127,5 +159,101 @@ class AccountController extends BaseController {
      */
     public function transfer() {
         return $this->json();
+    }
+
+
+    /**
+     * @param $os
+     * @param $scene
+     * @return mixed
+     */
+    public function payMethods($os, $scene)
+    {
+        /**
+         * @var $channelBind Channel
+         */
+        $os = $os == 'unknown' ? $os : ['ios' => DepositMethod::OS_IOS, 'andriod' => DepositMethod::OS_ANDRIOD][$os];
+
+        $scene = Scene::find($scene);
+        if ($os && $scene) {
+            $channelBind = $this->user->channel;
+            $channelBind = $channelBind ? $channelBind : Channel::find(1);
+            if ($channelBind->disabled) {
+                //被禁用则启用备用通道
+                $channelBind = $channelBind->spareChannel;
+            }
+
+            $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label')->get();
+
+            return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
+                return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
+                    ($os == 'unknown' || $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统,或不限系统,或系统匹配
+            })->mapWithKeys(function ($item) {
+                return [$item['id'] => $item['show_label']];
+            })]);
+        } else {
+            return $this->json(null, '不存在的场景或系统', 0);
+        }
+    }
+
+    public function withdrawMethods()
+    {
+        /**
+         * @var $channelBind Channel
+         */
+        $channelBind = $this->user->channel;
+        $channelBind = $channelBind ? $channelBind : Channel::find(1);
+        if ($channelBind->disabled) {
+            //被禁用则启用备用通道
+            $channelBind = $channelBind->spareChannel;
+        }
+
+        return $this->json($channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get());
+
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/account/records",
+     *   summary="帐单明细",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="query",
+     *     description="类型",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="start",
+     *     in="query",
+     *     description="结束日期",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="number"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function records(Request $request) {
+        $data = [];
+        $user = $this->auth->user();
+        /* @var $user User */
+        foreach ($user->funds()->orderBy('id DESC')->paginate($request->size) as $_fund) {
+            $data[] = [
+                'id' => $_fund->id,
+                'type' => (int)$_fund->type,
+                'model' => (int)$_fund->model,
+                'amount' => $_fund->amount,
+            ];
+        }
+        return $this->json(['data' => $data]);
     }
 }
