@@ -170,14 +170,13 @@ class AccountController extends BaseController {
          * @var $channelBind Channel
          */
         return $this->json([
-            'use_spare' => false,
+            'channel' => 1,
             'methods' => ['1' => '微信']
         ]);
         $os = $os == 'unknown' ? $os : ['ios' => DepositMethod::OS_IOS, 'andriod' => DepositMethod::OS_ANDRIOD][$os];
 
         $scene = Scene::find($scene);
         if ($os && $scene) {
-            $use_spare = false;
             $channelBind = $this->user->channel;
             if ($channelBind->disabled) {
                 //被禁用则启用备用通道
@@ -187,7 +186,7 @@ class AccountController extends BaseController {
 
             $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label')->get();
 
-            return $this->json(['use_spare' => $use_spare, 'methods' => $methods->filter(function ($method) use ($scene, $os) {
+            return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
                 return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
                     ($os == 'unknown' && $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统且不限系统,或系统匹配
             })->mapWithKeys(function ($item) {
@@ -207,15 +206,13 @@ class AccountController extends BaseController {
         /**
          * @var $channelBind Channel
          */
-        $use_spare = false;
         $channelBind = $this->user->channel;
         $channelBind = $channelBind ? $channelBind : Channel::find(1);
         if ($channelBind->disabled) {
             //被禁用则启用备用通道
-            $use_spare = true;
             $channelBind = $channelBind->spareChannel;
         }
 
-        return $this->json(['use_spare' => $use_spare, 'methods' => $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get()]);
+        return $this->json(['channel' => $channelBind->getKey(), 'methods' => $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get(), 'banks' => [1, 2, 3]]);
     }
 }

@@ -133,10 +133,12 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('/', 'AccountController@index');
         $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|andriod|ios', 'scene' => '\d+']);
         $api->get('withdraw-methods', 'AccountController@withdrawMethods');
+        $api->get('records', 'AccountController@records');
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->get('withdraw-fields', 'AccountController@withdrawFieldsInfo');
     });
+
 });
 
 Route::group([
