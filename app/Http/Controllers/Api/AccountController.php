@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\DepositMethod;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -57,13 +58,21 @@ class AccountController extends BaseController {
     public function charge(Request $request) {
         $validator = Validator::make($request->all(), [
             'amount' => 'required',
+            'way' => 'required'
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
+        $user = $this->auth->user();
+        /* @var $user User */
+        try {
+            $result = $user->container->initiateDeposit($request->amount, $user->channel, DepositMethod::find($request->way));
+        } catch (\Exception $e) {
+            return $this->json([], 'error', 0);
+        }
 
-        return $this->json();
+        return $this->json(['redirect_url' => $result]);
     }
 
     /**
