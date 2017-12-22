@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\DepositMethod;
+use App\Pay\Model\WithdrawMethod;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -98,7 +99,36 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function withdraw() {
+    public function withdraw(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required',
+            'way' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = $this->auth->user();
+
+        try {
+            $result = $user->container->initiateWithdraw(
+                $request->amount,
+                [
+                    'branch_bank' => $user->pay_card->bank->name,
+                    'bank_no' => $user->pay_card->bank_id,
+                    'city' => '广州市',
+                    'province' => '广东省',
+                    'receiver_account' => $user->pay_card->card_num,
+                    'receiver_name' => $user->pay_card->holder_name,
+                    'to_public' => 0
+                ],
+                $user->channel,
+                WithdrawMethod::find($request->way),
+                0.1
+            );
+        } catch (\Exception $e) {
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 
