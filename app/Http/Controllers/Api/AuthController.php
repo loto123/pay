@@ -397,7 +397,7 @@ class AuthController extends BaseController {
             Cache::put($cache_key, ['code' => $code, 'time' => time()], 5);
             return $this->json();
         } else {
-            Log::info("send sms error".var_export($result));
+            Log::info("send sms error".var_export($result, true));
             return $this->json([], 'error', 0);
         }
     }
