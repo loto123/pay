@@ -74,18 +74,17 @@
         </div>
 
         <div class="avatar-wrap flex-5 flex flex-justify-around">
-            <div class="avatar-item">
+            <div class="avatar-item" v-for="item in membersList">
+                <img src="/images/avatar.jpg" alt="">
+            </div>
+            <!-- <div class="avatar-item">
                 <img src="/images/avatar.jpg" alt="">
             </div>
             <div class="avatar-item">
                 <img src="/images/avatar.jpg" alt="">
-            </div>
-            <div class="avatar-item">
-                <img src="/images/avatar.jpg" alt="">
-            </div>
+            </div> -->
             
-
-            <div class="add-avatar flex flex-align-center flex-justify-center">
+            <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember">
                 <i class="iconfont">
                     &#xe600;
                 </i>
@@ -409,6 +408,7 @@ export default {
       rate: null,
       percent: null,
       membersCount: null,
+      membersList:[],
       active: null
     };
   },
@@ -416,6 +416,10 @@ export default {
     // 跳转控制
     hide() {},
     goMember() {
+      if(!this.membersCount){
+        Toast("当前店铺无成员,");
+        return ;
+      }
       this.$router.push("/shop/shop_member");
     },
     goDealManagement() {
@@ -426,6 +430,10 @@ export default {
     },
     goShopOrder() {
       this.$router.push("/shop/shopOrder");
+    },
+
+    addMember(){
+      console.log("添加成员");
     },
 
     // 数据控制
@@ -444,6 +452,7 @@ export default {
           this.rate = res.data.data.rate;
           this.percent = res.data.data.percent;
           this.membersCount = res.data.data.members_count;
+          this.membersList = res.data.data.members;
           if (res.data.data.active == 1) {
             this.tradeStatus = true;
           } else {

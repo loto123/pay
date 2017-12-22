@@ -19,7 +19,7 @@
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail(item.id)" v-for="item in dataList" >
+                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" >
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{item.shop_name}}</div>
@@ -187,6 +187,20 @@ export default {
       } else {
         this.tabItem = [false, false, false];
         this.tabItem[item] = true;
+
+          Loading.getInstance().open();
+          var _data = {
+            status:(item+1),
+            limit:50,
+            offset :0
+          }
+          request.getInstance().getData('api/transfer/record',_data).then(res=>{
+            this.dataList = res.data.data;
+            Loading.getInstance().close();
+            
+          }).catch(err=>{
+            Loading.getInstance().close();
+          });
       }
     },
     goDetail(id) {
@@ -194,7 +208,6 @@ export default {
     },
 
     mark(){
-      console.log(this.isStar);
       if(!this.isStar){
         this.isStar = true;
       }else {
@@ -225,9 +238,6 @@ export default {
         Loading.getInstance().close();
 
         });
-
-        console.log(_mark);
-        console.log(_disMark);
       }
     },
 
@@ -244,12 +254,10 @@ export default {
           }else if(_temp[i].makr == 1){
             _temp[i].makr = 0;
           }
-          // _temp[i].makr = !_temp[i].makr;
         }
       }     
 
       this.dataList = _temp;
-      console.log(id);
       
     },
     init(){
@@ -260,14 +268,11 @@ export default {
         offset :0
       }
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
-        console.log(res);
         this.dataList = res.data.data;
         Loading.getInstance().close();
         
       }).catch(err=>{
-        console.error(err);
         Loading.getInstance().close();
-        
       });
       
     },
