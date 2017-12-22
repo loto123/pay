@@ -211,4 +211,49 @@ class AccountController extends BaseController {
         return $this->json($channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get());
 
     }
+
+    /**
+     * @SWG\Get(
+     *   path="/account/records",
+     *   summary="帐单明细",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="query",
+     *     description="类型",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="start",
+     *     in="query",
+     *     description="结束日期",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="number"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function records(Request $request) {
+        $data = [];
+        $user = $this->auth->user();
+        /* @var $user User */
+        foreach ($user->funds()->orderBy('id DESC')->paginate($request->size) as $_fund) {
+            $data[] = [
+                'id' => $_fund->id,
+                'type' => (int)$_fund->type,
+                'model' => (int)$_fund->model,
+                'amount' => $_fund->amount,
+            ];
+        }
+        return $this->json(['data' => $data]);
+    }
 }
