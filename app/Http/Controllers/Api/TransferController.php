@@ -792,13 +792,6 @@ class TransferController extends Controller
      *   summary="标记",
      *   tags={"交易"},
      *   @SWG\Parameter(
-     *     name="record_id",
-     *     in="formData",
-     *     description="交易记录ID",
-     *     required=true,
-     *     type="integer"
-     *   ),
-     *   @SWG\Parameter(
      *     name="mark",
      *     in="formData",
      *     description="标记的交易记录ID 数组",
@@ -828,7 +821,6 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'record_id' => 'bail|required',
                 'mark' => 'bail|required|array',
                 'dismark' => 'bail|required|array'
             ],
@@ -841,8 +833,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        TransferRecord::whereIn('id', $request->mark)->update(['mark' => 1]);
-        TransferRecord::whereIn('id', $request->dismark)->update(['mark' => 0]);
+        TransferUserRelation::whereIn('id', $request->mark)->update(['mark' => 1]);
+        TransferUserRelation::whereIn('id', $request->dismark)->update(['mark' => 0]);
 
         return response()->json(['code' => 1, 'msg' => trans('trans.mark_success'), 'data' => []]);
     }

@@ -19,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        Config::load();
+        try {
+            Config::load();
+        } catch (\Exception $e){}
 
         //容器多态映射
         Relation::morphMap([
