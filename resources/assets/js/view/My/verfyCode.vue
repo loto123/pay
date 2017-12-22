@@ -6,13 +6,13 @@
         <section class="account-container">
           <div class="account-box flex flex-align-center">
             <span>手机号:</span>
-            <em class="flex-1 number">18390939299</em>
+            <em class="flex-1 number">{{mobile}}</em>
           </div>
         </section>
         <section class="input-wrap-box">
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
-            <input type="text" placeholder="请输入验证码" class="flex-1">
+            <input type="text" placeholder="请输入验证码" class="flex-1" v-model="code">
             <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime}}</mt-button>
           </div>
         </section>

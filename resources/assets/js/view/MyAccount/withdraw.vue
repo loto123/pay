@@ -13,7 +13,7 @@
             </div>
             <div class="all-money flex">
                 <div class="money">可提现余额 ¥<span>231321</span>, </div>
-                <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提现</a>
+                <a href="javascript:;" class="all-withdraw">全部提现</a>
             </div>
             <div class="withdraw-way">
                 <div class="title">提现到</div>

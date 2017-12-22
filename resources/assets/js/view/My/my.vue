@@ -164,7 +164,7 @@
 				if(this.listContent.identify_status==0){
 					MessageBox.confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(
 						() => {
-							this.$router.push('/my/realAuth');
+							this.$router.push("/my/realAuth"+"?mobile="+this.personal.mobile);
 						},
 						() => {
 							//取消操作

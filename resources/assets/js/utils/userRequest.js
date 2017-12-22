@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import 'babel-polyfill'
 import {Toast} from 'mint-ui'
+import Loading from './loading'
 export default class UserRequest {
     static getInstance() {
         if (this._instance == null) {
@@ -33,11 +34,13 @@ export default class UserRequest {
                     if(res.data.code == 1){
                         resolve(res);
                     }else if(res.data.code == 2){
-                        reject(res);
+                        Loading.getInstance().close();
                         Toast("用户未登录,即将跳转登录...");
                         setTimeout(function(){
                             window.location.href = "/#/login";
                         },1000);
+                        reject(res);
+                        
                     }
                     else {
                         reject(res);
@@ -66,11 +69,14 @@ export default class UserRequest {
                     if(res.data.code == 1){
                         resolve(res);
                     }else if(res.data.code == 2){
-                        reject(res);
+
+                        Loading.getInstance().close();
                         Toast("用户未登录,即将跳转登录...");
                         setTimeout(function(){
                             window.location.href = "/#/login"
-                        },1500);
+                        },2000);
+                        reject(res);
+                        
                     }
                     else {
                         reject(res);

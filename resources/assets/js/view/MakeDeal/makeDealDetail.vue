@@ -38,11 +38,14 @@
               </div>
 
               <div class="bottom flex flex-align-center flex-justify-between">
+                <img :src="item.user.avatar?item.user.avatar:'/images/avatar.jpg'" 
+                  alt="" 
+                  v-for="item in joiner" 
+                >
+                <!-- <img src="/images/avatar.jpg" alt="">
                 <img src="/images/avatar.jpg" alt="">
                 <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
+                <img src="/images/avatar.jpg" alt=""> -->
                 
                 <span class="info-friend">提醒好友</span>
               </div>
@@ -94,7 +97,7 @@
 
         <passwordPanel 
           :setSwitch="passWordSwitch" 
-          :settingPasswordSwitch="true" 
+          :settingPasswordSwitch="false" 
           :secondValid="false" 
           v-on:hidePassword="hidePassword" 
           v-on:callBack ="submitData">
@@ -299,8 +302,10 @@ export default {
         getMoney: null
       },
       payType: null,    // 支付方式，取钱get 放钱put
-      transfer_id:"",    // 交易id
-      password:""
+      transfer_id:"",   // 交易id
+      password:"",       // 支付密码
+
+      joiner:[]         // 交易的参与者，需要提醒的人
     };
   },
   created() {
@@ -325,7 +330,7 @@ export default {
         .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
         .then(res => {
           console.log(res);
-
+          this.joiner = res.data.data.joiner;
           this.renderData = res.data.data;
           Loading.getInstance().close();
         })
@@ -348,7 +353,24 @@ export default {
     callPassword(){
 
       if(this.payType == "put"){
-        this.showPassword();
+        Loading.getInstance().open();
+        request.getInstance().getData("api/my/info").then(res=>{
+          var _passwordStatus = res.data.data.has_pay_password;
+
+          if(!_passwordStatus){
+            Loading.getInstance().close();
+            Toast("您还未设置支付密码，即将跳转设置页面");
+            setTimeout(() => {
+              this.$router.push("/my/setting_password");
+            }, 2000);
+          }else {
+            Loading.getInstance().close();
+            this.showPassword();
+          }
+
+        }).catch(err=>{
+        });
+
       }else if(this.payType == "get"){
         this.submitData();
       }else {
@@ -372,6 +394,8 @@ export default {
           this.init();
         }).catch(err=>{
           console.error(err);
+          Toast(err.data.msg);
+          
         });
 
         this.hidePassword();

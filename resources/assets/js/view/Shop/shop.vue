@@ -364,10 +364,8 @@ export default {
       this.$router.push("/shop/message_list");
     },
     goDetail(e, evnet) {
-      console.log(e);
       this.$store.dispatch("shop_setShopDetailId",e);
       this.$router.push("/shop/shop_detail"+"?id="+e);
-      console.log(event);
     },
     addShop() {
       this.addShopTabStatus = true;
@@ -382,7 +380,6 @@ export default {
       var data = this.openNewShop;
 
       request.getInstance().postData("api/shop/create",data).then(function(res){
-        console.log(res);
         self.addShopTabStatus = false;
         self.getShopData();
       }).catch((err)=>{
@@ -396,7 +393,6 @@ export default {
       Loading.getInstance().open();
       request.getInstance().getData("api/shop/lists/mine").then(function(res){
         self.shopList = res.data.data.data;
-        console.log(res);
         Loading.getInstance().close();
         
       }).catch(function(e){
