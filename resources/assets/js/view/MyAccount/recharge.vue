@@ -22,7 +22,6 @@
 				<mt-button type="primary" size="large">充值</mt-button>
 			</a>
 		</div>
-		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
 	</div>
 </template>
 
@@ -30,7 +29,6 @@
 	import axios from "axios";
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack.vue";
-	import passWorld from "../../components/password"
 	
 	import { MessageBox, Toast } from "mint-ui";
 
@@ -41,8 +39,8 @@
 				choiseValue: null
 			}
 		},
-		components: { topBack },
-		props: ["showSwitch", "optionsList",passWorld],
+		components: { topBack},
+		props: ["showSwitch", "optionsList"],
 		methods: {
 			hideTab() {
 				this.$emit("hideDropList", this.choiseValue);
