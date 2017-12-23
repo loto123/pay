@@ -23,6 +23,7 @@ class CreateTransferRecordTable extends Migration
             $table->smallInteger('points')->comment('积分')->default(0);
             $table->tinyInteger('mark')->comment('标记 0 未标记 1 已标记')->default(0);
             $table->decimal('fee_amount',11, 2)->comment('手续费金额')->default(0);
+            $table->integer('pay_transfer_id')->unsigned();
             $table->timestamps();
         });
     }
