@@ -140,6 +140,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('records', 'AccountController@records');
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
+        $api->post('transfer', 'AccountController@transfer');
         $api->get('withdraw-fields', 'AccountController@withdrawFieldsInfo');
     });
 
