@@ -184,9 +184,13 @@ class AccountController extends BaseController {
 
 
     /**
-     * @param $os
-     * @param $scene
-     * @return mixed
+     * @SWG\Get(
+     *   path="/account/pay-method",
+     *   summary="充值方式列表",
+     *   tags={"账户"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
      */
     public function payMethods($os, $scene)
     {
@@ -222,8 +226,13 @@ class AccountController extends BaseController {
     }
 
     /**
-     * 充值方式列表
-     * @return mixed
+     * @SWG\Get(
+     *   path="/account/withdraw-method",
+     *   summary="提现方式列表",
+     *   tags={"账户"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
      */
     public function withdrawMethods()
     {
