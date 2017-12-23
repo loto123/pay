@@ -41,7 +41,7 @@
                     请输入验证码
                 </h3>
 
-                <p>短信验证码已发送至1008666666</p>
+                <p>短信验证码已发送至{{userAccountName}}</p>
 
                 <section class="input-wrap flex flex-align-center">
                     <span class="flex-1">验证码:</span>
