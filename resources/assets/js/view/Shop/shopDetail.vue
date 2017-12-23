@@ -4,15 +4,15 @@
       
       <div class="top flex flex-v flex-align-center">
         <div class="img-wrap flex flex-justify-center flex-align-center flex-wrap-on">
+            <img :src="logo" alt="" class="avatar">
+            <!-- <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
             <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
+            <img src="/images/avatar.jpg" alt="" class="avatar"> -->
         </div>
         <h3 style="margin-top:0.5em;">{{shopName}}</h3>
         <h3>店铺id:{{shopId}}</h3>
@@ -221,8 +221,8 @@
       .avatar {
         margin-top: 1%;
         margin-left: 1%;
-        width: 30%;
-        height: 30%;
+        width: 100%;
+        height: 100%;
       }
     }
 
@@ -539,7 +539,8 @@ export default {
       membersList:[],
       active: null,
 
-      addMemberSwitch: false      // 添加成员开关
+      addMemberSwitch: false,      // 添加成员开关
+      logo:null                    // 店铺的头像
     };
   },
   methods: {
@@ -556,14 +557,14 @@ export default {
       this.$router.push("/shop/deal_management");
     },
     goShopAccount() {
-      this.$router.push("/shop/shopAccount");
+      this.$router.push("/shop/shopAccount?id="+this.shopId);
     },
     goShopOrder() {
       this.$router.push("/shop/shopOrder");
     },
 
     invite(){
-      this.$router.push("/shop/shopShare?id="+this.shopId+"&avatar=");
+      this.$router.push("/shop/shopShare?id="+this.shopId);
     },
 
     addMember(){
@@ -587,6 +588,8 @@ export default {
           this.percent = res.data.data.percent;
           this.membersCount = res.data.data.members_count;
           this.membersList = res.data.data.members;
+          this.logo = res.data.data.logo;
+
           if (res.data.data.active == 1) {
             this.tradeStatus = true;
           } else {

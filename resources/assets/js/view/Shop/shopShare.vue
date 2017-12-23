@@ -4,8 +4,8 @@
 
       <div class="content-wrap-shop flex flex-v flex-align-center" v-if="!isUser">
         <div class="info flex flex-align-center">
-          <img src="/images/avatar.jpg" alt="">
-          <h3>斗牛小店</h3>
+          <img :src="logo" alt="">
+          <h3>{{shopName}}</h3>
         </div>
 
         <div class="qr-code flex flex-align-center flex-justify-center">
@@ -130,6 +130,7 @@
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
 import topBack from "../../components/topBack"
+import {Toast} from "mint-ui"
 
 export default {
   components:{topBack},
@@ -137,7 +138,9 @@ export default {
     return {
       isUser:false,             // false ：商户分享界面  true ：用户加入界面
       shopId:null,
-      QRCode:""
+      QRCode:"",
+      shopName:null,            //店铺名称
+      logo:null                 // 店铺头像
 
     }
   },
@@ -146,14 +149,20 @@ export default {
   },
   methods:{
     init(){
-      // /shop/qrcode/{id}
       this.shopId = this.$route.query.id;
-
-      request.getInstance().getData("api/shop/qrcode/"+this.shopId).then(res=>{
-        this.QRCode = res.data.data.url;
-      }).catch(err=>{
-
-      });
+      
+      Loading.getInstance().open();
+      Promise.all([request.getInstance().getData("api/shop/qrcode/"+this.shopId),request.getInstance().getData("api/shop/detail/" + this.shopId)])
+        .then(res=>{
+          this.QRCode = res[0].data.data.url;
+          this.logo = res[1].data.data.logo;
+          this.shopName = res[1].data.data.name;
+          Loading.getInstance().close();
+        }).catch(err=>{
+          Loading.getInstance().close();
+          Toast("请求错误");
+        });
+     
     }
   }
 }
