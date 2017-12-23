@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\Heepay\SmallBatchTransfer;
 use App\User;
 use App\UserCard;
 use Illuminate\Support\Facades\Cache;
@@ -232,6 +233,28 @@ class CardController extends Controller
                     'name' => $item->name,
                 ];
             }
+        }
+        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+    }
+
+    /**
+     * @SWG\GET(
+     *   path="/card/getBanks",
+     *   summary="添加银行卡支付通道需要参数",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function getBankCardParams() {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $data = [];
+        switch($this->user->channel_id) {
+            case 1:
+            $data = SmallBatchTransfer::queryProvincesAndCities();
+                break;
+            default :
+            break;
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
