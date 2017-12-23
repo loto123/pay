@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Pay\Model\Transfer;
 use Illuminate\Database\Eloquent\Model;
 
 class TransferRecord extends Model
@@ -24,6 +25,12 @@ class TransferRecord extends Model
     public function tip()
     {
         return $this->hasOne('App\TipRecord', 'record_id', 'id');
+    }
+
+    //容器事务
+    public function pay_transfer()
+    {
+        return $this->hasOne(Transfer::class, 'pay_transfer_id', 'id');
     }
 
 //    public function en_id() {
