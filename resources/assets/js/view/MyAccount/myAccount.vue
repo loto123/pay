@@ -11,7 +11,7 @@
                 <div class="title">当前可提现余额</div>
             </div>
             <div class="submit-btn">
-                <a href="javascript:;" class="mb15" @click="recharge">
+                <a href="/#/myAccount/recharge" class="mb15">
                     <button type="button" class="recharge-btn">充值</button>
                 </a>
                 <a href="javascript:;"  @click="withdraw" class="mb15">
@@ -26,10 +26,10 @@
 </template>
 
 <script>
-    import axios from "axios";
 	import request from '../../utils/userRequest';
     import topBack from '../../components/topBack.vue'
     import Loading from '../../utils/loading'
+    import { MessageBox, Toast } from "mint-ui";
 
     export default {
         data () {
@@ -56,23 +56,21 @@
 						console.log(err);
 					})
             },
-            //充值
-            recharge(){
-                if(this.has_pay_card==0){
-                    this.$router.push('/my');
-                }else{
-                    this.$router.push('/myAccount/recharge')
-                }
-                
-            },
             //提现
             withdraw(){
                 if(this.has_pay_card==0){
-                    this.$router.push('/my');
+                    MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
+                        () => {
+                            this.$router.push('/my');
+                        },
+                        () => {
+                            //取消操作
+                            console.log("已经取消");
+                        }
+                    );
                 }else{
                     this.$router.push('/myAccount/withdraw')
                 }
-                
             }
         }
     }

@@ -53868,12 +53868,12 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -53918,35 +53918,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.myAccount();
     },
 
-    components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
+    components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a },
     methods: {
         myAccount: function myAccount() {
             var _this = this;
 
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
-            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
                 _this.balance = res.data.data.balance;
                 _this.has_pay_card = res.data.data.has_pay_card;
-                __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
                 console.log(err);
             });
         },
 
-        //充值
-        recharge: function recharge() {
-            if (this.has_pay_card == 0) {
-                this.$router.push('/my');
-            } else {
-                this.$router.push('/myAccount/recharge');
-            }
-        },
-
         //提现
         withdraw: function withdraw() {
+            var _this2 = this;
+
             if (this.has_pay_card == 0) {
-                this.$router.push('/my');
+                __WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"].confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(function () {
+                    _this2.$router.push('/my');
+                }, function () {
+                    //取消操作
+                    console.log("已经取消");
+                });
             } else {
                 this.$router.push('/myAccount/withdraw');
             }
@@ -53995,21 +53993,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "submit-btn" }, [
-          _c(
-            "a",
-            {
-              staticClass: "mb15",
-              attrs: { href: "javascript:;" },
-              on: { click: _vm.recharge }
-            },
-            [
-              _c(
-                "button",
-                { staticClass: "recharge-btn", attrs: { type: "button" } },
-                [_vm._v("充值")]
-              )
-            ]
-          ),
+          _vm._m(0, false, false),
           _vm._v(" "),
           _c(
             "a",
@@ -54027,7 +54011,7 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _vm._m(0, false, false)
+          _vm._m(1, false, false)
         ])
       ])
     ],
@@ -54035,6 +54019,22 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      { staticClass: "mb15", attrs: { href: "/#/myAccount/recharge" } },
+      [
+        _c(
+          "button",
+          { staticClass: "recharge-btn", attrs: { type: "button" } },
+          [_vm._v("充值")]
+        )
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -63372,14 +63372,12 @@ exports.push([module.i, "\n#bankManage[data-v-059b1b09] {\n  padding-top: 2em;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(19);
 //
 //
 //
@@ -63405,7 +63403,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
 
 
 
@@ -63414,7 +63411,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+	components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack___default.a },
 	data: function data() {
 		return {
 			bankList: []
@@ -63430,30 +63427,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		bank: function bank() {
 			var _this = this;
 
-			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
+			__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
 				_this.bankList = res.data.data;
-				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
-				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
 		//更换结算卡
 		changeSet: function changeSet(card_id) {
 			var _this2 = this;
 
-			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
+			__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePayCard?' + 'card_id=' + card_id).then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePayCard?' + 'card_id=' + card_id).then(function (res) {
 				console.log(res);
-				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('更换成功');
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('更换成功');
 				_this2.bank();
-				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
-				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			});
 		}
 	}
