@@ -40,7 +40,11 @@ class WithdrawMethodController extends Controller
     protected function grid()
     {
         return Admin::grid(WithdrawMethod::class, function (Grid $grid) {
-
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
             $grid->id('ID')->sortable();
             $grid->column('title', '提现方式');
             $grid->column('platform.name', '支付平台');

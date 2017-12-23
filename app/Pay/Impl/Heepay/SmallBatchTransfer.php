@@ -14,6 +14,7 @@ use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawResult;
 use App\Pay\WithdrawInterface;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SmallBatchTransfer implements WithdrawInterface

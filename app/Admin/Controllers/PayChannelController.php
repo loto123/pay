@@ -43,6 +43,11 @@ class PayChannelController extends Controller
     {
         \Encore\Admin\Grid\Column::$displayers["switch"] = SwitchDisplay::class;
         return Admin::grid(Channel::class, function (Grid $grid) {
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
             $grid->id('ID')->sortable();
             $grid->name('通道名称');
             $grid->platform()->name('支付平台');//支付平台

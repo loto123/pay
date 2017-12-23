@@ -31,6 +31,34 @@ class Withdraw extends Model
     ];
     protected $guarded = ['id'];
 
+    /**
+     * 取得状态文本
+     * @param $state
+     * @return string
+     */
+    public static function getStateText($state)
+    {
+        switch ($state) {
+            case self::STATE_QUEUED:
+                return '等待处理';
+            case self::STATE_SEND_FAIL:
+                return '提交通道失败';
+            case self::STATE_PROCESS_FAIL:
+                return '通道处理失败';
+            case self::STATE_SUBMIT:
+                return '等待通道处理';
+            case self::STATE_COMPLETE:
+                return '提现成功';
+            default:
+                return '异常';
+        }
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return sprintf('%.2f', $value);
+    }
+
     public function getReceiverInfoAttribute($value)
     {
         return json_decode($value, true);
