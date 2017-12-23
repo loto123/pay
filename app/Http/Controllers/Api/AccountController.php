@@ -8,6 +8,7 @@ use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 
@@ -117,6 +118,13 @@ class AccountController extends BaseController {
      *     required=true,
      *     type="number"
      *   ),
+     *   @SWG\Parameter(
+     *     name="passwrod",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -125,14 +133,20 @@ class AccountController extends BaseController {
     {
         $validator = Validator::make($request->all(), [
             'amount' => 'required',
-            'way' => 'required'
+            'way' => 'required',
+            'password' => 'required'
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-
+        if (!Hash::check($request->password, $user->pay_password)) {
+            return $this->json([], trans("api.error_pay_password"), 0);
+        }
+        if (!$user->pay_card) {
+            return $this->json([], trans("api.error_pay_card"), 0);
+        }
         try {
             $result = $user->container->initiateWithdraw(
                 $request->amount,
@@ -184,9 +198,13 @@ class AccountController extends BaseController {
 
 
     /**
-     * @param $os
-     * @param $scene
-     * @return mixed
+     * @SWG\Get(
+     *   path="/account/pay-method",
+     *   summary="充值方式列表",
+     *   tags={"账户"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
      */
     public function payMethods($os, $scene)
     {
@@ -222,8 +240,13 @@ class AccountController extends BaseController {
     }
 
     /**
-     * 充值方式列表
-     * @return mixed
+     * @SWG\Get(
+     *   path="/account/withdraw-method",
+     *   summary="提现方式列表",
+     *   tags={"账户"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
      */
     public function withdrawMethods()
     {
