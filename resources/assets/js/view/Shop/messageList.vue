@@ -240,10 +240,20 @@
 </style>
 
 <script>
-import topBack from "../../components/topBack";
+import topBack from "../../components/topBack"
+import Loading from "../../utils/loading"
+import request from "../../utils/userRequest"
 
 export default {
-  components: { topBack }
+  components: { topBack },
+  created(){
+    this.init();
+  },
+  methods:{
+    init(){
+      console.log(1);
+    }
+  }
 };
 </script>
 
