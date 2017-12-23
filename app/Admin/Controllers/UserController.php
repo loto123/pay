@@ -209,7 +209,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        if ($user->child_proxy) {
+        if ($user->child_proxy()->count() > 0) {
             abort(404);
         }
         if ($this->form()->destroy($id)) {
