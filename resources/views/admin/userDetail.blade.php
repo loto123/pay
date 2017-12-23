@@ -15,7 +15,7 @@
                         @endif
                         </span></h4>
                     <h4 class="widget-user-desc">绑定微信：<span>{{$list->wechat_user->nickname??'无'}}</span></h4>
-                    <h4 class="widget-user-desc">余额：<span>{{$list->balance??0}}元</span></h4>
+                    <h4 class="widget-user-desc">余额：<span>{{$list->container->balance??0}}元</span></h4>
                     <h4 class="widget-user-desc">收益：<span>{{($transfer_record->profit - $transfer_record->payment)??0}}元</span></h4>
                     <h4 class="widget-user-desc">付款：<span>{{$transfer_record->payment??0}}元</span></h4>
                     <h4 class="widget-user-desc">收款：<span>{{$transfer_record->profit??0}}元</span></h4>

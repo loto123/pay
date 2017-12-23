@@ -110,7 +110,7 @@ class UserController extends Controller
             });
             $grid->roles('身份')->pluck('display_name')->label();
             $grid->transfer_count('交易笔数');
-            $grid->balance('余额');
+            $grid->column('container.balance','余额');
             $grid->column('pure_profit', '收益')->display(function(){
                 return number_format($this->profit - $this->payment,2);
             });
