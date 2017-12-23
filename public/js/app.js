@@ -54183,14 +54183,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			balance: null,
 			showPasswordTag: false, // 密码弹出开关
 
-			amount: null, //提现money
-			choiseValue: null,
+			amount: null,
+			options1: [],
+			way: null,
+			value: null,
 			has_pay_password: null //是否设置支付密码
 
 		};
 	},
 	created: function created() {
 		this.myAccount();
+		this.selWay();
 	},
 
 	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_3__components_password___default.a },
@@ -54219,17 +54222,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		withdrawBtn: function withdrawBtn() {
 			var self = this;
+			//成功内容
 			var _data = {
 				amount: this.amount,
-				choiseValue: this.choiseValue
+				way: this.value
 			};
 
 			if (!this.amount) {
 				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('请输入提现金额');
 				return;
 			}
+			if (!this.value) {
+				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('请选择支付方式');
+				return;
+			}
 
-			// console.log(this.has_pay_password);
 			if (this.has_pay_password == 0) {
 				this.$router.push('/my/setting_password'); //跳转到设置支付密码
 			} else {
@@ -54239,16 +54246,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//支付密码验证
 		callBack: function callBack(password) {
+			var _this2 = this;
+
 			var temp = {};
 			temp.password = password;
-
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp).then(function (res) {
-				if (res.data.code == 1) {
-					//成功内容
-				}
+			var _data = {
+				amount: this.amount,
+				way: this.value,
+				password: password
+			};
+			Promise.all([__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp), __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/account/withdraw', _data)]).then(function (res) {
+				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('提现成功');
+				_this2.$router.push('/myAccount');
 			}).catch(function (err) {
-				console.error(err.data.msg);
+				console.error(err);
 			});
+		},
+
+		//获取提现方式列表
+		selWay: function selWay() {
+			var _this3 = this;
+
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/withdraw-methods').then(function (res) {
+				_this3.setBankList(res);
+			}).catch(function (err) {
+				console.error(err);
+			});
+		},
+		setBankList: function setBankList(res) {
+			var _tempList = [];
+			for (var i = 0; i < res.data.data.methods.length; i++) {
+				var _t = {};
+				_t.value = res.data.data.methods[i].id.toString();
+				_t.label = res.data.data.methods[i].label;
+				_tempList.push(_t);
+			}
+			this.options1 = _tempList;
 		}
 	}
 });
@@ -54344,17 +54377,13 @@ var render = function() {
             { staticClass: "list-wrap" },
             [
               _c("mt-radio", {
-                attrs: {
-                  align: "right",
-                  title: "",
-                  options: ["银行卡", "微信"]
-                },
+                attrs: { align: "right", title: "", options: _vm.options1 },
                 model: {
-                  value: _vm.choiseValue,
+                  value: _vm.value,
                   callback: function($$v) {
-                    _vm.choiseValue = $$v
+                    _vm.value = $$v
                   },
-                  expression: "choiseValue"
+                  expression: "value"
                 }
               })
             ],
@@ -54539,12 +54568,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			amount: null,
-			choiseValue: null,
-			options1: []
+			options1: [],
+			way: null,
+			value: null
 		};
 	},
 	created: function created() {
-		this.rechargeWay();
+		this.selWay();
 	},
 
 	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
@@ -54560,7 +54590,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var self = this;
 			var _data = {
 				amount: this.amount,
-				choiseValue: this.choiseValue
+				way: this.value
 			};
 
 			if (!this.amount) {
@@ -54570,6 +54600,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/account/charge', _data).then(function (res) {
 				console.log(res);
 				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('充值成功');
+				location.href = res.data.data.redirect_url;
 			}).catch(function (err) {
 				console.error(err);
 			});
@@ -54578,15 +54609,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// watch: {
 		// 	"choiseValue": 'hideTab'
 		// },
-		rechargeWay: function rechargeWay() {
+		selWay: function selWay() {
 			var _this = this;
 
 			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/5').then(function (res) {
 				console.log(res);
-				_this.options1 = res.data.data.methods;
+				_this.setBankList(res);
 			}).catch(function (err) {
 				console.error(err);
 			});
+		},
+		setBankList: function setBankList(res) {
+			var _tempList = [];
+			for (var i = 0; i < res.data.data.methods.length; i++) {
+				var _t = {};
+				_t.value = res.data.data.methods[i].id.toString();
+				_t.label = res.data.data.methods[i].label;
+				_tempList.push(_t);
+			}
+			console.log(_tempList);
+			this.options1 = _tempList;
 		}
 	}
 });
@@ -54666,11 +54708,11 @@ var render = function() {
               _c("mt-radio", {
                 attrs: { align: "right", title: "", options: _vm.options1 },
                 model: {
-                  value: _vm.choiseValue,
+                  value: _vm.value,
                   callback: function($$v) {
-                    _vm.choiseValue = $$v
+                    _vm.value = $$v
                   },
-                  expression: "choiseValue"
+                  expression: "value"
                 }
               })
             ],
@@ -63293,7 +63335,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#bankManage[data-v-059b1b09] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-container[data-v-059b1b09] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-059b1b09] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-059b1b09] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-059b1b09],\n    .bankCard-list li .binding[data-v-059b1b09] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-059b1b09] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-059b1b09] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-059b1b09] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-059b1b09] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-059b1b09] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-059b1b09] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .card-number[data-v-059b1b09] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-059b1b09] {\n    font-size: 1em;\n}\n", ""]);
+exports.push([module.i, "\n#bankManage[data-v-059b1b09] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-container[data-v-059b1b09] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-059b1b09] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-059b1b09] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-059b1b09],\n    .bankCard-list li .binding[data-v-059b1b09] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-059b1b09] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-059b1b09] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-059b1b09] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-059b1b09] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-059b1b09] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-059b1b09] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .card-number[data-v-059b1b09] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-059b1b09] {\n    font-size: 1em;\n}\n.icon[data-v-059b1b09] {\n  color: #09BB07;\n}\n", ""]);
 
 // exports
 
@@ -63334,6 +63376,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -63343,31 +63388,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
-  data: function data() {
-    return {
-      bankList: []
-    };
-  },
-  created: function created() {
-    this.bank();
-  },
+	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+	data: function data() {
+		return {
+			bankList: []
+			// card_id:null
+		};
+	},
+	created: function created() {
+		this.bank();
+	},
 
-  methods: {
-    //银行卡列表
-    bank: function bank() {
-      var _this = this;
+	methods: {
+		//银行卡列表
+		bank: function bank() {
+			var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
+			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
-      __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
-        _this.bankList = res.data.data;
-        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
-      }).catch(function (err) {
-        console.log(err);
-      });
-    }
-  }
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/card/index').then(function (res) {
+				_this.bankList = res.data.data;
+				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+			}).catch(function (err) {
+				console.error(err);
+				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+			});
+		},
+		//更换结算卡
+		changeSet: function changeSet(card_id) {
+			var _this2 = this;
+
+			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
+
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePayCard?' + 'card_id=' + card_id).then(function (res) {
+				console.log(res);
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('更换成功');
+				_this2.bank();
+				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+			}).catch(function (err) {
+				console.error(err);
+				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+			});
+		}
+	}
 });
 
 /***/ }),
@@ -63389,25 +63452,48 @@ var render = function() {
         { staticClass: "bankCard-container" },
         _vm._l(_vm.bankList, function(item) {
           return _c("ul", { staticClass: "bankCard-list" }, [
-            _c("li", [
-              _c("div", { staticClass: "bankCard-box flex" }, [
-                _vm._m(0, true, false),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-info" }, [
-                  _c("div", { staticClass: "bank-name" }, [
-                    _vm._v(_vm._s(item.bank))
+            _c(
+              "li",
+              {
+                on: {
+                  click: function($event) {
+                    _vm.changeSet(item.card_id)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "bankCard-box flex" }, [
+                  _vm._m(0, true, false),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-info" }, [
+                    _c("div", { staticClass: "bank-name" }, [
+                      _vm._v(_vm._s(item.bank))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-type" }, [
+                      _vm._v(_vm._s(item.card_type))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-number" }, [
+                      _vm._v(_vm._s(item.card_num))
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "card-type" }, [
-                    _vm._v(_vm._s(item.card_type))
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "card-number" }, [
-                    _vm._v(_vm._s(item.card_num))
-                  ])
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "icon flex flex-v flex-align-center flex-justify-center"
+                    },
+                    [
+                      _c("i", { staticClass: "iconfont" }, [
+                        _vm._v(_vm._s(item.is_pay_card ? "" : ""))
+                      ])
+                    ]
+                  )
                 ])
-              ])
-            ])
+              ]
+            )
           ])
         })
       )

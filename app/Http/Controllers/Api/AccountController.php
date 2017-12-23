@@ -150,7 +150,7 @@ class AccountController extends BaseController {
                 0.1
             );
         } catch (\Exception $e) {
-            return $this->json([], 'error', 0);
+            return $this->json([], 'error'.$e->getMessage(), 0);
         }
         return $this->json();
     }
