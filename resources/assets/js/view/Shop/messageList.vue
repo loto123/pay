@@ -3,145 +3,24 @@
       <topBack :title="'消息列表'" style="background:#26a2ff;color:#fff"></topBack>
       <ul class="flex flex-v ">
          
-          <li class="flex flex-v flex-justify-around">
+          <li class="flex flex-v flex-justify-around" v-for="item in messageList">
               <div class="notice-content flex flex-align-center flex-justify-around">
                   <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
+                    <img :src="item.user_avatar" alt="" class="avatar">
+                    <span>昵称:{{item.user_name}}</span>
                   </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
+                  <span>申请加入小店 <i style="color:#26a2ff;">{{item.shop_name}}</i> </span>
               </div>
               <div class="notice-controller flex flex-align-center flex-justify-around">
                   <div>2017-12-1</div>
                   <div>14:55:45</div>
                   <div class="btn-wrap flex flex-align-center flex-justify-around">
                     <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
+                    <span class="agree" @click="agreeItem(item.id)">同意</span>
                   </div>
               </div>
           </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-                  
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-                  
-              </div>
-          </li>
+          
       </ul>
 
       <div class="all-list-controller flex flex-justify-center ">
@@ -245,13 +124,40 @@ import Loading from "../../utils/loading"
 import request from "../../utils/userRequest"
 
 export default {
+  data(){
+    return {
+      messageList:[]
+    }
+  },
   components: { topBack },
   created(){
     this.init();
   },
   methods:{
     init(){
-      console.log(1);
+      Loading.getInstance().open();
+      request.getInstance().getData("api/shop/messages").then(res=>{
+        this.messageList = res.data.data;
+        Loading.getInstance().close();
+      }).catch(err=>{
+
+      });
+    },
+    agreeItem(id){
+      Loading.getInstance().open();
+      if(id==null){
+        var _data = null;
+      }else {
+        var _data = {
+          id :id
+        };
+      }
+      request.getInstance().postData("api/shop/agree",_data).then(res=>{
+        Loading.getInstance().close();
+      }).catch(err=>{
+
+      });
+      console.log(id);
     }
   }
 };
