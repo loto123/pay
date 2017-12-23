@@ -269,7 +269,8 @@ class ShopController extends BaseController {
             'members_count' => (int)$shop->users()->count(),
             'rate' => $shop->price,
             'percent' => $shop->fee,
-            'created_at' => strtotime($shop->created_at)
+            'created_at' => strtotime($shop->created_at),
+            'logo' => asset("images/personal.jpg")
         ]);
     }
 
