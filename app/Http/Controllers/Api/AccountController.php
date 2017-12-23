@@ -33,6 +33,7 @@ class AccountController extends BaseController {
         return $this->json([
             'balance' => (float)$user->container->balance,
             'has_pay_password' => empty($user->pay_password) ? 0 : 1,
+            'has_pay_card' => $user->pay_card()->count() > 0 ? 1 : 0,
             ]);
     }
 
