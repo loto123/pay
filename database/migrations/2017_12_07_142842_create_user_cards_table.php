@@ -20,7 +20,10 @@ class CreateUserCardsTable extends Migration
             $table->char('holder_id', 18)->comment('持卡人身份证号');
             $table->string('holder_mobile', 20)->comment('持卡人银行预留手机号');
             $table->string('card_num','19')->comment('银行卡号');
-            $table->string('bank_id','30')->comment('所属银行');
+            $table->integer('bank_id')->unsigned()->comment('银行id');
+            $table->string('province','30')->comment('开户行所属省份');
+            $table->string('city','50')->comment('开户行所属市');
+            $table->string('branch','50')->comment('开户行所属支行')->nullable();
             $table->timestamps();
         });
     }
