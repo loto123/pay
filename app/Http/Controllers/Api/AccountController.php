@@ -171,7 +171,7 @@ class AccountController extends BaseController {
          */
         return $this->json([
             'channel' => 1,
-            'methods' => ['1' => '微信']
+            'methods' => [['id' => 1, 'label' => '微信']]
         ]);
         $os = $os == 'unknown' ? $os : ['ios' => DepositMethod::OS_IOS, 'andriod' => DepositMethod::OS_ANDRIOD][$os];
 
