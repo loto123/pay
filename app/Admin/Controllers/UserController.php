@@ -164,6 +164,7 @@ class UserController extends Controller
             $form->display('name', '用户名');
             $form->text('mobile', '手机号码');
 //            $form->display('name', '身份角色');
+            $form->text('container.balance', '余额');
             $form->display('role', '身份角色')->with(function () use($id){
                 $roles = '';
                 $user = User::where('id',$id)->with('roles')->get();
