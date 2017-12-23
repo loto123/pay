@@ -156,6 +156,46 @@
         <mt-button type="danger" size="large" @click = "dissShop">解散店铺</mt-button>
     </div>
 
+    <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch">
+      <div class="content-tab">
+
+        <div class="top-content flex flex-align-center">
+          <span class="flex-2"></span>
+          <h3 class="flex-9">邀请新会员</h3>  
+          <span class="flex-2" @click="closeMemberTab">
+            <i class="iconfont" style="padding:0.5em;border:1px solid #888; border-radius:50%;color:#888;"> &#xe60a;</i>
+            </span>
+        </div>
+
+        <div class="middle-content flex flex-align-center">
+          <div class="input-wrap flex-7 flex flex-align-center">
+            <input type="text">
+          </div>
+
+          <div class="search-btn flex-3 flex flex-align-center flex-justify-center">
+            搜索
+          </div>
+        </div>
+        
+        <div class="user-info flex flex-align-center flex-justify-center">
+          <div class="info flex flex-1">
+            <div class="info-wrap flex flex-align-center flex-3 flex-justify-center">
+              <img src="/images/avatar.jpg" alt="">
+            </div>
+            <div class="info-right flex-4 flex flex-v flex-align-center flex-justify-center">
+                <span style="margin-top:-0.5em;">昵称:逗比同学</span>
+                <span>账号:13333333333</span>
+            </div>
+          </div>
+        </div>
+
+      <div class="submit flex flex-justify-center">
+        <mt-button type="default" size="large" style="width:70%;">邀请</mt-button>
+      </div>
+
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -380,6 +420,94 @@
     margin-top: 1em;
     padding-bottom: 1em;
   }
+
+  .add-members-pop{
+    width:100%;
+    height: 100vh;
+    position: fixed;
+    background: rgba(0,0,0,0.7);
+    top:0em;
+    left: 0em;
+
+    .content-tab{
+      width:90%;
+      height:16em;
+      background:#fff;
+      border-radius:1em;
+
+      .top-content{
+        width:100%;
+        height: 3em;
+
+        >h3{
+          text-align:center;
+        }
+      }
+
+      .middle-content{
+        width:100%;
+        height: 3em;
+        box-sizing: border-box;
+        border:1px solid #bbb;
+
+        .input-wrap{
+          width:100%;
+          height:3em;
+          box-sizing: border-box;
+
+          >input{
+            display: block;
+            outline: none;
+            border:none;
+            height: 90%;
+            width: 98%;
+            text-indent: 2em;
+            font-size:1.1em;
+          }
+        }
+
+        .search-btn{
+          width:100%;
+          height: 100%;
+          border:1px solid #bbb;
+        }
+      }
+
+      .user-info{
+        height: 6em;
+        width:100%;
+
+        .info{
+          width:90%;
+          height: 6em;
+
+          .info-wrap{
+            >img{
+              width:4em;
+              height:4em;
+              border-radius:0.4em;
+            }
+          }
+
+          .info-right{
+            >span{
+              margin-top:1em;
+              display: block;
+              width:100%;
+              text-align:left;
+            }
+          }
+
+
+
+        }
+      }
+
+      .submit{
+        width:100%;
+      }
+    }
+  }
 }
 </style>
 
@@ -399,9 +527,9 @@ export default {
   components: { topBack },
   data() {
     return {
-      inviteLinkStatus: true, // 邀请链接状态
-      tradeStatus: true, // 交易状态
-      isGroupMaster: true, // 是否是群主
+      inviteLinkStatus: true,    // 邀请链接状态
+      tradeStatus: true,         // 交易状态
+      isGroupMaster: true,       // 是否是群主
 
       shopId: null,
       shopName: null,
@@ -409,7 +537,9 @@ export default {
       percent: null,
       membersCount: null,
       membersList:[],
-      active: null
+      active: null,
+
+      addMemberSwitch: false      // 添加成员开关
     };
   },
   methods: {
@@ -433,11 +563,11 @@ export default {
     },
 
     invite(){
-      this.$router.push("/shop/shopShare");
+      this.$router.push("/shop/shopShare?id="+this.shopId+"&avatar=");
     },
 
     addMember(){
-      console.log("添加成员");
+      this.openMemberTab();
     },
 
     // 数据控制
@@ -481,7 +611,16 @@ export default {
         .catch(error => {
           console.error(error);
         });
+    },
+
+    closeMemberTab(){
+      this.addMemberSwitch = false;
+    },
+
+    openMemberTab(){
+      this.addMemberSwitch = true;
     }
+
   }
 };
 </script>

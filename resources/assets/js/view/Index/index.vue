@@ -129,10 +129,14 @@ i {
 
 <script>
 import tabBar from "../../components/tabBar";
+import Loading from "../../utils/loading"
 
 export default {
   name: "index",
   components: { tabBar },
+  created(){
+    // Loading.getInstance().open();
+  },
   methods:{
     goInform(){
       this.$router.push("/inform");

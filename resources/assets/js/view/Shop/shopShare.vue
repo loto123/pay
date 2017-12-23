@@ -9,7 +9,7 @@
         </div>
 
         <div class="qr-code flex flex-align-center flex-justify-center">
-          <img src="/images/code.png" alt="">
+          <img :src="QRCode" alt="">
         </div>
 
         <h3>
@@ -135,9 +135,27 @@ export default {
   components:{topBack},
   data(){
     return {
-      isUser:false              // false ：商户分享界面  true ：用户加入界面
+      isUser:false,             // false ：商户分享界面  true ：用户加入界面
+      shopId:null,
+      QRCode:""
+
     }
   },
+  created(){
+    this.init();
+  },
+  methods:{
+    init(){
+      // /shop/qrcode/{id}
+      this.shopId = this.$route.query.id;
+
+      request.getInstance().getData("api/shop/qrcode/"+this.shopId).then(res=>{
+        this.QRCode = res.data.data.url;
+      }).catch(err=>{
+
+      });
+    }
+  }
 }
 </script>
 

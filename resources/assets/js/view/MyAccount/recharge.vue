@@ -41,7 +41,7 @@
 			}
 		},
 		created() {
-			this.rechargeWay();
+			this.rechargeWay(); 
 		},
 		components: { topBack},
 		props: ["showSwitch", "optionsList"],
@@ -86,7 +86,7 @@
 					})
 			}
 		}
-	};
+	}; 
 </script>
 
 <style lang="scss" scoped>

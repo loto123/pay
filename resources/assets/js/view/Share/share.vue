@@ -1,0 +1,17 @@
+<template>
+  <div id="share">
+      分享页面
+  </div>
+</template>
+
+<style lang="scss" scoped>
+
+</style>
+
+<script>
+export default {
+  
+}
+</script>
+
+
