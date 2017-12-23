@@ -239,7 +239,7 @@ class CardController extends Controller
 
     /**
      * @SWG\GET(
-     *   path="/card/getBanks",
+     *   path="/card/getBankCardParams",
      *   summary="添加银行卡支付通道需要参数",
      *   tags={"我的"},
      *   @SWG\Response(response=200, description="successful operation"),
