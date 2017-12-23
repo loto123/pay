@@ -11,10 +11,10 @@
                 <div class="title">当前可提现余额</div>
             </div>
             <div class="submit-btn">
-                <a href="/#/myAccount/recharge" class="mb15">
+                <a href="javascript:;" class="mb15" @click="recharge">
                     <button type="button" class="recharge-btn">充值</button>
                 </a>
-                <a href="/#/myAccount/withdraw" class="mb15">
+                <a href="javascript:;"  @click="withdraw" class="mb15">
                     <button type="button" class="withdraw-btn">提现</button>
                 </a>  
                 <a href="/#/myAccount/give">
@@ -34,7 +34,8 @@
     export default {
         data () {
             return {
-                balance:null
+                balance:null,
+                has_pay_card:null//是否有结算卡
             }
         },
         created(){
@@ -48,11 +49,30 @@
 				request.getInstance().getData("api/account")
 					.then((res) => {
                         this.balance=res.data.data.balance;
+                        this.has_pay_card=res.data.data.has_pay_card;
                         Loading.getInstance().close();
 					})
 					.catch((err) => {
 						console.log(err);
 					})
+            },
+            //充值
+            recharge(){
+                if(this.has_pay_card==0){
+                    this.$router.push('/my');
+                }else{
+                    this.$router.push('/myAccount/recharge')
+                }
+                
+            },
+            //提现
+            withdraw(){
+                if(this.has_pay_card==0){
+                    this.$router.push('/my');
+                }else{
+                    this.$router.push('/myAccount/withdraw')
+                }
+                
             }
         }
     }
