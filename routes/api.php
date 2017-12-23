@@ -103,6 +103,9 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('create', 'ShopController@create');
         $api->get('qrcode/{id}', 'ShopController@qrcode');
         $api->get('account/{id}', 'ShopController@account');
+        $api->get('messages', 'ShopController@messages');
+        $api->post('agree', 'ShopController@agree');
+        $api->post('ignore', 'ShopController@ignore');
     });
 });
 
