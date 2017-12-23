@@ -149,4 +149,8 @@ class User extends Authenticatable
     public function channel() {
         return $this->hasOne(Channel::class, 'id', 'channel_id');
     }
+
+    public function pay_card() {
+        return $this->hasOne(UserCard::class, 'id', 'pay_card_id');
+    }
 }

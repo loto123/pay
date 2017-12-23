@@ -6,7 +6,7 @@
 			</div>
 		</topBack>
 		<div class="recharge-box">
-			<div class="title">充值金额</div>
+			<div class="title">充值金额</div> 
 			<div class="recharge-money flex flex-justify-center">
 				<label>￥</label>
 				<input type="text" placeholder="请输入金额" v-model="amount">
@@ -14,7 +14,7 @@
 			<div class="recharge-way">
 				<div class="title">选择充值方式</div>
 				<div class="list-wrap">
-					<mt-radio align="right" title="" v-model="choiseValue" :options="['银行卡', '微信']">
+					<mt-radio align="right" title="" v-model="choiseValue" :options="options1">
 					</mt-radio>
 				</div>
 			</div>
@@ -22,7 +22,6 @@
 				<mt-button type="primary" size="large">充值</mt-button>
 			</a>
 		</div>
-		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
 	</div>
 </template>
 
@@ -30,7 +29,6 @@
 	import axios from "axios";
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack.vue";
-	import passWorld from "../../components/password"
 	
 	import { MessageBox, Toast } from "mint-ui";
 
@@ -38,15 +36,19 @@
 		data() {
 			return {
 				amount: null,
-				choiseValue: null
+				choiseValue: null,
+				options1:[]
 			}
 		},
-		components: { topBack },
-		props: ["showSwitch", "optionsList",passWorld],
+		created() {
+			this.rechargeWay();
+		},
+		components: { topBack},
+		props: ["showSwitch", "optionsList"],
 		methods: {
-			hideTab() {
-				this.$emit("hideDropList", this.choiseValue);
-			},
+			// hideTab() {
+			// 	this.$emit("hideDropList", this.choiseValue);
+			// },
 			goIndex() {
 				this.$router.push("/index");
 			},
@@ -70,8 +72,18 @@
 						console.error(err);
 					})
 			},
-			watch: {
-				"choiseValue": 'hideTab'
+			// watch: {
+			// 	"choiseValue": 'hideTab'
+			// },
+			rechargeWay(){
+				request.getInstance().getData('api/account/pay-methods/unknown/5')
+					.then((res) => {
+						console.log(res);
+						this.options1=res.data.data.methods;
+					})
+					.catch((err) => {
+						console.error(err);
+					})
 			}
 		}
 	};
