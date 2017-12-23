@@ -20,7 +20,7 @@
 			<div class="withdraw-way">
 				<div class="title">提现到</div>
 				<div class="list-wrap">
-					<mt-radio align="right" title="" v-model="choiseValue" :options="['银行卡', '微信']">
+					<mt-radio align="right" title="" v-model="value" :options="options1">
 					</mt-radio>
 				</div>
 			</div> 
@@ -43,17 +43,19 @@
 	export default {
 		data() {
 			return {
-				balance:null,
+				balance:null,//可用余额
 				showPasswordTag: false,       // 密码弹出开关
 
-				amount:null, //提现money
-				choiseValue:null,
+				amount: null,	//提现金钱
+				options1:[],
+				way:null,	//提现方式
+				value:null,
 				has_pay_password:null//是否设置支付密码
-
 			}
 		},
 		created(){
 			this.myAccount();
+			this.selWay();
     	},
 		components: { topBack,passWorld},
 		methods: {
@@ -81,17 +83,20 @@
 			},
 			withdrawBtn(){
 				var self = this;
+				//成功内容
 				var _data = {
 					amount: this.amount,
-					choiseValue: this.choiseValue
+					way:this.value
 				}
 
 				if (!this.amount) {
 					Toast('请输入提现金额');
 					return
 				}
-				
-				// console.log(this.has_pay_password);
+				if (!this.value) {
+					Toast('请选择支付方式');
+					return
+				}
 				if (this.has_pay_password==0) {
 					this.$router.push('/my/setting_password');//跳转到设置支付密码
 				}else{
@@ -102,16 +107,40 @@
 			callBack(password){
 				var temp = {};
 				temp.password=password;
-				
-				request.getInstance().postData('api/my/pay_password',temp)
+				var _data = {
+					amount: this.amount,
+					way:this.value,
+					password:password
+				}
+				Promise.all([request.getInstance().postData('api/my/pay_password',temp),request.getInstance().postData('api/account/withdraw', _data)])
 				.then((res) => {
-					if(res.data.code==1){
-						//成功内容
-					}
+					Toast('提现成功');
+					this.$router.push('/myAccount');
+
 				})
 				.catch((err) => {
-					console.error(err.data.msg);
+					console.error(err);
 				})
+			},
+			//获取提现方式列表
+			selWay(){
+				request.getInstance().getData('api/account/withdraw-methods')
+					.then((res) => {
+						this.setBankList(res);
+					})
+					.catch((err) => {
+						console.error(err);
+					})
+			},
+			setBankList(res) {
+				var _tempList = [];
+				for (let i = 0; i < res.data.data.methods.length; i++) {
+					var _t = {};
+					_t.value = res.data.data.methods[i].id.toString();
+					_t.label = res.data.data.methods[i].label;
+					_tempList.push(_t);
+				}
+				this.options1 = _tempList;
 			}
 		}
 	};

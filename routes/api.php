@@ -48,6 +48,7 @@ Route::group([
     $router->post('create', 'CardController@create');
     $router->post('delete', 'CardController@delete');
     $router->get('getBanks','CardController@getBanks');
+    $router->get('getBankCardParams','CardController@getBankCardParams');
 });
 
 $api = app('Dingo\Api\Routing\Router');
@@ -102,6 +103,9 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('create', 'ShopController@create');
         $api->get('qrcode/{id}', 'ShopController@qrcode');
         $api->get('account/{id}', 'ShopController@account');
+        $api->get('messages', 'ShopController@messages');
+        $api->post('agree', 'ShopController@agree');
+        $api->post('ignore', 'ShopController@ignore');
     });
 });
 
@@ -136,6 +140,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('records', 'AccountController@records');
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
+        $api->post('transfer', 'AccountController@transfer');
         $api->get('withdraw-fields', 'AccountController@withdrawFieldsInfo');
     });
 

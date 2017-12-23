@@ -110,7 +110,7 @@ class UserController extends Controller
             });
             $grid->roles('身份')->pluck('display_name')->label();
             $grid->transfer_count('交易笔数');
-            $grid->balance('余额');
+            $grid->column('container.balance','余额');
             $grid->column('pure_profit', '收益')->display(function(){
                 return number_format($this->profit - $this->payment,2);
             });
@@ -164,6 +164,7 @@ class UserController extends Controller
             $form->display('name', '用户名');
             $form->text('mobile', '手机号码');
 //            $form->display('name', '身份角色');
+            $form->text('container.balance', '余额');
             $form->display('role', '身份角色')->with(function () use($id){
                 $roles = '';
                 $user = User::where('id',$id)->with('roles')->get();
@@ -209,7 +210,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        if ($user->child_proxy) {
+        if ($user->child_proxy()->count() > 0) {
             abort(404);
         }
         if ($this->form()->destroy($id)) {

@@ -20,7 +20,7 @@
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
 
-        <div class="list-wrap" v-for="item in shopList" :key = "item.id">
+        <div class="list-wrap" v-for="item in shopList" :key = "item.id" @click="goDetail(item.id)">
           <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
             <div class="notice"></div>
             <img :src="item.logo"  alt="">
@@ -150,6 +150,11 @@ export default {
     goMyShop() {
       this.$router.push("/shop/");
     },
+
+    goDetail(id){
+      this.$router.push("/shop/shop_detail?"+"id="+id);
+    },
+
     init(){
       Loading.getInstance().open();
       request.getInstance().getData("api/shop/lists").then(res=>{
