@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
+use App\Pay\Model\WithdrawMethod;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
