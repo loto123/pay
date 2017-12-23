@@ -142,14 +142,11 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-        if (!$user->pay_card) {
-            return $this->json(['error_code' => 1]);
-        }
-        if (!$user->pay_password) {
-            return $this->json(['error_code' => 2]);
-        }
         if (!Hash::check($request->password, $user->pay_password)) {
             return $this->json([], trans("api.error_pay_password"), 0);
+        }
+        if (!$user->pay_card) {
+            return $this->json([], trans("api.error_pay_card"), 0);
         }
         try {
             $result = $user->container->initiateWithdraw(
