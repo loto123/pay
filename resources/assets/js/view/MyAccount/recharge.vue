@@ -14,7 +14,7 @@
 			<div class="recharge-way">
 				<div class="title">选择充值方式</div>
 				<div class="list-wrap">
-					<mt-radio align="right" title="" v-model="choiseValue" :options="['银行卡', '微信']">
+					<mt-radio align="right" title="" v-model="choiseValue" :options="options1">
 					</mt-radio>
 				</div>
 			</div>
@@ -36,15 +36,19 @@
 		data() {
 			return {
 				amount: null,
-				choiseValue: null
+				choiseValue: null,
+				options1:[]
 			}
+		},
+		created() {
+			this.rechargeWay();
 		},
 		components: { topBack},
 		props: ["showSwitch", "optionsList"],
 		methods: {
-			hideTab() {
-				this.$emit("hideDropList", this.choiseValue);
-			},
+			// hideTab() {
+			// 	this.$emit("hideDropList", this.choiseValue);
+			// },
 			goIndex() {
 				this.$router.push("/index");
 			},
@@ -68,8 +72,18 @@
 						console.error(err);
 					})
 			},
-			watch: {
-				"choiseValue": 'hideTab'
+			// watch: {
+			// 	"choiseValue": 'hideTab'
+			// },
+			rechargeWay(){
+				request.getInstance().getData('api/account/pay-methods/unknown/5')
+					.then((res) => {
+						console.log(res);
+						this.options1=res.data.data.methods;
+					})
+					.catch((err) => {
+						console.error(err);
+					})
 			}
 		}
 	};
