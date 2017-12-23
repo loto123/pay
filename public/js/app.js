@@ -53910,7 +53910,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            balance: null
+            balance: null,
+            has_pay_card: null //是否有结算卡
         };
     },
     created: function created() {
@@ -53926,10 +53927,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
                 _this.balance = res.data.data.balance;
+                _this.has_pay_card = res.data.data.has_pay_card;
                 __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
                 console.log(err);
             });
+        },
+
+        //充值
+        recharge: function recharge() {
+            if (this.has_pay_card == 0) {
+                this.$router.push('/my');
+            } else {
+                this.$router.push('/myAccount/recharge');
+            }
+        },
+
+        //提现
+        withdraw: function withdraw() {
+            if (this.has_pay_card == 0) {
+                this.$router.push('/my');
+            } else {
+                this.$router.push('/myAccount/withdraw');
+            }
         }
     }
 });
@@ -53974,7 +53994,41 @@ var render = function() {
           _c("div", { staticClass: "title" }, [_vm._v("当前可提现余额")])
         ]),
         _vm._v(" "),
-        _vm._m(0, false, false)
+        _c("div", { staticClass: "submit-btn" }, [
+          _c(
+            "a",
+            {
+              staticClass: "mb15",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.recharge }
+            },
+            [
+              _c(
+                "button",
+                { staticClass: "recharge-btn", attrs: { type: "button" } },
+                [_vm._v("充值")]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "mb15",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.withdraw }
+            },
+            [
+              _c(
+                "button",
+                { staticClass: "withdraw-btn", attrs: { type: "button" } },
+                [_vm._v("提现")]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _vm._m(0, false, false)
+        ])
       ])
     ],
     1
@@ -53985,35 +54039,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "submit-btn" }, [
-      _c(
-        "a",
-        { staticClass: "mb15", attrs: { href: "/#/myAccount/recharge" } },
-        [
-          _c(
-            "button",
-            { staticClass: "recharge-btn", attrs: { type: "button" } },
-            [_vm._v("充值")]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        { staticClass: "mb15", attrs: { href: "/#/myAccount/withdraw" } },
-        [
-          _c(
-            "button",
-            { staticClass: "withdraw-btn", attrs: { type: "button" } },
-            [_vm._v("提现")]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c("a", { attrs: { href: "/#/myAccount/give" } }, [
-        _c("button", { staticClass: "give-btn", attrs: { type: "button" } }, [
-          _vm._v("转账到店铺")
-        ])
+    return _c("a", { attrs: { href: "/#/myAccount/give" } }, [
+      _c("button", { staticClass: "give-btn", attrs: { type: "button" } }, [
+        _vm._v("转账到店铺")
       ])
     ])
   }
@@ -54180,15 +54208,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
-			balance: null,
+			balance: null, //可用余额
 			showPasswordTag: false, // 密码弹出开关
 
-			amount: null,
+			amount: null, //提现金钱
 			options1: [],
-			way: null,
+			way: null, //提现方式
 			value: null,
 			has_pay_password: null //是否设置支付密码
-
 		};
 	},
 	created: function created() {
@@ -54236,7 +54263,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('请选择支付方式');
 				return;
 			}
-
 			if (this.has_pay_password == 0) {
 				this.$router.push('/my/setting_password'); //跳转到设置支付密码
 			} else {
@@ -54725,7 +54751,7 @@ var render = function() {
           {
             staticClass: "recharge-btn",
             attrs: { href: "javascript:;" },
-            on: { click: _vm.recharge }
+            on: { click: _vm.rechargeBtn }
           },
           [
             _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
@@ -63335,7 +63361,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#bankManage[data-v-059b1b09] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-container[data-v-059b1b09] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-059b1b09] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-059b1b09] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-059b1b09],\n    .bankCard-list li .binding[data-v-059b1b09] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-059b1b09] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-059b1b09] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-059b1b09] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-059b1b09] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-059b1b09] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-059b1b09] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .card-number[data-v-059b1b09] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-059b1b09] {\n    font-size: 1em;\n}\n.icon[data-v-059b1b09] {\n  color: #09BB07;\n}\n", ""]);
+exports.push([module.i, "\n#bankManage[data-v-059b1b09] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-container[data-v-059b1b09] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-059b1b09] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-059b1b09] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-059b1b09],\n    .bankCard-list li .binding[data-v-059b1b09] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-059b1b09] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-059b1b09] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-059b1b09] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-059b1b09] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-059b1b09] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-059b1b09] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-059b1b09],\n  .bankCard-box .card-info .card-number[data-v-059b1b09] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-059b1b09] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-059b1b09] {\n    font-size: 1em;\n}\n.icon[data-v-059b1b09] {\n  color: #09BB07;\n}\n.icon i[data-v-059b1b09] {\n    font-size: 2em;\n}\n", ""]);
 
 // exports
 
@@ -63479,18 +63505,11 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "icon flex flex-v flex-align-center flex-justify-center"
-                    },
-                    [
-                      _c("i", { staticClass: "iconfont" }, [
-                        _vm._v(_vm._s(item.is_pay_card ? "" : ""))
-                      ])
-                    ]
-                  )
+                  _c("div", { staticClass: "icon flex flex-align-center" }, [
+                    _c("i", { staticClass: "iconfont" }, [
+                      _vm._v(_vm._s(item.is_pay_card ? "" : ""))
+                    ])
+                  ])
                 ])
               ]
             )

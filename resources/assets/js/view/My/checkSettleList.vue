@@ -13,7 +13,7 @@
 							<div class="card-type">{{item.card_type}}</div>
 							<div class="card-number">{{item.card_num}}</div>
 						</div>
-						<div class="icon flex flex-v flex-align-center flex-justify-center">
+						<div class="icon flex flex-align-center">
 							<i class="iconfont">{{item.is_pay_card ?'&#xe62b;':''}}</i>
 						</div>
 					</div>
@@ -152,5 +152,8 @@
 	}
 	.icon{
 		color:#09BB07;
+		i{
+			font-size:2em;
+		}
 	}
 </style>

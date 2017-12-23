@@ -43,15 +43,14 @@
 	export default {
 		data() {
 			return {
-				balance:null,
+				balance:null,//可用余额
 				showPasswordTag: false,       // 密码弹出开关
 
-				amount: null,
+				amount: null,	//提现金钱
 				options1:[],
-				way:null,
+				way:null,	//提现方式
 				value:null,
 				has_pay_password:null//是否设置支付密码
-
 			}
 		},
 		created(){
@@ -98,7 +97,6 @@
 					Toast('请选择支付方式');
 					return
 				}
-				
 				if (this.has_pay_password==0) {
 					this.$router.push('/my/setting_password');//跳转到设置支付密码
 				}else{

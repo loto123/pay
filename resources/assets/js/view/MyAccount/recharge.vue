@@ -18,7 +18,7 @@
 					</mt-radio>
 				</div>
 			</div>
-			<a href="javascript:;" class="recharge-btn" @click="recharge">
+			<a href="javascript:;" class="recharge-btn" @click="rechargeBtn">
 				<mt-button type="primary" size="large">充值</mt-button>
 			</a>
 		</div>
