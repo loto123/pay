@@ -1,6 +1,9 @@
 <template>
-  <div id="shop-share" class="flex flex-justify-center flex-align-center">
-      <topBack :title="!isUser?'邀请新会员':'加入店铺'" style="background:#26a2ff;color:#fff;"></topBack>
+  <div id="share" class="flex flex-justify-center flex-align-center">
+      <!-- <topBack :title="!isUser?'邀请新会员':'加入店铺'" style="background:#26a2ff;color:#fff;"></topBack> -->
+      <div class="top flex flex-align-center">
+          <h3>加入店铺</h3>
+      </div>
 
       <div class="content-wrap-shop flex flex-v flex-align-center" v-if="!isUser">
         <div class="info flex flex-align-center">
@@ -20,12 +23,12 @@
       <div class="content-wrap-user" v-if="isUser">
         <div class="info flex flex-v flex-align-center">
           <img src="/images/avatar.jpg" alt="">
-          <h1>斗牛小铺（68人</h1>
+          <h1>斗牛小铺(68人)</h1>
           <h2>Leaf 创建于 2017- 11-22</h2>
         </div>
 
         <div class="submit">
-          <mt-button type="primary" size="large">申请加入</mt-button>
+          <mt-button type="primary" size="large" @click="submit">申请加入</mt-button>
         </div>
       </div>
 
@@ -33,12 +36,27 @@
 </template>
 
 <style lang="scss" scoped>
-#shop-share{
+#share{
   box-sizing: border-box;
   padding-top:2em;
   height:100vh;
   width:100%;
   background:#26a2ff;
+
+  .top{
+      position: fixed;
+      width:100%;
+      height: 2em;
+      top:0em;
+      left: 0em;
+
+      h3{
+          color:#fff;
+          text-align:center;
+          display: block;
+          width:100%;
+      }
+  }
 
   .content-wrap-shop{
     margin-top:-3.5em;
@@ -123,48 +141,40 @@
     }
   }
 }
-
 </style>
 
 <script>
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
-import topBack from "../../components/topBack"
-import {Toast} from "mint-ui"
 
 export default {
-  components:{topBack},
-  data(){
-    return {
-      isUser:false,             // false ：商户分享界面  true ：用户加入界面
-      shopId:null,
-      QRCode:"",
-      shopName:null,            //店铺名称
-      logo:null                 // 店铺头像
 
-    }
-  },
   created(){
     this.init();
   },
+
+  data(){
+      return {
+          shopId :null,
+          userId :null,
+          isUser: true
+      }
+  },
   methods:{
-    init(){
-      this.shopId = this.$route.query.id;
-      
-      Loading.getInstance().open();
-      Promise.all([request.getInstance().getData("api/shop/qrcode/"+this.shopId),request.getInstance().getData("api/shop/detail/" + this.shopId)])
-        .then(res=>{
-          this.QRCode = res[0].data.data.url;
-          this.logo = res[1].data.data.logo;
-          this.shopName = res[1].data.data.name;
-          Loading.getInstance().close();
-        }).catch(err=>{
-          Loading.getInstance().close();
-          Toast("请求错误");
+      init(){
+        this.shopId = this.$route.query.shopId;
+        this.userId = this.$route.query.userId;
+        console.log(this.shopId);
+      },
+      submit(){
+        request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{
+          
+        }).catch(error=>{
+
         });
-     
-    }
+      }
   }
 }
 </script>
+
 

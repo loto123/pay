@@ -21,7 +21,7 @@ export default class UserRequest {
         var tempUrl = this.baseUrl + url;
         var postData = data||{};
 
-        var _token = sessionStorage.getItem("_token");
+        var _token = this.getToken();
         this.validToken(_token);
 
         return new Promise(function (resolve, reject) {
@@ -56,7 +56,7 @@ export default class UserRequest {
         var tempUrl = this.baseUrl + url;
         var postData = data || {};
 
-        var _token = sessionStorage.getItem("_token");
+        var _token = this.getToken();
         this.validToken(_token);
 
         return new Promise(function (resolve, reject) {
@@ -92,12 +92,22 @@ export default class UserRequest {
     // 验证token是否存在
     validToken(token){
         var url = window.location.href.indexOf("/#/login");
-        if(!token && url==-1){
+        var urlShare = window.location.href.indexOf("/#/share");
+        if(!token && url==-1 && urlShare){
             Loading.getInstance().close();
             Toast("用户未登录,即将跳转登录...");
             setTimeout(function(){
                 window.location.href = "/#/login";
             },1000);
         }
+    }
+
+    getToken(){
+        var _t =sessionStorage.getItem("_token");
+        return _t;
+    }
+
+    setToken(token){
+        sessionStorage.setItem("_token",token);
     }
 }

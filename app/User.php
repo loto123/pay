@@ -118,7 +118,7 @@ class User extends Authenticatable
     public function child_proxy()
     {
         return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
-            $query->where('name','like', 'agent%');
+            $query->where('name', 'like', 'agent%');
         });
     }
 
@@ -130,24 +130,34 @@ class User extends Authenticatable
         });
     }
 
-    public function en_id() {
+    public function en_id()
+    {
         return Skip32::encrypt("0123456789abcdef0123", $this->id);
     }
 
-    public static function findByEnId($en_id) {
+    public static function findByEnId($en_id)
+    {
         return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
     }
 
-    public function funds() {
+    public function funds()
+    {
         return $this->hasMany(UserFund::class, 'user_id');
     }
 
-    public function container() {
+    public function container()
+    {
         return $this->hasOne(MasterContainer::class, 'id', 'container_id');
     }
 
-    public function channel() {
+    public function channel()
+    {
         return $this->hasOne(Channel::class, 'id', 'channel_id');
+    }
+
+    public function getBalanceAttribute()
+    {
+        return $this->container->balance;
     }
 
     public function pay_card() {
