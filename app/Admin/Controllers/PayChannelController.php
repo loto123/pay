@@ -46,7 +46,7 @@ class PayChannelController extends Controller
             $grid->id('ID')->sortable();
             $grid->name('通道名称');
             $grid->platform()->name('支付平台');//支付平台
-            //$grid->column('businessEntity.company_name', '签约主体');//签约主体
+            $grid->column('businessEntity.company_name', '签约主体');//签约主体
             $grid->column('spareChannel.name', '备用通道');
             //开启状态
             $grid->disabled('通道状态')->switch([

@@ -41,7 +41,7 @@
                     请输入验证码
                 </h3>
 
-                <p>短信验证码已发送至1008666666</p>
+                <p>短信验证码已发送至{{userAccountName}}</p>
 
                 <section class="input-wrap flex flex-align-center">
                     <span class="flex-1">验证码:</span>
@@ -63,7 +63,7 @@
                     设置登录密码
                 </h3>
 
-                <p>密码又8-16位数字、字母或符号组成</p>
+                <p>密码由8-16位数字、字母或符号组成</p>
 
                 <section class="input-wrap ">
                     <mt-field label="密码" placeholder="请输入登录密码" type="password" v-model="userPassword"></mt-field>

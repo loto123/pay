@@ -14,6 +14,7 @@ use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawResult;
 use App\Pay\WithdrawInterface;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SmallBatchTransfer implements WithdrawInterface
@@ -43,6 +44,36 @@ class SmallBatchTransfer implements WithdrawInterface
             18 => '平安银行',
             38 => '浙江泰隆商业银行',
         ];
+    }
+
+    /**
+     * 查询省市
+     */
+    public static function queryProvincesAndCities($force = false)
+    {
+        $cacheKey = 'heepay_areas';
+        if ($force) {
+            Cache::forget($cacheKey);
+        }
+        $options = Cache::get($cacheKey, function () use ($cacheKey) {
+            $xmlObj = simplexml_load_string(iconv("gbk//IGNORE", "utf-8", file_get_contents('https://pay.heepay.com/API/PayTransit/QueryProvincesAndCities.aspx')));
+            $xmlObj = self::xmlToArr($xmlObj);
+            $options = array_column(array_map(function ($area) {
+                //dump($area);
+                return ['city' => (array)$area['city'], 'province' => $area['@attributes']['name']];
+
+            }, $xmlObj['province']), 'city', 'province');
+            $options = json_encode($options, JSON_UNESCAPED_UNICODE);
+            Cache::forever($cacheKey, $options);
+            return $options;
+        });
+        return json_decode($options, true);
+
+    }
+
+    public static function xmlToArr(\SimpleXMLElement $xml)
+    {
+        return json_decode(json_encode($xml, JSON_UNESCAPED_UNICODE), true);
     }
 
     /**

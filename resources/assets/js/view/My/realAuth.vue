@@ -15,7 +15,7 @@
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
             <input type="text" placeholder="请输入验证码" class="flex-1" v-model="code">
-            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime}}</mt-button>
+            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime?"("+computedTime+")":""}}</mt-button>
           </div>
         </section>
       </div>
@@ -87,7 +87,7 @@
 
         request.getInstance().postData("api/auth/sms",_temp).then((res) => {
           console.log(res);
-          this.computedTime = 5;
+          this.computedTime = 60;
           this.timer = setInterval(() => {
               this.computedTime --;
               console.log(this.computedTime); 
@@ -96,7 +96,7 @@
               }
           }, 1000)
         }).catch((err) => {
-         console.log(err);
+         console.error(err);
         })
       }
     }

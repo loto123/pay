@@ -14,7 +14,7 @@
 			<div class="recharge-way">
 				<div class="title">选择充值方式</div>
 				<div class="list-wrap">
-					<mt-radio align="right" title="" v-model="choiseValue" :options="['银行卡', '微信']">
+					<mt-radio align="right" title="" v-model="value" :options="options1">
 					</mt-radio>
 				</div>
 			</div>
@@ -22,7 +22,6 @@
 				<mt-button type="primary" size="large">充值</mt-button>
 			</a>
 		</div>
-		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
 	</div>
 </template>
 
@@ -30,7 +29,6 @@
 	import axios from "axios";
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack.vue";
-	import passWorld from "../../components/password"
 	
 	import { MessageBox, Toast } from "mint-ui";
 
@@ -38,15 +36,20 @@
 		data() {
 			return {
 				amount: null,
-				choiseValue: null
+				options1:[],
+				way:null,
+				value:null
 			}
 		},
-		components: { topBack },
-		props: ["showSwitch", "optionsList",passWorld],
+		created() {
+			this.selWay();
+		},
+		components: { topBack},
+		props: ["showSwitch", "optionsList"],
 		methods: {
-			hideTab() {
-				this.$emit("hideDropList", this.choiseValue);
-			},
+			// hideTab() {
+			// 	this.$emit("hideDropList", this.choiseValue);
+			// },
 			goIndex() {
 				this.$router.push("/index");
 			},
@@ -54,7 +57,7 @@
 				var self = this;
 				var _data = {
 					amount: this.amount,
-					choiseValue: this.choiseValue
+					way:this.value
 				}
 
 				if (!this.amount) {
@@ -65,13 +68,35 @@
 					.then((res) => {
 						console.log(res);
 						Toast('充值成功');
+						location.href=res.data.data.redirect_url;
 					})
 					.catch((err) => {
 						console.error(err);
 					})
 			},
-			watch: {
-				"choiseValue": 'hideTab'
+			// watch: {
+			// 	"choiseValue": 'hideTab'
+			// },
+			selWay(){
+				request.getInstance().getData('api/account/pay-methods/unknown/5')
+					.then((res) => {
+						console.log(res);
+						this.setBankList(res);
+					})
+					.catch((err) => {
+						console.error(err);
+					})
+			},
+			setBankList(res) {
+				var _tempList = [];
+				for (let i = 0; i < res.data.data.methods.length; i++) {
+					var _t = {};
+					_t.value = res.data.data.methods[i].id.toString();
+					_t.label = res.data.data.methods[i].label;
+					_tempList.push(_t);
+				}
+					console.log(_tempList);
+				this.options1 = _tempList;
 			}
 		}
 	};

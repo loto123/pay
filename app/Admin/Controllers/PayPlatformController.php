@@ -38,15 +38,16 @@ class PayPlatformController extends Controller
     protected function grid()
     {
         return Admin::grid(Platform::class, function (Grid $grid) {
+            $grid->model()->orderBy('id', 'desc');
             $grid->id('ID')->sortable();
             $grid->column('name', '平台')->editable();
             $grid->depositMethods('充值方式')->display(function ($depositMethods) {
-                $mthods = array_column($depositMethods, 'disabled', 'title');
+                $methods = array_column($depositMethods, 'disabled', 'title');
                 array_walk(
-                    $mthods, function (&$disabled, $title) {
+                    $methods, function (&$disabled, $title) {
                     $disabled = '<span class="label label-' . ($disabled ? 'danger' : 'success') . '">' . $title . '</span>';
                 });
-                return implode('&nbsp;', $mthods);
+                return implode('&nbsp;', $methods);
             });
 
             $grid->withdrawMethods('提现方式')->display(function ($withdrawMethods) {
