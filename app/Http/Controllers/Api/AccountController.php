@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
+use App\Pay\Model\WithdrawMethod;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -58,13 +59,14 @@ class AccountController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function charge(Request $request) {
-        $stdClass = new \stdClass();
-        $stdClass->pay_info = 'http://www.alipay.com';
-        return $this->json($stdClass);
+//        $stdClass = new \stdClass();
+//        $stdClass->pay_info = 'http://www.alipay.com';
+//        return $this->json($stdClass);
         $validator = Validator::make($request->all(), [
             'amount' => 'required',
             'way' => 'required'
         ]);
+
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
@@ -121,13 +123,35 @@ class AccountController extends BaseController {
      */
     public function withdraw(Request $request)
     {
-        return $this->json([], '提现申请已提交');
-        //判断通道
-        $bindChannel = $this->user->channel;
-        $bindChannel = $request->use_spare == 1 ? $bindChannel->spareChannel : $bindChannel;
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required',
+            'way' => 'required'
+        ]);
 
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = $this->auth->user();
 
-        //return $this->user->container->initiateWithdraw($request->amount, array $receiver_info, Channel $byChannel, WithdrawMethod $byMethod, $system_fee)
+        try {
+            $result = $user->container->initiateWithdraw(
+                $request->amount,
+                [
+                    'branch_bank' => $user->pay_card->bank->name,
+                    'bank_no' => $user->pay_card->bank_id,
+                    'city' => '广州市',
+                    'province' => '广东省',
+                    'receiver_account' => $user->pay_card->card_num,
+                    'receiver_name' => $user->pay_card->holder_name,
+                    'to_public' => 0
+                ],
+                $user->channel,
+                WithdrawMethod::find($request->way),
+                0.1
+            );
+        } catch (\Exception $e) {
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 

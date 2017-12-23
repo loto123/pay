@@ -5194,6 +5194,7 @@ var UserRequest = function () {
             var postData = data || {};
 
             var _token = sessionStorage.getItem("_token");
+            this.validToken(_token);
 
             return new Promise(function (resolve, reject) {
                 __WEBPACK_IMPORTED_MODULE_0_axios___default()({
@@ -5226,6 +5227,7 @@ var UserRequest = function () {
             var postData = data || {};
 
             var _token = sessionStorage.getItem("_token");
+            this.validToken(_token);
 
             return new Promise(function (resolve, reject) {
                 __WEBPACK_IMPORTED_MODULE_0_axios___default()({
@@ -5251,6 +5253,21 @@ var UserRequest = function () {
                     console.error(error);
                 });
             });
+        }
+
+        // 验证token是否存在
+
+    }, {
+        key: 'validToken',
+        value: function validToken(token) {
+            var url = window.location.href.indexOf("/#/login");
+            if (!token && url == -1) {
+                __WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */].getInstance().close();
+                Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户未登录,即将跳转登录...");
+                setTimeout(function () {
+                    window.location.href = "/#/login";
+                }, 1000);
+            }
         }
     }]);
 
@@ -46303,7 +46320,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.top[data-v-5c93fb5e] {\n  height: 2em;\n  width: 100%;\n  padding-right: 0.8em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.top > a[data-v-5c93fb5e] {\n    font-size: 1em;\n}\n.logo-wrap[data-v-5c93fb5e] {\n  width: 100%;\n  height: auto;\n  margin-top: 2em;\n}\n.logo-wrap .circle-wrap[data-v-5c93fb5e] {\n    width: 7em;\n    height: 7em;\n    border-radius: 50%;\n    border: 1px solid #eee;\n}\n.logo-wrap img[data-v-5c93fb5e] {\n    display: block;\n    width: 5em;\n    height: 5em;\n    margin: 0 auto;\n}\n.logo-wrap h3[data-v-5c93fb5e] {\n    font-size: 1.3em;\n    text-align: center;\n    margin-top: 0.7em;\n}\n.text-area[data-v-5c93fb5e] {\n  margin-left: auto;\n  margin-right: auto;\n  margin-top: 2em;\n  width: 95%;\n}\n.login-button[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 3em;\n}\n.forget-password[data-v-5c93fb5e] {\n  height: 2em;\n  padding-right: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-5c93fb5e] {\n    color: #26a2ff;\n}\n.bottom[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 5em;\n  height: 10em;\n}\n.bottom hr[data-v-5c93fb5e] {\n    border: none;\n    border-top: 1px solid #eee;\n    height: 0;\n    width: 100%;\n}\n.bottom .text[data-v-5c93fb5e] {\n    margin-top: -1.2em;\n    width: 8em;\n    height: 1em;\n    background: #fff;\n    text-align: center;\n    color: #999;\n}\n.bottom .login-type[data-v-5c93fb5e] {\n    margin-top: 1em;\n    width: 100%;\n}\n.bottom .login-type img[data-v-5c93fb5e] {\n      width: 2em;\n      display: block;\n}\n.bottom .login-type p[data-v-5c93fb5e] {\n      text-align: center;\n      font-size: 0.8em;\n      color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.top[data-v-5c93fb5e] {\n  height: 2em;\n  width: 100%;\n  padding-right: 0.8em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.top > a[data-v-5c93fb5e] {\n    font-size: 1em;\n}\n.logo-wrap[data-v-5c93fb5e] {\n  width: 100%;\n  height: auto;\n}\n.logo-wrap .circle-wrap[data-v-5c93fb5e] {\n    width: 7em;\n    height: 7em;\n    border-radius: 50%;\n    border: 1px solid #eee;\n}\n.logo-wrap img[data-v-5c93fb5e] {\n    display: block;\n    width: 5em;\n    height: 5em;\n    margin: 0 auto;\n}\n.logo-wrap h3[data-v-5c93fb5e] {\n    font-size: 1.3em;\n    text-align: center;\n    margin-top: 0.7em;\n}\n.text-area[data-v-5c93fb5e] {\n  margin-left: auto;\n  margin-right: auto;\n  margin-top: 2em;\n  width: 95%;\n}\n.login-button[data-v-5c93fb5e] {\n  width: 100%;\n  margin-top: 3em;\n}\n.forget-password[data-v-5c93fb5e] {\n  height: 2em;\n  padding-right: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-5c93fb5e] {\n    color: #26a2ff;\n}\n.bottom[data-v-5c93fb5e] {\n  width: 100%;\n  height: 5em;\n}\n.bottom hr[data-v-5c93fb5e] {\n    border: none;\n    border-top: 1px solid #eee;\n    height: 0;\n    width: 100%;\n}\n.bottom .text[data-v-5c93fb5e] {\n    margin-top: -1.2em;\n    width: 8em;\n    height: 1em;\n    background: #fff;\n    text-align: center;\n    color: #999;\n}\n.bottom .login-type[data-v-5c93fb5e] {\n    margin-top: 1em;\n    width: 100%;\n}\n.bottom .login-type img[data-v-5c93fb5e] {\n      width: 2em;\n      display: block;\n}\n.bottom .login-type p[data-v-5c93fb5e] {\n      text-align: center;\n      font-size: 0.8em;\n      color: #999;\n}\n", ""]);
 
 // exports
 
@@ -46319,7 +46336,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(10);
-//
 //
 //
 //
@@ -53380,9 +53396,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "topBack",
@@ -53576,7 +53589,9 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("p", [_vm._v("短信验证码已发送至1008666666")]),
+              _c("p", [
+                _vm._v("短信验证码已发送至" + _vm._s(_vm.userAccountName))
+              ]),
               _vm._v(" "),
               _c(
                 "section",
@@ -53652,7 +53667,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("p", [_vm._v("密码又8-16位数字、字母或符号组成")]),
+              _c("p", [_vm._v("密码由8-16位数字、字母或符号组成")]),
               _vm._v(" "),
               _c(
                 "section",
@@ -53842,7 +53857,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5a753464], body[data-v-5a753464], div[data-v-5a753464], span[data-v-5a753464], applet[data-v-5a753464], object[data-v-5a753464], iframe[data-v-5a753464],\nh1[data-v-5a753464], h2[data-v-5a753464], h3[data-v-5a753464], h4[data-v-5a753464], h5[data-v-5a753464], h6[data-v-5a753464], p[data-v-5a753464], blockquote[data-v-5a753464], pre[data-v-5a753464],\na[data-v-5a753464], abbr[data-v-5a753464], acronym[data-v-5a753464], address[data-v-5a753464], big[data-v-5a753464], cite[data-v-5a753464], code[data-v-5a753464],\ndel[data-v-5a753464], dfn[data-v-5a753464], em[data-v-5a753464], img[data-v-5a753464], ins[data-v-5a753464], kbd[data-v-5a753464], q[data-v-5a753464], s[data-v-5a753464], samp[data-v-5a753464],\nsmall[data-v-5a753464], strike[data-v-5a753464], strong[data-v-5a753464], sub[data-v-5a753464], sup[data-v-5a753464], tt[data-v-5a753464], var[data-v-5a753464],\nb[data-v-5a753464], u[data-v-5a753464], i[data-v-5a753464], center[data-v-5a753464],\ndl[data-v-5a753464], dt[data-v-5a753464], dd[data-v-5a753464], ol[data-v-5a753464], ul[data-v-5a753464], li[data-v-5a753464],\nfieldset[data-v-5a753464], form[data-v-5a753464], label[data-v-5a753464], legend[data-v-5a753464],\ntable[data-v-5a753464], caption[data-v-5a753464], tbody[data-v-5a753464], tfoot[data-v-5a753464], thead[data-v-5a753464], tr[data-v-5a753464], th[data-v-5a753464], td[data-v-5a753464],\narticle[data-v-5a753464], aside[data-v-5a753464], canvas[data-v-5a753464], details[data-v-5a753464], embed[data-v-5a753464],\nfigure[data-v-5a753464], figcaption[data-v-5a753464], footer[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464],\nmenu[data-v-5a753464], nav[data-v-5a753464], output[data-v-5a753464], ruby[data-v-5a753464], section[data-v-5a753464], summary[data-v-5a753464],\ntime[data-v-5a753464], mark[data-v-5a753464], audio[data-v-5a753464], video[data-v-5a753464] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5a753464], aside[data-v-5a753464], details[data-v-5a753464], figcaption[data-v-5a753464], figure[data-v-5a753464],\nfooter[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464], menu[data-v-5a753464], nav[data-v-5a753464], section[data-v-5a753464] {\n  display: block;\n}\nbody[data-v-5a753464] {\n  line-height: 1;\n}\nol[data-v-5a753464], ul[data-v-5a753464] {\n  list-style: none;\n}\nblockquote[data-v-5a753464], q[data-v-5a753464] {\n  quotes: none;\n}\nblockquote[data-v-5a753464]:before, blockquote[data-v-5a753464]:after,\nq[data-v-5a753464]:before, q[data-v-5a753464]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5a753464] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5a753464] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5a753464] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5a753464] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5a753464] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5a753464] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5a753464] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5a753464] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5a753464] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5a753464] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5a753464] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5a753464] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5a753464] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5a753464] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5a753464] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5a753464] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5a753464] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5a753464] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5a753464] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5a753464] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5a753464] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5a753464] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5a753464] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5a753464] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5a753464] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5a753464] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5a753464] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5a753464] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5a753464] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5a753464] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5a753464] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5a753464] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.mb15[data-v-5a753464] {\n  margin-bottom: 1.5em;\n}\n#myAccount[data-v-5a753464] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#myAccount .header-right[data-v-5a753464] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.myAccount-box[data-v-5a753464] {\n  margin-top: 2em;\n}\n.withDraw-money[data-v-5a753464] {\n  width: 13em;\n  height: 13em;\n  border: 1px solid #aaa;\n  border-radius: 50%;\n  margin: 0 auto 3em auto;\n  background: #199ED8;\n  position: relative;\n  text-align: center;\n}\n.withDraw-money .money[data-v-5a753464], .withDraw-money .title[data-v-5a753464] {\n    position: absolute;\n    width: 100%;\n    text-align: center;\n}\n.withDraw-money .money[data-v-5a753464] {\n    top: 30%;\n    color: #fff;\n    font-size: 2em;\n}\n.withDraw-money .title[data-v-5a753464] {\n    top: 50%;\n    color: #ddd;\n}\n.submit-btn[data-v-5a753464] {\n  width: 90%;\n  margin: auto;\n}\n.submit-btn a[data-v-5a753464] {\n    display: block;\n}\n.submit-btn a button[data-v-5a753464] {\n      border: none;\n      height: 2.8em;\n      line-height: 2.8em;\n      text-align: center;\n      width: 100%;\n      margin: auto;\n      border-radius: 5px;\n      font-size: 1em;\n}\n.submit-btn a .recharge-btn[data-v-5a753464] {\n      background: #00CC00;\n      color: #fff;\n}\n.submit-btn a .withdraw-btn[data-v-5a753464] {\n      background: #fff;\n      color: #333;\n}\n.submit-btn a .give-btn[data-v-5a753464] {\n      background: #199ED8;\n      color: #fff;\n}\n.mint-button--danger[data-v-5a753464] {\n  background: #fff !important;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-5a753464], body[data-v-5a753464], div[data-v-5a753464], span[data-v-5a753464], applet[data-v-5a753464], object[data-v-5a753464], iframe[data-v-5a753464],\nh1[data-v-5a753464], h2[data-v-5a753464], h3[data-v-5a753464], h4[data-v-5a753464], h5[data-v-5a753464], h6[data-v-5a753464], p[data-v-5a753464], blockquote[data-v-5a753464], pre[data-v-5a753464],\na[data-v-5a753464], abbr[data-v-5a753464], acronym[data-v-5a753464], address[data-v-5a753464], big[data-v-5a753464], cite[data-v-5a753464], code[data-v-5a753464],\ndel[data-v-5a753464], dfn[data-v-5a753464], em[data-v-5a753464], img[data-v-5a753464], ins[data-v-5a753464], kbd[data-v-5a753464], q[data-v-5a753464], s[data-v-5a753464], samp[data-v-5a753464],\nsmall[data-v-5a753464], strike[data-v-5a753464], strong[data-v-5a753464], sub[data-v-5a753464], sup[data-v-5a753464], tt[data-v-5a753464], var[data-v-5a753464],\nb[data-v-5a753464], u[data-v-5a753464], i[data-v-5a753464], center[data-v-5a753464],\ndl[data-v-5a753464], dt[data-v-5a753464], dd[data-v-5a753464], ol[data-v-5a753464], ul[data-v-5a753464], li[data-v-5a753464],\nfieldset[data-v-5a753464], form[data-v-5a753464], label[data-v-5a753464], legend[data-v-5a753464],\ntable[data-v-5a753464], caption[data-v-5a753464], tbody[data-v-5a753464], tfoot[data-v-5a753464], thead[data-v-5a753464], tr[data-v-5a753464], th[data-v-5a753464], td[data-v-5a753464],\narticle[data-v-5a753464], aside[data-v-5a753464], canvas[data-v-5a753464], details[data-v-5a753464], embed[data-v-5a753464],\nfigure[data-v-5a753464], figcaption[data-v-5a753464], footer[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464],\nmenu[data-v-5a753464], nav[data-v-5a753464], output[data-v-5a753464], ruby[data-v-5a753464], section[data-v-5a753464], summary[data-v-5a753464],\ntime[data-v-5a753464], mark[data-v-5a753464], audio[data-v-5a753464], video[data-v-5a753464] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-5a753464], aside[data-v-5a753464], details[data-v-5a753464], figcaption[data-v-5a753464], figure[data-v-5a753464],\nfooter[data-v-5a753464], header[data-v-5a753464], hgroup[data-v-5a753464], menu[data-v-5a753464], nav[data-v-5a753464], section[data-v-5a753464] {\n  display: block;\n}\nbody[data-v-5a753464] {\n  line-height: 1;\n}\nol[data-v-5a753464], ul[data-v-5a753464] {\n  list-style: none;\n}\nblockquote[data-v-5a753464], q[data-v-5a753464] {\n  quotes: none;\n}\nblockquote[data-v-5a753464]:before, blockquote[data-v-5a753464]:after,\nq[data-v-5a753464]:before, q[data-v-5a753464]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-5a753464] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-5a753464] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-5a753464] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-5a753464] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-5a753464] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-5a753464] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-5a753464] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-5a753464] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-5a753464] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-5a753464] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-5a753464] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-5a753464] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-5a753464] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-5a753464] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-5a753464] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-5a753464] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-5a753464] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-5a753464] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-5a753464] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-5a753464] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-5a753464] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-5a753464] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-5a753464] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-5a753464] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-5a753464] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-5a753464] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-5a753464] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-5a753464] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-5a753464] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-5a753464] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-5a753464] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-5a753464] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-5a753464] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-5a753464] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-5a753464] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.mb15[data-v-5a753464] {\n  margin-bottom: 1.5em;\n}\n#myAccount[data-v-5a753464] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#myAccount .header-right[data-v-5a753464] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.myAccount-box[data-v-5a753464] {\n  margin-top: 2em;\n}\n.withDraw-money[data-v-5a753464] {\n  width: 13em;\n  height: 13em;\n  border: 1px solid #aaa;\n  border-radius: 50%;\n  margin: 0 auto 2em auto;\n  background: #199ED8;\n  position: relative;\n  text-align: center;\n}\n.withDraw-money .money[data-v-5a753464], .withDraw-money .title[data-v-5a753464] {\n    position: absolute;\n    width: 100%;\n    text-align: center;\n}\n.withDraw-money .money[data-v-5a753464] {\n    top: 30%;\n    color: #fff;\n    font-size: 2em;\n}\n.withDraw-money .title[data-v-5a753464] {\n    top: 50%;\n    color: #ddd;\n}\n.submit-btn[data-v-5a753464] {\n  width: 90%;\n  margin: auto;\n}\n.submit-btn a[data-v-5a753464] {\n    display: block;\n}\n.submit-btn a button[data-v-5a753464] {\n      border: none;\n      height: 2.8em;\n      line-height: 2.8em;\n      text-align: center;\n      width: 100%;\n      margin: auto;\n      border-radius: 5px;\n      font-size: 1em;\n}\n.submit-btn a .recharge-btn[data-v-5a753464] {\n      background: #00CC00;\n      color: #fff;\n}\n.submit-btn a .withdraw-btn[data-v-5a753464] {\n      background: #fff;\n      color: #333;\n}\n.submit-btn a .give-btn[data-v-5a753464] {\n      background: #199ED8;\n      color: #fff;\n}\n.mint-button--danger[data-v-5a753464] {\n  background: #fff !important;\n}\n", ""]);
 
 // exports
 
@@ -54524,16 +54539,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			amount: null,
-			choiseValue: null
+			choiseValue: null,
+			options1: []
 		};
+	},
+	created: function created() {
+		this.rechargeWay();
 	},
 
 	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
 	props: ["showSwitch", "optionsList"],
 	methods: {
-		hideTab: function hideTab() {
-			this.$emit("hideDropList", this.choiseValue);
-		},
+		// hideTab() {
+		// 	this.$emit("hideDropList", this.choiseValue);
+		// },
 		goIndex: function goIndex() {
 			this.$router.push("/index");
 		},
@@ -54556,8 +54575,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		},
 
-		watch: {
-			"choiseValue": 'hideTab'
+		// watch: {
+		// 	"choiseValue": 'hideTab'
+		// },
+		rechargeWay: function rechargeWay() {
+			var _this = this;
+
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/5').then(function (res) {
+				console.log(res);
+				_this.options1 = res.data.data.methods;
+			}).catch(function (err) {
+				console.error(err);
+			});
 		}
 	}
 });
@@ -54635,11 +54664,7 @@ var render = function() {
             { staticClass: "list-wrap" },
             [
               _c("mt-radio", {
-                attrs: {
-                  align: "right",
-                  title: "",
-                  options: ["银行卡", "微信"]
-                },
+                attrs: { align: "right", title: "", options: _vm.options1 },
                 model: {
                   value: _vm.choiseValue,
                   callback: function($$v) {
@@ -55956,14 +55981,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -56029,6 +56046,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return "没有这个店铺";
     },
     showDropList: function showDropList() {
+      if (this.shopList.length == 0) {
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("当前无可选的店铺,请先加入店铺或创建店铺");
+        return;
+      }
+
       this.dropListSwitch = true;
     },
     hideDropList: function hideDropList(data) {
@@ -56082,9 +56104,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _temp.checked = false;
         this.memberList.push(_temp);
       }
-
-      console.log("======= 店铺会员列表 ======");
-      console.log(this.memberList);
     },
     hideMemberChoise: function hideMemberChoise() {
       this.choiseMemberSwitch = false;
@@ -56799,9 +56818,9 @@ var render = function() {
         },
         [
           _vm._v(
-            "\n      \n      " +
+            "\n      " +
               _vm._s(_vm.dealShop ? _vm.dealShop : "请选择您要发起交易的店铺") +
-              "\n\n  "
+              "\n  "
           )
         ]
       ),
@@ -60466,32 +60485,84 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     changeTab: function changeTab(item) {
+      var _this = this;
+
       if (item > 2 || item < 0) {
         return;
       } else {
         this.tabItem = [false, false, false];
         this.tabItem[item] = true;
+
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+        var _data = {
+          status: item + 1,
+          limit: 50,
+          offset: 0
+        };
+        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/record', _data).then(function (res) {
+          _this.dataList = res.data.data;
+          __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        }).catch(function (err) {
+          __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        });
       }
     },
-    goDetail: function goDetail() {
-      this.$router.push("/makeDeal/deal_detail");
+    goDetail: function goDetail(id) {
+      this.$router.push("/makeDeal/deal_detail" + "?id=" + id);
     },
     mark: function mark() {
-      console.log(this.isStar);
+      var _this2 = this;
+
       if (!this.isStar) {
         this.isStar = true;
       } else {
         this.isStar = false;
+
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+
+        var _mark = [];
+        var _disMark = [];
+        for (var i = 0; i < this.dataList.length; i++) {
+          if (this.dataList[i].makr == 1) {
+            _mark.push(this.dataList[i].id);
+          } else {
+            _disMark.push(this.dataList[i].id);
+          }
+        }
+
+        var _data = {
+          mark: _mark,
+          dismark: _disMark
+        };
+
+        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/mark", _data).then(function (res) {
+          _this2.init();
+          __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        }).catch(function (err) {
+          __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        });
       }
     },
     markItem: function markItem(id) {
       if (!this.isStar) {
         return;
       }
-      console.log(id);
+      var _temp = [].concat(this.dataList);
+
+      for (var i = 0; i < _temp.length; i++) {
+        if (id == _temp[i].id) {
+          if (_temp[i].makr == 0) {
+            _temp[i].makr = 1;
+          } else if (_temp[i].makr == 1) {
+            _temp[i].makr = 0;
+          }
+        }
+      }
+
+      this.dataList = _temp;
     },
     init: function init() {
-      var _this = this;
+      var _this3 = this;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
@@ -60500,11 +60571,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         offset: 0
       };
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/record', _data).then(function (res) {
-        console.log(res);
-        _this.dataList = res.data.data;
+        _this3.dataList = res.data.data;
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        console.error(err);
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       });
     }
@@ -60536,7 +60605,13 @@ var render = function() {
               staticClass: "mark-wrap flex flex-reverse",
               on: { click: _vm.mark }
             },
-            [_vm._v("\n        标记\n      ")]
+            [
+              _vm._v(
+                "\n        " +
+                  _vm._s(_vm.isStar ? "关闭编辑" : "标记") +
+                  "\n      "
+              )
+            ]
           )
         ]
       ),
@@ -60600,7 +60675,11 @@ var render = function() {
               "li",
               {
                 staticClass: "deal-item flex flex-align-center",
-                on: { click: _vm.goDetail }
+                on: {
+                  click: function($event) {
+                    _vm.goDetail(item.transfer_id)
+                  }
+                }
               },
               [
                 _c(
@@ -64649,6 +64728,8 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__view_Shop_withdraw_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__view_Shop_withdraw_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_Shop_give_vue__ = __webpack_require__(713);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__view_Shop_give_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__view_Shop_give_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_Shop_shopShare_vue__ = __webpack_require__(757);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__view_Shop_shopShare_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__view_Shop_shopShare_vue__);
 
 
 
@@ -64660,7 +64741,8 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/shop', name: 'shop', component: __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default.a }, { path: '/shop/my_collection', name: 'myCollection', component: __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default.a }, { path: '/shop/message_list', name: "shopMessageList", component: __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue___default.a }, { path: '/shop/shop_detail', name: "shopDetail", component: __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue___default.a }, { path: '/shop/shop_member', name: "shopMember", component: __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue___default.a }, { path: '/shop/deal_management', name: "dealManagement", component: __WEBPACK_IMPORTED_MODULE_5__view_Shop_dealManagement_vue___default.a }, { path: '/shop/shopAccount', name: "shopAccount", component: __WEBPACK_IMPORTED_MODULE_6__view_Shop_shopAccount_vue___default.a }, { path: '/shop/shopAccount/withdraw', name: "shopWithdraw", component: __WEBPACK_IMPORTED_MODULE_8__view_Shop_withdraw_vue___default.a }, { path: '/shop/shopAccount/give', name: "shopGive", component: __WEBPACK_IMPORTED_MODULE_9__view_Shop_give_vue___default.a }, { path: '/shop/shopOrder', name: "shopOrder", component: __WEBPACK_IMPORTED_MODULE_7__view_Shop_shopOrder_vue___default.a
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/shop', name: 'shop', component: __WEBPACK_IMPORTED_MODULE_0__view_Shop_shop_vue___default.a }, { path: '/shop/my_collection', name: 'myCollection', component: __WEBPACK_IMPORTED_MODULE_1__view_Shop_myCollection_vue___default.a }, { path: '/shop/message_list', name: "shopMessageList", component: __WEBPACK_IMPORTED_MODULE_2__view_Shop_messageList_vue___default.a }, { path: '/shop/shop_detail', name: "shopDetail", component: __WEBPACK_IMPORTED_MODULE_3__view_Shop_shopDetail_vue___default.a }, { path: '/shop/shop_member', name: "shopMember", component: __WEBPACK_IMPORTED_MODULE_4__view_Shop_shopMember_vue___default.a }, { path: '/shop/deal_management', name: "dealManagement", component: __WEBPACK_IMPORTED_MODULE_5__view_Shop_dealManagement_vue___default.a }, { path: '/shop/shopAccount', name: "shopAccount", component: __WEBPACK_IMPORTED_MODULE_6__view_Shop_shopAccount_vue___default.a }, { path: '/shop/shopAccount/withdraw', name: "shopWithdraw", component: __WEBPACK_IMPORTED_MODULE_8__view_Shop_withdraw_vue___default.a }, { path: '/shop/shopAccount/give', name: "shopGive", component: __WEBPACK_IMPORTED_MODULE_9__view_Shop_give_vue___default.a }, { path: '/shop/shopOrder', name: "shopOrder", component: __WEBPACK_IMPORTED_MODULE_7__view_Shop_shopOrder_vue___default.a }, { path: '/shop/shopShare', name: "shopShare", component: __WEBPACK_IMPORTED_MODULE_10__view_Shop_shopShare_vue___default.a // 店铺分享
 
     // { path: '/shop/shop_account', name: "shopDetail", component: ShopDetail },
 }]);
@@ -65753,6 +65835,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     goMyShop: function goMyShop() {
       this.$router.push("/shop/");
     },
+    goDetail: function goDetail(id) {
+      this.$router.push("/shop/shop_detail?" + "id=" + id);
+    },
     init: function init() {
       var _this = this;
 
@@ -65822,22 +65907,34 @@ var render = function() {
       "div",
       { staticClass: "shop-list flex flex-justify-around flex-wrap-on" },
       _vm._l(_vm.shopList, function(item) {
-        return _c("div", { key: item.id, staticClass: "list-wrap" }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
-            },
-            [
-              _c("div", { staticClass: "notice" }),
-              _vm._v(" "),
-              _c("img", { attrs: { src: item.logo, alt: "" } })
-            ]
-          ),
-          _vm._v(" "),
-          _c("h3", [_vm._v(_vm._s(item.name))])
-        ])
+        return _c(
+          "div",
+          {
+            key: item.id,
+            staticClass: "list-wrap",
+            on: {
+              click: function($event) {
+                _vm.goDetail(item.id)
+              }
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
+              },
+              [
+                _c("div", { staticClass: "notice" }),
+                _vm._v(" "),
+                _c("img", { attrs: { src: item.logo, alt: "" } })
+              ]
+            ),
+            _vm._v(" "),
+            _c("h3", [_vm._v(_vm._s(item.name))])
+          ]
+        )
       })
     )
   ])
@@ -67198,7 +67295,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -67225,6 +67321,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       rate: null,
       percent: null,
       membersCount: null,
+      membersList: [],
       active: null
     };
   },
@@ -67233,6 +67330,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // 跳转控制
     hide: function hide() {},
     goMember: function goMember() {
+      if (!this.membersCount) {
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前店铺无成员,");
+        return;
+      }
       this.$router.push("/shop/shop_member");
     },
     goDealManagement: function goDealManagement() {
@@ -67243,6 +67344,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     goShopOrder: function goShopOrder() {
       this.$router.push("/shop/shopOrder");
+    },
+    invite: function invite() {
+      this.$router.push("/shop/shopShare");
+    },
+    addMember: function addMember() {
+      console.log("添加成员");
     },
 
 
@@ -67261,6 +67368,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.rate = res.data.data.rate;
         _this.percent = res.data.data.percent;
         _this.membersCount = res.data.data.members_count;
+        _this.membersList = res.data.data.members;
         if (res.data.data.active == 1) {
           _this.tradeStatus = true;
         } else {
@@ -67361,7 +67469,27 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._m(1, false, false),
+      _c("div", { staticClass: "shop-info" }, [
+        _vm._m(1, false, false),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "shop-qrcode flex flex-align-center flex-justify-between",
+            on: { click: _vm.invite }
+          },
+          [
+            _c("span", { staticClass: "title flex-8" }, [_vm._v("店铺二维码")]),
+            _vm._v(" "),
+            _vm._m(2, false, false),
+            _vm._v(" "),
+            _c("i", { staticClass: "iconfont flex-1" }, [
+              _vm._v("\n          \n          ")
+            ])
+          ]
+        )
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -67370,9 +67498,39 @@ var render = function() {
           on: { click: _vm.goMember }
         },
         [
-          _vm._m(2, false, false),
-          _vm._v(" "),
           _vm._m(3, false, false),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "avatar-wrap flex-5 flex flex-justify-around" },
+            [
+              _vm._l(_vm.membersList, function(item) {
+                return _c("div", { staticClass: "avatar-item" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ])
+              }),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "add-avatar flex flex-align-center flex-justify-center",
+                  on: {
+                    click: function($event) {
+                      $event.stopPropagation()
+                      _vm.addMember($event)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "iconfont" }, [
+                    _vm._v("\n                  \n              ")
+                  ])
+                ]
+              )
+            ],
+            2
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "flex-4 flex flex-reverse" }, [
             _c(
@@ -67392,7 +67550,22 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "invite-wrap" }, [
-        _vm._m(4, false, false),
+        _c(
+          "div",
+          {
+            staticClass: "flex flex-align-center flex-justify-between",
+            on: { click: _vm.invite }
+          },
+          [
+            _c("span", { staticClass: "title flex-9" }, [
+              _vm._v(" 邀请新会员 ")
+            ]),
+            _vm._v(" "),
+            _c("i", { staticClass: "iconfont flex-1" }, [
+              _vm._v("\n              \n          ")
+            ])
+          ]
+        ),
         _vm._v(" "),
         _vm.isGroupMaster
           ? _c(
@@ -67501,7 +67674,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       !_vm.isGroupMaster
-        ? _c("div", { staticClass: "complaint" }, [_vm._m(5, false, false)])
+        ? _c("div", { staticClass: "complaint" }, [_vm._m(4, false, false)])
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -67586,44 +67759,28 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "shop-info" }, [
-      _c(
-        "div",
-        {
-          staticClass: "info-item flex flex-align-center flex-justify-between"
-        },
-        [
-          _c("span", { staticClass: "title flex-4" }, [_vm._v(" 店铺名称 ")]),
-          _vm._v(" "),
-          _c("span", { staticClass: "name flex-5" }, [
-            _vm._v("热血牛牛玩家群1")
-          ]),
-          _vm._v(" "),
-          _c("i", { staticClass: "iconfont flex-1" }, [
-            _vm._v("\n          \n          ")
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "shop-qrcode flex flex-align-center flex-justify-between"
-        },
-        [
-          _c("span", { staticClass: "title flex-8" }, [_vm._v("店铺二维码")]),
-          _vm._v(" "),
-          _c("span", { staticClass: "qr-code flex-1" }, [
-            _c("i", { staticClass: "iconfont" }, [
-              _vm._v("\n                  \n              ")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("i", { staticClass: "iconfont flex-1" }, [
-            _vm._v("\n          \n          ")
-          ])
-        ]
-      )
+    return _c(
+      "div",
+      { staticClass: "info-item flex flex-align-center flex-justify-between" },
+      [
+        _c("span", { staticClass: "title flex-4" }, [_vm._v(" 店铺名称 ")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "name flex-5" }, [_vm._v("热血牛牛玩家群1")]),
+        _vm._v(" "),
+        _c("i", { staticClass: "iconfont flex-1" }, [
+          _vm._v("\n          \n          ")
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "qr-code flex-1" }, [
+      _c("i", { staticClass: "iconfont" }, [
+        _vm._v("\n                  \n              ")
+      ])
     ])
   },
   function() {
@@ -67636,56 +67793,6 @@ var staticRenderFns = [
       [
         _c("i", { staticClass: "iconfont icon" }, [
           _vm._v("\n              \n          ")
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "avatar-wrap flex-5 flex flex-justify-around" },
-      [
-        _c("div", { staticClass: "avatar-item" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "avatar-item" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "avatar-item" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "add-avatar flex flex-align-center flex-justify-center"
-          },
-          [
-            _c("i", { staticClass: "iconfont" }, [
-              _vm._v("\n                  \n              ")
-            ])
-          ]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "flex flex-align-center flex-justify-between" },
-      [
-        _c("span", { staticClass: "title flex-9" }, [_vm._v(" 邀请新会员 ")]),
-        _vm._v(" "),
-        _c("i", { staticClass: "iconfont flex-1" }, [
-          _vm._v("\n              \n          ")
         ])
       ]
     )
@@ -73262,6 +73369,352 @@ var shopStore = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 756 */,
+/* 757 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(758)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(760)
+/* template */
+var __vue_template__ = __webpack_require__(761)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-6e9cc5ab"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\Shop\\shopShare.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6e9cc5ab", Component.options)
+  } else {
+    hotAPI.reload("data-v-6e9cc5ab", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 758 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(759);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("211443ef", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6e9cc5ab\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopShare.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6e9cc5ab\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./shopShare.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 759 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n#shop-share[data-v-6e9cc5ab] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  padding-top: 2em;\n  height: 100vh;\n  width: 100%;\n  background: #26a2ff;\n}\n#shop-share .content-wrap-shop[data-v-6e9cc5ab] {\n    margin-top: -3.5em;\n    width: 90%;\n    height: 22em;\n    background: #fff;\n    border-radius: 1em;\n}\n#shop-share .content-wrap-shop .info[data-v-6e9cc5ab] {\n      height: 5em;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding: 1em;\n}\n#shop-share .content-wrap-shop .info > img[data-v-6e9cc5ab] {\n        width: 4em;\n        height: 4em;\n        border-radius: 0.6em;\n        display: block;\n}\n#shop-share .content-wrap-shop .info > h3[data-v-6e9cc5ab] {\n        margin-left: 1em;\n        font-size: 1.2em;\n        font-weight: bold;\n}\n#shop-share .content-wrap-shop .qr-code[data-v-6e9cc5ab] {\n      width: 13em;\n      height: 13em;\n      background: #eee;\n      border-radius: 0.6em;\n}\n#shop-share .content-wrap-shop .qr-code > img[data-v-6e9cc5ab] {\n        width: 90%;\n        height: 90%;\n}\n#shop-share .content-wrap-shop > h3[data-v-6e9cc5ab] {\n      margin-top: 1em;\n      font-size: 0.9em;\n      color: #555;\n      text-align: center;\n}\n#shop-share .content-wrap-user[data-v-6e9cc5ab] {\n    margin-top: -3.5em;\n    width: 90%;\n    height: 22em;\n    background: #fff;\n    border-radius: 1em;\n}\n#shop-share .content-wrap-user .info[data-v-6e9cc5ab] {\n      height: auto;\n      width: 100%;\n      padding-top: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#shop-share .content-wrap-user .info > img[data-v-6e9cc5ab] {\n        width: 4.5em;\n        height: 4.5em;\n        border-radius: 0.6em;\n}\n#shop-share .content-wrap-user .info h1[data-v-6e9cc5ab] {\n        margin-top: 0.4em;\n}\n#shop-share .content-wrap-user .info h2[data-v-6e9cc5ab] {\n        margin-top: 0.4em;\n        color: #777;\n}\n#shop-share .content-wrap-user .submit[data-v-6e9cc5ab] {\n      margin: 0 auto;\n      width: 80%;\n      margin-top: 5em;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 760 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+  data: function data() {
+    return {
+      isUser: false // false ：商户分享界面  true ：用户加入界面
+    };
+  }
+});
+
+/***/ }),
+/* 761 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "flex flex-justify-center flex-align-center",
+      attrs: { id: "shop-share" }
+    },
+    [
+      _c("topBack", {
+        staticStyle: { background: "#26a2ff", color: "#fff" },
+        attrs: { title: !_vm.isUser ? "邀请新会员" : "加入店铺" }
+      }),
+      _vm._v(" "),
+      !_vm.isUser
+        ? _c(
+            "div",
+            { staticClass: "content-wrap-shop flex flex-v flex-align-center" },
+            [
+              _vm._m(0, false, false),
+              _vm._v(" "),
+              _vm._m(1, false, false),
+              _vm._v(" "),
+              _c("h3", [
+                _vm._v(
+                  "\n        该二维码7天内（12月12日前）有效，重新进入将更新\n      "
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.isUser
+        ? _c("div", { staticClass: "content-wrap-user" }, [
+            _vm._m(2, false, false),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "submit" },
+              [
+                _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
+                  _vm._v("申请加入")
+                ])
+              ],
+              1
+            )
+          ])
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "info flex flex-align-center" }, [
+      _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+      _vm._v(" "),
+      _c("h3", [_vm._v("斗牛小店")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "qr-code flex flex-align-center flex-justify-center" },
+      [_c("img", { attrs: { src: "/images/code.png", alt: "" } })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "info flex flex-v flex-align-center" }, [
+      _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
+      _vm._v(" "),
+      _c("h1", [_vm._v("斗牛小铺（68人")]),
+      _vm._v(" "),
+      _c("h2", [_vm._v("Leaf 创建于 2017- 11-22")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6e9cc5ab", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
