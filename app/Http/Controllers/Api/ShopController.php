@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Notifications\ShopApply;
 use App\Pay\Model\PayFactory;
 use App\Shop;
 use App\ShopUser;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -482,7 +484,9 @@ class ShopController extends BaseController {
      */
     public function join($id) {
         $user = $this->auth->user();
+        $shop = Shop::findByEnId($id);
         //#todo
+        Notification::send($shop->manager, new ShopApply(['user_id' => $user->id, 'shop_id' => $shop->id]));
         return $this->json();
     }
 
@@ -507,4 +511,100 @@ class ShopController extends BaseController {
         return $this->json(['balance' => (double)$shop->balance, 'today_profit' => 0, 'yesterday_profit' => 0, 'total_profit' => 0]);
     }
 
+    /**
+     * @SWG\Get(
+     *   path="/shop/messages",
+     *   summary="店铺消息",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="path",
+     *     description="页码",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="path",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function messages(Request $request) {
+        $user = $this->auth->user();
+
+        $data = [];
+        foreach ($user->notifications()->where("type", "App\Notifications\ShopApply")->paginate($request->input('size', 20)) as $notification) {
+            try {
+                $user = User::find($notification->data['user_id']);
+                $shop = Shop::find($notification->data['shop_id']);
+                $data[] = [
+                    'user_avatar' => asset("images/personal.jpg"),
+                    'user_name' => $user->name,
+                    'shop_name' => $shop->name,
+                    'id' => $notification->id,
+                    'status' => 0
+                ];
+            } catch (\Exception $e){}
+        }
+        return $this->json($data);
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/agree",
+     *   summary="店铺同意消息",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="消息id，不传同意全部",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="path",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function agree(Request $request) {
+        return $this->json();
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/ignore",
+     *   summary="店铺忽略消息",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="消息id,不传忽略全部",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="path",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function ignore(Request $request) {
+        return $this->json();
+    }
 }
