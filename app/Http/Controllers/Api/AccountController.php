@@ -33,6 +33,7 @@ class AccountController extends BaseController {
         return $this->json([
             'balance' => (float)$user->container->balance,
             'has_pay_password' => empty($user->pay_password) ? 0 : 1,
+            'has_pay_card' => $user->pay_card()->count() > 0 ? 1 : 0,
             ]);
     }
 
@@ -141,11 +142,14 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
+        if (!$user->pay_card) {
+            return $this->json(['error_code' => 1]);
+        }
+        if (!$user->pay_password) {
+            return $this->json(['error_code' => 2]);
+        }
         if (!Hash::check($request->password, $user->pay_password)) {
             return $this->json([], trans("api.error_pay_password"), 0);
-        }
-        if (!$user->pay_card) {
-            return $this->json([], trans("api.error_pay_card"), 0);
         }
         try {
             $result = $user->container->initiateWithdraw(
@@ -164,7 +168,7 @@ class AccountController extends BaseController {
                 0.1
             );
         } catch (\Exception $e) {
-            return $this->json([], 'error', 0);
+            return $this->json([], 'error'.$e->getMessage(), 0);
         }
         return $this->json();
     }

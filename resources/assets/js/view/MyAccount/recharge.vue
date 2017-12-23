@@ -6,7 +6,7 @@
 			</div>
 		</topBack>
 		<div class="recharge-box">
-			<div class="title">充值金额</div> 
+			<div class="title">充值金额</div>
 			<div class="recharge-money flex flex-justify-center">
 				<label>￥</label>
 				<input type="text" placeholder="请输入金额" v-model="amount">
@@ -14,11 +14,11 @@
 			<div class="recharge-way">
 				<div class="title">选择充值方式</div>
 				<div class="list-wrap">
-					<mt-radio align="right" title="" v-model="choiseValue" :options="options1">
+					<mt-radio align="right" title="" v-model="value" :options="options1">
 					</mt-radio>
 				</div>
 			</div>
-			<a href="javascript:;" class="recharge-btn" @click="recharge">
+			<a href="javascript:;" class="recharge-btn" @click="rechargeBtn">
 				<mt-button type="primary" size="large">充值</mt-button>
 			</a>
 		</div>
@@ -36,12 +36,13 @@
 		data() {
 			return {
 				amount: null,
-				choiseValue: null,
-				options1:[]
+				options1:[],
+				way:null,
+				value:null
 			}
 		},
 		created() {
-			this.rechargeWay(); 
+			this.selWay();
 		},
 		components: { topBack},
 		props: ["showSwitch", "optionsList"],
@@ -56,7 +57,7 @@
 				var self = this;
 				var _data = {
 					amount: this.amount,
-					choiseValue: this.choiseValue
+					way:this.value
 				}
 
 				if (!this.amount) {
@@ -67,6 +68,7 @@
 					.then((res) => {
 						console.log(res);
 						Toast('充值成功');
+						location.href=res.data.data.redirect_url;
 					})
 					.catch((err) => {
 						console.error(err);
@@ -75,18 +77,29 @@
 			// watch: {
 			// 	"choiseValue": 'hideTab'
 			// },
-			rechargeWay(){
+			selWay(){
 				request.getInstance().getData('api/account/pay-methods/unknown/5')
 					.then((res) => {
 						console.log(res);
-						this.options1=res.data.data.methods;
+						this.setBankList(res);
 					})
 					.catch((err) => {
 						console.error(err);
 					})
+			},
+			setBankList(res) {
+				var _tempList = [];
+				for (let i = 0; i < res.data.data.methods.length; i++) {
+					var _t = {};
+					_t.value = res.data.data.methods[i].id.toString();
+					_t.label = res.data.data.methods[i].label;
+					_tempList.push(_t);
+				}
+					console.log(_tempList);
+				this.options1 = _tempList;
 			}
 		}
-	}; 
+	};
 </script>
 
 <style lang="scss" scoped>

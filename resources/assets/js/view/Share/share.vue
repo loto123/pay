@@ -28,7 +28,7 @@
         </div>
 
         <div class="submit">
-          <mt-button type="primary" size="large">申请加入</mt-button>
+          <mt-button type="primary" size="large" @click="submit">申请加入</mt-button>
         </div>
       </div>
 
@@ -144,10 +144,13 @@
 </style>
 
 <script>
+import request from "../../utils/userRequest"
+import Loading from "../../utils/loading"
+
 export default {
 
   created(){
-      this.init();
+    this.init();
   },
 
   data(){
@@ -159,10 +162,16 @@ export default {
   },
   methods:{
       init(){
-        //   http://local.zf.com/#/share?shopId=2974582658&userId=4015064972
-
         this.shopId = this.$route.query.shopId;
         this.userId = this.$route.query.userId;
+        console.log(this.shopId);
+      },
+      submit(){
+        request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{
+          
+        }).catch(error=>{
+
+        });
       }
   }
 }

@@ -1,4 +1,5 @@
 <template>
+
     <div id="shop-account">
         <div class="top">
             <top-back :title="'店铺账户'" style="background: #26a2ff; color:#fff;">
