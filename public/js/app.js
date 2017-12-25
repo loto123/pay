@@ -57990,6 +57990,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -59860,11 +59864,20 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c("span", { staticClass: "title" }, [
-                              _vm._v(
-                                " " + _vm._s(item.stat == 1 ? "放钱" : "拿钱")
-                              )
-                            ])
+                            item.stat != 3
+                              ? _c("span", { staticClass: "title" }, [
+                                  _vm._v(
+                                    " " +
+                                      _vm._s(item.stat == 1 ? "放钱" : "拿钱")
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            item.stat == 3
+                              ? _c("span", { staticClass: "title" }, [
+                                  _vm._v(" 已撤回")
+                                ])
+                              : _vm._e()
                           ]
                         )
                       ]
