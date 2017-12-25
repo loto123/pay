@@ -138,8 +138,8 @@ class CardController extends Controller
                 'bank_id' => 'bail|required',
                 'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
                 'code' => 'bail|required',
-                'province' => 'bail|required',
-                'city' => 'bail|required',
+//                'province' => 'bail|required',
+//                'city' => 'bail|required',
             ],
             [
                 'required' => trans('trans.required'),
@@ -172,8 +172,8 @@ class CardController extends Controller
         $cards->holder_name = $this->user->name;
         $cards->holder_id = $this->user->id_number;
         $cards->holder_mobile = $request->mobile;
-        $cards->province = $request->province;
-        $cards->city = $request->city;
+        $cards->province = $request->province??'xxx';
+        $cards->city = $request->city??'xxx';
         $cards->branch = $request->branch??NULL;
         $cards->save();
         if(empty($this->user->pay_card_id)) {
