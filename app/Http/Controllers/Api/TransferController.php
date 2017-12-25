@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use JWTAuth;
 use Skip32;
@@ -178,10 +179,11 @@ class TransferController extends Controller
             $query->select('transfer_id', 'user_id');
         }, 'joiner.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
-        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+        }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
 
         //装填响应数据
         $transfer->id = $transfer->en_id();
+        $transfer->shop_id = $transfer->shop->en_id();
         $transfer->user->id = $transfer->user->en_id();
         foreach ($transfer->record as $key => $record) {
             $transfer->record[$key]->user->id = $record->user->en_id();
@@ -194,6 +196,7 @@ class TransferController extends Controller
             unset($transfer->joiner[$key]->user_id);
         }
         unset($transfer->user_id);
+        unset($transfer->shop);
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
 
@@ -530,6 +533,9 @@ class TransferController extends Controller
             //用户余额增加
 //                $user->balance = $user->balance + $record->amount;
 //                $user->save();
+            //红包余额增加
+            $transfer->amount = $transfer->amount + $record->amount;
+            $transfer->save();
             DB::commit();
             return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
