@@ -46565,7 +46565,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }, 1500);
         }
       }).catch(function (err) {
-        console.log(err);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
       });
     },
@@ -46573,7 +46572,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 微信登录
     weChatLogin: function weChatLogin() {
-
       var _data = {
         redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
@@ -46593,7 +46591,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 忘记密码
     forgetPassWord: function forgetPassWord() {
-
       this.$store.dispatch("setStep", 1);
       this.$store.dispatch("setRefindPassWordState", true);
       this.$router.push("/login/regist");
