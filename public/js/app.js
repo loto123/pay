@@ -5260,8 +5260,9 @@ var UserRequest = function () {
     }, {
         key: 'validToken',
         value: function validToken(token) {
-            var url = window.location.href.indexOf("/#/login");
-            var urlShare = window.location.href.indexOf("/#/share");
+            var url = window.location.href.indexOf("#/login");
+            var urlShare = window.location.href.indexOf("#/share");
+            // var wechatLogin = window.location.href.indexOf("#/login/weChatLogin")
             if (!token && url == -1 && urlShare) {
                 __WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */].getInstance().close();
                 Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户未登录,即将跳转登录...");
@@ -46263,7 +46264,7 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/login', name: 'login', component: __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default.a }, { path: '/login/regist', name: 'regist', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }, { path: '/login/weChatLogin', name: 'weChatLogin', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }]);
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/login', name: 'login', component: __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default.a }, { path: '/login/regist', name: 'regist', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }, { path: '/login/weChatLogin', name: 'weChatLogin', component: __WEBPACK_IMPORTED_MODULE_2__view_Login_wechatLogin_vue___default.a }]);
 
 /***/ }),
 /* 290 */
@@ -46568,7 +46569,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _data = {
         redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {}).catch();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
+        window.location.href = res.data.data.url;
+      }).catch();
     },
     commitName: function commitName() {
       this.$store.dispatch("changeName", this.name);
@@ -54601,13 +54604,11 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
 //
 //
 //
@@ -54635,8 +54636,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-
 
 
 
@@ -54655,7 +54654,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		this.selWay();
 	},
 
-	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a },
+	components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a },
 	props: ["showSwitch", "optionsList"],
 	methods: {
 		// hideTab() {
@@ -54672,12 +54671,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			};
 
 			if (!this.amount) {
-				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请输入充值金额');
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('请输入充值金额');
 			}
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/account/charge', _data).then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/account/charge', _data).then(function (res) {
 				console.log(res);
-				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('充值成功');
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('充值成功');
 				location.href = res.data.data.redirect_url;
 			}).catch(function (err) {
 				console.error(err);
@@ -54690,7 +54689,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		selWay: function selWay() {
 			var _this = this;
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
 				console.log(res);
 				_this.setBankList(res);
 			}).catch(function (err) {
@@ -61500,6 +61499,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
 //
 //
 //
@@ -61528,6 +61529,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -61545,7 +61547,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.mobile = this.$route.query.mobile;
 			this.$router.push('/my/verfy_code?' + 'mobile=' + this.mobile);
 		},
-		exit: function exit() {}
+		exit: function exit() {
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().removeToken();
+			Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户已经退出...");
+			setTimeout(function () {
+				window.location.href = "/#/login";
+			}, 2000);
+		}
 	}
 });
 
@@ -62690,6 +62698,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -62712,7 +62722,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			mobile: null,
 			code: null,
 
-			computedTime: null //短信验证码倒计时
+			computedTime: null, //短信验证码倒计时
+			slots: [] //省市
 		};
 	},
 
@@ -62720,6 +62731,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	created: function created() {
 		this.personalInfo();
 		this.init();
+		this.initArea();
 	},
 
 	methods: {
@@ -62744,6 +62756,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/card/getBanks").then(function (res) {
 				console.log(res);
 				_this2.setBankList(res);
+				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+			}).catch(function (err) {
+				console.error(err);
+				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+			});
+		},
+		initArea: function initArea() {
+			var _this3 = this;
+
+			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/card/getBankCardParams").then(function (res) {
+				console.log(res);
+				_this3.slots = res.data.data;
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
@@ -62779,7 +62804,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.shopId = data;
 		},
 		affirmAdd: function affirmAdd() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var self = this;
 			var _data = {
@@ -62806,7 +62831,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/card/create", _data).then(function (res) {
 				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('添加成功');
-				_this3.$router.push('/my/bankCardManage');
+				_this4.$router.push('/my/bankCardManage');
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
@@ -62816,7 +62841,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//短信验证码
 		sendYZM: function sendYZM() {
-			var _this4 = this;
+			var _this5 = this;
 
 			var _temp = {};
 			_temp.mobile = this.mobile;
@@ -62826,17 +62851,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				return;
 			}
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
-				_this4.computedTime = 60;
-				_this4.timer = setInterval(function () {
-					_this4.computedTime--;
-					console.log(_this4.computedTime);
-					if (_this4.computedTime == 0) {
-						clearInterval(_this4.timer);
+				_this5.computedTime = 60;
+				_this5.timer = setInterval(function () {
+					_this5.computedTime--;
+					console.log(_this5.computedTime);
+					if (_this5.computedTime == 0) {
+						clearInterval(_this5.timer);
 					}
 				}, 1000);
 			}).catch(function (err) {
 				console.log(err);
 			});
+		},
+		onValuesChange: function onValuesChange(picker, values) {
+			if (values[0] > values[1]) {
+				picker.setSlotValue(1, values[0]);
+			}
 		}
 	}
 });
@@ -62855,145 +62885,155 @@ var render = function() {
     [
       _c("topBack", { attrs: { title: "添加银行卡" } }),
       _vm._v(" "),
-      _c("div", { staticClass: "addBankCard-box" }, [
-        _c("h2", [_vm._v("请绑定持卡人本人的银行卡")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex flex-v flex-justify-center" }, [
-          _c("section", { staticClass: "account-container" }, [
-            _c("div", { staticClass: "account-box flex flex-align-center" }, [
-              _c("span", [_vm._v("姓名:")]),
+      _c(
+        "div",
+        { staticClass: "addBankCard-box" },
+        [
+          _c("h2", [_vm._v("请绑定持卡人本人的银行卡")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex flex-v flex-justify-center" }, [
+            _c("section", { staticClass: "account-container" }, [
+              _c("div", { staticClass: "account-box flex flex-align-center" }, [
+                _c("span", [_vm._v("姓名:")]),
+                _vm._v(" "),
+                _c("em", { staticClass: "flex-1 number" }, [
+                  _vm._v(_vm._s(_vm.name))
+                ])
+              ]),
               _vm._v(" "),
-              _c("em", { staticClass: "flex-1 number" }, [
-                _vm._v(_vm._s(_vm.name))
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "account-box flex flex-align-center" }, [
-              _c("span", [_vm._v("身份证号:")]),
-              _vm._v(" "),
-              _c("em", { staticClass: "flex-1 number" }, [
-                _vm._v(_vm._s(_vm.id_number))
+              _c("div", { staticClass: "account-box flex flex-align-center" }, [
+                _c("span", [_vm._v("身份证号:")]),
+                _vm._v(" "),
+                _c("em", { staticClass: "flex-1 number" }, [
+                  _vm._v(_vm._s(_vm.id_number))
+                ])
               ])
             ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "bank-info flex flex-v flex-justify-center" },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "select-wrap flex flex-align-center",
-                on: { click: _vm.showDropList }
-              },
-              [
-                _c("div", { staticClass: "title" }, [_vm._v("所属银行")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "sel-bank" }, [
-                  _vm._v(
-                    "\n\t\t\t\t\t" +
-                      _vm._s(
-                        _vm.dealShop ? _vm.dealShop : "请选择银行卡所属银行"
-                      ) +
-                      "\n\t\t\t\t"
-                  )
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c("mt-field", {
-              attrs: {
-                label: "银行卡号",
-                placeholder: "请填写银行卡号",
-                type: "number"
-              },
-              model: {
-                value: _vm.card_num,
-                callback: function($$v) {
-                  _vm.card_num = $$v
-                },
-                expression: "card_num"
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "bank-info flex flex-v flex-justify-center" },
-          [
-            _c("mt-field", {
-              attrs: {
-                label: "预留手机号",
-                placeholder: "请填写银行卡预留手机号",
-                type: "number",
-                maxlength: "11"
-              },
-              model: {
-                value: _vm.mobile,
-                callback: function($$v) {
-                  _vm.mobile = $$v
-                },
-                expression: "mobile"
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("section", { staticClass: "input-wrap-box" }, [
+          ]),
+          _vm._v(" "),
+          _c("mt-picker", {
+            attrs: { slots: _vm.slots },
+            on: { change: _vm.onValuesChange }
+          }),
+          _vm._v(" "),
           _c(
             "div",
-            { staticClass: "input-wrap flex flex-align-center" },
+            { staticClass: "bank-info flex flex-v flex-justify-center" },
             [
-              _c("span", [_vm._v("验证码:")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.code,
-                    expression: "code"
-                  }
-                ],
-                staticClass: "flex-1",
-                attrs: { type: "text", placeholder: "请输入验证码" },
-                domProps: { value: _vm.code },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.code = $event.target.value
-                  }
-                }
-              }),
-              _vm._v(" "),
               _c(
-                "mt-button",
+                "div",
                 {
-                  staticClass: "flex-1",
-                  attrs: { type: "default" },
-                  on: { click: _vm.sendYZM }
+                  staticClass: "select-wrap flex flex-align-center",
+                  on: { click: _vm.showDropList }
                 },
                 [
-                  _vm._v(
-                    "发送验证码" +
-                      _vm._s(
-                        _vm.computedTime ? "(" + _vm.computedTime + ")" : ""
-                      )
-                  )
+                  _c("div", { staticClass: "title" }, [_vm._v("所属银行")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "sel-bank" }, [
+                    _vm._v(
+                      "\n\t\t\t\t\t" +
+                        _vm._s(
+                          _vm.dealShop ? _vm.dealShop : "请选择银行卡所属银行"
+                        ) +
+                        "\n\t\t\t\t"
+                    )
+                  ])
                 ]
-              )
+              ),
+              _vm._v(" "),
+              _c("mt-field", {
+                attrs: {
+                  label: "银行卡号",
+                  placeholder: "请填写银行卡号",
+                  type: "number"
+                },
+                model: {
+                  value: _vm.card_num,
+                  callback: function($$v) {
+                    _vm.card_num = $$v
+                  },
+                  expression: "card_num"
+                }
+              })
             ],
             1
-          )
-        ])
-      ]),
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "bank-info flex flex-v flex-justify-center" },
+            [
+              _c("mt-field", {
+                attrs: {
+                  label: "预留手机号",
+                  placeholder: "请填写银行卡预留手机号",
+                  type: "number",
+                  maxlength: "11"
+                },
+                model: {
+                  value: _vm.mobile,
+                  callback: function($$v) {
+                    _vm.mobile = $$v
+                  },
+                  expression: "mobile"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("section", { staticClass: "input-wrap-box" }, [
+            _c(
+              "div",
+              { staticClass: "input-wrap flex flex-align-center" },
+              [
+                _c("span", [_vm._v("验证码:")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.code,
+                      expression: "code"
+                    }
+                  ],
+                  staticClass: "flex-1",
+                  attrs: { type: "text", placeholder: "请输入验证码" },
+                  domProps: { value: _vm.code },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.code = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "mt-button",
+                  {
+                    staticClass: "flex-1",
+                    attrs: { type: "default" },
+                    on: { click: _vm.sendYZM }
+                  },
+                  [
+                    _vm._v(
+                      "发送验证码" +
+                        _vm._s(
+                          _vm.computedTime ? "(" + _vm.computedTime + ")" : ""
+                        )
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "a",
@@ -74164,6 +74204,7 @@ exports.push([module.i, "", ""]);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(10);
 //
 //
 //
@@ -74174,17 +74215,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  created: function created() {
-    this.init();
-  },
+    data: function data() {
+        return {
+            state: null,
+            code: null
+        };
+    },
+    created: function created() {
+        this.init();
+    },
 
-  methods: {
-    init: function init() {
-      console.log(222);
+    methods: {
+        init: function init() {
+            this.code = this.$route.query.code;
+            this.state = this.$route.query.state;
+            var _data = {
+                code: this.code,
+                state: this.state
+            };
+            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {}).catch();
+
+            console.log(222);
+        }
     }
-  }
 
 });
 
