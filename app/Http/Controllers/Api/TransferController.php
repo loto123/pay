@@ -113,7 +113,7 @@ class TransferController extends Controller
         $transfer->container_id = $wallet->id;
         //交易关系包含自己
         $joiners = $request->input('joiner', []);
-        foreach($joiners as $key => $value) {
+        foreach ($joiners as $key => $value) {
             $joiners[$key] = Skip32::decrypt("0123456789abcdef0123", $value);
         }
         array_push($joiners, $user->id);
@@ -556,12 +556,16 @@ class TransferController extends Controller
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Parameter(
-     *     name="friend_id",
+     *    @SWG\Parameter(
+     *     name="joiner",
      *     in="formData",
-     *     description="好友user_id",
-     *     required=true,
-     *     type="integer"
+     *     description="参与交易人",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
@@ -572,7 +576,7 @@ class TransferController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
-                'friend_id' => 'bail|required',
+                'friend_id' => 'bail|required|array'
             ],
             [
                 'required' => trans('trans.required'),
@@ -593,14 +597,23 @@ class TransferController extends Controller
         if (TransferUserRelation::where('transfer_id', $transfer->transfer_id)->where('user_id', $request->friend_id)->exists()) {
             return response()->json(['code' => 0, 'msg' => trans('trans.notice_already_exists'), 'data' => []]);
         }
-        $relation = new TransferUserRelation();
-        $relation->transfer_id = $transfer->transfer_id;
-        $relation->user_id = $request->friend_id;
-        if ($relation->save()) {
+        DB::beginTransaction();
+        try {
+            foreach ($request->friend_id as $value) {
+                $real_id = Skip32::decrypt("0123456789abcdef0123", $value);
+                if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
+                    $relation = new TransferUserRelation();
+                    $relation->transfer_id = $transfer->transfer_id;
+                    $relation->user_id = $real_id;
+                    $relation->save();
+                }
+            }
+            DB::commit();
             return response()->json(['code' => 1, 'msg' => trans('trans.notice_success'), 'data' => []]);
-        } else {
-            return response()->json(['code' => 0, 'msg' => trans('trans.notice_failed'), 'data' => []]);
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
+        return response()->json(['code' => 0, 'msg' => trans('trans.notice_failed'), 'data' => []]);
     }
 
     /**
@@ -746,7 +759,7 @@ class TransferController extends Controller
                 $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
                 $pay_transfer = $user_container->transfer($shop_container, $request->fee, 0, 0, 0);
                 if (!$pay_transfer) {
-                    return response()->json(['code' => 0, 'msg' => "111".trans('trans.trade_failed'), 'data' => []]);
+                    return response()->json(['code' => 0, 'msg' => "111" . trans('trans.trade_failed'), 'data' => []]);
                 }
                 //减用户余额
 //                $user->balance = $user->balance - $request->fee;
