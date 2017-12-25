@@ -588,7 +588,7 @@ class TransferController extends Controller
         }
 
         $transfer = Transfer::findByEnId($request->transfer_id);
-        if ($transfer) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
