@@ -27,14 +27,21 @@ export default {
     init(){
         this.code = utils.getQueryString("code");
         this.state = utils.getQueryString("state");
-        console.log(this.code);
-        console.log(this.state);
+        
         var _data = {
             code :this.code,
             state:this.state
         };
         request.getInstance().postData("api/auth/login/wechat",_data).then(res=>{
+            
 
+            if(!res.data.data.token){
+                this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
+            }
+
+            if(res.data.data.oauth_user){
+
+            }
         }).catch();
 
     }
