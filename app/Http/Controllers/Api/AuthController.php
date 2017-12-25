@@ -72,7 +72,9 @@ class AuthController extends BaseController {
         }
 
         // all good so return the token
-        return $this->json(compact('token'));
+        $user = JWTAuth::toUser($token);
+        $wechat = $user->wechat_user ? 1 : 0;
+        return $this->json(compact('token', 'wechat'));
     }
 
     /**
