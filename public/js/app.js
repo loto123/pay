@@ -45730,6 +45730,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar__ = __webpack_require__(106);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_tabBar__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(7);
 //
 //
 //
@@ -45859,6 +45860,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -45866,13 +45868,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "index",
   components: { tabBar: __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default.a },
+  data: function data() {
+    return {
+      amount: null
+    };
+  },
   created: function created() {
-    // Loading.getInstance().open();
+    this.init();
   },
 
   methods: {
     goInform: function goInform() {
       this.$router.push("/inform");
+    },
+    init: function init() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
+        _this.amount = res.data.data.balance;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      });
     }
   }
 });
@@ -46141,7 +46159,15 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(0, false, false)
+        _c("section", { staticClass: "transaction flex flex-justify-center" }, [
+          _c("a", { attrs: { href: "/#/myAccount" } }, [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _c("h3", [_vm._v(_vm._s(_vm.amount))]),
+            _vm._v(" "),
+            _c("h4", [_vm._v("账户余额(元)")])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm._m(1, false, false),
@@ -46157,23 +46183,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "section",
-      { staticClass: "transaction flex flex-justify-center" },
-      [
-        _c("a", { attrs: { href: "/#/myAccount" } }, [
-          _c(
-            "div",
-            {
-              staticClass: "imggWrap flex flex-justify-center flex-align-center"
-            },
-            [_c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })]
-          ),
-          _vm._v(" "),
-          _c("h3", [_vm._v("0.00")]),
-          _vm._v(" "),
-          _c("h4", [_vm._v("账户余额(元)")])
-        ])
-      ]
+      "div",
+      { staticClass: "imggWrap flex flex-justify-center flex-align-center" },
+      [_c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })]
     )
   },
   function() {
@@ -66436,6 +66448,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(773);
 //
 //
 //
@@ -66556,6 +66569,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -66583,7 +66597,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {});
     },
+
+    // 同意加入店铺的请求
     agreeItem: function agreeItem(id) {
+      var _this2 = this;
+
       __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
       if (id == null) {
         var _data = null;
@@ -66594,8 +66612,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/agree", _data).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        Toast("操作成功");
+        setTimeout(function () {
+          _this2.init();
+        }, 1500);
       }).catch(function (err) {});
       console.log(id);
+    },
+    antiItem: function antiItem(id) {
+      var _this3 = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      if (id == null) {
+        var _data = null;
+      } else {
+        var _data = {
+          id: id
+        };
+      }
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/ignore/" + id).then(function (res) {
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        Toast("操作成功");
+        setTimeout(function () {
+          _this3.init();
+        }, 1500);
+      }).catch(function (err) {});
+    },
+    setString: function setString(str, len) {
+      return __WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* default */].SetString(str, len);
     }
   }
 });
@@ -66635,13 +66679,15 @@ var render = function() {
                     attrs: { src: item.user_avatar, alt: "" }
                   }),
                   _vm._v(" "),
-                  _c("span", [_vm._v("昵称:" + _vm._s(item.user_name))])
+                  _c("span", [
+                    _vm._v("昵称:" + _vm._s(_vm.setString(item.user_name, 7)))
+                  ])
                 ]),
                 _vm._v(" "),
                 _c("span", [
                   _vm._v("申请加入小店 "),
                   _c("i", { staticStyle: { color: "#26a2ff" } }, [
-                    _vm._v(_vm._s(item.shop_name))
+                    _vm._v(_vm._s(_vm.setString(item.shop_name, 10)))
                   ])
                 ])
               ]
@@ -66687,36 +66733,38 @@ var render = function() {
         })
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "all-list-controller flex flex-justify-center " },
-        [
-          _c(
+      !_vm.messageList
+        ? _c(
             "div",
-            { staticClass: "btn-wrap flex flex-v flex-justify-around" },
+            { staticClass: "all-list-controller flex flex-justify-center " },
             [
               _c(
-                "mt-button",
-                {
-                  staticStyle: { background: "#00cc00" },
-                  attrs: { type: "primary", size: "large" }
-                },
-                [_vm._v("全部同意")]
-              ),
-              _vm._v(" "),
-              _c(
-                "mt-button",
-                {
-                  staticStyle: { background: "#ccc" },
-                  attrs: { type: "primary", size: "large" }
-                },
-                [_vm._v("全部忽略")]
+                "div",
+                { staticClass: "btn-wrap flex flex-v flex-justify-around" },
+                [
+                  _c(
+                    "mt-button",
+                    {
+                      staticStyle: { background: "#00cc00" },
+                      attrs: { type: "primary", size: "large" }
+                    },
+                    [_vm._v("全部同意")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "mt-button",
+                    {
+                      staticStyle: { background: "#ccc" },
+                      attrs: { type: "primary", size: "large" }
+                    },
+                    [_vm._v("全部忽略")]
+                  )
+                ],
+                1
               )
-            ],
-            1
+            ]
           )
-        ]
-      )
+        : _vm._e()
     ],
     1
   )
@@ -68489,6 +68537,8 @@ exports.push([module.i, "\n#dealManagement[data-v-014c721d] {\n  padding-top: 2e
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
 //
 //
 //
@@ -68654,14 +68704,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+    created: function created() {
+        this.init();
+    },
     data: function data() {
         return {
-            tabItem: [true, false, false]
+            tabItem: [true, false, false],
+            dataList: []
         };
     },
 
@@ -68676,6 +68732,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         goDetail: function goDetail() {
             this.$router.push("/makeDeal/deal_detail");
+        },
+        init: function init() {
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+            var _data = {
+                status: 1,
+                limit: 50,
+                offset: 0
+            };
+
+            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/record", _data).then(function (res) {}).catch(function (err) {});
         }
     }
 });
