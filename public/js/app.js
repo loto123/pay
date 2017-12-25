@@ -53300,13 +53300,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     goNextStep: function goNextStep() {
       var self = this;
+      var auther = this.$route.query.oauth_user;
 
       if (this.step >= 3) {
         var data = {
           mobile: this.userAccountName,
           password: this.userPassword,
           code: this.validCode,
-          invite_mobile: this.inviteMobile
+          invite_mobile: this.inviteMobile,
+          oauth_user: auther
         };
 
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/register', data).then(function (res) {
@@ -74169,6 +74171,8 @@ exports.push([module.i, "", ""]);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_utils__ = __webpack_require__(773);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
 //
 //
 //
@@ -74179,6 +74183,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -74199,13 +74204,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         init: function init() {
             this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
             this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
-            console.log(this.code);
-            console.log(this.state);
+
             var _data = {
                 code: this.code,
                 state: this.state
             };
-            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {}).catch();
+            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
+
+                if (!res.data.data.token) {
+                    window.location.href = "/#/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
+                    // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
+                } else {
+                    Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("微信登录成功");
+                    __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
+
+                    setTimeout(function () {
+                        window.location.href = "/#/index";
+                    }, 2000);
+                }
+            }).catch();
         }
     }
 
