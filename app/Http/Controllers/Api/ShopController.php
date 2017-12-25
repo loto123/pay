@@ -560,7 +560,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
 
         $data = [];
-        foreach ($user->notifications()->where("type", "App\Notifications\ShopApply")->paginate($request->input('size', 20)) as $notification) {
+        foreach ($user->unreadNotifications()->where("type", "App\Notifications\ShopApply")->paginate($request->input('size', 20)) as $notification) {
             try {
                 $user = User::find($notification->data['user_id']);
                 $shop = Shop::find($notification->data['shop_id']);
