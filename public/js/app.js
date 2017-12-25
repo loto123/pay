@@ -57693,9 +57693,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_loading__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_qrCode__ = __webpack_require__(587);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__utils_qrCode__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__choiseMember_vue__ = __webpack_require__(568);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__choiseMember_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_qrCode__ = __webpack_require__(587);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__utils_qrCode__);
 //
 //
 //
@@ -57980,6 +57982,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -57994,7 +58005,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "makeDealDetail",
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, slider: __WEBPACK_IMPORTED_MODULE_1__components_slider___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_2__dealContent___default.a, passwordPanel: __WEBPACK_IMPORTED_MODULE_3__components_password___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a, slider: __WEBPACK_IMPORTED_MODULE_1__components_slider___default.a, dealContent: __WEBPACK_IMPORTED_MODULE_2__dealContent___default.a, passwordPanel: __WEBPACK_IMPORTED_MODULE_3__components_password___default.a, choiseMember: __WEBPACK_IMPORTED_MODULE_6__choiseMember_vue___default.a },
 
   data: function data() {
     return {
@@ -58011,7 +58022,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       password: "", // 支付密码
 
       joiner: [], // 交易的参与者，需要提醒的人
-      recordList: []
+      recordList: [],
+
+      choiseMemberSwitch: false,
+      memberList: [] //成员数组
     };
   },
   created: function created() {
@@ -58023,24 +58037,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     deleteIt: function deleteIt(id) {
-      __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         record_id: id
       };
 
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/withdraw", _data).then(function (res) {
-        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       });
-
-      console.log(id);
-      console.log("i m ru");
     },
     init: function init() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       this.transfer_id = this.$route.query.id;
       var _data = {
         transfer_id: this.transfer_id
@@ -58050,7 +58061,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.joiner = res.data.data.joiner;
         _this.renderData = res.data.data;
         _this.recordList = res.data.data.record;
-        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
       });
@@ -58068,18 +58079,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       if (this.payType == "put") {
-        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
         __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
           var _passwordStatus = res.data.data.has_pay_password;
 
           if (!_passwordStatus) {
-            __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("您还未设置支付密码，即将跳转设置页面");
             setTimeout(function () {
               _this2.$router.push("/my/setting_password");
             }, 2000);
           } else {
-            __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
             _this2.showPassword();
           }
         }).catch(function (err) {});
@@ -58106,13 +58117,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
 
         __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
-          __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("放钱进店铺成功");
           setTimeout(function () {
             _this3.init();
           }, 1500);
         }).catch(function (err) {
-          __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
 
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
         });
@@ -58126,14 +58137,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           action: "get"
         };
         __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
-          __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
 
           setTimeout(function () {
             _this3.init();
           }, 1500);
         }).catch(function (err) {
-          __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           console.error(err);
         });
       }
@@ -58164,6 +58175,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易失败");
       });
+    },
+    hideMemberChoise: function hideMemberChoise() {
+      this.choiseMemberSwitch = false;
+    },
+
+    // 初始化提醒玩家列表
+    initMemberList: function initMemberList(res) {
+
+      if (this.joiner.length > 0) {
+        return;
+      }
+
+      for (var i = 0; i < res.data.data.members.length; i++) {
+        var _temp = {};
+        _temp = res.data.data.members[i];
+        _temp.checked = false;
+        this.joiner.push(_temp);
+      }
+    },
+
+    // 获取所有要提醒的成员名单
+    showMemberChoise: function showMemberChoise() {
+      var _this5 = this;
+
+      __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/members/' + this.transfer_id).then(function (res) {
+        console.log(res);
+        _this5.initMemberList(res);
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+
+        if (res.data.data.members.length == 0) {
+          Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("当前店铺无成员");
+          return;
+        }
+
+        _this5.choiseMemberSwitch = true;
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+      });
+    },
+    getMemberData: function getMemberData(data) {
+      this.joiner = data;
     }
   },
   watch: {
@@ -59737,7 +59791,14 @@ var render = function() {
                 })
               }),
               _vm._v(" "),
-              _c("span", { staticClass: "info-friend" }, [_vm._v("提醒好友")])
+              _c(
+                "span",
+                {
+                  staticClass: "info-friend",
+                  on: { click: _vm.showMemberChoise }
+                },
+                [_vm._v("提醒好友")]
+              )
             ],
             2
           )
@@ -59831,6 +59892,15 @@ var render = function() {
           secondValid: false
         },
         on: { hidePassword: _vm.hidePassword, callBack: _vm.submitData }
+      }),
+      _vm._v(" "),
+      _c("choiseMember", {
+        attrs: {
+          isShow: _vm.choiseMemberSwitch,
+          dataList: _vm.joiner,
+          submit: _vm.getMemberData
+        },
+        on: { hide: _vm.hideMemberChoise }
       })
     ],
     1

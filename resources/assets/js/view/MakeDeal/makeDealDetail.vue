@@ -53,7 +53,7 @@
                   v-for="item in joiner" 
                 >
                 
-                <span class="info-friend">提醒好友</span>
+                <span class="info-friend" @click="showMemberChoise">提醒好友</span>
               </div>
             </div>
             
@@ -109,6 +109,14 @@
           v-on:hidePassword="hidePassword" 
           v-on:callBack ="submitData">
         </passwordPanel>
+
+        <choiseMember 
+          :isShow = "choiseMemberSwitch"
+          v-on:hide = "hideMemberChoise"
+          :dataList = "joiner"
+          :submit  ="getMemberData"
+        >
+        </choiseMember>  
     </div>
 </template>
 
@@ -289,6 +297,7 @@ import dealContent from "./dealContent";
 import passwordPanel from "../../components/password";
 import request from "../../utils/userRequest";
 import {Toast} from "mint-ui"
+import choiseMember from "./choiseMember.vue"
 
 import Loading from "../../utils/loading";
 
@@ -296,7 +305,7 @@ import qrCode from "../../utils/qrCode";
 
 export default {
   name: "makeDealDetail",
-  components: { topBack, slider, dealContent, passwordPanel },
+  components: { topBack, slider, dealContent, passwordPanel ,choiseMember},
 
   data() {
     return {
@@ -313,7 +322,10 @@ export default {
       password:"",       // 支付密码
 
       joiner:[],         // 交易的参与者，需要提醒的人
-      recordList:[]
+      recordList:[],
+
+      choiseMemberSwitch:false,
+      memberList:[]              //成员数组
     };
   },
   created() {
@@ -336,9 +348,7 @@ export default {
       }).catch(err=>{
         Loading.getInstance().close();
       });
-
-      console.log(id);
-      console.log("i m ru");
+      
     },
 
     init() {
@@ -474,7 +484,50 @@ export default {
       }).catch(err=>{
         Toast("撤销交易失败");
       });
-    }
+    },
+
+    hideMemberChoise(){
+      this.choiseMemberSwitch = false;
+    },
+    // 初始化提醒玩家列表
+    initMemberList(res){
+
+      if(this.joiner.length>0){
+        return;
+      }
+
+      for(let i = 0; i<res.data.data.members.length; i++){
+          var _temp = {};
+          _temp = res.data.data.members[i];
+          _temp.checked = false;
+          this.joiner.push(_temp);
+        }
+    },
+    // 获取所有要提醒的成员名单
+    showMemberChoise(){
+      
+      Loading.getInstance().open();
+      request.getInstance().getData('api/shop/members/'+this.transfer_id).then(res=>{
+        console.log(res);
+        this.initMemberList(res);
+        Loading.getInstance().close();
+
+        if(res.data.data.members.length == 0){
+          Toast("当前店铺无成员");
+          return;
+        }
+
+        this.choiseMemberSwitch = true;
+        
+      }).catch(err=>{
+        console.error(err);
+        Loading.getInstance().close();
+      });
+
+    },
+    getMemberData(data){
+      this.joiner = data;
+    },
   },
   watch: {
     "moneyData.payMoney": function() {
