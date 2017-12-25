@@ -46263,7 +46263,7 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/login', name: 'login', component: __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default.a }, { path: '/login/regist', name: 'regist', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }, { path: '/login/weChatLogin', name: 'weChatLogin', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }]);
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/login', name: 'login', component: __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default.a }, { path: '/login/regist', name: 'regist', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }, { path: '/login/weChatLogin', name: 'weChatLogin', component: __WEBPACK_IMPORTED_MODULE_2__view_Login_wechatLogin_vue___default.a }]);
 
 /***/ }),
 /* 290 */
@@ -46568,7 +46568,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _data = {
         redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {}).catch();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
+        window.location.href = res.data.data.url;
+      }).catch();
     },
     commitName: function commitName() {
       this.$store.dispatch("changeName", this.name);
