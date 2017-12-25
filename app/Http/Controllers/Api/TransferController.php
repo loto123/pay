@@ -640,7 +640,16 @@ class TransferController extends Controller
         }, 'tips.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
-        debug($transfer);
+
+        //装填响应数据
+        $transfer->id = $transfer->en_id();
+        $transfer->user->id = $transfer->user->en_id();
+        foreach ($transfer->tips as $key => $record) {
+            $transfer->tips[$key]->user->id = $record->user->en_id();
+            unset($transfer->tips[$key]->transfer_id);
+            unset($transfer->tips[$key]->user_id);
+        }
+        unset($transfer->user_id);
 
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
@@ -731,7 +740,7 @@ class TransferController extends Controller
                 $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
                 $pay_transfer = $user_container->transfer($shop_container, $request->fee, 0, 0, 0);
                 if (!$pay_transfer) {
-                    return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
+                    return response()->json(['code' => 0, 'msg' => "111".trans('trans.trade_failed'), 'data' => []]);
                 }
                 //减用户余额
 //                $user->balance = $user->balance - $request->fee;
