@@ -1036,10 +1036,12 @@ class TransferController extends Controller
         if ($transfer->record()->exists()) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_allow_to_cancel'), 'data' => []]);
         }
-        //删除交易
-        Transfer::where('id', $request->transfer_id)->delete();
         //删除交易用户关联关系
-        TransferUserRelation::where('transfer_id', $request->transfer_id)->delete();
+        TransferUserRelation::where('transfer_id', $transfer->id)->delete();
+        //删除交易容器
+        $transfer->container()->delete();
+        //删除交易
+        $transfer->delete();
         return response()->json(['code' => 1, 'msg' => trans('trans.trans_cancel_success'), 'data' => []]);
     }
 }
