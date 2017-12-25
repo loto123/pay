@@ -870,7 +870,7 @@ class TransferController extends Controller
 
     /**
      * @SWG\GET(
-     *   path="/transfer/record",
+     *   path="/transfer/shop",
      *   summary="商店交易记录",
      *   tags={"交易"},
      *   @SWG\Parameter(
