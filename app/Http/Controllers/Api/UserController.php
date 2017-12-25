@@ -355,6 +355,7 @@ class UserController extends Controller
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
+        Cache::forget($cache_key);
         //调用实名认证接口
 
         if(true) {
