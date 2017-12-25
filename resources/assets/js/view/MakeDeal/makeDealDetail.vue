@@ -427,7 +427,7 @@ export default {
 
       var _tempList = [];
       for(let i = 0; i<dataList.length; i++){
-        _tempList.push(dataList.id);
+        _tempList.push(dataList[i].id);
       }
 
       var _data ={

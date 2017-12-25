@@ -58123,7 +58123,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       var _tempList = [];
       for (var i = 0; i < dataList.length; i++) {
-        _tempList.push(dataList.id);
+        _tempList.push(dataList[i].id);
       }
 
       var _data = {
