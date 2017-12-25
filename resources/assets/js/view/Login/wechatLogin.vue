@@ -26,15 +26,16 @@ export default {
     init(){
         this.code = this.$route.query.code;
         this.state = this.$route.query.state;
+        console.log(this.code);
+        console.log(this.state);
         var _data = {
             code :this.code,
             state:this.state
-        }
+        };
         request.getInstance().postData("api/auth/login/wechat",_data).then(res=>{
-            
+
         }).catch();
 
-        console.log(222);
     }
   }
   

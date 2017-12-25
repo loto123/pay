@@ -74197,13 +74197,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         init: function init() {
             this.code = this.$route.query.code;
             this.state = this.$route.query.state;
+            console.log(this.code);
+            console.log(this.state);
             var _data = {
                 code: this.code,
                 state: this.state
             };
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {}).catch();
-
-            console.log(222);
         }
     }
 
