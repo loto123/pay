@@ -74216,7 +74216,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
                 } else {
                     Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("微信登录成功");
-                    __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().setToken(res.dat.data.token);
+                    __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
 
                     setTimeout(function () {
                         window.location.href = "/#/index";

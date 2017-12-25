@@ -40,7 +40,7 @@ export default {
                 // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
             }else {
                 Toast("微信登录成功");
-                request.getInstance().setToken(res.dat.data.token);
+                request.getInstance().setToken(res.data.data.token);
                 
                 setTimeout(()=>{
                     window.location.href = "/#/index";
