@@ -46568,7 +46568,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _data = {
         redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url").then(function (res) {}).catch();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {}).catch();
     },
     commitName: function commitName() {
       this.$store.dispatch("changeName", this.name);

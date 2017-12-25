@@ -196,7 +196,7 @@ export default {
       var _data={
         redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
-      request.getInstance().getData("api/auth/login/wechat/url").then(res=>{
+      request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
 
       }).catch();
     },
