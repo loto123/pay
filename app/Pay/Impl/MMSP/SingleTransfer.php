@@ -108,9 +108,7 @@ class SingleTransfer implements WithdrawInterface
     public function receiverInfoDescription()
     {
         return [
-            'ACCNAME' => '收款人银行卡户名',
-            'ACCNO' => '收款人银行卡账号',
-            'BANKSETTLENO' => '对公账户必传：传开户所在支行的联行号，参考《银行联行号.xlsx》对私账户：不传',
+            'bank_card' => '银行卡对象,后端设置'
         ];
     }
 
