@@ -34,7 +34,7 @@
         其他登录
       </div>
       <div class="login-type flex flex-v flex-align-center">
-        <a href="javascript:;" class="flex flex-v flex-align-center">
+        <a href="javascript:;" class="flex flex-v flex-align-center" @click="weChatLogin">
           <img src="/images/weichat_login.png" alt="">
           <p>微信登录</p>
         </a>
@@ -171,6 +171,7 @@ export default {
       this.$store.dispatch("increment", 15);
     },
 
+    // 普通登录
     login() {
       var self = this;
 
@@ -188,6 +189,19 @@ export default {
         Toast(err.data.message);
       });
     },
+
+    // 微信登录
+    weChatLogin(){
+
+      var _data={
+        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+      };
+      request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
+
+      }).catch();
+    },
+
+
     commitName() {
       this.$store.dispatch("changeName", this.name);
     },
