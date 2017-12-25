@@ -258,7 +258,7 @@ class ShopController extends BaseController {
             $members[] = [
                 'id' => (int)$_user->id,
                 'name' => $_user->name,
-                'avatar' => asset("images/personal.jpg"),
+                'avatar' => $_user->avatar,
 
             ];
         }
@@ -318,7 +318,7 @@ class ShopController extends BaseController {
             $members[] = [
                 'id' => (string)$_user->en_id(),
                 'name' => $_user->name,
-                'avatar' => asset("images/personal.jpg"),
+                'avatar' => $_user->avatar,
 
             ];
         }
