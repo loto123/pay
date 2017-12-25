@@ -33,10 +33,10 @@ export default {
             state:this.state
         };
         request.getInstance().postData("api/auth/login/wechat",_data).then(res=>{
-            
 
             if(!res.data.data.token){
-                this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
+                window.location.href = "/login/regist/"+"?oauth_user="+res.data.data.oauth_user;
+                // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
             }
 
             if(res.data.data.oauth_user){

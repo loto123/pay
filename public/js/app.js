@@ -53300,13 +53300,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     goNextStep: function goNextStep() {
       var self = this;
+      var auther = this.$route.query.oauth_user;
 
       if (this.step >= 3) {
         var data = {
           mobile: this.userAccountName,
           password: this.userPassword,
           code: this.validCode,
-          invite_mobile: this.inviteMobile
+          invite_mobile: this.inviteMobile,
+          oauth_user: auther
         };
 
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/register', data).then(function (res) {
@@ -74197,8 +74199,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         init: function init() {
-            var _this = this;
-
             this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
             this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
 
@@ -74209,7 +74209,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
 
                 if (!res.data.data.token) {
-                    _this.$router.push("/login/regist/" + "?oauth_user=" + res.data.data.oauth_user);
+                    window.location.href = "/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
+                    // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
                 }
 
                 if (res.data.data.oauth_user) {}
