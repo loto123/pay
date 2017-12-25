@@ -869,6 +869,82 @@ class TransferController extends Controller
     }
 
     /**
+     * @SWG\GET(
+     *   path="/transfer/record",
+     *   summary="商店交易记录",
+     *   tags={"交易"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="formData",
+     *     description="店铺ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="status",
+     *     in="formData",
+     *     description="交易状态 0, 1 待结算, 2 已平账, 3 已关闭",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="formData",
+     *     description="每页条数",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="offset",
+     *     in="formData",
+     *     description="起始位置",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function shop(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'shop_id' => 'bail|required|integer',
+                'status' => ['bail', 'required', Rule::in([0, 1, 2, 3])],
+                'limit' => 'bail|integer',
+                'offset' => 'bail|integer',
+            ],
+            [
+                'required' => trans('trans.required'),
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
+        }
+        $status = $request->status;
+//        $user = JWTAuth::parseToken()->authenticate();
+        $shop = Shop::findByEnId($request->shop_id);
+        if (!$shop) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
+        }
+        $query = $shop->transfer()->with(['user' => function ($query) {
+            $query->select('id', 'name', 'avatar');
+        }])->where('status', $status)->select('id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
+        if ($request->limit && $request->offset) {
+            $query->offset($request->offset)->limit($request->limit);
+        }
+        $list = $query->get();
+        //装填响应数据
+        foreach($list as $key => $value) {
+            $list[$key]->id = $value->en_id();
+            $list[$key]->user->id = $value->user->en_id();
+            unset($list[$key]->user_id);
+        }
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $list]);
+    }
+
+    /**
      * @SWG\Post(
      *   path="/transfer/mark",
      *   summary="标记",
