@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use JWTAuth;
+use Skip32;
 use Validator;
 
 class TransferController extends Controller
@@ -111,6 +112,9 @@ class TransferController extends Controller
         $transfer->container_id = $wallet->id;
         //交易关系包含自己
         $joiners = $request->input('joiner', []);
+        foreach($joiners as $key => $value) {
+            $joiners[$key] = Skip32::decrypt("0123456789abcdef0123", $value);
+        }
         array_push($joiners, $user->id);
         if ($transfer->save()) {
             //保存交易关系
@@ -178,7 +182,6 @@ class TransferController extends Controller
 
         //装填响应数据
         $transfer->id = $transfer->en_id();
-        unset($transfer->user_id);
         $transfer->user->id = $transfer->user->en_id();
         foreach ($transfer->record as $key => $record) {
             $transfer->record[$key]->user->id = $record->user->en_id();
@@ -190,6 +193,7 @@ class TransferController extends Controller
             unset($transfer->joiner[$key]->transfer_id);
             unset($transfer->joiner[$key]->user_id);
         }
+        unset($transfer->user_id);
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
 
@@ -348,7 +352,7 @@ class TransferController extends Controller
                 //容器转账
                 $user_container = PayFactory::MasterContainer($user->container->id);
                 $transfer_container = PayFactory::MasterContainer($transfer->container->id);
-                $pay_transfer = $user_container->transfer($transfer_container, $record->real_amount, 0, 0, 0);
+                $pay_transfer = $user_container->transfer($transfer_container, $record->amount, 0, 0, 0);
                 if (!$pay_transfer) {
                     return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
                 }
@@ -441,6 +445,7 @@ class TransferController extends Controller
             return response()->json(['code' => 1, 'msg' => trans('trans.trade_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json(['code' => 0, 'msg' => $e->getTraceAsString(), 'data' => []]);
         }
         return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
     }
