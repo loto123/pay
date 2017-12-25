@@ -1,3 +1,6 @@
+@php
+    use \App\Pay\Model\Deposit;
+@endphp
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -9,10 +12,10 @@
     <link href="{{mix('css/app.css')}}" rel="stylesheet" type="text/css">
 </head>
 <body>
-<p>支付{{$state}}</p>
-@if ($state === '成功')
-    <p>外部交易号:{{$out_batch_no}}</p>
-    <p>充值金额:{{$amount}}</p>
+<p>支付{{$status_text}}</p>
+@if ($result->state === Deposit::STATE_COMPLETE)
+    <p>外部交易号:{{$result->out_batch_no}}</p>
+    <p>充值金额:{{$result->amount}}</p>
 @endif
 </body>
 </html>
