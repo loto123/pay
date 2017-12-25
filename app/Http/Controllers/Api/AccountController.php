@@ -248,6 +248,10 @@ class AccountController extends BaseController {
             $channelBind = $channelBind->spareChannel;
         }
 
+        if (!$channelBind) {
+            return $this->json(null, '没有可用支付通道', 0);
+        }
+
         $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get();
         if (config('debug')) {
             $methods->each(function (&$item) {
