@@ -29,6 +29,7 @@
 <script>
 	import request from '../../utils/userRequest';
 	import topBack from '../../components/topBack'
+	import {Toast } from "mint-ui";
 
 	export default {
 		data() {
@@ -43,7 +44,11 @@
 				this.$router.push('/my/verfy_code?' + 'mobile=' + this.mobile);
 			},
 			exit(){
-
+				request.getInstance().removeToken();
+				Toast("用户已经退出...");
+				setTimeout(function(){
+					window.location.href = "/#/login"
+				},2000);
 			}
 		}
 	}
