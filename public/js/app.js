@@ -65370,7 +65370,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         active: true
       },
 
-      shopList: []
+      shopList: [],
+      total_profit: null
     };
   },
 
@@ -65411,15 +65412,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 数据处理
     getShopData: function getShopData() {
-      var self = this;
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine").then(function (res) {
-        self.shopList = res.data.data.data;
+        _this.shopList = res.data.data.data;
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (e) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
         console.error(e);
       });
+
+      // request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
+      //     console.log(res);
+      //     this.balance = res.data.data.balance;
+      //     this.today_profit = res.data.data.today_profit;
+      //     this.yesterday_profit = res.data.data.yesterday_profit;
+      //     this.total_profit = res.data.data.total_profit;
+
+      //     Loading.getInstance().close();
+      // }).catch(err=>{
+      //     console.error(err);
+      // });
+
+      // Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/account/"+this.shopId)])
+      //   .then(res=>{
+      //     this.shopList = res[0].data.data.data;
+      //     this.total_profit = res[1].data.data.data;
+      //     Loading.getInstance().close();
+      //   })
+      //   .catch(err=>{
+      //     Loading.getInstance().close();
+      //     console.error(err);
+      //   });
     }
   }
 });
@@ -65464,7 +65490,9 @@ var render = function() {
           _vm._v(" "),
           _vm._m(0, false, false),
           _vm._v(" "),
-          _c("h3", { staticClass: "money-text" }, [_vm._v("689523236.56元")]),
+          _c("h3", { staticClass: "money-text" }, [
+            _vm._v(_vm._s(_vm.total_profit) + "元")
+          ]),
           _vm._v(" "),
           _c("h3", [_vm._v("店铺总收益(元)")])
         ],
@@ -65531,7 +65559,7 @@ var render = function() {
                   _vm._v("今日收益:123456")
                 ]),
                 _vm._v(" "),
-                _c("p", { staticClass: "all-earn" }, [_vm._v("总收益:666666")])
+                _c("p", { staticClass: "all-earn" }, [_vm._v("总收益:111")])
               ]
             )
           }),
@@ -74213,7 +74241,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 if (!res.data.data.token) {
                     window.location.href = "/#/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
-                    // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
                 } else {
                     Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("微信登录成功");
                     __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
