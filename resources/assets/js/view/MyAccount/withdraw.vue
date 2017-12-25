@@ -33,7 +33,6 @@
 </template>
 
 <script>
-	import axios from "axios";
 	import request from '../../utils/userRequest';
 	import topBack from '../../components/topBack.vue'
 	import passWorld from "../../components/password"
