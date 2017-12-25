@@ -81,8 +81,8 @@ class DepositMethod extends Model
          * @var $result DepositResult
          */
         $result = (new $this->impl)->parseReturn($this);
-        $result->state = Deposit::getStateText($result['state']);
-        return view('pay_result', (array)$result);
+        $msg = Deposit::getStateText($result->state);
+        return view('pay_result', ['result' => $result, 'status_text' => $msg]);
     }
 
     /**

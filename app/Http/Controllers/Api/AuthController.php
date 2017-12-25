@@ -116,6 +116,13 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="oauth_user",
+     *         in="formData",
+     *         description="微信用户id",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
@@ -316,6 +323,13 @@ class AuthController extends BaseController {
      *         required=false,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="exist",
+     *         in="formData",
+     *         description="找回密码传1，其他验证不传",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
@@ -328,11 +342,19 @@ class AuthController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function valid(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable().',mobile',
-            'invite_mobile' => 'regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
-            'code' => 'regex:/^\d{4}$/',
-        ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+        if ($request->exist) {
+            $validator = Validator::make($request->all(), [
+                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|exist:'.(new User)->getTable().',mobile',
+                'code' => 'regex:/^\d{4}$/',
+            ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable().',mobile',
+                'invite_mobile' => 'regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
+                'code' => 'regex:/^\d{4}$/',
+            ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+        }
+
 
 
         if ($validator->fails()) {

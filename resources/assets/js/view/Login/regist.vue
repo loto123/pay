@@ -281,13 +281,15 @@ export default {
 
     goNextStep() {
       var self = this;
-      
+      var auther = this.$route.query.oauth_user;
+
       if (this.step >= 3) {
         var data = {
           mobile :this.userAccountName,
           password :this.userPassword,
           code:this.validCode,
-          invite_mobile:this.inviteMobile
+          invite_mobile:this.inviteMobile,
+          oauth_user:auther
         }
 
         request.getInstance().postData('api/auth/register',data).then(function(res){
