@@ -74197,15 +74197,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         init: function init() {
+            var _this = this;
+
             this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
             this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
-            console.log(this.code);
-            console.log(this.state);
+
             var _data = {
                 code: this.code,
                 state: this.state
             };
-            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {}).catch();
+            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
+
+                if (!res.data.data.token) {
+                    _this.$router.push("/login/regist/" + "?oauth_user=" + oauth_user);
+                }
+
+                if (res.data.data.oauth_user) {}
+            }).catch();
         }
     }
 
