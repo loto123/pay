@@ -560,7 +560,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
 
         $data = [];
-        foreach ($user->notifications()->where("type", "App\Notifications\ShopApply")->paginate($request->input('size', 20)) as $notification) {
+        foreach ($user->notifications()->where("type", "App\Notifications\ShopApply")->where("read_at", "!=", null)->paginate($request->input('size', 20)) as $notification) {
             try {
                 $user = User::find($notification->data['user_id']);
                 $shop = Shop::find($notification->data['shop_id']);
@@ -569,7 +569,6 @@ class ShopController extends BaseController {
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
-                    'status' => 0
                 ];
             } catch (\Exception $e){}
         }
@@ -593,6 +592,12 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function agree(Request $request) {
+        $user = $this->auth->user();
+        if ($request->id) {
+            $user->notifications()->where("id", $request->id)->markAsRead();
+        } else {
+            $user->unreadNotifications->markAsRead();
+        }
         return $this->json();
     }
 
@@ -617,7 +622,7 @@ class ShopController extends BaseController {
         if ($request->id) {
             $user->notifications()->where("id", $request->id)->markAsRead();
         } else {
-            $user->notifications()->markAsRead();
+            $user->unreadNotifications->markAsRead();
         }
         return $this->json();
     }
