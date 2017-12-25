@@ -38,11 +38,13 @@ class SubmitWithdrawRequest implements ShouldQueue
     /**
      * 处理提现
      *
-     * @return void
+     * @return WithdrawResult
      */
     public function handle()
     {
-        $this->job->delete();//失败禁止重试
+        if ($this->job) {
+            $this->job->delete();//失败禁止重试
+        }
 
         $withdraw = $this->withdraw;
         $prev_except = null;
@@ -82,6 +84,7 @@ class SubmitWithdrawRequest implements ShouldQueue
                 'exception' => $prev_except ? $prev_except->getMessage() : ''
             ]));
         }
+        return $result;
 
     }
 }

@@ -27,6 +27,14 @@ Route::group([
     $router->resource('pay/entity', BusinessEntityController::class);
     $router->resource('pay/channel', PayChannelController::class);
     $router->resource('pay/scene', PaySceneController::class);
+    $router->resource('pay/deposits', DepositController::class);
+    $router->resource('pay/withdraws', WithdrawController::class);
+
+    //支付重试
+    $router->post('pay/retry-{operation}/{id}', function ($operation, $id) {
+        $retry = ['charge' => new \App\Pay\Model\ChargeRetry($id), 'withdraw' => new \App\Pay\Model\WithdrawRetry($id)][$operation];
+        return $retry->reDo();
+    })->name('pay_retry')->where(['operation' => 'charge|withdraw', 'id' => '\d+']);
 
     $router->post('/excel/user', 'ExcelController@user');
 
