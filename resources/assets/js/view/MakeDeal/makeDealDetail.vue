@@ -60,7 +60,7 @@
             <ul class="flex flex-v flex-align-center">
 
                 <li v-for=" item in recordList">
-                    <slider @deleteIt="deleteIt(item.id)" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==1?true:false">
+                    <slider @deleteIt="deleteIt(item.id)" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==2?false:true">
                         <div class="slider-item flex flex-align-center flex-justify-between">
                             <img :src=item.user.avatar alt="">
                             <span>{{item.user.name}}</span>
@@ -341,6 +341,7 @@ export default {
     this._getQRCode();
   },
   methods: {
+    // 撤销交易
     deleteIt(id) {
       Loading.getInstance().open();
       var _data={
@@ -349,9 +350,13 @@ export default {
 
       request.getInstance().postData("api/transfer/withdraw",_data).then(res=>{
         Loading.getInstance().close();
-
-
+        Toast("撤销成功");
+        
+        setTimeout(()=>{
+          this.init();
+        },1500);
       }).catch(err=>{
+        Toast("撤销失败");
         Loading.getInstance().close();
       });
       

@@ -42805,8 +42805,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'app'
@@ -58047,7 +58045,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
+    // 撤销交易
     deleteIt: function deleteIt(id) {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         record_id: id
@@ -58055,12 +58056,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/withdraw", _data).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销成功");
+
+        setTimeout(function () {
+          _this.init();
+        }, 1500);
       }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销失败");
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       });
     },
     init: function init() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       this.transfer_id = this.$route.query.id;
@@ -58069,10 +58076,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id).then(function (res) {
         console.log(res);
-        _this.joiner = res.data.data.joiner;
-        _this.renderData = res.data.data;
-        _this.recordList = res.data.data.record;
-        _this.shop_id = res.data.data.shop_id;
+        _this2.joiner = res.data.data.joiner;
+        _this2.renderData = res.data.data;
+        _this2.recordList = res.data.data.record;
+        _this2.shop_id = res.data.data.shop_id;
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -58088,7 +58095,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.passWordSwitch = false;
     },
     callPassword: function callPassword() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.payType == "put") {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
@@ -58099,11 +58106,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("您还未设置支付密码，即将跳转设置页面");
             setTimeout(function () {
-              _this2.$router.push("/my/setting_password");
+              _this3.$router.push("/my/setting_password");
             }, 2000);
           } else {
             __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-            _this2.showPassword();
+            _this3.showPassword();
           }
         }).catch(function (err) {});
       } else if (this.payType == "get") {
@@ -58113,7 +58120,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     addMembersNotice: function addMembersNotice(dataList) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (!dataList) {
         return;
@@ -58134,7 +58141,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("交易成功...");
         setTimeout(function () {
-          _this3.init();
+          _this4.init();
         }, 2000);
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58147,7 +58154,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 提交交易  拿钱或者付钱
     submitData: function submitData(password) {
-      var _this4 = this;
+      var _this5 = this;
 
       // 放钱
       if (this.payType == "put") {
@@ -58163,7 +58170,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("放钱进店铺成功");
           setTimeout(function () {
-            _this4.init();
+            _this5.init();
           }, 1500);
         }).catch(function (err) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58184,7 +58191,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
 
           setTimeout(function () {
-            _this4.init();
+            _this5.init();
           }, 1500);
         }).catch(function (err) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58205,7 +58212,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       qrcode.makeCode("http://www.baidu.com");
     },
     cancelTrade: function cancelTrade() {
-      var _this5 = this;
+      var _this6 = this;
 
       var _data = {
         transfer_id: this.transfer_id
@@ -58213,7 +58220,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/cancel', _data).then(function (res) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易成功");
         setTimeout(function () {
-          _this5.$router.push("/makeDeal/my_deal");
+          _this6.$router.push("/makeDeal/my_deal");
         }, 1500);
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易失败");
@@ -58251,12 +58258,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 获取所有要提醒的成员名单
     showMemberChoise: function showMemberChoise() {
-      var _this6 = this;
+      var _this7 = this;
 
       __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/members/' + this.shop_id).then(function (res) {
         console.log(res);
-        _this6.initMemberList(res);
+        _this7.initMemberList(res);
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
 
         if (res.data.data.members.length == 0) {
@@ -58264,7 +58271,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           return;
         }
 
-        _this6.choiseMemberSwitch = true;
+        _this7.choiseMemberSwitch = true;
       }).catch(function (err) {
         console.error(err);
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -59868,7 +59875,7 @@ var render = function() {
                     attrs: {
                       height: "3em",
                       actionUser: "撤销",
-                      able: item.stat == 1 ? true : false
+                      able: item.stat == 2 ? false : true
                     },
                     on: {
                       deleteIt: function($event) {
