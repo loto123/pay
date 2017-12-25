@@ -74209,7 +74209,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
 
                 if (!res.data.data.token) {
-                    _this.$router.push("/login/regist/" + "?oauth_user=" + oauth_user);
+                    _this.$router.push("/login/regist/" + "?oauth_user=" + res.data.data.oauth_user);
                 }
 
                 if (res.data.data.oauth_user) {}

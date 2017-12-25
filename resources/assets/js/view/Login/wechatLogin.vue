@@ -36,7 +36,7 @@ export default {
             
 
             if(!res.data.data.token){
-                this.$router.push("/login/regist/"+"?oauth_user="+oauth_user);
+                this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
             }
 
             if(res.data.data.oauth_user){
