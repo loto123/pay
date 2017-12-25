@@ -51,15 +51,18 @@ class WithdrawMethod extends Model
     /**
      * 执行提现
      * @param Withdraw $withdraw
-     * @return array
+     * @return WithdrawResult
      */
     public function withdraw(Withdraw $withdraw)
     {
+        $result = new WithdrawResult($withdraw->state);
 
         //检查金额
         $actual_withdraw_amount = round($withdraw->amount - $withdraw->system_fee, 2);
         if ($actual_withdraw_amount <= 0) {
-            return ['state' => Withdraw::STATE_PROCESS_FAIL, 'raw_response' => '提现金额必须大于0'];
+            $result->state = Withdraw::STATE_PROCESS_FAIL;
+            $result->raw_response = '提现金额必须大于0';
+            return $result;
         }
 
         /**
@@ -70,7 +73,9 @@ class WithdrawMethod extends Model
         //检查收款参数
         $diff = array_diff_key($impl->receiverInfoDescription(), $withdraw->receiver_info);
         if (!empty($diff)) {
-            return ['state' => Withdraw::STATE_PROCESS_FAIL, 'raw_response' => '收款人信息不完整:' . implode(',', $diff)];
+            $result->state = Withdraw::STATE_PROCESS_FAIL;
+            $result->state = '收款人信息缺失:' . implode(',', $diff);
+            return $result;
         }
 
         return $impl->withdraw($withdraw->getKey(), $actual_withdraw_amount, $withdraw->receiver_info, array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($withdraw->channel->config)), $this->getNotifyUrl($withdraw->channel));

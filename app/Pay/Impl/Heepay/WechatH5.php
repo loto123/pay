@@ -84,7 +84,7 @@ class WechatH5 implements DepositInterface
     public function parseReturn(DepositMethod $method)
     {
         $request = request();
-        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_FAIL, $request->get('pay_amt'), $request->get('jnet_bill_no'));
+        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_PAY_FAIL, $request->get('pay_amt'), $request->get('jnet_bill_no'));
     }
 
     public function acceptNotify(array $config)

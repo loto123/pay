@@ -17,7 +17,7 @@
                 <a href="javascript:;"  @click="withdraw" class="mb15">
                     <button type="button" class="withdraw-btn">提现</button>
                 </a>  
-                <a href="/#/myAccount/give">
+                <a href="javascript:;" @click="give">
                     <button type="button" class="give-btn">转账到店铺</button>    
                 </a>  
             </div>
@@ -70,6 +70,22 @@
                     );
                 }else{
                     this.$router.push('/myAccount/withdraw')
+                }
+            },
+            //转账
+            give(){
+                if(this.has_pay_card==0){
+                    MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
+                        () => {
+                            this.$router.push('/my');
+                        },
+                        () => {
+                            //取消操作
+                            console.log("已经取消");
+                        }
+                    );
+                }else{
+                    this.$router.push('/myAccount/give')
                 }
             }
         }

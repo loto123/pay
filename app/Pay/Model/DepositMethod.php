@@ -21,7 +21,6 @@ class DepositMethod extends Model
     const OS_ANY = 3;
     public $timestamps = false;
     protected $table = 'pay_deposit_method';
-
     /**
      * 取得支付场景
      * @param $value
@@ -105,7 +104,7 @@ class DepositMethod extends Model
 
             if ($result->state === Deposit::STATE_COMPLETE) {
                 if (!$result->masterContainer->changeBalance($result->amount, 0)) {
-                    break;//到账失败
+                    $result->state = Deposit::STATE_CHARGE_FAIL;//到账失败
                 }
             }
 

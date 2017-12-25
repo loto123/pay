@@ -38,6 +38,11 @@ class PayPlatformController extends Controller
     protected function grid()
     {
         return Admin::grid(Platform::class, function (Grid $grid) {
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
             $grid->model()->orderBy('id', 'desc');
             $grid->id('ID')->sortable();
             $grid->column('name', '平台')->editable();
@@ -93,13 +98,9 @@ class PayPlatformController extends Controller
     {
         return Admin::form(Platform::class, function (Form $form) {
             $form->text('name', '平台名')->rules('between:2,10', ['between' => '填写2~10个字符']);
-            //$form->text('impl', '实现路径')->rules('between:5,255', ['between' => '必填,不超过255个字符']);
-            //$form->textarea('public_cfg', '公共参数')->rules('nullable|max:255', ['max' => '不能超过255个字符']);;
-//            $form->saving(function (Form $form) {
-//                if (!class_exists($form->impl)) {
-//                    throw new \Exception("平台接口 {$form->impl} 不存在");
-//                }
-//            });
+//            $form->checkbox('banksSupport', '支持银行')->options(Bank::all()->mapWithKeys(function ($item) {
+//                return [$item['id'] => $item['name']];
+//            }));
             $form->setWidth(4, 2);
             $form->disableReset();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Pay\Model;
 
+use App\Bank;
 use App\Pay\PlatformInterface;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,6 +48,14 @@ class Platform extends Model
     public function channels()
     {
         $this->hasMany(Channel::class);
+    }
+
+    /**
+     * 平台支持的银行
+     */
+    public function banksSupport()
+    {
+        return $this->belongsToMany(Bank::class, 'pay_banks_support');
     }
 
 

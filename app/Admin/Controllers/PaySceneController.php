@@ -37,6 +37,11 @@ class PaySceneController extends Controller
     protected function grid()
     {
         return Admin::grid(Scene::class, function (Grid $grid) {
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
             $grid->model()->orderBy('id');
             $grid->id('ID')->sortable();
             $grid->name('场景名');

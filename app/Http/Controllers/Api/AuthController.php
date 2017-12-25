@@ -443,7 +443,7 @@ class AuthController extends BaseController {
      */
     public function reset_password(Request $request) {
         $validator = Validator::make($request->all(), [
-            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exist:'.(new User)->getTable(),
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable(),
             'password' => 'required',
             'code' => 'required'
         ]);

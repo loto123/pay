@@ -52,7 +52,8 @@
 
 				shopId: null,	 //店铺ID
 				amount:null, 	//提现money
-				has_pay_password:null	//是否设置支付密码
+				has_pay_password:null,	//是否设置支付密码
+				shop_id:null
 			};
 		},
 		components: { topBack, inputList,passWorld},
@@ -121,6 +122,10 @@
 					Toast('请输入转账金额');
 					return
 				}
+				if (!this.shopId) {
+					Toast('请选择店铺');
+					return
+				}
 				
 				console.log(this.has_pay_password);
 				if (this.has_pay_password==0) {
@@ -133,15 +138,19 @@
 			callBack(password){
 				var temp = {};
 				temp.password=password;
-				
-				request.getInstance().postData('api/my/pay_password',temp)
+				var _data = {
+					amount: this.amount,
+					shop_id :this.shopId,
+					password:password
+				}
+
+				Promise.all([request.getInstance().postData('api/my/pay_password',temp),request.getInstance().postData('api/account/transfer', _data)])
 				.then((res) => {
-					if(res.data.code==1){
-						//成功内容
-					}
+					Toast('转账成功');
+					this.$router.push('/myAccount');
 				})
 				.catch((err) => {
-					console.error(err.data.msg);
+					console.error(err);
 				})
 			}
 

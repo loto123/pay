@@ -38,7 +38,11 @@ class BusinessEntityController extends Controller
     protected function grid()
     {
         return Admin::grid(BusinessEntity::class, function (Grid $grid) {
-
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
             $grid->id('ID')->sortable();
             $grid->column('company_name', '公司名');
             $grid->column('open_bank', '开户行');
