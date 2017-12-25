@@ -103,11 +103,15 @@ export default class UserRequest {
     }
 
     getToken(){
-        var _t =sessionStorage.getItem("_token");
+        var _t =localStorage.getItem("_token");
         return _t;
     }
 
     setToken(token){
-        sessionStorage.setItem("_token",token);
+        localStorage.setItem("_token",token);
+    }
+
+    removeToken(){
+        localStorage.removeItem("_token");
     }
 }
