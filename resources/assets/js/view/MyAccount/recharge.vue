@@ -53,7 +53,7 @@
 			goIndex() {
 				this.$router.push("/index");
 			},
-			recharge() {
+			rechargeBtn() {
 				var self = this;
 				var _data = {
 					amount: this.amount,
