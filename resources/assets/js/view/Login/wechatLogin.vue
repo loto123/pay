@@ -9,13 +9,34 @@
 </style>
 
 <script>
+
+import request from '../../utils/userRequest'
+import utils from '../../utils/utils'
+
 export default {
+    data(){
+        return {
+            state:null,
+            code:null
+        }
+    },
   created(){
       this.init();
   },
   methods:{
     init(){
-        console.log(222);
+        this.code = utils.getQueryString("code");
+        this.state = utils.getQueryString("state");
+        console.log(this.code);
+        console.log(this.state);
+        var _data = {
+            code :this.code,
+            state:this.state
+        };
+        request.getInstance().postData("api/auth/login/wechat",_data).then(res=>{
+
+        }).catch();
+
     }
   }
   

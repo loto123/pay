@@ -53,7 +53,7 @@
 			goIndex() {
 				this.$router.push("/index");
 			},
-			recharge() {
+			rechargeBtn() {
 				var self = this;
 				var _data = {
 					amount: this.amount,
@@ -78,7 +78,7 @@
 			// 	"choiseValue": 'hideTab'
 			// },
 			selWay(){
-				request.getInstance().getData('api/account/pay-methods/unknown/5')
+				request.getInstance().getData('api/account/pay-methods/unknown/2')
 					.then((res) => {
 						console.log(res);
 						this.setBankList(res);

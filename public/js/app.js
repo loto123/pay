@@ -5226,8 +5226,9 @@ var UserRequest = function () {
     }, {
         key: 'validToken',
         value: function validToken(token) {
-            var url = window.location.href.indexOf("/#/login");
-            var urlShare = window.location.href.indexOf("/#/share");
+            var url = window.location.href.indexOf("#/login");
+            var urlShare = window.location.href.indexOf("#/share");
+            // var wechatLogin = window.location.href.indexOf("#/login/weChatLogin")
             if (!token && url == -1 && urlShare) {
                 __WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */].getInstance().close();
                 Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户未登录,即将跳转登录...");
@@ -46263,7 +46264,7 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/login', name: 'login', component: __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default.a }, { path: '/login/regist', name: 'regist', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }, { path: '/login/weChatLogin', name: 'weChatLogin', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }]);
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/login', name: 'login', component: __WEBPACK_IMPORTED_MODULE_0__view_Login_login_vue___default.a }, { path: '/login/regist', name: 'regist', component: __WEBPACK_IMPORTED_MODULE_1__view_Login_regist_vue___default.a }, { path: '/login/weChatLogin', name: 'weChatLogin', component: __WEBPACK_IMPORTED_MODULE_2__view_Login_wechatLogin_vue___default.a }]);
 
 /***/ }),
 /* 290 */
@@ -46568,7 +46569,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _data = {
         redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {}).catch();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
+        window.location.href = res.data.data.url;
+      }).catch();
     },
     commitName: function commitName() {
       this.$store.dispatch("changeName", this.name);
@@ -55138,7 +55141,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		goIndex: function goIndex() {
 			this.$router.push("/index");
 		},
-		recharge: function recharge() {
+		rechargeBtn: function rechargeBtn() {
 			var self = this;
 			var _data = {
 				amount: this.amount,
@@ -55164,7 +55167,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		selWay: function selWay() {
 			var _this = this;
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/5').then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
 				console.log(res);
 				_this.setBankList(res);
 			}).catch(function (err) {
@@ -61497,11 +61500,9 @@ exports.push([module.i, "\n.mt1[data-v-6298473a] {\n  margin-top: 1em;\n}\n#set[
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack__);
 //
 //
 //
@@ -61530,7 +61531,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
 
 
 
@@ -61542,7 +61542,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		};
 	},
 
-	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack___default.a },
+	components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack___default.a },
 	methods: {
 		verfyCode: function verfyCode() {
 			this.mobile = this.$route.query.mobile;
@@ -74167,6 +74167,8 @@ exports.push([module.i, "", ""]);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_utils__ = __webpack_require__(773);
 //
 //
 //
@@ -74177,17 +74179,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  created: function created() {
-    this.init();
-  },
+    data: function data() {
+        return {
+            state: null,
+            code: null
+        };
+    },
+    created: function created() {
+        this.init();
+    },
 
-  methods: {
-    init: function init() {
-      console.log(222);
+    methods: {
+        init: function init() {
+            this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
+            this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
+            console.log(this.code);
+            console.log(this.state);
+            var _data = {
+                code: this.code,
+                state: this.state
+            };
+            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {}).catch();
+        }
     }
-  }
 
 });
 
@@ -74212,6 +74232,21 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-70102118", module.exports)
   }
 }
+
+/***/ }),
+/* 773 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var utils = {};
+
+utils.getQueryString = function (name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);return null;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (utils);
 
 /***/ })
 /******/ ]);
