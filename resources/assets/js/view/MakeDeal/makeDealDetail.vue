@@ -117,8 +117,8 @@
         <choiseMember 
           :isShow = "choiseMemberSwitch"
           v-on:hide = "hideMemberChoise"
-          :dataList = "joiner"
-          :submit  ="getMemberData"
+          :dataList = "memberList"
+          v-on:submit ="addMembersNotice"
         >
         </choiseMember>  
     </div>
@@ -323,13 +323,15 @@ export default {
       },
       payType: null,    // 支付方式，取钱get 放钱put
       transfer_id:"",   // 交易id
+      shop_id:"",
       password:"",       // 支付密码
 
       joiner:[],         // 交易的参与者，需要提醒的人
+      memberList:[],              //成员数组
+      
       recordList:[],
 
       choiseMemberSwitch:false,
-      memberList:[]              //成员数组
     };
   },
   created() {
@@ -369,6 +371,7 @@ export default {
           this.joiner = res.data.data.joiner;
           this.renderData = res.data.data;
           this.recordList = res.data.data.record;
+          this.shop_id = res.data.data.shop_id;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -413,6 +416,37 @@ export default {
       }else {
         Toast("请填写拿钱数额或取钱数额");
       }
+    },
+
+    addMembersNotice(dataList){
+      if(!dataList){
+        return;
+      }
+
+      Loading.getInstance().open();   
+
+      var _tempList = [];
+      for(let i = 0; i<dataList.length; i++){
+        _tempList.push(dataList.id);
+      }
+
+      var _data ={
+        transfer_id:this.transfer_id,
+        friend_id:_tempList
+      };  
+      request.getInstance().postData("api/transfer/notice",_data).then(res=>{
+        Loading.getInstance().close();   
+        Toast("交易成功...");
+        setTimeout(()=>{
+          this.init();
+        },2000);
+        
+      }).catch(err=>{
+        Loading.getInstance().close();   
+        console.error(err);
+      });
+
+      console.log(dataList);
     },
 
     // 提交交易  拿钱或者付钱
@@ -495,23 +529,34 @@ export default {
     },
     // 初始化提醒玩家列表
     initMemberList(res){
-
-      if(this.joiner.length>0){
-        return;
-      }
+      this.memberList = [];
+      // if(this.memberList.length>0){
+      //   return;
+      // }
 
       for(let i = 0; i<res.data.data.members.length; i++){
           var _temp = {};
           _temp = res.data.data.members[i];
-          _temp.checked = false;
-          this.joiner.push(_temp);
+          console.log(_temp);
+
+          for(let j = 0; j<this.joiner.length; j++){
+            if(this.joiner[j].user.id == _temp.id){
+              _temp.checked = true;
+              break;
+            }else {
+              _temp.checked = false;
+              break;
+            }
+          }
+
+          this.memberList.push(_temp);
         }
     },
     // 获取所有要提醒的成员名单
     showMemberChoise(){
       
       Loading.getInstance().open();
-      request.getInstance().getData('api/shop/members/'+this.transfer_id).then(res=>{
+      request.getInstance().getData('api/shop/members/'+this.shop_id).then(res=>{
         console.log(res);
         this.initMemberList(res);
         Loading.getInstance().close();
@@ -529,9 +574,10 @@ export default {
       });
 
     },
-    getMemberData(data){
-      this.joiner = data;
-    },
+
+    // getMemberData(data){
+    //   this.memberList = data;
+    // },
   },
   watch: {
     "moneyData.payMoney": function() {

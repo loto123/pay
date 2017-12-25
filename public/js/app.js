@@ -46555,7 +46555,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功");
-        self.$router.push("/index");
+        var _url = localStorage.getItem("url");
+        if (!_url) {
+          self.$router.push("/index");
+        } else {
+          localStorage.removeItem("url");
+          setTimeout(function () {
+            window.location.href = _url;
+          }, 1500);
+        }
       }).catch(function (err) {
         console.log(err);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
@@ -58023,13 +58031,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
       payType: null, // 支付方式，取钱get 放钱put
       transfer_id: "", // 交易id
+      shop_id: "",
       password: "", // 支付密码
 
       joiner: [], // 交易的参与者，需要提醒的人
+      memberList: [], //成员数组
+
       recordList: [],
 
-      choiseMemberSwitch: false,
-      memberList: [] //成员数组
+      choiseMemberSwitch: false
     };
   },
   created: function created() {
@@ -58065,6 +58075,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.joiner = res.data.data.joiner;
         _this.renderData = res.data.data;
         _this.recordList = res.data.data.record;
+        _this.shop_id = res.data.data.shop_id;
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -58104,11 +58115,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请填写拿钱数额或取钱数额");
       }
     },
+    addMembersNotice: function addMembersNotice(dataList) {
+      var _this3 = this;
+
+      if (!dataList) {
+        return;
+      }
+
+      __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
+
+      var _tempList = [];
+      for (var i = 0; i < dataList.length; i++) {
+        _tempList.push(dataList.id);
+      }
+
+      var _data = {
+        transfer_id: this.transfer_id,
+        friend_id: _tempList
+      };
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/notice", _data).then(function (res) {
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("交易成功...");
+        setTimeout(function () {
+          _this3.init();
+        }, 2000);
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+        console.error(err);
+      });
+
+      console.log(dataList);
+    },
 
 
     // 提交交易  拿钱或者付钱
     submitData: function submitData(password) {
-      var _this3 = this;
+      var _this4 = this;
 
       // 放钱
       if (this.payType == "put") {
@@ -58124,7 +58166,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("放钱进店铺成功");
           setTimeout(function () {
-            _this3.init();
+            _this4.init();
           }, 1500);
         }).catch(function (err) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58145,7 +58187,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
 
           setTimeout(function () {
-            _this3.init();
+            _this4.init();
           }, 1500);
         }).catch(function (err) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58166,7 +58208,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       qrcode.makeCode("http://www.baidu.com");
     },
     cancelTrade: function cancelTrade() {
-      var _this4 = this;
+      var _this5 = this;
 
       var _data = {
         transfer_id: this.transfer_id
@@ -58174,7 +58216,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/cancel', _data).then(function (res) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易成功");
         setTimeout(function () {
-          _this4.$router.push("/makeDeal/my_deal");
+          _this5.$router.push("/makeDeal/my_deal");
         }, 1500);
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易失败");
@@ -58186,27 +58228,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 初始化提醒玩家列表
     initMemberList: function initMemberList(res) {
-
-      if (this.joiner.length > 0) {
-        return;
-      }
+      this.memberList = [];
+      // if(this.memberList.length>0){
+      //   return;
+      // }
 
       for (var i = 0; i < res.data.data.members.length; i++) {
         var _temp = {};
         _temp = res.data.data.members[i];
-        _temp.checked = false;
-        this.joiner.push(_temp);
+        console.log(_temp);
+
+        for (var j = 0; j < this.joiner.length; j++) {
+          if (this.joiner[j].user.id == _temp.id) {
+            _temp.checked = true;
+            break;
+          } else {
+            _temp.checked = false;
+            break;
+          }
+        }
+
+        this.memberList.push(_temp);
       }
     },
 
     // 获取所有要提醒的成员名单
     showMemberChoise: function showMemberChoise() {
-      var _this5 = this;
+      var _this6 = this;
 
       __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
-      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/members/' + this.transfer_id).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/members/' + this.shop_id).then(function (res) {
         console.log(res);
-        _this5.initMemberList(res);
+        _this6.initMemberList(res);
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
 
         if (res.data.data.members.length == 0) {
@@ -58214,14 +58267,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           return;
         }
 
-        _this5.choiseMemberSwitch = true;
+        _this6.choiseMemberSwitch = true;
       }).catch(function (err) {
         console.error(err);
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       });
-    },
-    getMemberData: function getMemberData(data) {
-      this.joiner = data;
     }
   },
   watch: {
@@ -59908,12 +59958,8 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("choiseMember", {
-        attrs: {
-          isShow: _vm.choiseMemberSwitch,
-          dataList: _vm.joiner,
-          submit: _vm.getMemberData
-        },
-        on: { hide: _vm.hideMemberChoise }
+        attrs: { isShow: _vm.choiseMemberSwitch, dataList: _vm.memberList },
+        on: { hide: _vm.hideMemberChoise, submit: _vm.addMembersNotice }
       })
     ],
     1
@@ -72788,6 +72834,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log(this.shopId);
     },
     submit: function submit() {
+      if (!__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getToken()) {
+        localStorage.setItem("url", window.location.href);
+      }
+
       __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/join/" + this.shopId).then(function (res) {}).catch(function (error) {});
     }
   }
