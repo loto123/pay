@@ -1,7 +1,17 @@
 <template>
     <div id="deal-detail">
         <topBack style="background:#eee;">
-          <div style="width:100%;padding-right:1em;box-sizing:border-box;" class="flex flex-reverse">撤销交易</div>
+          <div 
+            style="width:100%;
+            padding-right:1em;
+            box-sizing:border-box;" 
+            class="flex flex-reverse"
+
+            v-if="recordList.length==0"
+            @click="cancelTrade"
+            >
+              撤销交易
+          </div>
         </topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
@@ -42,30 +52,27 @@
                   alt="" 
                   v-for="item in joiner" 
                 >
-                <!-- <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt=""> -->
                 
                 <span class="info-friend">提醒好友</span>
               </div>
             </div>
             
             <ul class="flex flex-v flex-align-center">
-                <li>
-                    <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="true">
+
+                <li v-for=" item in recordList">
+                    <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==1?true:false">
                         <div class="slider-item flex flex-align-center flex-justify-between">
-                            <img src="/images/avatar.jpg" alt="">
-                            <span>名字最多七个字</span>
+                            <img :src=item.user.avatar alt="">
+                            <span>{{item.user.name}}</span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
-                                <span class="money">-100</span>
-                                <span class="title">付钱</span>
+                                <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
+                                <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span>
                             </div>
                         </div>
                     </slider> 
                 </li>
                 
-                <li>
+                <!-- <li>
                     <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" >
                         <div class="slider-item flex flex-align-center flex-justify-between">
                             <img src="/images/avatar.jpg" alt="">
@@ -88,7 +95,7 @@
                             </div>
                         </div>
                     </slider> 
-                </li>
+                </li> -->
             </ul>
         </section>
 
@@ -305,7 +312,8 @@ export default {
       transfer_id:"",   // 交易id
       password:"",       // 支付密码
 
-      joiner:[]         // 交易的参与者，需要提醒的人
+      joiner:[],         // 交易的参与者，需要提醒的人
+      recordList:[]
     };
   },
   created() {
@@ -332,6 +340,7 @@ export default {
           console.log(res);
           this.joiner = res.data.data.joiner;
           this.renderData = res.data.data;
+          this.recordList = res.data.data.record;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -382,6 +391,7 @@ export default {
     submitData(password){
       // 放钱
       if(this.payType == "put"){
+
         var _data = {
           transfer_id :this.transfer_id,
           points :this.moneyData.payMoney,
@@ -390,10 +400,14 @@ export default {
         }
 
         request.getInstance().postData("api/transfer/trade",_data).then(res=>{
-          console.log(res);
-          this.init();
+          Loading.getInstance().close();
+          Toast("放钱进店铺成功");
+          setTimeout(()=>{
+            this.init();
+          },1500);
         }).catch(err=>{
-          console.error(err);
+          Loading.getInstance().close();
+
           Toast(err.data.msg);
           
         });
@@ -403,10 +417,22 @@ export default {
       }else if(this.payType == "get"){
         // 拿钱
         var _data = {
-          transfer_id :0,
-          points :0,
-          action :"put",
+          transfer_id :this.transfer_id,
+          points :this.moneyData.getMoney,
+          action :"get",
         }
+        request.getInstance().postData("api/transfer/trade",_data).then(res=>{
+          Loading.getInstance().close();
+          Toast("从店铺中拿钱成功");
+
+          setTimeout(()=>{
+            this.init();
+          },1500);
+
+        }).catch(err=>{
+          Loading.getInstance().close();
+          console.error(err);
+        });
       }
     },
 
@@ -414,13 +440,27 @@ export default {
       console.log(result);
       this.password = result;
     },
-    _getQRCode: function() {
+    _getQRCode() {
       var qrcode = new QRCode(document.getElementById("qrcode"), {
         width: 100, //设置宽高
         height: 100
       });
 
       qrcode.makeCode("http://www.baidu.com");
+    },
+    cancelTrade(){
+      var _data = {
+        transfer_id:this.transfer_id
+      }
+      request.getInstance().postData('api/transfer/cancel',_data).then(res=>{
+        Toast("撤销交易成功");
+        setTimeout(()=>{
+          this.$router.push("/makeDeal/my_deal");
+        },1500);
+      }).catch(err=>{
+        Toast("撤销交易失败");
+      });
+
     }
   },
   watch: {
