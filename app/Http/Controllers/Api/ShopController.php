@@ -594,9 +594,17 @@ class ShopController extends BaseController {
     public function agree(Request $request) {
         $user = $this->auth->user();
         if ($request->id) {
-            $message = $user->notifications()->where("id", $request->id)->first();
-            if ($message) {
-                $message->markAsRead();
+            $notification = $user->notifications()->where("id", $request->id)->first();
+            if ($notification) {
+                $notification->markAsRead();
+                try {
+                    $user = User::find($notification->data['user_id']);
+                    $shop = Shop::find($notification->data['shop_id']);
+                    $shop_user = new ShopUser();
+                    $shop_user->shop_id = $shop->id;
+                    $shop_user->user_id = $user->id;
+                    $shop_user->save();
+                } catch (\Exception $e){}
             }
         } else {
             $user->unreadNotifications->markAsRead();
