@@ -557,7 +557,7 @@ class TransferController extends Controller
      *     type="integer"
      *   ),
      *    @SWG\Parameter(
-     *     name="joiner",
+     *     name="friend_id",
      *     in="formData",
      *     description="参与交易人",
      *     required=false,
