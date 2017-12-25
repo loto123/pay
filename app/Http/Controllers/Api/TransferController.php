@@ -537,7 +537,7 @@ class TransferController extends Controller
             $transfer->amount = $transfer->amount + $record->amount;
             $transfer->save();
             DB::commit();
-            return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
+            return response()->json(['code' => 1, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
         }
