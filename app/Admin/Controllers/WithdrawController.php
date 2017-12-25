@@ -50,7 +50,7 @@ class WithdrawController extends Controller
     protected function grid()
     {
         return Admin::grid(Withdraw::class, function (Grid $grid) {
-            $grid->model()->has('masterContainer.user');
+            $grid->model()->has('masterContainer.user')->with('masterContainer.user');
 
             //工具按钮
             $grid->disableCreation();
