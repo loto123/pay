@@ -74171,6 +74171,8 @@ exports.push([module.i, "", ""]);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_utils__ = __webpack_require__(773);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
 //
 //
 //
@@ -74181,6 +74183,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -74209,11 +74212,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
 
                 if (!res.data.data.token) {
-                    window.location.href = "/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
+                    window.location.href = "/#/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
                     // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
-                }
+                } else {
+                    Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("微信登录成功");
+                    __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().setToken(res.dat.data.token);
 
-                if (res.data.data.oauth_user) {}
+                    setTimeout(function () {
+                        window.location.href = "/#/index";
+                    }, 2000);
+                }
             }).catch();
         }
     }
