@@ -594,7 +594,10 @@ class ShopController extends BaseController {
     public function agree(Request $request) {
         $user = $this->auth->user();
         if ($request->id) {
-            $user->notifications()->where("id", $request->id)->markAsRead();
+            $message = $user->notifications()->where("id", $request->id)->first();
+            if ($message) {
+                $message->markAsRead();
+            }
         } else {
             $user->unreadNotifications->markAsRead();
         }
@@ -620,7 +623,10 @@ class ShopController extends BaseController {
     public function ignore(Request $request) {
         $user = $this->auth->user();
         if ($request->id) {
-            $user->notifications()->where("id", $request->id)->markAsRead();
+            $message = $user->notifications()->where("id", $request->id)->first();
+            if ($message) {
+                $message->markAsRead();
+            }
         } else {
             $user->unreadNotifications->markAsRead();
         }
