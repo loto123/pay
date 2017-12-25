@@ -537,7 +537,7 @@ class TransferController extends Controller
             $transfer->amount = $transfer->amount + $record->amount;
             $transfer->save();
             DB::commit();
-            return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
+            return response()->json(['code' => 1, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
         }
@@ -588,13 +588,13 @@ class TransferController extends Controller
         }
 
         $transfer = Transfer::findByEnId($request->transfer_id);
-        if ($transfer) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
         }
-        if (TransferUserRelation::where('transfer_id', $transfer->transfer_id)->where('user_id', $request->friend_id)->exists()) {
+        if (TransferUserRelation::where('transfer_id', $transfer->id)->where('user_id', $request->friend_id)->exists()) {
             return response()->json(['code' => 0, 'msg' => trans('trans.notice_already_exists'), 'data' => []]);
         }
         DB::beginTransaction();
@@ -603,7 +603,7 @@ class TransferController extends Controller
                 $real_id = Skip32::decrypt("0123456789abcdef0123", $value);
                 if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
                     $relation = new TransferUserRelation();
-                    $relation->transfer_id = $transfer->transfer_id;
+                    $relation->transfer_id = $transfer->id;
                     $relation->user_id = $real_id;
                     $relation->save();
                 }
