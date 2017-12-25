@@ -3,16 +3,14 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Pay\Model\MasterContainer;
-use App\Pay\Model\Withdraw;
-use App\Pay\Model\WithdrawRetry;
+use App\Pay\Model\ChargeRetry;
+use App\Pay\Model\Deposit;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Layout\Row;
 
-class WithdrawController extends Controller
+class DepositController extends Controller
 {
     use ModelForm;
 
@@ -25,17 +23,8 @@ class WithdrawController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('提现记录');
+            $content->header('充值记录');
             //$content->description('description');
-            $content->row(function (Row $row) {
-                //累计已提现
-                $withdrawed = Withdraw::has('masterContainer.user')->sum('amount');
-                //累计待提现
-                $waitToWithdraw = MasterContainer::has('user')->sum('balance');
-                $row->column(3, "<h4>累计已提现:<span style='color:#FFAE20;font-weight:bold;'>$withdrawed</span>元</h4>");
-                $row->column(3, "<h4>累计待提现:<span style='color:#FFAE20;font-weight:bold;'>$waitToWithdraw</span>元</h4>");
-            });
-
 
             $content->body($this->grid());
         });
@@ -49,7 +38,7 @@ class WithdrawController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Withdraw::class, function (Grid $grid) {
+        return Admin::grid(Deposit::class, function (Grid $grid) {
             $grid->model()->has('masterContainer.user')->with('masterContainer.user');
 
             //工具按钮
@@ -57,8 +46,8 @@ class WithdrawController extends Controller
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
                 $actions->disableEdit();
-                if (in_array($actions->row['state'], WithdrawRetry::$abnormal_states)) {
-                    $actions->append(new WithdrawRetry($actions->getKey()));
+                if ($actions->row['state'] == Deposit::STATE_CHARGE_FAIL) {
+                    $actions->append(new ChargeRetry($actions->getKey()));
                 }
             });
             $grid->tools(function ($tools) {
@@ -88,26 +77,22 @@ class WithdrawController extends Controller
                 return $this->masterContainer->user->name;
             });
             $grid->updated_at('时间');
-            $grid->amount('提现金额');
-            $grid->column('actual', '实际到账')->display(function () {
-                return sprintf('%.2f', $this->amount - $this->system_fee);
-            });
+            $grid->amount('充值金额');
             $grid->channel()->name('支付通道');
-            $grid->method()->title('提现方式');
+            $grid->method()->title('支付方式');
             $grid->state('状态')->display(function ($value) {
                 $class = 'default';
                 switch ($value) {
-                    case Withdraw::STATE_QUEUED:
-                    case Withdraw::STATE_SUBMIT:
-                        $class = 'info';
+                    case Deposit::STATE_UNPAID:
+                        $class = 'default';
                         break;
-                    case Withdraw::STATE_COMPLETE:
+                    case Deposit::STATE_COMPLETE:
                         $class = 'success';
                         break;
                     default:
                         $class = 'danger';
                 }
-                $state = Withdraw::getStateText($value);
+                $state = Deposit::getStateText($value);
 
                 return "<span class=\"label label-$class\">$state</span>";
             });

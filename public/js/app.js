@@ -53987,6 +53987,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.$router.push('/myAccount/withdraw');
             }
+        },
+
+        //转账
+        give: function give() {
+            var _this3 = this;
+
+            if (this.has_pay_card == 0) {
+                __WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"].confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(function () {
+                    _this3.$router.push('/my');
+                }, function () {
+                    //取消操作
+                    console.log("已经取消");
+                });
+            } else {
+                this.$router.push('/myAccount/give');
+            }
         }
     }
 });
@@ -54050,7 +54066,17 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _vm._m(1, false, false)
+          _c(
+            "a",
+            { attrs: { href: "javascript:;" }, on: { click: _vm.give } },
+            [
+              _c(
+                "button",
+                { staticClass: "give-btn", attrs: { type: "button" } },
+                [_vm._v("转账到店铺")]
+              )
+            ]
+          )
         ])
       ])
     ],
@@ -54073,16 +54099,6 @@ var staticRenderFns = [
         )
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("a", { attrs: { href: "/#/myAccount/give" } }, [
-      _c("button", { staticClass: "give-btn", attrs: { type: "button" } }, [
-        _vm._v("转账到店铺")
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -54192,16 +54208,14 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_password__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 //
 //
 //
@@ -54236,7 +54250,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
 
 
 
@@ -54262,7 +54275,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		this.selWay();
 	},
 
-	components: { topBack: __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_3__components_password___default.a },
+	components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_2__components_password___default.a },
 	methods: {
 		goIndex: function goIndex() {
 			this.$router.push('/index');
@@ -54273,12 +54286,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		myAccount: function myAccount() {
 			var _this = this;
 
-			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
+			__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
 				_this.balance = res.data.data.balance;
 				_this.has_pay_password = res.data.data.has_pay_password;
-				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
 			});
@@ -54295,11 +54308,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			};
 
 			if (!this.amount) {
-				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('请输入提现金额');
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])('请输入提现金额');
 				return;
 			}
 			if (!this.value) {
-				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('请选择支付方式');
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])('请选择支付方式');
 				return;
 			}
 			if (this.has_pay_password == 0) {
@@ -54320,8 +54333,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				way: this.value,
 				password: password
 			};
-			Promise.all([__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp), __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/account/withdraw', _data)]).then(function (res) {
-				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('提现成功');
+			Promise.all([__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp), __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/account/withdraw', _data)]).then(function (res) {
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])('提现成功');
 				_this2.$router.push('/myAccount');
 			}).catch(function (err) {
 				console.error(err);
@@ -54332,7 +54345,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		selWay: function selWay() {
 			var _this3 = this;
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/withdraw-methods').then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData('api/account/withdraw-methods').then(function (res) {
 				_this3.setBankList(res);
 			}).catch(function (err) {
 				console.error(err);
@@ -55450,7 +55463,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			shopId: null, //店铺ID
 			amount: null, //提现money
-			has_pay_password: null //是否设置支付密码
+			has_pay_password: null, //是否设置支付密码
+			shop_id: null
 		};
 	},
 
@@ -55518,6 +55532,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('请输入转账金额');
 				return;
 			}
+			if (!this.shopId) {
+				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('请选择店铺');
+				return;
+			}
 
 			console.log(this.has_pay_password);
 			if (this.has_pay_password == 0) {
@@ -55529,15 +55547,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//支付密码验证
 		callBack: function callBack(password) {
+			var _this2 = this;
+
 			var temp = {};
 			temp.password = password;
+			var _data = {
+				amount: this.amount,
+				shop_id: this.shopId,
+				password: password
+			};
 
-			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp).then(function (res) {
-				if (res.data.code == 1) {
-					//成功内容
-				}
+			Promise.all([__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/my/pay_password', temp), __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/account/transfer', _data)]).then(function (res) {
+				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('转账成功');
+				_this2.$router.push('/myAccount');
 			}).catch(function (err) {
-				console.error(err.data.msg);
+				console.error(err);
 			});
 		}
 	}
