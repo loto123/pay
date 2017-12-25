@@ -54690,7 +54690,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		selWay: function selWay() {
 			var _this = this;
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/5').then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
 				console.log(res);
 				_this.setBankList(res);
 			}).catch(function (err) {
