@@ -185,6 +185,8 @@ import choiseMember from "./choiseMember.vue"
 import Loading from "../../utils/loading";
 import request from "../../utils/userRequest";
 
+import utils from "../../utils/utils"
+
 import {Toast} from 'mint-ui'
 
 export default {
@@ -228,7 +230,7 @@ export default {
       for (let i = 0; i < res.data.data.data.length; i++) {
         var _t = {};
         _t.value = res.data.data.data[i].id.toString();
-        _t.label = res.data.data.data[i].name;
+        _t.label = utils.SetString(res.data.data.data[i].name,10);
         _tempList.push(_t);
       }
 

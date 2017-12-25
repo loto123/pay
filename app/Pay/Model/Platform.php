@@ -3,7 +3,7 @@
 namespace App\Pay\Model;
 
 use App\Bank;
-use App\Pay\PlatformInterface;
+use App\UserCard;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,12 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Platform extends Model
 {
+    const SUPPORTED_BANKS_TABLE = 'pay_banks_support';
     public $timestamps = false;
     protected $table = 'pay_platform';
-    /**
-     * @var $interface PlatformInterface
-     */
-    private $interface;
 
     /**
      * 平台的充值方式
@@ -51,25 +48,32 @@ class Platform extends Model
     }
 
     /**
-     * 平台支持的银行
+     * 是否支持银行卡
+     * @param UserCard $card
+     * @return bool
+     */
+    public function isCardSupport(UserCard $card)
+    {
+        return $this->getBankCode($card) != null;
+    }
+
+    /**
+     * 根据银行卡获取银行内部编号
+     * @param UserCard $card
+     * @return mixed
+     */
+    public function getBankCode(UserCard $card)
+    {
+        return $this->banksSupport()->where('bank_id', $card->bank_id)->value('inner_code');
+        //return DB::table(self::SUPPORTED_BANKS_TABLE)->where([['bank_id' , $card->bank_id], ['platform_id' , $this->getKey()]])->value('inner_code');
+    }
+
+    /**
+     * 取得支持的银行
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function banksSupport()
     {
-        return $this->belongsToMany(Bank::class, 'pay_banks_support');
-    }
-
-
-    /**
-     * 获取平台接口实现
-     *
-     * @return PlatformInterface
-     */
-    public function getImplInstance()
-    {
-        if (!$this->interface) {
-            $this->interface = new $this->impl;
-        }
-
-        return $this->interface;
+        return $this->belongsToMany(Bank::class, Platform::SUPPORTED_BANKS_TABLE)->withPivot('inner_code');
     }
 }

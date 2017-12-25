@@ -11,7 +11,7 @@
               <div class="imggWrap flex flex-justify-center flex-align-center">
                     <img src="/images/avatar.jpg" alt="">
               </div>
-              <h3>0.00</h3>
+              <h3>{{amount}}</h3>
               <h4>账户余额(元)</h4>
             </a>
           </section>
@@ -44,6 +44,15 @@
                 &#xe63b;
               </i>
               <h3>我的交易</h3>
+            </a>
+          </li>
+
+          <li class="flex flex-v flex-align-center">
+            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe621;
+              </i>
+              <h3>我的用户</h3>
             </a>
           </li>
           
@@ -130,16 +139,33 @@ i {
 <script>
 import tabBar from "../../components/tabBar";
 import Loading from "../../utils/loading"
+import request from "../../utils/userRequest"
 
 export default {
   name: "index",
   components: { tabBar },
+  data(){
+    return {
+      amount:null
+    }
+  },
   created(){
-    // Loading.getInstance().open();
+    this.init();
   },
   methods:{
     goInform(){
       this.$router.push("/inform");
+    },
+    init(){
+      Loading.getInstance().open();
+      request.getInstance().getData("api/account").then(res=>{
+        this.amount = res.data.data.balance;
+        Loading.getInstance().close();
+        
+      }).catch(err=>{
+        Loading.getInstance().close();
+      });
+
     }
   }
 };

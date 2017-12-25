@@ -37,7 +37,6 @@ export default {
 
             if(!res.data.data.token){
                 window.location.href = "/#/login/regist/"+"?oauth_user="+res.data.data.oauth_user;
-                // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
             }else {
                 Toast("微信登录成功");
                 request.getInstance().setToken(res.data.data.token);

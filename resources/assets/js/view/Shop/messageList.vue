@@ -7,9 +7,9 @@
               <div class="notice-content flex flex-align-center flex-justify-around">
                   <div class="user-info flex flex-align-center">
                     <img :src="item.user_avatar" alt="" class="avatar">
-                    <span>昵称:{{item.user_name}}</span>
+                    <span>昵称:{{setString(item.user_name,7)}}</span>
                   </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">{{item.shop_name}}</i> </span>
+                  <span>申请加入小店 <i style="color:#26a2ff;">{{setString(item.shop_name,10)}}</i> </span>
               </div>
               <div class="notice-controller flex flex-align-center flex-justify-around">
                   <div>2017-12-1</div>
@@ -23,7 +23,7 @@
           
       </ul>
 
-      <div class="all-list-controller flex flex-justify-center ">
+      <div class="all-list-controller flex flex-justify-center " v-if="!messageList">
         <div class="btn-wrap flex flex-v flex-justify-around">
           <mt-button type="primary" size="large" style="background:#00cc00;">全部同意</mt-button>
           <mt-button type="primary" size="large" style="background:#ccc;">全部忽略</mt-button>
@@ -122,6 +122,7 @@
 import topBack from "../../components/topBack"
 import Loading from "../../utils/loading"
 import request from "../../utils/userRequest"
+import utils from "../../utils/utils"
 
 export default {
   data(){
@@ -143,6 +144,7 @@ export default {
 
       });
     },
+    // 同意加入店铺的请求
     agreeItem(id){
       Loading.getInstance().open();
       if(id==null){
@@ -154,10 +156,38 @@ export default {
       }
       request.getInstance().postData("api/shop/agree",_data).then(res=>{
         Loading.getInstance().close();
+        Toast("操作成功");
+        setTimeout(()=>{
+          this.init();
+        },1500);
       }).catch(err=>{
 
       });
       console.log(id);
+    },
+
+    antiItem(id){
+      
+      Loading.getInstance().open();
+      if(id==null){
+        var _data = null;
+      }else {
+        var _data = {
+          id :id
+        };
+      }
+      request.getInstance().postData("api/shop/ignore/"+id).then(res=>{
+        Loading.getInstance().close();
+        Toast("操作成功");
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch(err=>{
+
+      });
+    },
+    setString(str,len){
+      return utils.SetString(str,len);
     }
   }
 };

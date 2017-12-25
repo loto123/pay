@@ -55,4 +55,8 @@ class Shop extends Model
     public function container() {
         return $this->hasOne(MasterContainer::class, 'id', 'container_id');
     }
+
+    public function transfer() {
+        return $this->hasMany('App\Transfer', 'shop_id', 'id');
+    }
 }
