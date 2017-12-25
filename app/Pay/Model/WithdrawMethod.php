@@ -34,6 +34,7 @@ class WithdrawMethod extends Model
     public function targetPlatform()
     {
         return $this->belongsTo(Platform::class, 'target_platform')->withDefault([
+            'id' => 0,
             'name' => '银行卡',
         ]);
     }
