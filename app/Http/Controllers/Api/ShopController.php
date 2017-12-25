@@ -594,19 +594,35 @@ class ShopController extends BaseController {
     public function agree(Request $request) {
         $user = $this->auth->user();
         if ($request->id) {
-            $notification = $user->notifications()->where("id", $request->id)->first();
+            $notification = $user->unreadNotifications()->where("id", $request->id)->first();
             if ($notification) {
                 $notification->markAsRead();
                 try {
                     $user = User::find($notification->data['user_id']);
                     $shop = Shop::find($notification->data['shop_id']);
-                    $shop_user = new ShopUser();
-                    $shop_user->shop_id = $shop->id;
-                    $shop_user->user_id = $user->id;
-                    $shop_user->save();
+                    $exist = ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->first();
+                    if (!$exist) {
+                        $shop_user = new ShopUser();
+                        $shop_user->shop_id = $shop->id;
+                        $shop_user->user_id = $user->id;
+                        $shop_user->save();
+                    }
                 } catch (\Exception $e){}
             }
         } else {
+            foreach ($user->unreadNotifications as $notification) {
+                try {
+                    $user = User::find($notification->data['user_id']);
+                    $shop = Shop::find($notification->data['shop_id']);
+                    $exist = ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->first();
+                    if (!$exist) {
+                        $shop_user = new ShopUser();
+                        $shop_user->shop_id = $shop->id;
+                        $shop_user->user_id = $user->id;
+                        $shop_user->save();
+                    }
+                } catch (\Exception $e){}
+            }
             $user->unreadNotifications->markAsRead();
         }
         return $this->json();
@@ -631,7 +647,7 @@ class ShopController extends BaseController {
     public function ignore(Request $request) {
         $user = $this->auth->user();
         if ($request->id) {
-            $message = $user->notifications()->where("id", $request->id)->first();
+            $message = $user->unreadNotifications()->where("id", $request->id)->first();
             if ($message) {
                 $message->markAsRead();
             }
