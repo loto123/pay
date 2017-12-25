@@ -46,6 +46,15 @@
               <h3>我的交易</h3>
             </a>
           </li>
+
+          <li class="flex flex-v flex-align-center">
+            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe621;
+              </i>
+              <h3>我的用户</h3>
+            </a>
+          </li>
           
         </ul>
       </section>
