@@ -34,8 +34,6 @@ class Reality
             'name' => $name,
             'cert_no' => $cert_no,
         ];
-        //参数转小写
-        $params = array_map('strtolower', $params);
         //生成sign
         $sign_param = $params;
         $sign_param['key'] = $key;
@@ -61,7 +59,6 @@ class Reality
             Log::info(['params'=>$params,'request_url'=>$request_url,'res_xml'=>$res_xml]);
             return false;
         }
-
     }
 
     //将数组以 键=值& 的方式拼接成字符串
