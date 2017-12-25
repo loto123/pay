@@ -55614,6 +55614,7 @@ exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-a
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(773);
 //
 //
 //
@@ -55696,26 +55697,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    // showSwitch:组件显示开关
-    // optionsList:渲染选择对象
-    props: ["showSwitch", "optionsList"],
+  props: ["showSwitch", "optionsList"],
 
-    data: function data() {
-        return {
-            "choiseValue": null
-        };
-    },
+  // showSwitch:组件显示开关
+  // optionsList:渲染选择对象
+  computed: {},
+  data: function data() {
+    return {
+      "choiseValue": null,
+      "shopList": null
+    };
+  },
 
-    methods: {
-        hideTab: function hideTab() {
-            this.$emit("hideDropList", this.choiseValue);
-        }
-    },
-    watch: {
-        "choiseValue": 'hideTab'
+  methods: {
+    hideTab: function hideTab() {
+      this.$emit("hideDropList", this.choiseValue);
     }
+  },
+  watch: {
+    "choiseValue": 'hideTab'
+  }
 });
 
 /***/ }),
@@ -56619,8 +56623,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__choiseMember_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(773);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mint_ui__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_mint_ui__);
 //
 //
 //
@@ -56800,6 +56805,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
@@ -56849,7 +56856,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       for (var i = 0; i < res.data.data.data.length; i++) {
         var _t = {};
         _t.value = res.data.data.data[i].id.toString();
-        _t.label = res.data.data.data[i].name;
+        _t.label = __WEBPACK_IMPORTED_MODULE_5__utils_utils__["a" /* default */].SetString(res.data.data.data[i].name, 10);
         _tempList.push(_t);
       }
 
@@ -56866,7 +56873,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     showDropList: function showDropList() {
       if (this.shopList.length == 0) {
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("当前无可选的店铺,请先加入店铺或创建店铺");
+        Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("当前无可选的店铺,请先加入店铺或创建店铺");
         return;
       }
 
@@ -56886,7 +56893,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       if (this.shopId == null) {
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请选择发起交易的店铺");
+        Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("请选择发起交易的店铺");
         return;
       }
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
@@ -56896,7 +56903,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 
         if (res.data.data.members.length == 0) {
-          Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("当前店铺无成员");
+          Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("当前店铺无成员");
           return;
         }
 
@@ -56950,10 +56957,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
 
       if (this.shopId == null) {
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请选择发起交易的店铺");
+        Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("请选择发起交易的店铺");
         return;
       } else if (this.price == "") {
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请设置单价");
+        Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("请设置单价");
         return;
       }
 
@@ -58015,7 +58022,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    deleteIt: function deleteIt() {
+    deleteIt: function deleteIt(id) {
+      __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().open();
+      var _data = {
+        record_id: id
+      };
+
+      __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/withdraw", _data).then(function (res) {
+        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_6__utils_loading__["a" /* default */].getInstance().close();
+      });
+
+      console.log(id);
       console.log("i m ru");
     },
     init: function init() {
@@ -59739,7 +59758,11 @@ var render = function() {
                       actionUser: "撤销",
                       able: item.stat == 1 ? true : false
                     },
-                    on: { deleteIt: _vm.deleteIt }
+                    on: {
+                      deleteIt: function($event) {
+                        _vm.deleteIt(item.id)
+                      }
+                    }
                   },
                   [
                     _c(
@@ -60409,6 +60432,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils_js__ = __webpack_require__(773);
 //
 //
 //
@@ -60574,6 +60598,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -60593,6 +60618,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
+    SettingString: function SettingString(str, len) {
+      return __WEBPACK_IMPORTED_MODULE_3__utils_utils_js__["a" /* default */].SetString(str, len);
+    },
     changeTab: function changeTab(item) {
       var _this = this;
 
@@ -60799,7 +60827,7 @@ var render = function() {
                   },
                   [
                     _c("div", { staticClass: "title" }, [
-                      _vm._v(_vm._s(item.shop_name))
+                      _vm._v(_vm._s(_vm.SettingString(item.shop_name, 12)))
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "date" }, [
@@ -74304,6 +74332,28 @@ utils.getQueryString = function (name) {
     if (r != null) return unescape(r[2]);return null;
 };
 
+//截取字符串(包括中文）
+utils.SetString = function (str, len) {
+    var strlen = 0;
+    var s = "";
+    var _len = len * 2;
+    for (var i = 0; i < str.length; i++) {
+
+        if (str.charCodeAt(i) > 128) {
+            strlen += 2;
+        } else {
+            strlen++;
+        }
+
+        s += str.charAt(i);
+
+        if (strlen >= _len) {
+            return s + "...";
+        }
+    }
+
+    return s;
+};
 /* harmony default export */ __webpack_exports__["a"] = (utils);
 
 /***/ })

@@ -22,7 +22,7 @@
                  <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" >
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
-                        <div class="title">{{item.shop_name}}</div>
+                        <div class="title">{{SettingString(item.shop_name,12)}}</div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
@@ -167,6 +167,7 @@
 import topBack from "../../components/topBack";
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
+import utils from "../../utils/utils.js"
 
 export default {
   components: { topBack },
@@ -181,6 +182,10 @@ export default {
     };
   },
   methods: {
+    SettingString(str,len){
+      return utils.SetString(str,len);
+    },
+
     changeTab(item) {
       if (item > 2 || item < 0) {
         return;
