@@ -513,6 +513,28 @@ class ShopController extends BaseController {
 
     /**
      * @SWG\Get(
+     *   path="/shop/profit",
+     *   summary="所有店铺收益信息",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function profit() {
+        $user = $this->auth->user();
+
+        return $this->json(['profit' => 0]);
+    }
+
+    /**
+     * @SWG\Get(
      *   path="/shop/messages",
      *   summary="店铺消息",
      *   tags={"店铺"},
@@ -566,13 +588,6 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Parameter(
-     *     name="size",
-     *     in="path",
-     *     description="数目",
-     *     required=false,
-     *     type="integer"
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -583,7 +598,7 @@ class ShopController extends BaseController {
 
     /**
      * @SWG\Post(
-     *   path="/shop/ignore",
+     *   path="/shop/ignore/{id}",
      *   summary="店铺忽略消息",
      *   tags={"店铺"},
      *   @SWG\Parameter(
@@ -593,18 +608,17 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="integer"
      *   ),
-     *   @SWG\Parameter(
-     *     name="size",
-     *     in="path",
-     *     description="数目",
-     *     required=false,
-     *     type="integer"
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
      */
     public function ignore(Request $request) {
+        $user = $this->auth->user();
+        if ($request->id) {
+            $user->notifications()->where("id", $request->id)->markAsRead();
+        } else {
+            $user->notifications()->markAsRead();
+        }
         return $this->json();
     }
 }
