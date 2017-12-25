@@ -116,6 +116,13 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="oauth_user",
+     *         in="formData",
+     *         description="微信用户id",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
