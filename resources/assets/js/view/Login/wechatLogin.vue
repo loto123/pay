@@ -11,6 +11,7 @@
 <script>
 
 import request from '../../utils/userRequest'
+import utils from '../../utils/utils'
 
 export default {
     data(){
@@ -24,8 +25,8 @@ export default {
   },
   methods:{
     init(){
-        this.code = this.$route.query.code;
-        this.state = this.$route.query.state;
+        this.code = utils.getQueryString("code");
+        this.state = utils.getQueryString("state");
         console.log(this.code);
         console.log(this.state);
         var _data = {

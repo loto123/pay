@@ -55167,7 +55167,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		selWay: function selWay() {
 			var _this = this;
 
-			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/5').then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
 				console.log(res);
 				_this.setBankList(res);
 			}).catch(function (err) {
@@ -74168,6 +74168,7 @@ exports.push([module.i, "", ""]);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_utils__ = __webpack_require__(773);
 //
 //
 //
@@ -74178,6 +74179,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -74195,8 +74197,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         init: function init() {
-            this.code = this.$route.query.code;
-            this.state = this.$route.query.state;
+            this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
+            this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
             console.log(this.code);
             console.log(this.state);
             var _data = {
@@ -74230,6 +74232,21 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-70102118", module.exports)
   }
 }
+
+/***/ }),
+/* 773 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var utils = {};
+
+utils.getQueryString = function (name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);return null;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (utils);
 
 /***/ })
 /******/ ]);
