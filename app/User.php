@@ -25,6 +25,11 @@ class User extends Authenticatable
 {
     use Notifiable;
     use EntrustUserTrait;
+
+    public function getAvatarAttribute($value) {
+        return $value ? $value : asset("images/personal.jpg");
+    }
+
     /**
      * The attributes that are mass assignable.
      *

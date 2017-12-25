@@ -175,6 +175,8 @@ class AuthController extends BaseController {
             $oauth_user = OauthUser::find($request->oauth_user);
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
+                $user->avatar = $oauth_user->headimgurl;
+                $user->save();
                 $oauth_user->save();
             }
         }
