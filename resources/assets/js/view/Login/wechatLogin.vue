@@ -12,6 +12,7 @@
 
 import request from '../../utils/userRequest'
 import utils from '../../utils/utils'
+import {Toast} from 'mint-ui'
 
 export default {
     data(){
@@ -35,15 +36,17 @@ export default {
         request.getInstance().postData("api/auth/login/wechat",_data).then(res=>{
 
             if(!res.data.data.token){
-                window.location.href = "/login/regist/"+"?oauth_user="+res.data.data.oauth_user;
-                // this.$router.push("/login/regist/"+"?oauth_user="+res.data.data.oauth_user);
+                window.location.href = "/#/login/regist/"+"?oauth_user="+res.data.data.oauth_user;
+            }else {
+                Toast("微信登录成功");
+                request.getInstance().setToken(res.data.data.token);
+                
+                setTimeout(()=>{
+                    window.location.href = "/#/index";
+                },2000);
             }
-
-            if(res.data.data.oauth_user){
-
-            }
+            
         }).catch();
-
     }
   }
   

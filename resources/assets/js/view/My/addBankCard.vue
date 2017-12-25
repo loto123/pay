@@ -15,6 +15,8 @@
 					</div>
 				</section>
 			</div>
+			<mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+			
 			<div class="bank-info flex flex-v flex-justify-center">
 				
 				<div class="select-wrap flex flex-align-center" @click="showDropList">
@@ -51,7 +53,7 @@
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack";
 	import inputList from "../../components/inputList";
-	import { MessageBox,Toast } from "mint-ui";
+	import { MessageBox,Toast,Picker } from "mint-ui";
 
 	import Loading from '../../utils/loading'
 
@@ -69,13 +71,15 @@
 				mobile: null,
 				code: null,
 
-				computedTime:null 		//短信验证码倒计时
+				computedTime:null,		//短信验证码倒计时
+				slots:[]				//省市
 			}
 		},
 		components: { topBack, inputList },
 		created() {
 			this.personalInfo();
 			this.init();
+			this.initArea();
 		},
 		methods: {
 			//个人信息
@@ -101,6 +105,21 @@
 					.then(res => {
 						console.log(res);
 						this.setBankList(res);
+						Loading.getInstance().close();
+					})
+					.catch(err => {
+						console.error(err);
+						Loading.getInstance().close();
+					});
+			},
+			initArea() {
+				Loading.getInstance().open();
+				request
+					.getInstance()
+					.getData("api/card/getBankCardParams")
+					.then(res => {
+						console.log(res);
+						this.slots=res.data.data
 						Loading.getInstance().close();
 					})
 					.catch(err => {
@@ -193,6 +212,11 @@
 				}).catch((err) => {
 					console.log(err);
 				})
+			},
+			onValuesChange(picker, values) {
+				if (values[0] > values[1]) {
+					picker.setSlotValue(1, values[0]);
+				}
 			}
 		}
 	};

@@ -258,7 +258,7 @@ class ShopController extends BaseController {
             $members[] = [
                 'id' => (int)$_user->id,
                 'name' => $_user->name,
-                'avatar' => asset("images/personal.jpg"),
+                'avatar' => $_user->avatar,
 
             ];
         }
@@ -318,7 +318,7 @@ class ShopController extends BaseController {
             $members[] = [
                 'id' => (string)$_user->en_id(),
                 'name' => $_user->name,
-                'avatar' => asset("images/personal.jpg"),
+                'avatar' => $_user->avatar,
 
             ];
         }
@@ -513,6 +513,28 @@ class ShopController extends BaseController {
 
     /**
      * @SWG\Get(
+     *   path="/shop/profit",
+     *   summary="所有店铺收益信息",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function profit() {
+        $user = $this->auth->user();
+
+        return $this->json(['profit' => 0]);
+    }
+
+    /**
+     * @SWG\Get(
      *   path="/shop/messages",
      *   summary="店铺消息",
      *   tags={"店铺"},
@@ -538,7 +560,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
 
         $data = [];
-        foreach ($user->notifications()->where("type", "App\Notifications\ShopApply")->paginate($request->input('size', 20)) as $notification) {
+        foreach ($user->unreadNotifications()->where("type", "App\Notifications\ShopApply")->paginate($request->input('size', 20)) as $notification) {
             try {
                 $user = User::find($notification->data['user_id']);
                 $shop = Shop::find($notification->data['shop_id']);
@@ -547,7 +569,6 @@ class ShopController extends BaseController {
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
-                    'status' => 0
                 ];
             } catch (\Exception $e){}
         }
@@ -566,24 +587,50 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Parameter(
-     *     name="size",
-     *     in="path",
-     *     description="数目",
-     *     required=false,
-     *     type="integer"
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
      */
     public function agree(Request $request) {
+        $user = $this->auth->user();
+        if ($request->id) {
+            $notification = $user->unreadNotifications()->where("id", $request->id)->first();
+            if ($notification) {
+                $notification->markAsRead();
+                try {
+                    $user = User::find($notification->data['user_id']);
+                    $shop = Shop::find($notification->data['shop_id']);
+                    $exist = ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->first();
+                    if (!$exist) {
+                        $shop_user = new ShopUser();
+                        $shop_user->shop_id = $shop->id;
+                        $shop_user->user_id = $user->id;
+                        $shop_user->save();
+                    }
+                } catch (\Exception $e){}
+            }
+        } else {
+            foreach ($user->unreadNotifications as $notification) {
+                try {
+                    $user = User::find($notification->data['user_id']);
+                    $shop = Shop::find($notification->data['shop_id']);
+                    $exist = ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->first();
+                    if (!$exist) {
+                        $shop_user = new ShopUser();
+                        $shop_user->shop_id = $shop->id;
+                        $shop_user->user_id = $user->id;
+                        $shop_user->save();
+                    }
+                } catch (\Exception $e){}
+            }
+            $user->unreadNotifications->markAsRead();
+        }
         return $this->json();
     }
 
     /**
      * @SWG\Post(
-     *   path="/shop/ignore",
+     *   path="/shop/ignore/{id}",
      *   summary="店铺忽略消息",
      *   tags={"店铺"},
      *   @SWG\Parameter(
@@ -593,18 +640,20 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="integer"
      *   ),
-     *   @SWG\Parameter(
-     *     name="size",
-     *     in="path",
-     *     description="数目",
-     *     required=false,
-     *     type="integer"
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
      */
     public function ignore(Request $request) {
+        $user = $this->auth->user();
+        if ($request->id) {
+            $message = $user->unreadNotifications()->where("id", $request->id)->first();
+            if ($message) {
+                $message->markAsRead();
+            }
+        } else {
+            $user->unreadNotifications->markAsRead();
+        }
         return $this->json();
     }
 }

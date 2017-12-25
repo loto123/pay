@@ -183,16 +183,22 @@ export default {
       request.getInstance().postData('api/auth/login',data).then(function(res){
           request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");
-          self.$router.push("/index");
+          var _url = localStorage.getItem("url");
+          if(!_url){
+            self.$router.push("/index");
+          }else {
+            localStorage.removeItem("url");
+            setTimeout(()=>{
+              window.location.href = _url;
+            },1500);
+          }
       }).catch(function(err){
-        console.log(err);
         Toast(err.data.message);
       });
     },
 
     // 微信登录
     weChatLogin(){
-
       var _data={
         redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
@@ -214,7 +220,6 @@ export default {
 
     // 忘记密码
     forgetPassWord(){
-      
       this.$store.dispatch("setStep",1);
       this.$store.dispatch("setRefindPassWordState",true);
       this.$router.push("/login/regist");

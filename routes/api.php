@@ -106,6 +106,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('messages', 'ShopController@messages');
         $api->post('agree', 'ShopController@agree');
         $api->post('ignore', 'ShopController@ignore');
+        $api->get('profit', 'ShopController@profit');
     });
 });
 
@@ -117,6 +118,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('show', 'TransferController@show');
         $api->get('feerecord', 'TransferController@feeRecord');
         $api->get('record', 'TransferController@record');
+        $api->get('shop', 'TransferController@shop');
         $api->post('mark', 'TransferController@mark');
         $api->post('payfee', 'TransferController@payFee');
         $api->post('notice', 'TransferController@notice');

@@ -167,6 +167,10 @@ export default {
         console.log(this.shopId);
       },
       submit(){
+        if(!request.getInstance().getToken()){
+          localStorage.setItem("url",window.location.href);
+        }
+
         request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{
           
         }).catch(error=>{

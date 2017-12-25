@@ -72,7 +72,9 @@ class AuthController extends BaseController {
         }
 
         // all good so return the token
-        return $this->json(compact('token'));
+        $user = JWTAuth::toUser($token);
+        $wechat = $user->wechat_user ? 1 : 0;
+        return $this->json(compact('token', 'wechat'));
     }
 
     /**
@@ -175,6 +177,8 @@ class AuthController extends BaseController {
             $oauth_user = OauthUser::find($request->oauth_user);
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
+                $user->avatar = $oauth_user->headimgurl;
+                $user->save();
                 $oauth_user->save();
             }
         }

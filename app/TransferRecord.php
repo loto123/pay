@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Pay\Model\Transfer;
+use App\Pay\Model\Transfer as PayTransfer;
 use Illuminate\Database\Eloquent\Model;
 
 class TransferRecord extends Model
@@ -30,7 +30,7 @@ class TransferRecord extends Model
     //容器事务
     public function pay_transfer()
     {
-        return $this->hasOne(Transfer::class, 'pay_transfer_id', 'id');
+        return $this->hasOne(PayTransfer::class, 'id', 'pay_transfer_id');
     }
 
 //    public function en_id() {
