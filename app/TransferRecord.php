@@ -30,7 +30,7 @@ class TransferRecord extends Model
     //容器事务
     public function pay_transfer()
     {
-        return $this->hasOne(PayTransfer::class, 'pay_transfer_id', 'id');
+        return $this->hasOne(PayTransfer::class, 'id', 'pay_transfer_id');
     }
 
 //    public function en_id() {

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use JWTAuth;
 use Skip32;
@@ -530,6 +531,9 @@ class TransferController extends Controller
             //用户余额增加
 //                $user->balance = $user->balance + $record->amount;
 //                $user->save();
+            //红包余额增加
+            $transfer->amount = $transfer->amount + $record->amount;
+            $transfer->save();
             DB::commit();
             return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
