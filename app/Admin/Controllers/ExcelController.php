@@ -232,7 +232,7 @@ class ExcelController extends Controller
                 $item->proxy ? $item->proxy->name : '无',
                 $item->operator ? $item->operator->id : '无',
                 $item->operator ? $item->operator->name : '无',
-                $item->trans_amount or 0,
+                $item->trans_amount ?? 0,
                 $item->transfer_record()->count(),
                 $item->transfer_record()->where('stat', 2)->sum('amount'),
                 abs($item->transfer_record()->where('stat', 1)->sum('amount')),
@@ -240,8 +240,8 @@ class ExcelController extends Controller
                 $item->output_profit()->sum('fee_amount'),
                 $item->child_user_count,
                 $item->child_proxy_count,
-                $item->proxy_fee_amount or 0,
-                $item->profit_proxy_amount or 0
+                $item->proxy_fee_amount ?? 0,
+                $item->profit_proxy_amount ?? 0
             ];
         }
         Excel::create('用户统计', function ($excel) use ($cellData) {
