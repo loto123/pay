@@ -59,8 +59,6 @@
             </ul>
         </div>
 
-        
-
   </div>
 </template>
 

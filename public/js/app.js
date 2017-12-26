@@ -54029,7 +54029,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.has_pay_card = res.data.data.has_pay_card;
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
-                console.log(err);
+                console.error(err);
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             });
         },
 
@@ -56077,8 +56078,12 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -56141,29 +56146,101 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      showAlert: false
-    };
-  },
+	data: function data() {
+		return {
+			showAlert: false,
+			type: null, //类型
+			created_at: null, //结束时间
+			size: null, //数目
+			billList: []
+		};
+	},
+	created: function created() {
+		this.init();
+	},
 
-  methods: {
-    show: function show() {
-      this.showAlert = true;
-    },
-    cancel: function cancel() {
-      this.showAlert = false;
-    },
-    details: function details() {
-      this.$router.push({ path: "/myAccount/bill/bill_details" });
-    }
-  },
-  components: {
-    topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a
-  }
+	methods: {
+		show: function show() {
+			this.showAlert = true;
+		},
+		cancel: function cancel() {
+			this.showAlert = false;
+		},
+		details: function details(id) {
+			this.$router.push({ path: "/myAccount/bill/bill_details?id=" + id });
+		},
+		init: function init() {
+			var _this = this;
+
+			var data = {
+				type: this.type,
+				created_at: this.created_at,
+				size: this.size
+			};
+			__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open("加载中...");
+
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account/records").then(function (res) {
+				console.log(res);
+				_this.billList = res.data.data.data;
+				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+			}).catch(function (err) {
+				console.error(err);
+				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+			});
+		},
+		changeTime: function changeTime(shijianchuo) {
+			function add0(m) {
+				return m < 10 ? '0' + m : m;
+			}
+
+			var time = new Date(shijianchuo * 1000);
+			var y = time.getFullYear();
+			var m = time.getMonth() + 1;
+			var d = time.getDate();
+			var h = time.getHours();
+			var mm = time.getMinutes();
+			var s = time.getSeconds();
+			return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
+		},
+		status: function status(type) {
+			var result = '';
+			switch (type) {
+				case 0:
+					result = '充值';break;
+				case 1:
+					result = '提现';break;
+				case 2:
+					result = '交易收入';break;
+				case 3:
+					result = '交易支出';break;
+				case 4:
+					result = '转账到店铺';break;
+				case 5:
+					result = '店铺转入';break;
+				case 6:
+					result = '交易手续费';break;
+				case 7:
+					result = '提现手续费';break;
+				default:
+					result = '大赢家茶水费';
+			}
+			return result;
+		}
+	},
+	components: {
+		topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a
+	}
 });
 
 /***/ }),
@@ -56192,29 +56269,48 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "bill-box" }, [
-        _vm._m(0, false, false),
-        _vm._v(" "),
-        _c("ul", { staticClass: "bill-list" }, [
-          _c("li", {}, [
-            _c(
-              "a",
-              {
-                staticClass: "flex",
-                attrs: { href: "javascript:;" },
-                on: { click: _vm.details }
-              },
-              [
-                _vm._m(1, false, false),
-                _vm._v(" "),
-                _c("div", { staticClass: "bill-money active" }, [
-                  _vm._v("+100")
-                ])
-              ]
-            )
-          ])
-        ])
-      ]),
+      _c(
+        "div",
+        { staticClass: "bill-box" },
+        [
+          _vm._m(0, false, false),
+          _vm._v(" "),
+          _vm._l(_vm.billList, function(item) {
+            return _c("ul", { staticClass: "bill-list" }, [
+              _c(
+                "li",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.details(item.id)
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "a",
+                    { staticClass: "flex", attrs: { href: "javascript:;" } },
+                    [
+                      _c("div", { staticClass: "bill-content" }, [
+                        _c("h5", [_vm._v(_vm._s(_vm.status(item.type)))]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "time" }, [
+                          _vm._v(_vm._s(_vm.changeTime(item.created_at)))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "bill-money active" }, [
+                        _vm._v(_vm._s(item.amount))
+                      ])
+                    ]
+                  )
+                ]
+              )
+            ])
+          })
+        ],
+        2
+      ),
       _vm._v(" "),
       _c("transition", { attrs: { name: "slide" } }, [
         _vm.showAlert
@@ -56293,12 +56389,12 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("div", { staticClass: "month-money flex" }, [
             _c("div", { staticClass: "expend flex-1" }, [
-              _vm._v("支出¥"),
+              _vm._v("支出¥\n\t\t\t\t\t\t"),
               _c("span", [_vm._v("616.55")])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "income" }, [
-              _vm._v("收入¥"),
+              _vm._v("收入¥\n\t\t\t\t\t\t"),
               _c("span", [_vm._v("616.55")])
             ])
           ])
@@ -56307,16 +56403,6 @@ var staticRenderFns = [
         _c("div", [_vm._v("图标")])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bill-content" }, [
-      _c("h5", [_vm._v("交易")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "time" }, [_vm._v("2017-11-23  19:44:31")])
-    ])
   }
 ]
 render._withStripped = true
@@ -56426,8 +56512,12 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -56457,26 +56547,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      showAlert: false
-    };
-  },
+	data: function data() {
+		return {
+			showAlert: false
+		};
+	},
+	created: function created() {
+		this.init();
+	},
 
-  methods: {
-    show: function show() {
-      this.showAlert = true;
-    },
-    cancel: function cancel() {
-      this.showAlert = false;
-    }
-  },
-  components: {
-    topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a
-  }
+	methods: {
+		init: function init() {
+			__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open("加载中...");
+			var self = this;
+			var _id = this.$route.query.id;
+			console.log(_id);
+			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account/records/detail/" + _id).then(function (res) {
+				console.log(res);
+				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+			}).catch(function (err) {
+				console.error(err);
+				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+			});
+		}
+	},
+	components: {
+		topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a
+	}
 });
 
 /***/ }),
@@ -56513,26 +56621,31 @@ var staticRenderFns = [
       _c("ul", { staticClass: "billDetails-list" }, [
         _c("li", [
           _c("div", { staticClass: "title" }, [_vm._v("类型")]),
+          _vm._v(" "),
           _c("div", { staticClass: "content" }, [_vm._v("收入")])
         ]),
         _vm._v(" "),
         _c("li", [
           _c("div", { staticClass: "title" }, [_vm._v("时间")]),
+          _vm._v(" "),
           _c("div", { staticClass: "content" }, [_vm._v("2017-11-21 16:25:36")])
         ]),
         _vm._v(" "),
         _c("li", [
           _c("div", { staticClass: "title" }, [_vm._v("交易单号")]),
+          _vm._v(" "),
           _c("div", { staticClass: "content" }, [_vm._v("21321321321321321")])
         ]),
         _vm._v(" "),
         _c("li", [
           _c("div", { staticClass: "title" }, [_vm._v("账户余钱")]),
+          _vm._v(" "),
           _c("div", { staticClass: "content" }, [_vm._v("100.79")])
         ]),
         _vm._v(" "),
         _c("li", [
           _c("div", { staticClass: "title" }, [_vm._v("备注")]),
+          _vm._v(" "),
           _c("div", { staticClass: "content" }, [_vm._v("交易")])
         ])
       ])
@@ -68757,8 +68870,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
-//
-//
 //
 //
 //
