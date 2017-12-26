@@ -5,14 +5,6 @@
       <div class="top flex flex-v flex-align-center">
         <div class="img-wrap flex flex-justify-center flex-align-center flex-wrap-on">
             <img :src="logo" alt="" class="avatar">
-            <!-- <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar"> -->
         </div>
         <h3 style="margin-top:0.5em;">{{shopName}}</h3>
         <h3>店铺id:{{shopId}}</h3>
@@ -77,12 +69,6 @@
             <div class="avatar-item" v-for="item in membersList">
                 <img src="/images/avatar.jpg" alt="">
             </div>
-            <!-- <div class="avatar-item">
-                <img src="/images/avatar.jpg" alt="">
-            </div>
-            <div class="avatar-item">
-                <img src="/images/avatar.jpg" alt="">
-            </div> -->
             
             <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember">
                 <i class="iconfont">
@@ -133,7 +119,7 @@
 
     <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
-            <span class="title flex-9"> 抽水比例 </span>
+            <span class="title flex-9"> 手续费率 </span>
             <span class="text flex-1">{{percent}}%</span>
         </div>
 
@@ -515,7 +501,7 @@
 
 <script>
 import topBack from "../../components/topBack";
-import { Indicator, Toast } from "mint-ui";
+import { Toast,MessageBox } from "mint-ui";
 import request from "../../utils/userRequest";
 import Loading from "../../utils/loading";
 
@@ -614,16 +600,30 @@ export default {
         });
     },
 
+    // 解散店铺
     dissShop() {
-      request
-        .getInstance()
-        .postData("api/shop/close/" + this.shopId)
-        .then(res => {
-          this.$router.push("/shop");
-        })
-        .catch(error => {
-          console.error(error);
+        MessageBox.confirm('确定删除店铺?').then(action => {
+
+            Loading.getInstance().open();
+
+            request
+              .getInstance()
+              .postData("api/shop/close/" + this.shopId)
+              .then(res => {
+                Loading.getInstance().close();
+                Toast("店铺解散成功");
+                setTimeout(()=>{
+                  this.$router.push("/shop");
+                },1000);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+        }).catch(err=>{
+          
         });
+
+      
     },
 
     closeMemberTab(){
