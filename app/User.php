@@ -25,6 +25,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use EntrustUserTrait;
+    use Skip32Trait;
 
     public function getAvatarAttribute($value) {
         return $value ? $value : asset("images/personal.jpg");
@@ -135,15 +136,7 @@ class User extends Authenticatable
         });
     }
 
-    public function en_id()
-    {
-        return Skip32::encrypt("0123456789abcdef0123", $this->id);
-    }
-
-    public static function findByEnId($en_id)
-    {
-        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
-    }
+    protected static $skip32_id = '0123456789abcdef0123';
 
     public function funds()
     {

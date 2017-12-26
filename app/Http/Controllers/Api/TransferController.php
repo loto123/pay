@@ -414,10 +414,6 @@ class TransferController extends Controller
 //                $user->balance = $user->balance + $record->real_amount;
                 //红包减钱
                 $transfer->amount = $transfer->amount - $record->amount;
-                //判断红包状态
-                if ($transfer->amount == 0) {
-                    $transfer->status = 2;
-                }
                 //容器转账
                 $user_container = PayFactory::MasterContainer($user->container->id);
                 $transfer_container = PayFactory::MasterContainer($transfer->container->id);
@@ -427,6 +423,12 @@ class TransferController extends Controller
                 }
             }
 //            $user->save();
+            //判断红包状态
+            if ($transfer->amount == 0) {
+                $transfer->status = 2;
+            }else {
+                $transfer->status = 1;
+            }
             $transfer->save();
             if (isset($pay_transfer) && $pay_transfer) {
                 $record->pay_transfer_id = $pay_transfer->id;
