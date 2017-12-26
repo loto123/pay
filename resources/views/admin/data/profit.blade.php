@@ -26,6 +26,7 @@
                     </div>
                     <span class="col-sm-3">
                         <button type="submit" class="btn btn-primary">查询</button>
+                        <button type="button" class="btn btn-primary" onclick="data_export()">导出</button>
                     </span>
                 </div>
             </form>
@@ -126,6 +127,45 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    function data_export() {
+        var aid = $("#aid").val();
+        var parent = $("#parent").val();
+        var operator = $("#operator").val();
+        var date_time = $("#reservation").val();
+        var form = $("<form></form>");
+        form.attr('style', 'display:none');
+        form.attr('method', 'post');
+        form.attr('action', '/admin/excel/data/profit');
+        var input1 = $('<input />');
+        input1.attr('type', 'hidden');
+        input1.attr('name', 'aid');
+        input1.val(aid);
+        var input2 = $('<input />');
+        input2.attr('type', 'hidden');
+        input2.attr('name', 'date_time');
+        input2.val(date_time);
+        var input3 = $('<input />');
+        input3.attr('type', 'hidden');
+        input3.attr('name', '_token');
+        input3.val(LA.token);
+        var input4 = $('<input />');
+        input4.attr('type', 'hidden');
+        input4.attr('name', 'parent');
+        input4.val(parent);
+        var input5 = $('<input />');
+        input5.attr('type', 'hidden');
+        input5.attr('name', 'operator');
+        input5.val(operator);
+        $('body').append(form);
+        form.append(input1);
+        form.append(input2);
+        form.append(input3);
+        form.append(input4);
+        form.append(input5);
+        form.submit();
+        form.remove();
+    }
 
     $(document).ready(function() {
         $('#reservation').daterangepicker(null, function(start, end, label) {

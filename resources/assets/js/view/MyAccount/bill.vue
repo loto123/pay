@@ -20,14 +20,14 @@
 				</div>
 				<div>图标</div>
 			</div>
-			<ul class="bill-list" v-for="item in billList">
-				<li @click="details(item.id)">
+			<ul class="bill-list">
+				<li  v-for="item in billList" @click="details(item.id)">
 					<a href="javascript:;" class="flex">
 						<div class="bill-content">
 							<h5>{{status(item.type)}}</h5>
 							<div class="time">{{changeTime(item.created_at)}}</div>
 						</div>
-						<div class="bill-money active">{{item.amount}}</div>
+						<div class="bill-money">{{item.amount}}</div>
 					</a>
 				</li>
 			</ul>
@@ -137,6 +137,7 @@
 					case 6: result='交易手续费'; break;
 					case 7: result='提现手续费'; break;
 					default: result='打赏店家费'
+
 				}
 				return result;
 			}
@@ -181,8 +182,8 @@
 
 	.bill-list {
 		li {
-			border-top: 1px solid #ccc;
 			padding: 0 1em;
+			border-top: 1px solid #ccc;
 			a {
 				width: 100%;
 				display: flex;

@@ -95,7 +95,7 @@
                         <th>余额</th>
                         <th>已付平台手续费</th>
                         <th>直属用户数</th>
-                        <td>直属代理数</td>
+                        <th>直属代理数</th>
                         <th>代理业绩</th>
                         <th>代理分润收益</th>
                         {{--<th>持有VIP卡数</th>--}}
@@ -226,6 +226,8 @@
         form.append(input3);
         form.append(input4);
         form.append(input5);
+        form.append(input6);
+        form.append(input7);
         form.submit();
         form.remove();
     }
