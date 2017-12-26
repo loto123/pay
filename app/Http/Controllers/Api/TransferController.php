@@ -936,7 +936,7 @@ class TransferController extends Controller
         }
         $query = $shop->transfer()->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
-        }])->where('status', $status)->select('id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
+        }])->where('status', $status)->select('id', 'shop_id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
         if ($request->limit && $request->offset) {
             $query->offset($request->offset)->limit($request->limit);
         }
@@ -944,6 +944,7 @@ class TransferController extends Controller
         //装填响应数据
         foreach ($list as $key => $value) {
             $list[$key]->id = $value->en_id();
+            $list[$key]->shop_id = $value->en_shop_id();
             $list[$key]->user->id = $value->user->en_id();
             unset($list[$key]->user_id);
         }
