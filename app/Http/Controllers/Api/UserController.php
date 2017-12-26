@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\Heepay\Reality;
 use App\User;
 use App\UserCard;
 use Illuminate\Http\Request;
@@ -353,12 +354,12 @@ class UserController extends Controller
         $cache_value = Cache::get($cache_key);
 //        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
+//            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
         Cache::forget($cache_key);
         //调用实名认证接口
-
-        if(true) {
+        $reality_res = Reality::identify($name,$id_number);
+        if($reality_res) {
             User::where('id',$this->user->id)->update([
                 'identify_status' => 1,
                 'name' => $name,
