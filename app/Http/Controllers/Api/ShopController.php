@@ -486,7 +486,7 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
         //#todo
-        Notification::send($shop->manager, new ShopApply(['user_id' => $user->id, 'shop_id' => $shop->id]));
+        Notification::send($shop->manager, new ShopApply(['user_id' => $user->id, 'shop_id' => $shop->id, 'type' => ShopApply::TYPE_APPLY]));
         return $this->json();
     }
 
@@ -569,6 +569,7 @@ class ShopController extends BaseController {
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
+                    'type' => $notification->data['type']
                 ];
             } catch (\Exception $e){}
         }
@@ -655,5 +656,79 @@ class ShopController extends BaseController {
             $user->unreadNotifications->markAsRead();
         }
         return $this->json();
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/invite/{shop_id}/{user_id}",
+     *   summary="店铺邀请成员",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="path",
+     *     description="被邀请人id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function invite($shop_id, $user_id) {
+        $shop = Shop::findByEnId($shop_id);
+        $user = User::findByEnId($user_id);
+        Notification::send($user, new ShopApply(['user_id' => $user->id, 'invite_id' => $this->auth->user()->id, 'shop_id' => $shop->id, 'type' => ShopApply::TYPE_INVITE]));
+//        $user = $this->auth->user();
+//        if ($request->id) {
+//            $message = $user->unreadNotifications()->where("id", $request->id)->first();
+//            if ($message) {
+//                $message->markAsRead();
+//            }
+//        } else {
+//            $user->unreadNotifications->markAsRead();
+//        }
+        return $this->json();
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/user/search",
+     *   summary="手机号搜索用户",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="mobile",
+     *     in="path",
+     *     description="手机号",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function user_search(Request $request) {
+        $validator = Validator::make($request->all(),
+            ['mobile' => 'bail|required']
+        );
+        if ($validator->fails()) {
+            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => new \stdClass()]);
+        }
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return response()->json(['code' => 1,'msg' => "ok",'data' => new \stdClass()]);
+        }
+        return response()->json(['code' => 1,'msg' => "ok",'data' => [
+            'avatar' => $user->avatar,
+            'name' => $user->name,
+            'id' => $user->en_id(),
+            'mobile' => $user->mobile,
+        ]]);
     }
 }
