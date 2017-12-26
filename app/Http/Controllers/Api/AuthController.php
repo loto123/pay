@@ -419,7 +419,12 @@ class AuthController extends BaseController {
                 return mt_rand(0, 9);
             }, range(1, 4)));
         }
-        $result = PhpSms::make()->template(['YunTongXun' => '224348'])->to($request->mobile)->data([$code])->send();
+        if (config('app.debug')) {
+            $code = '1234';
+            $result['success'] = true;
+        } else {
+            $result = PhpSms::make()->template(['YunTongXun' => '224348'])->to($request->mobile)->data([$code])->send();
+        }
 //        var_dump($result);
         if ($result && $result['success']) {
             Cache::put($cache_key, ['code' => $code, 'time' => time()], 5);

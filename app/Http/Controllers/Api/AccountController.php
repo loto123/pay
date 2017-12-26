@@ -345,7 +345,7 @@ class AccountController extends BaseController {
         return $this->json([
             'id' => $fund->en_id(),
             'type' => (int)$fund->type,
-            'model' => (int)$fund->model,
+            'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
             'no' => $fund->no,

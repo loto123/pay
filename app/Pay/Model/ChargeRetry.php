@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class ChargeRetry extends PayRetry
 {
+    protected static $type = 'charge';
     function reDo()
     {
         // 手动到账

@@ -1,35 +1,29 @@
 <?php
 /**
- * 支付重试基类
+ * 尝试取消提现
  * Author: huangkaixuan
  * Date: 2017/12/23
- * Time: 18:55
+ * Time: 19:45
  */
 
 namespace App\Pay\Model;
 
-
 use Encore\Admin\Admin;
 
-abstract class PayRetry
+class WithdrawCancel extends PayRetry
 {
-    protected static $type;
-
-    public function __construct($id)
-    {
-        $this->id = $id;
-    }
+    public static $abnormal_states = [Withdraw::STATE_SEND_FAIL, Withdraw::STATE_PROCESS_FAIL];
 
     public static function script()
     {
-        $url = route('pay_retry', ['operation' => static::$type, 'id' => '']);
+        $url = route('withdraw_cancel', ['withdraw' => '']);
         Admin::script(<<<SCRIPT
-$('.grid-retry').on('click', function () {
+$('.grid-cancel-withdraw').on('click', function () {
     $(this).prop('disabled', true);
     var btn = $(this);
     $.post('$url/' + btn.data('id'),function(data){
         if (data.status === true) {
-            toastr.success(data.msg);
+            toastr.success('操作成功');
             btn.removeClass('btn-warning').addClass('btn-success').text('操作成功');
             $.pjax.reload('#pjax-container');
         } else {
@@ -45,20 +39,12 @@ SCRIPT
         );
     }
 
-    abstract function reDo();
-
-    public function __toString()
+    function reDo()
     {
-        return $this->render();
     }
 
     protected function render()
     {
-        return "<a class='btn btn-xs btn-warning fa grid-retry' data-id='{$this->id}'>重试</a>";
-    }
-
-    protected function response($success, $msg)
-    {
-        return ['status' => $success, 'msg' => $msg];
+        return "<a class='btn btn-xs btn-default fa grid-cancel-withdraw' data-id='{$this->id}'>取消</a>";
     }
 }
