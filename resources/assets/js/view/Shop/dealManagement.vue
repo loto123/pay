@@ -48,44 +48,9 @@
                     </div>
                 </li>
                  
-                <!-- <li class="deal-item flex flex-align-center">
-                    <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div>
-                    <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
-                    </div>
-                    <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
-                        <div class="m-text">￥168</div>
-                    </div>
-                </li> 
-
-                <li class="timer flex flex-align-center flex-justify-center">
-                    <div>
-                        2017年11月18日 12:45
-                    </div>
-                </li>
-                <li class="deal-item flex flex-align-center">
-                    <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div>
-                    <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
-                    </div>
-                    <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
-                        <div class="m-text">￥168</div>
-                    </div>
-                </li>
-                -->  
                 <div class="group-controller flex flex-v flex-align-center" v-if="tabItem[1]&&isListRadioShow ">
                     <div class="delete-choise">
-                        <mt-button type="primary" size="large" style="background: red;">关闭选中交易</mt-button>
+                        <mt-button type="primary" size="large" style="background: red;" @click="closeTradementByChoise">关闭选中交易</mt-button>
                     </div>
                     <div class="delete-all">
                         <mt-button type="primary" size="large" style="background: #777;">关闭所有已平账交易</mt-button>
@@ -237,6 +202,7 @@
 import topBack from "../../components/topBack";
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
+import {Toast} from 'mint-ui'
 
 export default {
   components: { topBack },
@@ -285,6 +251,7 @@ export default {
             console.error(err);
         });
     },
+
     goDetail(id){
         this.$router.push("/makeDeal/deal_detail"+"?id="+id);
     },
@@ -292,6 +259,7 @@ export default {
     toggleShowListButton(){
         this.isListRadioShow = !this.isListRadioShow;
     },
+
     // 标记操作的list对象
     markItem(item){
         var _t = [].concat(this.dataList);
@@ -302,6 +270,40 @@ export default {
             }
         }
 
+    },
+
+    // 删除选中的id
+    closeTradementByChoise(){
+        var _tList = [];
+        for(let i = 0 ; i<this.dataList.length ; i++){
+            if(this.dataList[i].checked){
+                _tList.push(this.dataList[i].id);
+            }
+        }
+
+        if(_tList.length == 0 ){
+            Toast("当前未选择记录");
+            return;
+        }
+
+        var _data = {
+            transfer_id:_tList 
+        };
+
+        request.getInstance().postData('api/transfer/close',_data).then(res=>{
+
+        }).catch(err=>{
+            console.error(err);
+        });
+    },
+
+    // 删除所有已平账的交易
+    closeAllTradement(){
+        request.getInstance().postData('api/transfer/close').then(res=>{
+
+        }).catch(err=>{
+            console.error(err);
+        });
     },
 
     init(){
@@ -328,6 +330,8 @@ export default {
             Loading.getInstance().close();
         });
     }
+
+
   }
 };
 </script>
