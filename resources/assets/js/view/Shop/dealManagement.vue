@@ -1,6 +1,15 @@
 <template>
   <div id="dealManagement">
-      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'"></top-back>
+      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
+          <div class="list-controller flex flex-reverse" 
+            style="width:100%;padding-right:1em;box-sizing:border-box;"
+            v-if="tabItem[1]"
+            @click = "toggleShowListButton"
+            >
+              {{isListRadioShow?"关闭操作":"操作"}}
+          </div>
+
+      </top-back>
         <div id="tab-menu" class=" flex flex-align-center">
             <div class="menu-item flex flex-justify-center flex-align-center " v-bind:class="{active:tabItem[0]}" @click = "changeTab(0)">待结算</div>
             <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已平账</div>
@@ -8,64 +17,48 @@
         </div>
 
         <div class="deal-wrap">
-            <ul>
+            <ul v-bind:class="{wrap:tabItem[1] && isListRadioShow}">
                 <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
                     </div>
                 </li>
-                <li class="deal-item flex flex-align-center" @click="goDetail">
+                <li class="deal-item flex flex-align-center" @click="goDetail(item.id)" v-for="item in dataList">
                     <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
+                        <img :src="item.user.avatar" alt="">
+                        <h3>{{item.user.name}}</h3>
                     </div>
                     <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
+                        <div class="title">交易包中余额:￥{{item.amount}}</div>
+                        <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
-                        <div class="m-text">￥168</div>
+                        <div class="title">收益</div>
+                        <div class="m-text">￥{{item.tip_amount}}</div>
+                    </div>
+
+                    <div class="controller-wrap flex flex-align-center" v-if="isListRadioShow">
+                        <i 
+                            class="iconfont flex flex-align-center flex-justify-center" 
+                            style="color:#00cc00;" 
+                            @click.stop="markItem(item.id)"
+                        >
+                            {{item.checked? "&#xe6cc;":""}}
+                        </i>
                     </div>
                 </li>
                  
-                <li class="deal-item flex flex-align-center">
-                    <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
+                <div class="group-controller flex flex-v flex-align-center" v-if="tabItem[1]&&isListRadioShow ">
+                    <div class="delete-choise">
+                        <mt-button type="primary" size="large" style="background: red;" @click="closeTradementByChoise">关闭选中交易</mt-button>
                     </div>
-                    <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
+                    <div class="delete-all">
+                        <mt-button type="primary" size="large" style="background: #777;">关闭所有已平账交易</mt-button>
                     </div>
-                    <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
-                        <div class="m-text">￥168</div>
-                    </div>
-                </li>
-
-                <li class="timer flex flex-align-center flex-justify-center">
-                    <div>
-                        2017年11月18日 12:45
-                    </div>
-                </li>
-                <li class="deal-item flex flex-align-center">
-                    <div class="avatar-wrap flex flex-v flex-align-center flex-2">
-                        <img src="/images/avatar.jpg" alt="">
-                        <h3>发起人发起</h3>
-                    </div>
-                    <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥168</div>
-                        <div class="date">2017-11-18 &nbsp; 14:25:46</div>
-                    </div>
-                    <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
-                        <div class="title">手续费收益</div>
-                        <div class="m-text">￥168</div>
-                    </div>
-                </li>  
-                
+                </div>
             </ul>
         </div>
+
   </div>
 </template>
 
@@ -95,6 +88,8 @@
         width:100%;
 
         ul{
+            width:100%;
+
             .timer{
                 width:100%;
                 height: 3em;
@@ -135,12 +130,13 @@
                 .content-wrap{
                     height: 100%;
                     .title{
-                        margin-top: 0.8em;
+                        font-size: 0.8em;
+                        margin-top: 1em;
                     }
 
                     .date{
                         color:#999;
-                        font-size: 0.9em;
+                        font-size: 0.8em;
                         margin-top:1em;
                     }
                 }
@@ -156,7 +152,44 @@
                         color:#00cc00;
                     }
                 }
+                
+                .controller-wrap{
+                    padding-right: 1em;
+                    box-sizing: border-box;
+                    height: 100%;
+
+                    >i{
+                        width:1.5em;
+                        height:1.5em;
+                        border-radius:50%;
+                        border:1px solid #eee;
+                    }
+                }
+
             }
+            
+            // 批量操作按钮
+            .group-controller{
+                position: fixed;
+                bottom:0em;
+                left: 0em;
+                width:100%;
+                height:7em;
+                background: #fff;
+                
+                .delete-choise{
+                
+                }
+
+                >div{
+                    margin-top:0.5em;
+                    width:90%;
+                }
+            }
+        }
+
+        .wrap{
+            padding-bottom: 7em;
         }
     }
 }
@@ -167,6 +200,7 @@
 import topBack from "../../components/topBack";
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
+import {Toast} from 'mint-ui'
 
 export default {
   components: { topBack },
@@ -177,11 +211,16 @@ export default {
     return {
         tabItem:[true,false,false],
         dataList:[],
+        isListRadioShow:false,
         shop_id:null
     }
   },
   methods:{
+
+    // 切换面板
     changeTab(item){
+        Loading.getInstance().open();
+        this.isListRadioShow = false;
         if(item>2 || item <0){
             return;
         }
@@ -189,10 +228,82 @@ export default {
             this.tabItem = [false,false,false];
             this.tabItem[item] = true;
         }
+        
+        var _data = {
+            status :item+1,
+            shop_id:this.shop_id,
+            limit :50,
+            offset :0
+        }
+
+        request.getInstance().getData("api/transfer/shop",_data).then(res=>{
+            this.dataList = [];
+            for(let i = 0; i<res.data.data.length; i++){
+                var _temp  = res.data.data[i];
+                _temp.checked = false;
+                this.dataList.push(_temp);
+            }
+
+            Loading.getInstance().close();
+        }).catch(err=>{
+            console.error(err);
+        });
     },
-    goDetail(){
-        this.$router.push("/makeDeal/deal_detail");
+
+    goDetail(id){
+        this.$router.push("/makeDeal/deal_detail"+"?id="+id);
     },
+
+    toggleShowListButton(){
+        this.isListRadioShow = !this.isListRadioShow;
+    },
+
+    // 标记操作的list对象
+    markItem(item){
+        var _t = [].concat(this.dataList);
+
+        for(let i = 0 ; i < this.dataList.length; i++){
+            if(this.dataList[i].id == item){
+                this.dataList[i].checked  = !this.dataList[i].checked;
+            }
+        }
+
+    },
+
+    // 删除选中的id
+    closeTradementByChoise(){
+        var _tList = [];
+        for(let i = 0 ; i<this.dataList.length ; i++){
+            if(this.dataList[i].checked){
+                _tList.push(this.dataList[i].id);
+            }
+        }
+
+        if(_tList.length == 0 ){
+            Toast("当前未选择记录");
+            return;
+        }
+
+        var _data = {
+            transfer_id:_tList 
+        };
+
+        request.getInstance().postData('api/transfer/close',_data).then(res=>{
+
+        }).catch(err=>{
+            console.error(err);
+        });
+    },
+
+    // 删除所有已平账的交易
+    closeAllTradement(){
+        request.getInstance().postData('api/transfer/close').then(res=>{
+
+        }).catch(err=>{
+            console.error(err);
+        });
+    },
+
     init(){
         Loading.getInstance().open();
         this.shop_id = this.$route.query.shopId;
@@ -203,12 +314,22 @@ export default {
             offset :0
         }
 
-        request.getInstance().postData("api/transfer/shop",_data).then(res=>{
+        request.getInstance().getData("api/transfer/shop",_data).then(res=>{
+            this.dataList = [];
+            for(let i = 0; i<res.data.data.length; i++){
+                var _temp  = res.data.data[i];
+                _temp.checked = false;
+                this.dataList.push(_temp);
+            }
 
+            Loading.getInstance().close();
         }).catch(err=>{
 
+            Loading.getInstance().close();
         });
     }
+
+
   }
 };
 </script>

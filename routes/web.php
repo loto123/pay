@@ -19,9 +19,9 @@ Route::get('/', function () {
 });
 
 //通知接收
-Route::match(['get', 'post'], '/{notify_type}-notify/c{channel}_m{method}', function ($notify_type, Channel $channel) {
-    $method = ['pay' => DepositMethod::class, 'withdraw' => WithdrawMethod::class][$notify_type];
-    $method = new $method;
+Route::match(['get', 'post'], '/{notify_type}-notify/c{channel}_m{method}', function ($notify_type, Channel $channel, $method) {
+    $methodClass = ['pay' => DepositMethod::class, 'withdraw' => WithdrawMethod::class][$notify_type];
+    $method = $methodClass::find($method);
     return $method->acceptNotify($channel);
 })->name('common_notify')->where(['notify_type' => 'pay|withdraw', 'channel' => '\d+', 'method' => '\d+']);
 

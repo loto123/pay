@@ -22,7 +22,7 @@
                  <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" >
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
-                        <div class="title">{{SettingString(item.shop_name,12)}}</div>
+                        <div class="title">{{SettingString(item.shop_name,10)}}</div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">

@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Http\Controllers\Controller;
 use App\Pay\Model\MasterContainer;
 use App\Pay\Model\Withdraw;
+use App\Pay\Model\WithdrawCancel;
 use App\Pay\Model\WithdrawRetry;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
@@ -50,7 +51,21 @@ class WithdrawController extends Controller
     protected function grid()
     {
         return Admin::grid(Withdraw::class, function (Grid $grid) {
-            $grid->model()->has('masterContainer.user')->with('masterContainer.user');
+            $token = csrf_token();
+            Admin::script(<<<SCRIPT
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': '$token'
+                    }
+                });
+SCRIPT
+
+            );
+
+            WithdrawRetry::script();
+            WithdrawCancel::script();
+
+            $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with('masterContainer.user');
 
             //工具按钮
             $grid->disableCreation();
@@ -59,6 +74,8 @@ class WithdrawController extends Controller
                 $actions->disableEdit();
                 if (in_array($actions->row['state'], WithdrawRetry::$abnormal_states)) {
                     $actions->append(new WithdrawRetry($actions->getKey()));
+                    $actions->append('&nbsp;&nbsp;');
+                    $actions->append(new WithdrawCancel($actions->getKey()));
                 }
             });
             $grid->tools(function ($tools) {
@@ -103,6 +120,9 @@ class WithdrawController extends Controller
                         break;
                     case Withdraw::STATE_COMPLETE:
                         $class = 'success';
+                        break;
+                    case Withdraw::STATE_CANCELED:
+                        $class = 'default';
                         break;
                     default:
                         $class = 'danger';

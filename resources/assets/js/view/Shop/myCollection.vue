@@ -26,7 +26,7 @@
             <img :src="item.logo"  alt="">
           </div>
 
-          <h3>{{item.name}}</h3>
+          <h3>{{SetString(item.name,10)}}</h3>
         </div>
         <!-- <div class="list-wrap">
           <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
@@ -89,6 +89,8 @@
 .shop-list {
   padding-top: 0.7em;
   .list-wrap {
+    width:33%;
+
     .shop-item {
       width: 4em;
       height: 4em;
@@ -134,6 +136,7 @@
 import topBack from "../../components/topBack"
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
+import utils from "../../utils/utils"
 
 export default {
   data(){
@@ -165,7 +168,12 @@ export default {
         Loading.getInstance().close();
         
       });
+    },
+
+    SetString(str,len){
+      return utils.SetString(str,len);
     }
+    
   },
   components: { topBack }
 };

@@ -143,9 +143,22 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|andriod|ios', 'scene' => '\d+']);
         $api->get('withdraw-methods', 'AccountController@withdrawMethods');
         $api->get('records', 'AccountController@records');
+        $api->get('records/detail/{id}', 'AccountController@record_detail');
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
+    });
+
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'proxy',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('share', 'ProxyController@share');
+        $api->get('members/count', 'ProxyController@members_count');
+        $api->get('members', 'ProxyController@members');
     });
 
 });

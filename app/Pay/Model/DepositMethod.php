@@ -10,6 +10,7 @@
 namespace App\Pay\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class DepositMethod extends Model
 {
@@ -88,6 +89,7 @@ class DepositMethod extends Model
     /**
      * 接收充值通知
      * @param Channel $channel
+     * @return mixed
      */
     public function acceptNotify(Channel $channel)
     {
@@ -103,8 +105,9 @@ class DepositMethod extends Model
             }
 
             if ($result->state === Deposit::STATE_COMPLETE) {
-                if (!$result->masterContainer->changeBalance($result->amount, 0)) {
-                    $result->state = Deposit::STATE_CHARGE_FAIL;//到账失败
+                $result->state = Deposit::STATE_CHARGE_FAIL;//到账失败
+                if ($result->masterContainer->changeBalance($result->amount, 0)) {
+                    $result->state = Deposit::STATE_COMPLETE;
                 }
             }
 

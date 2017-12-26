@@ -53,7 +53,8 @@
                         Loading.getInstance().close();
 					})
 					.catch((err) => {
-						console.log(err);
+						console.error(err);
+                        Loading.getInstance().close();
 					})
             },
             //提现

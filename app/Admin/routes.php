@@ -37,9 +37,18 @@ Route::group([
         return $retry->reDo();
     })->name('pay_retry')->where(['operation' => 'charge|withdraw', 'id' => '\d+']);
 
+
+    //提现取消
+    $router->post('pay/cancel-withdraw/{withdraw}', function (\App\Pay\Model\Withdraw $withdraw) {
+        return ['status' => $withdraw->cancel()];
+    })->name('withdraw_cancel')->where(['id' => '\d+']);
+
+
     $router->post('/excel/user', 'ExcelController@user');
 
     $router->resource('bank', BankController::class);
+
+    $router->post('/excel/data/user', 'ExcelController@dataUser');
 });
 
 Route::group([
