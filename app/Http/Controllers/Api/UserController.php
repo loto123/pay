@@ -367,7 +367,7 @@ class UserController extends Controller
             ]);
             return response()->json(['code' => 1, 'msg' =>'', 'data' => []]);
         }
-        return response()->json(['code' => 0, 'msg' =>'', 'data' => []]);
+        return response()->json(['code' => 0, 'msg' =>'身份证号码与姓名不匹配，请核实后重新输入', 'data' => []]);
 
     }
 
