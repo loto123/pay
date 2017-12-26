@@ -46583,6 +46583,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 普通登录
     login: function login() {
+      var _this = this;
+
       var self = this;
 
       var data = {
@@ -46591,6 +46593,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
+
+        // if(res.data.data.wechat == 0){
+        //   Toast("登录成功，请绑定微信");
+        //   return Promise.resolve(true);
+        // }
+
         __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功");
         var _url = localStorage.getItem("url");
@@ -46602,6 +46610,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             window.location.href = _url;
           }, 1500);
         }
+      }).then(function (res) {
+        if (res == true) {
+          _this.weChatLogin();
+        }
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
       });
@@ -46609,9 +46621,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     // 微信登录
-    weChatLogin: function weChatLogin() {
+    weChatLogin: function weChatLogin(mobile) {
       var _data = {
-        redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+        redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin" + mobile
       };
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
         window.location.href = res.data.data.url;
@@ -68775,7 +68787,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 offset: 0
             };
 
-            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/shop", _data).then(function (res) {}).catch(function (err) {});
+            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {}).catch(function (err) {});
         }
     }
 });

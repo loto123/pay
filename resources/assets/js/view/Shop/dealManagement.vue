@@ -203,7 +203,7 @@ export default {
             offset :0
         }
 
-        request.getInstance().postData("api/transfer/shop",_data).then(res=>{
+        request.getInstance().getData("api/transfer/shop",_data).then(res=>{
 
         }).catch(err=>{
 

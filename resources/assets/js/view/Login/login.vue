@@ -181,6 +181,12 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
+
+          // if(res.data.data.wechat == 0){
+          //   Toast("登录成功，请绑定微信");
+          //   return Promise.resolve(true);
+          // }
+
           request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");
           var _url = localStorage.getItem("url");
@@ -192,15 +198,19 @@ export default {
               window.location.href = _url;
             },1500);
           }
+      }).then(res=>{
+        if(res == true){
+          this.weChatLogin();
+        }
       }).catch(function(err){
         Toast(err.data.message);
       });
     },
 
     // 微信登录
-    weChatLogin(){
+    weChatLogin(mobile){
       var _data={
-        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+ mobile
       };
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
