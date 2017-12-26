@@ -150,6 +150,18 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
 
 });
 
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'proxy',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('share', 'ProxyController@share');
+        $api->get('members/count', 'ProxyController@members_count');
+        $api->get('members', 'ProxyController@members');
+    });
+
+});
+
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',
