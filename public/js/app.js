@@ -61012,7 +61012,7 @@ var render = function() {
                   },
                   [
                     _c("div", { staticClass: "title" }, [
-                      _vm._v(_vm._s(_vm.SettingString(item.shop_name, 12)))
+                      _vm._v(_vm._s(_vm.SettingString(item.shop_name, 10)))
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "date" }, [
@@ -67446,6 +67446,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -67477,7 +67479,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       active: null,
 
       addMemberSwitch: false, // 添加成员开关
-      logo: null // 店铺的头像
+      logo: null, // 店铺的头像
+
+      searchData: { // 搜索出来的数据
+        avatar: null,
+        id: null,
+        mobile: null,
+        name: null
+      }
     };
   },
 
@@ -67553,12 +67562,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     openMemberTab: function openMemberTab() {
       this.addMemberSwitch = true;
     },
+
+
+    // 搜索用户
     searchUser: function searchUser() {
+      var _this3 = this;
+
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         mobile: this.searchUserMobile
       };
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/user/search', _data).then(function (res) {}).catch(function (err) {});
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/user/search', _data).then(function (res) {
+        _this3.searchData = res.data.data;
+      }).catch(function (err) {});
     }
   }
 });
@@ -67967,23 +67983,68 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(4, false, false),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "submit flex flex-justify-center" },
-                  [
-                    _c(
-                      "mt-button",
+                _vm.searchData.id
+                  ? _c(
+                      "div",
                       {
-                        staticStyle: { width: "70%" },
-                        attrs: { type: "default", size: "large" }
+                        staticClass:
+                          "user-info flex flex-align-center flex-justify-center"
                       },
-                      [_vm._v("邀请")]
+                      [
+                        _c("div", { staticClass: "info flex flex-1" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "info-wrap flex flex-align-center flex-3 flex-justify-center"
+                            },
+                            [
+                              _c("img", {
+                                attrs: { src: _vm.searchData.avatar, alt: "" }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "info-right flex-4 flex flex-v flex-align-center flex-justify-center"
+                            },
+                            [
+                              _c(
+                                "span",
+                                { staticStyle: { "margin-top": "-0.5em" } },
+                                [_vm._v("昵称:" + _vm._s(_vm.searchData.name))]
+                              ),
+                              _vm._v(" "),
+                              _c("span", [
+                                _vm._v("账号:" + _vm._s(_vm.searchData.mobile))
+                              ])
+                            ]
+                          )
+                        ])
+                      ]
                     )
-                  ],
-                  1
-                )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.searchData.id
+                  ? _c(
+                      "div",
+                      { staticClass: "submit flex flex-justify-center" },
+                      [
+                        _c(
+                          "mt-button",
+                          {
+                            staticStyle: { width: "70%" },
+                            attrs: { type: "default", size: "large" }
+                          },
+                          [_vm._v("邀请")]
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e()
               ])
             ]
           )
@@ -68046,42 +68107,6 @@ var staticRenderFns = [
         _c("span", { staticClass: "title flex-9" }, [_vm._v(" 投诉 ")]),
         _vm._v(" "),
         _c("span", { staticClass: "text flex-1" })
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "user-info flex flex-align-center flex-justify-center" },
-      [
-        _c("div", { staticClass: "info flex flex-1" }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "info-wrap flex flex-align-center flex-3 flex-justify-center"
-            },
-            [_c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "info-right flex-4 flex flex-v flex-align-center flex-justify-center"
-            },
-            [
-              _c("span", { staticStyle: { "margin-top": "-0.5em" } }, [
-                _vm._v("昵称:逗比同学")
-              ]),
-              _vm._v(" "),
-              _c("span", [_vm._v("账号:13333333333")])
-            ]
-          )
-        ])
       ]
     )
   }
