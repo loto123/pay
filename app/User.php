@@ -23,6 +23,8 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  */
 class User extends Authenticatable
 {
+    protected $keyType = 'string';
+
     use Notifiable;
     use EntrustUserTrait;
     use Skip32Trait;
