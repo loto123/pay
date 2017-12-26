@@ -78,12 +78,11 @@
 					this.systemInfo();
 					})
 					.catch((err) => {
-					console.log(err);
+					  console.error(err);
 					})
 				},
 				() => {
 					//取消操作
-					console.log("已经取消");
 				}
 				);
 			}

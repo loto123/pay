@@ -161,7 +161,6 @@ export default {
     },
 
     username() {
-      console.log(this);
       return this.$store.state.login.name;
     }
   },

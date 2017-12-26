@@ -164,7 +164,6 @@ export default {
       }).catch(err=>{
 
       });
-      console.log(id);
     },
 
     antiItem(id){
