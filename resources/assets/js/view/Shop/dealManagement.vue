@@ -176,7 +176,8 @@ export default {
   data(){
     return {
         tabItem:[true,false,false],
-        dataList:[]
+        dataList:[],
+        shop_id:null
     }
   },
   methods:{
@@ -194,13 +195,15 @@ export default {
     },
     init(){
         Loading.getInstance().open();
+        this.shop_id = this.$route.query.shopId;
         var _data = {
             status :1,
+            shop_id:this.shop_id,
             limit :50,
             offset :0
         }
 
-        request.getInstance().getData("api/transfer/record",_data).then(res=>{
+        request.getInstance().postData("api/transfer/shop",_data).then(res=>{
 
         }).catch(err=>{
 

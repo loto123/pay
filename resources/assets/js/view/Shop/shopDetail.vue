@@ -554,7 +554,7 @@ export default {
       this.$router.push("/shop/shop_member");
     },
     goDealManagement() {
-      this.$router.push("/shop/deal_management");
+      this.$router.push("/shop/deal_management?shopId="+this.shopId);
     },
     goShopAccount() {
       this.$router.push("/shop/shopAccount?id="+this.shopId);
