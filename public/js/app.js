@@ -56233,7 +56233,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				case 7:
 					result = '提现手续费';break;
 				default:
-					result = '大赢家茶水费';
+					result = '打赏店家费';
 			}
 			return result;
 		}
@@ -59904,7 +59904,7 @@ var render = function() {
             "big-winner-tip flex flex-v flex-align-center flex-justify-center",
           on: { click: _vm.goTipPage }
         },
-        [_c("p", [_vm._v("大赢家")]), _vm._v(" "), _c("p", [_vm._v("茶水费")])]
+        [_c("p", [_vm._v("打赏")]), _vm._v(" "), _c("p", [_vm._v("店家")])]
       ),
       _vm._v(" "),
       _c("deal-content", { attrs: { renderData: _vm.renderData } }),
@@ -60406,7 +60406,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       if (this.renderData.moneyData == null) {
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请输入茶水费金额");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("请输入打赏店家金额");
         return;
       }
 
@@ -60471,10 +60471,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         pay_password: this.passwordData.value
       };
 
-      // 支付茶水费接口
+      // 打赏店家接口
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
         console.log(res);
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("茶水费缴纳成功");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("打赏店家成功");
         _this3.hidePassword();
         _this3.init();
       }).catch(function (err) {
@@ -60513,7 +60513,7 @@ var render = function() {
               staticStyle: { "padding-left": "1em" },
               attrs: { for: "" }
             },
-            [_vm._v("大赢家茶水费")]
+            [_vm._v("打赏店家")]
           ),
           _vm._v(" "),
           _c(
@@ -60536,7 +60536,7 @@ var render = function() {
                 staticClass: "tipMoney",
                 attrs: {
                   type: "text",
-                  placeholder: "点击缴纳茶水费",
+                  placeholder: "点击打赏店家",
                   maxlength: "6"
                 },
                 domProps: { value: _vm.renderData.moneyData },
@@ -60572,7 +60572,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "tip-record" }, [
-        _c("h3", [_vm._v("茶水费记录")]),
+        _c("h3", [_vm._v("打赏店家记录")]),
         _vm._v(" "),
         _c(
           "ul",
@@ -66091,8 +66091,8 @@ var render = function() {
                     _c("mt-field", {
                       staticStyle: { "margin-top": "0.4em" },
                       attrs: {
-                        label: "设置抽水比率",
-                        placeholder: "设置抽水比率(小数)",
+                        label: "设置手续费率",
+                        placeholder: "设置手续费率(小数)",
                         type: "number"
                       },
                       model: {
@@ -67656,20 +67656,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -67769,14 +67755,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.$router.go(-1);
       });
     },
+
+
+    // 解散店铺
     dissShop: function dissShop() {
       var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + this.shopId).then(function (res) {
-        _this2.$router.push("/shop");
-      }).catch(function (error) {
-        console.error(error);
-      });
+      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm('确定删除店铺?').then(function (action) {
+
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+
+        __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + _this2.shopId).then(function (res) {
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("店铺解散成功");
+          setTimeout(function () {
+            _this2.$router.push("/shop");
+          }, 1000);
+        }).catch(function (error) {
+          console.error(error);
+        });
+      }).catch(function (err) {});
     },
     closeMemberTab: function closeMemberTab() {
       this.addMemberSwitch = false;
@@ -68055,7 +68053,7 @@ var render = function() {
               { staticClass: "flex flex-align-center flex-justify-between" },
               [
                 _c("span", { staticClass: "title flex-9" }, [
-                  _vm._v(" 抽水比例 ")
+                  _vm._v(" 手续费率 ")
                 ]),
                 _vm._v(" "),
                 _c("span", { staticClass: "text flex-1" }, [
