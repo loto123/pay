@@ -156,13 +156,7 @@ class AccountController extends BaseController {
             $result = $user->container->initiateWithdraw(
                 $request->amount,
                 [
-                    'branch_bank' => $user->pay_card->bank->name,
-                    'bank_no' => $user->pay_card->bank_id,
-                    'city' => '广州市',
-                    'province' => '广东省',
-                    'receiver_account' => $user->pay_card->card_num,
-                    'receiver_name' => $user->pay_card->holder_name,
-                    'to_public' => 0
+                    'bank_card' => $user->pay_card
                 ],
                 $user->channel,
                 WithdrawMethod::find($request->way),
