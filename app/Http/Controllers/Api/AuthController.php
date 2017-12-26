@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\OauthUser;
+use App\Pay\Model\PayFactory;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -71,7 +72,9 @@ class AuthController extends BaseController {
         }
 
         // all good so return the token
-        return $this->json(compact('token'));
+        $user = JWTAuth::toUser($token);
+        $wechat = $user->wechat_user ? 1 : 0;
+        return $this->json(compact('token', 'wechat'));
     }
 
     /**
@@ -115,6 +118,13 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="oauth_user",
+     *         in="formData",
+     *         description="微信用户id",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
@@ -152,18 +162,29 @@ class AuthController extends BaseController {
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input['name'] = $request->name ? $request->name : $request->mobile;
-        $user = User::create($input);
-
+        $wallet = PayFactory::MasterContainer();
+        $wallet->save();
+        $input['container_id'] = $wallet->id;
+        try {
+            $user = User::create($input);
+        } catch (\Exception $e){
+            return $this->json();
+        }
+        $invite = User::where("mobile", $request->invite_mobile)->first();
+        if ($invite) {
+            $user->parent_id = $invite->id;
+        }
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
         if ($request->oauth_user) {
             $oauth_user = OauthUser::find($request->oauth_user);
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
+                $user->avatar = $oauth_user->headimgurl;
                 $oauth_user->save();
             }
         }
-
+        $user->save();
         return $this->json($success);
     }
 
@@ -308,6 +329,13 @@ class AuthController extends BaseController {
      *         required=false,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="exist",
+     *         in="formData",
+     *         description="找回密码传1，其他验证不传",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="ok",
@@ -320,11 +348,19 @@ class AuthController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function valid(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable(),
-            'invite_mobile' => 'regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
-            'code' => 'regex:/^\d{4}$/',
-        ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+        if ($request->exist) {
+            $validator = Validator::make($request->all(), [
+                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|exist:'.(new User)->getTable().',mobile',
+                'code' => 'regex:/^\d{4}$/',
+            ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable().',mobile',
+                'invite_mobile' => 'regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
+                'code' => 'regex:/^\d{4}$/',
+            ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+        }
+
 
 
         if ($validator->fails()) {
@@ -389,7 +425,7 @@ class AuthController extends BaseController {
             Cache::put($cache_key, ['code' => $code, 'time' => time()], 5);
             return $this->json();
         } else {
-            Log::info("send sms error".var_export($result));
+            Log::info("send sms error".var_export($result, true));
             return $this->json([], 'error', 0);
         }
     }
@@ -435,7 +471,7 @@ class AuthController extends BaseController {
      */
     public function reset_password(Request $request) {
         $validator = Validator::make($request->all(), [
-            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exist:'.(new User)->getTable(),
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable(),
             'password' => 'required',
             'code' => 'required'
         ]);

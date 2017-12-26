@@ -43,10 +43,15 @@ class PayChannelController extends Controller
     {
         \Encore\Admin\Grid\Column::$displayers["switch"] = SwitchDisplay::class;
         return Admin::grid(Channel::class, function (Grid $grid) {
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
             $grid->id('ID')->sortable();
             $grid->name('通道名称');
             $grid->platform()->name('支付平台');//支付平台
-            //$grid->column('businessEntity.company_name', '签约主体');//签约主体
+            $grid->column('businessEntity.company_name', '签约主体');//签约主体
             $grid->column('spareChannel.name', '备用通道');
             //开启状态
             $grid->disabled('通道状态')->switch([

@@ -82,34 +82,56 @@ class ExcelController extends Controller
     public function user(Request $request)
     {
         $cellData = [
-            ['编号','用户','交易笔数','余额','收益','收款','付款','上级运营','上级代理','支付渠道','公司账户']
+            ['编号','用户','身份','交易笔数','余额','收益','收款','付款','上级运营','上级代理','支付渠道']
         ];
 
-        $query = User::with('transfer_record')->select()->get();
-
+        Log::info($request->all());
         $user_table = (new User)->getTable();
         $query = User::leftJoin('transfer_record as tfr', 'tfr.user_id', '=', $user_table .'.id')
+            ->with(['roles', 'operator'])
             ->select($user_table.'.*',
-                DB::raw('SUM( CASE WHEN stat=1 THEN amount ELSE 0 END) AS payment'),
-                DB::raw('SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END) AS profit'),
-                DB::raw('COUNT(*) AS transfer_count'));
-
+                DB::raw('ABS(SUM( CASE WHEN stat=1 THEN amount ELSE 0 END)) AS payment'),
+                DB::raw('ABS(SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END)) AS profit'),
+                DB::raw('COUNT(tfr.id) AS transfer_count'));
+        if ($request->user_id) {
+            $query->where($user_table.'.id', $request->user_id);
+        }
+        if ($request->parent_id) {
+            $query->where($user_table.'.parent_id', $request->parent_id);
+        }
+        if ($request->operator_id) {
+            $query->where($user_table.'.operator_id', $request->operator_id);
+        }
+        if ($request->role > 0) {
+            $query->whereHas('roles', function ($query) use ($request){
+                $query->where('id', $request->role);
+            });
+        }
+        if ($request->channel_id) {
+            $query->where($user_table.'.channel_id', $request->channel_id);
+        }
         $query = $query->groupBy($user_table.'.id')->get();
 
         if(!empty($query) && count($query)>0) {
             foreach($query as $item) {
+                $role_name = '';
+                if (!empty($item->roles) && count($item->roles)>0) {
+                    foreach ($item ->roles as $_role) {
+                        $role_name = $_role->display_name;
+                    }
+                }
                 $cellData[] = [
                     $item->id,
-                    $item->name,
+                    $item->name . ' ' .$item->mobile,
+                    $role_name,
                     $item->transfer_count??0,
                     $item->balance,
                     ($item->profit-$item->payment)??0,
                     $item->profit??0,
                     $item->payment??0,
-                    '',
-                    '',
-                    '',
-                    '',
+                    $item->operator['username'].' '.$item->operator['name'],
+                    $item->parent_id,
+                    $item->channel_id,
                 ];
             }
         }

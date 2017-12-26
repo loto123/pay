@@ -11,6 +11,7 @@ import VerfyCode from '../view/My/verfyCode.vue'
 import PayPassword from '../view/My/payPassword.vue'
 import About from '../view/My/about.vue'
 import SettingPassword from '../view/My/settingPassword.vue'
+import MyUsers from '../view/My/myUsers.vue'
 
 export default [
     { path: '/my', name: 'my', component: My },
@@ -25,6 +26,8 @@ export default [
     { path:'/my/login_password', name:'loginPassword', component: LoginPassword },
     { path:'/my/verfy_code', name:'verfyCode', component: VerfyCode },
     { path:'/my/pay_password', name:'payPassword', component: PayPassword },
-    { path:'/my/setting_password', name:'settingPassword', component: SettingPassword }
+    { path:'/my/setting_password', name:'settingPassword', component: SettingPassword },
+    { path:'/my/my_users', name:'users', component: MyUsers }
+    
     
 ]

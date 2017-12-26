@@ -38,11 +38,13 @@ class SubmitWithdrawRequest implements ShouldQueue
     /**
      * 处理提现
      *
-     * @return void
+     * @return WithdrawResult
      */
     public function handle()
     {
-        $this->job->delete();//失败禁止重试
+        if ($this->job) {
+            $this->job->delete();//失败禁止重试
+        }
 
         $withdraw = $this->withdraw;
         $prev_except = null;
@@ -53,6 +55,11 @@ class SubmitWithdrawRequest implements ShouldQueue
         $result = new WithdrawResult();
 
         try {
+            if ($withdraw->method->targetPlatform->getKey() == 0) {
+                //银行卡提现取得银行内部编码
+                $withdraw->receiver_info['bank_no'] = $withdraw->channel->platform->getBankCode($withdraw->receiver_info['bank_card']);
+            }
+
             $result = $withdraw->method->withdraw($withdraw);
             if ($result->raw_response) {
                 $withdraw->state = $result->state;
@@ -82,6 +89,7 @@ class SubmitWithdrawRequest implements ShouldQueue
                 'exception' => $prev_except ? $prev_except->getMessage() : ''
             ]));
         }
+        return $result;
 
     }
 }

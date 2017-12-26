@@ -26,6 +26,23 @@ Route::group([
     $router->resource('pay/withdraw-method', WithdrawMethodController::class);
     $router->resource('pay/entity', BusinessEntityController::class);
     $router->resource('pay/channel', PayChannelController::class);
+    $router->resource('pay/scene', PaySceneController::class);
+    $router->resource('pay/deposits', DepositController::class);
+    $router->resource('pay/withdraws', WithdrawController::class);
+    $router->post('pay/support_banks/{platform}', 'PayPlatformController@bankSupport')->name('associate_bank');
+
+    //支付重试
+    $router->post('pay/retry-{operation}/{id}', function ($operation, $id) {
+        $retry = ['charge' => new \App\Pay\Model\ChargeRetry($id), 'withdraw' => new \App\Pay\Model\WithdrawRetry($id)][$operation];
+        return $retry->reDo();
+    })->name('pay_retry')->where(['operation' => 'charge|withdraw', 'id' => '\d+']);
+
+
+    //提现取消
+    $router->post('pay/cancel-withdraw/{withdraw}', function (\App\Pay\Model\Withdraw $withdraw) {
+        return ['status' => $withdraw->cancel()];
+    })->name('withdraw_cancel')->where(['id' => '\d+']);
+
 
     $router->post('/excel/user', 'ExcelController@user');
 

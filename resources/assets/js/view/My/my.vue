@@ -5,9 +5,9 @@
 				<div class="imgWrap">
 					<img src="/images/avatar.jpg">
 				</div>
-				<h3>{{personal.name}}</h3>
+				<h3>{{name}}</h3>
 				<div class="acc-number">账号:
-					<span>{{personal.mobile}}</span>
+					<span>{{mobile}}</span>
 				</div>
 			</div>
 		</section>
@@ -19,7 +19,7 @@
 						<span>{{listContent.parent_name}} <em>{{listContent.parent_mobile}}</em></span>
 					</mt-cell>
 				</li>
-				<li @click="realAuth(personal.mobile)">
+				<li @click="realAuth(mobile)">
 					<mt-cell title="实名认证" is-link>
 						<img slot="icon" src="/images/realName.png" width="30" height="30">
 						<span>{{listContent.identify_status ? "完善" : "未完善"}}</span>
@@ -37,8 +37,8 @@
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 					</mt-cell>
 				</li>
-				<li>
-					<mt-cell title="更多设置" is-link to="/my/set">
+				<li @click="set(mobile)">
+					<mt-cell title="更多设置" is-link>
 						<img slot="icon" src="/images/moreSet.png" width="30" height="30">
 					</mt-cell>
 				</li>
@@ -96,64 +96,52 @@
 
 <script>
 	import axios from "axios";
-	import { Toast,MessageBox } from 'mint-ui';
 	import tabBar from "../../components/tabBar";
 	import request from '../../utils/userRequest';
+	import { Toast,MessageBox } from 'mint-ui';
+
 	import Loading from '../../utils/loading'
 
 	export default {
 		data () {
 			return {
-				personal:{
-					name:null,
-					mobile:null,
-					thumb:null
-				},
+				name:null,		//名字
+				mobile:null,	//手机号
+				thumb:null,		//图像
+
 				listContent:{
-					parent_name:null,
-					parent_mobile:null,
-					card_count:null,
-					identify_status:null
+					parent_name:null,		//推荐人名字
+					parent_mobile:null,		//推荐人手机号
+					card_count:null,		//银行卡
+					identify_status:null	//认证状态
 				}
 				
 			}
 		},
 		created(){
 			this.personalInfo();
-			this.listInfo();
     	},
 		components: { tabBar },
 		methods: {
 			//个人信息
 			personalInfo(){
 				Loading.getInstance().open("加载中...");
+				Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData("api/my/index")])
+				.then((res)=>{
+					this.name=res[0].data.data.name;
+					this.mobile=res[0].data.data.mobile;
+					this.thumb=res[0].data.data.thumb;
 
-				request.getInstance().getData("api/my/info")
-					.then((res) => {
-						this.personal.name=res.data.data.name;
-						this.personal.mobile=res.data.data.mobile;
-						this.personal.thumb=res.data.data.thumb;
-						Loading.getInstance().close();
-					})
-					.catch((err) => {
-						console.log(err);
-					})
-			},
-			//列表信息
-			listInfo(){
-				var self=this;
+					this.listContent.parent_name=res[1].data.data.parent_name;
+					this.listContent.parent_mobile=res[1].data.data.parent_mobile;
+					this.listContent.card_count=res[1].data.data.card_count;
+					this.listContent.identify_status=res[1].data.data.identify_status;
 
-				request.getInstance().getData("api/my/index")
-					.then((res) => {
-						console.log(res);
-						self.listContent.parent_name=res.data.data.parent_name;
-						self.listContent.parent_mobile=res.data.data.parent_mobile;
-						self.listContent.card_count=res.data.data.card_count;
-						self.listContent.identify_status=res.data.data.identify_status;
-					})
-					.catch((err) => {
-						console.log(err);
-					})
+					Loading.getInstance().close();
+				})
+				.catch((err)=>{
+					console.error(err);
+				})
 			},
 			realAuth(e){
 				this.$router.push("/my/realAuth"+"?mobile="+e);
@@ -163,27 +151,27 @@
 				if(this.listContent.identify_status==0){
 					MessageBox.confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(
 						() => {
-							this.$router.push('/my/realAuth');
+							this.$router.push("/my/realAuth"+"?mobile="+this.mobile);
 						},
 						() => {
-							//取消操作
-							console.log("已经取消");
+							Toast("已经取消");
 						}
 					);
 				}else{
 					this.$router.push('/my/bankCardManage');
 				}
-				
 			},
-			//结算卡
+			//查看结算卡
 			checkSettle(){
-				if(this.listContent.card_count<=0){
-					Toast('请添加银行卡');
-					return;
-				}else{
+				if(this.listContent.card_count>0){
 					this.$router.push('/my/checkSettle');
+				}else{
+					Toast('请添加银行卡');
 				}
-			}
+			},
+			set(e){
+				this.$router.push("/my/set"+"?mobile="+e);
+			},
 		}
 	};
 </script>

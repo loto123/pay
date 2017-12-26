@@ -9,6 +9,7 @@ import MakeDeal from './makeDeal'
 import My from './my'
 import Shop from './shop'
 import Inform from './inform'
+import Share from './share'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -37,7 +38,10 @@ var routerList = {
 
     shop:Shop,
     //消息
-    inform:Inform
+    inform:Inform,
+
+    // 分享
+    share:Share
 };
 
 var router = [];

@@ -1,4 +1,5 @@
 <template>
+
     <div id="shop-account">
         <div class="top">
             <top-back :title="'店铺账户'" style="background: #26a2ff; color:#fff;">
@@ -8,11 +9,11 @@
             </top-back>
             <div class="profit-wrap flex flex-align-center">
                 <div class="left flex flex-v flex-align-center flex-justify-around">
-                    <div class="money">69999.99</div>
+                    <div class="money">{{yesterday_profit}}</div>
                     <div class="title">昨日收益(元)</div>
                 </div>
                 <div class="right flex flex-v flex-align-center flex-justify-around">
-                    <div class="money">69999.99</div>
+                    <div class="money">{{today_profit}}</div>
                     <div class="title">今日收益(元)</div>
                 </div>
             </div>
@@ -36,7 +37,7 @@
 
             <div class="foot flex flex-v flex-align-center">
               <div class="text">
-                  66666
+                  {{total_profit}}
               </div>
               <div class="title">
                 共累计收益（元）
@@ -167,7 +168,11 @@ export default {
 
   data(){
     return {
-      balance:null
+      balance:null,
+      shopId :null,
+      today_profit:null,
+      yesterday_profit:null,
+      total_profit:null
     }
   },
   methods: {
@@ -179,13 +184,20 @@ export default {
     },
 
     init(){
-      // Loading.getInstance().open();
-      // request.getInstance().getData("api/account").then(res=>{
-      //     console.log(res);
-      //     this.balance = res.data.data.balance;
-      // }).catch(err=>{
-      //     console.error(err);
-      // });
+      Loading.getInstance().open();
+
+      this.shopId = this.$route.query.id;
+      request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
+          console.log(res);
+          this.balance = res.data.data.balance;
+          this.today_profit = res.data.data.today_profit;
+          this.yesterday_profit = res.data.data.yesterday_profit;
+          this.total_profit = res.data.data.total_profit;
+
+          Loading.getInstance().close();
+      }).catch(err=>{
+          console.error(err);
+      });
     }
   }
 };

@@ -4,9 +4,7 @@
     <topBack title="发起交易" style="background:#eee;"></topBack>
 
     <div class="select-wrap flex flex-align-center" @click="showDropList">
-        
         {{dealShop?dealShop:'请选择您要发起交易的店铺'}}
-
     </div>
 
     <div class="price flex">
@@ -24,12 +22,6 @@
 
       <h3 class="flex flex-align-center">添加参与人</h3>
       <div class="flex flex-align-center flex-wrap-on ">
-        <!-- <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" >
-        <img src="/images/avatar.jpg" alt="" > -->
         <img :src="item.avatar" alt="" v-for="item in memberList" :key = "item.id" v-if="item.checked == true">
         <div class="add flex flex-align-center flex-justify-center" @click="showMemberChoise">
           <i class="iconfont" style="font-size: 1.5em;color:#bbb;">
@@ -193,6 +185,8 @@ import choiseMember from "./choiseMember.vue"
 import Loading from "../../utils/loading";
 import request from "../../utils/userRequest";
 
+import utils from "../../utils/utils"
+
 import {Toast} from 'mint-ui'
 
 export default {
@@ -222,7 +216,6 @@ export default {
         .getInstance()
         .getData("api/shop/lists/all")
         .then(res => {
-          console.log(res);
           this.setShopList(res);
           Loading.getInstance().close();
         })
@@ -237,7 +230,7 @@ export default {
       for (let i = 0; i < res.data.data.data.length; i++) {
         var _t = {};
         _t.value = res.data.data.data[i].id.toString();
-        _t.label = res.data.data.data[i].name;
+        _t.label = utils.SetString(res.data.data.data[i].name,10);
         _tempList.push(_t);
       }
 
@@ -255,6 +248,11 @@ export default {
     },
 
     showDropList() {
+      if(this.shopList.length == 0){
+        Toast("当前无可选的店铺,请先加入店铺或创建店铺");
+        return;
+      }
+
       this.dropListSwitch = true;
     },
     hideDropList(data) {
@@ -307,16 +305,13 @@ export default {
           _temp.checked = false;
           this.memberList.push(_temp);
         }
-
-        console.log("======= 店铺会员列表 ======");
-        console.log(this.memberList);
     },
 
     hideMemberChoise(){
       this.choiseMemberSwitch = false;
     },
 
-    // 提交数据
+    // 提交发起交易的数据
     submitData() {
       var _tempMessage = null;
       if (this.commentMessage == null) {
@@ -325,10 +320,13 @@ export default {
         _tempMessage = this.commentMessage;
       }
 
+      var _members = this.getMembersId();
+
       var _data = {
         shop_id: this.shopId,
         price: this.price,
-        comment:_tempMessage
+        comment:_tempMessage,
+        joiner:_members
       };
 
       if(this.shopId == null){
@@ -351,6 +349,24 @@ export default {
         .catch(err => {
           console.error(err);
         });
+    },
+
+    getMembersId(){
+      console.log(this.memberList);
+      if(this.memberList.length == 0){
+        return [];
+      }
+
+      var _tempIdList = [];
+
+      for(let i = 0; i< this.memberList.length; i++){
+        if(this.memberList[i].checked){
+          _tempIdList.push(this.memberList[i].id);
+        }
+      }
+
+      console.log(_tempIdList);
+      return _tempIdList;
     }
   },
   components: { topBack, inputList , choiseMember }

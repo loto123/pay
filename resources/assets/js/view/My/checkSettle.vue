@@ -60,7 +60,6 @@ export default {
     showPassword(){
       this.showPasswordTag = true;
     },
-
     hidePassword(){
       this.showPasswordTag = false;
     },
@@ -68,7 +67,6 @@ export default {
       var _this=this;
       request.getInstance().getData('api/my/getPayCard').then((res) => {
         console.log(res);
-        //   this.$router.push('/my/checkSettle');
         this.userMobile=res.data.data.user_mobile
         this.realName=res.data.data.holder_name
         this.idCard=res.data.data.holder_id
@@ -77,7 +75,7 @@ export default {
       }).catch((err) => {
         Toast({
             message: err.data.msg,
-            duration: 800
+            duration: 500
           });
         this.$router.go(-1);
       })
@@ -94,7 +92,7 @@ export default {
           }
         })
         .catch((err) => {
-          console.error(err.data.msg);
+          // console.error(err.data.msg);
         })
     }
   }

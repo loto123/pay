@@ -5,6 +5,7 @@
 /storage/app/pay
 /vendor
 /.idea
+*/.idea
 /.vagrant
 Homestead.json
 Homestead.yaml
@@ -12,7 +13,7 @@ npm-debug.log
 yarn-error.log
 .env
 composer.lock
-resources/assets/.idea/workspace.xml
+resources/assets/.idea/assets.iml
 resources/assets/.idea/modules.xml
 resources/assets/.idea/inspectionProfiles/Project_Default.xml
-resources/assets/.idea/assets.iml
+resources/assets/.idea/workspace.xml

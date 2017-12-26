@@ -3,148 +3,27 @@
       <topBack :title="'消息列表'" style="background:#26a2ff;color:#fff"></topBack>
       <ul class="flex flex-v ">
          
-          <li class="flex flex-v flex-justify-around">
+          <li class="flex flex-v flex-justify-around" v-for="item in messageList">
               <div class="notice-content flex flex-align-center flex-justify-around">
                   <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
+                    <img :src="item.user_avatar" alt="" class="avatar">
+                    <span>昵称:{{setString(item.user_name,7)}}</span>
                   </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
+                  <span>申请加入小店 <i style="color:#26a2ff;">{{setString(item.shop_name,10)}}</i> </span>
               </div>
               <div class="notice-controller flex flex-align-center flex-justify-around">
                   <div>2017-12-1</div>
                   <div>14:55:45</div>
                   <div class="btn-wrap flex flex-align-center flex-justify-around">
                     <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
+                    <span class="agree" @click="agreeItem(item.id)">同意</span>
                   </div>
               </div>
           </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-                  
-              </div>
-          </li>
-          <li class="flex flex-v flex-justify-around">
-              <div class="notice-content flex flex-align-center flex-justify-around">
-                  <div class="user-info flex flex-align-center">
-                    <img src="/images/avatar.jpg" alt="" class="avatar">
-                    <span>昵称:啦啦啦啦</span>
-                  </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">斗牛小店</i> </span>
-              </div>
-              <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
-                  <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
-                    <span class="agree">同意</span>
-                  </div>
-                  
-              </div>
-          </li>
+          
       </ul>
 
-      <div class="all-list-controller flex flex-justify-center ">
+      <div class="all-list-controller flex flex-justify-center " v-if="!messageList">
         <div class="btn-wrap flex flex-v flex-justify-around">
           <mt-button type="primary" size="large" style="background:#00cc00;">全部同意</mt-button>
           <mt-button type="primary" size="large" style="background:#ccc;">全部忽略</mt-button>
@@ -240,10 +119,77 @@
 </style>
 
 <script>
-import topBack from "../../components/topBack";
+import topBack from "../../components/topBack"
+import Loading from "../../utils/loading"
+import request from "../../utils/userRequest"
+import utils from "../../utils/utils"
 
 export default {
-  components: { topBack }
+  data(){
+    return {
+      messageList:[]
+    }
+  },
+  components: { topBack },
+  created(){
+    this.init();
+  },
+  methods:{
+    init(){
+      Loading.getInstance().open();
+      request.getInstance().getData("api/shop/messages").then(res=>{
+        this.messageList = res.data.data;
+        Loading.getInstance().close();
+      }).catch(err=>{
+
+      });
+    },
+    // 同意加入店铺的请求
+    agreeItem(id){
+      Loading.getInstance().open();
+      if(id==null){
+        var _data = null;
+      }else {
+        var _data = {
+          id :id
+        };
+      }
+      request.getInstance().postData("api/shop/agree",_data).then(res=>{
+        Loading.getInstance().close();
+        Toast("操作成功");
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch(err=>{
+
+      });
+      console.log(id);
+    },
+
+    antiItem(id){
+      
+      Loading.getInstance().open();
+      if(id==null){
+        var _data = null;
+      }else {
+        var _data = {
+          id :id
+        };
+      }
+      request.getInstance().postData("api/shop/ignore/"+id).then(res=>{
+        Loading.getInstance().close();
+        Toast("操作成功");
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch(err=>{
+
+      });
+    },
+    setString(str,len){
+      return utils.SetString(str,len);
+    }
+  }
 };
 </script>
 

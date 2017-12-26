@@ -6,14 +6,14 @@
         <section class="account-container">
           <div class="account-box flex flex-align-center">
             <span>手机号:</span>
-            <em class="flex-1 number">18390939299</em>
+            <em class="flex-1 number">{{mobile}}</em>
           </div>
         </section>
         <section class="input-wrap-box">
           <div class="input-wrap flex flex-align-center">
             <span>验证码:</span>
-            <input type="text" placeholder="请输入验证码" class="flex-1">
-            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime}}</mt-button>
+            <input type="text" placeholder="请输入验证码" class="flex-1" v-model="code">
+            <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime?"("+computedTime+")":""}}</mt-button>
           </div>
         </section>
       </div>
@@ -24,32 +24,45 @@
   </div>
 </template>
 
-
 <script>
+  import axios from "axios";  
   import topBack from "../../components/topBack";
   import request from '../../utils/userRequest';
   import { Toast } from "mint-ui";
+
   export default {
     data () {
       return {
-        realInfo:{
-          name :null,
-          id_number :null
-        },
-        computedTime:0  //倒数计时
+        mobile:null,
+        code:null,
+        computedTime:null  //倒数计时
       }
     },
+    created() {
+			this.getMobile();
+		},
     components: { topBack },
     methods: {
       nextBtn() {
-        this.$router.push('/my/pay_password');
+        if(!this.code){
+          Toast('请填写验证码')
+          return
+        }else{
+          this.$router.push('/my/pay_password');
+        }
       },
+      
+      getMobile(){
+        this.mobile=this.$route.query.mobile;
+      },
+
       sendYZM(){
         var _temp = {};
         _temp.mobile = this.$route.query.mobile;
+       
         request.getInstance().postData("api/auth/sms",_temp).then((res) => {
           console.log(res);
-          this.computedTime = 5;
+          this.computedTime = 60;
           this.timer = setInterval(() => {
               this.computedTime --;
               console.log(this.computedTime); 
@@ -58,7 +71,7 @@
               }
           }, 1000)
         }).catch((err) => {
-         console.log(err);
+         console.error(err);
         })
       }
     }
@@ -78,11 +91,10 @@
 
   .account-container {
     background: #fff;
-    padding-left: 10px;
     .account-box {
-      width: 100%;
       height: 3em;
       border-top: 1px solid #d9d9d9;
+      padding-left: 10px;
       span {
         display: inline-block;
         width: 105px;

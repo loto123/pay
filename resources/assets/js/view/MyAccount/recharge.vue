@@ -1,167 +1,145 @@
 <template>
-    <div id="recharge" class="recharge-container">
-        <topBack title="充值">
-            <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
-              <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
-            </div>
-        </topBack>
-        <div class="recharge-box">
-            <div class="title">充值金额</div>
-            <div class="recharge-money flex flex-justify-center">
-                <label>￥</label>
-                <input type="text" placeholder="请输入金额">
-            </div>
-            <div class="recharge-way">
-                <div class="title">选择充值方式</div>
-                <a class="list">
-                    <div class="list-wrapper">
-                        <div class="list-title">
-                            <label class="radiolist-label">
-                                <span class="mint-radio is-right">
-                                    <input type="radio" class="radio-input" checked name="tool" value="银行卡">
-                                    <span class="radio-core"></span>
-                                </span>
-                                <span class="radio-label">银行卡</span>
-                            </label>
-                        </div>
-                    </div>
-                </a>
-                <a class="list">
-                    <div class="list-wrapper">
-                        <div class="list-title">
-                            <label class="radiolist-label">
-                                <span class="mint-radio is-right">
-                                    <input type="radio" class="radio-input" name="tool" value="微信">
-                                    <span class="radio-core"></span>
-                                </span>
-                                <span class="radio-label">微信</span>
-                            </label>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <a href="javascript:;" class="recharge-btn"> 
-                <mt-button type="primary" size="large">提现</mt-button>    
-            </a>
-        </div>
-    </div>
+	<div id="recharge" class="recharge-container">
+		<topBack title="充值">
+			<div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
+				<i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
+			</div>
+		</topBack>
+		<div class="recharge-box">
+			<div class="title">充值金额</div>
+			<div class="recharge-money flex flex-justify-center">
+				<label>￥</label>
+				<input type="text" placeholder="请输入金额" v-model="amount">
+			</div>
+			<div class="recharge-way">
+				<div class="title">选择充值方式</div>
+				<div class="list-wrap">
+					<mt-radio align="right" title="" v-model="value" :options="options1">
+					</mt-radio>
+				</div>
+			</div>
+			<a href="javascript:;" class="recharge-btn" @click="rechargeBtn">
+				<mt-button type="primary" size="large">充值</mt-button>
+			</a>
+		</div>
+	</div>
 </template>
 
 <script>
-import topBack from "../../components/topBack.vue";
-export default {
-  data() {
-    return {};
-  },
-  components: { topBack },
-  methods: {
-    goIndex() {
-      this.$router.push("/index");
-    }
-  }
-};
+	import request from '../../utils/userRequest';
+	import topBack from "../../components/topBack.vue";
+	import { MessageBox, Toast } from "mint-ui";
+
+	export default {
+		data() {
+			return {
+				amount: null,
+				options1:[],
+				way:null,
+				value:null
+			}
+		},
+		created() {
+			this.selWay();
+		},
+		components: { topBack},
+		props: ["showSwitch", "optionsList"],
+		methods: {
+			// hideTab() {
+			// 	this.$emit("hideDropList", this.choiseValue);
+			// },
+			goIndex() {
+				this.$router.push("/index");
+			},
+			rechargeBtn() {
+				var self = this;
+				var _data = {
+					amount: this.amount,
+					way:this.value
+				}
+
+				if (!this.amount) {
+					Toast('请输入充值金额');
+				}
+
+				request.getInstance().postData('api/account/charge', _data)
+					.then((res) => {
+						console.log(res);
+						Toast('充值成功');
+						location.href=res.data.data.redirect_url;
+					})
+					.catch((err) => {
+						console.error(err);
+					})
+			},
+			// watch: {
+			// 	"choiseValue": 'hideTab'
+			// },
+			selWay(){
+				request.getInstance().getData('api/account/pay-methods/unknown/2')
+					.then((res) => {
+						console.log(res);
+						this.setBankList(res);
+					})
+					.catch((err) => {
+						console.error(err);
+					})
+			},
+			setBankList(res) {
+				var _tempList = [];
+				for (let i = 0; i < res.data.data.methods.length; i++) {
+					var _t = {};
+					_t.value = res.data.data.methods[i].id.toString();
+					_t.label = res.data.data.methods[i].label;
+					_tempList.push(_t);
+				}
+					console.log(_tempList);
+				this.options1 = _tempList;
+			}
+		}
+	};
 </script>
 
 <style lang="scss" scoped>
-@import "../../../sass/oo_flex.scss";
-.recharge-container {
-  background: #eee;
-  height: 100vh;
-  padding-top: 2em;
-  box-sizing: border-box;
-}
-.recharge-box {
-  background: #fff;
-  padding: 1em;
-  margin: 0 0.5em;
-  .tltle {
-    font-size: 1em;
-    color: #999;
-  }
-}
-.recharge-money {
- border-bottom: 1px solid #ccc;
-  vertical-align: middle;
-  margin-top: 2em;
-  font-size:1.2em;
-  padding: 0.2em 0;
-  input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size:0.9em;
-  }
-}
+	@import "../../../sass/oo_flex.scss";
+	.recharge-container {
+		background: #eee;
+		height: 100vh;
+		padding-top: 2em;
+		box-sizing: border-box;
+	}
 
-.recharge-way {
-  margin-top: 2em;
-  .title {
-    color: #666;
-    margin-bottom: 0.5em;
-  }
-}
+	.recharge-box {
+		background: #fff;
+		padding: 1em;
+		margin: 0 0.5em;
+		.tltle {
+			font-size: 1em;
+			color: #999;
+		}
+	}
 
-.list {
-  background-color: #fff;
-  box-sizing: border-box;
-  color: inherit;
-  min-height: 48px;
-  display: block;
-  border-bottom: 1px solid #d9d9d9;
-}
-.list-title {
-  width: 100%;
-}
-.list-wrapper {
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  min-height: inherit;
-  padding: 0 10px;
-}
+	.recharge-money {
+		border-bottom: 1px solid #ccc;
+		vertical-align: middle;
+		margin-top: 2em;
+		font-size: 1.2em;
+		padding: 0.2em 0;
+		input {
+			border: none;
+			outline: none;
+			width: 100%;
+			font-size: 0.9em;
+		}
+	}
 
-.radio-core {
-  box-sizing: border-box;
-  display: inline-block;
-  background-color: #fff;
-  border-radius: 100%;
-  border: 1px solid #ccc;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-  &::after {
-    content: " ";
-    border-radius: 100%;
-    top: 5px;
-    left: 5px;
-    position: absolute;
-    width: 8px;
-    height: 8px;
-  }
-}
-.radiolist-label {
-  display: block;
-  width: 100%;
-}
-.radio-input {
-  display: none;
-}
-.radio-label {
-  vertical-align: middle;
-}
-.radio-input:checked + .radio-core {
-  background-color: #26a2ff;
-  border-color: #26a2ff;
-  &::after {
-    background-color: #fff;
-  }
-}
-.recharge-btn {
-  display: block;
-  margin-top: 3em;
-  margin-bottom: 1em;
-}
+	.recharge-way {
+		margin-top: 2em;
+	}
+
+	.recharge-btn {
+		display: block;
+		margin-top: 3em;
+		margin-bottom: 1em;
+	}
 </style>
-
-

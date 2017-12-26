@@ -14,35 +14,39 @@ use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawResult;
 use App\Pay\WithdrawInterface;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SmallBatchTransfer implements WithdrawInterface
 {
-
-    public static function getBankNoMap()
+    /**
+     * 查询省市
+     */
+    public static function queryProvincesAndCities($force = false)
     {
-        return [
-            0 => '汇付宝账户',
-            1 => '工商银行',
-            2 => '建设银行',
-            3 => '农业银行',
-            4 => '邮政储蓄银行',
-            5 => '中国银行',
-            6 => '交通银行',
-            7 => '招商银行',
-            8 => '光大银行',
-            9 => '浦发银行',
-            10 => '华夏银行',
-            11 => '广东发展银行',
-            12 => '中信银行',
-            13 => '兴业银行',
-            14 => '民生银行',
-            15 => '杭州银行',
-            16 => '上海银行',
-            17 => '宁波银行',
-            18 => '平安银行',
-            38 => '浙江泰隆商业银行',
-        ];
+        $cacheKey = 'heepay_areas';
+        if ($force) {
+            Cache::forget($cacheKey);
+        }
+        $options = Cache::get($cacheKey, function () use ($cacheKey) {
+            $xmlObj = simplexml_load_string(iconv("gbk//IGNORE", "utf-8", file_get_contents('https://pay.heepay.com/API/PayTransit/QueryProvincesAndCities.aspx')));
+            $xmlObj = self::xmlToArr($xmlObj);
+            $options = array_column(array_map(function ($area) {
+                //dump($area);
+                return ['city' => (array)$area['city'], 'province' => $area['@attributes']['name']];
+
+            }, $xmlObj['province']), 'city', 'province');
+            $options = json_encode($options, JSON_UNESCAPED_UNICODE);
+            Cache::forever($cacheKey, $options);
+            return $options;
+        });
+        return json_decode($options, true);
+
+    }
+
+    public static function xmlToArr(\SimpleXMLElement $xml)
+    {
+        return json_decode(json_encode($xml, JSON_UNESCAPED_UNICODE), true);
     }
 
     /**
@@ -57,6 +61,7 @@ class SmallBatchTransfer implements WithdrawInterface
     {
         //Log::info($notify_url);
         $result = new WithdrawResult();
+        $card = $receiver_info['bank_card'];
 
         do {
             //网银提现
@@ -68,7 +73,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'batch_no' => $batch_no,
                 'batch_amt' => $amount,
                 'batch_num' => 1,
-                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^{$receiver_info['to_public']}^{$receiver_info['receiver_account']}^{$receiver_info['receiver_name']}^$amount^余额提现^{$receiver_info['province']}^{$receiver_info['city']}^{$receiver_info['branch_bank']}",
+                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^0^{$card->card_num}^{$card->holder_name}^$amount^余额提现^{$card->province}^{$card->city}^{$card->branch}",
                 'notify_url' => $notify_url,
                 'ext_param1' => $batch_no,
             ];
@@ -216,13 +221,7 @@ class SmallBatchTransfer implements WithdrawInterface
     public function receiverInfoDescription()
     {
         return [
-            'bank_no' => '银行编号',
-            'to_public' => '是否对公,0/1',
-            'receiver_account' => '收款账号',
-            'receiver_name' => '收款人姓名',
-            'province' => '省份',
-            'city' => '城市',
-            'branch_bank' => '支行名称'
+            'bank_card' => '银行卡对象,后端设置'
         ];
     }
 }

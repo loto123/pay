@@ -34,7 +34,7 @@
         其他登录
       </div>
       <div class="login-type flex flex-v flex-align-center">
-        <a href="javascript:;" class="flex flex-v flex-align-center">
+        <a href="javascript:;" class="flex flex-v flex-align-center" @click="weChatLogin">
           <img src="/images/weichat_login.png" alt="">
           <p>微信登录</p>
         </a>
@@ -60,7 +60,6 @@
 .logo-wrap {
   width: 100%;
   height: auto;
-  margin-top: 2em;
 
   .circle-wrap {
     width: 7em;
@@ -107,8 +106,8 @@
 
 .bottom {
   width: 100%;
-  margin-top: 5em;
-  height: 10em;
+  // margin-top: 5em;
+  height: 5em;
 
   hr {
     border: none;
@@ -172,6 +171,7 @@ export default {
       this.$store.dispatch("increment", 15);
     },
 
+    // 普通登录
     login() {
       var self = this;
 
@@ -181,15 +181,43 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-        console.log(res);
-          sessionStorage.setItem("_token",res.data.data.token);
+
+          // if(res.data.data.wechat == 0){
+          //   Toast("登录成功，请绑定微信");
+          //   return Promise.resolve(true);
+          // }
+
+          request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");
-          self.$router.push("/index");
+          var _url = localStorage.getItem("url");
+          if(!_url){
+            self.$router.push("/index");
+          }else {
+            localStorage.removeItem("url");
+            setTimeout(()=>{
+              window.location.href = _url;
+            },1500);
+          }
+      }).then(res=>{
+        if(res == true){
+          this.weChatLogin();
+        }
       }).catch(function(err){
-        console.log(err);
         Toast(err.data.message);
       });
     },
+
+    // 微信登录
+    weChatLogin(mobile){
+      var _data={
+        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+ mobile
+      };
+      request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
+        window.location.href = res.data.data.url;
+      }).catch();
+    },
+
+
     commitName() {
       this.$store.dispatch("changeName", this.name);
     },
@@ -202,7 +230,6 @@ export default {
 
     // 忘记密码
     forgetPassWord(){
-      
       this.$store.dispatch("setStep",1);
       this.$store.dispatch("setRefindPassWordState",true);
       this.$router.push("/login/regist");

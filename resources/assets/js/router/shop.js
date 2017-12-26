@@ -8,6 +8,7 @@ import ShopAccount from '../view/Shop/shopAccount.vue'
 import ShopOrder from '../view/Shop/shopOrder.vue'
 import Withdraw from '../view/Shop/withdraw.vue'
 import Give from '../view/Shop/give.vue'
+import ShopShare from '../view/Shop/shopShare.vue'
 
 export default [
     { path: '/shop', name: 'shop', component: Shop },
@@ -19,7 +20,8 @@ export default [
     { path: '/shop/shopAccount', name: "shopAccount", component: ShopAccount },
     { path: '/shop/shopAccount/withdraw', name: "shopWithdraw", component: Withdraw },
     { path: '/shop/shopAccount/give', name: "shopGive", component: Give },
-    { path: '/shop/shopOrder', name: "shopOrder", component: ShopOrder }
+    { path: '/shop/shopOrder', name: "shopOrder", component: ShopOrder },
+    { path: '/shop/shopShare', name: "shopShare", component: ShopShare }                  // 店铺分享
     
     // { path: '/shop/shop_account', name: "shopDetail", component: ShopDetail },
 ]

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\PayFactory;
 use App\PaypwdValidateRecord;
 use App\Profit;
 use App\Shop;
@@ -13,8 +14,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use JWTAuth;
+use Skip32;
 use Validator;
 
 class TransferController extends Controller
@@ -73,7 +76,7 @@ class TransferController extends Controller
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
                 'comment' => 'bail|max:200',
-                'joiner' => 'bail||array',
+                'joiner' => 'bail|array',
             ],
             [
                 'required' => trans('trans.required'),
@@ -91,6 +94,8 @@ class TransferController extends Controller
         if (!$shop) {
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
+        $wallet = PayFactory::MasterContainer();
+        $wallet->save();
         $transfer = new Transfer();
         $transfer->shop_id = $shop->id;
         $transfer->user_id = $user->id;
@@ -105,13 +110,16 @@ class TransferController extends Controller
             $transfer->tip_percent = $shop->type_value * 100;
         }
         $transfer->fee_percent = config('platform_fee_percent');
-
+        $transfer->container_id = $wallet->id;
         //交易关系包含自己
-        $joiners = $request->joiner;
-        array_push($joiners,$user->id);
+        $joiners = $request->input('joiner', []);
+        foreach ($joiners as $key => $value) {
+            $joiners[$key] = Skip32::decrypt("0123456789abcdef0123", $value);
+        }
+        array_push($joiners, $user->id);
         if ($transfer->save()) {
             //保存交易关系
-            foreach($joiners as $item) {
+            foreach ($joiners as $item) {
                 if (!$transfer->joiner()->where('user_id', $item)->exists()) {
                     $relation = new TransferUserRelation();
                     $relation->transfer_id = $transfer->id;
@@ -162,16 +170,33 @@ class TransferController extends Controller
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
         }, 'record' => function ($query) {
-            $query->select('id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
+            $query->select('id', 'transfer_id', 'user_id', 'amount', 'real_amount', 'stat', 'created_at')->orderBy('created_at', 'DESC');
         }, 'record.user' => function ($query) {
-            $query->select('name', 'avatar');
+            $query->select('id', 'name', 'avatar');
+        }, 'joiner' => function ($query) {
+            $query->select('transfer_id', 'user_id');
         }, 'joiner.user' => function ($query) {
-            $query->select('name', 'avatar');
-        }])->select('id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+            $query->select('id', 'name', 'avatar');
+        }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
 
-        $transfer->id = $transferObj->en_id();
+        //装填响应数据
+        $transfer->id = $transfer->en_id();
+        $transfer->shop_id = $transfer->shop->en_id();
+        $transfer->user->id = $transfer->user->en_id();
+        foreach ($transfer->record as $key => $record) {
+            $transfer->record[$key]->user->id = $record->user->en_id();
+            unset($transfer->record[$key]->transfer_id);
+            unset($transfer->record[$key]->user_id);
+        }
+        foreach ($transfer->joiner as $key => $item) {
+            $transfer->joiner[$key]->user->id = $item->user->en_id();
+            unset($transfer->joiner[$key]->transfer_id);
+            unset($transfer->joiner[$key]->user_id);
+        }
+        unset($transfer->user_id);
+        unset($transfer->shop);
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
 
@@ -325,11 +350,18 @@ class TransferController extends Controller
                     return response()->json(['code' => 0, 'msg' => trans('trans.user_pay_password_error'), 'data' => []]);
                 }
                 $record->stat = 1;
-                $record->real_amount = $record->amount * -1;
                 //用户减钱
-                $user->balance = $user->balance - $record->real_amount;
+//                $user->balance = $user->balance - $record->real_amount;
+                //容器转账
+                $user_container = PayFactory::MasterContainer($user->container->id);
+                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
+                $pay_transfer = $user_container->transfer($transfer_container, $record->amount, 0, 0, 0);
+                if (!$pay_transfer) {
+                    return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
+                }
                 //红包加钱
                 $transfer->amount = $transfer->amount + $record->amount;
+                $record->real_amount = $record->amount * -1;
                 $record->amount = $record->amount * -1;
             }
             //拿钱
@@ -340,7 +372,9 @@ class TransferController extends Controller
                 $record->stat = 2;
                 //收茶水费
                 $tips = 0;
-                if ($transfer->tip_type == 2 && $transfer->tip_percent > 0) {
+                $profit_shares = [];
+//                if ($transfer->tip_type == 2 && $transfer->tip_percent > 0) {
+                if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
                     $tips = $transfer->tip_percent * $record->amount / 100;
                     //红包茶水费金额增加
                     $transfer->tip_amount = $transfer->tip_amount + $tips;
@@ -351,30 +385,54 @@ class TransferController extends Controller
                     $tip->user_id = $user->id;
                     $tip->amount = $tips;
                     //增加店铺余额
-                    $shop = Shop::find($transfer->shop_id);
-                    $shop->frozen_balance = $shop->frozen_balance + $tips;
-                    $shop->save();
+//                    $shop = Shop::find($transfer->shop_id);
+//                    $shop->frozen_balance = $shop->frozen_balance + $tips;
+//                    $shop->save();
+                    //分润
+                    if ($transfer->shop && $transfer->shop->container) {
+                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
+                        $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
+                    }
                 }
                 //收手续费
+                $proxy_fee = 0;
                 if ($transfer->fee_percent) {
                     //手续费
                     $record->fee_amount = $record->amount * $transfer->fee_percent / 100;
                     //红包手续费金额
                     $transfer->fee_amount = $transfer->fee_amount + $record->fee_amount;
+                    //代理分润
+                    if ($user->parent) {
+                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
+                        $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
+                        $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
+                    }
                 }
                 //实际获得
                 $record->real_amount = $record->amount - $record->fee_amount - $tips;
                 //用户加钱
-                $user->balance = $user->balance + $record->real_amount;
+//                $user->balance = $user->balance + $record->real_amount;
                 //红包减钱
                 $transfer->amount = $transfer->amount - $record->amount;
-                //判断红包状态
-                if ($transfer->amount == 0) {
-                    $transfer->status = 2;
+                //容器转账
+                $user_container = PayFactory::MasterContainer($user->container->id);
+                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
+                $pay_transfer = $transfer_container->transfer($user_container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
+                if (!$pay_transfer) {
+                    return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
                 }
             }
-            $user->save();
+//            $user->save();
+            //判断红包状态
+            if ($transfer->amount == 0) {
+                $transfer->status = 2;
+            }else {
+                $transfer->status = 1;
+            }
             $transfer->save();
+            if (isset($pay_transfer) && $pay_transfer) {
+                $record->pay_transfer_id = $pay_transfer->id;
+            }
             $record->save();
             //保存茶水费记录
             if (isset($tip) && $tip) {
@@ -392,6 +450,7 @@ class TransferController extends Controller
             return response()->json(['code' => 1, 'msg' => trans('trans.trade_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json(['code' => 0, 'msg' => $e->getTraceAsString(), 'data' => []]);
         }
         return response()->json(['code' => 0, 'msg' => trans('trans.trade_failed'), 'data' => []]);
     }
@@ -445,31 +504,42 @@ class TransferController extends Controller
         if ($transfer->status == 3) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
         }
+        if ($user->balance < $record->amount) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.user_not_enough_money'), 'data' => []]);
+        }
         DB::beginTransaction();
         try {
+            //容器撤回
+            $pay_transfer = $record->pay_transfer()->first();
+            if ($pay_transfer->chargeback() != 1) {
+                return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_failed'), 'data' => []]);
+            }
             //交易记录变为撤回状态
             $record->stat = 3;
             $record->save();
             //扣除商店茶水费
             $tip = $record->tip;
             if ($tip) {
-                $shop = $transfer->shop;
-                if (!$shop->isEmpty()) {
-                    return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_error_3'), 'data' => []]);
-                }
-                if ($shop->frozen_balance < $tip->amount) {
-                    return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_error_2'), 'data' => []]);
-                }
-                $shop->frozen_balance = $shop->frozen_balance - $tip->amount;
-                $shop->save();
-                //用户余额增加
-                $user->balance = $user->balance + $record->amount;
-                $user->save();
+//                $shop = $transfer->shop;
+//                if (!$shop->isEmpty()) {
+//                    return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_error_3'), 'data' => []]);
+//                }
+//                if ($shop->frozen_balance < $tip->amount) {
+//                    return response()->json(['code' => 0, 'msg' => trans('trans.record_withdraw_error_2'), 'data' => []]);
+//                }
+//                $shop->frozen_balance = $shop->frozen_balance - $tip->amount;
+//                $shop->save();
                 //删除茶水费记录
                 TipRecord::where('id', $tip->id)->delete();
             }
+            //用户余额增加
+//                $user->balance = $user->balance + $record->amount;
+//                $user->save();
+            //红包余额增加
+            $transfer->amount = $transfer->amount + $record->amount;
+            $transfer->save();
             DB::commit();
-            return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
+            return response()->json(['code' => 1, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
         }
@@ -488,12 +558,16 @@ class TransferController extends Controller
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Parameter(
+     *    @SWG\Parameter(
      *     name="friend_id",
      *     in="formData",
-     *     description="好友user_id",
-     *     required=true,
-     *     type="integer"
+     *     description="参与交易人",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
@@ -504,7 +578,7 @@ class TransferController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
-                'friend_id' => 'bail|required',
+                'friend_id' => 'bail|required|array'
             ],
             [
                 'required' => trans('trans.required'),
@@ -516,23 +590,32 @@ class TransferController extends Controller
         }
 
         $transfer = Transfer::findByEnId($request->transfer_id);
-        if ($transfer) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
         }
-        if (TransferUserRelation::where('transfer_id', $transfer->transfer_id)->where('user_id', $request->friend_id)->exists()) {
+        if (TransferUserRelation::where('transfer_id', $transfer->id)->where('user_id', $request->friend_id)->exists()) {
             return response()->json(['code' => 0, 'msg' => trans('trans.notice_already_exists'), 'data' => []]);
         }
-        $relation = new TransferUserRelation();
-        $relation->transfer_id = $transfer->transfer_id;
-        $relation->user_id = $request->friend_id;
-        if ($relation->save()) {
+        DB::beginTransaction();
+        try {
+            foreach ($request->friend_id as $value) {
+                $real_id = Skip32::decrypt("0123456789abcdef0123", $value);
+                if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
+                    $relation = new TransferUserRelation();
+                    $relation->transfer_id = $transfer->id;
+                    $relation->user_id = $real_id;
+                    $relation->save();
+                }
+            }
+            DB::commit();
             return response()->json(['code' => 1, 'msg' => trans('trans.notice_success'), 'data' => []]);
-        } else {
-            return response()->json(['code' => 0, 'msg' => trans('trans.notice_failed'), 'data' => []]);
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
+        return response()->json(['code' => 0, 'msg' => trans('trans.notice_failed'), 'data' => []]);
     }
 
     /**
@@ -578,7 +661,16 @@ class TransferController extends Controller
         }, 'tips.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
-        debug($transfer);
+
+        //装填响应数据
+        $transfer->id = $transfer->en_id();
+        $transfer->user->id = $transfer->user->en_id();
+        foreach ($transfer->tips as $key => $record) {
+            $transfer->tips[$key]->user->id = $record->user->en_id();
+            unset($transfer->tips[$key]->transfer_id);
+            unset($transfer->tips[$key]->user_id);
+        }
+        unset($transfer->user_id);
 
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $transfer]);
     }
@@ -622,6 +714,10 @@ class TransferController extends Controller
      */
     public function payFee(Request $request)
     {
+        if(!config('shop_fee_status')) {
+            return response()->json(['code' => 0, 'msg' => 'something wrong', 'data' => []]);
+        }
+
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
@@ -664,17 +760,24 @@ class TransferController extends Controller
             }
             DB::beginTransaction();
             try {
+                //容器转账
+                $user_container = PayFactory::MasterContainer($user->container->id);
+                $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
+                $pay_transfer = $user_container->transfer($shop_container, $request->fee, 0, 0, 0);
+                if (!$pay_transfer) {
+                    return response()->json(['code' => 0, 'msg' => "111" . trans('trans.trade_failed'), 'data' => []]);
+                }
                 //减用户余额
-                $user->balance = $user->balance - $request->fee;
-                $user->save();
+//                $user->balance = $user->balance - $request->fee;
+//                $user->save();
                 //增加交易红包茶水费总额 交易红包茶水费状态改为已结清
                 $transfer->tip_amount = $transfer->tip_amount + $request->fee;
                 $transfer->tip_status = 1;
                 $transfer->save();
                 //增加店铺余额
-                $shop = Shop::find($transfer->shop_id);
-                $shop->frozen_balance = $shop->frozen_balance + $request->fee;
-                $shop->save();
+//                $shop = Shop::find($transfer->shop_id);
+//                $shop->frozen_balance = $shop->frozen_balance + $request->fee;
+//                $shop->save();
                 //增加茶水费记录
                 $record = new TipRecord();
                 $record->shop_id = $transfer->shop_id;
@@ -744,16 +847,106 @@ class TransferController extends Controller
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
         })->with(['transfer' => function ($query) {
-            $query->select('transfer_id');
-        }, 'transfer.record' => function ($query) {
-            $query->sum('amount');
-        }, 'transfer.shop' => function ($query) {
-            $query->select('id', 'name');
-        }])->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
+            $query->select('id', 'shop_id');
+        },
+//        }])
+//        }, 'transfer.record' => function ($query) {
+//            $query->sum('amount');
+//        },
+            'transfer.shop' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
         if ($request->limit && $request->offset) {
             $query->offset($request->offset)->limit($request->limit);
         }
         $list = $query->get();
+        $data = [];
+        foreach ($list as $key => $item) {
+            $data[$key]['id'] = $item->id;
+            $data[$key]['transfer_id'] = $item->transfer ? $item->transfer->en_id() : 0;
+            $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
+            $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
+            $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
+                ->where('stat', '<>', 3)->where('stat', '<>', 0)->sum('amount') : 0;
+            $data[$key]['makr'] = $item->mark;
+        }
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
+    }
+
+    /**
+     * @SWG\GET(
+     *   path="/transfer/shop",
+     *   summary="商店交易记录",
+     *   tags={"交易"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="formData",
+     *     description="店铺ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="status",
+     *     in="formData",
+     *     description="交易状态 0, 1 待结算, 2 已平账, 3 已关闭",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="formData",
+     *     description="每页条数",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="offset",
+     *     in="formData",
+     *     description="起始位置",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function shop(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'shop_id' => 'bail|required|integer',
+                'status' => ['bail', 'required', Rule::in([0, 1, 2, 3])],
+                'limit' => 'bail|integer',
+                'offset' => 'bail|integer',
+            ],
+            [
+                'required' => trans('trans.required'),
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
+        }
+        $status = $request->status;
+//        $user = JWTAuth::parseToken()->authenticate();
+        $shop = Shop::findByEnId($request->shop_id);
+        if (!$shop) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
+        }
+        $query = $shop->transfer()->with(['user' => function ($query) {
+            $query->select('id', 'name', 'avatar');
+        }])->where('status', $status)->select('id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
+        if ($request->limit && $request->offset) {
+            $query->offset($request->offset)->limit($request->limit);
+        }
+        $list = $query->get();
+        //装填响应数据
+        foreach($list as $key => $value) {
+            $list[$key]->id = $value->en_id();
+            $list[$key]->user->id = $value->user->en_id();
+            unset($list[$key]->user_id);
+        }
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $list]);
     }
 
@@ -762,13 +955,6 @@ class TransferController extends Controller
      *   path="/transfer/mark",
      *   summary="标记",
      *   tags={"交易"},
-     *   @SWG\Parameter(
-     *     name="record_id",
-     *     in="formData",
-     *     description="交易记录ID",
-     *     required=true,
-     *     type="integer"
-     *   ),
      *   @SWG\Parameter(
      *     name="mark",
      *     in="formData",
@@ -799,7 +985,6 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'record_id' => 'bail|required',
                 'mark' => 'bail|required|array',
                 'dismark' => 'bail|required|array'
             ],
@@ -812,8 +997,8 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        TransferRecord::whereIn('id', $request->mark)->update(['mark' => 1]);
-        TransferRecord::whereIn('id', $request->dismark)->update(['mark' => 0]);
+        TransferUserRelation::whereIn('id', $request->mark)->update(['mark' => 1]);
+        TransferUserRelation::whereIn('id', $request->dismark)->update(['mark' => 0]);
 
         return response()->json(['code' => 1, 'msg' => trans('trans.mark_success'), 'data' => []]);
     }
@@ -868,12 +1053,16 @@ class TransferController extends Controller
             $transfer->status = 3;
             if ($transfer->save()) {
                 //解冻店铺茶水费资金
-                $shop = $transfer->shop;
-                if ($shop) {
-                    $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
-                    $shop->balance = $shop->balance + $transfer->tip_amount;
-                    $shop->save();
+                $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
+                if (!$shop_container->unfreeze($transfer->tip_amount)) {
+                    return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
                 }
+//                $shop = $transfer->shop;
+//                if ($shop) {
+//                    $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
+//                    $shop->balance = $shop->balance + $transfer->tip_amount;
+//                    $shop->save();
+//                }
                 //公司分润 代理分润 运营分润
                 $records = $transfer->record()->where('stat', 2)->get();
                 foreach ($records as $key => $value) {
@@ -881,12 +1070,15 @@ class TransferController extends Controller
                     $profit->record_id = $value->id;
                     $profit->user_id = $value->user_id;
                     $profit->fee_percent = $transfer->fee_percent;
-                    $profit->fee_amount = $value->fee_amount;
-                    if ($value->user->proxy) {
-                        $profit->proxy = $value->user->proxy->id;
-                        $profit->proxy_percent = $value->user->proxy->percent;
-                        $profit->proxy_amount = ($value->fee_amount * $value->user->proxy->percent) / 100;
+                    if ($value->user->parent) {
+                        $profit->proxy = $value->user->parent->id;
+                        $profit->proxy_percent = $value->user->parent->percent;
+                        $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
+                        //解冻代理资金
+                        $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+                        $proxy_container->unfreeze($profit->proxy_amount);
                     }
+                    $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
                     if ($value->user->operator) {
                         $profit->operator = $value->user->operator->id;
 //                        $profit->operator_percent = $value->id;
@@ -945,10 +1137,12 @@ class TransferController extends Controller
         if ($transfer->record()->exists()) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_allow_to_cancel'), 'data' => []]);
         }
-        //删除交易
-        Transfer::where('id', $request->transfer_id)->delete();
         //删除交易用户关联关系
-        TransferUserRelation::where('transfer_id', $request->transfer_id)->delete();
+        TransferUserRelation::where('transfer_id', $transfer->id)->delete();
+        //删除交易容器
+        $transfer->container()->delete();
+        //删除交易
+        $transfer->delete();
         return response()->json(['code' => 1, 'msg' => trans('trans.trans_cancel_success'), 'data' => []]);
     }
 }

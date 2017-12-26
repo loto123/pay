@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\Heepay\SmallBatchTransfer;
 use App\User;
 use App\UserCard;
 use Illuminate\Support\Facades\Cache;
@@ -102,6 +103,27 @@ class CardController extends Controller
      *     required=true,
      *     type="string"
      *   ),
+     *   @SWG\Parameter(
+     *     name="province",
+     *     in="formData",
+     *     description="开户行所属省份",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="city",
+     *     in="formData",
+     *     description="开户行所属市",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="branch",
+     *     in="formData",
+     *     description="开户行所属支行",
+     *     required=false,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -116,6 +138,8 @@ class CardController extends Controller
                 'bank_id' => 'bail|required',
                 'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
                 'code' => 'bail|required',
+                // 'province' => 'bail|required',
+                // 'city' => 'bail|required',
             ],
             [
                 'required' => trans('trans.required'),
@@ -123,39 +147,34 @@ class CardController extends Controller
                 'mobile.regex'=>trans("api.error_mobile_format"),
             ]
         );
-        
-        
-        Log::info(['param'=>$request->all()]);
-        
+
+//        Log::info(['param'=>$request->all()]);
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
-
-        Log::info(['cache'=>[$cache_key=>$cache_value]]);
-
+//        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
+             return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
-
-        $card_num = $request->input('card_num');
-        $bank_id = $request->input('bank_id');
-        $holder_mobile = $request->input('mobile');
-
+        Cache::forget($cache_key);
         //同一用户只能绑定一次
-        $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$card_num)->first();
+        $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$request->card_num)->first();
         if (!empty($card_list) && count($card_list)>0) {
             return response()->json(['code' => 0,'msg' => '已经绑定的银行卡不能重复绑定','data' => []]);
         }
 
         $cards = new UserCard();
         $cards->user_id = $this->user->id;
-        $cards->card_num = $card_num;
-        $cards->bank_id = $bank_id;
+        $cards->card_num = $request->card_num;
+        $cards->bank_id = $request->bank_id;
         $cards->holder_name = $this->user->name;
         $cards->holder_id = $this->user->id_number;
-        $cards->holder_mobile = $holder_mobile;
+        $cards->holder_mobile = $request->mobile;
+        $cards->province = $request->province??'lll';
+        $cards->city = $request->city??'lll';
+        $cards->branch = $request->branch??NULL;
         $cards->save();
         if(empty($this->user->pay_card_id)) {
             $this->user->pay_card_id =$cards->id;
@@ -232,6 +251,28 @@ class CardController extends Controller
                     'name' => $item->name,
                 ];
             }
+        }
+        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+    }
+
+    /**
+     * @SWG\GET(
+     *   path="/card/getBankCardParams",
+     *   summary="添加银行卡支付通道需要参数",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function getBankCardParams() {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $data = [];
+        switch($this->user->channel_id) {
+            case 1:
+            $data = SmallBatchTransfer::queryProvincesAndCities();
+                break;
+            default :
+            break;
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }

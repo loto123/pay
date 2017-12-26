@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import 'babel-polyfill'
 import {Toast} from 'mint-ui'
+import Loading from './loading'
 export default class UserRequest {
     static getInstance() {
         if (this._instance == null) {
@@ -20,7 +21,8 @@ export default class UserRequest {
         var tempUrl = this.baseUrl + url;
         var postData = data||{};
 
-        var _token = sessionStorage.getItem("_token");
+        var _token = this.getToken();
+        this.validToken(_token);
 
         return new Promise(function (resolve, reject) {
             Axios({
@@ -33,11 +35,12 @@ export default class UserRequest {
                     if(res.data.code == 1){
                         resolve(res);
                     }else if(res.data.code == 2){
-                        reject(res);
+                        Loading.getInstance().close();
                         Toast("用户未登录,即将跳转登录...");
                         setTimeout(function(){
                             window.location.href = "/#/login";
                         },1000);
+                        reject(res);
                     }
                     else {
                         reject(res);
@@ -53,7 +56,8 @@ export default class UserRequest {
         var tempUrl = this.baseUrl + url;
         var postData = data || {};
 
-        var _token = sessionStorage.getItem("_token");
+        var _token = this.getToken();
+        this.validToken(_token);
 
         return new Promise(function (resolve, reject) {
             Axios({
@@ -66,11 +70,14 @@ export default class UserRequest {
                     if(res.data.code == 1){
                         resolve(res);
                     }else if(res.data.code == 2){
-                        reject(res);
+
+                        Loading.getInstance().close();
                         Toast("用户未登录,即将跳转登录...");
                         setTimeout(function(){
                             window.location.href = "/#/login"
-                        },1500);
+                        },2000);
+                        reject(res);
+                        
                     }
                     else {
                         reject(res);
@@ -80,5 +87,32 @@ export default class UserRequest {
                     console.error(error);
                 });
         });
+    }
+
+    // 验证token是否存在
+    validToken(token){
+        var url = window.location.href.indexOf("#/login");
+        var urlShare = window.location.href.indexOf("#/share");
+        // var wechatLogin = window.location.href.indexOf("#/login/weChatLogin")
+        if(!token && url==-1 && urlShare){
+            Loading.getInstance().close();
+            Toast("用户未登录,即将跳转登录...");
+            setTimeout(function(){
+                window.location.href = "/#/login";
+            },1000);
+        }
+    }
+
+    getToken(){
+        var _t =localStorage.getItem("_token");
+        return _t;
+    }
+
+    setToken(token){
+        localStorage.setItem("_token",token);
+    }
+
+    removeToken(){
+        localStorage.removeItem("_token");
     }
 }

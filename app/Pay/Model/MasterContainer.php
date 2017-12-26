@@ -12,6 +12,7 @@ namespace App\Pay\Model;
 
 
 use App\Jobs\SubmitWithdrawRequest;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 
@@ -65,6 +66,11 @@ class MasterContainer extends Container
     public function withdraws()
     {
         return $this->hasMany(Withdraw::class, 'master_container');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'container_id');
     }
 
 

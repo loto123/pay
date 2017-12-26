@@ -1,181 +1,205 @@
 <template>
-    <div id="withdraw" class="withdraw-container">
-        <topBack title="提现">
-            <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
-              <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
-            </div>
-        </topBack>
-        <div class="withdraw-box">
-            <div class="title">提现金额</div>
-            <div class="withdraw-money flex flex-justify-center">
-                <label>￥</label>
-                <input type="text" placeholder="请输入金额">
-            </div>
-            <div class="all-money flex">
-                <div class="money">可提现余额 ¥<span>231321</span>, </div>
-                <a href="javascript:;" class="all-withdraw">全部提现</a>
-            </div>
-            <div class="withdraw-way">
-                <div class="title">提现到</div>
-                <a class="list">
-                    <div class="list-wrapper">
-                        <div class="list-title">
-                            <label class="radiolist-label">
-                                <span class="mint-radio is-right">
-                                    <input type="radio" class="radio-input" checked name="tool" value="银行卡">
-                                    <span class="radio-core"></span>
-                                </span>
-                                <span class="radio-label">银行卡</span>
-                            </label>
-                        </div>
-                    </div>
-                </a>
-                <a class="list">
-                    <div class="list-wrapper">
-                        <div class="list-title">
-                            <label class="radiolist-label">
-                                <span class="mint-radio is-right">
-                                    <input type="radio" class="radio-input" name="tool" value="微信">
-                                    <span class="radio-core"></span>
-                                </span>
-                                <span class="radio-label">微信</span>
-                            </label>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <a href="javascript:;" class="withdraw-btn"> 
-                <mt-button type="primary" size="large">提现</mt-button>    
-            </a>
-        </div>
-    </div>
+	<div id="withdraw" class="withdraw-container">
+		<topBack title="提现">
+			<div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
+				<i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
+			</div>
+		</topBack>
+		<div class="withdraw-box">
+			<div class="title">提现金额</div>
+			<div class="withdraw-money flex flex-justify-center">
+				<label>￥</label>
+				<input type="text" placeholder="请输入金额" v-model="amount">
+			</div>
+			<div class="all-money flex">
+				<div class="money">
+					可提现余额 ¥<span>{{balance}}</span>,
+				</div>
+				<a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提现</a>
+			</div>
+			<div class="withdraw-way">
+				<div class="title">提现到</div>
+				<div class="list-wrap">
+					<mt-radio align="right" title="" v-model="value" :options="options1">
+					</mt-radio>
+				</div>
+			</div> 
+			<a href="javascript:;" class="withdraw-btn" @click="withdrawBtn">
+				<mt-button type="primary" size="large">提现</mt-button>
+			</a>
+		</div>
+		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
+	</div>
 </template>
 
 <script>
-import topBack from "../../components/topBack.vue";
-export default {
-  data() {
-    return {}
-  },
-  components: { topBack },
-  methods: {
-    goIndex(){
-      this.$router.push('/index');
-    }
-  }
-};
+	import request from '../../utils/userRequest';
+	import topBack from '../../components/topBack.vue'
+	import passWorld from "../../components/password"
+	import Loading from '../../utils/loading'
+	import { MessageBox, Toast } from "mint-ui";
+
+	export default {
+		data() {
+			return {
+				balance:null,//可用余额
+				showPasswordTag: false,       // 密码弹出开关
+
+				amount: null,	//提现金钱
+				options1:[],
+				way:null,	//提现方式
+				value:null,
+				has_pay_password:null//是否设置支付密码
+			}
+		},
+		created(){
+			this.myAccount();
+			this.selWay();
+    	},
+		components: { topBack,passWorld},
+		methods: {
+			goIndex() {
+				this.$router.push('/index');
+			},
+			hidePassword() {
+				this.showPasswordTag = false;
+			},
+			myAccount(){
+                Loading.getInstance().open("加载中...");
+
+				request.getInstance().getData("api/account")
+					.then((res) => {
+						this.balance=res.data.data.balance;
+						this.has_pay_password=res.data.data.has_pay_password;
+                        Loading.getInstance().close();
+					})
+					.catch((err) => {
+						console.error(err);
+					})
+			},
+			allWithdraw(){
+				this.amount=this.balance;
+			},
+			withdrawBtn(){
+				var self = this;
+				//成功内容
+				var _data = {
+					amount: this.amount,
+					way:this.value
+				}
+
+				if (!this.amount) {
+					Toast('请输入提现金额');
+					return
+				}
+				if (!this.value) {
+					Toast('请选择支付方式');
+					return
+				}
+				if (this.has_pay_password==0) {
+					this.$router.push('/my/setting_password');//跳转到设置支付密码
+				}else{
+					this.showPasswordTag = true;   //密码层弹出
+				}
+			},
+			//支付密码验证
+			callBack(password){
+				var temp = {};
+				temp.password=password;
+				var _data = {
+					amount: this.amount,
+					way:this.value,
+					password:password
+				}
+				Promise.all([request.getInstance().postData('api/my/pay_password',temp),request.getInstance().postData('api/account/withdraw', _data)])
+				.then((res) => {
+					Toast('提现成功');
+					this.$router.push('/myAccount');
+
+				})
+				.catch((err) => {
+					console.error(err);
+				})
+			},
+			//获取提现方式列表
+			selWay(){
+				request.getInstance().getData('api/account/withdraw-methods')
+					.then((res) => {
+						this.setBankList(res);
+					})
+					.catch((err) => {
+						console.error(err);
+					})
+			},
+			setBankList(res) {
+				var _tempList = [];
+				for (let i = 0; i < res.data.data.methods.length; i++) {
+					var _t = {};
+					_t.value = res.data.data.methods[i].id.toString();
+					_t.label = res.data.data.methods[i].label;
+					_tempList.push(_t);
+				}
+				this.options1 = _tempList;
+			}
+		}
+	};
 </script>
 
 <style lang="scss" scoped>
-@import "../../../sass/oo_flex.scss";
-.withdraw-container {
-  background: #eee;
-  height: 100vh;
-  padding-top: 2em;
-  box-sizing: border-box;
-}
-.withdraw-box {
-  background: #fff;
-  padding: 1em;
-  margin: 0 0.5em;
-  .tltle {
-    font-size: 1em;
-    color: #999;
-  }
-}
-.withdraw-money {
-  border-bottom: 1px solid #ccc;
-  vertical-align: middle;
-  margin-top: 2em;
-  font-size:1.2em;
-  padding: 0.2em 0;
-  input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size:0.9em;
-  }
-}
-.all-money {
-  margin-top: 1em;
-  font-size: 1em;
-  .money {
-    color: #666;
-  }
-  .all-withdraw {
-    color: #199ed8;
-    margin-left: 0.4em;
-  }
-}
-.withdraw-way {
-  margin-top: 2em;
-  .title {
-    color: #999;
-    margin-bottom: 0.5em;
-  }
-}
+	@import "../../../sass/oo_flex.scss";
+	.withdraw-container {
+		background: #eee;
+		height: 100vh;
+		padding-top: 2em;
+		box-sizing: border-box;
+	}
 
-.list {
-  background-color: #fff;
-  box-sizing: border-box;
-  color: inherit;
-  min-height: 48px;
-  display: block;
-  border-bottom: 1px solid #d9d9d9;
-}
-.list-title {
-  width: 100%;
-}
-.list-wrapper {
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  min-height: inherit;
-  padding: 0 10px;
-}
+	.withdraw-box {
+		background: #fff;
+		padding: 1em;
+		margin: 0 0.5em;
+		.tltle {
+			font-size: 1em;
+			color: #999;
+		}
+	}
 
-.radio-core {
-  box-sizing: border-box;
-  display: inline-block;
-  background-color: #fff;
-  border-radius: 100%;
-  border: 1px solid #ccc;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-  &::after {
-    content: " ";
-    border-radius: 100%;
-    top: 5px;
-    left: 5px;
-    position: absolute;
-    width: 8px;
-    height: 8px;
-  }
-}
-.radiolist-label {
-  display: block;
-  width: 100%;
-}
-.radio-input {
-  display: none;
-}
-.radio-label {
-  vertical-align: middle;
-}
-.radio-input:checked + .radio-core {
-  background-color: #26a2ff;
-  border-color: #26a2ff;
-  &::after {
-    background-color: #fff;
-  }
-}
-.withdraw-btn {
-  display: block;
-  margin-top: 3em;
-  margin-bottom: 1em;
-}
+	.withdraw-money {
+		border-bottom: 1px solid #ccc;
+		vertical-align: middle;
+		margin-top: 2em;
+		font-size: 1.2em;
+		padding: 0.2em 0;
+		input {
+			border: none;
+			outline: none;
+			width: 100%;
+			font-size: 0.9em;
+		}
+	}
+
+	.all-money {
+		margin-top: 1em;
+		font-size: 1em;
+		.money {
+			color: #666;
+		}
+		.all-withdraw {
+			color: #199ed8;
+			margin-left: 0.4em;
+		}
+	}
+
+	.withdraw-way {
+		margin-top: 2em;
+		.title {
+			color: #999;
+			margin-bottom: 0.5em;
+		}
+	}
+	.withdraw-btn {
+		display: block;
+		margin-top: 3em;
+		margin-bottom: 1em;
+	}
 </style>
-
-

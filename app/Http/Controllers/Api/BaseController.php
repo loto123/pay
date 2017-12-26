@@ -17,7 +17,7 @@ class BaseController extends Controller {
         $result = [
             'code' => (int)$code,
             'message' => $message,
-            'data' => $data
+            'data' => $data ? $data : new \stdClass()
         ];
         return $this->response()->array($result);
     }

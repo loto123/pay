@@ -13,6 +13,7 @@ use App\Pay\IdConfuse;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\DepositResult;
+use Illuminate\Support\Facades\Log;
 
 class WechatH5 implements DepositInterface
 {
@@ -84,7 +85,7 @@ class WechatH5 implements DepositInterface
     public function parseReturn(DepositMethod $method)
     {
         $request = request();
-        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_FAIL, $request->get('pay_amt'), $request->get('jnet_bill_no'));
+        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_PAY_FAIL, $request->get('pay_amt'), $request->get('jnet_bill_no'));
     }
 
     public function acceptNotify(array $config)
@@ -95,9 +96,7 @@ class WechatH5 implements DepositInterface
             //验证签名
             $validSign = self::makeSign($params, ['result', 'agent_id', 'jnet_bill_no', 'agent_bill_id', 'pay_type', 'pay_amt', 'remark'], $config['key']);
             if ($validSign !== $params['sign']) {
-                if (config('debug')) {
-                    echo $validSign;
-                }
+                Log::error('heepay h5 notify sign error:need ' . $validSign . ' give ' . $params['sign']);
                 break;
             }
 

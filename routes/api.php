@@ -48,6 +48,7 @@ Route::group([
     $router->post('create', 'CardController@create');
     $router->post('delete', 'CardController@delete');
     $router->get('getBanks','CardController@getBanks');
+    $router->get('getBankCardParams','CardController@getBankCardParams');
 });
 
 $api = app('Dingo\Api\Routing\Router');
@@ -102,6 +103,13 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('create', 'ShopController@create');
         $api->get('qrcode/{id}', 'ShopController@qrcode');
         $api->get('account/{id}', 'ShopController@account');
+        $api->get('messages', 'ShopController@messages');
+        $api->get('messages/count', 'ShopController@messages_count');
+        $api->post('agree', 'ShopController@agree');
+        $api->post('ignore', 'ShopController@ignore');
+        $api->get('profit', 'ShopController@profit');
+        $api->get('user/search', 'ShopController@user_search');
+        $api->post('invite/{shop_id}/{user_id}', 'ShopController@invite');
     });
 });
 
@@ -113,6 +121,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('show', 'TransferController@show');
         $api->get('feerecord', 'TransferController@feeRecord');
         $api->get('record', 'TransferController@record');
+        $api->get('shop', 'TransferController@shop');
         $api->post('mark', 'TransferController@mark');
         $api->post('payfee', 'TransferController@payFee');
         $api->post('notice', 'TransferController@notice');
@@ -131,9 +140,27 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/', 'AccountController@index');
+        $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|andriod|ios', 'scene' => '\d+']);
+        $api->get('withdraw-methods', 'AccountController@withdrawMethods');
+        $api->get('records', 'AccountController@records');
+        $api->get('records/detail/{id}', 'AccountController@record_detail');
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
+        $api->post('transfer', 'AccountController@transfer');
     });
+
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'proxy',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('share', 'ProxyController@share');
+        $api->get('members/count', 'ProxyController@members_count');
+        $api->get('members', 'ProxyController@members');
+    });
+
 });
 
 Route::group([

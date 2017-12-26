@@ -27,6 +27,7 @@ class CreateTransferTable extends Migration
             $table->smallInteger('fee_percent')->comment('手续费比例')->default(0);
             $table->decimal('fee_amount',11, 2)->comment('手续费金额')->default(0);
             $table->tinyInteger('tip_status')->comment('茶水费状态 0 未付 1 已付')->default(0);
+            $table->unsignedInteger('container_id');
             $table->timestamps();
         });
     }

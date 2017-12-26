@@ -1,7 +1,17 @@
 <template>
     <div id="deal-detail">
         <topBack style="background:#eee;">
-          <div style="width:100%;padding-right:1em;box-sizing:border-box;" class="flex flex-reverse">撤销交易</div>
+          <div 
+            style="width:100%;
+            padding-right:1em;
+            box-sizing:border-box;" 
+            class="flex flex-reverse"
+
+            v-if="recordList.length==0"
+            @click="cancelTrade"
+            >
+              撤销交易
+          </div>
         </topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
@@ -27,7 +37,7 @@
                 </div>
             </div>
 
-            <mt-button type="primary" size="large" @click="showPassword">确认</mt-button>
+            <mt-button type="primary" size="large" @click="callPassword">确认</mt-button>
         </section>
         
         <!-- 参与玩家记录 -->
@@ -38,31 +48,35 @@
               </div>
 
               <div class="bottom flex flex-align-center flex-justify-between">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
-                <img src="/images/avatar.jpg" alt="">
+                <img :src="item.user.avatar?item.user.avatar:'/images/avatar.jpg'" 
+                  alt="" 
+                  v-for="item in joiner" 
+                >
                 
-                <span class="info-friend">提醒好友</span>
+                <span class="info-friend" @click="showMemberChoise">提醒好友</span>
               </div>
             </div>
             
             <ul class="flex flex-v flex-align-center">
-                <li>
-                    <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="true">
+
+                <li v-for=" item in recordList">
+                    <slider @deleteIt="deleteIt(item.id)" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==2?false:true">
                         <div class="slider-item flex flex-align-center flex-justify-between">
-                            <img src="/images/avatar.jpg" alt="">
-                            <span>名字最多七个字</span>
+                            <img :src=item.user.avatar alt="">
+                            <span>{{item.user.name}}</span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
-                                <span class="money">-100</span>
-                                <span class="title">付钱</span>
+                                <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
+                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"放钱":"拿钱"}}</span>
+                                <span class="title" v-if="item.stat==3"> 已撤回</span>
+                                <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
+
+
                             </div>
                         </div>
                     </slider> 
                 </li>
                 
-                <li>
+                <!-- <li>
                     <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" >
                         <div class="slider-item flex flex-align-center flex-justify-between">
                             <img src="/images/avatar.jpg" alt="">
@@ -85,14 +99,28 @@
                             </div>
                         </div>
                     </slider> 
-                </li>
+                </li> -->
             </ul>
         </section>
 
         <section id="qrcode" class="flex flex-justify-center"></section>
         <h3 class="notice">扫描二维码快速交易</h3>
 
-        <passwordPanel :setSwitch="passWordSwitch" :settingPasswordSwitch="true" :secondValid="false" v-on:hidePassword="hidePassword" v-on:callBack ="getResult"></passwordPanel>
+        <passwordPanel 
+          :setSwitch="passWordSwitch" 
+          :settingPasswordSwitch="false" 
+          :secondValid="false" 
+          v-on:hidePassword="hidePassword" 
+          v-on:callBack ="submitData">
+        </passwordPanel>
+
+        <choiseMember 
+          :isShow = "choiseMemberSwitch"
+          v-on:hide = "hideMemberChoise"
+          :dataList = "memberList"
+          v-on:submit ="addMembersNotice"
+        >
+        </choiseMember>  
     </div>
 </template>
 
@@ -272,6 +300,8 @@ import slider from "../../components/slider";
 import dealContent from "./dealContent";
 import passwordPanel from "../../components/password";
 import request from "../../utils/userRequest";
+import {Toast} from "mint-ui"
+import choiseMember from "./choiseMember.vue"
 
 import Loading from "../../utils/loading";
 
@@ -279,7 +309,7 @@ import qrCode from "../../utils/qrCode";
 
 export default {
   name: "makeDealDetail",
-  components: { topBack, slider, dealContent, passwordPanel },
+  components: { topBack, slider, dealContent, passwordPanel ,choiseMember},
 
   data() {
     return {
@@ -291,7 +321,17 @@ export default {
         payMoney: null,
         getMoney: null
       },
-      payType: null // 支付方式，取钱get 放钱put
+      payType: null,    // 支付方式，取钱get 放钱put
+      transfer_id:"",   // 交易id
+      shop_id:"",
+      password:"",       // 支付密码
+
+      joiner:[],         // 交易的参与者，需要提醒的人
+      memberList:[],              //成员数组
+      
+      recordList:[],
+
+      choiseMemberSwitch:false,
     };
   },
   created() {
@@ -301,23 +341,42 @@ export default {
     this._getQRCode();
   },
   methods: {
-    deleteIt() {
-      console.log("i m ru");
+    // 撤销交易
+    deleteIt(id) {
+      Loading.getInstance().open();
+      var _data={
+        record_id :id
+      };
+
+      request.getInstance().postData("api/transfer/withdraw",_data).then(res=>{
+        Loading.getInstance().close();
+        Toast("撤销成功");
+        
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch(err=>{
+        Toast("撤销失败");
+        Loading.getInstance().close();
+      });
+      
     },
 
     init() {
       Loading.getInstance().open();
-      var _id = this.$route.query.id;
+      this.transfer_id = this.$route.query.id;
       var _data = {
-        transfer_id: _id
+        transfer_id: this.transfer_id
       };
       request
         .getInstance()
-        .getData("api/transfer/show" + "?transfer_id=" + _id)
+        .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
         .then(res => {
           console.log(res);
-
+          this.joiner = res.data.data.joiner;
           this.renderData = res.data.data;
+          this.recordList = res.data.data.record;
+          this.shop_id = res.data.data.shop_id;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -326,8 +385,7 @@ export default {
     },
 
     goTipPage() {
-      var _id = this.$route.query.id;
-      this.$router.push("/makeDeal/deal_tip" + "?id=" + _id);
+      this.$router.push("/makeDeal/deal_tip" + "?id=" + this.transfer_id);
     },
 
     showPassword() {
@@ -337,17 +395,194 @@ export default {
       this.passWordSwitch = false;
     },
 
+    callPassword(){
+
+      if(this.payType == "put"){
+        Loading.getInstance().open();
+        request.getInstance().getData("api/my/info").then(res=>{
+          var _passwordStatus = res.data.data.has_pay_password;
+
+          if(!_passwordStatus){
+            Loading.getInstance().close();
+            Toast("您还未设置支付密码，即将跳转设置页面");
+            setTimeout(() => {
+              this.$router.push("/my/setting_password");
+            }, 2000);
+          }else {
+            Loading.getInstance().close();
+            this.showPassword();
+          }
+
+        }).catch(err=>{
+        });
+
+      }else if(this.payType == "get"){
+        this.submitData();
+      }else {
+        Toast("请填写拿钱数额或取钱数额");
+      }
+    },
+
+    addMembersNotice(dataList){
+      if(!dataList){
+        return;
+      }
+
+      Loading.getInstance().open();   
+
+      var _tempList = [];
+      for(let i = 0; i<dataList.length; i++){
+        _tempList.push(dataList[i].id);
+      }
+
+      var _data ={
+        transfer_id:this.transfer_id,
+        friend_id:_tempList
+      };  
+      request.getInstance().postData("api/transfer/notice",_data).then(res=>{
+        Loading.getInstance().close();   
+        Toast("交易成功...");
+        setTimeout(()=>{
+          this.init();
+        },2000);
+        
+      }).catch(err=>{
+        Loading.getInstance().close();   
+        console.error(err);
+      });
+
+      console.log(dataList);
+    },
+
+    // 提交交易  拿钱或者付钱
+    submitData(password){
+      // 放钱
+      if(this.payType == "put"){
+
+        var _data = {
+          transfer_id :this.transfer_id,
+          points :this.moneyData.payMoney,
+          action :"put",
+          pay_password:password
+        }
+
+        request.getInstance().postData("api/transfer/trade",_data).then(res=>{
+          Loading.getInstance().close();
+          Toast("放钱进店铺成功");
+          setTimeout(()=>{
+            this.init();
+          },1500);
+        }).catch(err=>{
+          Loading.getInstance().close();
+
+          Toast(err.data.msg);
+          
+        });
+
+        this.hidePassword();
+
+      }else if(this.payType == "get"){
+        // 拿钱
+        var _data = {
+          transfer_id :this.transfer_id,
+          points :this.moneyData.getMoney,
+          action :"get",
+        }
+        request.getInstance().postData("api/transfer/trade",_data).then(res=>{
+          Loading.getInstance().close();
+          Toast("从店铺中拿钱成功");
+
+          setTimeout(()=>{
+            this.init();
+          },1500);
+
+        }).catch(err=>{
+          Loading.getInstance().close();
+          console.error(err);
+        });
+      }
+    },
+
     getResult(result) {
       console.log(result);
+      this.password = result;
     },
-    _getQRCode: function() {
+    _getQRCode() {
       var qrcode = new QRCode(document.getElementById("qrcode"), {
         width: 100, //设置宽高
         height: 100
       });
 
       qrcode.makeCode("http://www.baidu.com");
-    }
+    },
+    cancelTrade(){
+      var _data = {
+        transfer_id:this.transfer_id
+      }
+      request.getInstance().postData('api/transfer/cancel',_data).then(res=>{
+        Toast("撤销交易成功");
+        setTimeout(()=>{
+          this.$router.push("/makeDeal/my_deal");
+        },1500);
+      }).catch(err=>{
+        Toast("撤销交易失败");
+      });
+    },
+
+    hideMemberChoise(){
+      this.choiseMemberSwitch = false;
+    },
+    // 初始化提醒玩家列表
+    initMemberList(res){
+      this.memberList = [];
+      // if(this.memberList.length>0){
+      //   return;
+      // }
+
+      for(let i = 0; i<res.data.data.members.length; i++){
+          var _temp = {};
+          _temp = res.data.data.members[i];
+          console.log(_temp);
+
+          for(let j = 0; j<this.joiner.length; j++){
+            if(this.joiner[j].user.id == _temp.id){
+              _temp.checked = true;
+              break;
+            }else {
+              _temp.checked = false;
+              break;
+            }
+          }
+
+          this.memberList.push(_temp);
+        }
+    },
+    // 获取所有要提醒的成员名单
+    showMemberChoise(){
+      
+      Loading.getInstance().open();
+      request.getInstance().getData('api/shop/members/'+this.shop_id).then(res=>{
+        console.log(res);
+        this.initMemberList(res);
+        Loading.getInstance().close();
+
+        if(res.data.data.members.length == 0){
+          Toast("当前店铺无成员");
+          return;
+        }
+
+        this.choiseMemberSwitch = true;
+        
+      }).catch(err=>{
+        console.error(err);
+        Loading.getInstance().close();
+      });
+
+    },
+
+    // getMemberData(data){
+    //   this.memberList = data;
+    // },
   },
   watch: {
     "moneyData.payMoney": function() {

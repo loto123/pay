@@ -10,11 +10,37 @@
 namespace App\Pay\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class DepositMethod extends Model
 {
+    /**
+     * 适用操作系统
+     */
+    const OS_IOS = 1;
+    const OS_ANDRIOD = 2;
+    const OS_ANY = 3;
     public $timestamps = false;
     protected $table = 'pay_deposit_method';
+    /**
+     * 取得支付场景
+     * @param $value
+     * @return array
+     */
+    public function getSceneAttribute($value)
+    {
+        return explode(',', $value);
+    }
+
+    /**
+     * 设置支付场景
+     * @param array $options
+     */
+    public function setSceneAttribute(array $options)
+    {
+        $this->attributes['scene'] = implode(',', $options);
+
+    }
 
     /**
      * 发起充值
@@ -56,13 +82,14 @@ class DepositMethod extends Model
          * @var $result DepositResult
          */
         $result = (new $this->impl)->parseReturn($this);
-        $result->state = Deposit::getStateText($result['state']);
-        return view('pay_result', (array)$result);
+        $msg = Deposit::getStateText($result->state);
+        return view('pay_result', ['result' => $result, 'status_text' => $msg]);
     }
 
     /**
      * 接收充值通知
      * @param Channel $channel
+     * @return mixed
      */
     public function acceptNotify(Channel $channel)
     {
@@ -78,8 +105,9 @@ class DepositMethod extends Model
             }
 
             if ($result->state === Deposit::STATE_COMPLETE) {
-                if (!$result->masterContainer->changeBalance($result->amount, 0)) {
-                    break;//到账失败
+                $result->state = Deposit::STATE_CHARGE_FAIL;//到账失败
+                if ($result->masterContainer->changeBalance($result->amount, 0)) {
+                    $result->state = Deposit::STATE_COMPLETE;
                 }
             }
 

@@ -15,10 +15,11 @@ class Deposit extends Model
      * 支付状态
      */
     const STATE_UNPAID = 0;//未支付
-    const STATE_COMPLETE = 1; //未支完成
-    const STATE_FAIL = 2;//支付失败
+    const STATE_COMPLETE = 1; //支付完成
+    const STATE_PAY_FAIL = 2;//支付失败
     const STATE_PART_PAID = 3;//部分支付
     const STATE_API_ERR = 4;//接口不通
+    const STATE_CHARGE_FAIL = 5;//到账失败
     protected $table = 'pay_deposit';
 
     protected $casts = [
@@ -38,16 +39,23 @@ class Deposit extends Model
     {
         switch ($state) {
             case self::STATE_UNPAID:
-                return '未完成';
+                return '未支付';
             case self::STATE_COMPLETE:
-                return '成功';
-            case self::STATE_FAIL:
-                return '失败';
+                return '充值成功';
+            case self::STATE_PAY_FAIL:
+                return '支付失败';
             case self::STATE_PART_PAID:
                 return '金额不足';
+            case self::STATE_CHARGE_FAIL:
+                return '入账失败';
             default:
                 return '异常';
         }
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return sprintf('%.2f', $value);
     }
 
     /**
@@ -65,7 +73,7 @@ class Deposit extends Model
      */
     public function method()
     {
-        return $this->belongsTo(Deposit::class, 'method_id');
+        return $this->belongsTo(DepositMethod::class, 'method_id');
     }
 
     /**
