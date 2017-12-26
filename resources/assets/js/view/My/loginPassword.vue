@@ -62,7 +62,6 @@
 
         request.getInstance().postData('api/my/updatePassword',data)
           .then((res) => {
-            console.log(res);
             Toast('密码修改成功');
             this.$router.push('/login');  //调转到登录页
           })
