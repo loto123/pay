@@ -8,6 +8,7 @@
 namespace App\Pay\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Withdraw extends Model
 {
@@ -19,6 +20,7 @@ class Withdraw extends Model
     const STATE_COMPLETE = 3;//处理完成
     const STATE_PROCESS_FAIL = 4;//处理失败
     const STATE_SEND_FAIL = 5;//提交失败
+    const STATE_CANCELED = 6;//已取消
 
     protected $table = 'pay_withdraw';
     protected $casts = [
@@ -49,6 +51,8 @@ class Withdraw extends Model
                 return '等待通道处理';
             case self::STATE_COMPLETE:
                 return '提现成功';
+            case self::STATE_CANCELED:
+                return '已取消';
             default:
                 return '异常';
         }
@@ -78,13 +82,38 @@ class Withdraw extends Model
         return $this->belongsTo(WithdrawMethod::class, 'method_id');
     }
 
-    /**0
+    /**
      * 提现通道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function channel()
     {
         return $this->belongsTo(Channel::class);
+    }
+
+    /**
+     * 取消提现
+     * @return bool
+     */
+    public function cancel()
+    {
+        $commit = false;
+        DB::beginTransaction();
+
+        do {
+            if (!self::where($this->getKeyName(), $this->getKey())->whereIn('state', WithdrawRetry::$abnormal_states)->update(['state' => self::STATE_CANCELED])) {
+                break;
+            }
+
+            if (!$this->masterContainer->changeBalance($this->amount, 0)) {
+                break;
+            }
+
+            $commit = true;
+        } while (false);
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $commit;
     }
 
     /**

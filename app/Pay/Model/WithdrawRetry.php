@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class WithdrawRetry extends PayRetry
 {
     public static $abnormal_states = [Withdraw::STATE_SEND_FAIL, Withdraw::STATE_PROCESS_FAIL];
-    protected $type = 'withdraw';
+    protected static $type = 'withdraw';
 
     function reDo()
     {

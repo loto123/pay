@@ -318,4 +318,39 @@ class AccountController extends BaseController {
         }
         return $this->json(['data' => $data]);
     }
+
+    /**
+     * @SWG\Get(
+     *   path="/account/records/detail/{id}",
+     *   summary="帐单详情",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="帐单id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function record_detail($id) {
+        $user = $this->auth->user();
+
+        $fund = UserFund::findByEnId($id);
+        if (!$fund || $fund->user_id != $user->id) {
+            return $this->json([], trans("error_fund"), 0);
+        }
+        return $this->json([
+            'id' => $fund->en_id(),
+            'type' => (int)$fund->type,
+            'model' => (int)$fund->model,
+            'amount' => $fund->amount,
+            'created_at' => strtotime($fund->created_at),
+            'no' => $fund->no,
+            'remark' => $fund->remark,
+            'balance' => $fund->balance
+        ]);
+    }
 }

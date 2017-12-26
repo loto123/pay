@@ -39,6 +39,17 @@ class DepositController extends Controller
     protected function grid()
     {
         return Admin::grid(Deposit::class, function (Grid $grid) {
+            $token = csrf_token();
+            Admin::script(<<<SCRIPT
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': '$token'
+                    }
+                });
+SCRIPT
+
+            );
+            ChargeRetry::script();
             $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with('masterContainer.user');
 
             //工具按钮
