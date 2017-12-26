@@ -220,7 +220,7 @@ class AccountController extends BaseController {
                 return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
                     ($os == 'unknown' && $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统且不限系统,或系统匹配
             })->mapWithKeys(function ($item) {
-                return [$item['id'] => $item['show_label']];
+                return [['id' => $item['id'], 'label' => $item['show_label']]];
             })]);
         } else {
             return $this->json(null, '不存在的场景或系统', 0);
