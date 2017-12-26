@@ -4,7 +4,7 @@
 		<div class="details-content">
 			<div class="money-box">
 				<span>入账金额</span>
-				<em >{{amount}}</em>
+				<em>{{amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
@@ -46,7 +46,7 @@
 				type:null,			//类型
 				no:null,			//交易单号
 				amount:null,		//入账金额
-				mode:null,			//正负数  0:收入		1:支出
+				mode:null,			//0:收入		1:支出
 				balance:null		//账户余钱
 
 			};
@@ -68,7 +68,7 @@
 						this.created_at=res.data.data.created_at
 						this.amount=res.data.data.amount
 						this.type=res.data.data.type	
-
+						this.mode=res.data.data.mode
                         Loading.getInstance().close();
 					})
 					.catch((err) => {

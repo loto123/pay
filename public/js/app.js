@@ -56779,7 +56779,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			type: null, //类型
 			no: null, //交易单号
 			amount: null, //入账金额
-			mode: null, //正负数  0:收入		1:支出
+			mode: null, //0:收入		1:支出
 			balance: null //账户余钱
 
 		};
@@ -56803,7 +56803,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.created_at = res.data.data.created_at;
 				_this.amount = res.data.data.amount;
 				_this.type = res.data.data.type;
-
+				_this.mode = res.data.data.mode;
 				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
