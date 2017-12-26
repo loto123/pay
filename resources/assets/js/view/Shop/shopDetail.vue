@@ -169,10 +169,10 @@
 
         <div class="middle-content flex flex-align-center">
           <div class="input-wrap flex-7 flex flex-align-center">
-            <input type="text">
+            <input type="text" v-model="searchUserMobile">
           </div>
 
-          <div class="search-btn flex-3 flex flex-align-center flex-justify-center">
+          <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
             搜索
           </div>
         </div>
@@ -530,6 +530,7 @@ export default {
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
       isGroupMaster: true,       // 是否是群主
+      searchUserMobile:null,     // 搜索店铺成员的手机号
 
       shopId: null,
       shopName: null,
@@ -622,6 +623,18 @@ export default {
 
     openMemberTab(){
       this.addMemberSwitch = true;
+    },
+
+    searchUser(){
+      Loading.getInstance().open();
+      var _data = {
+        mobile :this.searchUserMobile
+      }
+      request.getInstance().getData('api/shop/user/search',_data).then(res=>{
+
+      }).catch(err=>{
+
+      });
     }
 
   }

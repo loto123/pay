@@ -66093,7 +66093,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#top[data-v-7328b9b8] {\n  height: 10em;\n  padding-top: 2em;\n  width: 100%;\n  background: #26a2ff;\n}\n#top .imgwrap[data-v-7328b9b8] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-7328b9b8] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-7328b9b8] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-7328b9b8] {\n    margin-top: 1em;\n    color: #fff;\n    text-align: center;\n    font-size: 1.2em;\n}\n.tab-menu[data-v-7328b9b8] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-7328b9b8] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-7328b9b8] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list[data-v-7328b9b8] {\n  padding-top: 0.7em;\n}\n.shop-list .list-wrap .shop-item[data-v-7328b9b8] {\n    width: 4em;\n    height: 4em;\n    margin-left: 1em;\n    margin-right: 1em;\n    margin-top: 0.5em;\n    background: #eee;\n    border-radius: 0.4em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding: 0.2em;\n    position: relative;\n}\n.shop-list .list-wrap .shop-item .notice[data-v-7328b9b8] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .list-wrap .shop-item > img[data-v-7328b9b8] {\n      width: 100%;\n      height: 100%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list h3[data-v-7328b9b8] {\n    font-size: 0.9em;\n    text-align: center;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n", ""]);
+exports.push([module.i, "\n#top[data-v-7328b9b8] {\n  height: 10em;\n  padding-top: 2em;\n  width: 100%;\n  background: #26a2ff;\n}\n#top .imgwrap[data-v-7328b9b8] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-7328b9b8] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-7328b9b8] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-7328b9b8] {\n    margin-top: 1em;\n    color: #fff;\n    text-align: center;\n    font-size: 1.2em;\n}\n.tab-menu[data-v-7328b9b8] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-7328b9b8] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-7328b9b8] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list[data-v-7328b9b8] {\n  padding-top: 0.7em;\n}\n.shop-list .list-wrap[data-v-7328b9b8] {\n    width: 33%;\n}\n.shop-list .list-wrap .shop-item[data-v-7328b9b8] {\n      width: 4em;\n      height: 4em;\n      margin-left: 1em;\n      margin-right: 1em;\n      margin-top: 0.5em;\n      background: #eee;\n      border-radius: 0.4em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      padding: 0.2em;\n      position: relative;\n}\n.shop-list .list-wrap .shop-item .notice[data-v-7328b9b8] {\n        position: absolute;\n        width: 0.9em;\n        height: 0.9em;\n        background: red;\n        border-radius: 50%;\n        right: -0.2em;\n        top: -0.2em;\n}\n.shop-list .list-wrap .shop-item > img[data-v-7328b9b8] {\n        width: 100%;\n        height: 100%;\n        display: block;\n        margin-left: 1%;\n        margin-top: 1%;\n}\n.shop-list h3[data-v-7328b9b8] {\n    font-size: 0.9em;\n    text-align: center;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n", ""]);
 
 // exports
 
@@ -66108,6 +66108,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(773);
 //
 //
 //
@@ -66240,6 +66241,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
 
 
 
@@ -66274,6 +66278,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         console.error(err);
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       });
+    },
+    SetString: function SetString(str, len) {
+      return __WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* default */].SetString(str, len);
     }
   },
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
@@ -66357,7 +66364,7 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _c("h3", [_vm._v(_vm._s(item.name))])
+            _c("h3", [_vm._v(_vm._s(_vm.SetString(item.name, 10)))])
           ]
         )
       })
@@ -67459,6 +67466,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       inviteLinkStatus: true, // 邀请链接状态
       tradeStatus: true, // 交易状态
       isGroupMaster: true, // 是否是群主
+      searchUserMobile: null, // 搜索店铺成员的手机号
 
       shopId: null,
       shopName: null,
@@ -67544,6 +67552,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     openMemberTab: function openMemberTab() {
       this.addMemberSwitch = true;
+    },
+    searchUser: function searchUser() {
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      var _data = {
+        mobile: this.searchUserMobile
+      };
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/user/search', _data).then(function (res) {}).catch(function (err) {});
     }
   }
 });
@@ -67907,9 +67922,52 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(4, false, false),
+                _c(
+                  "div",
+                  { staticClass: "middle-content flex flex-align-center" },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "input-wrap flex-7 flex flex-align-center"
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.searchUserMobile,
+                              expression: "searchUserMobile"
+                            }
+                          ],
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.searchUserMobile },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.searchUserMobile = $event.target.value
+                            }
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "search-btn flex-3 flex flex-align-center flex-justify-center",
+                        on: { click: _vm.searchUser }
+                      },
+                      [_vm._v("\n          搜索\n        ")]
+                    )
+                  ]
+                ),
                 _vm._v(" "),
-                _vm._m(5, false, false),
+                _vm._m(4, false, false),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -67990,25 +68048,6 @@ var staticRenderFns = [
         _c("span", { staticClass: "text flex-1" })
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "middle-content flex flex-align-center" }, [
-      _c("div", { staticClass: "input-wrap flex-7 flex flex-align-center" }, [
-        _c("input", { attrs: { type: "text" } })
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass:
-            "search-btn flex-3 flex flex-align-center flex-justify-center"
-        },
-        [_vm._v("\n          搜索\n        ")]
-      )
-    ])
   },
   function() {
     var _vm = this
@@ -68567,7 +68606,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#dealManagement[data-v-014c721d] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#dealManagement #tab-menu[data-v-014c721d] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#dealManagement #tab-menu .menu-item[data-v-014c721d] {\n      height: 100%;\n      width: 33.33%;\n}\n#dealManagement #tab-menu .active[data-v-014c721d] {\n      border-bottom: 4px solid #26a2ff;\n}\n#dealManagement .deal-wrap[data-v-014c721d] {\n    width: 100%;\n}\n#dealManagement .deal-wrap ul .timer[data-v-014c721d] {\n      width: 100%;\n      height: 3em;\n      margin-top: 0.1em;\n}\n#dealManagement .deal-wrap ul .timer > div[data-v-014c721d] {\n        display: inline-block;\n        font-size: 0.8em;\n        background: #aaa;\n        color: #fff;\n        padding-left: 0.4em;\n        padding-right: 0.4em;\n        padding-top: 0.4em;\n        padding-bottom: 0.4em;\n        border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item[data-v-014c721d] {\n      height: 4em;\n      background: #fff;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      margin-top: 0.1em;\n      /*border-bottom:1px solid #eee;*/\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap[data-v-014c721d] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap img[data-v-014c721d] {\n          width: 2.3em;\n          height: 2.3em;\n          border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap h3[data-v-014c721d] {\n          font-size: 0.5em;\n          margin-top: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap[data-v-014c721d] {\n        height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .title[data-v-014c721d] {\n          margin-top: 0.8em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .date[data-v-014c721d] {\n          color: #999;\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap[data-v-014c721d] {\n        height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-014c721d] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-014c721d] {\n          font-size: 1.1em;\n          margin-top: 0.6em;\n          color: #00cc00;\n}\n", ""]);
+exports.push([module.i, "\n#dealManagement[data-v-014c721d] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#dealManagement #tab-menu[data-v-014c721d] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#dealManagement #tab-menu .menu-item[data-v-014c721d] {\n      height: 100%;\n      width: 33.33%;\n}\n#dealManagement #tab-menu .active[data-v-014c721d] {\n      border-bottom: 4px solid #26a2ff;\n}\n#dealManagement .deal-wrap[data-v-014c721d] {\n    width: 100%;\n}\n#dealManagement .deal-wrap ul .timer[data-v-014c721d] {\n      width: 100%;\n      height: 3em;\n      margin-top: 0.1em;\n}\n#dealManagement .deal-wrap ul .timer > div[data-v-014c721d] {\n        display: inline-block;\n        font-size: 0.8em;\n        background: #aaa;\n        color: #fff;\n        padding-left: 0.4em;\n        padding-right: 0.4em;\n        padding-top: 0.4em;\n        padding-bottom: 0.4em;\n        border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item[data-v-014c721d] {\n      height: 4em;\n      background: #fff;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      margin-top: 0.1em;\n      /*border-bottom:1px solid #eee;*/\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap[data-v-014c721d] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap img[data-v-014c721d] {\n          width: 2.3em;\n          height: 2.3em;\n          border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap h3[data-v-014c721d] {\n          font-size: 0.5em;\n          margin-top: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap[data-v-014c721d] {\n        height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .title[data-v-014c721d] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .date[data-v-014c721d] {\n          color: #999;\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap[data-v-014c721d] {\n        height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-014c721d] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-014c721d] {\n          font-size: 1.1em;\n          margin-top: 0.6em;\n          color: #00cc00;\n}\n", ""]);
 
 // exports
 
@@ -68747,6 +68786,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -68761,23 +68811,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             tabItem: [true, false, false],
             dataList: [],
+            isListRadioShow: false,
             shop_id: null
         };
     },
 
     methods: {
         changeTab: function changeTab(item) {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+
             if (item > 2 || item < 0) {
                 return;
             } else {
                 this.tabItem = [false, false, false];
                 this.tabItem[item] = true;
             }
+
+            var _data = {
+                status: item + 1,
+                shop_id: this.shop_id,
+                limit: 50,
+                offset: 0
+            };
+
+            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {
+                _this.dataList = res.data.data;
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            }).catch(function (err) {
+                console.log(err);
+            });
         },
-        goDetail: function goDetail() {
-            this.$router.push("/makeDeal/deal_detail");
+        goDetail: function goDetail(id) {
+            this.$router.push("/makeDeal/deal_detail" + "?id=" + id);
+        },
+        toggleShowListButton: function toggleShowListButton() {
+            this.isListRadioShow = !this.isListRadioShow;
         },
         init: function init() {
+            var _this2 = this;
+
             __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
             this.shop_id = this.$route.query.shopId;
             var _data = {
@@ -68787,7 +68861,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 offset: 0
             };
 
-            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {}).catch(function (err) {});
+            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {
+                _this2.dataList = res.data.data;
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            }).catch(function (err) {
+
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            });
         }
     }
 });
@@ -68804,10 +68884,36 @@ var render = function() {
     "div",
     { attrs: { id: "dealManagement" } },
     [
-      _c("top-back", {
-        staticStyle: { background: "#26a2ff", color: "#fff" },
-        attrs: { title: "交易管理" }
-      }),
+      _c(
+        "top-back",
+        {
+          staticStyle: { background: "#26a2ff", color: "#fff" },
+          attrs: { title: "交易管理" }
+        },
+        [
+          _vm.tabItem[1]
+            ? _c(
+                "div",
+                {
+                  staticClass: "list-controller flex flex-reverse",
+                  staticStyle: {
+                    width: "100%",
+                    "padding-right": "1em",
+                    "box-sizing": "border-box"
+                  },
+                  on: { click: _vm.toggleShowListButton }
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.isListRadioShow ? "关闭操作" : "操作") +
+                      "\n        "
+                  )
+                ]
+              )
+            : _vm._e()
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -68861,30 +68967,75 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "deal-wrap" }, [
-        _c("ul", [
-          _vm._m(0, false, false),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "deal-item flex flex-align-center",
-              on: { click: _vm.goDetail }
-            },
-            [
-              _vm._m(1, false, false),
-              _vm._v(" "),
-              _vm._m(2, false, false),
-              _vm._v(" "),
-              _vm._m(3, false, false)
-            ]
-          ),
-          _vm._v(" "),
-          _vm._m(4, false, false),
-          _vm._v(" "),
-          _vm._m(5, false, false),
-          _vm._v(" "),
-          _vm._m(6, false, false)
-        ])
+        _c(
+          "ul",
+          [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _vm._l(_vm.dataList, function(item) {
+              return _c(
+                "li",
+                {
+                  staticClass: "deal-item flex flex-align-center",
+                  on: {
+                    click: function($event) {
+                      _vm.goDetail(item.id)
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "avatar-wrap flex flex-v flex-align-center flex-2"
+                    },
+                    [
+                      _c("img", { attrs: { src: item.user.avatar, alt: "" } }),
+                      _vm._v(" "),
+                      _c("h3", [_vm._v(_vm._s(item.user.name))])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "content-wrap flex flex-v flex-align-center flex-5"
+                    },
+                    [
+                      _c("div", { staticClass: "title" }, [
+                        _vm._v("交易包中余额:￥" + _vm._s(item.amount))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "date" }, [
+                        _vm._v(_vm._s(item.created_at))
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "pay-detail-wrap flex flex-v flex-align-center flex-3"
+                    },
+                    [
+                      _c("div", { staticClass: "title" }, [
+                        _vm._v("手续费收益")
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "m-text" }, [
+                        _vm._v("￥" + _vm._s(item.tip_amount))
+                      ])
+                    ]
+                  )
+                ]
+              )
+            })
+          ],
+          2
+        )
       ])
     ],
     1
@@ -68906,136 +69057,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "avatar-wrap flex flex-v flex-align-center flex-2" },
-      [
-        _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-        _vm._v(" "),
-        _c("h3", [_vm._v("发起人发起")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "content-wrap flex flex-v flex-align-center flex-5" },
-      [
-        _c("div", { staticClass: "title" }, [_vm._v("交易包中余额:￥168")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "pay-detail-wrap flex flex-v flex-align-center flex-3" },
-      [
-        _c("div", { staticClass: "title" }, [_vm._v("手续费收益")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "m-text" }, [_vm._v("￥168")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "deal-item flex flex-align-center" }, [
-      _c(
-        "div",
-        { staticClass: "avatar-wrap flex flex-v flex-align-center flex-2" },
-        [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("h3", [_vm._v("发起人发起")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "content-wrap flex flex-v flex-align-center flex-5" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("交易包中余额:￥168")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pay-detail-wrap flex flex-v flex-align-center flex-3" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("手续费收益")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "m-text" }, [_vm._v("￥168")])
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      { staticClass: "timer flex flex-align-center flex-justify-center" },
-      [
-        _c("div", [
-          _vm._v(
-            "\n                      2017年11月18日 12:45\n                  "
-          )
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "deal-item flex flex-align-center" }, [
-      _c(
-        "div",
-        { staticClass: "avatar-wrap flex flex-v flex-align-center flex-2" },
-        [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-          _vm._v(" "),
-          _c("h3", [_vm._v("发起人发起")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "content-wrap flex flex-v flex-align-center flex-5" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("交易包中余额:￥168")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "date" }, [_vm._v("2017-11-18   14:25:46")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pay-detail-wrap flex flex-v flex-align-center flex-3" },
-        [
-          _c("div", { staticClass: "title" }, [_vm._v("手续费收益")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "m-text" }, [_vm._v("￥168")])
-        ]
-      )
-    ])
   }
 ]
 render._withStripped = true
