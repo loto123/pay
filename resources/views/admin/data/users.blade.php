@@ -226,6 +226,8 @@
         form.append(input3);
         form.append(input4);
         form.append(input5);
+        form.append(input6);
+        form.append(input7);
         form.submit();
         form.remove();
     }

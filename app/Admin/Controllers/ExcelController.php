@@ -254,6 +254,69 @@ class ExcelController extends Controller
     //收益统计数据导出
     public function dataProfit(Request $request)
     {
-
+        $cellData = [
+            ['排名', '用户id', '用户昵称', '上级代理id', '上级代理昵称', '上级运营账号', '上级运营昵称', '收款笔数', '收款金额',
+                '店铺分润', '代理分润', '运营业绩']
+        ];
+        $with = ['parent', 'operator'];
+        $query = User::query();
+        //用户ID
+        $aid = $request->input('aid');
+        if ($aid) {
+            $query->where('users.id', $aid);
+        }
+        //推荐人ID
+        $parent = $request->input('parent');
+        if ($parent) {
+            $query->where('users.parent_id', $parent);
+        }
+        //运营ID
+        $operator = $request->input('operator');
+        if ($operator) {
+            $query->where('users.operator_id', $operator);
+        }
+        $date_time = $request->input('date_time');
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $request->input('date_time'));
+            $begin = $date_time_arr[0];
+            $end = $date_time_arr[1] . ' 23:59:59';
+            $with['transfer_record'] = function ($query) use ($begin, $end) {
+                $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end)->where('stat', 2);
+            };
+            $with['tips'] = function ($query) use ($begin, $end) {
+                $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
+            };
+            $with['output_profit'] = function ($query) use ($begin, $end) {
+                $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
+            };
+        } else {
+            $with[] = 'transfer_record';
+            $with[] = 'tips';
+            $with[] = 'output_profit';
+        }
+        $list = $query->with($with)->leftJoin('profit_record', 'users.id', '=', 'profit_record.user_id')
+            ->select('users.*', DB::raw('SUM(profit_record.fee_amount) as fee_amount_total'))
+            ->orderBy('fee_amount_total', 'DESC')->groupBy('users.id')->get();
+        foreach ($list as $key => $item) {
+            $cellData[] = [
+                $key + 1,
+                $item->id,
+                $item->name,
+                $item->proxy ? $item->proxy->id : '无',
+                $item->proxy ? $item->proxy->name : '无',
+                $item->operator ? $item->operator->id : '无',
+                $item->operator ? $item->operator->name : '无',
+                $item->transfer_record()->count(),
+                $item->transfer_record()->sum('amount'),
+                $item->tips()->sum('amount'),
+                $item->output_profit()->sum('proxy_amount'),
+                $item->output_profit()->sum('fee_amount')
+            ];
+        }
+        Excel::create('收益统计', function ($excel) use ($cellData) {
+            $excel->sheet('收益统计', function ($sheet) use ($cellData) {
+                $sheet->rows($cellData);
+            });
+        })->export('xls');
     }
 }
