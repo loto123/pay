@@ -42805,8 +42805,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'app'
@@ -45732,6 +45730,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar__ = __webpack_require__(106);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_tabBar__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(7);
 //
 //
 //
@@ -45861,6 +45860,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -45868,13 +45877,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "index",
   components: { tabBar: __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default.a },
+  data: function data() {
+    return {
+      amount: null
+    };
+  },
   created: function created() {
-    // Loading.getInstance().open();
+    this.init();
   },
 
   methods: {
     goInform: function goInform() {
       this.$router.push("/inform");
+    },
+    init: function init() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
+        _this.amount = res.data.data.balance;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      });
     }
   }
 });
@@ -46143,7 +46168,15 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(0, false, false)
+        _c("section", { staticClass: "transaction flex flex-justify-center" }, [
+          _c("a", { attrs: { href: "/#/myAccount" } }, [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _c("h3", [_vm._v(_vm._s(_vm.amount))]),
+            _vm._v(" "),
+            _c("h4", [_vm._v("账户余额(元)")])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm._m(1, false, false),
@@ -46159,23 +46192,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "section",
-      { staticClass: "transaction flex flex-justify-center" },
-      [
-        _c("a", { attrs: { href: "/#/myAccount" } }, [
-          _c(
-            "div",
-            {
-              staticClass: "imggWrap flex flex-justify-center flex-align-center"
-            },
-            [_c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })]
-          ),
-          _vm._v(" "),
-          _c("h3", [_vm._v("0.00")]),
-          _vm._v(" "),
-          _c("h4", [_vm._v("账户余额(元)")])
-        ])
-      ]
+      "div",
+      { staticClass: "imggWrap flex flex-justify-center flex-align-center" },
+      [_c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })]
     )
   },
   function() {
@@ -46233,6 +46252,25 @@ var staticRenderFns = [
               ),
               _vm._v(" "),
               _c("h3", [_vm._v("我的交易")])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+          _c(
+            "a",
+            {
+              staticClass: "flex flex-v flex-align-center",
+              attrs: { href: "/#/makeDeal/my_deal" }
+            },
+            [
+              _c(
+                "i",
+                { staticClass: "iconfont transaction-icon common-icon" },
+                [_vm._v("\n              \n            ")]
+              ),
+              _vm._v(" "),
+              _c("h3", [_vm._v("我的用户")])
             ]
           )
         ])
@@ -46565,7 +46603,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }, 1500);
         }
       }).catch(function (err) {
-        console.log(err);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
       });
     },
@@ -46573,7 +46610,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 微信登录
     weChatLogin: function weChatLogin() {
-
       var _data = {
         redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
@@ -46593,7 +46629,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 忘记密码
     forgetPassWord: function forgetPassWord() {
-
       this.$store.dispatch("setStep", 1);
       this.$store.dispatch("setRefindPassWordState", true);
       this.$router.push("/login/regist");
@@ -58050,7 +58085,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
+    // 撤销交易
     deleteIt: function deleteIt(id) {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         record_id: id
@@ -58058,12 +58096,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/withdraw", _data).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销成功");
+
+        setTimeout(function () {
+          _this.init();
+        }, 1500);
       }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销失败");
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       });
     },
     init: function init() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       this.transfer_id = this.$route.query.id;
@@ -58072,10 +58116,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id).then(function (res) {
         console.log(res);
-        _this.joiner = res.data.data.joiner;
-        _this.renderData = res.data.data;
-        _this.recordList = res.data.data.record;
-        _this.shop_id = res.data.data.shop_id;
+        _this2.joiner = res.data.data.joiner;
+        _this2.renderData = res.data.data;
+        _this2.recordList = res.data.data.record;
+        _this2.shop_id = res.data.data.shop_id;
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -58091,7 +58135,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.passWordSwitch = false;
     },
     callPassword: function callPassword() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.payType == "put") {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
@@ -58102,11 +58146,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("您还未设置支付密码，即将跳转设置页面");
             setTimeout(function () {
-              _this2.$router.push("/my/setting_password");
+              _this3.$router.push("/my/setting_password");
             }, 2000);
           } else {
             __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-            _this2.showPassword();
+            _this3.showPassword();
           }
         }).catch(function (err) {});
       } else if (this.payType == "get") {
@@ -58116,7 +58160,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     addMembersNotice: function addMembersNotice(dataList) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (!dataList) {
         return;
@@ -58126,7 +58170,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       var _tempList = [];
       for (var i = 0; i < dataList.length; i++) {
-        _tempList.push(dataList.id);
+        _tempList.push(dataList[i].id);
       }
 
       var _data = {
@@ -58137,7 +58181,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("交易成功...");
         setTimeout(function () {
-          _this3.init();
+          _this4.init();
         }, 2000);
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58150,7 +58194,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 提交交易  拿钱或者付钱
     submitData: function submitData(password) {
-      var _this4 = this;
+      var _this5 = this;
 
       // 放钱
       if (this.payType == "put") {
@@ -58166,7 +58210,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("放钱进店铺成功");
           setTimeout(function () {
-            _this4.init();
+            _this5.init();
           }, 1500);
         }).catch(function (err) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58187,7 +58231,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
 
           setTimeout(function () {
-            _this4.init();
+            _this5.init();
           }, 1500);
         }).catch(function (err) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -58208,7 +58252,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       qrcode.makeCode("http://www.baidu.com");
     },
     cancelTrade: function cancelTrade() {
-      var _this5 = this;
+      var _this6 = this;
 
       var _data = {
         transfer_id: this.transfer_id
@@ -58216,7 +58260,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/cancel', _data).then(function (res) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易成功");
         setTimeout(function () {
-          _this5.$router.push("/makeDeal/my_deal");
+          _this6.$router.push("/makeDeal/my_deal");
         }, 1500);
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易失败");
@@ -58254,12 +58298,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 获取所有要提醒的成员名单
     showMemberChoise: function showMemberChoise() {
-      var _this6 = this;
+      var _this7 = this;
 
       __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/members/' + this.shop_id).then(function (res) {
         console.log(res);
-        _this6.initMemberList(res);
+        _this7.initMemberList(res);
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
 
         if (res.data.data.members.length == 0) {
@@ -58267,7 +58311,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           return;
         }
 
-        _this6.choiseMemberSwitch = true;
+        _this7.choiseMemberSwitch = true;
       }).catch(function (err) {
         console.error(err);
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
@@ -59871,7 +59915,7 @@ var render = function() {
                     attrs: {
                       height: "3em",
                       actionUser: "撤销",
-                      able: item.stat == 1 ? true : false
+                      able: item.stat == 2 ? false : true
                     },
                     on: {
                       deleteIt: function($event) {
@@ -61054,6 +61098,8 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__view_My_about_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__view_My_about_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue__ = __webpack_require__(660);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__view_My_myUsers_vue__ = __webpack_require__(774);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__view_My_myUsers_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__view_My_myUsers_vue__);
 
 
 
@@ -61068,7 +61114,8 @@ if (false) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/my', name: 'my', component: __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default.a }, { path: '/my/set', name: 'set', component: __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default.a }, { path: '/my/set/about', name: 'about', component: __WEBPACK_IMPORTED_MODULE_11__view_My_about_vue___default.a }, { path: '/my/referrer', name: 'referrer', component: __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default.a }, { path: '/my/bankCardManage', name: 'bankCardManage', component: __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default.a }, { path: '/my/realAuth', name: 'realAuth', component: __WEBPACK_IMPORTED_MODULE_4__view_My_realAuth_vue___default.a }, { path: '/my/bankCardManage/addBankCard', name: 'addBankCard', component: __WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue___default.a }, { path: '/my/checkSettle', name: 'checkSettle', component: __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue___default.a }, { path: '/my/checkSettle/list', name: 'checkSettleList', component: __WEBPACK_IMPORTED_MODULE_7__view_My_checkSettleList_vue___default.a }, { path: '/my/login_password', name: 'loginPassword', component: __WEBPACK_IMPORTED_MODULE_8__view_My_loginPassword_vue___default.a }, { path: '/my/verfy_code', name: 'verfyCode', component: __WEBPACK_IMPORTED_MODULE_9__view_My_verfyCode_vue___default.a }, { path: '/my/pay_password', name: 'payPassword', component: __WEBPACK_IMPORTED_MODULE_10__view_My_payPassword_vue___default.a }, { path: '/my/setting_password', name: 'settingPassword', component: __WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue___default.a }]);
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/my', name: 'my', component: __WEBPACK_IMPORTED_MODULE_0__view_My_my_vue___default.a }, { path: '/my/set', name: 'set', component: __WEBPACK_IMPORTED_MODULE_1__view_My_set_vue___default.a }, { path: '/my/set/about', name: 'about', component: __WEBPACK_IMPORTED_MODULE_11__view_My_about_vue___default.a }, { path: '/my/referrer', name: 'referrer', component: __WEBPACK_IMPORTED_MODULE_2__view_My_referrer_vue___default.a }, { path: '/my/bankCardManage', name: 'bankCardManage', component: __WEBPACK_IMPORTED_MODULE_3__view_My_bankCardManage_vue___default.a }, { path: '/my/realAuth', name: 'realAuth', component: __WEBPACK_IMPORTED_MODULE_4__view_My_realAuth_vue___default.a }, { path: '/my/bankCardManage/addBankCard', name: 'addBankCard', component: __WEBPACK_IMPORTED_MODULE_5__view_My_addBankCard_vue___default.a }, { path: '/my/checkSettle', name: 'checkSettle', component: __WEBPACK_IMPORTED_MODULE_6__view_My_checkSettle_vue___default.a }, { path: '/my/checkSettle/list', name: 'checkSettleList', component: __WEBPACK_IMPORTED_MODULE_7__view_My_checkSettleList_vue___default.a }, { path: '/my/login_password', name: 'loginPassword', component: __WEBPACK_IMPORTED_MODULE_8__view_My_loginPassword_vue___default.a }, { path: '/my/verfy_code', name: 'verfyCode', component: __WEBPACK_IMPORTED_MODULE_9__view_My_verfyCode_vue___default.a }, { path: '/my/pay_password', name: 'payPassword', component: __WEBPACK_IMPORTED_MODULE_10__view_My_payPassword_vue___default.a }, { path: '/my/setting_password', name: 'settingPassword', component: __WEBPACK_IMPORTED_MODULE_12__view_My_settingPassword_vue___default.a }, { path: '/my/my_users', name: 'users', component: __WEBPACK_IMPORTED_MODULE_13__view_My_myUsers_vue___default.a }]);
 
 /***/ }),
 /* 600 */
@@ -66432,6 +66479,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(773);
 //
 //
 //
@@ -66552,6 +66600,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -66579,7 +66628,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {});
     },
+
+    // 同意加入店铺的请求
     agreeItem: function agreeItem(id) {
+      var _this2 = this;
+
       __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
       if (id == null) {
         var _data = null;
@@ -66590,8 +66643,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/agree", _data).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        Toast("操作成功");
+        setTimeout(function () {
+          _this2.init();
+        }, 1500);
       }).catch(function (err) {});
       console.log(id);
+    },
+    antiItem: function antiItem(id) {
+      var _this3 = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      if (id == null) {
+        var _data = null;
+      } else {
+        var _data = {
+          id: id
+        };
+      }
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/ignore/" + id).then(function (res) {
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        Toast("操作成功");
+        setTimeout(function () {
+          _this3.init();
+        }, 1500);
+      }).catch(function (err) {});
+    },
+    setString: function setString(str, len) {
+      return __WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* default */].SetString(str, len);
     }
   }
 });
@@ -66631,13 +66710,15 @@ var render = function() {
                     attrs: { src: item.user_avatar, alt: "" }
                   }),
                   _vm._v(" "),
-                  _c("span", [_vm._v("昵称:" + _vm._s(item.user_name))])
+                  _c("span", [
+                    _vm._v("昵称:" + _vm._s(_vm.setString(item.user_name, 7)))
+                  ])
                 ]),
                 _vm._v(" "),
                 _c("span", [
                   _vm._v("申请加入小店 "),
                   _c("i", { staticStyle: { color: "#26a2ff" } }, [
-                    _vm._v(_vm._s(item.shop_name))
+                    _vm._v(_vm._s(_vm.setString(item.shop_name, 10)))
                   ])
                 ])
               ]
@@ -66683,36 +66764,38 @@ var render = function() {
         })
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "all-list-controller flex flex-justify-center " },
-        [
-          _c(
+      !_vm.messageList
+        ? _c(
             "div",
-            { staticClass: "btn-wrap flex flex-v flex-justify-around" },
+            { staticClass: "all-list-controller flex flex-justify-center " },
             [
               _c(
-                "mt-button",
-                {
-                  staticStyle: { background: "#00cc00" },
-                  attrs: { type: "primary", size: "large" }
-                },
-                [_vm._v("全部同意")]
-              ),
-              _vm._v(" "),
-              _c(
-                "mt-button",
-                {
-                  staticStyle: { background: "#ccc" },
-                  attrs: { type: "primary", size: "large" }
-                },
-                [_vm._v("全部忽略")]
+                "div",
+                { staticClass: "btn-wrap flex flex-v flex-justify-around" },
+                [
+                  _c(
+                    "mt-button",
+                    {
+                      staticStyle: { background: "#00cc00" },
+                      attrs: { type: "primary", size: "large" }
+                    },
+                    [_vm._v("全部同意")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "mt-button",
+                    {
+                      staticStyle: { background: "#ccc" },
+                      attrs: { type: "primary", size: "large" }
+                    },
+                    [_vm._v("全部忽略")]
+                  )
+                ],
+                1
               )
-            ],
-            1
+            ]
           )
-        ]
-      )
+        : _vm._e()
     ],
     1
   )
@@ -67389,7 +67472,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$router.push("/shop/shop_member");
     },
     goDealManagement: function goDealManagement() {
-      this.$router.push("/shop/deal_management");
+      this.$router.push("/shop/deal_management?shopId=" + this.shopId);
     },
     goShopAccount: function goShopAccount() {
       this.$router.push("/shop/shopAccount?id=" + this.shopId);
@@ -68485,6 +68568,8 @@ exports.push([module.i, "\n#dealManagement[data-v-014c721d] {\n  padding-top: 2e
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
 //
 //
 //
@@ -68650,14 +68735,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
+    created: function created() {
+        this.init();
+    },
     data: function data() {
         return {
-            tabItem: [true, false, false]
+            tabItem: [true, false, false],
+            dataList: [],
+            shop_id: null
         };
     },
 
@@ -68672,6 +68764,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         goDetail: function goDetail() {
             this.$router.push("/makeDeal/deal_detail");
+        },
+        init: function init() {
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+            this.shop_id = this.$route.query.shopId;
+            var _data = {
+                status: 1,
+                shop_id: this.shop_id,
+                limit: 50,
+                offset: 0
+            };
+
+            __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/shop", _data).then(function (res) {}).catch(function (err) {});
         }
     }
 });
@@ -73169,7 +73273,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_jj6e029874s7cik9.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_jj6e029874s7cik9.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_jj6e029874s7cik9.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_jj6e029874s7cik9.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_jj6e029874s7cik9.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
 
 // exports
 
@@ -74488,6 +74592,139 @@ utils.SetString = function (str, len) {
     return s;
 };
 /* harmony default export */ __webpack_exports__["a"] = (utils);
+
+/***/ }),
+/* 774 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(775)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(777)
+/* template */
+var __vue_template__ = __webpack_require__(778)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-5e89e994"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\view\\My\\myUsers.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5e89e994", Component.options)
+  } else {
+    hotAPI.reload("data-v-5e89e994", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 775 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(776);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("664e4d30", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5e89e994\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./myUsers.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5e89e994\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./myUsers.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 776 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 777 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 778 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "my-users" } }, [_vm._v("\n    我的用户\n")])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5e89e994", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

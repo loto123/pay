@@ -374,7 +374,7 @@ class TransferController extends Controller
                 $tips = 0;
                 $profit_shares = [];
 //                if ($transfer->tip_type == 2 && $transfer->tip_percent > 0) {
-                if ($transfer->tip_percent > 0) {
+                if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
                     $tips = $transfer->tip_percent * $record->amount / 100;
                     //红包茶水费金额增加
                     $transfer->tip_amount = $transfer->tip_amount + $tips;
@@ -537,7 +537,7 @@ class TransferController extends Controller
             $transfer->amount = $transfer->amount + $record->amount;
             $transfer->save();
             DB::commit();
-            return response()->json(['code' => 0, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
+            return response()->json(['code' => 1, 'msg' => trans('trans.withdraw_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
         }
@@ -588,13 +588,13 @@ class TransferController extends Controller
         }
 
         $transfer = Transfer::findByEnId($request->transfer_id);
-        if ($transfer) {
+        if (!$transfer) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
         }
         if ($transfer->status == 3) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
         }
-        if (TransferUserRelation::where('transfer_id', $transfer->transfer_id)->where('user_id', $request->friend_id)->exists()) {
+        if (TransferUserRelation::where('transfer_id', $transfer->id)->where('user_id', $request->friend_id)->exists()) {
             return response()->json(['code' => 0, 'msg' => trans('trans.notice_already_exists'), 'data' => []]);
         }
         DB::beginTransaction();
@@ -603,7 +603,7 @@ class TransferController extends Controller
                 $real_id = Skip32::decrypt("0123456789abcdef0123", $value);
                 if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
                     $relation = new TransferUserRelation();
-                    $relation->transfer_id = $transfer->transfer_id;
+                    $relation->transfer_id = $transfer->id;
                     $relation->user_id = $real_id;
                     $relation->save();
                 }
@@ -712,6 +712,10 @@ class TransferController extends Controller
      */
     public function payFee(Request $request)
     {
+        if(!config('shop_fee_status')) {
+            return response()->json(['code' => 0, 'msg' => 'something wrong', 'data' => []]);
+        }
+
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
@@ -866,6 +870,82 @@ class TransferController extends Controller
             $data[$key]['makr'] = $item->mark;
         }
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
+    }
+
+    /**
+     * @SWG\GET(
+     *   path="/transfer/shop",
+     *   summary="商店交易记录",
+     *   tags={"交易"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="formData",
+     *     description="店铺ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="status",
+     *     in="formData",
+     *     description="交易状态 0, 1 待结算, 2 已平账, 3 已关闭",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="formData",
+     *     description="每页条数",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="offset",
+     *     in="formData",
+     *     description="起始位置",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function shop(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'shop_id' => 'bail|required|integer',
+                'status' => ['bail', 'required', Rule::in([0, 1, 2, 3])],
+                'limit' => 'bail|integer',
+                'offset' => 'bail|integer',
+            ],
+            [
+                'required' => trans('trans.required'),
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
+        }
+        $status = $request->status;
+//        $user = JWTAuth::parseToken()->authenticate();
+        $shop = Shop::findByEnId($request->shop_id);
+        if (!$shop) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
+        }
+        $query = $shop->transfer()->with(['user' => function ($query) {
+            $query->select('id', 'name', 'avatar');
+        }])->where('status', $status)->select('id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
+        if ($request->limit && $request->offset) {
+            $query->offset($request->offset)->limit($request->limit);
+        }
+        $list = $query->get();
+        //装填响应数据
+        foreach($list as $key => $value) {
+            $list[$key]->id = $value->en_id();
+            $list[$key]->user->id = $value->user->en_id();
+            unset($list[$key]->user_id);
+        }
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => $list]);
     }
 
     /**

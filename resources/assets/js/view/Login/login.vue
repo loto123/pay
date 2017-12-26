@@ -193,14 +193,12 @@ export default {
             },1500);
           }
       }).catch(function(err){
-        console.log(err);
         Toast(err.data.message);
       });
     },
 
     // 微信登录
     weChatLogin(){
-
       var _data={
         redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
       };
@@ -222,7 +220,6 @@ export default {
 
     // 忘记密码
     forgetPassWord(){
-      
       this.$store.dispatch("setStep",1);
       this.$store.dispatch("setRefindPassWordState",true);
       this.$router.push("/login/regist");

@@ -120,6 +120,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('show', 'TransferController@show');
         $api->get('feerecord', 'TransferController@feeRecord');
         $api->get('record', 'TransferController@record');
+        $api->get('shop', 'TransferController@shop');
         $api->post('mark', 'TransferController@mark');
         $api->post('payfee', 'TransferController@payFee');
         $api->post('notice', 'TransferController@notice');
@@ -144,7 +145,6 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
-        $api->get('withdraw-fields', 'AccountController@withdrawFieldsInfo');
     });
 
 });

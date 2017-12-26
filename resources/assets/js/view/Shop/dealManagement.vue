@@ -165,12 +165,19 @@
 
 <script>
 import topBack from "../../components/topBack";
+import request from "../../utils/userRequest"
+import Loading from "../../utils/loading"
 
 export default {
   components: { topBack },
+  created(){
+      this.init();
+  },
   data(){
     return {
-        tabItem:[true,false,false]
+        tabItem:[true,false,false],
+        dataList:[],
+        shop_id:null
     }
   },
   methods:{
@@ -185,6 +192,22 @@ export default {
     },
     goDetail(){
         this.$router.push("/makeDeal/deal_detail");
+    },
+    init(){
+        Loading.getInstance().open();
+        this.shop_id = this.$route.query.shopId;
+        var _data = {
+            status :1,
+            shop_id:this.shop_id,
+            limit :50,
+            offset :0
+        }
+
+        request.getInstance().postData("api/transfer/shop",_data).then(res=>{
+
+        }).catch(err=>{
+
+        });
     }
   }
 };
