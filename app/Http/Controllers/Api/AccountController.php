@@ -7,6 +7,7 @@ use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
 use App\User;
+use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -74,8 +75,15 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
+        $record = new UserFund();
+        $record->type = UserFund::TYPE_CHARGE;
+        $record->mode = UserFund::MODE_IN;
+        $record->amount = $request->amount;
+        $record->balance = $user->balance + $request->amount;
+        $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
         try {
+            $record->save();
             $result = $user->container->initiateDeposit($request->amount, $user->channel, DepositMethod::find($request->way));
         } catch (\Exception $e) {
             return $this->json([], 'error', 0);
@@ -132,7 +140,17 @@ class AccountController extends BaseController {
         if (!$user->pay_card) {
             return $this->json([], trans("api.error_pay_card"), 0);
         }
+        if ($user->container->balance < $request->amount) {
+            return $this->json([], trans("api.error_balance"), 0);
+        }
+        $record = new UserFund();
+        $record->type = UserFund::TYPE_WITHDRAW;
+        $record->mode = UserFund::MODE_OUT;
+        $record->amount = $request->amount;
+        $record->balance = $user->balance - $request->amount;
+        $record->status = UserFund::STATUS_SUCCESS;
         try {
+            $record->save();
             $result = $user->container->initiateWithdraw(
                 $request->amount,
                 [
