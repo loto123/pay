@@ -4,9 +4,9 @@
         <dealContent :renderData="renderData"></dealContent>
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
-            <label for="" class="flex-4" style="padding-left:1em;">大赢家茶水费</label>
+            <label for="" class="flex-4" style="padding-left:1em;">打赏店家</label>
             <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
-            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击缴纳茶水费"  maxlength="6" v-model="renderData.moneyData"></span>
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击打赏店家"  maxlength="6" v-model="renderData.moneyData"></span>
         </div>
 
         <div class="button-wrap">
@@ -14,7 +14,7 @@
         </div>
 
         <div class="tip-record">
-            <h3>茶水费记录</h3>
+            <h3>打赏店家记录</h3>
             <ul class="flex flex-v">
                 <li class="flex flex-justify-between flex-align-center" v-for="item in renderData.tips">
                     <img :src="item.user.avatar?item.user.avatar:'/images/default_avatar.jpg'" alt="">
@@ -141,7 +141,7 @@ export default {
     },
     payTip() {
       if (this.renderData.moneyData == null) {
-        Toast("请输入茶水费金额");
+        Toast("请输入打赏店家金额");
         return;
       }
 
@@ -214,13 +214,13 @@ export default {
         pay_password: this.passwordData.value
       };
 
-      // 支付茶水费接口
+      // 打赏店家接口
       request
         .getInstance()
         .postData("api/transfer/payfee", _data)
         .then(res => {
           console.log(res);
-          Toast("茶水费缴纳成功");
+          Toast("打赏店家成功");
           this.hidePassword();
           this.init();
         })

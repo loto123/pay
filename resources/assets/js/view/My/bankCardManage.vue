@@ -2,8 +2,8 @@
   <div id="bankManage">
     <topBack title="银行卡管理"></topBack>
     <div class="bankCard-container">
-      <ul class="bankCard-list" v-for="item in bankList">
-        <li>
+      <ul class="bankCard-list">
+        <li v-for="item in bankList">
           <div class="bankCard-box flex">
             <div class="card-image">
               <img src="/images/personal.jpg">

@@ -21,6 +21,8 @@ use Skip32;
  */
 class Shop extends Model
 {
+    protected $keyType = 'string';
+
     use Skip32Trait;
 
     const STATUS_NORMAL = 0;

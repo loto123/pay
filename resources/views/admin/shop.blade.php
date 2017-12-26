@@ -98,7 +98,7 @@
 
 <script language="JavaScript">
     function data_export() {
-        var manager_id = $("#manager_id").val();
+        var aid = $("#aid").val();
         var shop_id = $("#shop_id").val();
         var shop_name = $("#shop_name").val();
         var date_time = $("#reservation").val();

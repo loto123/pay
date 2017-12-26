@@ -59,8 +59,8 @@ class AuthController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function login(Request $request) {
+        Log::info($request->all());
         $credentials = $request->only('mobile', 'password');
-
         try {
             // attempt to verify the credentials and create a token for the user
             if (!$token = JWTAuth::attempt($credentials)) {
@@ -419,7 +419,12 @@ class AuthController extends BaseController {
                 return mt_rand(0, 9);
             }, range(1, 4)));
         }
-        $result = PhpSms::make()->template(['YunTongXun' => '224348'])->to($request->mobile)->data([$code])->send();
+        if (config('app.debug')) {
+            $code = '1234';
+            $result['success'] = true;
+        } else {
+            $result = PhpSms::make()->template(['YunTongXun' => '224348'])->to($request->mobile)->data([$code])->send();
+        }
 //        var_dump($result);
         if ($result && $result['success']) {
             Cache::put($cache_key, ['code' => $code, 'time' => time()], 5);
