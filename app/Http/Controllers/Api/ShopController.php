@@ -718,17 +718,17 @@ class ShopController extends BaseController {
             ['mobile' => 'bail|required']
         );
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => new \stdClass()]);
+            return $this->json([], $validator->errors()->first(), 0);
         }
         $user = User::where("mobile", $request->mobile)->first();
         if (!$user) {
-            return response()->json(['code' => 1,'msg' => "ok",'data' => new \stdClass()]);
+            return $this->json([], 'ok', 1);
         }
-        return response()->json(['code' => 1,'msg' => "ok",'data' => [
+        return $this->json([
             'avatar' => $user->avatar,
             'name' => $user->name,
             'id' => $user->en_id(),
             'mobile' => $user->mobile,
-        ]]);
+        ]);
     }
 }
