@@ -104,9 +104,12 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('qrcode/{id}', 'ShopController@qrcode');
         $api->get('account/{id}', 'ShopController@account');
         $api->get('messages', 'ShopController@messages');
+        $api->get('messages/count', 'ShopController@messages_count');
         $api->post('agree', 'ShopController@agree');
         $api->post('ignore', 'ShopController@ignore');
         $api->get('profit', 'ShopController@profit');
+        $api->get('user/search', 'ShopController@user_search');
+        $api->post('invite/{shop_id}/{user_id}', 'ShopController@invite');
     });
 });
 
@@ -143,6 +146,18 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
+    });
+
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'proxy',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('share', 'ProxyController@share');
+        $api->get('members/count', 'ProxyController@members_count');
+        $api->get('members', 'ProxyController@members');
     });
 
 });

@@ -39,7 +39,7 @@ class DepositController extends Controller
     protected function grid()
     {
         return Admin::grid(Deposit::class, function (Grid $grid) {
-            $grid->model()->has('masterContainer.user')->with('masterContainer.user');
+            $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with('masterContainer.user');
 
             //工具按钮
             $grid->disableCreation();

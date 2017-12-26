@@ -10,6 +10,7 @@
 namespace App\Pay\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class DepositMethod extends Model
 {
@@ -88,6 +89,7 @@ class DepositMethod extends Model
     /**
      * 接收充值通知
      * @param Channel $channel
+     * @return mixed
      */
     public function acceptNotify(Channel $channel)
     {
