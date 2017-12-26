@@ -15,8 +15,8 @@
         </topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
-            <p>大赢家</p>
-            <p>茶水费</p>
+            <p>打赏</p>
+            <p>店家</p>
         </section>
         
         <deal-content :renderData = "renderData"></deal-content>

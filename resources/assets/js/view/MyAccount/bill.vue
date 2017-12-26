@@ -136,7 +136,8 @@
 					case 5: result='店铺转入'; break;
 					case 6: result='交易手续费'; break;
 					case 7: result='提现手续费'; break;
-					case 8: result='大赢家茶水费'; break;
+					default: result='打赏店家费'
+
 				}
 				return result;
 			}

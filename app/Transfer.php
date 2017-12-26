@@ -9,7 +9,7 @@ use Skip32;
 class Transfer extends Model
 {
     protected $table = 'transfer';
-
+    protected $keyType = 'string';
     //交易记录
     public function record()
     {
