@@ -309,10 +309,11 @@ class AccountController extends BaseController {
         /* @var $user User */
         foreach ($user->funds()->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
             $data[] = [
-                'id' => $_fund->id,
+                'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
                 'model' => (int)$_fund->model,
                 'amount' => $_fund->amount,
+                'created_at' => strtotime($_fund->created_at)
             ];
         }
         return $this->json(['data' => $data]);

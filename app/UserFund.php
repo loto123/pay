@@ -21,4 +21,8 @@ class UserFund extends Model
 
     const STATUS_FAIL = 2;
 
+    use Skip32Trait;
+
+    protected static $skip32_id = '0123456789abcdef0123';
+
 }
