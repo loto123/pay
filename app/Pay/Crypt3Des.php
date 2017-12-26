@@ -2,10 +2,13 @@
 
 namespace App\Pay;
 
+use Illuminate\Support\Facades\Log;
+
 class Crypt3Des
 {
 
     public $key = "";
+    public $iv = "";
 
     /*构造方法*/
     public function encrypt($input)
@@ -18,6 +21,24 @@ class Crypt3Des
         return $this->strToHex($data);
     }
 
+    //cbc模式的des-ede3加密
+    public function encrypt_cbc($input)
+    {
+        if (empty($input)) {
+            return null;
+        }
+        $input = $this->pkcs5_pad($input,8);
+        $key = str_pad($this->key,24,'0');
+        $iv = substr($key,0,8);
+        $dsd = openssl_encrypt($input, 'des-ede3-cbc', $key,2 , $iv);
+        $data = base64_decode($dsd);
+        return $this->strToHex($data);
+    }
+
+    public function pkcs5_pad ($text, $blocksize) {
+        $pad = $blocksize - (strlen($text) % $blocksize);
+        return $text . str_repeat(chr($pad), $pad);
+    }
     private function strToHex($string)
     {
         $hex = "";

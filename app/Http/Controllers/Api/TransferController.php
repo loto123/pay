@@ -374,7 +374,7 @@ class TransferController extends Controller
                 $tips = 0;
                 $profit_shares = [];
 //                if ($transfer->tip_type == 2 && $transfer->tip_percent > 0) {
-                if ($transfer->tip_percent > 0) {
+                if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
                     $tips = $transfer->tip_percent * $record->amount / 100;
                     //红包茶水费金额增加
                     $transfer->tip_amount = $transfer->tip_amount + $tips;
@@ -712,6 +712,10 @@ class TransferController extends Controller
      */
     public function payFee(Request $request)
     {
+        if(!config('shop_fee_status')) {
+            return response()->json(['code' => 0, 'msg' => 'something wrong', 'data' => []]);
+        }
+
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
