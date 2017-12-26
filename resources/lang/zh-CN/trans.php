@@ -50,4 +50,5 @@ return [
     'digits' => ':attribute必须为数字，且长度必须是:value位',
     'user_pay_password_error' => '支付密码错误',
     'user_check_pay_password_times_out' => '超出支付密码错误次数上限',
+    'not_need_trans_closed' => '关闭交易失败，没有符合关闭条件的交易',
 ];

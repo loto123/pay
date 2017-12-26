@@ -936,7 +936,7 @@ class TransferController extends Controller
         }
         $query = $shop->transfer()->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
-        }])->where('status', $status)->select('id', 'shop_id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
+        }])->where('status', $status)->select('id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
         if ($request->limit && $request->offset) {
             $query->offset($request->offset)->limit($request->limit);
         }
@@ -944,7 +944,7 @@ class TransferController extends Controller
         //装填响应数据
         foreach ($list as $key => $value) {
             $list[$key]->id = $value->en_id();
-            $list[$key]->shop_id = $value->en_shop_id();
+            $list[$key]->shop_id = $request->shop_id;
             $list[$key]->user->id = $value->user->en_id();
             unset($list[$key]->user_id);
         }
@@ -1065,11 +1065,18 @@ class TransferController extends Controller
         if ($shop->manager_id != $user->id) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_error_shop_manager'), 'data' => []]);
         }
-        $query = Transfer::where('shop_id', $shop->id)->where('status', 1);
+        $query = Transfer::where('shop_id', $shop->id)->where('status', 2);
         if (isset($request->transfer_id) && $request->transfer_id) {
-            $query->whereIn('id', $request->transfer_id);
+            $tmpIds = [];
+            foreach ($request->transfer_id as $key => $value) {
+                $tmpIds[] = Skip32::decrypt("0123456789abcdef0123", $value);
+            }
+            $query->whereIn('id', $tmpIds);
         }
         $list = $query->get();
+        if (!$list || $list->isEmpty()) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.not_need_trans_closed'), 'data' => []]);
+        }
         DB::beginTransaction();
         try {
             foreach ($list as $transfer) {
@@ -1077,8 +1084,10 @@ class TransferController extends Controller
                 if ($transfer->save()) {
                     //解冻店铺茶水费资金
                     $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
-                    if (!$shop_container->unfreeze($transfer->tip_amount)) {
-                        return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
+                    if($transfer->tip_amount > 0) {
+                        if (!$shop_container->unfreeze($transfer->tip_amount)) {
+                            return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
+                        }
                     }
 //                $shop = $transfer->shop;
 //                if ($shop) {
@@ -1093,13 +1102,17 @@ class TransferController extends Controller
                         $profit->record_id = $value->id;
                         $profit->user_id = $value->user_id;
                         $profit->fee_percent = $transfer->fee_percent;
+                        $profit->proxy = 0 ;
+                        $profit->operator = 0;
                         if ($value->user->parent) {
                             $profit->proxy = $value->user->parent->id;
                             $profit->proxy_percent = $value->user->parent->percent;
                             $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
                             //解冻代理资金
-                            $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
-                            $proxy_container->unfreeze($profit->proxy_amount);
+                            if($profit->proxy_amount > 0) {
+                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+                                $proxy_container->unfreeze($profit->proxy_amount);
+                            }
                         }
                         $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
                         if ($value->user->operator) {
@@ -1115,6 +1128,7 @@ class TransferController extends Controller
             return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::info($e->getTraceAsString());
         }
         return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
     }
