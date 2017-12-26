@@ -76,6 +76,7 @@ class AccountController extends BaseController {
         }
         $user = $this->auth->user();
         $record = new UserFund();
+        $record->user_id = $user->id;
         $record->type = UserFund::TYPE_CHARGE;
         $record->mode = UserFund::MODE_IN;
         $record->amount = $request->amount;
@@ -144,6 +145,7 @@ class AccountController extends BaseController {
             return $this->json([], trans("api.error_balance"), 0);
         }
         $record = new UserFund();
+        $record->user_id = $user->id;
         $record->type = UserFund::TYPE_WITHDRAW;
         $record->mode = UserFund::MODE_OUT;
         $record->amount = $request->amount;
