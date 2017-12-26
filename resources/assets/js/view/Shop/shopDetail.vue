@@ -177,7 +177,7 @@
           </div>
         </div>
 
-      <div class="submit flex flex-justify-center" v-if="searchData.id">
+      <div class="submit flex flex-justify-center" v-if="searchData.id" @click="submitAddMember">
         <mt-button type="default" size="large" style="width:70%;">邀请</mt-button>
       </div>
 
@@ -567,6 +567,22 @@ export default {
       this.openMemberTab();
     },
 
+    // 发送邀请用户请求
+    submitAddMember(){
+      Loading.getInstance().open();
+      var _data= {
+        shop_id:this.shopId,
+        user_id:this.searchUserMobile
+      }
+
+      request.getInstance().postData("api/shop/invite/"+this.shopId+"/"+this.searchData.id).then(res=>{
+        Loading.getInstance().close();
+        Toast("邀请用户成功");
+        this.closeMemberTab();
+      }).catch(error=>{
+      });
+    },
+
     // 数据控制
     init() {
       Loading.getInstance().open();
@@ -620,7 +636,7 @@ export default {
                 console.error(error);
               });
         }).catch(err=>{
-          
+
         });
 
       
@@ -628,6 +644,8 @@ export default {
 
     closeMemberTab(){
       this.addMemberSwitch = false;
+      this.searchData = {};
+      this.searchUserMobile = null;
     },
 
     openMemberTab(){
@@ -642,8 +660,9 @@ export default {
       }
       request.getInstance().getData('api/shop/user/search',_data).then(res=>{
         this.searchData = res.data.data;
+        Loading.getInstance().close();
       }).catch(err=>{
-
+        Loading.getInstance().close();
       });
     }
 

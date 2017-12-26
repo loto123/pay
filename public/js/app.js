@@ -45939,7 +45939,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\ni[data-v-21c80755] {\n  display: block;\n}\n.active[data-v-21c80755] {\n  color: #26a2ff;\n}\n.normal[data-v-21c80755] {\n  color: #666;\n}\n#tabBar[data-v-21c80755] {\n  position: absolute;\n  bottom: 0em;\n  left: 0em;\n  height: 4em;\n  border-top: 1px solid #eee;\n  width: 100%;\n  background: #f5f7fb;\n}\n#tabBar ul[data-v-21c80755] {\n    padding-top: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#tabBar ul li .comonIcon[data-v-21c80755] {\n      font-size: 2.3em;\n}\n#tabBar ul li p[data-v-21c80755] {\n      margin-top: 0.2em;\n      text-align: center;\n}\n#tabBar ul li .make-deal[data-v-21c80755] {\n      width: 5.8em;\n      height: 5.8em;\n      background: #f5f7fb;\n      border-radius: 50%;\n      margin-top: -4em;\n}\n#tabBar ul li .make-deal i[data-v-21c80755] {\n        margin-top: 0.4em;\n        padding: 0.4em;\n        background: #26a2ff;\n        border-radius: 50%;\n        color: #fff;\n}\n#tabBar ul li .make-deal p[data-v-21c80755] {\n        margin-top: 0.5em;\n}\n", ""]);
+exports.push([module.i, "\ni[data-v-21c80755] {\n  display: block;\n}\n.active[data-v-21c80755] {\n  color: #26a2ff;\n}\n.normal[data-v-21c80755] {\n  color: #666;\n}\n#tabBar[data-v-21c80755] {\n  position: absolute;\n  bottom: 0em;\n  left: 0em;\n  height: 3em;\n  border-top: 1px solid #eee;\n  width: 100%;\n  background: #f5f7fb;\n}\n#tabBar ul[data-v-21c80755] {\n    padding-top: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#tabBar ul li .comonIcon[data-v-21c80755] {\n      font-size: 1.7em;\n}\n#tabBar ul li p[data-v-21c80755] {\n      margin-top: 0.2em;\n      text-align: center;\n      font-size: 0.8em;\n}\n#tabBar ul li .make-deal[data-v-21c80755] {\n      width: 4.5em;\n      height: 4.5em;\n      background: #f5f7fb;\n      border-radius: 50%;\n      margin-top: -4em;\n}\n#tabBar ul li .make-deal i[data-v-21c80755] {\n        margin-top: 0.4em;\n        padding: 0.4em;\n        background: #26a2ff;\n        border-radius: 50%;\n        color: #fff;\n}\n#tabBar ul li .make-deal p[data-v-21c80755] {\n        margin-top: 0.5em;\n}\n", ""]);
 
 // exports
 
@@ -45950,6 +45950,8 @@ exports.push([module.i, "\ni[data-v-21c80755] {\n  display: block;\n}\n.active[d
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -67725,9 +67727,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
+    // 发送邀请用户请求
+    submitAddMember: function submitAddMember() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      var _data = {
+        shop_id: this.shopId,
+        user_id: this.searchUserMobile
+      };
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/invite/" + this.shopId + "/" + this.searchData.id).then(function (res) {
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("邀请用户成功");
+        _this.closeMemberTab();
+      }).catch(function (error) {});
+    },
+
+
     // 数据控制
     init: function init() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       var self = this;
@@ -67735,41 +67755,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/detail/" + _id).then(function (res) {
 
-        _this.shopId = res.data.data.id;
-        _this.shopName = res.data.data.name;
-        _this.rate = res.data.data.rate;
-        _this.percent = res.data.data.percent;
-        _this.membersCount = res.data.data.members_count;
-        _this.membersList = res.data.data.members;
-        _this.logo = res.data.data.logo;
+        _this2.shopId = res.data.data.id;
+        _this2.shopName = res.data.data.name;
+        _this2.rate = res.data.data.rate;
+        _this2.percent = res.data.data.percent;
+        _this2.membersCount = res.data.data.members_count;
+        _this2.membersList = res.data.data.members;
+        _this2.logo = res.data.data.logo;
 
         if (res.data.data.active == 1) {
-          _this.tradeStatus = true;
+          _this2.tradeStatus = true;
         } else {
-          _this.tradeStatus = false;
+          _this2.tradeStatus = false;
         }
 
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
-        _this.$router.go(-1);
+        _this2.$router.go(-1);
       });
     },
 
 
     // 解散店铺
     dissShop: function dissShop() {
-      var _this2 = this;
+      var _this3 = this;
 
       __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm('确定删除店铺?').then(function (action) {
 
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
 
-        __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + _this2.shopId).then(function (res) {
+        __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + _this3.shopId).then(function (res) {
           __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("店铺解散成功");
           setTimeout(function () {
-            _this2.$router.push("/shop");
+            _this3.$router.push("/shop");
           }, 1000);
         }).catch(function (error) {
           console.error(error);
@@ -67778,6 +67798,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     closeMemberTab: function closeMemberTab() {
       this.addMemberSwitch = false;
+      this.searchData = {};
+      this.searchUserMobile = null;
     },
     openMemberTab: function openMemberTab() {
       this.addMemberSwitch = true;
@@ -67786,15 +67808,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 搜索用户
     searchUser: function searchUser() {
-      var _this3 = this;
+      var _this4 = this;
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         mobile: this.searchUserMobile
       };
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/user/search', _data).then(function (res) {
-        _this3.searchData = res.data.data;
-      }).catch(function (err) {});
+        _this4.searchData = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+      });
     }
   }
 });
@@ -68251,7 +68276,10 @@ var render = function() {
                 _vm.searchData.id
                   ? _c(
                       "div",
-                      { staticClass: "submit flex flex-justify-center" },
+                      {
+                        staticClass: "submit flex flex-justify-center",
+                        on: { click: _vm.submitAddMember }
+                      },
                       [
                         _c(
                           "mt-button",
@@ -69156,7 +69184,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             var _data = {
-                transfer_id: _tList
+                transfer_id: _tList,
+                shop_id: this.dataList[0].shop_id
             };
 
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/close', _data).then(function (res) {}).catch(function (err) {
