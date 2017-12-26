@@ -631,7 +631,7 @@ class ShopController extends BaseController {
 
     /**
      * @SWG\Post(
-     *   path="/shop/ignore/{id}",
+     *   path="/shop/ignore",
      *   summary="店铺忽略消息",
      *   tags={"店铺"},
      *   @SWG\Parameter(
