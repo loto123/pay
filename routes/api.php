@@ -143,6 +143,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|andriod|ios', 'scene' => '\d+']);
         $api->get('withdraw-methods', 'AccountController@withdrawMethods');
         $api->get('records', 'AccountController@records');
+        $api->get('records/detail/{id}', 'AccountController@record_detail');
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');

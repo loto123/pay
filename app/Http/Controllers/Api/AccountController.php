@@ -7,6 +7,7 @@ use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
 use App\User;
+use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -74,8 +75,16 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
+        $record = new UserFund();
+        $record->user_id = $user->id;
+        $record->type = UserFund::TYPE_CHARGE;
+        $record->mode = UserFund::MODE_IN;
+        $record->amount = $request->amount;
+        $record->balance = $user->balance + $request->amount;
+        $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
         try {
+            $record->save();
             $result = $user->container->initiateDeposit($request->amount, $user->channel, DepositMethod::find($request->way));
         } catch (\Exception $e) {
             return $this->json([], 'error', 0);
@@ -132,17 +141,22 @@ class AccountController extends BaseController {
         if (!$user->pay_card) {
             return $this->json([], trans("api.error_pay_card"), 0);
         }
+        if ($user->container->balance < $request->amount) {
+            return $this->json([], trans("api.error_balance"), 0);
+        }
+        $record = new UserFund();
+        $record->user_id = $user->id;
+        $record->type = UserFund::TYPE_WITHDRAW;
+        $record->mode = UserFund::MODE_OUT;
+        $record->amount = $request->amount;
+        $record->balance = $user->balance - $request->amount;
+        $record->status = UserFund::STATUS_SUCCESS;
         try {
+            $record->save();
             $result = $user->container->initiateWithdraw(
                 $request->amount,
                 [
-                    'branch_bank' => $user->pay_card->bank->name,
-                    'bank_no' => $user->pay_card->bank_id,
-                    'city' => '广州市',
-                    'province' => '广东省',
-                    'receiver_account' => $user->pay_card->card_num,
-                    'receiver_name' => $user->pay_card->holder_name,
-                    'to_public' => 0
+                    'bank_card' => $user->pay_card
                 ],
                 $user->channel,
                 WithdrawMethod::find($request->way),
@@ -293,14 +307,50 @@ class AccountController extends BaseController {
         $data = [];
         $user = $this->auth->user();
         /* @var $user User */
-        foreach ($user->funds()->orderBy('id DESC')->paginate($request->size) as $_fund) {
+        foreach ($user->funds()->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
             $data[] = [
-                'id' => $_fund->id,
+                'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
                 'model' => (int)$_fund->model,
                 'amount' => $_fund->amount,
+                'created_at' => strtotime($_fund->created_at)
             ];
         }
         return $this->json(['data' => $data]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/account/records/detail/{id}",
+     *   summary="帐单详情",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="帐单id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function record_detail($id) {
+        $user = $this->auth->user();
+
+        $fund = UserFund::findByEnId($id);
+        if (!$fund || $fund->user_id != $user->id) {
+            return $this->json([], trans("error_fund"), 0);
+        }
+        return $this->json([
+            'id' => $fund->en_id(),
+            'type' => (int)$fund->type,
+            'model' => (int)$fund->model,
+            'amount' => $fund->amount,
+            'created_at' => strtotime($fund->created_at),
+            'no' => $fund->no,
+            'remark' => $fund->remark,
+            'balance' => $fund->balance
+        ]);
     }
 }

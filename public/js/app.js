@@ -68631,7 +68631,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#dealManagement[data-v-014c721d] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#dealManagement #tab-menu[data-v-014c721d] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#dealManagement #tab-menu .menu-item[data-v-014c721d] {\n      height: 100%;\n      width: 33.33%;\n}\n#dealManagement #tab-menu .active[data-v-014c721d] {\n      border-bottom: 4px solid #26a2ff;\n}\n#dealManagement .deal-wrap[data-v-014c721d] {\n    width: 100%;\n}\n#dealManagement .deal-wrap ul .timer[data-v-014c721d] {\n      width: 100%;\n      height: 3em;\n      margin-top: 0.1em;\n}\n#dealManagement .deal-wrap ul .timer > div[data-v-014c721d] {\n        display: inline-block;\n        font-size: 0.8em;\n        background: #aaa;\n        color: #fff;\n        padding-left: 0.4em;\n        padding-right: 0.4em;\n        padding-top: 0.4em;\n        padding-bottom: 0.4em;\n        border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item[data-v-014c721d] {\n      height: 4em;\n      background: #fff;\n      width: 100%;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      margin-top: 0.1em;\n      /*border-bottom:1px solid #eee;*/\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap[data-v-014c721d] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap img[data-v-014c721d] {\n          width: 2.3em;\n          height: 2.3em;\n          border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap h3[data-v-014c721d] {\n          font-size: 0.5em;\n          margin-top: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap[data-v-014c721d] {\n        height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .title[data-v-014c721d] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .date[data-v-014c721d] {\n          color: #999;\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap[data-v-014c721d] {\n        height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-014c721d] {\n          font-size: 0.9em;\n          margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-014c721d] {\n          font-size: 1.1em;\n          margin-top: 0.6em;\n          color: #00cc00;\n}\n", ""]);
+exports.push([module.i, "\n#dealManagement[data-v-014c721d] {\n  padding-top: 2em;\n  background: #eee;\n  min-height: 100vh;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#dealManagement #tab-menu[data-v-014c721d] {\n    height: 3em;\n    background: #fff;\n    width: 100%;\n}\n#dealManagement #tab-menu .menu-item[data-v-014c721d] {\n      height: 100%;\n      width: 33.33%;\n}\n#dealManagement #tab-menu .active[data-v-014c721d] {\n      border-bottom: 4px solid #26a2ff;\n}\n#dealManagement .deal-wrap[data-v-014c721d] {\n    width: 100%;\n}\n#dealManagement .deal-wrap ul[data-v-014c721d] {\n      width: 100%;\n}\n#dealManagement .deal-wrap ul .timer[data-v-014c721d] {\n        width: 100%;\n        height: 3em;\n        margin-top: 0.1em;\n}\n#dealManagement .deal-wrap ul .timer > div[data-v-014c721d] {\n          display: inline-block;\n          font-size: 0.8em;\n          background: #aaa;\n          color: #fff;\n          padding-left: 0.4em;\n          padding-right: 0.4em;\n          padding-top: 0.4em;\n          padding-bottom: 0.4em;\n          border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item[data-v-014c721d] {\n        height: 4em;\n        background: #fff;\n        width: 100%;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        margin-top: 0.1em;\n        /*border-bottom:1px solid #eee;*/\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap[data-v-014c721d] {\n          -webkit-box-sizing: border-box;\n                  box-sizing: border-box;\n          padding-left: 0.5em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap img[data-v-014c721d] {\n            width: 2.3em;\n            height: 2.3em;\n            border-radius: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .avatar-wrap h3[data-v-014c721d] {\n            font-size: 0.5em;\n            margin-top: 0.2em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap[data-v-014c721d] {\n          height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .title[data-v-014c721d] {\n            font-size: 0.8em;\n            margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .content-wrap .date[data-v-014c721d] {\n            color: #999;\n            font-size: 0.8em;\n            margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap[data-v-014c721d] {\n          height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .title[data-v-014c721d] {\n            font-size: 0.9em;\n            margin-top: 1em;\n}\n#dealManagement .deal-wrap ul .deal-item .pay-detail-wrap .m-text[data-v-014c721d] {\n            font-size: 1.1em;\n            margin-top: 0.6em;\n            color: #00cc00;\n}\n#dealManagement .deal-wrap ul .deal-item .controller-wrap[data-v-014c721d] {\n          padding-right: 1em;\n          -webkit-box-sizing: border-box;\n                  box-sizing: border-box;\n          height: 100%;\n}\n#dealManagement .deal-wrap ul .deal-item .controller-wrap > i[data-v-014c721d] {\n            width: 1.5em;\n            height: 1.5em;\n            border-radius: 50%;\n            border: 1px solid #eee;\n}\n#dealManagement .deal-wrap ul .group-controller[data-v-014c721d] {\n        position: fixed;\n        bottom: 0em;\n        left: 0em;\n        width: 100%;\n        height: 7em;\n        background: #fff;\n}\n#dealManagement .deal-wrap ul .group-controller > div[data-v-014c721d] {\n          margin-top: 0.5em;\n          width: 90%;\n}\n#dealManagement .deal-wrap .wrap[data-v-014c721d] {\n      padding-bottom: 7em;\n}\n", ""]);
 
 // exports
 
@@ -68646,6 +68646,65 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(13);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -68842,11 +68901,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+
+        // 切换面板
         changeTab: function changeTab(item) {
             var _this = this;
 
             __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
-
+            this.isListRadioShow = false;
             if (item > 2 || item < 0) {
                 return;
             } else {
@@ -68862,10 +68923,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {
-                _this.dataList = res.data.data;
+                _this.dataList = [];
+                for (var i = 0; i < res.data.data.length; i++) {
+                    var _temp = res.data.data[i];
+                    _temp.checked = false;
+                    _this.dataList.push(_temp);
+                }
+
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
-                console.log(err);
+                console.error(err);
             });
         },
         goDetail: function goDetail(id) {
@@ -68873,6 +68940,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         toggleShowListButton: function toggleShowListButton() {
             this.isListRadioShow = !this.isListRadioShow;
+        },
+
+        // 标记操作的list对象
+        markItem: function markItem(item) {
+            var _t = [].concat(this.dataList);
+
+            for (var i = 0; i < this.dataList.length; i++) {
+                if (this.dataList[i].id == item) {
+                    this.dataList[i].checked = !this.dataList[i].checked;
+                }
+            }
         },
         init: function init() {
             var _this2 = this;
@@ -68887,7 +68965,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {
-                _this2.dataList = res.data.data;
+                _this2.dataList = [];
+                for (var i = 0; i < res.data.data.length; i++) {
+                    var _temp = res.data.data[i];
+                    _temp.checked = false;
+                    _this2.dataList.push(_temp);
+                }
+
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
 
@@ -68994,6 +69078,7 @@ var render = function() {
       _c("div", { staticClass: "deal-wrap" }, [
         _c(
           "ul",
+          { class: { wrap: _vm.tabItem[1] && _vm.isListRadioShow } },
           [
             _vm._m(0, false, false),
             _vm._v(" "),
@@ -69046,18 +69131,91 @@ var render = function() {
                         "pay-detail-wrap flex flex-v flex-align-center flex-3"
                     },
                     [
-                      _c("div", { staticClass: "title" }, [
-                        _vm._v("手续费收益")
-                      ]),
+                      _c("div", { staticClass: "title" }, [_vm._v("收益")]),
                       _vm._v(" "),
                       _c("div", { staticClass: "m-text" }, [
                         _vm._v("￥" + _vm._s(item.tip_amount))
                       ])
                     ]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _vm.isListRadioShow
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "controller-wrap flex flex-align-center"
+                        },
+                        [
+                          _c(
+                            "i",
+                            {
+                              staticClass:
+                                "iconfont flex flex-align-center flex-justify-center",
+                              staticStyle: { color: "#00cc00" },
+                              on: {
+                                click: function($event) {
+                                  $event.stopPropagation()
+                                  _vm.markItem(item.id)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                          " +
+                                  _vm._s(item.checked ? "" : "") +
+                                  "\n                      "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    : _vm._e()
                 ]
               )
-            })
+            }),
+            _vm._v(" "),
+            _vm.tabItem[1] && _vm.isListRadioShow
+              ? _c(
+                  "div",
+                  {
+                    staticClass:
+                      "group-controller flex flex-v flex-align-center"
+                  },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "delete-choise" },
+                      [
+                        _c(
+                          "mt-button",
+                          {
+                            staticStyle: { background: "red" },
+                            attrs: { type: "primary", size: "large" }
+                          },
+                          [_vm._v("关闭选中交易")]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "delete-all" },
+                      [
+                        _c(
+                          "mt-button",
+                          {
+                            staticStyle: { background: "#777" },
+                            attrs: { type: "primary", size: "large" }
+                          },
+                          [_vm._v("关闭所有已平账交易")]
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                )
+              : _vm._e()
           ],
           2
         )

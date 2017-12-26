@@ -40,19 +40,13 @@ class Transfer extends Model
         return $this->hasMany('App\TipRecord', 'transfer_id', 'id');
     }
 
-    public function en_id()
-    {
-        return Skip32::encrypt("0123456789abcdef0123", $this->id);
-    }
+    use Skip32Trait;
+
+    protected static $skip32_id = '0123456789abcdef0123';
 
     public function en_shop_id()
     {
-        return Skip32::encrypt("0123456789abcdef0123", $this->shop_ip);
-    }
-
-    public static function findByEnId($en_id)
-    {
-        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
+        return Skip32::encrypt(self::$skip32_id, $this->shop_ip);
     }
 
     public function container()
