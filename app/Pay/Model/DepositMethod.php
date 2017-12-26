@@ -105,8 +105,9 @@ class DepositMethod extends Model
             }
 
             if ($result->state === Deposit::STATE_COMPLETE) {
-                if (!$result->masterContainer->changeBalance($result->amount, 0)) {
-                    $result->state = Deposit::STATE_CHARGE_FAIL;//到账失败
+                $result->state = Deposit::STATE_CHARGE_FAIL;//到账失败
+                if ($result->masterContainer->changeBalance($result->amount, 0)) {
+                    $result->state = Deposit::STATE_COMPLETE;
                 }
             }
 
