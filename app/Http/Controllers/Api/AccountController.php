@@ -313,7 +313,7 @@ class AccountController extends BaseController {
         $data = [];
         $user = $this->auth->user();
         /* @var $user User */
-        foreach ($user->funds()->orderBy('id DESC')->paginate($request->size) as $_fund) {
+        foreach ($user->funds()->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
             $data[] = [
                 'id' => $_fund->id,
                 'type' => (int)$_fund->type,
