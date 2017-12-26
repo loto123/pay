@@ -21,6 +21,8 @@ use Skip32;
  */
 class Shop extends Model
 {
+    use Skip32Trait;
+
     const STATUS_NORMAL = 0;
 
     const STATUS_CLOSED = 1;
@@ -44,13 +46,7 @@ class Shop extends Model
     }
 
 
-    public function en_id() {
-        return Skip32::encrypt("0123456789abcdef0123", $this->id);
-    }
-
-    public static function findByEnId($en_id) {
-        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
-    }
+    protected static $skip32_id = '0123456789abcdef0123';
 
     public function container() {
         return $this->hasOne(MasterContainer::class, 'id', 'container_id');
