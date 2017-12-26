@@ -577,6 +577,21 @@ class ShopController extends BaseController {
     }
 
     /**
+     * @SWG\Get(
+     *   path="/shop/messages/count",
+     *   summary="店铺未读消息数",
+     *   tags={"店铺"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function messages_count() {
+        $user = $this->auth->user();
+
+        return $this->json(['count' => (int)$user->unreadNotifications()->where("type", "App\Notifications\ShopApply")->count()]);
+    }
+
+    /**
      * @SWG\Post(
      *   path="/shop/agree",
      *   summary="店铺同意消息",
