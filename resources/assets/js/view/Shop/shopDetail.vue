@@ -169,27 +169,29 @@
 
         <div class="middle-content flex flex-align-center">
           <div class="input-wrap flex-7 flex flex-align-center">
-            <input type="text">
+            <input type="text" v-model="searchUserMobile">
           </div>
 
-          <div class="search-btn flex-3 flex flex-align-center flex-justify-center">
+          <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
             搜索
           </div>
         </div>
         
-        <div class="user-info flex flex-align-center flex-justify-center">
+        <div class="user-info flex flex-align-center flex-justify-center" v-if="searchData.id">
           <div class="info flex flex-1">
             <div class="info-wrap flex flex-align-center flex-3 flex-justify-center">
-              <img src="/images/avatar.jpg" alt="">
+              <img :src="searchData.avatar" alt="">
             </div>
+
             <div class="info-right flex-4 flex flex-v flex-align-center flex-justify-center">
-                <span style="margin-top:-0.5em;">昵称:逗比同学</span>
-                <span>账号:13333333333</span>
+                <span style="margin-top:-0.5em;">昵称:{{searchData.name}}</span>
+                <span>账号:{{searchData.mobile}}</span>
             </div>
+
           </div>
         </div>
 
-      <div class="submit flex flex-justify-center">
+      <div class="submit flex flex-justify-center" v-if="searchData.id">
         <mt-button type="default" size="large" style="width:70%;">邀请</mt-button>
       </div>
 
@@ -530,6 +532,7 @@ export default {
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
       isGroupMaster: true,       // 是否是群主
+      searchUserMobile:null,     // 搜索店铺成员的手机号
 
       shopId: null,
       shopName: null,
@@ -540,7 +543,14 @@ export default {
       active: null,
 
       addMemberSwitch: false,      // 添加成员开关
-      logo:null                    // 店铺的头像
+      logo:null,                    // 店铺的头像
+
+      searchData:{                 // 搜索出来的数据
+        avatar:null,
+        id:null,
+        mobile:null,
+        name:null
+      }
     };
   },
   methods: {
@@ -554,7 +564,7 @@ export default {
       this.$router.push("/shop/shop_member");
     },
     goDealManagement() {
-      this.$router.push("/shop/deal_management");
+      this.$router.push("/shop/deal_management?shopId="+this.shopId);
     },
     goShopAccount() {
       this.$router.push("/shop/shopAccount?id="+this.shopId);
@@ -622,6 +632,19 @@ export default {
 
     openMemberTab(){
       this.addMemberSwitch = true;
+    },
+
+    // 搜索用户
+    searchUser(){
+      Loading.getInstance().open();
+      var _data = {
+        mobile :this.searchUserMobile
+      }
+      request.getInstance().getData('api/shop/user/search',_data).then(res=>{
+        this.searchData = res.data.data;
+      }).catch(err=>{
+
+      });
     }
 
   }

@@ -25,6 +25,7 @@ class SingleTransfer implements WithdrawInterface
     public function withdraw($withdraw_id, $amount, array $receiver_info, array $config, $notify_url)
     {
         $result = new WithdrawResult();
+        $card = $receiver_info['bank_card'];
         $amount *= 100;
         $encrypt = [
             'CMDID' => hexdec('0x1001'),
@@ -34,15 +35,15 @@ class SingleTransfer implements WithdrawInterface
             'REQTIME' => date('YmdHis'),
             'AMT' => (int)$amount,
             'BUSITYPE' => '001',
-            'ACCNAME' => $receiver_info['ACCNAME'],
-            'ACCNO' => $receiver_info['ACCNO'],
+            'ACCNAME' => $card->holder_name,
+            'ACCNO' => $card->card_num,
             'MEMO' => '',
             'PAYTYPE' => isset($config['PAYTYPE']) ? $config['PAYTYPE'] : 1,
         ];
 
-        if (isset($receiver_info['BANKSETTLENO'])) {
-            $encrypt['BANKSETTLENO'] = $receiver_info['BANKSETTLENO'];
-        }
+//        if (isset($receiver_info['BANKSETTLENO'])) {
+//            $encrypt['BANKSETTLENO'] = $receiver_info['BANKSETTLENO'];
+//        }
 
         //加密
         $RSAEncryptor = $this->getEncryptor($config);
@@ -107,9 +108,7 @@ class SingleTransfer implements WithdrawInterface
     public function receiverInfoDescription()
     {
         return [
-            'ACCNAME' => '收款人银行卡户名',
-            'ACCNO' => '收款人银行卡账号',
-            'BANKSETTLENO' => '对公账户必传：传开户所在支行的联行号，参考《银行联行号.xlsx》对私账户：不传',
+            'bank_card' => '银行卡对象,后端设置'
         ];
     }
 

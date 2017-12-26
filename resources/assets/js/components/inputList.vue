@@ -81,20 +81,25 @@
 </style>
 
 <script>
+import utils from '../utils/utils.js'
 export default {
-  // showSwitch:组件显示开关
-  // optionsList:渲染选择对象
   props:["showSwitch","optionsList"],
 
+  // showSwitch:组件显示开关
+  // optionsList:渲染选择对象
+  computed :{
+    
+  },
   data(){
       return {
-        "choiseValue":null
+        "choiseValue":null,
+        "shopList":null
       }
   },
   methods:{
       hideTab(){
           this.$emit("hideDropList",this.choiseValue);
-      }
+      },
   },
   watch:{
       "choiseValue":'hideTab'

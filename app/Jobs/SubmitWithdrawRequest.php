@@ -55,6 +55,11 @@ class SubmitWithdrawRequest implements ShouldQueue
         $result = new WithdrawResult();
 
         try {
+            if ($withdraw->method->targetPlatform->getKey() == 0) {
+                //银行卡提现取得银行内部编码
+                $withdraw->receiver_info['bank_no'] = $withdraw->channel->platform->getBankCode($withdraw->receiver_info['bank_card']);
+            }
+
             $result = $withdraw->method->withdraw($withdraw);
             if ($result->raw_response) {
                 $withdraw->state = $result->state;

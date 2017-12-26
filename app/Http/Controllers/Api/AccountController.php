@@ -85,22 +85,6 @@ class AccountController extends BaseController {
     }
 
     /**
-     * 提现字段信息
-     */
-    public function withdrawFieldsInfo()
-    {
-        return $this->json([
-            ['fields' => [['name' => '姓名']]],
-            ['fields' => [['id_card' => '身份证']]],
-            ['fields' => [['main_bank' => '所属银行']], 'select' => [['1' => '	中国银行', '2' => '中国农业银行']]],
-            ['fields' => [['branch_bank' => '支行名']]],
-            ['fields' => [['province' => '省'], ['city' => '市'], 'select' => [['value' => '1', 'label' => '湖南', 'select' => ['1' => '长沙', '2' => '常德']], ['value' => '2', 'label' => '广东', 'select' => ['1' => '韶关', '2' => '清远']]]]],
-            ['fields' => [['card_no' => '卡号']]],
-            ['fields' => [['bank_mobile' => '预留手机号']]],
-        ]);
-    }
-
-    /**
      * @SWG\Post(
      *   path="/account/withdraw",
      *   summary="账户提现",
@@ -212,10 +196,10 @@ class AccountController extends BaseController {
         /**
          * @var $channelBind Channel
          */
-        return $this->json([
-            'channel' => 1,
-            'methods' => [['id' => 1, 'label' => '微信']]
-        ]);
+//        return $this->json([
+//            'channel' => 1,
+//            'methods' => [['id' => 1, 'label' => '微信']]
+//        ]);
         $os = $os == 'unknown' ? $os : ['ios' => DepositMethod::OS_IOS, 'andriod' => DepositMethod::OS_ANDRIOD][$os];
 
         $scene = Scene::find($scene);
@@ -223,17 +207,17 @@ class AccountController extends BaseController {
             $channelBind = $this->user->channel;
             if ($channelBind->disabled) {
                 //被禁用则启用备用通道
-                $use_spare = true;
                 $channelBind = $channelBind->spareChannel;
             }
 
-            $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label')->get();
+            if (!$channelBind) {
+                return $this->json(null, '没有可用支付通道', 0);
+            }
 
-            return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
-                return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
-                    ($os == 'unknown' && $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统且不限系统,或系统匹配
-            })->mapWithKeys(function ($item) {
-                return [$item['id'] => $item['show_label']];
+            $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label')->get();
+            //dump($methods);
+            return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->map(function ($item) {
+                return ['id' => $item['id'], 'label' => $item['show_label']];
             })]);
         } else {
             return $this->json(null, '不存在的场景或系统', 0);
@@ -261,7 +245,18 @@ class AccountController extends BaseController {
             $channelBind = $channelBind->spareChannel;
         }
 
-        return $this->json(['channel' => $channelBind->getKey(), 'methods' => $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get(), 'banks' => [1, 2, 3]]);
+        if (!$channelBind) {
+            return $this->json(null, '没有可用支付通道', 0);
+        }
+
+        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get();
+        if (config('app.debug')) {
+            $methods->each(function (&$item) {
+                $item['required-params'] = WithdrawMethod::find($item['id'])->getReceiverDescription();
+            });
+        }
+
+        return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods]);
     }
 
     /**
