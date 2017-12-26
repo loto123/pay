@@ -11,6 +11,10 @@ class ShopApply extends Notification
 {
     use Queueable;
 
+    const TYPE_APPLY = 0;
+
+    const TYPE_INVITE = 1;
+
     /**
      * Create a new notification instance.
      *
