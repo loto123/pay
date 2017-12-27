@@ -316,7 +316,12 @@ export default {
     return {
       passWordSwitch: false,
       renderData: {
-        name: null
+        name: null,
+        user:{
+          avatar:{}
+        },
+        avatar:{},
+        
       },
       moneyData: {
         payMoney: null,
@@ -554,7 +559,7 @@ export default {
           this.$router.push("/makeDeal/my_deal");
         },1500);
       }).catch(err=>{
-        Toast("撤销交易失败");
+        Toast(err.data.data.msg);
       });
     },
 

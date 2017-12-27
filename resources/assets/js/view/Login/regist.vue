@@ -297,7 +297,7 @@ export default {
           Toast("注册成功");
           self.$router.push("/login");
         }).catch((err)=>{
-          console.log(err);
+          console.error(err);
           Toast("注册失败");
         });
         return;

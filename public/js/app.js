@@ -53478,7 +53478,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册成功");
           self.$router.push("/login");
         }).catch(function (err) {
-          console.log(err);
+          console.error(err);
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册失败");
         });
         return;
@@ -55493,7 +55493,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/account/charge', _data).then(function (res) {
-				console.log(res);
 				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('充值成功');
 				location.href = res.data.data.redirect_url;
 			}).catch(function (err) {
@@ -55508,7 +55507,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
-				console.log(res);
 				_this.setBankList(res);
 			}).catch(function (err) {
 				console.error(err);
@@ -58567,7 +58565,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       passWordSwitch: false,
       renderData: {
-        name: null
+        name: null,
+        user: {
+          avatar: {}
+        },
+        avatar: {}
+
       },
       moneyData: {
         payMoney: null,
@@ -58790,7 +58793,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this6.$router.push("/makeDeal/my_deal");
         }, 1500);
       }).catch(function (err) {
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易失败");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.data.msg);
       });
     },
     hideMemberChoise: function hideMemberChoise() {
@@ -59259,7 +59262,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["renderData"]
+  props: ["renderData"],
+  mounted: function mounted() {
+    console.log(this.renderData);
+  }
 });
 
 /***/ }),
@@ -59274,10 +59280,12 @@ var render = function() {
     _c("section", { staticClass: "content flex flex-v flex-align-center" }, [
       _c("img", {
         staticClass: "avatar",
-        attrs: { src: "/images/avatar.jpg", alt: "" }
+        attrs: { src: _vm.renderData.user.avatar, alt: "" }
       }),
       _vm._v(" "),
-      _c("h3", { staticClass: "user-name" }, [_vm._v("用户名字")]),
+      _c("h3", { staticClass: "user-name" }, [
+        _vm._v(_vm._s(_vm.renderData.user.name))
+      ]),
       _vm._v(" "),
       _c("p", { staticClass: "message" }, [
         _vm._v(
@@ -60775,9 +60783,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       renderData: {
         name: null,
-        moneyData: null
+        moneyData: null,
+        user: {}
       },
-      // hasPayList:[],
       passwordData: {
         switch: false,
         value: null
