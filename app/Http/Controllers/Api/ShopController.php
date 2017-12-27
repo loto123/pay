@@ -518,13 +518,6 @@ class ShopController extends BaseController {
      *   path="/shop/profit",
      *   summary="所有店铺收益信息",
      *   tags={"店铺"},
-     *   @SWG\Parameter(
-     *     name="id",
-     *     in="path",
-     *     description="店铺id",
-     *     required=true,
-     *     type="integer"
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
