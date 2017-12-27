@@ -66358,7 +66358,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
 
       shopList: [],
-      total_profit: null
+      total_profit: null,
+      messageCount: null // 新消息数量
     };
   },
 
@@ -66403,9 +66404,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
 
-      Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit")]).then(function (res) {
+      Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/messages/count")]).then(function (res) {
         _this.shopList = res[0].data.data.data;
         _this.total_profit = res[1].data.data.profit;
+        _this.messageCount = res.data.data.count;
+        console.log(res[2]);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
@@ -66447,7 +66450,9 @@ var render = function() {
                 [
                   _c("i", { staticClass: "iconfont" }, [_vm._v("")]),
                   _vm._v(" "),
-                  _c("span", { staticClass: "notice" })
+                  _vm.messageCount
+                    ? _c("span", { staticClass: "notice" })
+                    : _vm._e()
                 ]
               )
             ]
@@ -66511,11 +66516,7 @@ var render = function() {
                     staticClass:
                       "img-wrap flex flex-justify-around flex-wrap-on flex-align-around"
                   },
-                  [
-                    _c("div", { staticClass: "notice" }),
-                    _vm._v(" "),
-                    _c("img", { attrs: { src: item.logo, alt: "" } })
-                  ]
+                  [_c("img", { attrs: { src: item.logo, alt: "" } })]
                 ),
                 _vm._v(" "),
                 _c("h3", [_vm._v(_vm._s(item.name))]),
@@ -71732,7 +71733,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.give-container[data-v-e328c442] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.user-box-wrap[data-v-e328c442] {\n  padding-top: 1em;\n  height: 6em;\n  background: #fff;\n  margin: 0 0.5em;\n}\n.user-box-wrap .user-box[data-v-e328c442] {\n    width: 5em;\n    height: 100%;\n}\n.user-box-wrap .user-box > img[data-v-e328c442] {\n      width: 4em;\n      height: 4em;\n      border-radius: 50%;\n}\n.user-box-wrap .user-box .name[data-v-e328c442] {\n      font-size: 0.95em;\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n}\n.user-box-wrap .user-box .id[data-v-e328c442] {\n      font-size: 0.9em;\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n}\n.give-box[data-v-e328c442] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.give-box .tltle[data-v-e328c442] {\n    font-size: 1em;\n    color: #999;\n}\n.give-money[data-v-e328c442] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 2em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.give-money input[data-v-e328c442] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.all-money[data-v-e328c442] {\n  margin-top: 1em;\n}\n.all-money .money[data-v-e328c442] {\n    color: #666;\n}\n.all-money .all-giveAcc[data-v-e328c442] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.give-store[data-v-e328c442] {\n  margin-top: 2.5em;\n}\n.give-store h3[data-v-e328c442] {\n    color: #999;\n    font-size: 0.9em;\n}\n.give-store #store[data-v-e328c442] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 40px;\n    line-height: 40px;\n    border: 1px solid #ccc;\n}\n.transAcc-btn[data-v-e328c442] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
+exports.push([module.i, "\n.give-container[data-v-e328c442] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.user-box-wrap[data-v-e328c442] {\n  padding-top: 1em;\n  height: 6em;\n  background: #fff;\n  margin: 0 0.5em;\n}\n.user-box-wrap .user-box[data-v-e328c442] {\n    width: 5em;\n    height: 100%;\n}\n.user-box-wrap .user-box > img[data-v-e328c442] {\n      width: 4em;\n      height: 4em;\n      border-radius: 50%;\n}\n.user-box-wrap .user-box .name[data-v-e328c442] {\n      font-size: 0.95em;\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n}\n.user-box-wrap .user-box .id[data-v-e328c442] {\n      font-size: 0.9em;\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n}\n.give-box[data-v-e328c442] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.give-box .tltle[data-v-e328c442] {\n    font-size: 1em;\n    color: #999;\n}\n.give-money[data-v-e328c442] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 1em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.give-money input[data-v-e328c442] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.all-money[data-v-e328c442] {\n  margin-top: 1em;\n}\n.all-money .money[data-v-e328c442] {\n    color: #666;\n}\n.all-money .all-giveAcc[data-v-e328c442] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.comment[data-v-e328c442] {\n  width: 100%;\n  height: 5em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  border: 1px solid #eee;\n  border-radius: 0.4em;\n  margin-top: 1em;\n}\n.comment > textarea[data-v-e328c442] {\n    width: 90%;\n    height: 90%;\n    border: none;\n    outline: none;\n    display: block;\n    resize: none;\n    font-size: 1.5em;\n}\n.give-store[data-v-e328c442] {\n  margin-top: 2.5em;\n}\n.give-store h3[data-v-e328c442] {\n    color: #999;\n    font-size: 0.9em;\n}\n.give-store #store[data-v-e328c442] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 40px;\n    line-height: 40px;\n    border: 1px solid #ccc;\n}\n.transAcc-btn[data-v-e328c442] {\n  display: block;\n  margin-top: 1em;\n  margin-bottom: 1em;\n}\n", ""]);
 
 // exports
 
@@ -71749,6 +71750,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest_js__ = __webpack_require__(6);
+//
+//
+//
+//
 //
 //
 //
@@ -71918,6 +71923,8 @@ var render = function() {
         _vm._v(" "),
         _vm._m(1, false, false),
         _vm._v(" "),
+        _vm._m(2, false, false),
+        _vm._v(" "),
         _c(
           "a",
           { staticClass: "transAcc-btn", attrs: { href: "javascript:;" } },
@@ -71969,6 +71976,27 @@ var staticRenderFns = [
         _vm._v("全部转账")
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "comment flex flex-align-center flex-justify-center" },
+      [
+        _c("textarea", {
+          attrs: {
+            name: "",
+            id: "",
+            cols: "30",
+            rows: "10",
+            placeholder: "添加备注（50字以内）",
+            maxlength: "50"
+          }
+        })
+      ]
+    )
   }
 ]
 render._withStripped = true

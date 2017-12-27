@@ -25,6 +25,10 @@
                 <a href="javascript:;" class="all-giveAcc">全部转账</a>
             </div>
            
+            <div class="comment flex flex-align-center flex-justify-center">
+              <textarea name="" id="" cols="30" rows="10" placeholder="添加备注（50字以内）" maxlength="50"></textarea>
+            </div>
+
             <a href="javascript:;" class="transAcc-btn"> 
                 <mt-button type="primary" size="large">转账</mt-button>    
             </a>
@@ -155,7 +159,7 @@ export default {
 .give-money {
  border-bottom: 1px solid #ccc;
   vertical-align: middle;
-  margin-top: 2em;
+  margin-top: 1em;
   font-size:1.2em;
   padding: 0.2em 0;
   input {
@@ -175,6 +179,26 @@ export default {
     margin-left: 0.4em;
   }
 }
+
+.comment{
+  width:100%;
+  height: 5em;
+  box-sizing: border-box;
+  border:1px solid #eee;
+  border-radius: 0.4em;
+  margin-top:1em;
+
+  >textarea{
+    width:90%;
+    height:90%;
+    border:none;
+    outline:none;
+    display: block;
+    resize: none;
+    font-size: 1.5em;
+  }
+}
+
 .give-store {
   margin-top: 2.5em;
   h3 {
@@ -191,7 +215,7 @@ export default {
 }
 .transAcc-btn {
   display: block;
-  margin-top: 3em;
+  margin-top: 1em;
   margin-bottom: 1em;
 }
 </style>
