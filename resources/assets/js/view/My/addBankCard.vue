@@ -337,10 +337,8 @@
 
 	.affirm-add {
 		display: block;
-		margin-top: 1em;
-		width: 96%;
-		margin: auto;
-		margin-top: 2em;
+		width: 100%;
+		margin: 2em auto;
 	}
 
 	.account-container {

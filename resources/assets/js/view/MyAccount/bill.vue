@@ -27,7 +27,7 @@
 							<h5>{{status(item.type)}}</h5>
 							<div class="time">{{changeTime(item.created_at)}}</div>
 						</div>
-						<div class="bill-money">{{item.amount}}</div>
+						<div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
 					</a>
 				</li>
 			</ul>
@@ -83,7 +83,7 @@
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack.vue";
 	import Loading from '../../utils/loading'
-	import { MessageBox, Toast } from "mint-ui";
+	import { Toast } from "mint-ui";
 
 	export default {
 		data() {
@@ -152,7 +152,6 @@
 					case 6: result='交易手续费'; break;
 					case 7: result='提现手续费'; break;
 					default: result='打赏店家费'
-
 				}
 				return result;
 			}
