@@ -379,13 +379,17 @@ export default {
 
     // 创建店铺
     createShop(){
+      Loading.getInstance().open();
       var self = this;
       var data = this.openNewShop;
 
       request.getInstance().postData("api/shop/create",data).then(function(res){
         self.addShopTabStatus = false;
         self.getShopData();
+        Loading.getInstance().close();
+        
       }).catch((err)=>{
+        Loading.getInstance().close();
         console.error(err);
       });
     },

@@ -66,7 +66,7 @@
                             <span>{{item.user.name}}</span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
-                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"放钱":"拿钱"}}</span>
+                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
 

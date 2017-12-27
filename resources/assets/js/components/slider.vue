@@ -6,6 +6,7 @@
                       @touchmove='touchMove'
                       @touchend='touchEnd'
                       :style="deleteSlider"
+                      ref="content"
                    >
                 <!-- 插槽中放具体项目中需要内容         -->   
                     <slot></slot>
@@ -139,6 +140,7 @@ export default {
     },
 
     deleteIt() {
+      this.$refs.content.style.transform = "translateX(0px)";
       this.$emit("deleteIt", true);
     }
   }

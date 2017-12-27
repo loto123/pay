@@ -59007,6 +59007,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["height", "actionUser", "able"],
@@ -59093,6 +59094,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     deleteIt: function deleteIt() {
+      this.$refs.content.style.transform = "translateX(0px)";
       this.$emit("deleteIt", true);
     }
   }
@@ -59114,6 +59116,7 @@ var render = function() {
         _c(
           "div",
           {
+            ref: "content",
             staticClass: "content",
             style: _vm.deleteSlider,
             on: {
@@ -60492,7 +60495,7 @@ var render = function() {
                               ? _c("span", { staticClass: "title" }, [
                                   _vm._v(
                                     " " +
-                                      _vm._s(item.stat == 1 ? "放钱" : "拿钱")
+                                      _vm._s(item.stat == 1 ? "付钱" : "拿钱")
                                   )
                                 ])
                               : _vm._e(),
@@ -60965,7 +60968,7 @@ var render = function() {
               attrs: { type: "primary", size: "large" },
               on: { click: _vm.payTip }
             },
-            [_vm._v("交纳")]
+            [_vm._v("确认打赏")]
           )
         ],
         1
@@ -61001,7 +61004,7 @@ var render = function() {
                   _c(
                     "div",
                     { staticStyle: { "font-size": "0.8em", color: "#999" } },
-                    [_vm._v("已交纳")]
+                    [_vm._v("已打赏")]
                   )
                 ])
               ]
@@ -66386,13 +66389,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 创建店铺
     createShop: function createShop() {
+      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       var self = this;
       var data = this.openNewShop;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/create", data).then(function (res) {
         self.addShopTabStatus = false;
         self.getShopData();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
         console.error(err);
       });
     },
@@ -68354,6 +68360,101 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       });
+    },
+    updateShop: function updateShop(type) {
+      var _this5 = this;
+
+      console.log(type);
+
+      // 修改店铺名称
+      if (type == "shopName") {
+
+        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的店铺名称", "修改店铺名称").then(function (_ref) {
+          var value = _ref.value,
+              action = _ref.action;
+
+          console.log(value);
+          if (value.length == 0) {
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("新店铺名称不能为空");
+            return;
+          }
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+          var _data = {
+            name: value
+          };
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("店铺改名成功");
+            setTimeout(function () {
+              _this5.init();
+            }, 1500);
+          }).catch(function (err) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
+          });
+        }).catch();
+      }
+
+      // 手续费率
+      if (type == "percent") {
+        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的手续费率", "修改手续费率").then(function (_ref2) {
+          var value = _ref2.value,
+              action = _ref2.action;
+
+
+          if (value.length == 0) {
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("手续费率不能为空");
+            return;
+          }
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+
+          var _data = {
+            percent: value
+          };
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
+            console.log(res);
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("修改手续费率成功");
+            setTimeout(function () {
+              _this5.init();
+            }, 1500);
+          }).catch(function (err) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
+          });
+        }).catch();
+      }
+
+      // 设置单价
+      if (type == "rate") {
+        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的单价", "修改单价").then(function (_ref3) {
+          var value = _ref3.value,
+              action = _ref3.action;
+
+          if (!value) {
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("单价不能为空");
+            return;
+          }
+
+          var _data = {
+            rate: value
+          };
+          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("修改单价成功");
+            setTimeout(function () {
+              _this5.init();
+            }, 1500);
+          }).catch(function (err) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
+          });
+        }).catch();
+      }
     }
   }
 });
@@ -68447,7 +68548,29 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "shop-info" }, [
-        _vm._m(0, false, false),
+        _c(
+          "div",
+          {
+            staticClass:
+              "info-item flex flex-align-center flex-justify-between",
+            on: {
+              click: function($event) {
+                _vm.updateShop("shopName")
+              }
+            }
+          },
+          [
+            _c("span", { staticClass: "title flex-4" }, [_vm._v(" 店铺名称 ")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "name flex-5" }, [
+              _vm._v(_vm._s(_vm.shopName))
+            ]),
+            _vm._v(" "),
+            _c("i", { staticClass: "iconfont flex-1" }, [
+              _vm._v("\n          \n          ")
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -68459,7 +68582,7 @@ var render = function() {
           [
             _c("span", { staticClass: "title flex-8" }, [_vm._v("店铺二维码")]),
             _vm._v(" "),
-            _vm._m(1, false, false),
+            _vm._m(0, false, false),
             _vm._v(" "),
             _c("i", { staticClass: "iconfont flex-1" }, [
               _vm._v("\n          \n          ")
@@ -68475,7 +68598,7 @@ var render = function() {
           on: { click: _vm.goMember }
         },
         [
-          _vm._m(2, false, false),
+          _vm._m(1, false, false),
           _vm._v(" "),
           _c(
             "div",
@@ -68594,7 +68717,14 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "flex flex-align-center flex-justify-between" },
+          {
+            staticClass: "flex flex-align-center flex-justify-between",
+            on: {
+              click: function($event) {
+                _vm.updateShop("rate")
+              }
+            }
+          },
           [
             _c("span", { staticClass: "title flex-9" }, [_vm._v(" 默认单价 ")]),
             _vm._v(" "),
@@ -68611,9 +68741,18 @@ var render = function() {
               "div",
               { staticClass: "flex flex-align-center flex-justify-between" },
               [
-                _c("span", { staticClass: "title flex-9" }, [
-                  _vm._v(" 手续费率 ")
-                ]),
+                _c(
+                  "span",
+                  {
+                    staticClass: "title flex-9",
+                    on: {
+                      click: function($event) {
+                        _vm.updateShop("percent")
+                      }
+                    }
+                  },
+                  [_vm._v(" 手续费率 ")]
+                ),
                 _vm._v(" "),
                 _c("span", { staticClass: "text flex-1" }, [
                   _vm._v(_vm._s(_vm.percent) + "%")
@@ -68651,7 +68790,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       !_vm.isGroupMaster
-        ? _c("div", { staticClass: "complaint" }, [_vm._m(3, false, false)])
+        ? _c("div", { staticClass: "complaint" }, [_vm._m(2, false, false)])
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -68836,24 +68975,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "info-item flex flex-align-center flex-justify-between" },
-      [
-        _c("span", { staticClass: "title flex-4" }, [_vm._v(" 店铺名称 ")]),
-        _vm._v(" "),
-        _c("span", { staticClass: "name flex-5" }, [_vm._v("热血牛牛玩家群1")]),
-        _vm._v(" "),
-        _c("i", { staticClass: "iconfont flex-1" }, [
-          _vm._v("\n          \n          ")
-        ])
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
