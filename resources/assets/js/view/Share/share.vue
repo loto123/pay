@@ -164,7 +164,6 @@ export default {
       init(){
         this.shopId = this.$route.query.shopId;
         this.userId = this.$route.query.userId;
-        console.log(this.shopId);
       },
       submit(){
         if(!request.getInstance().getToken()){

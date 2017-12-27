@@ -20,9 +20,8 @@
                   </div>
               </div>
           </li>
-          
       </ul>
-
+      <h3 v-if="!messageList.length">无消息</h3>
       <div class="all-list-controller flex flex-justify-center " v-if="!messageList">
         <div class="btn-wrap flex flex-v flex-justify-around">
           <mt-button type="primary" size="large" style="background:#00cc00;">全部同意</mt-button>
@@ -101,7 +100,11 @@
       }
     }
   }
-
+  h3{
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
+  }
   .all-list-controller {
     height: 7em;
     position: fixed;

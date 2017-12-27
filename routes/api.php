@@ -37,6 +37,7 @@ Route::group([
     $router->get('getPayCard','UserController@getPayCard');
     $router->post('identify','UserController@identify');
     $router->get('info','UserController@info');
+    $router->get('parent','UserController@parent');
     $router->post('pay_password','UserController@pay_password');
 });
 
@@ -159,6 +160,16 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('share', 'ProxyController@share');
         $api->get('members/count', 'ProxyController@members_count');
         $api->get('members', 'ProxyController@members');
+    });
+
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'index',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/', 'IndexController@index');
     });
 
 });
