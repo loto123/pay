@@ -58686,23 +58686,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // 拿钱
         var _data = {
           transfer_id: this.transfer_id,
-          points: this.moneyData.getMoney,
-          action: "get"
+          points: this.moneyData.getMoney
+          // action :"realGet",
         };
 
-        __WEBPACK_IMPORTED_MODULE_5_mint_ui__["MessageBox"].confirm('实际拿钱可能不足' + this.moneyData.getMoney * this.renderData.price + "元,可能会产生少许手续费用").then(function (action) {
-          __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-            Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
+        __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/realget", _data).then(function (res) {
+          console.log(res);
+          var _data = {
+            amount: res.data.data.amount,
+            real_amount: res.data.data.real_amount
+          };
 
-            setTimeout(function () {
-              _this5.init();
-            }, 1500);
-          }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-            console.error(err);
-          });
+          return Promise.resolve(_data);
+        }).then(function (realData) {
+          console.log(realData.amount);
+          __WEBPACK_IMPORTED_MODULE_5_mint_ui__["MessageBox"].confirm("实际拿钱" + realData.real_amount + "元,手续费" + Math.floor((realData.amount - realData.real_amount) * 100) / 100 + "元").then(function (action) {
+
+            var _data = {
+              transfer_id: _this5.transfer_id,
+              points: _this5.moneyData.getMoney,
+              action: "get"
+            };
+
+            __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
+              __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+              Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
+
+              setTimeout(function () {
+                _this5.init();
+              }, 1500);
+            }).catch(function (err) {
+              __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+              console.error(err);
+            });
+          }).catch(function (err) {});
         }).catch(function (err) {});
+        return;
       }
     },
     getResult: function getResult(result) {
@@ -66332,36 +66351,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine").then(function (res) {
-        _this.shopList = res.data.data.data;
+      Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit")]).then(function (res) {
+        _this.shopList = res[0].data.data.data;
+        _this.total_profit = res[1].data.data.profit;
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
-      }).catch(function (e) {
+      }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
-        console.error(e);
+        console.error(err);
       });
-
-      // request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
-      //     console.log(res);
-      //     this.balance = res.data.data.balance;
-      //     this.today_profit = res.data.data.today_profit;
-      //     this.yesterday_profit = res.data.data.yesterday_profit;
-      //     this.total_profit = res.data.data.total_profit;
-
-      //     Loading.getInstance().close();
-      // }).catch(err=>{
-      //     console.error(err);
-      // });
-
-      // Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/account/"+this.shopId)])
-      //   .then(res=>{
-      //     this.shopList = res[0].data.data.data;
-      //     this.total_profit = res[1].data.data.data;
-      //     Loading.getInstance().close();
-      //   })
-      //   .catch(err=>{
-      //     Loading.getInstance().close();
-      //     console.error(err);
-      //   });
     }
   }
 });
@@ -66472,10 +66469,12 @@ var render = function() {
                 _c("h3", [_vm._v(_vm._s(item.name))]),
                 _vm._v(" "),
                 _c("p", { staticClass: "today-earn" }, [
-                  _vm._v("今日收益:123456")
+                  _vm._v("今日收益:" + _vm._s(item.today_profit))
                 ]),
                 _vm._v(" "),
-                _c("p", { staticClass: "all-earn" }, [_vm._v("总收益:111")])
+                _c("p", { staticClass: "all-earn" }, [
+                  _vm._v("总收益:" + _vm._s(item.total_profit))
+                ])
               ]
             )
           }),
