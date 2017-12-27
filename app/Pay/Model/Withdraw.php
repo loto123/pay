@@ -65,12 +65,12 @@ class Withdraw extends Model
 
     public function getReceiverInfoAttribute($value)
     {
-        return json_decode($value, true);
+        return unserialize($value);
     }
 
     public function setReceiverInfoAttribute(array $value)
     {
-        $this->attributes['receiver_info'] = json_encode($value, JSON_UNESCAPED_UNICODE);
+        $this->attributes['receiver_info'] = serialize($value);
     }
 
     /**
