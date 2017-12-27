@@ -27,8 +27,8 @@ class PayChannelController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('支付通道');
 
             $content->body($this->grid());
         });
@@ -43,6 +43,20 @@ class PayChannelController extends Controller
     {
         \Encore\Admin\Grid\Column::$displayers["switch"] = SwitchDisplay::class;
         return Admin::grid(Channel::class, function (Grid $grid) {
+            $grid->filter(function ($filter) {
+
+                // 在这里添加字段过滤器
+                $filter->like('name', '通道名称');
+
+                $filter->equal('entity_id', '签约主体')->select(BusinessEntity::all()->mapWithKeys(function ($item) {
+                    return [$item['id'] => $item['company_name']];
+                }));
+
+                $filter->equal('spare_channel_id', '备用通道')->select(Channel::all()->mapWithKeys(function ($item) {
+                    return [$item['id'] => $item['name']];
+                }));
+            });
+
             $grid->tools(function ($tools) {
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();
@@ -72,8 +86,8 @@ class PayChannelController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('通道编辑');
-            $content->description('同一支付平台可签约多条通道');
+            $content->header('支付管理');
+            $content->description('编辑支付通道');
 
             $content->body($this->form()->edit($id));
         });
@@ -170,7 +184,7 @@ class PayChannelController extends Controller
         return Admin::content(function (Content $content) {
 
             $content->header('支付管理');
-            $content->description('新增通道');
+            $content->description('添加支付通道');
 
             $content->body($this->form());
         });

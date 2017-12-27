@@ -316,7 +316,12 @@ export default {
     return {
       passWordSwitch: false,
       renderData: {
-        name: null
+        name: null,
+        user:{
+          avatar:{}
+        },
+        avatar:{},
+        
       },
       moneyData: {
         payMoney: null,
@@ -485,25 +490,51 @@ export default {
         var _data = {
           transfer_id :this.transfer_id,
           points :this.moneyData.getMoney,
-          action :"get",
+          // action :"realGet",
         }
 
-        MessageBox.confirm('实际拿钱可能不足'+this.moneyData.getMoney*this.renderData.price +"元,可能会产生少许手续费用").then(action => {
-          request.getInstance().postData("api/transfer/trade",_data).then(res=>{
-          Loading.getInstance().close();
-          Toast("从店铺中拿钱成功");
+        request.getInstance().postData("api/transfer/realget",_data)
+          .then(res=>{
+            console.log(res);
+            var _data = {
+              amount:res.data.data.amount,
+              real_amount:res.data.data.real_amount
+            }
 
-          setTimeout(()=>{
-            this.init();
-          },1500);
+            return Promise.resolve(_data);
+          })
+          .then(realData=>{
+            console.log(realData.amount);
+            MessageBox.confirm("实际拿钱"+ realData.real_amount+ "元,手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "元").then(action => {
 
-           }).catch(err=>{
-            Loading.getInstance().close();
-            console.error(err);
+              var _data = {
+                transfer_id :this.transfer_id,
+                points :this.moneyData.getMoney,
+                action :"get",
+              }
+
+              request.getInstance().postData("api/transfer/trade",_data)
+                .then(res=>{
+                  Loading.getInstance().close();
+                  Toast("从店铺中拿钱成功");
+
+                  setTimeout(()=>{
+                    this.init();
+                  },1500);
+
+               }).catch(err=>{
+                  Loading.getInstance().close();
+                  console.error(err);
+              });
+
+            }).catch(err=>{
+
+            });
+           })
+          .catch(err=>{
+            
           });
-        }).catch(err=>{
-
-        });
+        return;
       }
     },
 
@@ -528,7 +559,7 @@ export default {
           this.$router.push("/makeDeal/my_deal");
         },1500);
       }).catch(err=>{
-        Toast("撤销交易失败");
+        Toast(err.data.data.msg);
       });
     },
 

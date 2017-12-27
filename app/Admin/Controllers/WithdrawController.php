@@ -31,7 +31,7 @@ class WithdrawController extends Controller
             //$content->description('description');
             $content->row(function (Row $row) {
                 //累计已提现
-                $withdrawed = Withdraw::has('masterContainer.user')->sum('amount');
+                $withdrawed = Withdraw::has('masterContainer.user')->where('state', '<>', Withdraw::STATE_CANCELED)->sum('amount');
                 //累计待提现
                 $waitToWithdraw = MasterContainer::has('user')->sum('balance');
                 $row->column(3, "<h4>累计已提现:<span style='color:#FFAE20;font-weight:bold;'>$withdrawed</span>元</h4>");
@@ -109,7 +109,7 @@ SCRIPT
                 }
 
                 if ($show_exceptions) {
-                    $actions->append("<a class='btn btn-xs btn-primary fa exception-detail' data-id='{$actions->getKey()}'>异常记录</a>");
+                    $actions->append("<a class='btn btn-xs btn-warning fa exception-detail' data-id='{$actions->getKey()}'>异常记录</a>");
                 }
             });
             $grid->tools(function ($tools) {

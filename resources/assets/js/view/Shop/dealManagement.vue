@@ -280,8 +280,6 @@ export default {
             }
         }
 
-        
-
         if(_tList.length == 0 ){
             Toast("当前未选择记录");
             return;
@@ -339,7 +337,6 @@ export default {
 
             Loading.getInstance().close();
         }).catch(err=>{
-
             Loading.getInstance().close();
         });
     }

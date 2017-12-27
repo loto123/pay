@@ -41,7 +41,7 @@
                     请输入验证码
                 </h3>
 
-                <p>短信验证码已发送至{{userAccountName}}</p>
+                <p v-if="smsTimer">短信验证码已发送至{{userAccountName}}</p>
 
                 <section class="input-wrap flex flex-align-center">
                     <span class="flex-1">验证码:</span>
@@ -297,7 +297,7 @@ export default {
           Toast("注册成功");
           self.$router.push("/login");
         }).catch((err)=>{
-          console.log(err);
+          console.error(err);
           Toast("注册失败");
         });
         return;

@@ -9,7 +9,7 @@
           <section class="transaction flex flex-justify-center">
             <a href="/#/myAccount">
               <div class="imggWrap flex flex-justify-center flex-align-center">
-                    <img src="/images/avatar.jpg" alt="">
+                    <img :src="avatar" alt="">
               </div>
               <h3>{{amount}}</h3>
               <h4>账户余额(元)</h4>
@@ -146,7 +146,8 @@ export default {
   components: { tabBar },
   data(){
     return {
-      amount:null
+      amount:null,
+      avatar:null
     }
   },
   created(){
@@ -158,8 +159,11 @@ export default {
     },
     init(){
       Loading.getInstance().open();
-      request.getInstance().getData("api/account").then(res=>{
+      request.getInstance().getData("api/index").then(res=>{
         this.amount = res.data.data.balance;
+        this.avatar = res.data.data.avatar;
+        this.message = res.data.data.message;
+
         Loading.getInstance().close();
         
       }).catch(err=>{
