@@ -300,7 +300,7 @@ import slider from "../../components/slider";
 import dealContent from "./dealContent";
 import passwordPanel from "../../components/password";
 import request from "../../utils/userRequest";
-import {Toast} from "mint-ui"
+import {Toast,MessageBox} from "mint-ui"
 import choiseMember from "./choiseMember.vue"
 
 import Loading from "../../utils/loading";
@@ -372,7 +372,6 @@ export default {
         .getInstance()
         .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
         .then(res => {
-          console.log(res);
           this.joiner = res.data.data.joiner;
           this.renderData = res.data.data;
           this.recordList = res.data.data.record;
@@ -428,7 +427,7 @@ export default {
         return;
       }
 
-      Loading.getInstance().open();   
+      Loading.getInstance().open();
 
       var _tempList = [];
       for(let i = 0; i<dataList.length; i++){
@@ -451,7 +450,6 @@ export default {
         console.error(err);
       });
 
-      console.log(dataList);
     },
 
     // 提交交易  拿钱或者付钱
@@ -488,7 +486,9 @@ export default {
           points :this.moneyData.getMoney,
           action :"get",
         }
-        request.getInstance().postData("api/transfer/trade",_data).then(res=>{
+
+        MessageBox.confirm('实际拿钱可能不足'+this.moneyData.getMoney*this.renderData.price +"元,可能会产生少许手续费用").then(action => {
+          request.getInstance().postData("api/transfer/trade",_data).then(res=>{
           Loading.getInstance().close();
           Toast("从店铺中拿钱成功");
 
@@ -496,15 +496,17 @@ export default {
             this.init();
           },1500);
 
+           }).catch(err=>{
+            Loading.getInstance().close();
+            console.error(err);
+          });
         }).catch(err=>{
-          Loading.getInstance().close();
-          console.error(err);
+
         });
       }
     },
 
     getResult(result) {
-      console.log(result);
       this.password = result;
     },
     _getQRCode() {
@@ -513,7 +515,7 @@ export default {
         height: 100
       });
 
-      qrcode.makeCode("http://www.baidu.com");
+      qrcode.makeCode(window.location.href);
     },
     cancelTrade(){
       var _data = {
@@ -535,14 +537,10 @@ export default {
     // 初始化提醒玩家列表
     initMemberList(res){
       this.memberList = [];
-      // if(this.memberList.length>0){
-      //   return;
-      // }
 
       for(let i = 0; i<res.data.data.members.length; i++){
           var _temp = {};
           _temp = res.data.data.members[i];
-          console.log(_temp);
 
           for(let j = 0; j<this.joiner.length; j++){
             if(this.joiner[j].user.id == _temp.id){
@@ -562,7 +560,6 @@ export default {
       
       Loading.getInstance().open();
       request.getInstance().getData('api/shop/members/'+this.shop_id).then(res=>{
-        console.log(res);
         this.initMemberList(res);
         Loading.getInstance().close();
 
