@@ -53390,7 +53390,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   name: "regist",
   data: function data() {
     return {
-      step: 0,
+      // step: 0,
       agrementState: false, // 用户协议开关
       findPasswordSwitch: false, // 找回密码开关
 
@@ -53405,18 +53405,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     if (this.$store.state.regist.refindPassword == true) {
       this.findPasswordSwitch = this.$store.state.regist.refindPassword;
-      this.step = this.$store.state.regist.step;
+      // this.step = this.$store.state.regist.step;
 
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
       localStorage.setItem("registStep", this.step);
     }
+    var _step = localStorage.getItem("registStep");
+    if (_step) {
+      console.log(_step);
+    }
   },
+
 
   methods: {
     comfirm: function comfirm() {
       var _this = this;
 
-      if (this.step == 0) {
+      if (this.$store.state.regist.step == 0) {
         // 输入推荐人手机号
         var _data = {
           invite_mobile: this.inviteMobile
@@ -53429,7 +53434,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("推荐人手机号有误");
         });
-      } else if (this.step == 1) {
+      } else if (this.$store.state.regist.step == 1) {
         // 输入注册手机号
         var _data = {
           mobile: this.userAccountName
@@ -53443,7 +53448,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册手机号输入有误");
           console.error(err);
         });
-      } else if (this.step == 2) {
+      } else if (this.$store.state.regist.step == 2) {
         // 验证手机号
         var _data = {
           mobile: this.userAccountName,
@@ -53464,7 +53469,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var self = this;
       var auther = this.$route.query.oauth_user;
 
-      if (this.step >= 3) {
+      if (this.$store.state.regist.step >= 3) {
         var data = {
           mobile: this.userAccountName,
           password: this.userPassword,
@@ -53483,7 +53488,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
         return;
       }
-      this.step = this.step + 1;
+
+      console.log(this);
+      this.$store.dispatch("addStep");
+      // this.step = this.step + 1;
     },
     showAgreement: function showAgreement() {
       this.agrementState = true;
@@ -53667,7 +53675,7 @@ var render = function() {
     [
       _c("topBack"),
       _vm._v(" "),
-      (_vm.step == 0 ? true : false)
+      (_vm.$store.state.regist.step == 0 ? true : false)
         ? _c("section", { staticClass: "content step1" }, [
             _c("h3", [
               _vm._v("\r\n                请输入推荐码\r\n            ")
@@ -53716,7 +53724,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
-        (_vm.step == 1 ? true : false)
+        (_vm.$store.state.regist.step == 1 ? true : false)
           ? _c("section", { staticClass: "content step2" }, [
               _c("h3", [
                 _vm._v(
@@ -53786,7 +53794,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
-        (_vm.step == 2 ? true : false)
+        (_vm.$store.state.regist.step == 2 ? true : false)
           ? _c("section", { staticClass: "content step3" }, [
               _c("h3", [
                 _vm._v(
@@ -53866,7 +53874,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
-        (_vm.step == 3 ? true : false)
+        (_vm.$store.state.regist.step == 3 ? true : false)
           ? _c("section", { staticClass: "content step4" }, [
               _c("h3", [
                 _vm._v(
@@ -68399,8 +68407,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     updateShop: function updateShop(type) {
       var _this5 = this;
-
-      console.log(type);
 
       // 修改店铺名称
       if (type == "shopName") {

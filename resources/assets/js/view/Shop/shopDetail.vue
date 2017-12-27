@@ -666,7 +666,6 @@ export default {
     },
 
     updateShop(type){
-      console.log(type);
 
       // 修改店铺名称
       if(type == "shopName"){

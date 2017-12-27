@@ -2,7 +2,7 @@
 <!-- 注册模块 -->
     <div id="regist">
         <topBack></topBack>
-        <section class="content step1" v-if="step==0?true:false">
+        <section class="content step1" v-if="$store.state.regist.step==0?true:false">
             <h3>
                 请输入推荐码
             </h3>
@@ -18,7 +18,7 @@
         </section>
 
         <transition name="fade">
-            <section class="content step2" v-if="step==1?true:false">
+            <section class="content step2" v-if="$store.state.regist.step==1?true:false">
                 <h3>
                     {{findPasswordSwitch?"手机号验证":"输入手机号快速注册"}}
                 </h3>
@@ -36,7 +36,7 @@
         </transition>  
 
         <transition name="fade">
-            <section class="content step3" v-if="step==2?true:false">
+            <section class="content step3" v-if="$store.state.regist.step==2?true:false">
                 <h3>
                     请输入验证码
                 </h3>
@@ -58,7 +58,7 @@
         </transition>  
 
         <transition name="fade">
-            <section class="content step4" v-if="step==3?true:false">
+            <section class="content step4" v-if="$store.state.regist.step==3?true:false">
                 <h3>
                     设置登录密码
                 </h3>
@@ -209,7 +209,7 @@ export default {
   name: "regist",
   data() {
     return {
-      step: 0,
+      // step: 0,
       agrementState: false,           // 用户协议开关
       findPasswordSwitch: false,      // 找回密码开关
 
@@ -225,16 +225,20 @@ export default {
   mounted() {
     if (this.$store.state.regist.refindPassword == true) {
       this.findPasswordSwitch = this.$store.state.regist.refindPassword;
-      this.step = this.$store.state.regist.step;
+      // this.step = this.$store.state.regist.step;
       
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
       localStorage.setItem("registStep", this.step);
     }
+    var _step = localStorage.getItem("registStep")
+    if(_step){
+      console.log(_step);
+    }
   },
+
   methods: {
     comfirm() {
-
-      if (this.step == 0) {
+      if (this.$store.state.regist.step == 0) {
         // 输入推荐人手机号
         var _data = {
           invite_mobile:this.inviteMobile
@@ -246,9 +250,9 @@ export default {
         }).catch(err=>{
           Loading.getInstance().close();
           Toast("推荐人手机号有误");
-          
+
         });
-      }else if(this.step == 1){
+      }else if(this.$store.state.regist.step == 1){
         // 输入注册手机号
         var _data = {
           mobile:this.userAccountName
@@ -262,7 +266,7 @@ export default {
           Toast("注册手机号输入有误");
           console.error(err);
         });
-      }else if(this.step == 2){
+      }else if(this.$store.state.regist.step == 2){
         // 验证手机号
         var _data = {
           mobile:this.userAccountName,
@@ -284,7 +288,7 @@ export default {
       var self = this;
       var auther = this.$route.query.oauth_user;
 
-      if (this.step >= 3) {
+      if (this.$store.state.regist.step >= 3) {
         var data = {
           mobile :this.userAccountName,
           password :this.userPassword,
@@ -303,7 +307,10 @@ export default {
         });
         return;
       }
-      this.step = this.step + 1;
+
+      console.log(this);
+      this.$store.dispatch("addStep");
+      // this.step = this.step + 1;
     },
 
     showAgreement() {
