@@ -913,7 +913,7 @@ class ShopController extends BaseController {
      * @SWG\Get(
      *   path="/transfer/records/month",
      *   summary="帐单月数据",
-     *   tags={"账户"},
+     *   tags={"店铺"},
      *   @SWG\Parameter(
      *     name="month",
      *     in="formData",
