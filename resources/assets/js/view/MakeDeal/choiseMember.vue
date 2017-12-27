@@ -2,8 +2,8 @@
     <transition name="slide">
         <div id="choise-member" v-if="isShow">
             <div class="top flex flex-align-center">
-                <span class="flex-1" @click="hidePage">返回</span>
-                <h3 class="flex-4">选择要提醒的群友</h3>
+                <span class="flex-1" @click="hidePage(true)">返回</span>
+                <h3 class="flex-4">选择要提醒的成员</h3>
                 <div class="flex-1"></div>
             </div>
 
@@ -20,22 +20,23 @@
             </div>
 
              <ul>
-                <li class="flex flex-align-center" v-for="item in dataList" :key="item.id">
+                <li class="flex flex-align-center" v-for="item in dataList" :key="item.id" @click="makeMark(item.id)">
                     <span class="img-wrap flex-2">
                         <img :src="item.avatar" >
                     </span>
                     <span class="user-name flex-6">{{item.name}}</span>
-                    <span class="flex-2 flex flex-reverse" @click="makeMark(item.id)">
-                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;">
+                    <span class="flex-2 flex flex-reverse" >
+                        <i class="iconfont flex flex-align-center flex-justify-center" style="color:#00cc00;" v-if="!singleMode">
                             {{item.checked? "&#xe6cc;":""}}
                         </i>
                     </span>
                 </li>
-
+                
+                <li class="flex flex-align-center flex-justify-center" v-if="!dataList.length">当前店铺无成员</li>
                 <!-- <h3 v-if="dataList.length == 0">无数据</h3> -->
             </ul>
 
-            <div class="submit">
+            <div class="submit" v-if="!singleMode">
                 <mt-button type="primary" size="large" @click="submitData">确认添加</mt-button>
             </div>
 
@@ -147,7 +148,7 @@ export default{
      *  参数数据结构
      *  dataList : [
      *      {
-     *           avatar:"/images/avatar.jpg",
+     *          avatar:"/images/avatar.jpg",
      *          checked:true
      *          id:1
      *          name:"sa"
@@ -159,23 +160,43 @@ export default{
             _dataList:[]
         }
     },
-    props:["isShow","dataList"],
+    // isShow :组件开关
+    // dataList :渲染数组
+    // singleMode :单选模式
+    // backUrl : 回退地址
+    props:["isShow","dataList","singleMode","backUrl"],
     methods:{
-        hidePage(){
-            this.$emit("hide");
+        hidePage(control){
+            if(control && this.$props.backUrl){
+                this.$emit("hide",true);
+            }else {
+                this.$emit("hide");
+            }
         },
         submitData(){
             this.$emit("submit",this._dataList);
             this.hidePage();
         },
         makeMark(id){
-            this._dataList = [].concat(this.$props.dataList);
+            if(!this.singleMode){
+                this._dataList = [].concat(this.$props.dataList);
 
-            for(let i = 0; i< this._dataList.length; i++){
-                if(this._dataList[i].id == id){
-                    this._dataList[i].checked = !this._dataList[i].checked;
+                for(let i = 0; i< this._dataList.length; i++){
+                    if(this._dataList[i].id == id){
+                        this._dataList[i].checked = !this._dataList[i].checked;
+                    }
                 }
+            }else {
+                this._dataList = [].concat(this.$props.dataList);
+
+                for(let i = 0; i< this._dataList.length; i++){
+                    if(this._dataList[i].id == id){
+                        this._dataList = this._dataList[i];
+                    }
+                }
+                this.submitData();
             }
+           
         }
     }
 }
