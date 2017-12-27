@@ -122,6 +122,11 @@ class PayPlatformController extends Controller
                 $token = csrf_token();
 
                 Admin::script(<<<EOT
+                var checkall = $('<label><input type="checkbox" id="check_all" style="cursor:pointer;"/>反选</label>');
+                $('label[for=banks_support]').append('<br/>').append(checkall);
+                checkall.children(0).click(function(){
+                    $('.bank-check').iCheck('toggle');
+                });
                 $.ajaxSetup({
         headers: {
         'X-CSRF-TOKEN': '$token',
@@ -129,7 +134,7 @@ class PayPlatformController extends Controller
              async: false
         });
                 var supported = $supported;
-            $('div.checkbox').each(function(){
+            $('div.checkbox').css({width:'25%',float:'left'}).each(function(){
                 var _check = $(':checkbox',this);
                 var checked = supported.hasOwnProperty(_check.val());
                 _check.prop('checked', checked);
@@ -137,7 +142,8 @@ class PayPlatformController extends Controller
                 if (checked) {
                     _txt.val(supported[_check.val()]);
                 } else {
-                    _txt.hide();
+                    _txt.hide().val($(':checkbox',this).val());
+   
                 }
                 
                 $(this).append(_txt);
