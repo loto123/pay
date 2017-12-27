@@ -180,7 +180,7 @@ export default {
       this.$router.push('/shop/shopAccount/withdraw');
     },
     goGive(){
-      this.$router.push('/shop/shopAccount/give');
+      this.$router.push('/shop/shopAccount/give?shopId='+this.shopId);
     },
 
     init(){

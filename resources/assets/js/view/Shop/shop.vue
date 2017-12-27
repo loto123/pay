@@ -217,6 +217,7 @@
       font-size: 0.95em;
       padding-top: 0.1em;
       padding-bottom: 0.1em;
+      text-align: center;
     }
 
     p {
