@@ -246,6 +246,7 @@ export default {
         }).catch(err=>{
           Loading.getInstance().close();
           Toast("推荐人手机号有误");
+          
         });
       }else if(this.step == 1){
         // 输入注册手机号

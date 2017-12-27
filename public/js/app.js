@@ -56459,90 +56459,90 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	data: function data() {
-		return {
-			showAlert: false,
-			type: null, //类型
-			created_at: null, //结束时间
-			size: null, //数目
-			billList: []
-		};
-	},
-	created: function created() {
-		this.init();
-	},
+    data: function data() {
+        return {
+            showAlert: false,
+            type: null, //类型
+            created_at: null, //结束时间
+            size: null, //数目
+            billList: []
+        };
+    },
+    created: function created() {
+        this.init();
+    },
 
-	methods: {
-		show: function show() {
-			this.showAlert = true;
-		},
-		cancel: function cancel() {
-			this.showAlert = false;
-		},
-		details: function details(id) {
-			this.$router.push({ path: "/myAccount/bill/bill_details?id=" + id });
-		},
-		init: function init() {
-			var _this = this;
+    methods: {
+        show: function show() {
+            this.showAlert = true;
+        },
+        cancel: function cancel() {
+            this.showAlert = false;
+        },
+        details: function details(id) {
+            this.$router.push({ path: "/myAccount/bill/bill_details?id=" + id });
+        },
+        init: function init() {
+            var _this = this;
 
-			var data = {
-				type: this.type,
-				created_at: this.created_at,
-				size: this.size
-			};
-			__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open("加载中...");
+            var data = {
+                type: this.type,
+                created_at: this.created_at,
+                size: this.size
+            };
+            __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
-			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account/records").then(function (res) {
-				console.log(res);
-				_this.billList = res.data.data.data;
-				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
-			}).catch(function (err) {
-				console.error(err);
-				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
-			});
-		},
-		changeTime: function changeTime(shijianchuo) {
-			function add0(m) {
-				return m < 10 ? '0' + m : m;
-			}
+            __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account/records").then(function (res) {
+                console.log(res);
+                _this.billList = res.data.data.data;
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            }).catch(function (err) {
+                console.error(err);
+                __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+            });
+        },
+        changeTime: function changeTime(shijianchuo) {
+            function add0(m) {
+                return m < 10 ? '0' + m : m;
+            }
 
-			var time = new Date(shijianchuo * 1000);
-			var y = time.getFullYear();
-			var m = time.getMonth() + 1;
-			var d = time.getDate();
-			var h = time.getHours();
-			var mm = time.getMinutes();
-			var s = time.getSeconds();
-			return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
-		},
-		status: function status(type) {
-			var result = '';
-			switch (type) {
-				case 0:
-					result = '充值';break;
-				case 1:
-					result = '提现';break;
-				case 2:
-					result = '交易收入';break;
-				case 3:
-					result = '交易支出';break;
-				case 4:
-					result = '转账到店铺';break;
-				case 5:
-					result = '店铺转入';break;
-				case 6:
-					result = '交易手续费';break;
-				case 7:
-					result = '提现手续费';break;
-				default:
-					result = '打赏店家费';
-			}
-			return result;
-		}
-	},
-	components: {
-		topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a
-	}
+            var time = new Date(shijianchuo * 1000);
+            var y = time.getFullYear();
+            var m = time.getMonth() + 1;
+            var d = time.getDate();
+            var h = time.getHours();
+            var mm = time.getMinutes();
+            var s = time.getSeconds();
+            return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
+        },
+        status: function status(type) {
+            var result = '';
+            switch (type) {
+                case 0:
+                    result = '充值';break;
+                case 1:
+                    result = '提现';break;
+                case 2:
+                    result = '交易收入';break;
+                case 3:
+                    result = '交易支出';break;
+                case 4:
+                    result = '转账到店铺';break;
+                case 5:
+                    result = '店铺转入';break;
+                case 6:
+                    result = '交易手续费';break;
+                case 7:
+                    result = '提现手续费';break;
+                default:
+                    result = '打赏店家费';
+            }
+            return result;
+        }
+    },
+    components: {
+        topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a
+    }
 });
 
 /***/ }),
@@ -56727,12 +56727,12 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("div", { staticClass: "month-money flex" }, [
             _c("div", { staticClass: "expend flex-1" }, [
-              _vm._v("支出¥\n\t\t\t\t\t\t"),
+              _vm._v("支出¥\n                        "),
               _c("span", [_vm._v("616.55")])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "income" }, [
-              _vm._v("收入¥\n\t\t\t\t\t\t"),
+              _vm._v("收入¥\n                        "),
               _c("span", [_vm._v("616.55")])
             ])
           ])
@@ -61745,14 +61745,12 @@ exports.push([module.i, "\n.header-container[data-v-65470904] {\n  padding-top: 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tabBar__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tabBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_tabBar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_tabBar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(12);
 //
 //
 //
@@ -61849,8 +61847,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-
 
 
 
@@ -61877,14 +61873,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		this.personalInfo();
 	},
 
-	components: { tabBar: __WEBPACK_IMPORTED_MODULE_1__components_tabBar___default.a },
+	components: { tabBar: __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default.a },
 	methods: {
 		//个人信息
 		personalInfo: function personalInfo() {
 			var _this = this;
 
-			__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open("加载中...");
-			Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/my/index")]).then(function (res) {
+			__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
+			Promise.all([__WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info"), __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/my/index")]).then(function (res) {
 				_this.name = res[0].data.data.name;
 				_this.mobile = res[0].data.data.mobile;
 				_this.thumb = res[0].data.data.thumb;
@@ -61894,14 +61890,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.card_count = res[1].data.data.card_count;
 				_this.identify_status = res[1].data.data.identify_status;
 
-				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
 			});
 		},
 		realAuth: function realAuth(e) {
 			if (this.identify_status == 1) {
-				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('你已完成实名认证 ');
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('你已完成实名认证 ');
 			} else {
 				this.$router.push("/my/realAuth" + "?mobile=" + e);
 			}
@@ -61912,10 +61908,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this2 = this;
 
 			if (this.identify_status == 0) {
-				__WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"].confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(function () {
+				__WEBPACK_IMPORTED_MODULE_2_mint_ui__["MessageBox"].confirm("你还没有进行实名认证，请先前往认证", "温馨提示").then(function () {
 					_this2.$router.push("/my/realAuth" + "?mobile=" + _this2.mobile);
 				}, function () {
-					Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("已经取消");
+					Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("已经取消");
 				});
 			} else {
 				this.$router.push('/my/bankCardManage');
@@ -61927,11 +61923,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (this.card_count > 0) {
 				this.$router.push('/my/checkSettle');
 			} else {
-				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('请添加银行卡');
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('请添加银行卡');
 			}
 		},
 		set: function set(e) {
 			this.$router.push("/my/set" + "?mobile=" + e);
+		},
+		referrer: function referrer() {
+			this.$router.push('/my/referrer');
 		}
 	}
 });
@@ -61950,7 +61949,9 @@ var render = function() {
     [
       _c("section", { staticClass: "header-container" }, [
         _c("div", { staticClass: "header" }, [
-          _vm._m(0, false, false),
+          _c("div", { staticClass: "imgWrap" }, [
+            _c("img", { attrs: { src: _vm.thumb } })
+          ]),
           _vm._v(" "),
           _c("h3", [_vm._v(_vm._s(_vm.name))]),
           _vm._v(" "),
@@ -61965,6 +61966,7 @@ var render = function() {
         _c("ul", { staticClass: "my-list" }, [
           _c(
             "li",
+            { on: { click: _vm.referrer } },
             [
               _c("mt-cell", { attrs: { title: "推荐人", "is-link": "" } }, [
                 _c("img", {
@@ -62008,7 +62010,7 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _c("span", [
-                  _vm._v(_vm._s(_vm.identify_status ? "完善" : "未完善"))
+                  _vm._v(_vm._s(_vm.identify_status ? "已认证" : "去认证"))
                 ])
               ])
             ],
@@ -62091,16 +62093,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "imgWrap" }, [
-      _c("img", { attrs: { src: "/images/avatar.jpg" } })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -62249,7 +62242,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
-			mobile: null
+			mobile: null,
+			user_feedback: window.user_feedback
 		};
 	},
 
@@ -62265,6 +62259,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			setTimeout(function () {
 				window.location.href = "/#/login";
 			}, 2000);
+		},
+		help: function help() {
+			location.href = this.user_feedback;
 		}
 	}
 });
@@ -62310,15 +62307,18 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("ul", { staticClass: "list mt1" }, [
-          _c(
-            "li",
-            [
-              _c("mt-cell", {
-                attrs: { title: "帮助与反馈", "is-link": "", to: "" }
-              })
-            ],
-            1
-          ),
+          _vm.user_feedback
+            ? _c(
+                "li",
+                { on: { click: _vm.help } },
+                [
+                  _c("mt-cell", {
+                    attrs: { title: "帮助与反馈", "is-link": "" }
+                  })
+                ],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "li",
@@ -62443,7 +62443,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #26a2ff;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.referrer-container[data-v-4698f5f7] {\n  background: #fff;\n  width: 92%;\n  border-radius: 0.7em;\n}\n.header[data-v-4698f5f7] {\n  height: 4.5em;\n  padding: 1em;\n}\n.header .referrer-image[data-v-4698f5f7] {\n    width: 4.5em;\n    height: 4.5em;\n}\n.header .referrer-image > img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n      border-radius: 50%;\n}\n.header .referrer-info[data-v-4698f5f7] {\n    margin-left: 1em;\n}\n.header .referrer-info .tel[data-v-4698f5f7],\n    .header .referrer-info h2[data-v-4698f5f7] {\n      margin-bottom: 0.8em;\n}\n.header .referrer-info .wx-number[data-v-4698f5f7],\n    .header .referrer-info .tel[data-v-4698f5f7] {\n      color: #999;\n      font-size: 0.9em;\n}\n.header .referrer-info h2[data-v-4698f5f7] {\n      font-size: 1em;\n      margin-top: 0.1em;\n}\n.code[data-v-4698f5f7] {\n  padding-bottom: 2.5em;\n}\n.code .code-image[data-v-4698f5f7] {\n    max-width: 150px;\n    margin: 2em auto;\n    background: #f1f1f1;\n    padding: 10px;\n    border-radius: 5px;\n}\n.code .code-image img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n}\n.code .add-referrer[data-v-4698f5f7] {\n    text-align: center;\n    font-size: 0.8em;\n    color: #666;\n}\n", ""]);
+exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #26a2ff;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.referrer-container[data-v-4698f5f7] {\n  background: #fff;\n  width: 92%;\n  border-radius: 0.7em;\n}\n.header[data-v-4698f5f7] {\n  height: 4.5em;\n  padding: 1em;\n}\n.header .referrer-image[data-v-4698f5f7] {\n    width: 4.5em;\n    height: 4.5em;\n}\n.header .referrer-image > img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n      border-radius: 50%;\n}\n.header .referrer-info[data-v-4698f5f7] {\n    margin-left: 1em;\n}\n.header .referrer-info .tel[data-v-4698f5f7],\n    .header .referrer-info h2[data-v-4698f5f7] {\n      margin-bottom: 0.8em;\n}\n.header .referrer-info .wx-number[data-v-4698f5f7],\n    .header .referrer-info .tel[data-v-4698f5f7] {\n      color: #999;\n      font-size: 0.9em;\n}\n.header .referrer-info h2[data-v-4698f5f7] {\n      font-size: 1em;\n      margin-top: 0.1em;\n}\n.code[data-v-4698f5f7] {\n  padding-bottom: 2.5em;\n}\n.code .code-image[data-v-4698f5f7] {\n    max-width: 150px;\n    height: 150px;\n    margin: 2em auto;\n    background: #f1f1f1;\n    padding: 10px;\n    border-radius: 5px;\n}\n.code .code-image img[data-v-4698f5f7] {\n      display: block;\n      width: 100%;\n}\n.code .add-referrer[data-v-4698f5f7] {\n    text-align: center;\n    font-size: 0.8em;\n    color: #666;\n}\n", ""]);
 
 // exports
 
@@ -62454,8 +62454,12 @@ exports.push([module.i, "\n#referrer[data-v-4698f5f7] {\n  background: #26a2ff;\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_topBack__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_topBack__);
 //
 //
 //
@@ -62483,11 +62487,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a }
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_3__components_topBack___default.a },
+  data: function data() {
+    return {
+      avatar: null,
+      name: null,
+      mobile: null
+    };
+  },
+  created: function created() {
+    this.init();
+  },
+
+  methods: {
+    init: function init() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/my/parent").then(function (res) {
+        _this.avatar = res.data.data.avatar;
+        _this.name = res.data.data.name;
+        _this.mobile = res.data.data.mobile;
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -62507,7 +62545,35 @@ var render = function() {
         attrs: { title: "推荐人信息" }
       }),
       _vm._v(" "),
-      _vm._m(0, false, false)
+      _c(
+        "div",
+        {
+          staticClass: "flex flex-align-center flex-justify-center",
+          staticStyle: { height: "100%" }
+        },
+        [
+          _c("div", { staticClass: "referrer-container" }, [
+            _c("div", { staticClass: "header flex" }, [
+              _c("div", { staticClass: "referrer-image" }, [
+                _c("img", { attrs: { src: _vm.avatar } })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "referrer-info" }, [
+                _c("h2", [_vm._v(_vm._s(_vm.name))]),
+                _vm._v(" "),
+                _c("div", { staticClass: "tel" }, [
+                  _vm._v("电话:\n            "),
+                  _c("span", [_vm._v(_vm._s(_vm.mobile))])
+                ]),
+                _vm._v(" "),
+                _vm._m(0, false, false)
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(1, false, false)
+          ])
+        ]
+      )
     ],
     1
   )
@@ -62517,46 +62583,24 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "flex flex-align-center flex-justify-center",
-        staticStyle: { height: "100%" }
-      },
-      [
-        _c("div", { staticClass: "referrer-container" }, [
-          _c("div", { staticClass: "header flex" }, [
-            _c("div", { staticClass: "referrer-image" }, [
-              _c("img", { attrs: { src: "/images/personal.jpg" } })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "referrer-info" }, [
-              _c("h2", [_vm._v("牛大王")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "tel" }, [
-                _vm._v("电话:"),
-                _c("span", [_vm._v("31231321321")])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "wx-number" }, [
-                _vm._v("微信号:"),
-                _c("span", [_vm._v("31231321321")])
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "code" }, [
-            _c("div", { staticClass: "code-image" }, [
-              _c("img", { attrs: { src: "/images/code.png" } })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "add-referrer" }, [
-              _vm._v("用微信识别二维码添加您的推荐人")
-            ])
-          ])
-        ])
-      ]
-    )
+    return _c("div", { staticClass: "wx-number" }, [
+      _vm._v("微信号:\n            "),
+      _c("span")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "code" }, [
+      _c("div", { staticClass: "code-image" }, [
+        _c("img", { attrs: { src: "" } })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "add-referrer" }, [
+        _vm._v("用微信识别二维码添加您的推荐人")
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -62822,7 +62866,9 @@ var render = function() {
           _vm._l(_vm.bankList, function(item) {
             return _c("li", [
               _c("div", { staticClass: "bankCard-box flex" }, [
-                _vm._m(0, true, false),
+                _c("div", { staticClass: "card-image" }, [
+                  _c("img", { attrs: { src: item.card_logo } })
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-info" }, [
                   _c("div", { staticClass: "bank-name" }, [
@@ -62878,16 +62924,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-image" }, [
-      _c("img", { attrs: { src: "/images/personal.jpg" } })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -63339,7 +63376,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.affirm-add[data-v-192ddef6] {\n  display: block;\n  width: 100%;\n  margin: 2em auto;\n}\n.account-container[data-v-192ddef6] {\n  background: #fff;\n}\n.account-container .account-box[data-v-192ddef6] {\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n    padding-left: 10px;\n}\n.account-container .account-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.account-container .account-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n.select-wrap[data-v-192ddef6] {\n  height: 2.5em;\n  padding-left: 10px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.select-wrap .title[data-v-192ddef6] {\n    width: 105px;\n}\n.select-wrap .sel-bank[data-v-192ddef6] {\n    color: #666;\n}\n.input-wrap-box[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.input-wrap[data-v-192ddef6] {\n  width: 100%;\n  height: 3em;\n}\n.input-wrap span[data-v-192ddef6] {\n    display: inline-block;\n    width: 105px;\n}\n.input-wrap .mint-button[data-v-192ddef6] {\n    font-size: 0.9em;\n}\n.input-wrap .mint-button--default[data-v-192ddef6] {\n    background: #fff;\n}\n.input-wrap input[data-v-192ddef6] {\n    border: none;\n    outline: none;\n    text-rendering: auto;\n    color: initial;\n    letter-spacing: normal;\n    word-spacing: normal;\n    text-transform: none;\n    text-indent: 0px;\n    text-shadow: none;\n    display: inline-block;\n    text-align: start;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 20%;\n    font-size: inherit;\n}\n", ""]);
+exports.push([module.i, "\n#addBankCard[data-v-192ddef6] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.addBankCard-box[data-v-192ddef6] {\n  border-top: 1px solid #ccc;\n}\n.addBankCard-box h2[data-v-192ddef6] {\n    color: #999;\n    height: 2em;\n    line-height: 2em;\n    padding-left: 10px;\n    padding-top: 0.7em;\n}\n.addBankCard-box .bank-info[data-v-192ddef6] {\n    margin-top: 1em;\n}\n.addBankCard-box .bank-info .mint-cell[data-v-192ddef6] {\n      background-image: none;\n}\n.affirm-add[data-v-192ddef6] {\n  display: block;\n  width: 100%;\n  margin: 2em auto;\n}\n.account-container[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.account-container .account-box[data-v-192ddef6] {\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n}\n.account-container .account-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.account-container .account-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n.mobile-container[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.mobile-container .mobile-box[data-v-192ddef6] {\n    height: 3em;\n    border-top: 1px solid #d9d9d9;\n    border-bottom: 1px solid #d9d9d9;\n}\n.mobile-container .mobile-box span[data-v-192ddef6] {\n      display: inline-block;\n      width: 105px;\n}\n.mobile-container .mobile-box .number[data-v-192ddef6] {\n      color: #666;\n      font-size: inherit;\n}\n.select-wrap[data-v-192ddef6] {\n  height: 2.5em;\n  padding-left: 10px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin-top: 0.5em;\n  background: #fff;\n}\n.select-wrap .title[data-v-192ddef6] {\n    width: 105px;\n}\n.select-wrap .sel-bank[data-v-192ddef6] {\n    color: #666;\n}\n.input-wrap-box[data-v-192ddef6] {\n  background: #fff;\n  padding-left: 10px;\n}\n.input-wrap[data-v-192ddef6] {\n  width: 100%;\n  height: 3em;\n}\n.input-wrap span[data-v-192ddef6] {\n    display: inline-block;\n    width: 105px;\n}\n.input-wrap .mint-button[data-v-192ddef6] {\n    font-size: 0.9em;\n}\n.input-wrap .mint-button--default[data-v-192ddef6] {\n    background: #fff;\n}\n.input-wrap input[data-v-192ddef6] {\n    border: none;\n    outline: none;\n    text-rendering: auto;\n    color: initial;\n    letter-spacing: normal;\n    word-spacing: normal;\n    text-transform: none;\n    text-indent: 0px;\n    text-shadow: none;\n    display: inline-block;\n    text-align: start;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 20%;\n    font-size: inherit;\n}\n", ""]);
 
 // exports
 
@@ -63358,6 +63395,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(12);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -63462,10 +63504,9 @@ var address = {
 			name: null,
 			id_number: null,
 			dealShop: null,
-
+			mobile: null,
 			card_num: null,
 			bank_id: null,
-			mobile: null,
 			code: null,
 
 			computedTime: null, //短信验证码倒计时
@@ -63515,6 +63556,7 @@ var address = {
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/my/info").then(function (res) {
 				_this.name = res.data.data.name;
 				_this.id_number = res.data.data.id_number;
+				_this.mobile = res.data.data.mobile;
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				console.error(err);
@@ -63686,7 +63728,10 @@ var render = function() {
     "div",
     { attrs: { id: "addBankCard" } },
     [
-      _c("topBack", { attrs: { title: "添加银行卡" } }),
+      _c("topBack", {
+        staticStyle: { background: "#eee" },
+        attrs: { title: "添加银行卡" }
+      }),
       _vm._v(" "),
       _c("div", { staticClass: "addBankCard-box" }, [
         _c("h2", [_vm._v("请绑定持卡人本人的银行卡")]),
@@ -63779,28 +63824,17 @@ var render = function() {
           1
         ),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "bank-info flex flex-v flex-justify-center" },
-          [
-            _c("mt-field", {
-              attrs: {
-                label: "预留手机号",
-                placeholder: "请填写银行卡预留手机号",
-                type: "number",
-                maxlength: "11"
-              },
-              model: {
-                value: _vm.mobile,
-                callback: function($$v) {
-                  _vm.mobile = $$v
-                },
-                expression: "mobile"
-              }
-            })
-          ],
-          1
-        ),
+        _c("div", { staticClass: "flex flex-v flex-justify-center" }, [
+          _c("section", { staticClass: "mobile-container" }, [
+            _c("div", { staticClass: "mobile-box flex flex-align-center" }, [
+              _c("span", [_vm._v("手机号:")]),
+              _vm._v(" "),
+              _c("em", { staticClass: "flex-1 number" }, [
+                _vm._v(_vm._s(_vm.mobile))
+              ])
+            ])
+          ])
+        ]),
         _vm._v(" "),
         _c("section", { staticClass: "input-wrap-box" }, [
           _c(
@@ -65506,7 +65540,7 @@ var staticRenderFns = [
           _c("img", { attrs: { src: "/images/logo.png" } })
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "versions" }, [_vm._v("游戏宝 1.0.1")])
+        _c("div", { staticClass: "versions" }, [_vm._v("聚宝朋 1.0.1")])
       ])
     ])
   }
@@ -71872,6 +71906,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 //
 //
 //
@@ -71923,6 +71959,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -71938,7 +71975,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       choiseMemberSwitch: true,
       memberList: [],
       shopId: null,
-      transferData: {}
+      transferData: {},
+      amount: null // 转账金额
     };
   },
 
@@ -71949,6 +71987,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     getMemberData: function getMemberData(data) {
       this.transferData = data;
+      console.log(this.transferData);
     },
     hideMemberChoise: function hideMemberChoise(e) {
       if (e) {
@@ -71958,6 +71997,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     showMemberChoise: function showMemberChoise() {
       this.choiseMemberSwitch = true;
+    },
+    submitDate: function submitDate() {
+      // /shop/transfer/{shop_id}/{user_id}
+      __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__["a" /* default */].getInstance().open();
+      var _data = {
+        amount: this.amount
+      };
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest_js__["a" /* default */].getInstance().postData('api/shop/transfer/' + this.shopId + "/" + this.transferData.id, _data).then(function (res) {
+        console.log(res);
+
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("转账成功");
+      }).catch();
     },
     init: function init() {
       var _this = this;
@@ -71992,7 +72044,7 @@ var render = function() {
     "div",
     { staticClass: "give-container", attrs: { id: "give" } },
     [
-      _c("topBack", { attrs: { title: "转账到店铺" } }, [
+      _c("topBack", { attrs: { title: "转账给店铺成员" } }, [
         _c(
           "div",
           {
@@ -72041,19 +72093,47 @@ var render = function() {
       _c("div", { staticClass: "give-box" }, [
         _c("div", { staticClass: "title" }, [_vm._v("转账金额")]),
         _vm._v(" "),
+        _c("div", { staticClass: "give-money flex flex-justify-center" }, [
+          _c("label", [_vm._v("￥")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.amount,
+                expression: "amount"
+              }
+            ],
+            attrs: { type: "text", placeholder: "请输入金额" },
+            domProps: { value: _vm.amount },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.amount = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
         _vm._m(0, false, false),
         _vm._v(" "),
         _vm._m(1, false, false),
-        _vm._v(" "),
-        _vm._m(2, false, false),
         _vm._v(" "),
         _c(
           "a",
           { staticClass: "transAcc-btn", attrs: { href: "javascript:;" } },
           [
-            _c("mt-button", { attrs: { type: "primary", size: "large" } }, [
-              _vm._v("转账")
-            ])
+            _c(
+              "mt-button",
+              {
+                attrs: { type: "primary", size: "large" },
+                on: { click: _vm.submitDate }
+              },
+              [_vm._v("转账")]
+            )
           ],
           1
         )
@@ -72073,16 +72153,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "give-money flex flex-justify-center" }, [
-      _c("label", [_vm._v("￥")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", placeholder: "请输入金额" } })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
