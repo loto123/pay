@@ -463,11 +463,11 @@ class ShopController extends BaseController {
         }
 
         if ($request->rate !== null) {
-            $shop->rate = $request->rate;
+            $shop->price = $request->rate;
         }
 
         if ($request->percent !== null) {
-            $shop->percent = $request->percent;
+            $shop->fee = $request->percent;
         }
         $shop->save();
         return $this->json();
