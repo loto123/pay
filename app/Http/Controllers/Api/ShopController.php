@@ -79,6 +79,10 @@ class ShopController extends BaseController {
         $shop->fee = $request->percent;
         $shop->container_id = $wallet->id;
         $shop->save();
+        $shop_user = new ShopUser();
+        $shop_user->shop_id = $shop->id;
+        $shop_user->user_id = $user->id;
+        $shop_user->save();
         return $this->json([$shop]);
     }
 
@@ -463,11 +467,11 @@ class ShopController extends BaseController {
         }
 
         if ($request->rate !== null) {
-            $shop->rate = $request->rate;
+            $shop->price = $request->rate;
         }
 
         if ($request->percent !== null) {
-            $shop->percent = $request->percent;
+            $shop->fee = $request->percent;
         }
         $shop->save();
         return $this->json();
@@ -821,6 +825,7 @@ class ShopController extends BaseController {
      */
     public function transfer($shop_id, Request $request) {
         $shop = Shop::findByEnId($shop_id);
+        
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
@@ -828,7 +833,14 @@ class ShopController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
-        $record->save();
+        try {
+            $record->save();
+            $shop->container->transfer($shop->manager->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
+        
         return $this->json();
     }
 
@@ -872,7 +884,13 @@ class ShopController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
-        $record->save();
+        try {
+            $record->save();
+            $shop->container->transfer($member->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer member error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 

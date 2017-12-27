@@ -16,9 +16,16 @@ class Heepay
         return [
             'agent_id'  =>  '1664502',
             'version' => 1,
-            'key' => '5716FE2DEE9C495F98C710F2',
-            'des_key' => '6044BDC53A814294A275579B',
-            'reality_rul' => 'https://www.heepay.com/API/Merchant/Reality.aspx',
+            'reality' => [
+                'key' => '5716FE2DEE9C495F98C710F2',
+                'des_key' => '6044BDC53A814294A275579B',
+                'url' => 'https://www.heepay.com/API/Merchant/Reality.aspx',
+            ],
+            'auth' => [
+                'key' => 'E571A22188014DCDA059B8F2',
+                'des_key' => '579E754B57D8451B987A8A35',
+                'url' => 'https://www.heepay.com/API/Certify/BankAccountThirdCertifySubmit.aspx',
+            ],
         ];
     }
 }
