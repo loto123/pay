@@ -1,6 +1,6 @@
 <template>
 	<div id="addBankCard">
-		<topBack title="添加银行卡"></topBack>
+		<topBack title="添加银行卡" style="background:#eee;"></topBack>
 		<div class="addBankCard-box">
 			<h2>请绑定持卡人本人的银行卡</h2>
 			<div class="flex flex-v flex-justify-center">
@@ -28,8 +28,13 @@
 				</div>
 				<mt-field label="银行卡号" placeholder="请填写银行卡号" type="number" v-model="card_num"></mt-field>
 			</div>
-			<div class="bank-info flex flex-v flex-justify-center">
-				<mt-field label="预留手机号" placeholder="请填写银行卡预留手机号" type="number" maxlength="11" v-model="mobile"></mt-field>
+			<div class="flex flex-v flex-justify-center">
+				<section class="mobile-container">
+					<div class="mobile-box flex flex-align-center">
+						<span>手机号:</span>
+						<em class="flex-1 number">{{mobile}}</em>
+					</div>
+				</section>
 			</div>
 			<section class="input-wrap-box">
 				<div class="input-wrap flex flex-align-center">
@@ -102,10 +107,9 @@
 				name: null,
 				id_number: null,
 				dealShop: null,
-
+				mobile:null,
 				card_num: null,
 				bank_id: null,
-				mobile: null,
 				code: null,
 
 				computedTime: null,		//短信验证码倒计时
@@ -152,6 +156,7 @@
 					.then((res) => {
 						this.name = res.data.data.name;
 						this.id_number = res.data.data.id_number;
+						this.mobile = res.data.data.mobile;
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
@@ -332,6 +337,9 @@
 		}
 		.bank-info {
 			margin-top: 1em;
+			.mint-cell{
+				background-image: none;
+			}
 		}
 	}
 
@@ -343,10 +351,28 @@
 
 	.account-container {
 		background: #fff;
+		padding-left: 10px;
 		.account-box {
 			height: 3em;
 			border-top: 1px solid #d9d9d9;
-			padding-left: 10px;
+			span {
+				display: inline-block;
+				width: 105px;
+			}
+			.number {
+				color: #666;
+				font-size: inherit;
+			}
+		}
+	}
+
+	.mobile-container {
+		background: #fff;
+		padding-left: 10px;
+		.mobile-box {
+			height: 3em;
+			border-top: 1px solid #d9d9d9;
+			border-bottom: 1px solid #d9d9d9;
 			span {
 				display: inline-block;
 				width: 105px;

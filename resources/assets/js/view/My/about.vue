@@ -6,7 +6,7 @@
 				<div class="imgWrap">
 					<img src="/images/logo.png">
 				</div>
-				<div class="versions">游戏宝 1.0.1</div>
+				<div class="versions">聚宝朋 1.0.1</div>
 			</div>
 		</section>
 	</div>
