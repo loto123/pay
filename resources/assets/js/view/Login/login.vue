@@ -207,15 +207,22 @@ export default {
     },
 
     // 微信登录
-    weChatLogin(mobile){
-      var _data={
-        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+ mobile
-      };
+    weChatLogin(e,mobile){
+
+      if(!mobile){
+        var _data={
+          redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+        };
+      }else {
+        var _data={
+          redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+"?mobile="+ mobile
+        };
+      }
+
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
       }).catch();
     },
-
 
     commitName() {
       this.$store.dispatch("changeName", this.name);
@@ -233,8 +240,6 @@ export default {
       this.$store.dispatch("setRefindPassWordState",true);
       this.$router.push("/login/regist");
     }
-
-
   }
 };
 </script>

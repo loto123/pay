@@ -12,7 +12,6 @@ namespace App\Pay\Impl\MMSP;
 use App\Pay\DepositInterface;
 use App\Pay\IdConfuse;
 use App\Pay\Impl\MMSP\SDK\wxscan;
-use Illuminate\Support\Facades\Log;
 
 class WechatOfficialAccount extends WechatH5
 {
@@ -57,7 +56,7 @@ class WechatOfficialAccount extends WechatH5
                 //Log::info($result);
                 return $result['URL'];
             } else {
-                Log::error([$result['ERR_CODE_MSG']]);
+                PayLogger::deposit()->error('公众号预支付错误', [$result]);
                 return null;
             }
 
