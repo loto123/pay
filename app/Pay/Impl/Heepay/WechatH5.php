@@ -112,7 +112,7 @@ class WechatH5 implements DepositInterface
 
                 $deposit->out_batch_no = $params['jnet_bill_no'];
 
-                if ($params['pay_amt'] > 0 && $deposit->amount > $deposit['pay_amt']) {
+                if ($params['pay_amt'] > 0 && $deposit->amount > $params['pay_amt']) {
                     $deposit->state = Deposit::STATE_PART_PAID;
                 } else {
                     $deposit->state = Deposit::STATE_COMPLETE;
