@@ -52,6 +52,21 @@
 						<li>
 							<a href="javascript:;">交易</a>
 						</li>
+						<li class="active">
+							<a href="javascript:;">全部</a>
+						</li>
+						<li>
+							<a href="javascript:;">交易</a>
+						</li>
+						<li>
+							<a href="javascript:;">店铺转账</a>
+						</li>
+						<li>
+							<a href="javascript:;">全部</a>
+						</li>
+						<li>
+							<a href="javascript:;">交易</a>
+						</li>
 					</ul>
 					<div class="cancel-btn">
 						<a href="javascript:;" @click="cancel">

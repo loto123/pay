@@ -56365,6 +56365,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -56532,6 +56547,36 @@ var render = function() {
                 _c("h2", [_vm._v("选择交易类型")]),
                 _vm._v(" "),
                 _c("ul", { staticClass: "type-list" }, [
+                  _c("li", { staticClass: "active" }, [
+                    _c("a", { attrs: { href: "javascript:;" } }, [
+                      _vm._v("全部")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("a", { attrs: { href: "javascript:;" } }, [
+                      _vm._v("交易")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("a", { attrs: { href: "javascript:;" } }, [
+                      _vm._v("店铺转账")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("a", { attrs: { href: "javascript:;" } }, [
+                      _vm._v("全部")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("a", { attrs: { href: "javascript:;" } }, [
+                      _vm._v("交易")
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c("li", { staticClass: "active" }, [
                     _c("a", { attrs: { href: "javascript:;" } }, [
                       _vm._v("全部")
