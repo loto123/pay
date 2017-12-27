@@ -354,6 +354,36 @@ class ShopController extends BaseController {
     }
 
     /**
+     * @SWG\Get(
+     *   path="/shop/members/{shop_id}/delete/{user_id}",
+     *   summary="店铺成员详情",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="path",
+     *     description="用户id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function member_delete($shop_id, $user_id) {
+        $shop = Shop::findByEnId($shop_id);
+        $user = User::findByEnId($user_id);
+        ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->delete();
+        return $this->json();
+    }
+    
+    /**
      * @SWG\Post(
      *   path="/shop/close/{id}",
      *   summary="解散店铺",
