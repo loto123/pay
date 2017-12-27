@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\Heepay\Reality;
 use App\Pay\Impl\Heepay\SmallBatchTransfer;
 use App\User;
 use App\UserCard;
@@ -136,7 +137,7 @@ class CardController extends Controller
             [
                 'card_num' => 'bail|required|digits_between:16,19',
                 'bank_id' => 'bail|required',
-                'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
+//                'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
                 'code' => 'bail|required',
                 // 'province' => 'bail|required',
                 // 'city' => 'bail|required',
@@ -152,17 +153,26 @@ class CardController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-        $cache_key = "SMS_".$request->mobile;
+        $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
 //        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
              return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
         Cache::forget($cache_key);
+
         //同一用户只能绑定一次
         $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$request->card_num)->first();
         if (!empty($card_list) && count($card_list)>0) {
             return response()->json(['code' => 0,'msg' => '已经绑定的银行卡不能重复绑定','data' => []]);
+        }
+
+        $bill_id = time();
+        $bill_time = date('YmdHis');
+        //调用银行卡鉴权接口
+        $auth_res = Reality::authentication($bill_id,$bill_time,$request->card_num,$this->user->id_number,$this->user->name);
+        if ($auth_res !== true){
+            return response()->json(['code' => 0,'msg' => $auth_res,'data' => []]);
         }
 
         $cards = new UserCard();
