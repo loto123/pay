@@ -9,6 +9,7 @@
 
 namespace App\Pay\Model;
 
+use App\Pay\PayLogger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -22,6 +23,7 @@ class DepositMethod extends Model
     const OS_ANY = 3;
     public $timestamps = false;
     protected $table = 'pay_deposit_method';
+
     /**
      * 取得支付场景
      * @param $value
@@ -93,6 +95,7 @@ class DepositMethod extends Model
      */
     public function acceptNotify(Channel $channel)
     {
+        PayLogger::deposit()->info('支付通知', ['通道' => $channel->name, '请求' => request()]);
         //启动事务
         $commit = false;
         DB::beginTransaction();
@@ -109,6 +112,8 @@ class DepositMethod extends Model
                 if ($result->masterContainer->changeBalance($result->amount, 0)) {
                     $result->state = Deposit::STATE_COMPLETE;
                 }
+            } else {
+                PayLogger::deposit()->notice('支付异常', [$result->toArray()]);
             }
 
             if (!$result->save()) {

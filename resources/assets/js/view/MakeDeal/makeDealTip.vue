@@ -115,8 +115,8 @@ export default {
       renderData: {
         name: null,
         moneyData: null,
+        user:{},
       },
-      // hasPayList:[],
       passwordData: {
         switch: false,
         value: null

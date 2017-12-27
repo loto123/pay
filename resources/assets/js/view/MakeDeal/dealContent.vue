@@ -1,8 +1,8 @@
 <template>
     <div>
         <section class="content flex flex-v flex-align-center">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <h3 class="user-name">用户名字</h3>
+            <img :src="renderData.user.avatar" alt="" class="avatar">
+            <h3 class="user-name">{{renderData.user.name}}</h3>
             <p class="message">{{(renderData.comment==0)?'无消息':renderData.comment}}</p>
         </section>
 
@@ -63,6 +63,9 @@
 
 <script>
   export default {
-    props:["renderData"]
+    props:["renderData"],
+    mounted(){
+      console.log(this.renderData);
+    }
   }
 </script>

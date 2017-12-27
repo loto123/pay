@@ -37,6 +37,7 @@ Route::group([
     $router->get('getPayCard','UserController@getPayCard');
     $router->post('identify','UserController@identify');
     $router->get('info','UserController@info');
+    $router->get('parent','UserController@parent');
     $router->post('pay_password','UserController@pay_password');
 });
 
@@ -110,6 +111,12 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('profit', 'ShopController@profit');
         $api->get('user/search', 'ShopController@user_search');
         $api->post('invite/{shop_id}/{user_id}', 'ShopController@invite');
+        $api->post('transfer/{shop_id}', 'ShopController@transfer');
+        $api->post('transfer/{shop_id}/{user_id}', 'ShopController@transfer_member')->where('shop_id', '[0-9]+');
+        $api->get('transfer/records/{shop_id}', 'ShopController@transfer_records')->where('shop_id', '[0-9]+');
+        $api->get('transfer/records/month', 'ShopController@month_data');
+
+
     });
 });
 
@@ -131,6 +138,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('create', 'TransferController@create');
         $api->post('close', 'TransferController@close');
         $api->post('cancel', 'TransferController@cancel');
+        $api->post('realget', 'TransferController@realGet');
     });
 });
 
@@ -147,6 +155,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
+        $api->get('records/month', 'AccountController@month_data');
     });
 
 });
@@ -159,6 +168,16 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('share', 'ProxyController@share');
         $api->get('members/count', 'ProxyController@members_count');
         $api->get('members', 'ProxyController@members');
+    });
+
+});
+
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'index',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/', 'IndexController@index');
     });
 
 });

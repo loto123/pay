@@ -10,6 +10,12 @@
 </head>
 <body>
 <div id="app"></div>
+<script>
+    var user_feedback=null
+    @if (config("user_feedback"))
+    user_feedback = "{{ config("user_feedback") }}"
+    @endif
+</script>
 <script src="{{mix('js/app.js')}}" ></script>
 </body>
 </html>

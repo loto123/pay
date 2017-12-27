@@ -48,11 +48,11 @@
 				showPasswordTag:false,
 				dealShop: null,
 				shopList: null,
-				balance:null,  	//可转账金额
+				balance:null,  	            //可转账金额
 
-				shopId: null,	 //店铺ID
-				amount:null, 	//提现money
-				has_pay_password:null,	//是否设置支付密码
+				shopId: null,	            //店铺ID
+				amount:null, 	            //提现money
+				has_pay_password:null,	    //是否设置支付密码
 				shop_id:null
 			};
 		},

@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawException;
 use App\Pay\Model\WithdrawResult;
+use App\Pay\PayLogger;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -57,10 +58,13 @@ class SubmitWithdrawRequest implements ShouldQueue
         try {
             if ($withdraw->method->targetPlatform->getKey() == 0) {
                 //银行卡提现取得银行内部编码
-                $withdraw->receiver_info['bank_no'] = $withdraw->channel->platform->getBankCode($withdraw->receiver_info['bank_card']);
+                $withdraw->receiver_info = array_merge($withdraw->receiver_info, ['bank_no' => $withdraw->channel->platform->getBankCode($withdraw->receiver_info['bank_card'])]);
             }
 
+            PayLogger::withdraw()->info('提交提现..', ['支付平台' => $withdraw->channel->platform->name, '提现方式' => $withdraw->method->title]);
             $result = $withdraw->method->withdraw($withdraw);
+            PayLogger::withdraw()->info('通道返回', [$result]);
+
             if ($result->raw_response) {
                 $withdraw->state = $result->state;
                 //通道交易号

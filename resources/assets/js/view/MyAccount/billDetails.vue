@@ -4,12 +4,12 @@
 		<div class="details-content">
 			<div class="money-box">
 				<span>入账金额</span>
-				<em>{{amount}}</em>
+				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{(mode==0)?'收入':'支出'}}</div>
+					<div class="content">{{(mode==1)?'支出':'收入'}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
@@ -59,7 +59,6 @@
 				Loading.getInstance().open("加载中...");
 				var self = this;
       			var _id = this.$route.query.id;
-				console.log(_id);
 				request.getInstance().getData("api/account/records/detail/"+_id)
 					.then((res) => {
                         this.remark=res.data.data.remark
@@ -131,6 +130,9 @@
 		display: flex;
 		justify-content: space-between;
 		padding: .5em .7em 0 .7em;
+		.active{
+			color: #00cc00;
+		}
 	}
 
 	.billDetails-list {

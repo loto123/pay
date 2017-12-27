@@ -25,8 +25,8 @@ class WithdrawMethodController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('提现方式');
 
             $content->body($this->grid());
         });
@@ -67,8 +67,8 @@ class WithdrawMethodController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('编辑提现方式');
 
             $content->body($this->form()->edit($id));
         });
@@ -120,8 +120,8 @@ class WithdrawMethodController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('添加提现方式');
 
             $content->body($this->form());
         });

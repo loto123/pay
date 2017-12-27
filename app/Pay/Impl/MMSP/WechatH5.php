@@ -15,7 +15,7 @@ use App\Pay\Impl\MMSP\SDK\base;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\DepositResult;
-use Illuminate\Support\Facades\Log;
+use App\Pay\PayLogger;
 use Mockery\Exception;
 
 class WechatH5 implements DepositInterface
@@ -48,11 +48,11 @@ class WechatH5 implements DepositInterface
         $wxh5payMod->BodyAes();
         $wxh5payMod->MakeSign($config['KEY']);
         $result = $wxh5payMod->send($config['URL'], $config['KEY']);
-        Log::info($wxh5payMod->GetValues());
+        PayLogger::deposit()->debug('充值数据', [$wxh5payMod->GetValues()]);
         if ($result['STATUS'] == 1) {
             return $result['URL'];
         } else {
-            Log::error($result);
+            PayLogger::deposit()->error('微信H5预支付错误', [$result]);
             return null;
         }
     }

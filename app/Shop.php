@@ -57,4 +57,8 @@ class Shop extends Model
     public function transfer() {
         return $this->hasMany('App\Transfer', 'shop_id', 'id');
     }
+
+    public function funds() {
+        return $this->hasMany(ShopFund::class, 'shop_id');
+    }
 }
