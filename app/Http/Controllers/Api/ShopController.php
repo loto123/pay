@@ -256,7 +256,7 @@ class ShopController extends BaseController {
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
-        if ($shop->user_id != $user->id && $shop->shop_user()->where("id", $user->id)->count() == 0) {
+        if ($shop->manager_id != $user->id && $shop->shop_user()->where("id", $user->id)->count() == 0) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         /* @var $shop Shop */
@@ -270,7 +270,7 @@ class ShopController extends BaseController {
 
             ];
         }
-        if ($shop->user_id == $user->id) {
+        if ($shop->manager_id == $user->id) {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
