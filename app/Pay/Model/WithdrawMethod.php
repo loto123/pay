@@ -9,6 +9,7 @@
 
 namespace App\Pay\Model;
 
+use App\Pay\PayLogger;
 use App\Pay\WithdrawInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -106,6 +107,7 @@ class WithdrawMethod extends Model
      */
     public function acceptNotify(Channel $channel)
     {
+        PayLogger::withdraw()->info('提现通知', ['通道' => $channel->name, '请求' => request()]);
         //启动事务
         $commit = false;
         DB::beginTransaction();

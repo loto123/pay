@@ -314,7 +314,7 @@ class AccountController extends BaseController {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
-                'model' => (int)$_fund->model,
+                'mode' => (int)$_fund->mode,
                 'amount' => $_fund->amount,
                 'created_at' => strtotime($_fund->created_at)
             ];

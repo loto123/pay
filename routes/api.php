@@ -163,6 +163,16 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
 
 });
 
+$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+    $api->group([
+        'prefix' => 'index',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/', 'IndexController@index');
+    });
+
+});
+
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',
