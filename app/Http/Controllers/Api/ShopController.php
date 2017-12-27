@@ -421,6 +421,27 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="boolean"
      *   ),
+     *   @SWG\Parameter(
+     *     name="name",
+     *     in="formData",
+     *     description="店铺名",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="percent",
+     *     in="formData",
+     *     description="平台交易费",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="rate",
+     *     in="formData",
+     *     description="单价",
+     *     required=false,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -432,14 +453,21 @@ class ShopController extends BaseController {
         if ($request->name) {
             $shop->name = $request->name;
         }
-        if ($request->use_link) {
+        if ($request->use_link !== null) {
             $shop->use_link = $request->use_link ? 1 : 0;
         }
 
-        if ($request->active) {
+        if ($request->active !== null) {
             $shop->active = $request->active ? 1 : 0;
         }
 
+        if ($request->rate !== null) {
+            $shop->rate = $request->rate;
+        }
+
+        if ($request->percent !== null) {
+            $shop->percent = $request->percent;
+        }
         $shop->save();
         return $this->json();
     }
