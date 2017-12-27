@@ -45976,7 +45976,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   components: { tabBar: __WEBPACK_IMPORTED_MODULE_0__components_tabBar___default.a },
   data: function data() {
     return {
-      amount: null
+      amount: null,
+      avatar: null
     };
   },
   created: function created() {
@@ -45991,8 +45992,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/account").then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/index").then(function (res) {
         _this.amount = res.data.data.balance;
+        _this.avatar = res.data.data.avatar;
+        _this.message = res.data.data.message;
+
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
@@ -52462,7 +52466,14 @@ var render = function() {
         _vm._v(" "),
         _c("section", { staticClass: "transaction flex flex-justify-center" }, [
           _c("a", { attrs: { href: "/#/myAccount" } }, [
-            _vm._m(0, false, false),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "imggWrap flex flex-justify-center flex-align-center"
+              },
+              [_c("img", { attrs: { src: _vm.avatar, alt: "" } })]
+            ),
             _vm._v(" "),
             _c("h3", [_vm._v(_vm._s(_vm.amount))]),
             _vm._v(" "),
@@ -52471,7 +52482,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(1, false, false),
+      _vm._m(0, false, false),
       _vm._v(" "),
       _c("tabBar", { attrs: { status: "index" } })
     ],
@@ -52479,16 +52490,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "imggWrap flex flex-justify-center flex-align-center" },
-      [_c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -53793,9 +53794,11 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("p", [
-                _vm._v("短信验证码已发送至" + _vm._s(_vm.userAccountName))
-              ]),
+              _vm.smsTimer
+                ? _c("p", [
+                    _vm._v("短信验证码已发送至" + _vm._s(_vm.userAccountName))
+                  ])
+                : _vm._e(),
               _vm._v(" "),
               _c(
                 "section",
