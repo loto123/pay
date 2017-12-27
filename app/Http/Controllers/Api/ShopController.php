@@ -759,4 +759,58 @@ class ShopController extends BaseController {
             'mobile' => $user->mobile,
         ]);
     }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/transfer/{shop_id}",
+     *   summary="店铺转账到个人帐户",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="path",
+     *     description="被邀请人id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function transfer($shop_id) {
+        return $this->json();
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/transfer/{shop_id}/{user_id}",
+     *   summary="店铺转账到成员帐户",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="path",
+     *     description="成员id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function transfer_member($shop_id, $user_id) {
+        return $this->json();
+    }
 }

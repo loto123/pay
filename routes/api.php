@@ -111,6 +111,9 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('profit', 'ShopController@profit');
         $api->get('user/search', 'ShopController@user_search');
         $api->post('invite/{shop_id}/{user_id}', 'ShopController@invite');
+        $api->post('transfer/{shop_id}', 'ShopController@transfer');
+        $api->post('transfer/{shop_id}/{user_id}', 'ShopController@transfer_member');
+
     });
 });
 
