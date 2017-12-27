@@ -444,9 +444,10 @@ export default {
         transfer_id:this.transfer_id,
         friend_id:_tempList
       };  
+      
       request.getInstance().postData("api/transfer/notice",_data).then(res=>{
         Loading.getInstance().close();   
-        Toast("交易成功...");
+        Toast("添加成员成功...");
         setTimeout(()=>{
           this.init();
         },2000);

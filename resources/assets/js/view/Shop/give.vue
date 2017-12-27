@@ -26,7 +26,7 @@
             </div>
            
             <div class="comment flex flex-align-center flex-justify-center">
-              <textarea name="" id="" cols="30" rows="10" placeholder="添加备注（50字以内）" maxlength="50"></textarea>
+              <textarea name="" id="" cols="30" rows="10" placeholder="添加备注（50字以内）" maxlength="50" v-model="comment"></textarea>
             </div>
 
             <a href="javascript:;" class="transAcc-btn"> 
@@ -67,7 +67,8 @@ export default {
       memberList:[],
       shopId:null,
       transferData:{},
-      amount:null                      // 转账金额
+      amount:null,                      // 转账金额
+      comment:""
     };
   },
   components: { topBack ,choiseMember},
@@ -93,14 +94,16 @@ export default {
       // /shop/transfer/{shop_id}/{user_id}
       Loading.getInstance().open();
       var _data = {
-        amount : this.amount
+        amount : this.amount,
+        remark:comment
       }
       request.getInstance().postData('api/shop/transfer/'+this.shopId+"/"+this.transferData.id,_data).then(res=>{
-        console.log(res);
-
         Loading.getInstance().close();
         Toast("转账成功");
-      }).catch();
+      }).catch(err=>{
+        Loading.getInstance().close();
+        Toast(err.data.data.msg);
+      });
     },
     init(){
       Loading.getInstance().open();

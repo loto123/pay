@@ -101,7 +101,6 @@
                 <mt-switch v-model="inviteLinkStatus"></mt-switch>
             </span>
         </div>
-        
     </div>
 
     <div class="platform">
@@ -126,7 +125,7 @@
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 是否开启交易功能 </span>
             <span class="text flex-1 flex flex-reverse">
-                <mt-switch v-model="tradeStatus"></mt-switch>
+                <mt-switch v-model="tradeStatus" @click="changeStatus(22)"></mt-switch>
             </span>
         </div>
     </div>
@@ -749,8 +748,53 @@ export default {
             });  
           }).catch();
         }
+    },
+
+    changeStatus(type){
+      console.log(type);
     }
 
+  },
+  watch:{
+    // 邀请链接修改
+    "inviteLinkStatus":function(){
+
+      var _link = null;
+      if(this.inviteLinkStatus == true){
+        _link = 1;
+      }else {
+        _link = 0;
+      }
+
+      var _data = {
+        use_link:_link
+      };
+
+      request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch();
+    },
+
+    "tradeStatus":function(){
+      var _link = null;
+      if(this.tradeStatus == true){
+        _link = 1;
+      }else {
+        _link = 0;
+      }
+
+      var _data = {
+        active:_link
+      };
+
+      request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch();
+    }
   }
 };
 </script>

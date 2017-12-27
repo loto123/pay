@@ -58688,9 +58688,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         transfer_id: this.transfer_id,
         friend_id: _tempList
       };
+
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/notice", _data).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("交易成功...");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("添加成员成功...");
         setTimeout(function () {
           _this4.init();
         }, 2000);
@@ -68233,7 +68234,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -68491,6 +68491,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           });
         }).catch();
       }
+    },
+    changeStatus: function changeStatus(type) {
+      console.log(type);
+    }
+  },
+  watch: {
+    // 邀请链接修改
+    "inviteLinkStatus": function inviteLinkStatus() {
+      var _this6 = this;
+
+      var _link = null;
+      if (this.inviteLinkStatus == true) {
+        _link = 1;
+      } else {
+        _link = 0;
+      }
+
+      var _data = {
+        use_link: _link
+      };
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + this.shopId, _data).then(function (res) {
+        setTimeout(function () {
+          _this6.init();
+        }, 1500);
+      }).catch();
+    },
+
+    "tradeStatus": function tradeStatus() {
+      var _this7 = this;
+
+      var _link = null;
+      if (this.tradeStatus == true) {
+        _link = 1;
+      } else {
+        _link = 0;
+      }
+
+      var _data = {
+        active: _link
+      };
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + this.shopId, _data).then(function (res) {
+        setTimeout(function () {
+          _this7.init();
+        }, 1500);
+      }).catch();
     }
   }
 });
@@ -68809,6 +68856,11 @@ var render = function() {
                   { staticClass: "text flex-1 flex flex-reverse" },
                   [
                     _c("mt-switch", {
+                      on: {
+                        click: function($event) {
+                          _vm.changeStatus(22)
+                        }
+                      },
                       model: {
                         value: _vm.tradeStatus,
                         callback: function($$v) {
@@ -71976,7 +72028,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       memberList: [],
       shopId: null,
       transferData: {},
-      amount: null // 转账金额
+      amount: null, // 转账金额
+      comment: ""
     };
   },
 
@@ -72002,14 +72055,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // /shop/transfer/{shop_id}/{user_id}
       __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__["a" /* default */].getInstance().open();
       var _data = {
-        amount: this.amount
+        amount: this.amount,
+        remark: comment
       };
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest_js__["a" /* default */].getInstance().postData('api/shop/transfer/' + this.shopId + "/" + this.transferData.id, _data).then(function (res) {
-        console.log(res);
-
         __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__["a" /* default */].getInstance().close();
         Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("转账成功");
-      }).catch();
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.data.msg);
+      });
     },
     init: function init() {
       var _this = this;
@@ -72120,7 +72175,39 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0, false, false),
         _vm._v(" "),
-        _vm._m(1, false, false),
+        _c(
+          "div",
+          { staticClass: "comment flex flex-align-center flex-justify-center" },
+          [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.comment,
+                  expression: "comment"
+                }
+              ],
+              attrs: {
+                name: "",
+                id: "",
+                cols: "30",
+                rows: "10",
+                placeholder: "添加备注（50字以内）",
+                maxlength: "50"
+              },
+              domProps: { value: _vm.comment },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.comment = $event.target.value
+                }
+              }
+            })
+          ]
+        ),
         _vm._v(" "),
         _c(
           "a",
@@ -72168,27 +72255,6 @@ var staticRenderFns = [
         _vm._v("全部转账")
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "comment flex flex-align-center flex-justify-center" },
-      [
-        _c("textarea", {
-          attrs: {
-            name: "",
-            id: "",
-            cols: "30",
-            rows: "10",
-            placeholder: "添加备注（50字以内）",
-            maxlength: "50"
-          }
-        })
-      ]
-    )
   }
 ]
 render._withStripped = true
