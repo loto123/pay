@@ -66407,8 +66407,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/messages/count")]).then(function (res) {
         _this.shopList = res[0].data.data.data;
         _this.total_profit = res[1].data.data.profit;
-        _this.messageCount = res.data.data.count;
-        console.log(res[2]);
+        _this.messageCount = res[2].data.data.count;
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();

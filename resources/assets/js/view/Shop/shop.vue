@@ -398,8 +398,7 @@ export default {
         .then(res=>{
           this.shopList = res[0].data.data.data;
           this.total_profit = res[1].data.data.profit;
-          this.messageCount = res.data.data.count;
-          console.log(res[2]);
+          this.messageCount = res[2].data.data.count;
           Loading.getInstance().close();
         })
         .catch(err=>{
