@@ -821,6 +821,7 @@ class ShopController extends BaseController {
      */
     public function transfer($shop_id, Request $request) {
         $shop = Shop::findByEnId($shop_id);
+        
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
@@ -828,7 +829,14 @@ class ShopController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
-        $record->save();
+        try {
+            $record->save();
+            $shop->container->transfer($shop->manager->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
+        
         return $this->json();
     }
 
