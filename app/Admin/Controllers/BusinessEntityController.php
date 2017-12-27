@@ -68,8 +68,8 @@ class BusinessEntityController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('编辑签约主体');
 
             $content->body($this->form()->edit($id));
         });
@@ -99,8 +99,8 @@ class BusinessEntityController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('添加签约主体');
 
             $content->body($this->form());
         });

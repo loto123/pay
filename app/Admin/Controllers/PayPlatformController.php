@@ -93,8 +93,8 @@ class PayPlatformController extends Controller
         $this->id = $id;
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('编辑支付平台');
 
             $content->body($this->form()->edit($id));
         });
@@ -226,8 +226,8 @@ EOT
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('添加支付平台后如果支持银行卡提现请在编辑页面勾选支持银行');
 
             $content->body($this->form());
         });
