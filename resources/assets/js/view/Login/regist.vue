@@ -226,7 +226,7 @@ export default {
     if (this.$store.state.regist.refindPassword == true) {
       this.findPasswordSwitch = this.$store.state.regist.refindPassword;
       this.step = this.$store.state.regist.step;
-
+      
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
       localStorage.setItem("registStep", this.step);
     }

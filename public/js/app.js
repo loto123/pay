@@ -58766,7 +58766,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
               console.error(err);
             });
           }).catch(function (err) {});
-        }).catch(function (err) {});
+        }).catch(function (err) {
+          Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
+        });
         return;
       }
     },
