@@ -58686,23 +58686,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // 拿钱
         var _data = {
           transfer_id: this.transfer_id,
-          points: this.moneyData.getMoney,
-          action: "get"
+          points: this.moneyData.getMoney
+          // action :"realGet",
         };
 
-        __WEBPACK_IMPORTED_MODULE_5_mint_ui__["MessageBox"].confirm('实际拿钱可能不足' + this.moneyData.getMoney * this.renderData.price + "元,可能会产生少许手续费用").then(function (action) {
-          __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-            Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
+        __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/realget", _data).then(function (res) {
+          console.log(res);
+          var _data = {
+            amount: res.data.data.amount,
+            real_amount: res.data.data.real_amount
+          };
 
-            setTimeout(function () {
-              _this5.init();
-            }, 1500);
-          }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-            console.error(err);
-          });
+          return Promise.resolve(_data);
+        }).then(function (realData) {
+          console.log(realData.amount);
+          __WEBPACK_IMPORTED_MODULE_5_mint_ui__["MessageBox"].confirm("实际拿钱" + realData.real_amount + "元,手续费" + Math.floor((realData.amount - realData.real_amount) * 100) / 100 + "元").then(function (action) {
+
+            var _data = {
+              transfer_id: _this5.transfer_id,
+              points: _this5.moneyData.getMoney,
+              action: "get"
+            };
+
+            __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
+              __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+              Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
+
+              setTimeout(function () {
+                _this5.init();
+              }, 1500);
+            }).catch(function (err) {
+              __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+              console.error(err);
+            });
+          }).catch(function (err) {});
         }).catch(function (err) {});
+        return;
       }
     },
     getResult: function getResult(result) {
