@@ -354,7 +354,7 @@ class ShopController extends BaseController {
     }
 
     /**
-     * @SWG\Get(
+     * @SWG\Post(
      *   path="/shop/members/{shop_id}/delete/{user_id}",
      *   summary="删除店铺成员",
      *   tags={"店铺"},
