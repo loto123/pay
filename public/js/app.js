@@ -66332,36 +66332,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine").then(function (res) {
-        _this.shopList = res.data.data.data;
+      Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit")]).then(function (res) {
+        _this.shopList = res[0].data.data.data;
+        _this.total_profit = res[1].data.data.profit;
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
-      }).catch(function (e) {
+      }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
-        console.error(e);
+        console.error(err);
       });
-
-      // request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
-      //     console.log(res);
-      //     this.balance = res.data.data.balance;
-      //     this.today_profit = res.data.data.today_profit;
-      //     this.yesterday_profit = res.data.data.yesterday_profit;
-      //     this.total_profit = res.data.data.total_profit;
-
-      //     Loading.getInstance().close();
-      // }).catch(err=>{
-      //     console.error(err);
-      // });
-
-      // Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/account/"+this.shopId)])
-      //   .then(res=>{
-      //     this.shopList = res[0].data.data.data;
-      //     this.total_profit = res[1].data.data.data;
-      //     Loading.getInstance().close();
-      //   })
-      //   .catch(err=>{
-      //     Loading.getInstance().close();
-      //     console.error(err);
-      //   });
     }
   }
 });
@@ -66472,10 +66450,12 @@ var render = function() {
                 _c("h3", [_vm._v(_vm._s(item.name))]),
                 _vm._v(" "),
                 _c("p", { staticClass: "today-earn" }, [
-                  _vm._v("今日收益:123456")
+                  _vm._v("今日收益:" + _vm._s(item.today_profit))
                 ]),
                 _vm._v(" "),
-                _c("p", { staticClass: "all-earn" }, [_vm._v("总收益:111")])
+                _c("p", { staticClass: "all-earn" }, [
+                  _vm._v("总收益:" + _vm._s(item.total_profit))
+                ])
               ]
             )
           }),

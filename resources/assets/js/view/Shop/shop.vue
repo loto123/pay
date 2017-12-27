@@ -36,8 +36,8 @@
           </div>
 
           <h3>{{item.name}}</h3>
-          <p class="today-earn">今日收益:123456</p>
-          <p class="all-earn">总收益:111</p>
+          <p class="today-earn">今日收益:{{item.today_profit}}</p>
+          <p class="all-earn">总收益:{{item.total_profit}}</p>
         </div>
 
         <div class="add-shop flex flex-v flex-align-center flex-justify-center" @click="addShop">
@@ -392,37 +392,16 @@ export default {
     getShopData(){
       Loading.getInstance().open();
 
-      request.getInstance().getData("api/shop/lists/mine").then((res)=>{
-        this.shopList = res.data.data.data;
-        Loading.getInstance().close();
-        
-      }).catch((e)=>{
-        Loading.getInstance().close();
-        console.error(e);
-      });
-
-      // request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
-      //     console.log(res);
-      //     this.balance = res.data.data.balance;
-      //     this.today_profit = res.data.data.today_profit;
-      //     this.yesterday_profit = res.data.data.yesterday_profit;
-      //     this.total_profit = res.data.data.total_profit;
-
-      //     Loading.getInstance().close();
-      // }).catch(err=>{
-      //     console.error(err);
-      // });
-
-      // Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/account/"+this.shopId)])
-      //   .then(res=>{
-      //     this.shopList = res[0].data.data.data;
-      //     this.total_profit = res[1].data.data.data;
-      //     Loading.getInstance().close();
-      //   })
-      //   .catch(err=>{
-      //     Loading.getInstance().close();
-      //     console.error(err);
-      //   });
+      Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/profit")])
+        .then(res=>{
+          this.shopList = res[0].data.data.data;
+          this.total_profit = res[1].data.data.profit;
+          Loading.getInstance().close();
+        })
+        .catch(err=>{
+          Loading.getInstance().close();
+          console.error(err);
+        });
     }
 
   }
