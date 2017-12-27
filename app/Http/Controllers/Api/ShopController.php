@@ -880,7 +880,13 @@ class ShopController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
-        $record->save();
+        try {
+            $record->save();
+            $shop->container->transfer($member->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer member error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 
