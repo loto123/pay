@@ -7,6 +7,7 @@ use App\OauthUser;
 use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -174,7 +175,11 @@ class AuthController extends BaseController {
         } catch (\Exception $e){
             return $this->json();
         }
-
+        $role = Role::where("name", 'user')->first();
+        if ($role) {
+            $user->roles()->sync($role);
+        }
+        
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
         if ($request->oauth_user) {
