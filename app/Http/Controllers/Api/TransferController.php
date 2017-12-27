@@ -342,7 +342,7 @@ class TransferController extends Controller
      *   @SWG\Parameter(
      *     name="action",
      *     in="formData",
-     *     description="action value:put(付钱) or get(拿钱) or realGet",
+     *     description="action value:put(付钱) or get(拿钱)",
      *     required=true,
      *     type="string"
      *   ),
@@ -365,7 +365,7 @@ class TransferController extends Controller
             [
                 'transfer_id' => 'bail|required',
                 'points' => 'bail|required|integer|between:1,99999',
-                'action' => ['bail', 'required', Rule::in(['put', 'get', 'realGet'])],
+                'action' => ['bail', 'required', Rule::in(['put', 'get'])],
                 'pay_password' => 'required_if:action,put',
             ],
             [
