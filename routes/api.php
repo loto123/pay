@@ -112,7 +112,8 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('user/search', 'ShopController@user_search');
         $api->post('invite/{shop_id}/{user_id}', 'ShopController@invite');
         $api->post('transfer/{shop_id}', 'ShopController@transfer');
-        $api->post('transfer/{shop_id}/{user_id}', 'ShopController@transfer_member');
+        $api->post('transfer/{shop_id}/{user_id}', 'ShopController@transfer_member')->where('shop_id', '[0-9]+');
+        $api->get('transfer/records/{shop_id}', 'ShopController@transfer_records')->where('shop_id', '[0-9]+');
 
     });
 });

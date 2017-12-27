@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Notifications\ShopApply;
 use App\Pay\Model\PayFactory;
 use App\Shop;
+use App\ShopFund;
 use App\ShopUser;
 use App\User;
 use Illuminate\Http\Request;
@@ -818,7 +819,16 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer($shop_id) {
+    public function transfer($shop_id, Request $request) {
+        $shop = Shop::findByEnId($shop_id);
+        $record = new ShopFund();
+        $record->shop_id = $shop->id;
+        $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
+        $record->mode = ShopFund::MODE_OUT;
+        $record->amount = $request->amount;
+        $record->balance = $shop->container->balance - $request->amount;
+        $record->status = ShopFund::STATUS_SUCCESS;
+        $record->save();
         return $this->json();
     }
 
@@ -852,7 +862,50 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer_member($shop_id, $user_id) {
+    public function transfer_member($shop_id, $user_id, Request $request) {
+        $shop = Shop::findByEnId($shop_id);
+        $member = User::findByEnId($user_id);
+        $record = new ShopFund();
+        $record->shop_id = $shop->id;
+        $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
+        $record->mode = ShopFund::MODE_OUT;
+        $record->amount = $request->amount;
+        $record->balance = $shop->container->balance - $request->amount;
+        $record->status = ShopFund::STATUS_SUCCESS;
+        $record->save();
         return $this->json();
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/transfer/records/{shop_id}",
+     *   summary="手机号搜索用户",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="mobile",
+     *     in="path",
+     *     description="手机号",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function transfer_records($shop_id, Request $request) {
+        $data = [];
+        $user = $this->auth->user();
+        $shop = Shop::findByEnId($shop_id);
+        /* @var $user User */
+        foreach ($shop->funds()->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
+            $data[] = [
+                'id' => $_fund->en_id(),
+                'type' => (int)$_fund->type,
+                'mode' => (int)$_fund->mode,
+                'amount' => $_fund->amount,
+                'created_at' => strtotime($_fund->created_at)
+            ];
+        }
+        return $this->json(['data' => $data]);
     }
 }
