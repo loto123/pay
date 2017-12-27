@@ -86,8 +86,8 @@ class PayChannelController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('通道编辑');
-            $content->description('同一支付平台可签约多条通道');
+            $content->header('支付管理');
+            $content->description('编辑支付通道');
 
             $content->body($this->form()->edit($id));
         });
@@ -184,7 +184,7 @@ class PayChannelController extends Controller
         return Admin::content(function (Content $content) {
 
             $content->header('支付管理');
-            $content->description('新增通道');
+            $content->description('添加支付通道');
 
             $content->body($this->form());
         });
