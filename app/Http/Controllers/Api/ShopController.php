@@ -908,4 +908,24 @@ class ShopController extends BaseController {
         }
         return $this->json(['data' => $data]);
     }
+
+    /**
+     * @SWG\Get(
+     *   path="/transfer/records/month",
+     *   summary="帐单月数据",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="month",
+     *     in="formData",
+     *     description="月(2017-12形式)",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function month_data(Request $request) {
+        return $this->json(['in' => 0, 'out' => 0]);
+    }
 }
