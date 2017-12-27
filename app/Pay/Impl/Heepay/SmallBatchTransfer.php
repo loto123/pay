@@ -77,7 +77,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'notify_url' => $notify_url,
                 'ext_param1' => $batch_no,
             ];
-            PayLogger::withdraw()->debug('汇付宝提现', [$params]);
+            PayLogger::withdraw()->debug('汇付宝提现', $params);
             $params['key'] = $config['key'];
             ksort($params);
             $params['sign'] = $this->makeSign($params);
@@ -92,10 +92,17 @@ class SmallBatchTransfer implements WithdrawInterface
 
             $res_xml = self::send_post($config['url'], http_build_query($params), $config['cert_path']);
             $res_xml = iconv("gbk//IGNORE", "utf-8", $res_xml);
+            PayLogger::withdraw()->debug('提现返回', [$res_xml]);
             $result->raw_response = $res_xml;
             $response = simplexml_load_string($res_xml);
 
+            PayLogger::withdraw()->debug('xml对象', ['xml' => json_encode($response, JSON_UNESCAPED_UNICODE)]);
             if (empty($response)) {
+                if ($response === false) {
+                    PayLogger::withdraw()->error('xml解析错误!', [libxml_get_errors()]);
+                } else {
+                    PayLogger::withdraw()->error('汇付宝提现返回空');
+                }
                 break;
             }
 

@@ -248,9 +248,14 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function detail($id, Request $request) {
+        $user = $this->auth->user();
+
         $member_size = $request->input('member_size', 5);
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->user_id != $user->id && $shop->shop_user()->where("id", $user->id)->count() == 0) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         /* @var $shop Shop */
@@ -264,18 +269,31 @@ class ShopController extends BaseController {
 
             ];
         }
-        return $this->json([
-            'id' => $shop->en_id(),
-            'name' => $shop->name,
-            'user_link' => $shop->use_link ? 1 : 0,
-            'active' => $shop->active ? 1 : 0,
-            'members' => $members,
-            'members_count' => (int)$shop->users()->count(),
-            'rate' => $shop->price,
-            'percent' => $shop->fee,
-            'created_at' => strtotime($shop->created_at),
-            'logo' => asset("images/personal.jpg")
-        ]);
+        if ($shop->user_id == $user->id) {
+            $data = [
+                'id' => $shop->en_id(),
+                'name' => $shop->name,
+                'user_link' => $shop->use_link ? 1 : 0,
+                'active' => $shop->active ? 1 : 0,
+                'members' => $members,
+                'members_count' => (int)$shop->users()->count(),
+                'rate' => $shop->price,
+                'percent' => $shop->fee,
+                'created_at' => strtotime($shop->created_at),
+                'logo' => asset("images/personal.jpg")
+            ];
+        } else {
+            $data = [
+                'id' => $shop->en_id(),
+                'name' => $shop->name,
+                'members' => $members,
+                'members_count' => (int)$shop->users()->count(),
+                'percent' => $shop->fee,
+                'created_at' => strtotime($shop->created_at),
+                'logo' => asset("images/personal.jpg")
+            ];
+        }
+        return $this->json($data);
     }
 
     /**
@@ -403,6 +421,27 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="boolean"
      *   ),
+     *   @SWG\Parameter(
+     *     name="name",
+     *     in="formData",
+     *     description="店铺名",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="percent",
+     *     in="formData",
+     *     description="平台交易费",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="rate",
+     *     in="formData",
+     *     description="单价",
+     *     required=false,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -414,14 +453,21 @@ class ShopController extends BaseController {
         if ($request->name) {
             $shop->name = $request->name;
         }
-        if ($request->use_link) {
+        if ($request->use_link !== null) {
             $shop->use_link = $request->use_link ? 1 : 0;
         }
 
-        if ($request->active) {
+        if ($request->active !== null) {
             $shop->active = $request->active ? 1 : 0;
         }
 
+        if ($request->rate !== null) {
+            $shop->rate = $request->rate;
+        }
+
+        if ($request->percent !== null) {
+            $shop->percent = $request->percent;
+        }
         $shop->save();
         return $this->json();
     }
@@ -740,5 +786,73 @@ class ShopController extends BaseController {
             'id' => $user->en_id(),
             'mobile' => $user->mobile,
         ]);
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/transfer/{shop_id}",
+     *   summary="店铺转账到个人帐户",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="amount",
+     *     in="formData",
+     *     description="金额",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="path",
+     *     description="被邀请人id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function transfer($shop_id) {
+        return $this->json();
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/shop/transfer/{shop_id}/{user_id}",
+     *   summary="店铺转账到成员帐户",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="amount",
+     *     in="formData",
+     *     description="金额",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="path",
+     *     description="成员id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function transfer_member($shop_id, $user_id) {
+        return $this->json();
     }
 }

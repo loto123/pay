@@ -189,6 +189,7 @@ class AuthController extends BaseController {
         $invite = User::where("mobile", $request->invite_mobile)->first();
         if ($invite) {
             $user->parent_id = $invite->id;
+            $user->operator_id = $invite->operator_id;
             Notification::send($invite, new UserApply(['user_name' =>  $user->name, 'user_id' => $user->id]));
         }
         $user->channel_id = $channel->id;
