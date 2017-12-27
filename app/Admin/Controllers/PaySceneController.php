@@ -44,8 +44,7 @@ class PaySceneController extends Controller
             });
             $grid->model()->orderBy('id');
             $grid->id('ID')->sortable();
-            $grid->name('场景名');
-
+            $grid->name('场景名')->editable();
         });
     }
 
@@ -59,8 +58,8 @@ class PaySceneController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('编辑支付场景');
 
             $content->body($this->form()->edit($id));
         });
@@ -87,8 +86,8 @@ class PaySceneController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('添加支付场景');
 
             $content->body($this->form());
         });
