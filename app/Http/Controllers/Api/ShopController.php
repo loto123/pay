@@ -773,6 +773,13 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
+     *     name="amount",
+     *     in="formData",
+     *     description="金额",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
      *     name="user_id",
      *     in="path",
      *     description="被邀请人id",
@@ -796,6 +803,13 @@ class ShopController extends BaseController {
      *     name="shop_id",
      *     in="path",
      *     description="店铺id",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="amount",
+     *     in="formData",
+     *     description="金额",
      *     required=true,
      *     type="string"
      *   ),
