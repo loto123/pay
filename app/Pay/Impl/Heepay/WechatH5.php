@@ -13,7 +13,7 @@ use App\Pay\IdConfuse;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\DepositResult;
-use Illuminate\Support\Facades\Log;
+use App\Pay\PayLogger;
 
 class WechatH5 implements DepositInterface
 {
@@ -96,7 +96,7 @@ class WechatH5 implements DepositInterface
             //验证签名
             $validSign = self::makeSign($params, ['result', 'agent_id', 'jnet_bill_no', 'agent_bill_id', 'pay_type', 'pay_amt', 'remark'], $config['key']);
             if ($validSign !== $params['sign']) {
-                Log::error('heepay h5 notify sign error:need ' . $validSign . ' give ' . $params['sign']);
+                PayLogger::deposit()->critical('汇付宝通知md5计算错误', ['答案' => $validSign, '当前' => $params['sign']]);
                 break;
             }
 

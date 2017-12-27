@@ -13,9 +13,9 @@ use App\Pay\Crypt3Des;
 use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawResult;
+use App\Pay\PayLogger;
 use App\Pay\WithdrawInterface;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class SmallBatchTransfer implements WithdrawInterface
 {
@@ -77,7 +77,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'notify_url' => $notify_url,
                 'ext_param1' => $batch_no,
             ];
-            Log::info($params);
+            PayLogger::withdraw()->debug('汇付宝提现', [$params]);
             $params['key'] = $config['key'];
             ksort($params);
             $params['sign'] = $this->makeSign($params);
@@ -152,7 +152,7 @@ class SmallBatchTransfer implements WithdrawInterface
 
         $server_output = curl_exec($ch);
         if (curl_error($ch)) {
-            Log::info([
+            PayLogger::common()->error("汇付宝{$send_type}请求错误", [
                 'curl_url' => $url,
                 'curl_errno' => curl_errno($ch),
                 'curl_error' => curl_error($ch),
@@ -163,13 +163,12 @@ class SmallBatchTransfer implements WithdrawInterface
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         $http_code_int = intval($http_code);
-        Log::info('http_code:' . $http_code);
+        PayLogger::withdraw()->debug("汇付宝响应$http_code");
 
         if ($http_code_int === 200) {       // 只接收 200 返回的数据
             return $server_output;
         }
 
-        Log::info('http_code_error:' . $url);
         return false;
     }
 

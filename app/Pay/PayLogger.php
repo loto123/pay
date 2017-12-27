@@ -16,17 +16,18 @@ class PayLogger
 {
     private static $withdrawLogger;
     private static $depositLogger;
+    private static $commonLogger;
 
     /**
-     * 取得提现日志
+     * 通用日志
      * @return Writer
      */
-    public static function withdraw()
+    public static function common()
     {
-        if (!self::$withdrawLogger) {
-            self::$withdrawLogger = self::genLogger('withdraw', 20);
+        if (!self::$commonLogger) {
+            self::$commonLogger = self::genLogger('pay-common', 20);
         }
-        return self::$withdrawLogger;
+        return self::$commonLogger;
     }
 
     /**
@@ -40,6 +41,18 @@ class PayLogger
         $logger = new Writer(new Logger($type));
         $logger->useDailyFiles(storage_path() . '/logs/' . $type . '.log', $preserve_days);
         return $logger;
+    }
+
+    /**
+     * 取得提现日志
+     * @return Writer
+     */
+    public static function withdraw()
+    {
+        if (!self::$withdrawLogger) {
+            self::$withdrawLogger = self::genLogger('withdraw', 20);
+        }
+        return self::$withdrawLogger;
     }
 
     /**
