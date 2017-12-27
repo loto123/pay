@@ -26,7 +26,7 @@ class Transfer extends Model
     protected $table = 'pay_transfer';
 
     protected $casts = [
-        'fee' => 'flaot',
+        'fee' => 'float',
         'amount' => 'float',
         'create_at' => 'datetime',
         'update_at' => 'datetime',
