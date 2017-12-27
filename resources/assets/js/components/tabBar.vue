@@ -44,26 +44,28 @@ i {
   position: absolute;
   bottom: 0em;
   left: 0em;
-  height: 4em;
+  height: 3em;
   border-top: 1px solid #eee;
   width: 100%;
   background: #f5f7fb;
+
   ul {
     padding-top: 0.2em;
     box-sizing: border-box;
     li {
       .comonIcon {
-        font-size: 2.3em;
+        font-size: 1.7em;
       }
 
       p {
         margin-top: 0.2em;
         text-align: center;
+        font-size: 0.8em;
       }
 
       .make-deal {
-        width: 5.8em;
-        height: 5.8em;
+        width: 4.5em;
+        height: 4.5em;
         background: #f5f7fb;
         border-radius: 50%;
         margin-top: -4em;

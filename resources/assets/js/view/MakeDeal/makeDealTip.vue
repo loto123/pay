@@ -131,7 +131,6 @@ export default {
         .getInstance()
         .getData("api/transfer/feerecord" + "?transfer_id=" + _id)
         .then(res => {
-          console.log(res);
           this.renderData = res.data.data;
           Loading.getInstance().close();
         })
@@ -151,7 +150,6 @@ export default {
         .getInstance()
         .getData("api/my/info")
         .then(res => {
-          console.log(res);
 
           // 判断是否已经设置了支付密码
           if (!res.data.data.has_pay_password) {
@@ -180,7 +178,6 @@ export default {
               .getInstance()
               .postData("api/transfer/payfee", _data)
               .then(res => {
-                console.log(res);
                 this.passwordData.switch = true;
                 Loading.getInstance().close();
               })
@@ -190,7 +187,6 @@ export default {
                 Toast(err.data.msg);       
               });
           }
-          console.log(res);
         })
         .catch(err => {
           console.error(err);
@@ -219,7 +215,6 @@ export default {
         .getInstance()
         .postData("api/transfer/payfee", _data)
         .then(res => {
-          console.log(res);
           Toast("打赏店家成功");
           this.hidePassword();
           this.init();

@@ -43,7 +43,8 @@ Route::group([
         return ['status' => $withdraw->cancel()];
     })->name('withdraw_cancel')->where(['id' => '\d+']);
 
-
+    //提现异常
+    $router->get('pay/withdraw-exceptions', 'WithdrawController@exception_view');
     $router->post('/excel/user', 'ExcelController@user');
 
     $router->resource('bank', BankController::class);

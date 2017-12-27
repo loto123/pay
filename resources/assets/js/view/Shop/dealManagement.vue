@@ -279,13 +279,16 @@ export default {
             }
         }
 
+        
+
         if(_tList.length == 0 ){
             Toast("当前未选择记录");
             return;
         }
 
         var _data = {
-            transfer_id:_tList 
+            transfer_id:_tList,
+            shop_id:this.dataList[0].shop_id 
         };
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
