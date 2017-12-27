@@ -79,6 +79,10 @@ class ShopController extends BaseController {
         $shop->fee = $request->percent;
         $shop->container_id = $wallet->id;
         $shop->save();
+        $shop_user = new ShopUser();
+        $shop_user->shop_id = $shop->id;
+        $shop_user->user_id = $user->id;
+        $shop_user->save();
         return $this->json([$shop]);
     }
 
