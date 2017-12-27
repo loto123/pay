@@ -165,7 +165,7 @@ class AuthController extends BaseController {
         $input['name'] = $request->name ? $request->name : $request->mobile;
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
-        $channel = Channel::inRandomOrder()->first();
+        $channel = Channel::where("disabled",0)->inRandomOrder()->first();
         $input['container_id'] = $wallet->id;
         try {
             $user = User::create($input);
