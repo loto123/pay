@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Notifications\UserApply;
 use App\OauthUser;
 use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Swagger\Annotations as SWG;
 use PhpSms;
@@ -172,10 +174,7 @@ class AuthController extends BaseController {
         } catch (\Exception $e){
             return $this->json();
         }
-        $invite = User::where("mobile", $request->invite_mobile)->first();
-        if ($invite) {
-            $user->parent_id = $invite->id;
-        }
+
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
         if ($request->oauth_user) {
@@ -183,8 +182,14 @@ class AuthController extends BaseController {
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
                 $user->avatar = $oauth_user->headimgurl;
+                $user->name = $oauth_user->nickname;
                 $oauth_user->save();
             }
+        }
+        $invite = User::where("mobile", $request->invite_mobile)->first();
+        if ($invite) {
+            $user->parent_id = $invite->id;
+            Notification::send($invite, new UserApply(['user_name' =>  $user->name, 'user_id' => $user->id]));
         }
         $user->channel_id = $channel->id;
         $user->save();
