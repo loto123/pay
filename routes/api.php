@@ -132,6 +132,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('create', 'TransferController@create');
         $api->post('close', 'TransferController@close');
         $api->post('cancel', 'TransferController@cancel');
+        $api->post('realget', 'TransferController@realGet');
     });
 });
 
