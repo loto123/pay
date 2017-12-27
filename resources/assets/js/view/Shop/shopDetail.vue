@@ -412,7 +412,7 @@
   .add-members-pop{
     width:100%;
     height: 100vh;
-    position: fixed;
+    position: absolute;
     background: rgba(0,0,0,0.7);
     top:0em;
     left: 0em;

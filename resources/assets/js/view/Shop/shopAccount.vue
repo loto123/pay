@@ -188,7 +188,6 @@ export default {
 
       this.shopId = this.$route.query.id;
       request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
-          console.log(res);
           this.balance = res.data.data.balance;
           this.today_profit = res.data.data.today_profit;
           this.yesterday_profit = res.data.data.yesterday_profit;
