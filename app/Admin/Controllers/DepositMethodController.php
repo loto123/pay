@@ -28,8 +28,8 @@ class DepositMethodController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('充值方式');
 
             $content->body($this->grid());
         });

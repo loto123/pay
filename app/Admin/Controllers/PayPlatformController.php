@@ -28,8 +28,8 @@ class PayPlatformController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('支付平台');
 
             $content->body($this->grid());
         });
@@ -69,9 +69,13 @@ class PayPlatformController extends Controller
                 return implode('&nbsp;', $mthods);
             });
 
+            $grid->filter(function ($filter) {
+                $filter->disableIdFilter();
+                $filter->like('name', '平台名称');
+            });
             $grid->actions(function ($actions) {
                 //$actions->disableEdit();
-                $actions->disableDelete();
+                //$actions->disableDelete();
             });
 
 

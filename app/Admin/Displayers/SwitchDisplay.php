@@ -38,7 +38,7 @@ $('.$class').bootstrapSwitch({
                 _method: 'PUT'
             },
             success: function (data) {
-                toastr[data.status === true ? 'success':'error'](data.message + "2");
+                toastr[data.status === true ? 'success':'error'](data.message);
                 data.status !== true && \$cur_switch.bootstrapSwitch('state', false, true);
             }
         });
