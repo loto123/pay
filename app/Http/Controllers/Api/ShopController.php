@@ -216,7 +216,9 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
-                'logo' => asset("images/personal.jpg")
+                'logo' => asset("images/personal.jpg"),
+                'today_profit' => 0,
+                'total_profit' => 0
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
