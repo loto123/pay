@@ -23,8 +23,8 @@ class BusinessEntityController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('签约主体');
 
             $content->body($this->grid());
         });
@@ -42,6 +42,11 @@ class BusinessEntityController extends Controller
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();
                 });
+            });
+
+            $grid->filter(function ($filter) {
+                $filter->disableIdFilter();
+                $filter->like('company_name', '公司名称');
             });
             $grid->id('ID')->sortable();
             $grid->column('company_name', '公司名');

@@ -291,6 +291,8 @@
   font-size: 0.9em;
   color: #999;
 }
+
+
 </style>
 
 
@@ -302,7 +304,6 @@ import passwordPanel from "../../components/password";
 import request from "../../utils/userRequest";
 import {Toast,MessageBox} from "mint-ui"
 import choiseMember from "./choiseMember.vue"
-
 import Loading from "../../utils/loading";
 
 import qrCode from "../../utils/qrCode";

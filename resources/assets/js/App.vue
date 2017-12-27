@@ -13,6 +13,14 @@
 .mint-indicator-wrapper{
   z-index:1999 !important;
 }
+
+#drop-list-component{
+    .mint-radio-label{
+      font-size: 0.9em;
+    }
+}
+
+
 </style>
 
 <script>

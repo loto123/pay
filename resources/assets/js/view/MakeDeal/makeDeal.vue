@@ -55,6 +55,8 @@
 </template>
 
 <style scoped lang="scss">
+
+
 #makeDeal {
   padding-top: 2em;
   background: #eee;
