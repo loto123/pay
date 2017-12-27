@@ -445,4 +445,29 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @SWG\GET(
+     *   path="/my/parent",
+     *   summary="推荐人信息",
+     *   tags={"我的"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function parent() {
+        $user = JWTAuth::parseToken()->authenticate();
+        if (!$user->parent) {
+            return response()->json(['code' => 1,'msg' => '','data' => [
+                'avatar' => "",
+                'name' => "",
+                'mobile' => "",
+            ]]);
+        }
+        return response()->json(['code' => 1,'msg' => '','data' => [
+            'avatar' => $user->parent->avatar,
+            'name' => $user->parent->name,
+            'mobile' => $user->parent->mobile,
+        ]]);
+    }
+
 }
