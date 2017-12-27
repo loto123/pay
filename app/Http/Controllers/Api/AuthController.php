@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\OauthUser;
+use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
 use Illuminate\Http\Request;
@@ -164,6 +165,7 @@ class AuthController extends BaseController {
         $input['name'] = $request->name ? $request->name : $request->mobile;
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
+        $channel = Channel::inRandomOrder()->first();
         $input['container_id'] = $wallet->id;
         try {
             $user = User::create($input);
@@ -184,6 +186,7 @@ class AuthController extends BaseController {
                 $oauth_user->save();
             }
         }
+        $user->channel_id = $channel->id;
         $user->save();
         return $this->json($success);
     }
