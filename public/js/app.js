@@ -53478,7 +53478,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册成功");
           self.$router.push("/login");
         }).catch(function (err) {
-          console.log(err);
+          console.error(err);
           Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册失败");
         });
         return;
@@ -55493,7 +55493,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/account/charge', _data).then(function (res) {
-				console.log(res);
 				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('充值成功');
 				location.href = res.data.data.redirect_url;
 			}).catch(function (err) {
@@ -55508,7 +55507,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
-				console.log(res);
 				_this.setBankList(res);
 			}).catch(function (err) {
 				console.error(err);
@@ -57741,13 +57739,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     /**
      *  参数数据结构
      *  dataList : [
      *      {
-     *           avatar:"/images/avatar.jpg",
+     *          avatar:"/images/avatar.jpg",
      *          checked:true
      *          id:1
      *          name:"sa"
@@ -57760,22 +57759,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    props: ["isShow", "dataList"],
+    // isShow :组件开关
+    // dataList :渲染数组
+    // singleMode :单选模式
+    // backUrl : 回退地址
+    props: ["isShow", "dataList", "singleMode", "backUrl"],
     methods: {
-        hidePage: function hidePage() {
-            this.$emit("hide");
+        hidePage: function hidePage(control) {
+            if (control && this.$props.backUrl) {
+                this.$emit("hide", true);
+            } else {
+                this.$emit("hide");
+            }
         },
         submitData: function submitData() {
             this.$emit("submit", this._dataList);
             this.hidePage();
         },
         makeMark: function makeMark(id) {
-            this._dataList = [].concat(this.$props.dataList);
+            if (!this.singleMode) {
+                this._dataList = [].concat(this.$props.dataList);
 
-            for (var i = 0; i < this._dataList.length; i++) {
-                if (this._dataList[i].id == id) {
-                    this._dataList[i].checked = !this._dataList[i].checked;
+                for (var i = 0; i < this._dataList.length; i++) {
+                    if (this._dataList[i].id == id) {
+                        this._dataList[i].checked = !this._dataList[i].checked;
+                    }
                 }
+            } else {
+                this._dataList = [].concat(this.$props.dataList);
+
+                for (var _i = 0; _i < this._dataList.length; _i++) {
+                    if (this._dataList[_i].id == id) {
+                        this._dataList = this._dataList[_i];
+                    }
+                }
+                this.submitData();
             }
         }
     }
@@ -57793,11 +57811,20 @@ var render = function() {
     _vm.isShow
       ? _c("div", { attrs: { id: "choise-member" } }, [
           _c("div", { staticClass: "top flex flex-align-center" }, [
-            _c("span", { staticClass: "flex-1", on: { click: _vm.hidePage } }, [
-              _vm._v("返回")
-            ]),
+            _c(
+              "span",
+              {
+                staticClass: "flex-1",
+                on: {
+                  click: function($event) {
+                    _vm.hidePage(true)
+                  }
+                }
+              },
+              [_vm._v("返回")]
+            ),
             _vm._v(" "),
-            _c("h3", { staticClass: "flex-4" }, [_vm._v("选择要提醒的群友")]),
+            _c("h3", { staticClass: "flex-4" }, [_vm._v("选择要提醒的成员")]),
             _vm._v(" "),
             _c("div", { staticClass: "flex-1" })
           ]),
@@ -57839,67 +57866,81 @@ var render = function() {
           _vm._v(" "),
           _c(
             "ul",
-            _vm._l(_vm.dataList, function(item) {
-              return _c(
-                "li",
-                { key: item.id, staticClass: "flex flex-align-center" },
-                [
-                  _c("span", { staticClass: "img-wrap flex-2" }, [
-                    _c("img", { attrs: { src: item.avatar } })
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "user-name flex-6" }, [
-                    _vm._v(_vm._s(item.name))
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "span",
-                    {
-                      staticClass: "flex-2 flex flex-reverse",
-                      on: {
-                        click: function($event) {
-                          _vm.makeMark(item.id)
-                        }
+            [
+              _vm._l(_vm.dataList, function(item) {
+                return _c(
+                  "li",
+                  {
+                    key: item.id,
+                    staticClass: "flex flex-align-center",
+                    on: {
+                      click: function($event) {
+                        _vm.makeMark(item.id)
                       }
-                    },
-                    [
-                      _c(
-                        "i",
-                        {
-                          staticClass:
-                            "iconfont flex flex-align-center flex-justify-center",
-                          staticStyle: { color: "#00cc00" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        " +
-                              _vm._s(item.checked ? "" : "") +
-                              "\n                    "
+                    }
+                  },
+                  [
+                    _c("span", { staticClass: "img-wrap flex-2" }, [
+                      _c("img", { attrs: { src: item.avatar } })
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "user-name flex-6" }, [
+                      _vm._v(_vm._s(item.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "flex-2 flex flex-reverse" }, [
+                      !_vm.singleMode
+                        ? _c(
+                            "i",
+                            {
+                              staticClass:
+                                "iconfont flex flex-align-center flex-justify-center",
+                              staticStyle: { color: "#00cc00" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(item.checked ? "" : "") +
+                                  "\n                    "
+                              )
+                            ]
                           )
-                        ]
-                      )
-                    ]
+                        : _vm._e()
+                    ])
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              !_vm.dataList.length
+                ? _c(
+                    "li",
+                    {
+                      staticClass: "flex flex-align-center flex-justify-center"
+                    },
+                    [_vm._v("当前店铺无成员")]
                   )
-                ]
-              )
-            })
+                : _vm._e()
+            ],
+            2
           ),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "submit" },
-            [
-              _c(
-                "mt-button",
-                {
-                  attrs: { type: "primary", size: "large" },
-                  on: { click: _vm.submitData }
-                },
-                [_vm._v("确认添加")]
+          !_vm.singleMode
+            ? _c(
+                "div",
+                { staticClass: "submit" },
+                [
+                  _c(
+                    "mt-button",
+                    {
+                      attrs: { type: "primary", size: "large" },
+                      on: { click: _vm.submitData }
+                    },
+                    [_vm._v("确认添加")]
+                  )
+                ],
+                1
               )
-            ],
-            1
-          )
+            : _vm._e()
         ])
       : _vm._e()
   ])
@@ -58524,7 +58565,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       passWordSwitch: false,
       renderData: {
-        name: null
+        name: null,
+        user: {
+          avatar: {}
+        },
+        avatar: {}
+
       },
       moneyData: {
         payMoney: null,
@@ -58747,7 +58793,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this6.$router.push("/makeDeal/my_deal");
         }, 1500);
       }).catch(function (err) {
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("撤销交易失败");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.data.msg);
       });
     },
     hideMemberChoise: function hideMemberChoise() {
@@ -59216,7 +59262,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["renderData"]
+  props: ["renderData"],
+  mounted: function mounted() {
+    console.log(this.renderData);
+  }
 });
 
 /***/ }),
@@ -59231,10 +59280,12 @@ var render = function() {
     _c("section", { staticClass: "content flex flex-v flex-align-center" }, [
       _c("img", {
         staticClass: "avatar",
-        attrs: { src: "/images/avatar.jpg", alt: "" }
+        attrs: { src: _vm.renderData.user.avatar, alt: "" }
       }),
       _vm._v(" "),
-      _c("h3", { staticClass: "user-name" }, [_vm._v("用户名字")]),
+      _c("h3", { staticClass: "user-name" }, [
+        _vm._v(_vm._s(_vm.renderData.user.name))
+      ]),
       _vm._v(" "),
       _c("p", { staticClass: "message" }, [
         _vm._v(
@@ -60732,9 +60783,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       renderData: {
         name: null,
-        moneyData: null
+        moneyData: null,
+        user: {}
       },
-      // hasPayList:[],
       passwordData: {
         switch: false,
         value: null
@@ -65936,7 +65987,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-active[data-v-2cbc9344] {\n  -webkit-transition: all 0.5s ease;\n  transition: all 0.5s ease;\n}\n.slide-enter[data-v-2cbc9344],\n.slide-leave-to[data-v-2cbc9344] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 100%;\n      height: 100%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .add-shop[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .add-shop > div[data-v-2cbc9344] {\n    border-radius: 0.4em;\n    width: 85%;\n    height: 85%;\n    border: 1px dashed #eee;\n}\n.shop-list .add-shop > div > i[data-v-2cbc9344] {\n      font-size: 4em;\n      color: #bbb;\n}\n.shop-list .add-shop h3[data-v-2cbc9344] {\n    padding-top: 0.3em;\n    color: #999;\n}\n.add-shop-tab[data-v-2cbc9344] {\n  width: 100%;\n  height: 100vh;\n  background: #eee;\n  padding-bottom: 2em;\n  padding-top: 1em;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.add-shop-tab h3[data-v-2cbc9344] {\n    font-size: 1.8em;\n    text-align: center;\n    padding-top: 0.5em;\n    padding-bottom: 0.5em;\n}\n.add-shop-tab p[data-v-2cbc9344] {\n    line-height: 1.5;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-left: 1em;\n    padding-right: 1em;\n    text-indent: 2em;\n}\n.add-shop-tab .item[data-v-2cbc9344] {\n    width: 95%;\n    margin: 0 auto;\n}\n.add-shop-tab .open-deal-switch[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 2.9em;\n    background: #fff;\n    border-top: 1px solid #ddd;\n    border-bottom: 1px solid #ddd;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.add-shop-tab .pay-wrap[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 3em;\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n.add-shop-tab .pay-wrap .origin[data-v-2cbc9344] {\n      margin-right: 1em;\n}\n.add-shop-tab .btn-wrap[data-v-2cbc9344] {\n    margin: 0 auto;\n    margin-top: 2em;\n    width: 95%;\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-active[data-v-2cbc9344] {\n  -webkit-transition: all 0.5s ease;\n  transition: all 0.5s ease;\n}\n.slide-enter[data-v-2cbc9344],\n.slide-leave-to[data-v-2cbc9344] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 100%;\n      height: 100%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n    text-align: center;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .add-shop[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .add-shop > div[data-v-2cbc9344] {\n    border-radius: 0.4em;\n    width: 85%;\n    height: 85%;\n    border: 1px dashed #eee;\n}\n.shop-list .add-shop > div > i[data-v-2cbc9344] {\n      font-size: 4em;\n      color: #bbb;\n}\n.shop-list .add-shop h3[data-v-2cbc9344] {\n    padding-top: 0.3em;\n    color: #999;\n}\n.add-shop-tab[data-v-2cbc9344] {\n  width: 100%;\n  height: 100vh;\n  background: #eee;\n  padding-bottom: 2em;\n  padding-top: 1em;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.add-shop-tab h3[data-v-2cbc9344] {\n    font-size: 1.8em;\n    text-align: center;\n    padding-top: 0.5em;\n    padding-bottom: 0.5em;\n}\n.add-shop-tab p[data-v-2cbc9344] {\n    line-height: 1.5;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-left: 1em;\n    padding-right: 1em;\n    text-indent: 2em;\n}\n.add-shop-tab .item[data-v-2cbc9344] {\n    width: 95%;\n    margin: 0 auto;\n}\n.add-shop-tab .open-deal-switch[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 2.9em;\n    background: #fff;\n    border-top: 1px solid #ddd;\n    border-bottom: 1px solid #ddd;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.add-shop-tab .pay-wrap[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 3em;\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n.add-shop-tab .pay-wrap .origin[data-v-2cbc9344] {\n      margin-right: 1em;\n}\n.add-shop-tab .btn-wrap[data-v-2cbc9344] {\n    margin: 0 auto;\n    margin-top: 2em;\n    width: 95%;\n}\n", ""]);
 
 // exports
 
@@ -65953,6 +66004,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(12);
+//
 //
 //
 //
@@ -69713,7 +69765,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
-
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             });
         }
@@ -70257,7 +70308,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$router.push('/shop/shopAccount/withdraw');
     },
     goGive: function goGive() {
-      this.$router.push('/shop/shopAccount/give');
+      this.$router.push('/shop/shopAccount/give?shopId=' + this.shopId);
     },
     init: function init() {
       var _this = this;
@@ -71681,7 +71732,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-e328c442], body[data-v-e328c442], div[data-v-e328c442], span[data-v-e328c442], applet[data-v-e328c442], object[data-v-e328c442], iframe[data-v-e328c442],\nh1[data-v-e328c442], h2[data-v-e328c442], h3[data-v-e328c442], h4[data-v-e328c442], h5[data-v-e328c442], h6[data-v-e328c442], p[data-v-e328c442], blockquote[data-v-e328c442], pre[data-v-e328c442],\na[data-v-e328c442], abbr[data-v-e328c442], acronym[data-v-e328c442], address[data-v-e328c442], big[data-v-e328c442], cite[data-v-e328c442], code[data-v-e328c442],\ndel[data-v-e328c442], dfn[data-v-e328c442], em[data-v-e328c442], img[data-v-e328c442], ins[data-v-e328c442], kbd[data-v-e328c442], q[data-v-e328c442], s[data-v-e328c442], samp[data-v-e328c442],\nsmall[data-v-e328c442], strike[data-v-e328c442], strong[data-v-e328c442], sub[data-v-e328c442], sup[data-v-e328c442], tt[data-v-e328c442], var[data-v-e328c442],\nb[data-v-e328c442], u[data-v-e328c442], i[data-v-e328c442], center[data-v-e328c442],\ndl[data-v-e328c442], dt[data-v-e328c442], dd[data-v-e328c442], ol[data-v-e328c442], ul[data-v-e328c442], li[data-v-e328c442],\nfieldset[data-v-e328c442], form[data-v-e328c442], label[data-v-e328c442], legend[data-v-e328c442],\ntable[data-v-e328c442], caption[data-v-e328c442], tbody[data-v-e328c442], tfoot[data-v-e328c442], thead[data-v-e328c442], tr[data-v-e328c442], th[data-v-e328c442], td[data-v-e328c442],\narticle[data-v-e328c442], aside[data-v-e328c442], canvas[data-v-e328c442], details[data-v-e328c442], embed[data-v-e328c442],\nfigure[data-v-e328c442], figcaption[data-v-e328c442], footer[data-v-e328c442], header[data-v-e328c442], hgroup[data-v-e328c442],\nmenu[data-v-e328c442], nav[data-v-e328c442], output[data-v-e328c442], ruby[data-v-e328c442], section[data-v-e328c442], summary[data-v-e328c442],\ntime[data-v-e328c442], mark[data-v-e328c442], audio[data-v-e328c442], video[data-v-e328c442] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-e328c442], aside[data-v-e328c442], details[data-v-e328c442], figcaption[data-v-e328c442], figure[data-v-e328c442],\nfooter[data-v-e328c442], header[data-v-e328c442], hgroup[data-v-e328c442], menu[data-v-e328c442], nav[data-v-e328c442], section[data-v-e328c442] {\n  display: block;\n}\nbody[data-v-e328c442] {\n  line-height: 1;\n}\nol[data-v-e328c442], ul[data-v-e328c442] {\n  list-style: none;\n}\nblockquote[data-v-e328c442], q[data-v-e328c442] {\n  quotes: none;\n}\nblockquote[data-v-e328c442]:before, blockquote[data-v-e328c442]:after,\nq[data-v-e328c442]:before, q[data-v-e328c442]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-e328c442] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-e328c442] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-e328c442] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-e328c442] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-e328c442] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-e328c442] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-e328c442] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-e328c442] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-e328c442] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-e328c442] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-e328c442] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-e328c442] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-e328c442] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-e328c442] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-e328c442] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-e328c442] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-e328c442] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-e328c442] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-e328c442] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-e328c442] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-e328c442] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-e328c442] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-e328c442] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-e328c442] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-e328c442] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-e328c442] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-e328c442] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-e328c442] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-e328c442] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-e328c442] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-e328c442] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-e328c442] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-e328c442] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-e328c442] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-e328c442] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-e328c442] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-e328c442] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-e328c442] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-e328c442] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-e328c442] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.give-container[data-v-e328c442] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.give-box[data-v-e328c442] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.give-box .tltle[data-v-e328c442] {\n    font-size: 1em;\n    color: #999;\n}\n.give-money[data-v-e328c442] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 2em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.give-money input[data-v-e328c442] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.all-money[data-v-e328c442] {\n  margin-top: 1em;\n}\n.all-money .money[data-v-e328c442] {\n    color: #666;\n}\n.all-money .all-giveAcc[data-v-e328c442] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.give-store[data-v-e328c442] {\n  margin-top: 2.5em;\n}\n.give-store h3[data-v-e328c442] {\n    color: #999;\n    font-size: 0.9em;\n}\n.give-store #store[data-v-e328c442] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 40px;\n    line-height: 40px;\n    border: 1px solid #ccc;\n}\n.transAcc-btn[data-v-e328c442] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
+exports.push([module.i, "\n.give-container[data-v-e328c442] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.user-box-wrap[data-v-e328c442] {\n  padding-top: 1em;\n  height: 6em;\n  background: #fff;\n  margin: 0 0.5em;\n}\n.user-box-wrap .user-box[data-v-e328c442] {\n    width: 5em;\n    height: 100%;\n}\n.user-box-wrap .user-box > img[data-v-e328c442] {\n      width: 4em;\n      height: 4em;\n      border-radius: 50%;\n}\n.user-box-wrap .user-box .name[data-v-e328c442] {\n      font-size: 0.95em;\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n}\n.user-box-wrap .user-box .id[data-v-e328c442] {\n      font-size: 0.9em;\n      padding-top: 0.2em;\n      padding-bottom: 0.2em;\n}\n.give-box[data-v-e328c442] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.give-box .tltle[data-v-e328c442] {\n    font-size: 1em;\n    color: #999;\n}\n.give-money[data-v-e328c442] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 2em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.give-money input[data-v-e328c442] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.all-money[data-v-e328c442] {\n  margin-top: 1em;\n}\n.all-money .money[data-v-e328c442] {\n    color: #666;\n}\n.all-money .all-giveAcc[data-v-e328c442] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.give-store[data-v-e328c442] {\n  margin-top: 2.5em;\n}\n.give-store h3[data-v-e328c442] {\n    color: #999;\n    font-size: 0.9em;\n}\n.give-store #store[data-v-e328c442] {\n    margin-top: 0.5em;\n    width: 100%;\n    height: 40px;\n    line-height: 40px;\n    border: 1px solid #ccc;\n}\n.transAcc-btn[data-v-e328c442] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
 
 // exports
 
@@ -71694,6 +71745,10 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue__ = __webpack_require__(147);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest_js__ = __webpack_require__(6);
 //
 //
 //
@@ -71724,17 +71779,76 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    this.init();
+  },
   data: function data() {
-    return {};
+    return {
+      choiseMemberSwitch: true,
+      memberList: [],
+      shopId: null,
+      transferData: {}
+    };
   },
 
-  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a, choiseMember: __WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue___default.a },
   methods: {
     goIndex: function goIndex() {
       this.$router.push("/index");
+    },
+    getMemberData: function getMemberData(data) {
+      this.transferData = data;
+    },
+    hideMemberChoise: function hideMemberChoise(e) {
+      if (e) {
+        this.$router.go(-1);
+      }
+      this.choiseMemberSwitch = false;
+    },
+    showMemberChoise: function showMemberChoise() {
+      this.choiseMemberSwitch = true;
+    },
+    init: function init() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__["a" /* default */].getInstance().open();
+      this.memberList = [];
+      this.shopId = this.$route.query.shopId;
+      __WEBPACK_IMPORTED_MODULE_3__utils_userRequest_js__["a" /* default */].getInstance().getData("api/shop/members/" + this.shopId).then(function (res) {
+
+        for (var i = 0; i < res.data.data.members.length; i++) {
+          var _temp = res.data.data.members[i];
+          _temp.checked = false;
+          _this.memberList.push(_temp);
+        }
+
+        _this.memberList = res.data.data.members;
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading_js__["a" /* default */].getInstance().close();
+      }).catch();
     }
   }
 });
@@ -71776,14 +71890,33 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "user-box-wrap flex flex-align-center flex-justify-center"
+        },
+        [
+          _c("div", { staticClass: "user-box flex flex-v flex-align-center" }, [
+            _c("img", { attrs: { src: _vm.transferData.avatar, alt: "" } }),
+            _vm._v(" "),
+            _c("h3", { staticClass: "name" }, [
+              _vm._v(_vm._s(_vm.transferData.name))
+            ]),
+            _vm._v(" "),
+            _c("h3", { staticClass: "id" }, [
+              _vm._v(_vm._s(_vm.transferData.id))
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
       _c("div", { staticClass: "give-box" }, [
         _c("div", { staticClass: "title" }, [_vm._v("转账金额")]),
         _vm._v(" "),
         _vm._m(0, false, false),
         _vm._v(" "),
         _vm._m(1, false, false),
-        _vm._v(" "),
-        _vm._m(2, false, false),
         _vm._v(" "),
         _c(
           "a",
@@ -71795,7 +71928,17 @@ var render = function() {
           ],
           1
         )
-      ])
+      ]),
+      _vm._v(" "),
+      _c("choiseMember", {
+        attrs: {
+          isShow: _vm.choiseMemberSwitch,
+          dataList: _vm.memberList,
+          singleMode: true,
+          backUrl: true
+        },
+        on: { hide: _vm.hideMemberChoise, submit: _vm.getMemberData }
+      })
     ],
     1
   )
@@ -71824,18 +71967,6 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("a", { staticClass: "all-giveAcc", attrs: { href: "javascript:;" } }, [
         _vm._v("全部转账")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "give-store" }, [
-      _c("h3", [_vm._v("选择转账店铺")]),
-      _vm._v(" "),
-      _c("select", { attrs: { name: "", id: "store" } }, [
-        _c("option", { attrs: { value: "0" } }, [_vm._v("默认店铺")])
       ])
     ])
   }
