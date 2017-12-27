@@ -259,6 +259,69 @@ class TransferController extends Controller
 
     /**
      * @SWG\Post(
+     *   path="/transfer/realGet",
+     *   summary="提钱实际获取",
+     *   tags={"交易"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="points",
+     *     in="formData",
+     *     description="积分",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function realGet(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'transfer_id' => 'bail|required',
+                'points' => 'bail|required|integer|between:1,99999',
+            ],
+            [
+                'required' => trans('trans.required'),
+                'integer' => trans('trans.integer'),
+                'between' => trans('trans.between'),
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
+        }
+
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
+        }
+        if ($transfer->status == 3) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
+        }
+        $amount = $request->points * $transfer->price;
+        $tips = 0;
+        if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
+            $tips = $transfer->tip_percent * $amount / 100;
+        }
+        //收手续费
+        $fee_amount = 0;
+        if ($transfer->fee_percent) {
+            $fee_amount = $amount * $transfer->fee_percent / 100;
+        }
+        $real_amount = $amount - $tips - $fee_amount;
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => ['amount' => $amount,'real_amount' => $real_amount]]);
+    }
+
+
+    /**
+     * @SWG\Post(
      *   path="/transfer/trade",
      *   summary="交易",
      *   tags={"交易"},
@@ -279,7 +342,7 @@ class TransferController extends Controller
      *   @SWG\Parameter(
      *     name="action",
      *     in="formData",
-     *     description="action value:put(付钱) or get(拿钱)",
+     *     description="action value:put(付钱) or get(拿钱) or realGet",
      *     required=true,
      *     type="string"
      *   ),
@@ -302,7 +365,7 @@ class TransferController extends Controller
             [
                 'transfer_id' => 'bail|required',
                 'points' => 'bail|required|integer|between:1,99999',
-                'action' => ['bail', 'required', Rule::in(['put', 'get'])],
+                'action' => ['bail', 'required', Rule::in(['put', 'get', 'realGet'])],
                 'pay_password' => 'required_if:action,put',
             ],
             [
