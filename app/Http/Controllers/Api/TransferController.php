@@ -259,7 +259,7 @@ class TransferController extends Controller
 
     /**
      * @SWG\Post(
-     *   path="/transfer/realGet",
+     *   path="/transfer/realget",
      *   summary="提钱实际获取",
      *   tags={"交易"},
      *   @SWG\Parameter(
