@@ -67,7 +67,7 @@
 
         <div class="avatar-wrap flex-5 flex flex-justify-around">
             <div class="avatar-item" v-for="item in membersList">
-                <img src="/images/avatar.jpg" alt="">
+                <img :src="item.avatar" alt="">
             </div>
             
             <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember">
@@ -547,7 +547,7 @@ export default {
         Toast("当前店铺无成员,");
         return ;
       }
-      this.$router.push("/shop/shop_member");
+      this.$router.push("/shop/shop_member?shopId="+this.shopId);
     },
     goDealManagement() {
       this.$router.push("/shop/deal_management?shopId="+this.shopId);

@@ -1,8 +1,8 @@
 <template>
     <div id="top-component" class="flex flex-align-center flex-justify-between">
-        <div v-on:click="goBack">返回</div>
-        <h3>{{title}}</h3>
-        <div>
+        <div v-on:click="goBack" class="flex-2">返回</div>
+        <h3 class="flex-3">{{title}}</h3>
+        <div class="flex-2">
           <slot></slot>
         </div>
         
@@ -22,11 +22,8 @@
 
   h3 {
     text-align: center;
-    width: 33.33%;
   }
-  div {
-    width: 33.33%;
-  }
+
 }
 </style>
 
