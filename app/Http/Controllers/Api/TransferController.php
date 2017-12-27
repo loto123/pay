@@ -316,7 +316,7 @@ class TransferController extends Controller
             $fee_amount = $amount * $transfer->fee_percent / 100;
         }
         $real_amount = $amount - $tips - $fee_amount;
-        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => ['amount' => $amount,'real_amount' => $real_amount]]);
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => ['amount' => $amount, 'real_amount' => $real_amount]]);
     }
 
 
@@ -1147,7 +1147,7 @@ class TransferController extends Controller
                 if ($transfer->save()) {
                     //解冻店铺茶水费资金
                     $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
-                    if($transfer->tip_amount > 0) {
+                    if ($transfer->tip_amount > 0) {
                         if (!$shop_container->unfreeze($transfer->tip_amount)) {
                             return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
                         }
@@ -1165,14 +1165,14 @@ class TransferController extends Controller
                         $profit->record_id = $value->id;
                         $profit->user_id = $value->user_id;
                         $profit->fee_percent = $transfer->fee_percent;
-                        $profit->proxy = 0 ;
+                        $profit->proxy = 0;
                         $profit->operator = 0;
                         if ($value->user->parent) {
                             $profit->proxy = $value->user->parent->id;
                             $profit->proxy_percent = $value->user->parent->percent;
                             $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
                             //解冻代理资金
-                            if($profit->proxy_amount > 0) {
+                            if ($profit->proxy_amount > 0) {
                                 $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
                                 $proxy_container->unfreeze($profit->proxy_amount);
                             }
@@ -1183,7 +1183,12 @@ class TransferController extends Controller
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
                         }
-                        $profit->save();
+                        if ($profit->save()) {
+                            //发送通知
+                            if ($profit->proxy_amount > 0) {
+                                \App\Admin\Controllers\NoticeController::send($profit->user_id, 1, '', '', $profit->id);
+                            }
+                        }
                     }
                 }
             }
@@ -1191,7 +1196,6 @@ class TransferController extends Controller
             return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::info($e->getTraceAsString());
         }
         return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
     }
