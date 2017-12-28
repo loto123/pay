@@ -104,7 +104,7 @@
 				addressSlots: [],
 				areaPicker: '',
 				areaText: '',	
-				privince: '',//省
+				province: '',//省
 				city: ''			//市
 
 			}
@@ -222,7 +222,7 @@
 				var _data = {
 					bank_id: this.shopId,
 					card_num: this.card_num,
-					privince:this.privince,
+					province:this.province,
 					city:this.city,
 					code: this.code
 				}
@@ -281,21 +281,21 @@
 			choiceArea: function () {
 				this.popupVisible = true;
 				// 设置默认选中  
-				if (this.privince !== '' && this.city !== '') {
-					this.areaPicker.setSlotValue(0, this.privince)
+				if (this.province !== '' && this.city !== '') {
+					this.areaPicker.setSlotValue(0, this.province)
 					this.areaPicker.setSlotValue(1, this.city)
 				}
 			},
 			cancel() {
 				this.popupVisible = false;
-				this.areaPicker.setSlotValue(0, this.privince)
+				this.areaPicker.setSlotValue(0, this.province)
 				this.areaPicker.setSlotValue(1, this.city)
 			},
 			selectaddress() {
 				this.popupVisible = false
-				this.privince = this.addressProvince
+				this.province = this.addressProvince
 				this.city = this.addressCity
-				this.areaText = this.privince + this.city
+				this.areaText = this.province + this.city
 			},
 		}
 	};
