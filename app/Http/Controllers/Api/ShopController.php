@@ -291,6 +291,8 @@ class ShopController extends BaseController {
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
+                'is_manager' => $is_manager,
+                'is_member' => $is_member,
             ];
         } else {
             $data = [
@@ -301,6 +303,8 @@ class ShopController extends BaseController {
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
+                'is_manager' => $is_manager,
+                'is_member' => $is_member,
             ];
         }
         return $this->json($data);
@@ -522,6 +526,12 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_perm"), 0);
+        }
         if ($request->name) {
             $shop->name = $request->name;
         }
