@@ -9,6 +9,7 @@
 namespace App\Pay\Impl\Heepay;
 
 
+use App\Admin\Model\UploadFile;
 use App\Pay\Crypt3Des;
 use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
@@ -73,7 +74,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'batch_no' => $batch_no,
                 'batch_amt' => $amount,
                 'batch_num' => 1,
-                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^0^{$card->card_num}^{$card->holder_name}^$amount^余额提现^{$card->province}^{$card->city}^{$card->branch}",
+                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^0^{$card->card_num}^{$card->holder_name}^$amount^{$config['transfer_reason']}^{$card->province}^{$card->city}^{$card->bank->name}",
                 'notify_url' => $notify_url,
                 'ext_param1' => $batch_no,
             ];
@@ -144,7 +145,6 @@ class SmallBatchTransfer implements WithdrawInterface
      */
     public static function send_post($url, $data, $cacert_url, $send_type = 'POST')
     {
-        $cacert_url = storage_path('app/pay/'. $cacert_url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -152,7 +152,7 @@ class SmallBatchTransfer implements WithdrawInterface
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $send_type);
         if ($cacert_url) {
-            curl_setopt($ch, CURLOPT_CAINFO, $cacert_url);     //证书地址
+            curl_setopt($ch, CURLOPT_CAINFO, UploadFile::getFile($cacert_url));     //证书地址
         }
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

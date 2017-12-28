@@ -109,7 +109,7 @@ SCRIPT
                 }
 
                 if ($show_exceptions) {
-                    $actions->append("<a class='btn btn-xs btn-warning fa exception-detail' data-id='{$actions->getKey()}'>异常记录</a>");
+                    $actions->append("&nbsp;&nbsp;<a class='btn btn-xs btn-warning fa exception-detail' data-id='{$actions->getKey()}'>异常记录</a>");
                 }
             });
             $grid->tools(function ($tools) {

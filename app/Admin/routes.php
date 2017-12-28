@@ -29,6 +29,8 @@ Route::group([
     $router->resource('pay/scene', PaySceneController::class);
     $router->resource('pay/deposits', DepositController::class);
     $router->resource('pay/withdraws', WithdrawController::class);
+    $router->resource('uploads', UploadFileController::class);
+
     $router->post('pay/support_banks/{platform}', 'PayPlatformController@bankSupport')->name('associate_bank');
 
     //支付重试
