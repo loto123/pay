@@ -28,7 +28,8 @@ export default {
     init(){
         this.code = utils.getQueryString("code");
         this.state = utils.getQueryString("state");
-        
+        this.bindMobile = utils.getQueryString("mobile");
+
         var _data = {
             code :this.code,
             state:this.state
