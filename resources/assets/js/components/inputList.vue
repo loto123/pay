@@ -13,7 +13,9 @@
                     align="right"
                     title=""
                     v-model="choiseValue"
-                    :options="optionsList">
+                    :options="optionsList"
+                    style="font-size: 0.9em;"
+                  >
                 </mt-radio>
             </div>
             

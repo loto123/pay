@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\Heepay\Reality;
 use App\Pay\Impl\Heepay\SmallBatchTransfer;
+use App\PayBanksSupport;
+use App\PayChannel;
 use App\User;
 use App\UserCard;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use JWTAuth;
 use Validator;
 use Illuminate\Support\Facades\Log;
@@ -136,10 +140,10 @@ class CardController extends Controller
             [
                 'card_num' => 'bail|required|digits_between:16,19',
                 'bank_id' => 'bail|required',
-                'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
+//                'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
                 'code' => 'bail|required',
-                // 'province' => 'bail|required',
-                // 'city' => 'bail|required',
+                'province' => 'bail|required',
+                'city' => 'bail|required',
             ],
             [
                 'required' => trans('trans.required'),
@@ -152,17 +156,26 @@ class CardController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
-        $cache_key = "SMS_".$request->mobile;
+        $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
 //        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
              return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
         Cache::forget($cache_key);
+
         //同一用户只能绑定一次
         $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$request->card_num)->first();
         if (!empty($card_list) && count($card_list)>0) {
             return response()->json(['code' => 0,'msg' => '已经绑定的银行卡不能重复绑定','data' => []]);
+        }
+
+        $bill_id = time();
+        $bill_time = date('YmdHis');
+        //调用银行卡鉴权接口
+        $auth_res = Reality::authentication($bill_id,$bill_time,$request->card_num,$this->user->id_number,$this->user->name);
+        if ($auth_res !== true){
+            return response()->json(['code' => 0,'msg' => $auth_res,'data' => []]);
         }
 
         $cards = new UserCard();
@@ -171,9 +184,9 @@ class CardController extends Controller
         $cards->bank_id = $request->bank_id;
         $cards->holder_name = $this->user->name;
         $cards->holder_id = $this->user->id_number;
-        $cards->holder_mobile = $request->mobile;
-        $cards->province = $request->province??'lll';
-        $cards->city = $request->city??'lll';
+        $cards->holder_mobile = $this->user->mobile;
+        $cards->province = $request->province;
+        $cards->city = $request->city;
         $cards->branch = $request->branch??NULL;
         $cards->save();
         if(empty($this->user->pay_card_id)) {
@@ -242,16 +255,22 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getBanks() {
-        $query = Bank::query()->select()->get();
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $platform_bank = DB::table('pay_banks_support as pbs')->join('pay_channel as pc','pc.platform_id','=','pbs.platform_id')
+            ->where('pc.id',$this->user->channel_id)->pluck('pbs.bank_id');
         $data = [];
-        if(!empty($query) && count($query)>0) {
-            foreach ($query as $item) {
-                $data[] = [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                ];
+        if (!empty($platform_bank) && count($platform_bank)>0){
+            $query = Bank::whereIn('id',$platform_bank)->select()->get();
+            if(!empty($query) && count($query)>0) {
+                foreach ($query as $item) {
+                    $data[] = [
+                        'id' => $item->id,
+                        'name' => $item->name,
+                    ];
+                }
             }
         }
+
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
 

@@ -1,7 +1,7 @@
 <template>
   <div id="shop-member">
       <div class="top">
-          <top-back :title="'店铺成员(74)'">
+          <top-back :title="'店铺成员('+membersCount+')'">
           </top-back>
       </div>
 
@@ -13,7 +13,7 @@
       </div>
       <ul class="flex flex-wrap-on">
 
-          <li class="add-member flex flex-v flex-align-center flex-justify-center">
+          <!-- <li class="add-member flex flex-v flex-align-center flex-justify-center">
                 <div class="img-wrap flex flex-align-center flex-justify-center">
                   <i class="iconfont">
                     &#xe600;
@@ -22,9 +22,9 @@
               <span>
                    
               </span>
-          </li>
+          </li> -->
 
-          <li class="minus-member flex flex-v flex-align-center flex-justify-center">
+          <li class="minus-member flex flex-v flex-align-center flex-justify-center" @click="openControlSwitch">
               <div class="img-wrap flex flex-align-center flex-justify-center">
                   <i class="iconfont" style="margin-top:-0.2em;">
                     &#xe620;
@@ -34,25 +34,12 @@
               </span>
           </li>
 
-          <li class="flex flex-v flex-align-center flex-justify-start">
-              <img src="/images/avatar.jpg" alt="" class="avatar">
-              <h3>玩家姓名已</h3>
-          </li>
-          <li class="flex flex-v flex-align-center">
-              <img src="/images/avatar.jpg" alt="" class="avatar">
-              <h3>玩家姓名已</h3>
-          </li>
-          <li class="flex flex-v flex-align-center">
-              <img src="/images/avatar.jpg" alt="" class="avatar">
-              <h3>玩家姓名已</h3>
-          </li>
-          <li class="flex flex-v flex-align-center">
-              <img src="/images/avatar.jpg" alt="" class="avatar">
-              <h3>玩家姓名已</h3>
-          </li>
-          <li class="flex flex-v flex-align-center">
-              <img src="/images/avatar.jpg" alt="" class="avatar">
-              <h3>玩家姓名已</h3>
+          <li class="flex flex-v flex-align-center" v-for="item in dataList">
+              <img :src="item.avatar" alt="" class="avatar">
+              <h3>{{SetString(item.name,6)}}</h3>
+              <span class="notice flex flex-align-center flex-justify-center" v-if="controlSwitch" @click="deleteMember(item.id)">
+                -
+              </span>
           </li>
       </ul>
   </div>
@@ -64,10 +51,26 @@
 
   ul {
     width: 100%;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    box-sizing: border-box;
+    
     li {
-      width: 20%;
+      width: 25%;
       height: 4.5em;
       box-sizing: border-box;
+      position: relative;
+
+      .notice{
+        width:1em;
+        height: 1em;
+        position: absolute;
+        background: red;
+        right: 0.5em;
+        top:0em;
+        border-radius: 50%;
+        color:#fff;
+      }
 
       .img-wrap {
         width: 3em;
@@ -88,7 +91,7 @@
       }
 
       h3 {
-        font-size: 0.8em;
+        font-size: 0.5em;
         margin-top:0.2em;
       }
 
@@ -144,17 +147,64 @@
 
 <script>
 import topBack from "../../components/topBack";
+import Loading from "../../utils/loading.js"
+import request from "../../utils/userRequest.js"
+import utils from "../../utils/utils.js"
+import {Toast} from "mint-ui"
 
 export default {
+  created(){
+    this.init();
+  },
+
   data() {
     return {
-      searchSwitch: false
+      searchSwitch: false,
+      shopId:null,
+      membersCount:0,
+      dataList:[],
+      controlSwitch:false
     };
   },
   components: { topBack },
   methods: {
+    // 删除成员
+    deleteMember(id){
+      Loading.getInstance().open();
+
+      // /shop/members/{shop_id}/delete/{user_id}
+      request.getInstance().postData("api/shop/members/"+this.shopId+"/delete/"+id).then(res=>{
+        Loading.getInstance().close();
+        Toast("删除成功");
+        this.controlSwitch = false;
+      }).catch(err=>{
+        Toast(err.data.data.msg);
+      });
+    },
+
     openSearchSwitch() {
       this.searchSwitch = true;
+    },
+
+    openControlSwitch(){
+      this.controlSwitch = true;
+    },
+
+    init(){
+      Loading.getInstance().open();
+      this.shopId = this.$route.query.shopId;
+
+      request.getInstance().getData("api/shop/members/"+this.shopId).then(res=>{
+        this.dataList = res.data.data.members;
+        this.membersCount = res.data.data.count;
+        Loading.getInstance().close();
+      }).catch(err=>{
+        console.error(err);
+      });
+    },
+
+    SetString(str,len){
+      return utils.SetString(str,len);
     }
   }
 };

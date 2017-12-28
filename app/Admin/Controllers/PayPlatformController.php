@@ -28,8 +28,8 @@ class PayPlatformController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('支付平台');
 
             $content->body($this->grid());
         });
@@ -69,9 +69,13 @@ class PayPlatformController extends Controller
                 return implode('&nbsp;', $mthods);
             });
 
+            $grid->filter(function ($filter) {
+                $filter->disableIdFilter();
+                $filter->like('name', '平台名称');
+            });
             $grid->actions(function ($actions) {
                 //$actions->disableEdit();
-                $actions->disableDelete();
+                //$actions->disableDelete();
             });
 
 
@@ -89,8 +93,8 @@ class PayPlatformController extends Controller
         $this->id = $id;
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('编辑支付平台');
 
             $content->body($this->form()->edit($id));
         });
@@ -118,6 +122,11 @@ class PayPlatformController extends Controller
                 $token = csrf_token();
 
                 Admin::script(<<<EOT
+                var checkall = $('<label><input type="checkbox" id="check_all" style="cursor:pointer;"/>反选</label>');
+                $('label[for=banks_support]').append('<br/>').append(checkall);
+                checkall.children(0).click(function(){
+                    $('.bank-check').iCheck('toggle');
+                });
                 $.ajaxSetup({
         headers: {
         'X-CSRF-TOKEN': '$token',
@@ -125,7 +134,7 @@ class PayPlatformController extends Controller
              async: false
         });
                 var supported = $supported;
-            $('div.checkbox').each(function(){
+            $('div.checkbox').css({width:'25%',float:'left'}).each(function(){
                 var _check = $(':checkbox',this);
                 var checked = supported.hasOwnProperty(_check.val());
                 _check.prop('checked', checked);
@@ -133,7 +142,8 @@ class PayPlatformController extends Controller
                 if (checked) {
                     _txt.val(supported[_check.val()]);
                 } else {
-                    _txt.hide();
+                    _txt.hide().val($(':checkbox',this).val());
+   
                 }
                 
                 $(this).append(_txt);
@@ -222,8 +232,8 @@ EOT
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('支付管理');
+            $content->description('添加支付平台后如果支持银行卡提现请在编辑页面勾选支持银行');
 
             $content->body($this->form());
         });

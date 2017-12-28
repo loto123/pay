@@ -14,9 +14,9 @@
           </div>
         </topBack>
 
-        <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
-            <p>大赢家</p>
-            <p>茶水费</p>
+        <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage" v-if="allow_reward">
+            <p>打赏</p>
+            <p>店家</p>
         </section>
         
         <deal-content :renderData = "renderData"></deal-content>
@@ -66,40 +66,14 @@
                             <span>{{item.user.name}}</span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
-                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"放钱":"拿钱"}}</span>
+                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
-
-
                             </div>
                         </div>
                     </slider> 
                 </li>
                 
-                <!-- <li>
-                    <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" >
-                        <div class="slider-item flex flex-align-center flex-justify-between">
-                            <img src="/images/avatar.jpg" alt="">
-                            <span>名字最多七个字</span>
-                            <div class="pay-money-text flex flex-v  ">
-                                <span class="money green-color">+100</span>
-                                <span class="title">拿钱</span>
-                            </div>
-                        </div>
-                    </slider> 
-                </li>
-                <li>
-                    <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="true">
-                        <div class="slider-item flex flex-align-center flex-justify-between">
-                            <img src="/images/avatar.jpg" alt="">
-                            <span>名字最多七个字</span>
-                            <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
-                                <span class="money">-100</span>
-                                <span class="title">付钱</span>
-                            </div>
-                        </div>
-                    </slider> 
-                </li> -->
             </ul>
         </section>
 
@@ -291,6 +265,8 @@
   font-size: 0.9em;
   color: #999;
 }
+
+
 </style>
 
 
@@ -300,9 +276,8 @@ import slider from "../../components/slider";
 import dealContent from "./dealContent";
 import passwordPanel from "../../components/password";
 import request from "../../utils/userRequest";
-import {Toast} from "mint-ui"
+import {Toast,MessageBox} from "mint-ui"
 import choiseMember from "./choiseMember.vue"
-
 import Loading from "../../utils/loading";
 
 import qrCode from "../../utils/qrCode";
@@ -315,18 +290,23 @@ export default {
     return {
       passWordSwitch: false,
       renderData: {
-        name: null
+        name: null,
+        user:{
+          avatar:null
+        },
+        avatar:null,
+        
       },
       moneyData: {
         payMoney: null,
         getMoney: null
       },
-      payType: null,    // 支付方式，取钱get 放钱put
-      transfer_id:"",   // 交易id
+      payType: null,              // 支付方式，取钱get 放钱put
+      transfer_id:"",             // 交易id
       shop_id:"",
-      password:"",       // 支付密码
-
-      joiner:[],         // 交易的参与者，需要提醒的人
+      password:"",                // 支付密码
+      allow_reward:false,         // 是否允许打赏
+      joiner:[],                  // 交易的参与者，需要提醒的人
       memberList:[],              //成员数组
       
       recordList:[],
@@ -368,15 +348,16 @@ export default {
       var _data = {
         transfer_id: this.transfer_id
       };
+
       request
         .getInstance()
         .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
         .then(res => {
-          console.log(res);
           this.joiner = res.data.data.joiner;
           this.renderData = res.data.data;
           this.recordList = res.data.data.record;
           this.shop_id = res.data.data.shop_id;
+          this.allow_reward = res.data.data.allow_reward;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -428,7 +409,7 @@ export default {
         return;
       }
 
-      Loading.getInstance().open();   
+      Loading.getInstance().open();
 
       var _tempList = [];
       for(let i = 0; i<dataList.length; i++){
@@ -439,9 +420,10 @@ export default {
         transfer_id:this.transfer_id,
         friend_id:_tempList
       };  
+
       request.getInstance().postData("api/transfer/notice",_data).then(res=>{
         Loading.getInstance().close();   
-        Toast("交易成功...");
+        Toast("编辑提醒成员成功...");
         setTimeout(()=>{
           this.init();
         },2000);
@@ -451,7 +433,6 @@ export default {
         console.error(err);
       });
 
-      console.log(dataList);
     },
 
     // 提交交易  拿钱或者付钱
@@ -476,7 +457,6 @@ export default {
           Loading.getInstance().close();
 
           Toast(err.data.msg);
-          
         });
 
         this.hidePassword();
@@ -486,25 +466,53 @@ export default {
         var _data = {
           transfer_id :this.transfer_id,
           points :this.moneyData.getMoney,
-          action :"get",
+          // action :"realGet",
         }
-        request.getInstance().postData("api/transfer/trade",_data).then(res=>{
-          Loading.getInstance().close();
-          Toast("从店铺中拿钱成功");
 
-          setTimeout(()=>{
-            this.init();
-          },1500);
+        request.getInstance().postData("api/transfer/realget",_data)
+          .then(res=>{
+            var _data = {
+              amount:res.data.data.amount,
+              real_amount:res.data.data.real_amount
+            }
 
-        }).catch(err=>{
-          Loading.getInstance().close();
-          console.error(err);
-        });
+            return Promise.resolve(_data);
+          })
+          .then(realData=>{
+            MessageBox.confirm("实际拿钱"+ realData.real_amount+ "元,手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "元").then(action => {
+
+              var _data = {
+                transfer_id :this.transfer_id,
+                points :this.moneyData.getMoney,
+                action :"get",
+              }
+
+              request.getInstance().postData("api/transfer/trade",_data)
+                .then(res=>{
+                  Loading.getInstance().close();
+                  Toast("从店铺中拿钱成功");
+
+                  setTimeout(()=>{
+                    this.init();
+                  },1500);
+
+               }).catch(err=>{
+                  Loading.getInstance().close();
+                  console.error(err);
+              });
+
+            }).catch(err=>{
+
+            });
+           })
+          .catch(err=>{
+            Toast(err.data.msg);
+          });
+        return;
       }
     },
 
     getResult(result) {
-      console.log(result);
       this.password = result;
     },
     _getQRCode() {
@@ -513,7 +521,7 @@ export default {
         height: 100
       });
 
-      qrcode.makeCode("http://www.baidu.com");
+      qrcode.makeCode(window.location.href);
     },
     cancelTrade(){
       var _data = {
@@ -525,7 +533,7 @@ export default {
           this.$router.push("/makeDeal/my_deal");
         },1500);
       }).catch(err=>{
-        Toast("撤销交易失败");
+        Toast(err.data.data.msg);
       });
     },
 
@@ -535,26 +543,19 @@ export default {
     // 初始化提醒玩家列表
     initMemberList(res){
       this.memberList = [];
-      // if(this.memberList.length>0){
-      //   return;
-      // }
 
       for(let i = 0; i<res.data.data.members.length; i++){
           var _temp = {};
           _temp = res.data.data.members[i];
-          console.log(_temp);
-
+          _temp.checked = false;
           for(let j = 0; j<this.joiner.length; j++){
             if(this.joiner[j].user.id == _temp.id){
               _temp.checked = true;
-              break;
-            }else {
-              _temp.checked = false;
-              break;
+              continue;
             }
           }
-
           this.memberList.push(_temp);
+
         }
     },
     // 获取所有要提醒的成员名单
@@ -562,7 +563,6 @@ export default {
       
       Loading.getInstance().open();
       request.getInstance().getData('api/shop/members/'+this.shop_id).then(res=>{
-        console.log(res);
         this.initMemberList(res);
         Loading.getInstance().close();
 

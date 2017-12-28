@@ -4,24 +4,24 @@
         <dealContent :renderData="renderData"></dealContent>
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
-            <label for="" class="flex-4" style="padding-left:1em;">大赢家茶水费</label>
+            <label for="" class="flex-4" style="padding-left:1em;">打赏店家</label>
             <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
-            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击缴纳茶水费"  maxlength="6" v-model="renderData.moneyData"></span>
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击打赏店家"  maxlength="6" v-model="renderData.moneyData"></span>
         </div>
 
         <div class="button-wrap">
-            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">交纳</mt-button>
+            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">确认打赏</mt-button>
         </div>
 
         <div class="tip-record">
-            <h3>茶水费记录</h3>
+            <h3>打赏店家记录</h3>
             <ul class="flex flex-v">
                 <li class="flex flex-justify-between flex-align-center" v-for="item in renderData.tips">
                     <img :src="item.user.avatar?item.user.avatar:'/images/default_avatar.jpg'" alt="">
                     <span>{{item.user.name}}</span>
                     <div class="flex flex-v flex-align-center">
                         <div style="font-size: 1.4em;">{{item.amount}}</div>
-                        <div style="font-size: 0.8em;color:#999;">已交纳</div>
+                        <div style="font-size: 0.8em;color:#999;">已打赏</div>
                     </div>
                 </li>
             </ul>
@@ -115,8 +115,8 @@ export default {
       renderData: {
         name: null,
         moneyData: null,
+        user:{},
       },
-      // hasPayList:[],
       passwordData: {
         switch: false,
         value: null
@@ -131,7 +131,6 @@ export default {
         .getInstance()
         .getData("api/transfer/feerecord" + "?transfer_id=" + _id)
         .then(res => {
-          console.log(res);
           this.renderData = res.data.data;
           Loading.getInstance().close();
         })
@@ -141,7 +140,7 @@ export default {
     },
     payTip() {
       if (this.renderData.moneyData == null) {
-        Toast("请输入茶水费金额");
+        Toast("请输入打赏店家金额");
         return;
       }
 
@@ -151,7 +150,6 @@ export default {
         .getInstance()
         .getData("api/my/info")
         .then(res => {
-          console.log(res);
 
           // 判断是否已经设置了支付密码
           if (!res.data.data.has_pay_password) {
@@ -180,7 +178,6 @@ export default {
               .getInstance()
               .postData("api/transfer/payfee", _data)
               .then(res => {
-                console.log(res);
                 this.passwordData.switch = true;
                 Loading.getInstance().close();
               })
@@ -190,7 +187,6 @@ export default {
                 Toast(err.data.msg);       
               });
           }
-          console.log(res);
         })
         .catch(err => {
           console.error(err);
@@ -214,13 +210,12 @@ export default {
         pay_password: this.passwordData.value
       };
 
-      // 支付茶水费接口
+      // 打赏店家接口
       request
         .getInstance()
         .postData("api/transfer/payfee", _data)
         .then(res => {
-          console.log(res);
-          Toast("茶水费缴纳成功");
+          Toast("打赏店家成功");
           this.hidePassword();
           this.init();
         })

@@ -1,12 +1,12 @@
 <template>
   <div id="bankManage">
-    <topBack title="银行卡管理"></topBack>
+    <topBack title="银行卡管理"style="background:#fff;"></topBack>
     <div class="bankCard-container">
-      <ul class="bankCard-list" v-for="item in bankList">
-        <li>
+      <ul class="bankCard-list">
+        <li v-for="item in bankList">
           <div class="bankCard-box flex">
             <div class="card-image">
-              <img src="/images/personal.jpg">
+              <img :src="item.card_logo">
             </div>
             <div class="card-info">
               <div class="bank-name">{{item.bank}}</div>
@@ -130,6 +130,8 @@
   #bankManage {
     padding-top: 2em;
     box-sizing: border-box;
+    box-sizing: border-box;
+    background:#fff;
   }
 
   .bankCard-container {

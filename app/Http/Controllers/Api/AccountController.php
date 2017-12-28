@@ -6,10 +6,13 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
+use App\Shop;
+use App\ShopFund;
 use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 
@@ -80,7 +83,7 @@ class AccountController extends BaseController {
         $record->type = UserFund::TYPE_CHARGE;
         $record->mode = UserFund::MODE_IN;
         $record->amount = $request->amount;
-        $record->balance = $user->balance + $request->amount;
+        $record->balance = $user->container->balance + $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
         try {
@@ -149,7 +152,7 @@ class AccountController extends BaseController {
         $record->type = UserFund::TYPE_WITHDRAW;
         $record->mode = UserFund::MODE_OUT;
         $record->amount = $request->amount;
-        $record->balance = $user->balance - $request->amount;
+        $record->balance = $user->container->balance - $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
         try {
             $record->save();
@@ -191,7 +194,31 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer() {
+    public function transfer(Request $request) {
+        $shop = Shop::findByEnId($request->shop_id);
+        $user = $this->auth->user();
+        $record = new UserFund();
+        $record->user_id = $user->id;
+        $record->type = UserFund::TYPE_TRANSFER;
+        $record->mode = UserFund::MODE_OUT;
+        $record->amount = $request->amount;
+        $record->balance = $user->container->balance - $request->amount;
+        $record->status = UserFund::STATUS_SUCCESS;
+        $shop_record = new ShopFund();
+        $shop_record->shop_id = $shop->id;
+        $shop_record->type = ShopFund::TYPE_TRANAFER_IN;
+        $shop_record->mode = ShopFund::MODE_IN;
+        $shop_record->amount = $request->amount;
+        $shop_record->balance = $shop->container->balance + $request->amount;
+        $shop_record->status = ShopFund::STATUS_SUCCESS;
+        try {
+            $record->save();
+            $shop_record->save();
+            $user->container->transfer($shop->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer member error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 
@@ -230,7 +257,10 @@ class AccountController extends BaseController {
 
             $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label')->get();
             //dump($methods);
-            return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->map(function ($item) {
+            return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
+                return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
+                    ($method->os == DepositMethod::OS_ANY || $method->os == $os);//不限系统,或系统匹配
+            })->map(function ($item) {
                 return ['id' => $item['id'], 'label' => $item['show_label']];
             })]);
         } else {
@@ -311,7 +341,7 @@ class AccountController extends BaseController {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
-                'model' => (int)$_fund->model,
+                'mode' => (int)$_fund->mode,
                 'amount' => $_fund->amount,
                 'created_at' => strtotime($_fund->created_at)
             ];
@@ -352,5 +382,25 @@ class AccountController extends BaseController {
             'remark' => $fund->remark,
             'balance' => $fund->balance
         ]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/account/records/month",
+     *   summary="帐单月数据",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="month",
+     *     in="formData",
+     *     description="月(2017-12形式)",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function month_data(Request $request) {
+        return $this->json(['in' => 0, 'out' => 0]);
     }
 }

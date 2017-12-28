@@ -55,6 +55,8 @@
 </template>
 
 <style scoped lang="scss">
+
+
 #makeDeal {
   padding-top: 2em;
   background: #eee;
@@ -271,7 +273,6 @@ export default {
       }
       Loading.getInstance().open();
       request.getInstance().getData('api/shop/members/'+this.shopId).then(res=>{
-        console.log(res);
         this.initMemberList(res);
         Loading.getInstance().close();
 
@@ -341,7 +342,6 @@ export default {
         .getInstance()
         .postData("api/transfer/create", _data)
         .then(res => {
-          console.log(res);
           this.$router.push(
             "/makeDeal/deal_detail" + "?id=" + res.data.data.id
           );
@@ -352,7 +352,6 @@ export default {
     },
 
     getMembersId(){
-      console.log(this.memberList);
       if(this.memberList.length == 0){
         return [];
       }
@@ -365,7 +364,6 @@ export default {
         }
       }
 
-      console.log(_tempIdList);
       return _tempIdList;
     }
   },

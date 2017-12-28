@@ -21,6 +21,8 @@ use Skip32;
  */
 class Shop extends Model
 {
+    protected $keyType = 'string';
+
     use Skip32Trait;
 
     const STATUS_NORMAL = 0;
@@ -54,5 +56,13 @@ class Shop extends Model
 
     public function transfer() {
         return $this->hasMany('App\Transfer', 'shop_id', 'id');
+    }
+
+    public function tips() {
+        return $this->hasMany(TipRecord::class, 'shop_id', 'id');
+    }
+
+    public function funds() {
+        return $this->hasMany(ShopFund::class, 'shop_id');
     }
 }

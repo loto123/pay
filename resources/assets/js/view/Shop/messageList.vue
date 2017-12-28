@@ -9,20 +9,19 @@
                     <img :src="item.user_avatar" alt="" class="avatar">
                     <span>昵称:{{setString(item.user_name,7)}}</span>
                   </div>
-                  <span>申请加入小店 <i style="color:#26a2ff;">{{setString(item.shop_name,10)}}</i> </span>
+                  <span> {{item.type==0?"申请":"邀请你"}}加入 <i style="color:#26a2ff;">{{setString(item.shop_name,8)}}</i> </span>
               </div>
               <div class="notice-controller flex flex-align-center flex-justify-around">
                   <div>2017-12-1</div>
                   <div>14:55:45</div>
                   <div class="btn-wrap flex flex-align-center flex-justify-around">
-                    <span class="cancel">忽略</span>
+                    <span class="cancel" @click="antiItem(item.id)">忽略</span>
                     <span class="agree" @click="agreeItem(item.id)">同意</span>
                   </div>
               </div>
           </li>
-          
       </ul>
-
+      <h3 v-if="!messageList.length">无消息</h3>
       <div class="all-list-controller flex flex-justify-center " v-if="!messageList">
         <div class="btn-wrap flex flex-v flex-justify-around">
           <mt-button type="primary" size="large" style="background:#00cc00;">全部同意</mt-button>
@@ -47,14 +46,14 @@
         padding-top: 0.5em;
         .user-info {
           span {
-            font-size: 0.9em;
+            font-size: 0.75em;
             padding-left: 1.2em;
           }
         }
 
         > span {
           display: block;
-          font-size: 0.9em;
+          font-size: 0.75em;
         }
 
         .avatar {
@@ -101,7 +100,11 @@
       }
     }
   }
-
+  h3{
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
+  }
   .all-list-controller {
     height: 7em;
     position: fixed;
@@ -123,6 +126,7 @@ import topBack from "../../components/topBack"
 import Loading from "../../utils/loading"
 import request from "../../utils/userRequest"
 import utils from "../../utils/utils"
+import {Toast} from 'mint-ui'
 
 export default {
   data(){
@@ -163,12 +167,11 @@ export default {
       }).catch(err=>{
 
       });
-      console.log(id);
     },
 
     antiItem(id){
-      
       Loading.getInstance().open();
+
       if(id==null){
         var _data = null;
       }else {
@@ -176,7 +179,7 @@ export default {
           id :id
         };
       }
-      request.getInstance().postData("api/shop/ignore/"+id).then(res=>{
+      request.getInstance().postData("api/shop/ignore",_data).then(res=>{
         Loading.getInstance().close();
         Toast("操作成功");
         setTimeout(()=>{

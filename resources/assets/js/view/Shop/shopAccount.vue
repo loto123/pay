@@ -3,7 +3,7 @@
     <div id="shop-account">
         <div class="top">
             <top-back :title="'店铺账户'" style="background: #26a2ff; color:#fff;">
-              <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;">
+              <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="record">
                 提转记录
               </div>
             </top-back>
@@ -180,7 +180,7 @@ export default {
       this.$router.push('/shop/shopAccount/withdraw');
     },
     goGive(){
-      this.$router.push('/shop/shopAccount/give');
+      this.$router.push('/shop/shopAccount/give?shopId='+this.shopId);
     },
 
     init(){
@@ -188,7 +188,6 @@ export default {
 
       this.shopId = this.$route.query.id;
       request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
-          console.log(res);
           this.balance = res.data.data.balance;
           this.today_profit = res.data.data.today_profit;
           this.yesterday_profit = res.data.data.yesterday_profit;
@@ -198,6 +197,9 @@ export default {
       }).catch(err=>{
           console.error(err);
       });
+    },
+    record(){
+      this.$router.push('/shop/record?id='+this.shopId);
     }
   }
 };

@@ -5,14 +5,6 @@
       <div class="top flex flex-v flex-align-center">
         <div class="img-wrap flex flex-justify-center flex-align-center flex-wrap-on">
             <img :src="logo" alt="" class="avatar">
-            <!-- <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar">
-            <img src="/images/avatar.jpg" alt="" class="avatar"> -->
         </div>
         <h3 style="margin-top:0.5em;">{{shopName}}</h3>
         <h3>店铺id:{{shopId}}</h3>
@@ -44,9 +36,9 @@
 
     <div class="shop-info">
 
-        <div class="info-item flex flex-align-center flex-justify-between">
+        <div class="info-item flex flex-align-center flex-justify-between" @click="updateShop('shopName')">
             <span class="title flex-4"> 店铺名称 </span>
-            <span class="name flex-5">热血牛牛玩家群1</span>
+            <span class="name flex-5">{{shopName}}</span>
             <i class="iconfont flex-1">
             &#xe62e;
             </i>
@@ -75,14 +67,8 @@
 
         <div class="avatar-wrap flex-5 flex flex-justify-around">
             <div class="avatar-item" v-for="item in membersList">
-                <img src="/images/avatar.jpg" alt="">
+                <img :src="item.avatar" alt="">
             </div>
-            <!-- <div class="avatar-item">
-                <img src="/images/avatar.jpg" alt="">
-            </div>
-            <div class="avatar-item">
-                <img src="/images/avatar.jpg" alt="">
-            </div> -->
             
             <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember">
                 <i class="iconfont">
@@ -115,7 +101,6 @@
                 <mt-switch v-model="inviteLinkStatus"></mt-switch>
             </span>
         </div>
-        
     </div>
 
     <div class="platform">
@@ -124,7 +109,7 @@
             <span class="text flex-1">5%</span>
         </div>
 
-        <div class="flex flex-align-center flex-justify-between">
+        <div class="flex flex-align-center flex-justify-between" @click="updateShop('rate')">
             <span class="title flex-9"> 默认单价 </span>
             <span class="text flex-1">{{rate}}</span>
         </div>
@@ -133,7 +118,7 @@
 
     <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
-            <span class="title flex-9"> 抽水比例 </span>
+            <span class="title flex-9" @click="updateShop('percent')"> 手续费率 </span>
             <span class="text flex-1">{{percent}}%</span>
         </div>
 
@@ -191,7 +176,7 @@
           </div>
         </div>
 
-      <div class="submit flex flex-justify-center" v-if="searchData.id">
+      <div class="submit flex flex-justify-center" v-if="searchData.id" @click="submitAddMember">
         <mt-button type="default" size="large" style="width:70%;">邀请</mt-button>
       </div>
 
@@ -426,7 +411,7 @@
   .add-members-pop{
     width:100%;
     height: 100vh;
-    position: fixed;
+    position: absolute;
     background: rgba(0,0,0,0.7);
     top:0em;
     left: 0em;
@@ -515,7 +500,7 @@
 
 <script>
 import topBack from "../../components/topBack";
-import { Indicator, Toast } from "mint-ui";
+import { Toast,MessageBox } from "mint-ui";
 import request from "../../utils/userRequest";
 import Loading from "../../utils/loading";
 
@@ -561,7 +546,7 @@ export default {
         Toast("当前店铺无成员,");
         return ;
       }
-      this.$router.push("/shop/shop_member");
+      this.$router.push("/shop/shop_member?shopId="+this.shopId);
     },
     goDealManagement() {
       this.$router.push("/shop/deal_management?shopId="+this.shopId);
@@ -579,6 +564,22 @@ export default {
 
     addMember(){
       this.openMemberTab();
+    },
+
+    // 发送邀请用户请求
+    submitAddMember(){
+      Loading.getInstance().open();
+      var _data= {
+        shop_id:this.shopId,
+        user_id:this.searchUserMobile
+      }
+
+      request.getInstance().postData("api/shop/invite/"+this.shopId+"/"+this.searchData.id).then(res=>{
+        Loading.getInstance().close();
+        Toast("邀请用户成功");
+        this.closeMemberTab();
+      }).catch(error=>{
+      });
     },
 
     // 数据控制
@@ -600,6 +601,10 @@ export default {
           this.membersList = res.data.data.members;
           this.logo = res.data.data.logo;
 
+          if(!this.rate){
+            this.isGroupMaster = false;
+          }
+
           if (res.data.data.active == 1) {
             this.tradeStatus = true;
           } else {
@@ -614,20 +619,35 @@ export default {
         });
     },
 
+    // 解散店铺
     dissShop() {
-      request
-        .getInstance()
-        .postData("api/shop/close/" + this.shopId)
-        .then(res => {
-          this.$router.push("/shop");
-        })
-        .catch(error => {
-          console.error(error);
+        MessageBox.confirm('确定删除店铺?').then(action => {
+
+            Loading.getInstance().open();
+
+            request
+              .getInstance()
+              .postData("api/shop/close/" + this.shopId)
+              .then(res => {
+                Loading.getInstance().close();
+                Toast("店铺解散成功");
+                setTimeout(()=>{
+                  this.$router.push("/shop");
+                },1000);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+        }).catch(err=>{
+
         });
+      
     },
 
     closeMemberTab(){
       this.addMemberSwitch = false;
+      this.searchData = {};
+      this.searchUserMobile = null;
     },
 
     openMemberTab(){
@@ -642,11 +662,136 @@ export default {
       }
       request.getInstance().getData('api/shop/user/search',_data).then(res=>{
         this.searchData = res.data.data;
+        Loading.getInstance().close();
       }).catch(err=>{
-
+        Loading.getInstance().close();
       });
-    }
+    },
 
+    updateShop(type){
+
+      // 修改店铺名称
+      if(type == "shopName"){
+
+        MessageBox.prompt("请输入新的店铺名称","修改店铺名称",).then(({ value, action }) => {
+          if(value.length ==0){
+            Toast("新店铺名称不能为空");
+            return;
+          }
+          Loading.getInstance().open();
+          var _data = {
+            name:value
+          };
+          request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+            Loading.getInstance().close();
+            
+            Toast("店铺改名成功");
+            setTimeout(()=>{
+              this.init();
+            },1500);
+          }).catch(err=>{
+            Loading.getInstance().close();
+            Toast(err.data.data.msg);
+          });  
+        }).catch(err=>{});
+      }
+
+      // 手续费率
+      if(type=="percent"){
+         MessageBox.prompt("请输入新的手续费率","修改手续费率",).then(({ value, action }) => {
+          
+          if(value.length ==0){
+            Toast("手续费率不能为空");
+            return;
+          }
+          Loading.getInstance().open();
+          
+          var _data = {
+            percent:value
+          };
+
+          request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+            Loading.getInstance().close();
+            Toast("修改手续费率成功");
+            setTimeout(()=>{
+              this.init();
+            },1500);
+          }).catch(err=>{
+            Loading.getInstance().close();
+            
+            Toast(err.data.data.msg);
+          });  
+        }).catch(err=>{});
+      }
+
+      // 设置单价
+      if(type=="rate"){
+          MessageBox.prompt("请输入新的单价","修改单价",).then(({ value, action }) => {
+            if(!value){
+              Toast("单价不能为空");
+              return;
+            }
+
+            var _data = {
+              rate:value
+            };
+            Loading.getInstance().open();
+            request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+              Loading.getInstance().close();
+              
+              Toast("修改单价成功");
+              setTimeout(()=>{
+                this.init();
+              },1500);
+            }).catch(err=>{
+              Loading.getInstance().close();
+              Toast(err.data.data.msg);
+            });  
+          }).catch(err=>{});
+        }
+    },
+
+  },
+  watch:{
+    // 邀请链接修改
+    "inviteLinkStatus":function(){
+
+      var _link = null;
+      if(this.inviteLinkStatus == true){
+        _link = 1;
+      }else {
+        _link = 0;
+      }
+
+      var _data = {
+        use_link:_link
+      };
+
+      request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch();
+    },
+
+    "tradeStatus":function(){
+      var _link = null;
+      if(this.tradeStatus == true){
+        _link = 1;
+      }else {
+        _link = 0;
+      }
+
+      var _data = {
+        active:_link
+      };
+
+      request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch();
+    }
   }
 };
 </script>

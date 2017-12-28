@@ -23,6 +23,8 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  */
 class User extends Authenticatable
 {
+    protected $keyType = 'string';
+
     use Notifiable;
     use EntrustUserTrait;
     use Skip32Trait;
@@ -99,6 +101,10 @@ class User extends Authenticatable
     public function shop()
     {
         return $this->hasMany('App\Shop', 'manager_id', 'id');
+    }
+
+    public function shop_tips() {
+        return $this->hasManyThrough(TipRecord::class, Shop::class, 'manager_id', 'shop_id');
     }
 
     /**

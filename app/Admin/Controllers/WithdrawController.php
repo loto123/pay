@@ -12,6 +12,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
+use Illuminate\Http\Request;
 
 class WithdrawController extends Controller
 {
@@ -30,7 +31,7 @@ class WithdrawController extends Controller
             //$content->description('description');
             $content->row(function (Row $row) {
                 //累计已提现
-                $withdrawed = Withdraw::has('masterContainer.user')->sum('amount');
+                $withdrawed = Withdraw::has('masterContainer.user')->where('state', '<>', Withdraw::STATE_CANCELED)->sum('amount');
                 //累计待提现
                 $waitToWithdraw = MasterContainer::has('user')->sum('balance');
                 $row->column(3, "<h4>累计已提现:<span style='color:#FFAE20;font-weight:bold;'>$withdrawed</span>元</h4>");
@@ -42,7 +43,6 @@ class WithdrawController extends Controller
         });
     }
 
-
     /**
      * Make a grid builder.
      *
@@ -52,12 +52,38 @@ class WithdrawController extends Controller
     {
         return Admin::grid(Withdraw::class, function (Grid $grid) {
             $token = csrf_token();
+            $exception_url = 'withdraw-exceptions';
             Admin::script(<<<SCRIPT
+                var exceptions_down = {};
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': '$token'
                     }
                 });
+                
+                var exception_row = $('<tr><td colspan="10" style="text-align:center;"></td></tr>').hide();
+;
+//异常记录
+$('.exception-detail').click(function () {
+    $(this).toggleClass('detail-open');
+    if ($(this).hasClass('detail-open')) {
+        $(this).parent().parent().after(exception_row);
+        exception_row.children(0).html('加载中...');
+        exception_row.show();
+        $.get('$exception_url', {id: $(this).data('id')}, function (json) {
+            var table = "<table class=\"table table-hover table-condensed\"><thead><tr class=\"bg-primary\"><td>提交时间</td><td>接口返回</td><td>异常信息</td><td>提现结果</td></tr></thead><tbody>";
+            for (var i in json) {
+                var row = json[i];
+
+                table += '<tr class="danger"><td>' + row.created_at + '</td><td>' + row.message + '</td><td>' + row.exception + '</td><td>' + row.state + '</td></tr>';
+            }
+            table += '</tbody></table>';
+            exception_row.children(0).html(table);
+        }, 'json');
+    } else {
+        exception_row.hide();
+    }
+});
 SCRIPT
 
             );
@@ -72,10 +98,18 @@ SCRIPT
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
                 $actions->disableEdit();
+
                 if (in_array($actions->row['state'], WithdrawRetry::$abnormal_states)) {
                     $actions->append(new WithdrawRetry($actions->getKey()));
                     $actions->append('&nbsp;&nbsp;');
                     $actions->append(new WithdrawCancel($actions->getKey()));
+                    $show_exceptions = true;
+                } else {
+                    $show_exceptions = $actions->row['state'] == Withdraw::STATE_CANCELED;
+                }
+
+                if ($show_exceptions) {
+                    $actions->append("&nbsp;&nbsp;<a class='btn btn-xs btn-warning fa exception-detail' data-id='{$actions->getKey()}'>异常记录</a>");
                 }
             });
             $grid->tools(function ($tools) {
@@ -133,5 +167,20 @@ SCRIPT
             });
 
         });
+    }
+
+    /**
+     * 输出提现异常列表
+     * @param $id
+     */
+    public function exception_view(Request $request)
+    {
+        $exceptions = Withdraw::find($request->id)->exceptions()->get();
+        if ($exceptions) {
+            $exceptions->map(function (&$item) {
+                $item['state'] = Withdraw::getStateText($item['state']);
+            });
+            return $exceptions;
+        }
     }
 }

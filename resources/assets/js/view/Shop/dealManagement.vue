@@ -18,11 +18,11 @@
 
         <div class="deal-wrap">
             <ul v-bind:class="{wrap:tabItem[1] && isListRadioShow}">
-                <li class="timer flex flex-align-center flex-justify-center">
+                <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
                     </div>
-                </li>
+                </li> -->
                 <li class="deal-item flex flex-align-center" @click="goDetail(item.id)" v-for="item in dataList">
                     <div class="avatar-wrap flex flex-v flex-align-center flex-2">
                         <img :src="item.user.avatar" alt="">
@@ -53,7 +53,7 @@
                         <mt-button type="primary" size="large" style="background: red;" @click="closeTradementByChoise">关闭选中交易</mt-button>
                     </div>
                     <div class="delete-all">
-                        <mt-button type="primary" size="large" style="background: #777;">关闭所有已平账交易</mt-button>
+                        <mt-button type="primary" size="large" style="background: #777;" @click="closeAllTradement">关闭所有已平账交易</mt-button>
                     </div>
                 </div>
             </ul>
@@ -165,7 +165,6 @@
                         border:1px solid #eee;
                     }
                 }
-
             }
             
             // 批量操作按钮
@@ -255,6 +254,11 @@ export default {
     },
 
     toggleShowListButton(){
+
+        if(this.dataList.length == 0){
+            Toast("当前无可操作数据...");
+            return;
+        }
         this.isListRadioShow = !this.isListRadioShow;
     },
 
@@ -272,6 +276,8 @@ export default {
 
     // 删除选中的id
     closeTradementByChoise(){
+        Loading.getInstance().open();
+
         var _tList = [];
         for(let i = 0 ; i<this.dataList.length ; i++){
             if(this.dataList[i].checked){
@@ -285,21 +291,36 @@ export default {
         }
 
         var _data = {
-            transfer_id:_tList 
+            transfer_id:_tList,
+            shop_id:this.dataList[0].shop_id 
         };
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
-
+            Loading.getInstance().close();
+            Toast("关闭成功");
+            setTimeout(()=>{
+                this.init();
+            },1500);
         }).catch(err=>{
+            Loading.getInstance().close();
+            Toast(err.data.msg)
             console.error(err);
         });
     },
 
     // 删除所有已平账的交易
     closeAllTradement(){
-        request.getInstance().postData('api/transfer/close').then(res=>{
+        Loading.getInstance().open();
+        var _data = {
+            shop_id:this.dataList[0].shop_id 
+        };
+
+        request.getInstance().postData('api/transfer/close',_data).then(res=>{
+            Loading.getInstance().close();
 
         }).catch(err=>{
+            Loading.getInstance().close();
+            Toast(err.data.msg)
             console.error(err);
         });
     },
@@ -307,8 +328,16 @@ export default {
     init(){
         Loading.getInstance().open();
         this.shop_id = this.$route.query.shopId;
+        
+        var _status = 0;
+        for(var i = 0; i<this.tabItem.length; i++){
+            if(this.tabItem[i] == true){
+            _status = i+1;
+            }
+        }
+
         var _data = {
-            status :1,
+            status :_status,
             shop_id:this.shop_id,
             limit :50,
             offset :0
@@ -324,7 +353,6 @@ export default {
 
             Loading.getInstance().close();
         }).catch(err=>{
-
             Loading.getInstance().close();
         });
     }

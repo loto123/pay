@@ -94,6 +94,9 @@ class TransferController extends Controller
         if (!$shop) {
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
+        if ($shop->status == 2) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_is_frozen'), 'data' => []]);
+        }
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
         $transfer = new Transfer();
@@ -183,6 +186,10 @@ class TransferController extends Controller
 
         //装填响应数据
         $transfer->id = $transfer->en_id();
+        $transfer->allow_reward = false;
+        if(config('shop_fee_status')) {
+            $transfer->allow_reward = true;
+        }
         $transfer->shop_id = $transfer->shop->en_id();
         $transfer->user->id = $transfer->user->en_id();
         foreach ($transfer->record as $key => $record) {
@@ -256,6 +263,69 @@ class TransferController extends Controller
         }
         return response()->json(['code' => 1, 'msg' => 'ok', 'data' => []]);
     }
+
+    /**
+     * @SWG\Post(
+     *   path="/transfer/realget",
+     *   summary="提钱实际获取",
+     *   tags={"交易"},
+     *   @SWG\Parameter(
+     *     name="transfer_id",
+     *     in="formData",
+     *     description="交易ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="points",
+     *     in="formData",
+     *     description="积分",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function realGet(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            [
+                'transfer_id' => 'bail|required',
+                'points' => 'bail|required|integer|between:1,99999',
+            ],
+            [
+                'required' => trans('trans.required'),
+                'integer' => trans('trans.integer'),
+                'between' => trans('trans.between'),
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
+        }
+
+        $transfer = Transfer::findByEnId($request->transfer_id);
+        if (!$transfer) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
+        }
+        if ($transfer->status == 3) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
+        }
+        $amount = $request->points * $transfer->price;
+        $tips = 0;
+        if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
+            $tips = $transfer->tip_percent * $amount / 100;
+        }
+        //收手续费
+        $fee_amount = 0;
+        if ($transfer->fee_percent) {
+            $fee_amount = $amount * $transfer->fee_percent / 100;
+        }
+        $real_amount = $amount - $tips - $fee_amount;
+        return response()->json(['code' => 1, 'msg' => 'ok', 'data' => ['amount' => $amount, 'real_amount' => $real_amount]]);
+    }
+
 
     /**
      * @SWG\Post(
@@ -426,7 +496,7 @@ class TransferController extends Controller
             //判断红包状态
             if ($transfer->amount == 0) {
                 $transfer->status = 2;
-            }else {
+            } else {
                 $transfer->status = 1;
             }
             $transfer->save();
@@ -636,6 +706,10 @@ class TransferController extends Controller
      */
     public function feeRecord(Request $request)
     {
+        if (!config('shop_fee_status')) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.reward_is_turned_off'), 'data' => []]);
+        }
+
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
@@ -714,8 +788,8 @@ class TransferController extends Controller
      */
     public function payFee(Request $request)
     {
-        if(!config('shop_fee_status')) {
-            return response()->json(['code' => 0, 'msg' => 'something wrong', 'data' => []]);
+        if (!config('shop_fee_status')) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.reward_is_turned_off'), 'data' => []]);
         }
 
         $validator = Validator::make($request->all(),
@@ -915,7 +989,7 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'shop_id' => 'bail|required|integer',
+                'shop_id' => 'bail|required',
                 'status' => ['bail', 'required', Rule::in([0, 1, 2, 3])],
                 'limit' => 'bail|integer',
                 'offset' => 'bail|integer',
@@ -942,8 +1016,9 @@ class TransferController extends Controller
         }
         $list = $query->get();
         //装填响应数据
-        foreach($list as $key => $value) {
+        foreach ($list as $key => $value) {
             $list[$key]->id = $value->en_id();
+            $list[$key]->shop_id = $request->shop_id;
             $list[$key]->user->id = $value->user->en_id();
             unset($list[$key]->user_id);
         }
@@ -985,8 +1060,8 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'mark' => 'bail|required|array',
-                'dismark' => 'bail|required|array'
+                'mark' => 'bail|required_without:dismark|array',
+                'dismark' => 'bail|required_without:mark|array'
             ],
             [
                 'required' => trans('trans.required'),
@@ -1009,11 +1084,22 @@ class TransferController extends Controller
      *   summary="关闭交易",
      *   tags={"交易"},
      *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="formData",
+     *     description="店铺ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
      *     name="transfer_id",
      *     in="formData",
      *     description="交易ID",
-     *     required=true,
-     *     type="integer"
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *             type="integer",
+     *             format="int32"
+     *      )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
@@ -1023,7 +1109,8 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'transfer_id' => 'bail|required',
+                'shop_id' => 'bail|required',
+                'transfer_id' => 'bail|array',
             ],
             [
                 'required' => trans('trans.required'),
@@ -1034,61 +1121,90 @@ class TransferController extends Controller
             return response()->json(['code' => 0, 'msg' => $validator->errors()->first(), 'data' => []]);
         }
 
-        $transfer = Transfer::findByEnId($request->transfer_id);
-        if (!$transfer) {
-            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
-        }
-        if ($transfer->status == 3) {
-            return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
-        }
-        if ($transfer->status != 2) {
-            return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_error'), 'data' => []]);
-        }
+//        $transfer = Transfer::findByEnId($request->transfer_id);
+//        if (!$transfer) {
+//            return response()->json(['code' => 0, 'msg' => trans('trans.trans_not_exist'), 'data' => []]);
+//        }
+//        if ($transfer->status == 3) {
+//            return response()->json(['code' => 0, 'msg' => trans('trans.trans_already_closed'), 'data' => []]);
+//        }
+//        if ($transfer->status != 2) {
+//            return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_error'), 'data' => []]);
+//        }
         $user = JWTAuth::parseToken()->authenticate();
-        if ($transfer->shop->manager != $user->id) {
+        $shop = Shop::findByEnId($request->shop_id);
+        if (!$shop) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
+        }
+        if ($shop->manager_id != $user->id) {
             return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_error_shop_manager'), 'data' => []]);
+        }
+        $query = Transfer::where('shop_id', $shop->id)->where('status', 2);
+        if (isset($request->transfer_id) && $request->transfer_id) {
+            $tmpIds = [];
+            foreach ($request->transfer_id as $key => $value) {
+                $tmpIds[] = Skip32::decrypt("0123456789abcdef0123", $value);
+            }
+            $query->whereIn('id', $tmpIds);
+        }
+        $list = $query->get();
+        if (!$list || $list->isEmpty()) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.not_need_trans_closed'), 'data' => []]);
         }
         DB::beginTransaction();
         try {
-            $transfer->status = 3;
-            if ($transfer->save()) {
-                //解冻店铺茶水费资金
-                $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
-                if (!$shop_container->unfreeze($transfer->tip_amount)) {
-                    return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
-                }
+            foreach ($list as $transfer) {
+                $transfer->status = 3;
+                if ($transfer->save()) {
+                    //解冻店铺茶水费资金
+                    $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
+                    if ($transfer->tip_amount > 0) {
+                        if (!$shop_container->unfreeze($transfer->tip_amount)) {
+                            return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
+                        }
+                    }
 //                $shop = $transfer->shop;
 //                if ($shop) {
 //                    $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
 //                    $shop->balance = $shop->balance + $transfer->tip_amount;
 //                    $shop->save();
 //                }
-                //公司分润 代理分润 运营分润
-                $records = $transfer->record()->where('stat', 2)->get();
-                foreach ($records as $key => $value) {
-                    $profit = new Profit();
-                    $profit->record_id = $value->id;
-                    $profit->user_id = $value->user_id;
-                    $profit->fee_percent = $transfer->fee_percent;
-                    if ($value->user->parent) {
-                        $profit->proxy = $value->user->parent->id;
-                        $profit->proxy_percent = $value->user->parent->percent;
-                        $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
-                        //解冻代理资金
-                        $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
-                        $proxy_container->unfreeze($profit->proxy_amount);
-                    }
-                    $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
-                    if ($value->user->operator) {
-                        $profit->operator = $value->user->operator->id;
+                    //公司分润 代理分润 运营分润
+                    $records = $transfer->record()->where('stat', 2)->get();
+                    foreach ($records as $key => $value) {
+                        $profit = new Profit();
+                        $profit->record_id = $value->id;
+                        $profit->user_id = $value->user_id;
+                        $profit->fee_percent = $transfer->fee_percent;
+                        $profit->proxy = 0;
+                        $profit->operator = 0;
+                        if ($value->user->parent) {
+                            $profit->proxy = $value->user->parent->id;
+                            $profit->proxy_percent = $value->user->parent->percent;
+                            $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
+                            //解冻代理资金
+                            if ($profit->proxy_amount > 0) {
+                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+                                $proxy_container->unfreeze($profit->proxy_amount);
+                            }
+                        }
+                        $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
+                        if ($value->user->operator) {
+                            $profit->operator = $value->user->operator->id;
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
+                        }
+                        if ($profit->save()) {
+                            //发送通知
+                            if ($profit->proxy_amount > 0) {
+                                \App\Admin\Controllers\NoticeController::send($profit->user_id, 1, '', '', $profit->id);
+                            }
+                        }
                     }
-                    $profit->save();
                 }
-                DB::commit();
-                return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
             }
+            DB::commit();
+            return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
         } catch (\Exception $e) {
             DB::rollBack();
         }

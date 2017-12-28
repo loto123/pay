@@ -13,7 +13,7 @@ use App\Pay\IdConfuse;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\DepositResult;
-use Illuminate\Support\Facades\Log;
+use App\Pay\PayLogger;
 
 class WechatH5 implements DepositInterface
 {
@@ -56,10 +56,9 @@ class WechatH5 implements DepositInterface
      * @param $params
      * @param $fieldsToSign array 签名字段,保持顺序
      */
-    public function appendSign(&$params, $fieldsToSign, $key)
+    public static function appendSign(&$params, $fieldsToSign, $key)
     {
-        $params['sign'] = $this->makeSign($params, $fieldsToSign, $key);
-
+        $params['sign'] = self::makeSign($params, $fieldsToSign, $key);
     }
 
     /**
@@ -75,7 +74,7 @@ class WechatH5 implements DepositInterface
             $string .= "&$field={$params[$field]}";
         }
         $string = ltrim($string, '&') . "&key=$key";
-        return md5($string);
+        return md5(strtolower($string));
     }
 
     /**
@@ -96,7 +95,7 @@ class WechatH5 implements DepositInterface
             //验证签名
             $validSign = self::makeSign($params, ['result', 'agent_id', 'jnet_bill_no', 'agent_bill_id', 'pay_type', 'pay_amt', 'remark'], $config['key']);
             if ($validSign !== $params['sign']) {
-                Log::error('heepay h5 notify sign error:need ' . $validSign . ' give ' . $params['sign']);
+                PayLogger::deposit()->critical('汇付宝通知md5计算错误', ['答案' => $validSign, '当前' => $params['sign']]);
                 break;
             }
 
@@ -112,7 +111,7 @@ class WechatH5 implements DepositInterface
 
                 $deposit->out_batch_no = $params['jnet_bill_no'];
 
-                if ($params['pay_amt'] > 0 && $deposit->amount > $deposit['pay_amt']) {
+                if ($params['pay_amt'] > 0 && $deposit->amount > $params['pay_amt']) {
                     $deposit->state = Deposit::STATE_PART_PAID;
                 } else {
                     $deposit->state = Deposit::STATE_COMPLETE;

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Notifications\UserApply;
 use App\OauthUser;
+use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Swagger\Annotations as SWG;
 use PhpSms;
@@ -60,7 +64,6 @@ class AuthController extends BaseController {
      */
     public function login(Request $request) {
         $credentials = $request->only('mobile', 'password');
-
         try {
             // attempt to verify the credentials and create a token for the user
             if (!$token = JWTAuth::attempt($credentials)) {
@@ -74,7 +77,8 @@ class AuthController extends BaseController {
         // all good so return the token
         $user = JWTAuth::toUser($token);
         $wechat = $user->wechat_user ? 1 : 0;
-        return $this->json(compact('token', 'wechat'));
+        $id = $user->en_id();
+        return $this->json(compact('token', 'wechat', 'id'));
     }
 
     /**
@@ -164,26 +168,36 @@ class AuthController extends BaseController {
         $input['name'] = $request->name ? $request->name : $request->mobile;
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
+        $channel = Channel::where("disabled",0)->inRandomOrder()->first();
         $input['container_id'] = $wallet->id;
         try {
             $user = User::create($input);
         } catch (\Exception $e){
             return $this->json();
         }
-        $invite = User::where("mobile", $request->invite_mobile)->first();
-        if ($invite) {
-            $user->parent_id = $invite->id;
+        $role = Role::where("name", 'user')->first();
+        if ($role) {
+            $user->roles()->sync($role);
         }
+        
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
         if ($request->oauth_user) {
-            $oauth_user = OauthUser::find($request->oauth_user);
+            $oauth_user = OauthUser::findByEnId($request->oauth_user);
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
                 $user->avatar = $oauth_user->headimgurl;
+                $user->name = $oauth_user->nickname;
                 $oauth_user->save();
             }
         }
+        $invite = User::where("mobile", $request->invite_mobile)->first();
+        if ($invite) {
+            $user->parent_id = $invite->id;
+            $user->operator_id = $invite->operator_id;
+            Notification::send($invite, new UserApply(['user_name' =>  $user->name, 'user_id' => $user->id]));
+        }
+        $user->channel_id = $channel->id;
         $user->save();
         return $this->json($success);
     }
@@ -251,6 +265,13 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="user_id",
+     *         in="formData",
+     *         description="要绑定的用户id",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="A list with products",
@@ -291,14 +312,30 @@ class AuthController extends BaseController {
         $oauth_user->remark = isset($user['remark']) ? $user['remark'] : '';
         $oauth_user->groupid = isset($user['groupid']) ? $user['groupid'] : 0;
         $oauth_user->save();
-        if ($oauth_user->user_id) {
-            $user = User::find($oauth_user->user_id);
-            if ($user) {
-                return $this->json(['token' => JWTAuth::fromUser($user)]);
+        if ($request->user_id) {
+            $login_user = User::findByEnId($request->user_id);
+            if ($login_user) {
+                $login_user->avatar = $oauth_user->headimgurl;
+                $login_user->name = $oauth_user->nickname;
+                $login_user->save();
+                $oauth_user->user_id = $login_user->id;
+                $oauth_user->save();
+                return $this->json(['token' => JWTAuth::fromUser($login_user)]);
             }
         } else {
-            return $this->json(['oauth_user' => $oauth_user->id]);
+            if ($oauth_user->user_id) {
+                $login_user = User::find($oauth_user->user_id);
+                if ($login_user) {
+                    $login_user->avatar = $oauth_user->headimgurl;
+                    $login_user->name = $oauth_user->nickname;
+                    $login_user->save();
+                    return $this->json(['token' => JWTAuth::fromUser($login_user)]);
+                }
+            } else {
+                return $this->json(['oauth_user' => $oauth_user->en_id()]);
+            }
         }
+
     }
 
 
@@ -350,7 +387,7 @@ class AuthController extends BaseController {
     public function valid(Request $request) {
         if ($request->exist) {
             $validator = Validator::make($request->all(), [
-                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|exist:'.(new User)->getTable().',mobile',
+                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
                 'code' => 'regex:/^\d{4}$/',
             ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
         } else {
@@ -419,7 +456,12 @@ class AuthController extends BaseController {
                 return mt_rand(0, 9);
             }, range(1, 4)));
         }
-        $result = PhpSms::make()->template(['YunTongXun' => '224348'])->to($request->mobile)->data([$code])->send();
+        if (config('app.debug')) {
+            $code = '1234';
+            $result['success'] = true;
+        } else {
+            $result = PhpSms::make()->template(['YunTongXun' => '224348'])->to($request->mobile)->data([$code])->send();
+        }
 //        var_dump($result);
         if ($result && $result['success']) {
             Cache::put($cache_key, ['code' => $code, 'time' => time()], 5);

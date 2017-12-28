@@ -39,9 +39,9 @@
         </div>
     </div>
 
-    <div class="box box-primary">
+    <div class="box">
         <!--店铺统计表格开始-->
-        <div class="box-footer table-responsive no-padding mt20">
+        <div class="box-body table-responsive no-padding">
             @if($list && !$list->isEmpty())
                 <table class="table table-hover">
                     <thead>
@@ -63,15 +63,15 @@
                     @foreach ($list as $key => $item)
                         <tr>
                             <td>{{$key+$offset+1}}</td>
-                            <td>{{$item->name}}<br/>ID：{{$item->id}}</td>
+                            <td>{{$item->name}}<br/>ID：{{$item->en_id()}}</td>
                             <td>
                                 <div class="user-panel clearfix">
                                     <div class="pull-left">
-                                        <img src="{{$item->manager_id}}" width="40" height="40" class="img-circle">
+                                        <img src="{{$item->manager['avatar']}}" width="40" height="40" class="img-circle">
                                     </div>
                                     <div class="pull-left ml7">
-                                        <p>{{$item->manager_name}}</p>
-                                        <span>ID:<span>{{$item->manager_id}}</span></span>
+                                        <p>{{$item->manager['name']}}</p>
+                                        <span>ID:<span>{{\App\User::encrypt($item->manager_id)}}</span></span>
                                     </div>
                                 </div>
                             </td>
@@ -81,7 +81,7 @@
                             <td>{{$item->transfer_cnt}}</td>
                             <td>{{$item->summary??0}}</td>
                             <td>{{$item->tip_amount_cnt??0}}</td>
-                            <td>{{$item->balance}}</td>
+                            <td>{{$item->container['balance']}}</td>
                             <td><a href="/admin/shop/detail/{{$item->id}}">详情</a></td>
                         </tr>
                     @endforeach
@@ -91,14 +91,14 @@
                 <p class="no-data text-muted text-center" style="font-size:24px;margin-top:20px;">暂无数据</p>
             @endif
         </div>
-        <div>{{ $list->links() }}</div>
+        <div>{{ $list->appends(compact('manager_id', 'shop_id', 'shop_name', 'date_time'))->links() }}</div>
         <!--店铺统计表格结束-->
     </div>
 </div>
 
 <script language="JavaScript">
     function data_export() {
-        var manager_id = $("#manager_id").val();
+        var aid = $("#aid").val();
         var shop_id = $("#shop_id").val();
         var shop_name = $("#shop_name").val();
         var date_time = $("#reservation").val();
