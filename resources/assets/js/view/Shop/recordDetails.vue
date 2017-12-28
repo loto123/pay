@@ -3,13 +3,13 @@
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
 			<div class="money-box">
-				<span>{{mode == 1?'出':'入'}}账金额账金额</span>
+				<span>{{mode == 1?'出':'入'}}账金额</span>
 				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{(mode==1)?'支出':'收入'}}</div>
+					<div class="content">{{(mode==1)?'转账':'提现'}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
@@ -59,7 +59,7 @@
 				Loading.getInstance().open("加载中...");
 				var self = this;
       			var _id = this.$route.query.id;
-				request.getInstance().getData("api/account/records/detail/"+_id)
+				request.getInstance().getData("api/shop/transfer/records/detail/"+_id)
 					.then((res) => {
                         this.remark=res.data.data.remark
 						this.no=res.data.data.no
