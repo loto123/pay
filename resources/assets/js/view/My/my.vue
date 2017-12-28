@@ -3,7 +3,7 @@
 		<section class="header-container">
 			<div class="header">
 				<div class="imgWrap">
-					<img src="/images/avatar.jpg">
+					<img :src="thumb">
 				</div>
 				<h3>{{name}}</h3>
 				<div class="acc-number">账号:
@@ -13,7 +13,7 @@
 		</section>
 		<section>
 			<ul class="my-list">
-				<li>
+				<li @click="referrer">
 					<mt-cell title="推荐人" is-link>
 						<img slot="icon" src="/images/referrer.png" width="30" height="30">
 						<span>{{parent_name}} <em>{{parent_mobile}}</em></span>
@@ -22,7 +22,7 @@
 				<li @click="realAuth(mobile)">
 					<mt-cell title="实名认证" is-link>
 						<img slot="icon" src="/images/realName.png" width="30" height="30">
-						<span>{{identify_status ? "完善" : "未完善"}}</span>
+						<span>{{identify_status ? "已认证" : "去认证"}}</span>
 					</mt-cell>
 				</li>
 				<li @click="bankCardManage">
@@ -95,11 +95,9 @@
 
 
 <script>
-	import axios from "axios";
 	import tabBar from "../../components/tabBar";
 	import request from '../../utils/userRequest';
 	import { Toast,MessageBox } from 'mint-ui';
-
 	import Loading from '../../utils/loading'
 
 	export default {
@@ -177,6 +175,9 @@
 			set(e){
 				this.$router.push("/my/set"+"?mobile="+e);
 			},
+			referrer(){
+				this.$router.push('/my/referrer');
+			}
 		}
 	};
 </script>

@@ -6,7 +6,7 @@
         <li v-for="item in bankList">
           <div class="bankCard-box flex">
             <div class="card-image">
-              <img src="/images/personal.jpg">
+              <img :src="item.card_logo">
             </div>
             <div class="card-info">
               <div class="bank-name">{{item.bank}}</div>

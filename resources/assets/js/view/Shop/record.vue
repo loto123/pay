@@ -21,7 +21,7 @@
                 <div>图标</div>
             </div>
             <ul class="bill-list">
-                <li  v-for="item in billList" @click="details(item.id)">
+                <li  v-for="item in recordList" @click="details(item.id)">
                     <a href="javascript:;" class="flex">
                         <div class="bill-content">
                             <h5>{{status(item.type)}}</h5>
@@ -92,7 +92,7 @@
                 type:null,		//类型
                 created_at:null,		//结束时间
                 size:null,  //数目
-                billList:[]
+                recordList:[]
             };
         },
         created(){
@@ -106,7 +106,7 @@
                 this.showAlert = false;
             },
             details(id) {
-                this.$router.push({ path: "/myAccount/bill/bill_details?id="+id});
+                this.$router.push({ path: "/shop/record/record_details?id="+id});
             },
             init(){
                 var data={
@@ -115,11 +115,12 @@
                     size:this.size
                 }
                 Loading.getInstance().open("加载中...");
-
-                request.getInstance().getData("api/account/records")
+                this.shopId = this.$route.query.id;
+                console.log(this.shopId);
+                request.getInstance().getData("api/shop/transfer/records/"+this.shopId)
                     .then((res) => {
                         console.log(res);
-                        this.billList=res.data.data.data
+                        this.recordList=res.data.data.data;
                         Loading.getInstance().close();
                     })
                     .catch((err) => {

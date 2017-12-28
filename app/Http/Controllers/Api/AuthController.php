@@ -7,6 +7,7 @@ use App\OauthUser;
 use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -62,7 +63,6 @@ class AuthController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function login(Request $request) {
-        Log::info($request->all());
         $credentials = $request->only('mobile', 'password');
         try {
             // attempt to verify the credentials and create a token for the user
@@ -174,7 +174,11 @@ class AuthController extends BaseController {
         } catch (\Exception $e){
             return $this->json();
         }
-
+        $role = Role::where("name", 'user')->first();
+        if ($role) {
+            $user->roles()->sync($role);
+        }
+        
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
         if ($request->oauth_user) {
@@ -359,7 +363,7 @@ class AuthController extends BaseController {
     public function valid(Request $request) {
         if ($request->exist) {
             $validator = Validator::make($request->all(), [
-                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|exist:'.(new User)->getTable().',mobile',
+                'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
                 'code' => 'regex:/^\d{4}$/',
             ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
         } else {

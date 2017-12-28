@@ -180,11 +180,11 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-
-          // if(res.data.data.wechat == 0){
-          //   Toast("登录成功，请绑定微信");
-          //   return Promise.resolve(true);
-          // }
+          console.log(res.data.data.wechat);
+          if(res.data.data.wechat == 0){
+            Toast("登录成功，请绑定微信");
+            return Promise.resolve(true);
+          }
 
           request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");
@@ -199,7 +199,7 @@ export default {
           }
       }).then(res=>{
         if(res == true){
-          this.weChatLogin();
+          this.weChatBind(this.mobile);
         }
       }).catch(function(err){
         Toast(err.data.message);
@@ -207,17 +207,20 @@ export default {
     },
 
     // 微信登录
-    weChatLogin(e,mobile){
+    weChatLogin(){
+      var _data={
+        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+      };
+        
+      request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
+        window.location.href = res.data.data.url;
+      }).catch();
+    },
 
-      if(!mobile){
-        var _data={
-          redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
-        };
-      }else {
-        var _data={
-          redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+"?mobile="+ mobile
-        };
-      }
+    weChatBind(mobile){
+      var _data={
+        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+"?mobile="+ mobile
+      };
 
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
@@ -230,6 +233,7 @@ export default {
 
     regist(){
         this.$store.dispatch("setStep",0);
+      localStorage.setItem("registStep",0);
         this.$store.dispatch("setRefindPassWordState",false);
         this.$router.push("/login/regist");
     },
@@ -238,6 +242,7 @@ export default {
     forgetPassWord(){
       this.$store.dispatch("setStep",1);
       this.$store.dispatch("setRefindPassWordState",true);
+      localStorage.setItem("registStep",1);
       this.$router.push("/login/regist");
     }
   }

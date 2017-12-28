@@ -4,7 +4,7 @@
           <topBack :backUrl="'\/index\/'" style="color:#fff;background:#26a2ff;" >
               <div class="top-message flex flex-reverse" @click = "goMessagePage">
                 <i class="iconfont">&#xe626;</i>
-                <span class="notice">
+                <span class="notice" v-if="messageCount">
 
                 </span>
               </div>
@@ -30,7 +30,7 @@
 
         <div class="shop-item flex flex-v flex-align-center" @click="goDetail(item.id)"  v-for="item in shopList" :key ="item.id">
           <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around">
-            <div class="notice"></div>
+            <!-- <div class="notice"></div> -->
             <img :src="item.logo" alt="">
             
           </div>
@@ -353,7 +353,8 @@ export default {
       },
 
       shopList:[],
-      total_profit:null
+      total_profit:null,
+      messageCount:null            // 新消息数量
     };
   },
   methods: {
@@ -378,13 +379,17 @@ export default {
 
     // 创建店铺
     createShop(){
+      Loading.getInstance().open();
       var self = this;
       var data = this.openNewShop;
 
       request.getInstance().postData("api/shop/create",data).then(function(res){
         self.addShopTabStatus = false;
         self.getShopData();
+        Loading.getInstance().close();
+        
       }).catch((err)=>{
+        Loading.getInstance().close();
         console.error(err);
       });
     },
@@ -393,10 +398,11 @@ export default {
     getShopData(){
       Loading.getInstance().open();
 
-      Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/profit")])
+      Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/profit"),request.getInstance().getData("api/shop/messages/count")])
         .then(res=>{
           this.shopList = res[0].data.data.data;
           this.total_profit = res[1].data.data.profit;
+          this.messageCount = res[2].data.data.count;
           Loading.getInstance().close();
         })
         .catch(err=>{

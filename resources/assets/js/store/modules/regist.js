@@ -11,7 +11,7 @@ const registStore = {
 
     mutations: {
         addStep(state) {
-            state.step += 1;
+            state.step = parseInt(state.step)+ 1;
         },
         setStep(state, value) {
             state.step = value;

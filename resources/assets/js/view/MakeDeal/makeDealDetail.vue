@@ -66,7 +66,7 @@
                             <span>{{item.user.name}}</span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
-                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"放钱":"拿钱"}}</span>
+                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
 
@@ -76,30 +76,6 @@
                     </slider> 
                 </li>
                 
-                <!-- <li>
-                    <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" >
-                        <div class="slider-item flex flex-align-center flex-justify-between">
-                            <img src="/images/avatar.jpg" alt="">
-                            <span>名字最多七个字</span>
-                            <div class="pay-money-text flex flex-v  ">
-                                <span class="money green-color">+100</span>
-                                <span class="title">拿钱</span>
-                            </div>
-                        </div>
-                    </slider> 
-                </li>
-                <li>
-                    <slider @deleteIt="deleteIt" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="true">
-                        <div class="slider-item flex flex-align-center flex-justify-between">
-                            <img src="/images/avatar.jpg" alt="">
-                            <span>名字最多七个字</span>
-                            <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
-                                <span class="money">-100</span>
-                                <span class="title">付钱</span>
-                            </div>
-                        </div>
-                    </slider> 
-                </li> -->
             </ul>
         </section>
 
@@ -374,6 +350,7 @@ export default {
       var _data = {
         transfer_id: this.transfer_id
       };
+
       request
         .getInstance()
         .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
@@ -444,9 +421,10 @@ export default {
         transfer_id:this.transfer_id,
         friend_id:_tempList
       };  
+
       request.getInstance().postData("api/transfer/notice",_data).then(res=>{
         Loading.getInstance().close();   
-        Toast("交易成功...");
+        Toast("编辑提醒成员成功...");
         setTimeout(()=>{
           this.init();
         },2000);
@@ -480,7 +458,6 @@ export default {
           Loading.getInstance().close();
 
           Toast(err.data.msg);
-          
         });
 
         this.hidePassword();
@@ -532,7 +509,7 @@ export default {
             });
            })
           .catch(err=>{
-            
+            Toast(err.data.msg);
           });
         return;
       }
@@ -573,18 +550,16 @@ export default {
       for(let i = 0; i<res.data.data.members.length; i++){
           var _temp = {};
           _temp = res.data.data.members[i];
-
+          _temp.checked = false;
           for(let j = 0; j<this.joiner.length; j++){
             if(this.joiner[j].user.id == _temp.id){
               _temp.checked = true;
-              break;
-            }else {
-              _temp.checked = false;
-              break;
+              continue;
             }
           }
-
           this.memberList.push(_temp);
+          console.log(this.memberList);
+          
         }
     },
     // 获取所有要提醒的成员名单

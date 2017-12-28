@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserFund extends Model
+class ShopFund extends Model
 {
     //
-    const TYPE_CHARGE = 0;
+    const TYPE_TRANAFER = 0;
 
-    const TYPE_WITHDRAW = 1;
+    const TYPE_TRANAFER_MEMBER = 1;
 
-    const TYPE_TRANSFER = 4;
+    const TYPE_TRANAFER_IN = 2;
 
     const MODE_IN = 0;
 
@@ -26,5 +26,4 @@ class UserFund extends Model
     use Skip32Trait;
 
     protected static $skip32_id = '0123456789abcdef0123';
-
 }
