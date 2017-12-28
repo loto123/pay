@@ -74314,21 +74314,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       shopId: null,
       userId: null,
-      isUser: true
+      isUser: true,
+      logo: null,
+      shopName: null,
+      membersCount: null
     };
   },
 
   methods: {
     init: function init() {
+      var _this = this;
+
       this.shopId = this.$route.query.shopId;
       this.userId = this.$route.query.userId;
+
+      __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/detail/" + this.shopId).then(function (res) {
+        _this.shopName = res.data.data.name;
+        _this.membersCount = res.data.data.members_count;
+        _this.logo = res.data.data.logo;
+        _this.timer = res.data.data.created_at;
+        // this.c
+      }).catch(function (err) {});
     },
     submit: function submit() {
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+
       if (!__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getToken()) {
         localStorage.setItem("url", window.location.href);
       }
 
-      __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/join/" + this.shopId).then(function (res) {}).catch(function (error) {});
+      __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/join/" + this.shopId).then(function (res) {
+
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        Toast("申请加入店铺成功");
+      }).catch(function (error) {
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      });
     }
   }
 });
@@ -74381,7 +74402,15 @@ var render = function() {
       _vm._v(" "),
       _vm.isUser
         ? _c("div", { staticClass: "content-wrap-user" }, [
-            _vm._m(1, false, false),
+            _c("div", { staticClass: "info flex flex-v flex-align-center" }, [
+              _c("img", { attrs: { src: _vm.logo, alt: "" } }),
+              _vm._v(" "),
+              _c("h1", [
+                _vm._v(_vm._s(_vm.shopName + "(" + _vm.membersCount + "人)"))
+              ]),
+              _vm._v(" "),
+              _c("h2", [_vm._v("Leaf 创建于 2017- 11-22")])
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -74410,18 +74439,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "top flex flex-align-center" }, [
       _c("h3", [_vm._v("加入店铺")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "info flex flex-v flex-align-center" }, [
-      _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-      _vm._v(" "),
-      _c("h1", [_vm._v("斗牛小铺(68人)")]),
-      _vm._v(" "),
-      _c("h2", [_vm._v("Leaf 创建于 2017- 11-22")])
     ])
   }
 ]
