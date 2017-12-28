@@ -63,7 +63,6 @@ class AuthController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function login(Request $request) {
-        Log::info($request->all());
         $credentials = $request->only('mobile', 'password');
         try {
             // attempt to verify the credentials and create a token for the user
