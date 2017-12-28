@@ -263,19 +263,20 @@ class ShopController extends BaseController {
         }
         /* @var $shop Shop */
 
-        $members = [];
         $is_manager = $shop->manager_id == $user->id ? true : false;
         $is_member = ShopUser::where('user_id', $user->id)->where("shop_id", $shop->id)->count() > 0;
-        if ($is_manager || $is_member) {
-            foreach ($shop->users()->limit($member_size)->get() as $_user) {
-                /* @var $_user User */
-                $members[] = [
-                    'id' => (int)$_user->id,
-                    'name' => $_user->name,
-                    'avatar' => $_user->avatar,
+        if (!$is_manager && !$is_member) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $members = [];
+        foreach ($shop->users()->limit($member_size)->get() as $_user) {
+            /* @var $_user User */
+            $members[] = [
+                'id' => (int)$_user->id,
+                'name' => $_user->name,
+                'avatar' => $_user->avatar,
 
-                ];
-            }
+            ];
         }
 
         if ($is_manager) {
@@ -290,9 +291,8 @@ class ShopController extends BaseController {
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
-                'manager' => $shop->manager->name
             ];
-        } else if ($is_member) {
+        } else {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
@@ -301,18 +301,40 @@ class ShopController extends BaseController {
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
-                'manager' => $shop->manager->name
-            ];
-        } else {
-            $data = [
-                'id' => $shop->en_id(),
-                'name' => $shop->name,
-                'members_count' => (int)$shop->users()->count(),
-                'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg"),
-                'manager' => $shop->manager->name
             ];
         }
+        return $this->json($data);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/summary/{id}",
+     *   summary="店铺摘要（游客）",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function shop_summary($id) {
+        $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $data = [
+            'id' => $shop->en_id(),
+            'name' => $shop->name,
+            'members_count' => (int)$shop->users()->count(),
+            'created_at' => strtotime($shop->created_at),
+            'logo' => asset("images/personal.jpg"),
+            'manager' => $shop->manager->name
+        ];
         return $this->json($data);
     }
 
