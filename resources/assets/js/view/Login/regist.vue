@@ -20,7 +20,7 @@
         <transition name="fade">
             <section class="content step2" v-if="$store.state.regist.step==1?true:false">
                 <h3>
-                    {{findPasswordSwitch?"手机号验证":"输入手机号快速注册"}}
+                    {{$store.state.regist.refindPassword?"手机号验证":"输入手机号快速注册"}}
                 </h3>
 
                 <section class="input-wrap">
@@ -28,10 +28,10 @@
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
-                    <mt-button type="primary" size="large" v-on:click="comfirm">{{findPasswordSwitch?"下一步":"注册"}}</mt-button>
+                    <mt-button type="primary" size="large" v-on:click="comfirm">{{$store.state.regist.refindPassword?"下一步":"注册"}}</mt-button>
                 </div>
 
-                <p class="agreement-btn" v-if="!findPasswordSwitch">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
+                <p class="agreement-btn" v-if="!$store.state.regist.refindPassword">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
             </section>
         </transition>  
 
@@ -224,16 +224,22 @@ export default {
 
   mounted() {
     if (this.$store.state.regist.refindPassword == true) {
-      this.findPasswordSwitch = this.$store.state.regist.refindPassword;
-      // this.step = this.$store.state.regist.step;
-      
+      // this.findPasswordSwitch = this.$store.state.regist.refindPassword;
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
-      localStorage.setItem("registStep", this.step);
+      localStorage.setItem("registStep", this.$store.state.regist.step);
     }
-    var _step = localStorage.getItem("registStep")
-    if(_step){
-      console.log(_step);
+
+    var _step = localStorage.getItem("registStep");
+    var _findPassWord = localStorage.getItem("findPasswordSwitch");
+
+    console.log(_findPassWord);
+    if(_step && _findPassWord){
+
+      this.$store.dispatch("setRefindPassWordState",true);
+      this.$store.dispatch("setStep",_step);
+      // localStorage.removeItem("registStep");
     }
+   
   },
 
   methods: {
@@ -253,19 +259,36 @@ export default {
 
         });
       }else if(this.$store.state.regist.step == 1){
-        // 输入注册手机号
         var _data = {
           mobile:this.userAccountName
         };
-        Loading.getInstance().open();
-        request.getInstance().postData("api/auth/valid",_data).then(res=>{
-          Loading.getInstance().close();
-          this.goNextStep();
-        }).catch(err=>{
-          Loading.getInstance().close();
-          Toast("注册手机号输入有误");
-          console.error(err);
-        });
+        // 找回密码
+        if(this.$store.state.regist.refindPassword){
+          Loading.getInstance().open();
+          _data.exist = 1;
+          request.getInstance().postData("api/auth/valid",_data).then(res=>{
+            Loading.getInstance().close();
+            this.goNextStep();
+          }).catch(err=>{
+            Loading.getInstance().close();
+            Toast("手机号输入有误");
+            console.error(err);
+          });
+
+        }else {
+          // 输入注册手机号
+          Loading.getInstance().open();
+          request.getInstance().postData("api/auth/valid",_data).then(res=>{
+            Loading.getInstance().close();
+            this.goNextStep();
+          }).catch(err=>{
+            Loading.getInstance().close();
+            Toast("注册手机号输入有误");
+            console.error(err);
+          });
+        }
+
+        
       }else if(this.$store.state.regist.step == 2){
         // 验证手机号
         var _data = {
