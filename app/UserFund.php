@@ -11,6 +11,8 @@ class UserFund extends Model
 
     const TYPE_WITHDRAW = 1;
 
+    const TYPE_TRANSFER = 4;
+
     const MODE_IN = 0;
 
     const MODE_OUT = 1;
