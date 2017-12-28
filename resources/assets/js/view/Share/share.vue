@@ -142,9 +142,11 @@
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
 import moment from 'moment'
+
 export default {
 
   created(){
+    console.log(222);
     this.init();
   },
 
