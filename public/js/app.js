@@ -74435,6 +74435,8 @@ exports.push([module.i, "\n#share[data-v-1ed3f5ca] {\n  -webkit-box-sizing: bord
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
 //
 //
 //
@@ -74595,13 +74597,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       isUser: true,
       logo: null,
       shopName: null,
-      membersCount: null
+      membersCount: null,
+      manager: null,
+      timer: null
+
     };
   },
 
   methods: {
     init: function init() {
       var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
 
       this.shopId = this.$route.query.shopId;
       this.userId = this.$route.query.userId;
@@ -74610,9 +74617,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.shopName = res.data.data.name;
         _this.membersCount = res.data.data.members_count;
         _this.logo = res.data.data.logo;
-        _this.timer = res.data.data.created_at;
-        // this.c
-      }).catch(function (err) {});
+        _this.timer = __WEBPACK_IMPORTED_MODULE_2_moment___default()(res.data.data.created_at).format("YYYY-MM-DD");
+        _this.manager = res.data.data.manager;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      });
     },
     submit: function submit() {
       __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
@@ -74687,7 +74697,9 @@ var render = function() {
                 _vm._v(_vm._s(_vm.shopName + "(" + _vm.membersCount + "人)"))
               ]),
               _vm._v(" "),
-              _c("h2", [_vm._v("Leaf 创建于 2017- 11-22")])
+              _c("h2", [
+                _vm._v(_vm._s(_vm.manager) + " 创建于 " + _vm._s(_vm.timer))
+              ])
             ]),
             _vm._v(" "),
             _c(
