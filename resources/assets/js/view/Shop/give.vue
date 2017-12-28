@@ -95,7 +95,7 @@ export default {
       Loading.getInstance().open();
       var _data = {
         amount : this.amount,
-        remark:comment
+        remark:this.comment
       }
       request.getInstance().postData('api/shop/transfer/'+this.shopId+"/"+this.transferData.id,_data).then(res=>{
         Loading.getInstance().close();
