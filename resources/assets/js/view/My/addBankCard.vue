@@ -15,10 +15,32 @@
 					</div>
 				</section>
 			</div>
-			<div class="page-picker-wrapper" v-if="pickerShow">
-				<mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5"></mt-picker>
-			</div>
-			<p class="page-picker-desc" style="padding:1em;">地址: {{ addressProvince }} {{ addressCity }}</p>
+			<a class="mint-cell mint-field">
+				<div class="mint-cell-left"></div>
+				<div class="mint-cell-wrapper">
+					<div class="mint-cell-title">
+						<span class="mint-cell-text">所在地区</span>
+					</div>
+					<div class="mint-cell-value">
+						<div class="mint-cell-value is-link" @click="choiceArea">
+							<input placeholder="请选择省市" type="text" class="mint-field-core text-right" readonly="readonly" v-model="areaText">
+							<div class="mint-field-clear" style="display: none;">
+								<i class="mintui mintui-field-error"></i>
+							</div>
+						</div>
+					</div>
+					<i class="mint-cell-allow-right"></i>
+					<mt-popup v-model="popupVisible" position="bottom" class="mint-popup-4" style="width:100%;">
+						<div class="picker-toolbar">
+							<span class="mint-datetime-action mint-datetime-cancel" @click="cancel">取消</span>
+							<span class="mint-datetime-action mint-datetime-confirm" @click="selectaddress">确定</span>
+						</div>
+						<div class="page-picker-wrapper" v-if="pickerShow">
+							<mt-picker :slots="addressSlots" @change="onAddressChange" :visible-item-count="5"></mt-picker>
+						</div>
+					</mt-popup>
+				</div>
+			</a>
 			<div class="bank-info flex flex-v flex-justify-center">
 				<div class="select-wrap flex flex-align-center" @click="showDropList">
 					<div class="title">所属银行</div>
@@ -58,33 +80,37 @@
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack";
 	import inputList from "../../components/inputList";
-	import { MessageBox, Toast, Picker } from "mint-ui";
+	import { MessageBox, Toast, Picker, Popup } from "mint-ui";
 	import Loading from '../../utils/loading'
 
 	export default {
 		data() {
 			return {
-				pickerShow:false,
+				pickerShow: false,
 				dropListSwitch: false,
 				shopList: null,
 				name: null,
 				id_number: null,
 				dealShop: null,
-				mobile:null,
+				mobile: null,
 				card_num: null,
 				bank_id: null,
 				code: null,
+				popupVisible: false,  //地址弹框
 
 				computedTime: null,		//短信验证码倒计时
-				addressSlots:null,
-				address:null,
-				addressProvince:'北京直辖市',
-				addressCity:'昌平区',
-				addressSlots:[],
+				addressSlots: null,
+				address: null,
+				addressSlots: [],
+				areaPicker: '',
+				areaText: '',	
+				privince: '',//省
+				city: ''			//市
+
 			}
 		},
 		components: { topBack, inputList },
-		beforeCreate(){
+		beforeCreate() {
 			// request.getInstance().getData("api/card/getBankCardParams").then(res => {
 			// 		window.address = res.data.data;
 			// 		console.log(window.address);
@@ -93,7 +119,7 @@
 
 		created() {
 			this.personalInfo();
-			
+
 			this.initArea();
 
 			this.init();
@@ -134,20 +160,20 @@
 				Loading.getInstance().open();
 				request.getInstance().getData("api/card/getBankCardParams").then(res => {
 					this.address = res.data.data;
-					this.addressSlots=[
+					this.addressSlots = [
 						{
 							flex: 1,
 							values: Object.keys(this.address),
 							className: 'slot1',
 							textAlign: 'center'
-						}, 
+						},
 						{
 							divider: true,
 							content: '-',
 							className: 'slot2'
 						}, {
 							flex: 1,
-							values: [''],
+							values: Object.values(this.address)[0],
 							className: 'slot3',
 							textAlign: 'center'
 						}
@@ -160,7 +186,7 @@
 						Loading.getInstance().close();
 					});
 			},
-			
+
 			setBankList(res) {
 				var _tempList = [];
 				for (let i = 0; i < res.data.data.length; i++) {
@@ -196,20 +222,20 @@
 				var _data = {
 					bank_id: this.shopId,
 					card_num: this.card_num,
-					mobile: this.mobile,
+					privince:this.privince,
+					city:this.city,
 					code: this.code
 				}
-
-				if (this.shopId == null) {
+				if (!this.areaText) {
+					Toast("请选择省市");
+					return
+				}else if (this.shopId == null) {
 					Toast("请选择银行卡所属银行");
 					return
 				} else if (!this.card_num) {
 					Toast("请填写银行卡号");
 					return
-				} else if (!this.mobile) {
-					Toast("请填写银行卡预留手机号");
-					return
-				} else if (!this.code) {
+				}else if (!this.code) {
 					Toast("请输入验证码");
 					return
 				}
@@ -247,10 +273,30 @@
 				})
 			},
 			onAddressChange(picker, values) {
-				picker.setSlotValues(1,this.address[values[0]]); // 区/县数据就是一个数组
+				this.areaPicker = picker
+				picker.setSlotValues(1, this.address[values[0]]); // 区/县数据就是一个数组
 				this.addressProvince = values[0];
 				this.addressCity = values[1];
-			}
+			},
+			choiceArea: function () {
+				this.popupVisible = true;
+				// 设置默认选中  
+				if (this.privince !== '' && this.city !== '') {
+					this.areaPicker.setSlotValue(0, this.privince)
+					this.areaPicker.setSlotValue(1, this.city)
+				}
+			},
+			cancel() {
+				this.popupVisible = false;
+				this.areaPicker.setSlotValue(0, this.privince)
+				this.areaPicker.setSlotValue(1, this.city)
+			},
+			selectaddress() {
+				this.popupVisible = false
+				this.privince = this.addressProvince
+				this.city = this.addressCity
+				this.areaText = this.privince + this.city
+			},
 		}
 	};
 </script>
@@ -274,7 +320,7 @@
 		}
 		.bank-info {
 			margin-top: 1em;
-			.mint-cell{
+			.mint-cell {
 				background-image: none;
 			}
 		}
