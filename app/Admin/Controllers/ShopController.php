@@ -19,8 +19,8 @@ class ShopController extends Controller
     //店铺管理
     public function index(Request $request)
     {
-        $manager_id = $request->input('manager_id');
-        $shop_id = $request->input('shop_id');
+        $manager_id = User::decrypt($request->input('manager_id'));
+        $shop_id = Shop::decrypt($request->input('shop_id'));
         $shop_name = $request->input('shop_name');
         $date_time = $request->input('date_time');
         $begin = '';
