@@ -52911,7 +52911,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }).catch(function (err) {
         // Toast(err.data.);
-        console.error(err);
+        console.log(err);
       });
     },
 

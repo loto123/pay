@@ -206,7 +206,7 @@ export default {
         }
       }).catch(function(err){
         // Toast(err.data.);
-        console.error(err);
+        console.log(err);
       });
     },
 
