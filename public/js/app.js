@@ -52885,7 +52885,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
-        console.log(res.data.data.wechat);
+        console.log(res.data.data);
+        return;
         if (res.data.data.wechat == 0) {
           Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，请绑定微信");
           return Promise.resolve(true);
@@ -54150,14 +54151,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
             this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
             this.bindMobile = window.location.href.split("mobile=")[1];
-            console.log(this.bindMobile);
-            if (this.bindMobile) {
-                return;
-            }
+            if (this.bindMobile) {}
             return;
             var _data = {
                 code: this.code,
                 state: this.state
+
             };
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
 
