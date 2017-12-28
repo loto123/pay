@@ -152,7 +152,8 @@ export default {
     return {
       name: null,
       mobile:null,
-      password:null
+      password:null,
+      userId:null
     };
   },
   computed: {
@@ -180,8 +181,9 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-          console.log(res.data.data);
-          return;
+
+          this.userId = res.data.data.id;
+
           if(res.data.data.wechat == 0){
             Toast("登录成功，请绑定微信");
             return Promise.resolve(true);
@@ -200,7 +202,7 @@ export default {
           }
       }).then(res=>{
         if(res == true){
-          this.weChatBind(this.mobile);
+          this.weChatBind(this.userId);
         }
       }).catch(function(err){
         Toast(err.data.message);

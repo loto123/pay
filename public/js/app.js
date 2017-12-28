@@ -52854,7 +52854,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       name: null,
       mobile: null,
-      password: null
+      password: null,
+      userId: null
     };
   },
 
@@ -52885,8 +52886,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
-        console.log(res.data.data);
-        return;
+
+        this.userId = res.data.data.id;
+
         if (res.data.data.wechat == 0) {
           Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，请绑定微信");
           return Promise.resolve(true);
@@ -52905,7 +52907,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }).then(function (res) {
         if (res == true) {
-          _this.weChatBind(_this.mobile);
+          _this.weChatBind(_this.userId);
         }
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
@@ -54151,13 +54153,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
             this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
             this.bindMobile = window.location.href.split("mobile=")[1];
-            if (this.bindMobile) {}
-            return;
+
             var _data = {
                 code: this.code,
                 state: this.state
-
             };
+
+            if (this.bindMobile) {
+                _data.user_id = this.bindMobile;
+            }
+
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
 
                 if (!res.data.data.token) {
