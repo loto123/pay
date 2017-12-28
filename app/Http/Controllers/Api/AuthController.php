@@ -315,6 +315,9 @@ class AuthController extends BaseController {
         if ($request->user_id) {
             $login_user = User::findByEnId($request->user_id);
             if ($login_user) {
+                $login_user->avatar = $oauth_user->headimgurl;
+                $login_user->name = $oauth_user->nickname;
+                $login_user->save();
                 $oauth_user->user_id = $login_user->id;
                 $oauth_user->save();
                 return $this->json(['token' => JWTAuth::fromUser($login_user)]);
@@ -323,6 +326,9 @@ class AuthController extends BaseController {
             if ($oauth_user->user_id) {
                 $login_user = User::find($oauth_user->user_id);
                 if ($login_user) {
+                    $login_user->avatar = $oauth_user->headimgurl;
+                    $login_user->name = $oauth_user->nickname;
+                    $login_user->save();
                     return $this->json(['token' => JWTAuth::fromUser($login_user)]);
                 }
             } else {
