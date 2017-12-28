@@ -22,6 +22,9 @@ trait Skip32Trait {
     }
 
     public static function decrypt($value) {
+        if (!$value) {
+            return $value;
+        }
         return Skip32::decrypt(self::$skip32_id, $value);
     }
 
