@@ -54149,7 +54149,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         init: function init() {
             this.code = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("code");
             this.state = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("state");
-            this.bindMobile = __WEBPACK_IMPORTED_MODULE_1__utils_utils__["a" /* default */].getQueryString("mobile");
+            this.bindMobile = window.location.href.split("mobile=")[1];
             console.log(this.bindMobile);
             if (this.bindMobile) {
                 return;
