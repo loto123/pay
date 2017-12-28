@@ -230,6 +230,7 @@ export default {
 
     regist(){
         this.$store.dispatch("setStep",0);
+      localStorage.setItem("registStep",0);
         this.$store.dispatch("setRefindPassWordState",false);
         this.$router.push("/login/regist");
     },
@@ -238,6 +239,7 @@ export default {
     forgetPassWord(){
       this.$store.dispatch("setStep",1);
       this.$store.dispatch("setRefindPassWordState",true);
+      localStorage.setItem("registStep",1);
       this.$router.push("/login/regist");
     }
   }
