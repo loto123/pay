@@ -152,7 +152,8 @@ export default {
     return {
       name: null,
       mobile:null,
-      password:null
+      password:null,
+      userId:null
     };
   },
   computed: {
@@ -180,7 +181,8 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-          console.log(res.data.data.wechat);
+          self.userId = res.data.data.id;
+
           if(res.data.data.wechat == 0){
             Toast("登录成功，请绑定微信");
             return Promise.resolve(true);
@@ -199,11 +201,13 @@ export default {
           }
       }).then(res=>{
         if(res == true){
-          this.weChatBind(this.mobile);
+          this.weChatBind(self.userId);
         }
       }).catch(function(err){
-        Toast(err.data.message);
+        // Toast(err.data.);
+        console.log(err);
       });
+
     },
 
     // 微信登录
@@ -233,7 +237,7 @@ export default {
 
     regist(){
         this.$store.dispatch("setStep",0);
-      localStorage.setItem("registStep",0);
+        localStorage.setItem("registStep",0);
         this.$store.dispatch("setRefindPassWordState",false);
         this.$router.push("/login/regist");
     },
