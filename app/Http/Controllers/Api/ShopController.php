@@ -526,6 +526,12 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_perm"), 0);
+        }
         if ($request->name) {
             $shop->name = $request->name;
         }
