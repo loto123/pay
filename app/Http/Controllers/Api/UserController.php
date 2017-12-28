@@ -6,6 +6,7 @@ use App\Bank;
 use App\Pay\Impl\Heepay\Reality;
 use App\User;
 use App\UserCard;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -434,11 +435,23 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),
             ['password' => 'bail|required']
         );
+
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
         $user = JWTAuth::parseToken()->authenticate();
+        $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $user->id);
+        $times = Cache::get($key);
+        if ($times && $times > config("pay_pwd_validate_times", 5)) {
+            return response()->json(['code' => 0,'msg' => trans("api.over_max_times"),'data' => []]);
+        }
         if (!Hash::check($request->password, $user->pay_password)) {
+            if(!$times) {
+                Cache::put($key, 1, Carbon::now()->addDay(1));
+            }
+            else {
+                Cache::increment($key);
+            }
             return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => []]);
         } else {
             return response()->json(['code' => 1,'msg' => '','data' => []]);
