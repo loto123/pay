@@ -261,21 +261,24 @@ class ShopController extends BaseController {
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
-        if ($shop->manager_id != $user->id && ShopUser::where('user_id', $user->id)->where("shop_id", $shop->id)->count() == 0) {
-            return $this->json([], trans("api.error_shop_status"), 0);
-        }
         /* @var $shop Shop */
-        $members = [];
-        foreach ($shop->users()->limit($member_size)->get() as $_user) {
-            /* @var $_user User */
-            $members[] = [
-                'id' => (int)$_user->id,
-                'name' => $_user->name,
-                'avatar' => $_user->avatar,
 
-            ];
+        $members = [];
+        $is_manager = $shop->manager_id == $user->id ? true : false;
+        $is_member = ShopUser::where('user_id', $user->id)->where("shop_id", $shop->id)->count() > 0;
+        if ($is_manager || $is_member) {
+            foreach ($shop->users()->limit($member_size)->get() as $_user) {
+                /* @var $_user User */
+                $members[] = [
+                    'id' => (int)$_user->id,
+                    'name' => $_user->name,
+                    'avatar' => $_user->avatar,
+
+                ];
+            }
         }
-        if ($shop->manager_id == $user->id) {
+
+        if ($is_manager) {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
@@ -286,9 +289,10 @@ class ShopController extends BaseController {
                 'rate' => $shop->price,
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg")
+                'logo' => asset("images/personal.jpg"),
+                'manager' => $shop->manager->name
             ];
-        } else {
+        } else if ($is_member) {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
@@ -296,7 +300,17 @@ class ShopController extends BaseController {
                 'members_count' => (int)$shop->users()->count(),
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg")
+                'logo' => asset("images/personal.jpg"),
+                'manager' => $shop->manager->name
+            ];
+        } else {
+            $data = [
+                'id' => $shop->en_id(),
+                'name' => $shop->name,
+                'members_count' => (int)$shop->users()->count(),
+                'created_at' => strtotime($shop->created_at),
+                'logo' => asset("images/personal.jpg"),
+                'manager' => $shop->manager->name
             ];
         }
         return $this->json($data);
