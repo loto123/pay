@@ -205,7 +205,8 @@ export default {
           this.weChatBind(this.userId);
         }
       }).catch(function(err){
-        Toast(err.data.message);
+        // Toast(err.data.);
+        console.error(err);
       });
     },
 

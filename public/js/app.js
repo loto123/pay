@@ -52910,7 +52910,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this.weChatBind(_this.userId);
         }
       }).catch(function (err) {
-        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
+        // Toast(err.data.);
+        console.error(err);
       });
     },
 
