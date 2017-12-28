@@ -61388,8 +61388,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this3 = this;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
+      var _status = 0;
+      for (var i = 0; i < this.tabItem.length; i++) {
+        if (this.tabItem[i] == true) {
+          _status = i + 1;
+        }
+      }
       var _data = {
-        status: 1,
+        status: _status,
         limit: 50,
         offset: 0
       };
@@ -69878,6 +69884,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$router.push("/makeDeal/deal_detail" + "?id=" + id);
         },
         toggleShowListButton: function toggleShowListButton() {
+
+            if (this.dataList.length == 0) {
+                Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("当前无可操作数据...");
+                return;
+            }
             this.isListRadioShow = !this.isListRadioShow;
         },
 
@@ -69896,6 +69907,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         // 删除选中的id
         closeTradementByChoise: function closeTradementByChoise() {
+            var _this2 = this;
+
             __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
 
             var _tList = [];
@@ -69918,6 +69931,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData('api/transfer/close', _data).then(function (res) {
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
                 Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("关闭成功");
+                setTimeout(function () {
+                    _this2.init();
+                }, 1500);
             }).catch(function (err) {
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
                 Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
@@ -69942,23 +69958,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         init: function init() {
-            var _this2 = this;
+            var _this3 = this;
 
             __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
             this.shop_id = this.$route.query.shopId;
+
+            var _status = 0;
+            for (var i = 0; i < this.tabItem.length; i++) {
+                if (this.tabItem[i] == true) {
+                    _status = i + 1;
+                }
+            }
+
             var _data = {
-                status: 1,
+                status: _status,
                 shop_id: this.shop_id,
                 limit: 50,
                 offset: 0
             };
 
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {
-                _this2.dataList = [];
-                for (var i = 0; i < res.data.data.length; i++) {
-                    var _temp = res.data.data[i];
+                _this3.dataList = [];
+                for (var _i = 0; _i < res.data.data.length; _i++) {
+                    var _temp = res.data.data[_i];
                     _temp.checked = false;
-                    _this2.dataList.push(_temp);
+                    _this3.dataList.push(_temp);
                 }
 
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();

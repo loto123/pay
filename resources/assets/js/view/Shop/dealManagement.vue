@@ -254,6 +254,11 @@ export default {
     },
 
     toggleShowListButton(){
+
+        if(this.dataList.length == 0){
+            Toast("当前无可操作数据...");
+            return;
+        }
         this.isListRadioShow = !this.isListRadioShow;
     },
 
@@ -293,6 +298,9 @@ export default {
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
             Toast("关闭成功");
+            setTimeout(()=>{
+                this.init();
+            },1500);
         }).catch(err=>{
             Loading.getInstance().close();
             Toast(err.data.msg)
@@ -320,8 +328,16 @@ export default {
     init(){
         Loading.getInstance().open();
         this.shop_id = this.$route.query.shopId;
+        
+        var _status = 0;
+        for(var i = 0; i<this.tabItem.length; i++){
+            if(this.tabItem[i] == true){
+            _status = i+1;
+            }
+        }
+
         var _data = {
-            status :1,
+            status :_status,
             shop_id:this.shop_id,
             limit :50,
             offset :0

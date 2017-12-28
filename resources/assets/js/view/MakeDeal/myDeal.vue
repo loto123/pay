@@ -267,8 +267,14 @@ export default {
     },
     init(){
       Loading.getInstance().open();
+      var _status = 0;
+      for(var i = 0; i<this.tabItem.length; i++){
+        if(this.tabItem[i] == true){
+          _status = i+1;
+        }
+      }
       var _data = {
-        status:1,
+        status:_status,
         limit:50,
         offset :0
       }
