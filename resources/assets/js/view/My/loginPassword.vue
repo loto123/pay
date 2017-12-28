@@ -12,14 +12,13 @@
     <div class="forget-password-box">
       <div class="notice">密码长度必须在6-16个字符之间个字符</div>
       <div class="forget-password">
-        <a href="javascript:;">
+        <a href="javascript:;" @click="forgetPassWord">
           忘记原密码?
         </a>
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
   import axios from "axios";
@@ -35,7 +34,15 @@
         confirm_password:null    //确认密码
       }
     },
+
     methods: {
+      forgetPassWord(){
+        this.$store.dispatch("setStep",1);
+        this.$store.dispatch("setRefindPassWordState",true);
+        localStorage.setItem("registStep",1);
+        this.$router.push("/login/regist");
+      },
+
       affirm() {
         var self=this;
         var data = {
