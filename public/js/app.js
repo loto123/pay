@@ -52914,7 +52914,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 微信登录
     weChatLogin: function weChatLogin(e, mobile) {
-
+      console.log(mobile);
+      return;
       if (!mobile) {
         var _data = {
           redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"

@@ -208,7 +208,8 @@ export default {
 
     // 微信登录
     weChatLogin(e,mobile){
-
+      console.log(mobile);
+      return;
       if(!mobile){
         var _data={
           redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
