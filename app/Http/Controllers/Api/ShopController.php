@@ -592,7 +592,9 @@ class ShopController extends BaseController {
      */
     public function account($id) {
         $shop = Shop::findByEnId($id);
-        return $this->json(['balance' => (double)$shop->balance, 'today_profit' => 0, 'yesterday_profit' => 0, 'total_profit' => 0]);
+        return $this->json(['balance' => (double)$shop->container->balance, 'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
+            'total_profit' => $shop->tips()->sum('amount')
+        ]);
     }
 
     /**
