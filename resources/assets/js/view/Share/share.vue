@@ -1,6 +1,5 @@
 <template>
   <div id="share" class="flex flex-justify-center flex-align-center">
-      <!-- <topBack :title="!isUser?'邀请新会员':'加入店铺'" style="background:#26a2ff;color:#fff;"></topBack> -->
       <div class="top flex flex-align-center">
           <h3>加入店铺</h3>
       </div>
@@ -14,17 +13,13 @@
         <div class="qr-code flex flex-align-center flex-justify-center">
           <img :src="QRCode" alt="">
         </div>
-
-        <h3>
-          该二维码7天内（12月12日前）有效，重新进入将更新
-        </h3>
       </div>
       
       <div class="content-wrap-user" v-if="isUser">
         <div class="info flex flex-v flex-align-center">
           <img :src="logo" alt="">
           <h1>{{shopName+'('+membersCount+'人)'}}</h1>
-          <h2>Leaf 创建于 2017- 11-22</h2>
+          <h2>{{manager}} 创建于 {{timer}}</h2>
         </div>
 
         <div class="submit">
@@ -146,7 +141,7 @@
 <script>
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
-
+import moment from 'moment'
 export default {
 
   created(){
@@ -160,11 +155,16 @@ export default {
           isUser: true,
           logo:null,
           shopName:null,
-          membersCount:null
+          membersCount:null,
+          manager:null,
+          timer:null
+
       }
   },
   methods:{
       init(){
+        Loading.getInstance().open();
+
         this.shopId = this.$route.query.shopId;
         this.userId = this.$route.query.userId;
 
@@ -172,10 +172,12 @@ export default {
           this.shopName = res.data.data.name;
           this.membersCount = res.data.data.members_count;
           this.logo = res.data.data.logo;
-          this.timer = res.data.data.created_at;
-          // this.c
+          this.timer = moment(res.data.data.created_at).format("YYYY-MM-DD");
+          this.manager = res.data.data.manager;
+          Loading.getInstance().close();
+          
         }).catch(err=>{
-
+          Loading.getInstance().close();
         });
       },
       submit(){
