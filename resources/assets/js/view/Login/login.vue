@@ -180,7 +180,7 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-
+          console.log(res.data.data.wechat);
           if(res.data.data.wechat == 0){
             Toast("登录成功，请绑定微信");
             return Promise.resolve(true);
