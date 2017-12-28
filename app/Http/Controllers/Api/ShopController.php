@@ -927,14 +927,28 @@ class ShopController extends BaseController {
     /**
      * @SWG\Get(
      *   path="/shop/transfer/records/{shop_id}",
-     *   summary="手机号搜索用户",
+     *   summary="店铺帐单明细",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="mobile",
-     *     in="path",
-     *     description="手机号",
-     *     required=true,
+     *     name="type",
+     *     in="query",
+     *     description="类型",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="start",
+     *     in="query",
+     *     description="结束日期",
+     *     required=false,
      *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="number"
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
