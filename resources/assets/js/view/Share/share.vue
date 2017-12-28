@@ -142,11 +142,11 @@
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
 import moment from 'moment'
+import {Toast} from 'mint-ui'
 
 export default {
 
   created(){
-    console.log(222);
     this.init();
   },
 
@@ -186,12 +186,18 @@ export default {
         Loading.getInstance().open();
 
         if(!request.getInstance().getToken()){
-          localStorage.setItem("url",window.location.href);
+            Loading.getInstance().close();
+            localStorage.setItem("url",window.location.href);
+
+            Toast("当前用户未登录");
+            setTimeout(()=>{
+                this.$router.push("/login");
+            },1000)
         }
 
         request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{
           
-          Loading.getInstance().close(); 
+          Loading.getInstance().close();
           Toast("申请加入店铺成功");
         }).catch(error=>{
           Loading.getInstance().close();
