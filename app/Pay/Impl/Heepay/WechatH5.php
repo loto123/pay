@@ -56,10 +56,9 @@ class WechatH5 implements DepositInterface
      * @param $params
      * @param $fieldsToSign array 签名字段,保持顺序
      */
-    public function appendSign(&$params, $fieldsToSign, $key)
+    public static function appendSign(&$params, $fieldsToSign, $key)
     {
-        $params['sign'] = $this->makeSign($params, $fieldsToSign, $key);
-
+        $params['sign'] = self::makeSign($params, $fieldsToSign, $key);
     }
 
     /**
