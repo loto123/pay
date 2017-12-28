@@ -973,6 +973,41 @@ class ShopController extends BaseController {
 
     /**
      * @SWG\Get(
+     *   path="/shop/transfer/records/detail/{id}",
+     *   summary="帐单详情",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="帐单id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function record_detail($id) {
+        $user = $this->auth->user();
+
+        $fund = ShopFund::findByEnId($id);
+        if (!$fund) {
+            return $this->json([], trans("error_fund"), 0);
+        }
+        return $this->json([
+            'id' => $fund->en_id(),
+            'type' => (int)$fund->type,
+            'mode' => (int)$fund->mode,
+            'amount' => $fund->amount,
+            'created_at' => strtotime($fund->created_at),
+            'no' => $fund->no,
+            'remark' => $fund->remark,
+            'balance' => $fund->balance
+        ]);
+    }
+
+    /**
+     * @SWG\Get(
      *   path="/transfer/records/month",
      *   summary="帐单月数据",
      *   tags={"店铺"},
