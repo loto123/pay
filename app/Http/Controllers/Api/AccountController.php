@@ -7,6 +7,7 @@ use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
 use App\Shop;
+use App\ShopFund;
 use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
@@ -203,8 +204,16 @@ class AccountController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $user->container->balance - $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
+        $shop_record = new ShopFund();
+        $shop_record->shop_id = $shop->id;
+        $shop_record->type = ShopFund::TYPE_TRANAFER_IN;
+        $shop_record->mode = ShopFund::MODE_IN;
+        $shop_record->amount = $request->amount;
+        $shop_record->balance = $shop->container->balance + $request->amount;
+        $shop_record->status = ShopFund::STATUS_SUCCESS;
         try {
             $record->save();
+            $shop_record->save();
             $user->container->transfer($shop->container, $request->amount, 0, false, false);
         } catch (\Exception $e){
             Log::info("shop transfer member error:".$e->getMessage());
