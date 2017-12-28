@@ -223,8 +223,8 @@ class ShopController extends BaseController {
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => asset("images/personal.jpg"),
-                'today_profit' => 0,
-                'total_profit' => 0
+                'today_profit' => $_shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
+                'total_profit' => $_shop->tips()->sum('amount')
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -607,7 +607,7 @@ class ShopController extends BaseController {
     public function profit() {
         $user = $this->auth->user();
 
-        return $this->json(['profit' => 0]);
+        return $this->json(['profit' => $user->shop_tips()->sum('amount')]);
     }
 
     /**
@@ -856,7 +856,10 @@ class ShopController extends BaseController {
      */
     public function transfer($shop_id, Request $request) {
         $shop = Shop::findByEnId($shop_id);
-        
+
+        if ($shop->container->balance < $request->amount) {
+            return $this->json([], trans("error_balance"), 0);
+        }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
@@ -914,6 +917,9 @@ class ShopController extends BaseController {
      */
     public function transfer_member($shop_id, $user_id, Request $request) {
         $shop = Shop::findByEnId($shop_id);
+        if ($shop->container->balance < $request->amount) {
+            return $this->json([], trans("error_balance"), 0);
+        }
         $member = User::findByEnId($user_id);
         $record = new ShopFund();
         $record->shop_id = $shop->id;
