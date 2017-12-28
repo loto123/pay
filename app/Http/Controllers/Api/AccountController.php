@@ -80,7 +80,7 @@ class AccountController extends BaseController {
         $record->type = UserFund::TYPE_CHARGE;
         $record->mode = UserFund::MODE_IN;
         $record->amount = $request->amount;
-        $record->balance = $user->balance + $request->amount;
+        $record->balance = $user->container->balance + $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
         try {
@@ -149,7 +149,7 @@ class AccountController extends BaseController {
         $record->type = UserFund::TYPE_WITHDRAW;
         $record->mode = UserFund::MODE_OUT;
         $record->amount = $request->amount;
-        $record->balance = $user->balance - $request->amount;
+        $record->balance = $user->container->balance - $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
         try {
             $record->save();
@@ -191,7 +191,23 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer() {
+    public function transfer(Request $request) {
+        $shop = Shop::findByEnId($request->shop_id);
+        $user = $this->auth->user();
+        $record = new UserFund();
+        $record->user_id = $user->id;
+        $record->type = UserFund::TYPE_WITHDRAW;
+        $record->mode = UserFund::MODE_OUT;
+        $record->amount = $request->amount;
+        $record->balance = $user->container->balance - $request->amount;
+        $record->status = UserFund::STATUS_SUCCESS;
+        try {
+            $record->save();
+            $user->container->transfer($shop->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer member error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 
@@ -355,5 +371,25 @@ class AccountController extends BaseController {
             'remark' => $fund->remark,
             'balance' => $fund->balance
         ]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/account/records/month",
+     *   summary="帐单月数据",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="month",
+     *     in="formData",
+     *     description="月(2017-12形式)",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function month_data(Request $request) {
+        return $this->json(['in' => 0, 'out' => 0]);
     }
 }

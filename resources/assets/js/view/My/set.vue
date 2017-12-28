@@ -11,8 +11,8 @@
 				</li>
 			</ul>
 			<ul class="list mt1">
-				<li>
-					<mt-cell title="帮助与反馈" is-link to=""></mt-cell>
+				<li v-if="user_feedback" @click="help">
+					<mt-cell title="帮助与反馈" is-link></mt-cell>
 				</li>
 				<li>
 					<mt-cell title="关于" is-link to="/my/set/about"></mt-cell>
@@ -34,7 +34,8 @@
 	export default {
 		data() {
 			return {
-				mobile: null
+				mobile: null,
+				user_feedback:window.user_feedback
 			}
 		},
 		components: { topBack },
@@ -49,6 +50,9 @@
 				setTimeout(function(){
 					window.location.href = "/#/login"
 				},2000);
+			},
+			help(){
+				location.href=this.user_feedback;
 			}
 		}
 	}

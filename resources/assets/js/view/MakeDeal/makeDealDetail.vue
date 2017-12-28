@@ -66,7 +66,7 @@
                             <span>{{item.user.name}}</span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
-                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"放钱":"拿钱"}}</span>
+                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
 
@@ -316,7 +316,12 @@ export default {
     return {
       passWordSwitch: false,
       renderData: {
-        name: null
+        name: null,
+        user:{
+          avatar:{}
+        },
+        avatar:{},
+        
       },
       moneyData: {
         payMoney: null,
@@ -439,9 +444,10 @@ export default {
         transfer_id:this.transfer_id,
         friend_id:_tempList
       };  
+      
       request.getInstance().postData("api/transfer/notice",_data).then(res=>{
         Loading.getInstance().close();   
-        Toast("交易成功...");
+        Toast("添加成员成功...");
         setTimeout(()=>{
           this.init();
         },2000);
@@ -527,7 +533,7 @@ export default {
             });
            })
           .catch(err=>{
-            
+            Toast(err.data.msg);
           });
         return;
       }
@@ -554,7 +560,7 @@ export default {
           this.$router.push("/makeDeal/my_deal");
         },1500);
       }).catch(err=>{
-        Toast("撤销交易失败");
+        Toast(err.data.data.msg);
       });
     },
 

@@ -36,9 +36,9 @@
 
     <div class="shop-info">
 
-        <div class="info-item flex flex-align-center flex-justify-between">
+        <div class="info-item flex flex-align-center flex-justify-between" @click="updateShop('shopName')">
             <span class="title flex-4"> 店铺名称 </span>
-            <span class="name flex-5">热血牛牛玩家群1</span>
+            <span class="name flex-5">{{shopName}}</span>
             <i class="iconfont flex-1">
             &#xe62e;
             </i>
@@ -101,7 +101,6 @@
                 <mt-switch v-model="inviteLinkStatus"></mt-switch>
             </span>
         </div>
-        
     </div>
 
     <div class="platform">
@@ -110,7 +109,7 @@
             <span class="text flex-1">5%</span>
         </div>
 
-        <div class="flex flex-align-center flex-justify-between">
+        <div class="flex flex-align-center flex-justify-between" @click="updateShop('rate')">
             <span class="title flex-9"> 默认单价 </span>
             <span class="text flex-1">{{rate}}</span>
         </div>
@@ -119,14 +118,14 @@
 
     <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
-            <span class="title flex-9"> 手续费率 </span>
+            <span class="title flex-9" @click="updateShop('percent')"> 手续费率 </span>
             <span class="text flex-1">{{percent}}%</span>
         </div>
 
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 是否开启交易功能 </span>
             <span class="text flex-1 flex flex-reverse">
-                <mt-switch v-model="tradeStatus"></mt-switch>
+                <mt-switch v-model="tradeStatus" @click="changeStatus(22)"></mt-switch>
             </span>
         </div>
     </div>
@@ -664,8 +663,137 @@ export default {
       }).catch(err=>{
         Loading.getInstance().close();
       });
+    },
+
+    updateShop(type){
+
+      // 修改店铺名称
+      if(type == "shopName"){
+
+        MessageBox.prompt("请输入新的店铺名称","修改店铺名称",).then(({ value, action }) => {
+          console.log(value);
+          if(value.length ==0){
+            Toast("新店铺名称不能为空");
+            return;
+          }
+          Loading.getInstance().open();
+          var _data = {
+            name:value
+          };
+          request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+            Loading.getInstance().close();
+            
+            Toast("店铺改名成功");
+            setTimeout(()=>{
+              this.init();
+            },1500);
+          }).catch(err=>{
+            Loading.getInstance().close();
+            Toast(err.data.data.msg);
+          });  
+        }).catch();
+      }
+
+      // 手续费率
+      if(type=="percent"){
+         MessageBox.prompt("请输入新的手续费率","修改手续费率",).then(({ value, action }) => {
+          
+          if(value.length ==0){
+            Toast("手续费率不能为空");
+            return;
+          }
+          Loading.getInstance().open();
+          
+          var _data = {
+            percent:value
+          };
+          request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+            console.log(res);
+            Loading.getInstance().close();            
+            Toast("修改手续费率成功");
+            setTimeout(()=>{
+              this.init();
+            },1500);
+          }).catch(err=>{
+            Loading.getInstance().close();
+            
+            Toast(err.data.data.msg);
+          });  
+        }).catch();
+      }
+
+      // 设置单价
+      if(type=="rate"){
+          MessageBox.prompt("请输入新的单价","修改单价",).then(({ value, action }) => {
+            if(!value){
+              Toast("单价不能为空");
+              return;
+            }
+
+            var _data = {
+              rate:value
+            };
+            Loading.getInstance().open();
+            request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+              Loading.getInstance().close();
+              
+              Toast("修改单价成功");
+              setTimeout(()=>{
+                this.init();
+              },1500);
+            }).catch(err=>{
+              Loading.getInstance().close();
+              Toast(err.data.data.msg);
+            });  
+          }).catch();
+        }
+    },
+
+    changeStatus(type){
+      console.log(type);
     }
 
+  },
+  watch:{
+    // 邀请链接修改
+    "inviteLinkStatus":function(){
+
+      var _link = null;
+      if(this.inviteLinkStatus == true){
+        _link = 1;
+      }else {
+        _link = 0;
+      }
+
+      var _data = {
+        use_link:_link
+      };
+
+      request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch();
+    },
+
+    "tradeStatus":function(){
+      var _link = null;
+      if(this.tradeStatus == true){
+        _link = 1;
+      }else {
+        _link = 0;
+      }
+
+      var _data = {
+        active:_link
+      };
+
+      request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
+        setTimeout(()=>{
+          this.init();
+        },1500);
+      }).catch();
+    }
   }
 };
 </script>

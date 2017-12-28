@@ -97,6 +97,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('lists/all', 'ShopController@all');
         $api->get('detail/{id}', 'ShopController@detail');
         $api->get('members/{id}', 'ShopController@members');
+        $api->post('members/{shop_id}/delete/{user_id}', 'ShopController@member_delete');
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
@@ -111,6 +112,12 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('profit', 'ShopController@profit');
         $api->get('user/search', 'ShopController@user_search');
         $api->post('invite/{shop_id}/{user_id}', 'ShopController@invite');
+        $api->post('transfer/{shop_id}', 'ShopController@transfer');
+        $api->post('transfer/{shop_id}/{user_id}', 'ShopController@transfer_member')->where('shop_id', '[0-9]+');
+        $api->get('transfer/records/{shop_id}', 'ShopController@transfer_records')->where('shop_id', '[0-9]+');
+        $api->get('transfer/records/month', 'ShopController@month_data');
+
+
     });
 });
 
@@ -149,6 +156,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
+        $api->get('records/month', 'AccountController@month_data');
     });
 
 });

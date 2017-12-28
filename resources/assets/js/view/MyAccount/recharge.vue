@@ -64,7 +64,6 @@
 
 				request.getInstance().postData('api/account/charge', _data)
 					.then((res) => {
-						console.log(res);
 						Toast('充值成功');
 						location.href=res.data.data.redirect_url;
 					})
@@ -78,7 +77,6 @@
 			selWay(){
 				request.getInstance().getData('api/account/pay-methods/unknown/2')
 					.then((res) => {
-						console.log(res);
 						this.setBankList(res);
 					})
 					.catch((err) => {
