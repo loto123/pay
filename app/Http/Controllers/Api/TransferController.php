@@ -94,6 +94,9 @@ class TransferController extends Controller
         if (!$shop) {
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
+        if ($shop->status == 2) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_is_frozen'), 'data' => []]);
+        }
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
         $transfer = new Transfer();
@@ -1057,8 +1060,8 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'mark' => 'bail|required|array',
-                'dismark' => 'bail|required|array'
+                'mark' => 'bail|required_without:dismark|array',
+                'dismark' => 'bail|required_without:mark|array'
             ],
             [
                 'required' => trans('trans.required'),

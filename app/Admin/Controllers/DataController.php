@@ -93,7 +93,7 @@ class DataController extends Controller
     public function transfer(Request $request)
     {
         $count = Transfer::count();
-        $amount = TransferRecord::where('stat', 1)->sum('amount');
+        $amount = TransferRecord::sum('fee_amount');
 //        $listQuery = Transfer::query();
         $listQuery = Transfer::with(['shop', 'shop.manager', 'record' => function ($query) {
             $query->where('stat', 1);
