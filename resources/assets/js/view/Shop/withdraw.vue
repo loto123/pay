@@ -119,7 +119,7 @@
 
           })
           .catch((err) => {
-            console.error(err);
+            Toast(err.data.msg);
           })
       },
       setBankList(res) {
