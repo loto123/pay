@@ -199,7 +199,7 @@ export default {
           }
       }).then(res=>{
         if(res == true){
-          this.weChatLogin(this.mobile);
+          this.weChatBind(this.mobile);
         }
       }).catch(function(err){
         Toast(err.data.message);
@@ -207,18 +207,20 @@ export default {
     },
 
     // 微信登录
-    weChatLogin(e,mobile){
-      console.log(mobile);
-      return;
-      if(!mobile){
-        var _data={
-          redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
-        };
-      }else {
-        var _data={
-          redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+"?mobile="+ mobile
-        };
-      }
+    weChatLogin(){
+      var _data={
+        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+      };
+        
+      request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
+        window.location.href = res.data.data.url;
+      }).catch();
+    },
+
+    weChatBind(mobile){
+      var _data={
+        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+"?mobile="+ mobile
+      };
 
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;

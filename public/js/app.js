@@ -52904,7 +52904,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }).then(function (res) {
         if (res == true) {
-          _this.weChatLogin(_this.mobile);
+          _this.weChatBind(_this.mobile);
         }
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.message);
@@ -52913,18 +52913,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     // 微信登录
-    weChatLogin: function weChatLogin(e, mobile) {
-      console.log(mobile);
-      return;
-      if (!mobile) {
-        var _data = {
-          redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
-        };
-      } else {
-        var _data = {
-          redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin" + "?mobile=" + mobile
-        };
-      }
+    weChatLogin: function weChatLogin() {
+      var _data = {
+        redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+      };
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
+        window.location.href = res.data.data.url;
+      }).catch();
+    },
+    weChatBind: function weChatBind(mobile) {
+      var _data = {
+        redirect_url: "https://qp-jubaopen-test.supernano.com/#/login/weChatLogin" + "?mobile=" + mobile
+      };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
         window.location.href = res.data.data.url;
