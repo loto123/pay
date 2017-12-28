@@ -20,4 +20,15 @@ trait Skip32Trait {
     {
         return self::find(Skip32::decrypt(self::$skip32_id, $en_id));
     }
+
+    public static function decrypt($value) {
+        if (!$value) {
+            return $value;
+        }
+        return Skip32::decrypt(self::$skip32_id, $value);
+    }
+
+    public static function encrypt($value) {
+        return Skip32::encrypt(self::$skip32_id, $value);
+    }
 }

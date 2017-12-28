@@ -191,7 +191,7 @@ export default {
 
         request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{
           
-          Loading.getInstance().close();
+          Loading.getInstance().close(); 
           Toast("申请加入店铺成功");
         }).catch(error=>{
           Loading.getInstance().close();

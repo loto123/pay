@@ -73,7 +73,7 @@ class UserController extends Controller
 
         return Admin::grid(User::class, function (Grid $grid) {
 
-            $user_id = Request::input('user_id');
+            $user_id = User::decrypt(Request::input('user_id'));
             $parent_id = Request::input('parent_id');
             $operator_id = Request::input('operator_id');
             $channel_id = Request::input('channel_id');
@@ -105,7 +105,9 @@ class UserController extends Controller
             }
             $grid->model()->groupBy($user_table.'.id')->orderBy('transfer_count','DESC')->orderBy($user_table.'.id');
 
-            $grid->id('编号');
+            $grid->id('编号')->display(function(){
+                return $this->en_id();
+            });
             $grid->avatar('用户头像')->image('',70,70);
             $grid->column('user','用户')->display(function () {
                 return "<span style='color:black'>$this->name</span><br/><span style='color:gray'>$this->mobile</span>";
@@ -162,7 +164,9 @@ class UserController extends Controller
     {
         return Admin::form(User::class, function (Form $form) use($id){
 
-            $form->display('id', '编号');
+            $form->display('id', '编号')->with(function(){
+                return $this->en_id();
+            });
             if ($id) {
                 $form->display('name', '用户名');
             } else {

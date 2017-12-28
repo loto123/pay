@@ -1,6 +1,6 @@
 <template>
 	<div id="recharge" class="recharge-container">
-		<topBack title="充值">
+		<topBack title="充值" style="background: #eee;">
 			<div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
 				<i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
 			</div>

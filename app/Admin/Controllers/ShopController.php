@@ -19,8 +19,8 @@ class ShopController extends Controller
     //店铺管理
     public function index(Request $request)
     {
-        $manager_id = $request->input('manager_id');
-        $shop_id = $request->input('shop_id');
+        $manager_id = User::decrypt($request->input('manager_id'));
+        $shop_id = Shop::decrypt($request->input('shop_id'));
         $shop_name = $request->input('shop_name');
         $date_time = $request->input('date_time');
         $begin = '';
@@ -44,15 +44,15 @@ class ShopController extends Controller
                 DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
                 DB::raw('(SELECT SUM(amount) FROM tip_record WHERE tip_record.transfer_id = t.id ) as tip_amount_cnt'));
         if(!empty($manager_id)) {
-            $listQuery->where('u.id', $manager_id);
+            $listQuery->where('manager_id', $manager_id);
         }
         if(!empty($shop_id)) {
             $listQuery->where($table_name.'.id', $shop_id);
             $countQuery->where($table_name.'.id', $shop_id);
         }
         if(!empty($shop_name)) {
-            $listQuery->where($table_name.'.name', $shop_name);
-            $countQuery->where($table_name.'.name', $shop_name);
+            $listQuery->where($table_name.'.name', 'like', '%'.$shop_name.'%');
+            $countQuery->where($table_name.'.name', 'like', '%'.$shop_name.'%');
         }
         if($begin && $end) {
             $listQuery->where($table_name.'.created_at', '>=', $begin)->where($table_name.'.created_at', '<=', $end);
@@ -63,6 +63,8 @@ class ShopController extends Controller
         $count = $countQuery->count();
         $list = $listQuery->paginate($this->limit);
         $offset = ($request->page>1 ? $request->page-1 : 0 ) * $this->limit;
+        $manager_id = $request->input('manager_id');
+        $shop_id = $request->input('shop_id');
         $data = compact('list','count','date_time','manager_id','shop_id','shop_name','offset');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shop',$data));
