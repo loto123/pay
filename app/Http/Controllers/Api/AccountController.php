@@ -6,6 +6,7 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
+use App\Shop;
 use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
@@ -196,7 +197,7 @@ class AccountController extends BaseController {
         $user = $this->auth->user();
         $record = new UserFund();
         $record->user_id = $user->id;
-        $record->type = UserFund::TYPE_WITHDRAW;
+        $record->type = UserFund::TYPE_TRANSFER;
         $record->mode = UserFund::MODE_OUT;
         $record->amount = $request->amount;
         $record->balance = $user->container->balance - $request->amount;
