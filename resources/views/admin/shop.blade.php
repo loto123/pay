@@ -63,7 +63,7 @@
                     @foreach ($list as $key => $item)
                         <tr>
                             <td>{{$key+$offset+1}}</td>
-                            <td>{{$item->name}}<br/>ID：{{$item->id}}</td>
+                            <td>{{$item->name}}<br/>ID：{{$item->en_id()}}</td>
                             <td>
                                 <div class="user-panel clearfix">
                                     <div class="pull-left">
@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="pull-left ml7">
                                         <p>{{$item->manager['name']}}</p>
-                                        <span>ID:<span>{{$item->manager_id}}</span></span>
+                                        <span>ID:<span>{{\App\User::encrypt($item->manager_id)}}</span></span>
                                     </div>
                                 </div>
                             </td>

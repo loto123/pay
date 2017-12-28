@@ -1,6 +1,6 @@
 <template>
   <div id="bankManage">
-    <topBack title="银行卡管理"></topBack>
+    <topBack title="银行卡管理"style="background:#fff;"></topBack>
     <div class="bankCard-container">
       <ul class="bankCard-list">
         <li v-for="item in bankList">
@@ -130,6 +130,8 @@
   #bankManage {
     padding-top: 2em;
     box-sizing: border-box;
+    box-sizing: border-box;
+    background:#fff;
   }
 
   .bankCard-container {
