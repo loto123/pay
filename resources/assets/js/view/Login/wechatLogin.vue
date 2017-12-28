@@ -28,11 +28,12 @@ export default {
     init(){
         this.code = utils.getQueryString("code");
         this.state = utils.getQueryString("state");
-        this.bindMobile = utils.getQueryString("mobile");
-
+        this.bindMobile = window.location.href.split("mobile=")[1];
+        console.log(this.bindMobile);
         if(this.bindMobile){
             return 
         }
+        return;
         var _data = {
             code :this.code,
             state:this.state
