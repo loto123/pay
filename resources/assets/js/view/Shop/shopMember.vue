@@ -13,7 +13,7 @@
       </div>
       <ul class="flex flex-wrap-on">
 
-          <li class="add-member flex flex-v flex-align-center flex-justify-center">
+          <!-- <li class="add-member flex flex-v flex-align-center flex-justify-center">
                 <div class="img-wrap flex flex-align-center flex-justify-center">
                   <i class="iconfont">
                     &#xe600;
@@ -22,9 +22,9 @@
               <span>
                    
               </span>
-          </li>
+          </li> -->
 
-          <li class="minus-member flex flex-v flex-align-center flex-justify-center">
+          <li class="minus-member flex flex-v flex-align-center flex-justify-center" @click="openControlSwitch">
               <div class="img-wrap flex flex-align-center flex-justify-center">
                   <i class="iconfont" style="margin-top:-0.2em;">
                     &#xe620;
@@ -37,6 +37,9 @@
           <li class="flex flex-v flex-align-center" v-for="item in dataList">
               <img :src="item.avatar" alt="" class="avatar">
               <h3>{{SetString(item.name,6)}}</h3>
+              <span class="notice flex flex-align-center flex-justify-center" v-if="controlSwitch" @click="deleteMember(item.id)">
+                -
+              </span>
           </li>
       </ul>
   </div>
@@ -56,6 +59,18 @@
       width: 25%;
       height: 4.5em;
       box-sizing: border-box;
+      position: relative;
+
+      .notice{
+        width:1em;
+        height: 1em;
+        position: absolute;
+        background: red;
+        right: 0.5em;
+        top:0em;
+        border-radius: 50%;
+        color:#fff;
+      }
 
       .img-wrap {
         width: 3em;
@@ -135,6 +150,7 @@ import topBack from "../../components/topBack";
 import Loading from "../../utils/loading.js"
 import request from "../../utils/userRequest.js"
 import utils from "../../utils/utils.js"
+import {Toast} from "mint-ui"
 
 export default {
   created(){
@@ -146,13 +162,32 @@ export default {
       searchSwitch: false,
       shopId:null,
       membersCount:0,
-      dataList:[]
+      dataList:[],
+      controlSwitch:false
     };
   },
   components: { topBack },
   methods: {
+    // 删除成员
+    deleteMember(id){
+      Loading.getInstance().open();
+
+      // /shop/members/{shop_id}/delete/{user_id}
+      request.getInstance().postData("api/shop/members/"+this.shopId+"/delete/"+id).then(res=>{
+        Loading.getInstance().close();
+        Toast("删除成功");
+        this.controlSwitch = false;
+      }).catch(err=>{
+        Toast(err.data.data.msg);
+      });
+    },
+
     openSearchSwitch() {
       this.searchSwitch = true;
+    },
+
+    openControlSwitch(){
+      this.controlSwitch = true;
     },
 
     init(){

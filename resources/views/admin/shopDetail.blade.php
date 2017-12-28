@@ -6,10 +6,10 @@
                     <h4 class="widget-user-desc">店主：
                         <div class="user-panel clearfix">
                             <div class="pull-left">
-                                <img src="{{''}}" width="40" height="40" class="img-circle">
+                                <img src="{{$list->manager['avatar']}}" width="40" height="40" class="img-circle">
                             </div>
                             <div class="pull-left ml7">
-                                <p>{{$list->manager_name}}</p>
+                                <p>{{$list->manager['name']}}</p>
                                 <span>ID:<span class="text-yellow">{{$list->manager_id}}</span></span>
                             </div>
                         </div>
@@ -20,7 +20,7 @@
                             @foreach($users_arr as $user_item)
                             <div style="margin-left: 20px;float: left">
                                 <div class="pull-left">
-                                    <img src="{{''}}" width="40" height="40" class="img-circle">
+                                    <img src="{{$user_item->avatar}}" width="40" height="40" class="img-circle">
                                 </div>
                                 <div class="pull-left ml7">
                                     <p>{{$user_item->name}}</p>
@@ -38,7 +38,7 @@
                     <h4 class="widget-user-desc">店铺默认单价：<span>{{$list->price}}</span></h4>
                     <h4 class="widget-user-desc">总交易额：<span>{{$list->summary??0}}</span></h4>
                     <h4 class="widget-user-desc">店铺收入：<span>{{$list->tip_amount_cnt??0}}</span></h4>
-                    <h4 class="widget-user-desc">店铺余额：<span>{{$list->balance}}</span></h4>
+                    <h4 class="widget-user-desc">店铺余额：<span>{{$list->container['balance']}}</span></h4>
                     <h4 class="widget-user-desc">店铺创建时间：<span>{{$list->created_at}}</span></h4>
                 </div>
                 <form class="form-horizontal" method="post" action="/admin/shop/updates">

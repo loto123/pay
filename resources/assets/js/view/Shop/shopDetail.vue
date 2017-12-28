@@ -601,6 +601,10 @@ export default {
           this.membersList = res.data.data.members;
           this.logo = res.data.data.logo;
 
+          if(!this.rate){
+            this.isGroupMaster = false;
+          }
+
           if (res.data.data.active == 1) {
             this.tradeStatus = true;
           } else {
@@ -637,7 +641,6 @@ export default {
         }).catch(err=>{
 
         });
-
       
     },
 
@@ -691,7 +694,7 @@ export default {
             Loading.getInstance().close();
             Toast(err.data.data.msg);
           });  
-        }).catch();
+        }).catch(err=>{});
       }
 
       // 手续费率
@@ -719,7 +722,7 @@ export default {
             
             Toast(err.data.data.msg);
           });  
-        }).catch();
+        }).catch(err=>{});
       }
 
       // 设置单价
@@ -745,7 +748,7 @@ export default {
               Loading.getInstance().close();
               Toast(err.data.data.msg);
             });  
-          }).catch();
+          }).catch(err=>{});
         }
     },
 

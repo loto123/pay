@@ -9,6 +9,7 @@ use App\ShopFund;
 use App\ShopUser;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -900,6 +901,13 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
+     *   @SWG\Parameter(
+     *     name="remark",
+     *     in="formData",
+     *     description="备注",
+     *     required=false,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -912,6 +920,7 @@ class ShopController extends BaseController {
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
+        $record->remark = $request->remark;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
         try {
@@ -969,6 +978,41 @@ class ShopController extends BaseController {
             ];
         }
         return $this->json(['data' => $data]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/transfer/records/detail/{id}",
+     *   summary="帐单详情",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="帐单id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function record_detail($id) {
+        $user = $this->auth->user();
+
+        $fund = ShopFund::findByEnId($id);
+        if (!$fund) {
+            return $this->json([], trans("error_fund"), 0);
+        }
+        return $this->json([
+            'id' => $fund->en_id(),
+            'type' => (int)$fund->type,
+            'mode' => (int)$fund->mode,
+            'amount' => $fund->amount,
+            'created_at' => strtotime($fund->created_at),
+            'no' => $fund->no,
+            'remark' => $fund->remark,
+            'balance' => $fund->balance
+        ]);
     }
 
     /**
