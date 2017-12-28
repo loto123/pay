@@ -14,7 +14,7 @@
           </div>
         </topBack>
 
-        <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
+        <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage" v-if="allow_reward">
             <p>打赏</p>
             <p>店家</p>
         </section>
@@ -303,12 +303,12 @@ export default {
         payMoney: null,
         getMoney: null
       },
-      payType: null,    // 支付方式，取钱get 放钱put
-      transfer_id:"",   // 交易id
+      payType: null,              // 支付方式，取钱get 放钱put
+      transfer_id:"",             // 交易id
       shop_id:"",
-      password:"",       // 支付密码
-
-      joiner:[],         // 交易的参与者，需要提醒的人
+      password:"",                // 支付密码
+      allow_reward:false,         // 是否允许打赏
+      joiner:[],                  // 交易的参与者，需要提醒的人
       memberList:[],              //成员数组
       
       recordList:[],
@@ -359,6 +359,7 @@ export default {
           this.renderData = res.data.data;
           this.recordList = res.data.data.record;
           this.shop_id = res.data.data.shop_id;
+          this.allow_reward = res.data.data.allow_reward;
           Loading.getInstance().close();
         })
         .catch(err => {

@@ -58623,7 +58623,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       transfer_id: "", // 交易id
       shop_id: "",
       password: "", // 支付密码
-
+      allow_reward: false, // 是否允许打赏
       joiner: [], // 交易的参与者，需要提醒的人
       memberList: [], //成员数组
 
@@ -58675,6 +58675,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.renderData = res.data.data;
         _this2.recordList = res.data.data.record;
         _this2.shop_id = res.data.data.shop_id;
+        _this2.allow_reward = res.data.data.allow_reward;
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -60349,15 +60350,17 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c(
-        "section",
-        {
-          staticClass:
-            "big-winner-tip flex flex-v flex-align-center flex-justify-center",
-          on: { click: _vm.goTipPage }
-        },
-        [_c("p", [_vm._v("打赏")]), _vm._v(" "), _c("p", [_vm._v("店家")])]
-      ),
+      _vm.allow_reward
+        ? _c(
+            "section",
+            {
+              staticClass:
+                "big-winner-tip flex flex-v flex-align-center flex-justify-center",
+              on: { click: _vm.goTipPage }
+            },
+            [_c("p", [_vm._v("打赏")]), _vm._v(" "), _c("p", [_vm._v("店家")])]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("deal-content", { attrs: { renderData: _vm.renderData } }),
       _vm._v(" "),
