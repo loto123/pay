@@ -19,9 +19,9 @@
       
       <div class="content-wrap-user" v-if="isUser">
         <div class="info flex flex-v flex-align-center">
-          <img src="/images/avatar.jpg" alt="">
-          <h1>斗牛小铺（68人</h1>
-          <h2>Leaf 创建于 2017- 11-22</h2>
+          <img :src="logo" alt="">
+          <h1>{{shopName+'('+membersCount+'人)'}}</h1>
+          <h2>{{manager}} 创建于 {{timer}}</h2>
         </div>
 
         <div class="submit">
@@ -140,8 +140,10 @@ export default {
       shopId:null,
       QRCode:"",
       shopName:null,            //店铺名称
-      logo:null                 // 店铺头像
-
+      logo:null,                 // 店铺头像
+      membersCount:null,
+      manager:null,
+      timer:null
     }
   },
   created(){
@@ -157,6 +159,10 @@ export default {
           this.QRCode = res[0].data.data.url;
           this.logo = res[1].data.data.logo;
           this.shopName = res[1].data.data.name;
+          this.membersCount = res[1].data.data.membersCount;
+          this.timer = moment(res.data.data.created_at).format("YYYY-MM-DD");
+          this.manager = res.data.data.manager;
+
           Loading.getInstance().close();
         }).catch(err=>{
           Loading.getInstance().close();

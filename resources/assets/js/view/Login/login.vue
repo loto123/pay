@@ -181,7 +181,6 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-          console.log(self);
           self.userId = res.data.data.id;
 
           if(res.data.data.wechat == 0){
@@ -238,7 +237,7 @@ export default {
 
     regist(){
         this.$store.dispatch("setStep",0);
-      localStorage.setItem("registStep",0);
+        localStorage.setItem("registStep",0);
         this.$store.dispatch("setRefindPassWordState",false);
         this.$router.push("/login/regist");
     },

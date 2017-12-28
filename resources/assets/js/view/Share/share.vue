@@ -1,6 +1,5 @@
 <template>
   <div id="share" class="flex flex-justify-center flex-align-center">
-      <!-- <topBack :title="!isUser?'邀请新会员':'加入店铺'" style="background:#26a2ff;color:#fff;"></topBack> -->
       <div class="top flex flex-align-center">
           <h3>加入店铺</h3>
       </div>
@@ -14,10 +13,6 @@
         <div class="qr-code flex flex-align-center flex-justify-center">
           <img :src="QRCode" alt="">
         </div>
-
-        <h3>
-          该二维码7天内（12月12日前）有效，重新进入将更新
-        </h3>
       </div>
       
       <div class="content-wrap-user" v-if="isUser">
