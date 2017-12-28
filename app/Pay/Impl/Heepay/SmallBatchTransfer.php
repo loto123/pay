@@ -73,7 +73,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'batch_no' => $batch_no,
                 'batch_amt' => $amount,
                 'batch_num' => 1,
-                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^0^{$card->card_num}^{$card->holder_name}^$amount^余额提现^{$card->province}^{$card->city}^{$card->branch}",
+                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^0^{$card->card_num}^{$card->holder_name}^$amount^余额提现^{$card->province}^{$card->city}^{$card->bank->name}",
                 'notify_url' => $notify_url,
                 'ext_param1' => $batch_no,
             ];

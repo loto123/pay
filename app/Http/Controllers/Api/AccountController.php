@@ -232,7 +232,7 @@ class AccountController extends BaseController {
             //dump($methods);
             return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
                 return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
-                    ($os == 'unknown' && $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统且不限系统,或系统匹配
+                    ($method->os == DepositMethod::OS_ANY || $method->os == $os);//不限系统,或系统匹配
             })->map(function ($item) {
                 return ['id' => $item['id'], 'label' => $item['show_label']];
             })]);
