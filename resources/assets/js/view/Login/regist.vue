@@ -295,6 +295,11 @@ export default {
           mobile:this.userAccountName,
           code:this.validCode
         }
+
+        if(this.$store.state.regist.refindPassword == true){
+          _data.exist = 1;
+        }
+
         Loading.getInstance().open();
         request.getInstance().postData("api/auth/valid",_data).then(res=>{
           Loading.getInstance().close();
@@ -312,28 +317,47 @@ export default {
       var auther = this.$route.query.oauth_user;
 
       if (this.$store.state.regist.step >= 3) {
-        var data = {
-          mobile :this.userAccountName,
-          password :this.userPassword,
-          code:this.validCode,
-          invite_mobile:this.inviteMobile,
-          oauth_user:auther
+        Loading.getInstance().open();
+        if(this.$store.state.regist.refindPassword == true){
+
+          var _data = {
+            mobile :this.userAccountName,
+            password :this.userPassword,
+            code:this.validCode,
+          };
+          request.getInstance().postData('api/auth/password/reset',_data).then(res=>{
+            Loading.getInstance().close();
+            
+            Toast("密码设置成功，请重新登录...");
+            setTimeout(()=>{
+              this.$router.push('/index');
+            },1000);
+          }).catch(err=>{
+            Loading.getInstance().close();            
+          });
+          return;
+        }else {
+          var data = {
+            mobile :this.userAccountName,
+            password :this.userPassword,
+            code:this.validCode,
+            invite_mobile:this.inviteMobile,
+            oauth_user:auther
+          }
+          request.getInstance().postData('api/auth/register',data).then(function(res){
+              sessionStorage.setItem("_token",res.data.data.token);
+              Loading.getInstance().close();
+              Toast("注册成功");
+              self.$router.push("/login");
+            }).catch((err)=>{
+              Loading.getInstance().close();
+              console.error(err);
+              Toast("注册失败");
+            });
+            return;
+          }
         }
-
-        request.getInstance().postData('api/auth/register',data).then(function(res){
-          sessionStorage.setItem("_token",res.data.data.token);
-          Toast("注册成功");
-          self.$router.push("/login");
-        }).catch((err)=>{
-          console.error(err);
-          Toast("注册失败");
-        });
-        return;
-      }
-
-      console.log(this);
       this.$store.dispatch("addStep");
-      // this.step = this.step + 1;
     },
 
     showAgreement() {

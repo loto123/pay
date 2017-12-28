@@ -53475,6 +53475,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           mobile: this.userAccountName,
           code: this.validCode
         };
+
+        if (this.$store.state.regist.refindPassword == true) {
+          _data.exist = 1;
+        }
+
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData("api/auth/valid", _data).then(function (res) {
           __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
@@ -53487,32 +53492,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     goNextStep: function goNextStep() {
+      var _this2 = this;
+
       var self = this;
       var auther = this.$route.query.oauth_user;
 
       if (this.$store.state.regist.step >= 3) {
-        var data = {
-          mobile: this.userAccountName,
-          password: this.userPassword,
-          code: this.validCode,
-          invite_mobile: this.inviteMobile,
-          oauth_user: auther
-        };
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+        if (this.$store.state.regist.refindPassword == true) {
 
-        __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/register', data).then(function (res) {
-          sessionStorage.setItem("_token", res.data.data.token);
-          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册成功");
-          self.$router.push("/login");
-        }).catch(function (err) {
-          console.error(err);
-          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册失败");
-        });
-        return;
+          var _data = {
+            mobile: this.userAccountName,
+            password: this.userPassword,
+            code: this.validCode
+          };
+          __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/password/reset', _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+
+            Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("密码设置成功，请重新登录...");
+            setTimeout(function () {
+              _this2.$router.push('/index');
+            }, 1000);
+          }).catch(function (err) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          });
+          return;
+        } else {
+          var data = {
+            mobile: this.userAccountName,
+            password: this.userPassword,
+            code: this.validCode,
+            invite_mobile: this.inviteMobile,
+            oauth_user: auther
+          };
+          __WEBPACK_IMPORTED_MODULE_1__utils_userRequest_js__["a" /* default */].getInstance().postData('api/auth/register', data).then(function (res) {
+            sessionStorage.setItem("_token", res.data.data.token);
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册成功");
+            self.$router.push("/login");
+          }).catch(function (err) {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            console.error(err);
+            Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("注册失败");
+          });
+          return;
+        }
       }
-
-      console.log(this);
       this.$store.dispatch("addStep");
-      // this.step = this.step + 1;
     },
     showAgreement: function showAgreement() {
       this.agrementState = true;
@@ -53521,7 +53547,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.agrementState = false;
     },
     sendSMS: function sendSMS() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.smsTimer != null) {
         return;
@@ -53532,10 +53558,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       this.smsTimer = 60;
       var timer = setInterval(function () {
-        _this2.smsTimer--;
+        _this3.smsTimer--;
 
-        if (_this2.smsTimer == 0) {
-          _this2.smsTimer = null;
+        if (_this3.smsTimer == 0) {
+          _this3.smsTimer = null;
           clearInterval(timer);
         }
       }, 1000);
@@ -75625,7 +75651,7 @@ var registStore = {
 
     mutations: {
         addStep: function addStep(state) {
-            state.step += 1;
+            state.step = parseInt(state.step) + 1;
         },
         setStep: function setStep(state, value) {
             state.step = value;
