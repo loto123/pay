@@ -77,7 +77,8 @@ class AuthController extends BaseController {
         // all good so return the token
         $user = JWTAuth::toUser($token);
         $wechat = $user->wechat_user ? 1 : 0;
-        return $this->json(compact('token', 'wechat'));
+        $id = $user->en_id();
+        return $this->json(compact('token', 'wechat', 'id'));
     }
 
     /**
@@ -182,7 +183,7 @@ class AuthController extends BaseController {
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
         if ($request->oauth_user) {
-            $oauth_user = OauthUser::find($request->oauth_user);
+            $oauth_user = OauthUser::findByEnId($request->oauth_user);
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
                 $user->avatar = $oauth_user->headimgurl;
@@ -264,6 +265,13 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="user_id",
+     *         in="formData",
+     *         description="要绑定的用户id",
+     *         required=false,
+     *         type="string",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="A list with products",
@@ -304,14 +312,24 @@ class AuthController extends BaseController {
         $oauth_user->remark = isset($user['remark']) ? $user['remark'] : '';
         $oauth_user->groupid = isset($user['groupid']) ? $user['groupid'] : 0;
         $oauth_user->save();
-        if ($oauth_user->user_id) {
-            $user = User::find($oauth_user->user_id);
-            if ($user) {
-                return $this->json(['token' => JWTAuth::fromUser($user)]);
+        if ($request->user_id) {
+            $login_user = User::findByEnId($request->user_id);
+            if ($login_user) {
+                $oauth_user->user_id = $login_user->id;
+                $oauth_user->save();
+                return $this->json(['token' => JWTAuth::fromUser($login_user)]);
             }
         } else {
-            return $this->json(['oauth_user' => $oauth_user->id]);
+            if ($oauth_user->user_id) {
+                $login_user = User::find($oauth_user->user_id);
+                if ($login_user) {
+                    return $this->json(['token' => JWTAuth::fromUser($login_user)]);
+                }
+            } else {
+                return $this->json(['oauth_user' => $oauth_user->en_id()]);
+            }
         }
+
     }
 
 
