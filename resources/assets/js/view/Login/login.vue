@@ -201,7 +201,8 @@ export default {
           }
       }).then(res=>{
         if(res == true){
-          this.weChatBind(self.userId);
+//           是否需要绑定微信
+//          this.weChatBind(self.userId);
         }
       }).catch(function(err){
         // Toast(err.data.);

@@ -52878,8 +52878,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 普通登录
     login: function login() {
-      var _this = this;
-
       var self = this;
 
       var data = {
@@ -52908,7 +52906,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }).then(function (res) {
         if (res == true) {
-          _this.weChatBind(self.userId);
+          //           是否需要绑定微信
+          //          this.weChatBind(self.userId);
         }
       }).catch(function (err) {
         // Toast(err.data.);
@@ -75402,7 +75401,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.shopId = this.$route.query.shopId;
       this.userId = this.$route.query.userId;
 
-      __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/detail/" + this.shopId).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/summary/" + this.shopId).then(function (res) {
         _this.shopName = res.data.data.name;
         _this.membersCount = res.data.data.members_count;
         _this.logo = res.data.data.logo;
