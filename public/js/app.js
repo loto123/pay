@@ -52888,10 +52888,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
         self.userId = res.data.data.id;
 
-        //          if(res.data.data.wechat == 0){
-        //            Toast("登录成功，请绑定微信");
-        //            return Promise.resolve(true);
-        //          }
+        if (res.data.data.wechat == 0) {
+          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，请绑定微信");
+          return Promise.resolve(true);
+        }
 
         __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功");

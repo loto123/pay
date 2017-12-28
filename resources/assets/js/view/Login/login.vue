@@ -183,10 +183,10 @@ export default {
       request.getInstance().postData('api/auth/login',data).then(function(res){
           self.userId = res.data.data.id;
 
-//          if(res.data.data.wechat == 0){
-//            Toast("登录成功，请绑定微信");
-//            return Promise.resolve(true);
-//          }
+          if(res.data.data.wechat == 0){
+            Toast("登录成功，请绑定微信");
+            return Promise.resolve(true);
+          }
 
           request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");
