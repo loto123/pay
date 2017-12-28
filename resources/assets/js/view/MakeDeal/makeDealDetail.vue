@@ -69,8 +69,6 @@
                                 <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
-
-
                             </div>
                         </div>
                     </slider> 
@@ -294,9 +292,9 @@ export default {
       renderData: {
         name: null,
         user:{
-          avatar:{}
+          avatar:null
         },
-        avatar:{},
+        avatar:null,
         
       },
       moneyData: {
