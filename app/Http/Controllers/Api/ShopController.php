@@ -289,7 +289,8 @@ class ShopController extends BaseController {
                 'rate' => $shop->price,
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg")
+                'logo' => asset("images/personal.jpg"),
+                'manager' => $shop->manager->name
             ];
         } else if ($is_member) {
             $data = [
@@ -299,7 +300,8 @@ class ShopController extends BaseController {
                 'members_count' => (int)$shop->users()->count(),
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg")
+                'logo' => asset("images/personal.jpg"),
+                'manager' => $shop->manager->name
             ];
         } else {
             $data = [
