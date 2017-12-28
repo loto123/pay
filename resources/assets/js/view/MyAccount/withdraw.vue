@@ -1,6 +1,6 @@
 <template>
 		<div id="withdraw" class="withdraw-container">
-		  <topBack title="提现到个人账户">
+		  <topBack title="提现到个人账户" style="background: #eee;">
 			<div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
 			  <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
 			</div>

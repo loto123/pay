@@ -5229,7 +5229,8 @@ var UserRequest = function () {
             var url = window.location.href.indexOf("#/login");
             var urlShare = window.location.href.indexOf("#/share");
             // var wechatLogin = window.location.href.indexOf("#/login/weChatLogin")
-            if (!token && url == -1 && urlShare) {
+
+            if (!token && url == -1 && urlShare == -1) {
                 __WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */].getInstance().close();
                 Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])("用户未登录,即将跳转登录...");
                 setTimeout(function () {
@@ -46604,7 +46605,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
-        console.log(self);
         self.userId = res.data.data.id;
 
         if (res.data.data.wechat == 0) {
@@ -55210,30 +55210,37 @@ var render = function() {
     "div",
     { staticClass: "withdraw-container", attrs: { id: "withdraw" } },
     [
-      _c("topBack", { attrs: { title: "提现到个人账户" } }, [
-        _c(
-          "div",
-          {
-            staticClass: "flex flex-reverse",
-            staticStyle: {
-              width: "100%",
-              "padding-right": "1em",
-              "box-sizing": "border-box"
-            },
-            on: { click: _vm.goIndex }
-          },
-          [
-            _c(
-              "i",
-              {
-                staticClass: "iconfont",
-                staticStyle: { "font-size": "1.4em" }
+      _c(
+        "topBack",
+        {
+          staticStyle: { background: "#eee" },
+          attrs: { title: "提现到个人账户" }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "flex flex-reverse",
+              staticStyle: {
+                width: "100%",
+                "padding-right": "1em",
+                "box-sizing": "border-box"
               },
-              [_vm._v("")]
-            )
-          ]
-        )
-      ]),
+              on: { click: _vm.goIndex }
+            },
+            [
+              _c(
+                "i",
+                {
+                  staticClass: "iconfont",
+                  staticStyle: { "font-size": "1.4em" }
+                },
+                [_vm._v("")]
+              )
+            ]
+          )
+        ]
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "withdraw-box" }, [
         _c("div", { staticClass: "title" }, [_vm._v("提现金额")]),
@@ -55551,30 +55558,34 @@ var render = function() {
     "div",
     { staticClass: "recharge-container", attrs: { id: "recharge" } },
     [
-      _c("topBack", { attrs: { title: "充值" } }, [
-        _c(
-          "div",
-          {
-            staticClass: "flex flex-reverse",
-            staticStyle: {
-              width: "100%",
-              "padding-right": "1em",
-              "box-sizing": "border-box"
-            },
-            on: { click: _vm.goIndex }
-          },
-          [
-            _c(
-              "i",
-              {
-                staticClass: "iconfont",
-                staticStyle: { "font-size": "1.4em" }
+      _c(
+        "topBack",
+        { staticStyle: { background: "#eee" }, attrs: { title: "充值" } },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "flex flex-reverse",
+              staticStyle: {
+                width: "100%",
+                "padding-right": "1em",
+                "box-sizing": "border-box"
               },
-              [_vm._v("")]
-            )
-          ]
-        )
-      ]),
+              on: { click: _vm.goIndex }
+            },
+            [
+              _c(
+                "i",
+                {
+                  staticClass: "iconfont",
+                  staticStyle: { "font-size": "1.4em" }
+                },
+                [_vm._v("")]
+              )
+            ]
+          )
+        ]
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "recharge-box" }, [
         _c("div", { staticClass: "title" }, [_vm._v("充值金额")]),
@@ -58586,8 +58597,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -58610,9 +58619,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       renderData: {
         name: null,
         user: {
-          avatar: {}
+          avatar: null
         },
-        avatar: {}
+        avatar: null
 
       },
       moneyData: {
@@ -62750,7 +62759,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.bankCard-container[data-v-5865f0c9] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-5865f0c9] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-5865f0c9] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-5865f0c9],\n    .bankCard-list li .binding[data-v-5865f0c9] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-5865f0c9] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-5865f0c9] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-5865f0c9] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-5865f0c9] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-5865f0c9] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    font-size: 1em;\n}\n.add-bankCard[data-v-5865f0c9] {\n  width: 90%;\n  height: 4em;\n  line-height: 4em;\n  border: 1px dashed #ccc;\n  text-align: center;\n  margin: auto;\n  margin-top: 1em;\n}\n.add-bankCard a[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    color: #999;\n}\n", ""]);
+exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  box-sizing: border-box;\n  background: #fff;\n}\n.bankCard-container[data-v-5865f0c9] {\n  width: 100;\n  border-top: 1px solid #ccc;\n  padding-top: 1em;\n}\n.bankCard-list[data-v-5865f0c9] {\n  width: 90%;\n  margin: auto;\n}\n.bankCard-list li[data-v-5865f0c9] {\n    border: 1px solid #ccc;\n    margin-bottom: 1em;\n    padding: 0.7em;\n    position: relative;\n}\n.bankCard-list li .del[data-v-5865f0c9],\n    .bankCard-list li .binding[data-v-5865f0c9] {\n      position: absolute;\n      right: 1em;\n}\n.bankCard-list li .del[data-v-5865f0c9] {\n      bottom: 10px;\n      background: #fff;\n      border: none;\n      outline: none;\n}\n.bankCard-list li .del i[data-v-5865f0c9] {\n        font-size: 2em;\n        color: #777;\n}\n.bankCard-list li .binding[data-v-5865f0c9] {\n      top: 1em;\n      color: #333;\n      font-size: 0.8em;\n}\n.bankCard-box .card-image[data-v-5865f0c9] {\n  width: 3em;\n  height: 3em;\n}\n.bankCard-box .card-image > img[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    border-radius: 50%;\n}\n.bankCard-box .card-info[data-v-5865f0c9] {\n  margin-left: 1em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    margin-bottom: 0.3em;\n}\n.bankCard-box .card-info .card-type[data-v-5865f0c9],\n  .bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    color: #999;\n    font-size: 0.9em;\n}\n.bankCard-box .card-info .bank-name[data-v-5865f0c9] {\n    font-size: 1em;\n    margin-top: 0.1em;\n}\n.bankCard-box .card-info .card-number[data-v-5865f0c9] {\n    font-size: 1em;\n}\n.add-bankCard[data-v-5865f0c9] {\n  width: 90%;\n  height: 4em;\n  line-height: 4em;\n  border: 1px dashed #ccc;\n  text-align: center;\n  margin: auto;\n  margin-top: 1em;\n}\n.add-bankCard a[data-v-5865f0c9] {\n    display: block;\n    width: 100%;\n    color: #999;\n}\n", ""]);
 
 // exports
 
@@ -62908,7 +62917,10 @@ var render = function() {
     "div",
     { attrs: { id: "bankManage" } },
     [
-      _c("topBack", { attrs: { title: "银行卡管理" } }),
+      _c("topBack", {
+        staticStyle: { background: "#fff" },
+        attrs: { title: "银行卡管理" }
+      }),
       _vm._v(" "),
       _c("div", { staticClass: "bankCard-container" }, [
         _c(
@@ -64714,7 +64726,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.password-btn[data-v-87f34208] {\n  width: 96%;\n  margin: auto;\n  margin-top: 2em;\n}\n.forget-password-box[data-v-87f34208] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-87f34208] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-87f34208] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-87f34208] {\n    color: #26a2ff;\n}\n", ""]);
+exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.password-btn[data-v-87f34208] {\n  width: 96%;\n  margin: auto;\n  margin-top: 2em;\n}\n.forget-password-box[data-v-87f34208] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-87f34208] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-87f34208] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-87f34208] {\n    color: #26a2ff;\n}\n", ""]);
 
 // exports
 
@@ -64825,7 +64837,10 @@ var render = function() {
     "div",
     { attrs: { id: "settleInfo" } },
     [
-      _c("topBack", { attrs: { title: "修改登录密码" } }),
+      _c("topBack", {
+        staticStyle: { background: "#eee" },
+        attrs: { title: "修改登录密码" }
+      }),
       _vm._v(" "),
       _c(
         "div",
@@ -65294,7 +65309,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#settleInfo[data-v-17eeec8a] {\n  background: #efeef4;\n  height: 100vh;\n  padding-top: 2em;\n}\n.forget-password-box[data-v-17eeec8a] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-17eeec8a] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-17eeec8a] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-17eeec8a] {\n    color: #26a2ff;\n}\n.password-btn[data-v-17eeec8a] {\n  width: 96%;\n  margin: auto;\n  margin-top: 2em;\n}\n", ""]);
+exports.push([module.i, "\n#settleInfo[data-v-17eeec8a] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password-box[data-v-17eeec8a] {\n  padding-left: 10px;\n  margin-top: 0.7em;\n  font-size: 1em;\n}\n.forget-password-box .notice[data-v-17eeec8a] {\n    color: #666;\n    margin-bottom: 0.5em;\n}\n.forget-password[data-v-17eeec8a] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.forget-password > a[data-v-17eeec8a] {\n    color: #26a2ff;\n}\n.password-btn[data-v-17eeec8a] {\n  width: 96%;\n  margin: auto;\n  margin-top: 2em;\n}\n", ""]);
 
 // exports
 
@@ -65398,7 +65413,10 @@ var render = function() {
     "div",
     { attrs: { id: "settleInfo" } },
     [
-      _c("topBack", { attrs: { title: "修改支付密码" } }),
+      _c("topBack", {
+        staticStyle: { background: "#eee" },
+        attrs: { title: "修改支付密码" }
+      }),
       _vm._v(" "),
       _c(
         "div",
@@ -72694,8 +72712,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       shopId: null,
       QRCode: "",
       shopName: null, //店铺名称
-      logo: null // 店铺头像
-
+      logo: null, // 店铺头像
+      membersCount: null,
+      manager: null,
+      timer: null
     };
   },
   created: function created() {
@@ -72713,6 +72733,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.QRCode = res[0].data.data.url;
         _this.logo = res[1].data.data.logo;
         _this.shopName = res[1].data.data.name;
+        _this.membersCount = res[1].data.data.membersCount;
+        _this.timer = moment(res.data.data.created_at).format("YYYY-MM-DD");
+        _this.manager = res.data.data.manager;
+
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
@@ -72773,7 +72797,17 @@ var render = function() {
       _vm._v(" "),
       _vm.isUser
         ? _c("div", { staticClass: "content-wrap-user" }, [
-            _vm._m(0, false, false),
+            _c("div", { staticClass: "info flex flex-v flex-align-center" }, [
+              _c("img", { attrs: { src: _vm.logo, alt: "" } }),
+              _vm._v(" "),
+              _c("h1", [
+                _vm._v(_vm._s(_vm.shopName + "(" + _vm.membersCount + "人)"))
+              ]),
+              _vm._v(" "),
+              _c("h2", [
+                _vm._v(_vm._s(_vm.manager) + " 创建于 " + _vm._s(_vm.timer))
+              ])
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -72791,20 +72825,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "info flex flex-v flex-align-center" }, [
-      _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } }),
-      _vm._v(" "),
-      _c("h1", [_vm._v("斗牛小铺（68人")]),
-      _vm._v(" "),
-      _c("h2", [_vm._v("Leaf 创建于 2017- 11-22")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -74447,17 +74468,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
+    console.log(222);
     this.init();
   },
   data: function data() {
@@ -74547,13 +74565,7 @@ var render = function() {
                     "qr-code flex flex-align-center flex-justify-center"
                 },
                 [_c("img", { attrs: { src: _vm.QRCode, alt: "" } })]
-              ),
-              _vm._v(" "),
-              _c("h3", [
-                _vm._v(
-                  "\n        该二维码7天内（12月12日前）有效，重新进入将更新\n      "
-                )
-              ])
+              )
             ]
           )
         : _vm._e(),
