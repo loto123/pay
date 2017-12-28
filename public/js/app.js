@@ -52886,8 +52886,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
-
-        this.userId = res.data.data.id;
+        console.log(self);
+        self.userId = res.data.data.id;
 
         if (res.data.data.wechat == 0) {
           Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，请绑定微信");
@@ -52907,7 +52907,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }).then(function (res) {
         if (res == true) {
-          _this.weChatBind(_this.userId);
+          _this.weChatBind(self.userId);
         }
       }).catch(function (err) {
         // Toast(err.data.);
