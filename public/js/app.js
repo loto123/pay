@@ -58529,30 +58529,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -58634,6 +58610,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _data = {
         transfer_id: this.transfer_id
       };
+
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id).then(function (res) {
         _this2.joiner = res.data.data.joiner;
         _this2.renderData = res.data.data;
@@ -58699,7 +58676,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/notice", _data).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("添加成员成功...");
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("编辑提醒成员成功...");
         setTimeout(function () {
           _this4.init();
         }, 2000);
@@ -58818,18 +58795,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       for (var i = 0; i < res.data.data.members.length; i++) {
         var _temp = {};
         _temp = res.data.data.members[i];
-
+        _temp.checked = false;
         for (var j = 0; j < this.joiner.length; j++) {
           if (this.joiner[j].user.id == _temp.id) {
             _temp.checked = true;
-            break;
-          } else {
-            _temp.checked = false;
-            break;
+            continue;
           }
         }
-
         this.memberList.push(_temp);
+        console.log(this.memberList);
       }
     },
 
@@ -67024,13 +66998,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -67145,11 +67112,7 @@ var render = function() {
                 staticClass:
                   "shop-item flex flex-justify-around flex-wrap-on flex-align-around"
               },
-              [
-                _c("div", { staticClass: "notice" }),
-                _vm._v(" "),
-                _c("img", { attrs: { src: item.logo, alt: "" } })
-              ]
+              [_c("img", { attrs: { src: item.logo, alt: "" } })]
             ),
             _vm._v(" "),
             _c("h3", [_vm._v(_vm._s(_vm.SetString(item.name, 10)))])
@@ -68347,6 +68310,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.membersList = res.data.data.members;
         _this2.logo = res.data.data.logo;
 
+        if (!_this2.rate) {
+          _this2.isGroupMaster = false;
+        }
+
         if (res.data.data.active == 1) {
           _this2.tradeStatus = true;
         } else {
@@ -68435,7 +68402,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
-        }).catch();
+        }).catch(function (err) {});
       }
 
       // 手续费率
@@ -68466,7 +68433,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
-        }).catch();
+        }).catch(function (err) {});
       }
 
       // 设置单价
@@ -68495,7 +68462,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
-        }).catch();
+        }).catch(function (err) {});
       }
     },
     changeStatus: function changeStatus(type) {
@@ -69204,7 +69171,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#shop-member[data-v-fb842804] {\n  padding-top: 2em;\n}\n#shop-member ul[data-v-fb842804] {\n    width: 100%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#shop-member ul li[data-v-fb842804] {\n      width: 25%;\n      height: 4.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#shop-member ul li .img-wrap[data-v-fb842804] {\n        width: 3em;\n        height: 3em;\n        border: 1px solid #aaa;\n        border-radius: 0.4em;\n}\n#shop-member ul li .img-wrap > i[data-v-fb842804] {\n          font-size: 2em;\n          color: #aaa;\n}\n#shop-member ul li > img[data-v-fb842804] {\n        width: 2.6em;\n        height: 2.6em;\n        display: block;\n}\n#shop-member ul li h3[data-v-fb842804] {\n        font-size: 0.5em;\n        margin-top: 0.2em;\n}\n#shop-member ul li .avatar[data-v-fb842804] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        margin-top: 0.6em;\n}\n#search-wrap[data-v-fb842804] {\n  width: 100%;\n  height: 3em;\n  background: #eee;\n}\n#search-wrap > div[data-v-fb842804] {\n    width: 95%;\n    height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n#search-wrap > div #search-input[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      margin: 0 auto;\n      height: 100%;\n      border-radius: 0.2em;\n      padding-left: 2em;\n      padding-right: 2em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      width: 80%;\n}\n#search-wrap > div #search-input[data-v-fb842804]::-webkit-input-placeholder {\n        padding-left: 49%;\n        color: #aaa;\n}\n#search-wrap > div > button[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      height: 100%;\n      background: none;\n      font-size: 1em;\n      color: #00cc00;\n}\n", ""]);
+exports.push([module.i, "\n#shop-member[data-v-fb842804] {\n  padding-top: 2em;\n}\n#shop-member ul[data-v-fb842804] {\n    width: 100%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#shop-member ul li[data-v-fb842804] {\n      width: 25%;\n      height: 4.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      position: relative;\n}\n#shop-member ul li .notice[data-v-fb842804] {\n        width: 1em;\n        height: 1em;\n        position: absolute;\n        background: red;\n        right: 0.5em;\n        top: 0em;\n        border-radius: 50%;\n        color: #fff;\n}\n#shop-member ul li .img-wrap[data-v-fb842804] {\n        width: 3em;\n        height: 3em;\n        border: 1px solid #aaa;\n        border-radius: 0.4em;\n}\n#shop-member ul li .img-wrap > i[data-v-fb842804] {\n          font-size: 2em;\n          color: #aaa;\n}\n#shop-member ul li > img[data-v-fb842804] {\n        width: 2.6em;\n        height: 2.6em;\n        display: block;\n}\n#shop-member ul li h3[data-v-fb842804] {\n        font-size: 0.5em;\n        margin-top: 0.2em;\n}\n#shop-member ul li .avatar[data-v-fb842804] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        margin-top: 0.6em;\n}\n#search-wrap[data-v-fb842804] {\n  width: 100%;\n  height: 3em;\n  background: #eee;\n}\n#search-wrap > div[data-v-fb842804] {\n    width: 95%;\n    height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n#search-wrap > div #search-input[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      margin: 0 auto;\n      height: 100%;\n      border-radius: 0.2em;\n      padding-left: 2em;\n      padding-right: 2em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      width: 80%;\n}\n#search-wrap > div #search-input[data-v-fb842804]::-webkit-input-placeholder {\n        padding-left: 49%;\n        color: #aaa;\n}\n#search-wrap > div > button[data-v-fb842804] {\n      border: none;\n      outline: none;\n      display: block;\n      height: 100%;\n      background: none;\n      font-size: 1em;\n      color: #00cc00;\n}\n", ""]);
 
 // exports
 
@@ -69220,6 +69187,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils_js__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 //
 //
 //
@@ -69352,6 +69321,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -69367,24 +69352,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       searchSwitch: false,
       shopId: null,
       membersCount: 0,
-      dataList: []
+      dataList: [],
+      controlSwitch: false
     };
   },
 
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack___default.a },
   methods: {
+    // 删除成员
+    deleteMember: function deleteMember(id) {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().open();
+
+      // /shop/members/{shop_id}/delete/{user_id}
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest_js__["a" /* default */].getInstance().postData("api/shop/members/" + this.shopId + "/delete/" + id).then(function (res) {
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("删除成功");
+        _this.controlSwitch = false;
+      }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.data.msg);
+      });
+    },
     openSearchSwitch: function openSearchSwitch() {
       this.searchSwitch = true;
     },
+    openControlSwitch: function openControlSwitch() {
+      this.controlSwitch = true;
+    },
     init: function init() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().open();
       this.shopId = this.$route.query.shopId;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest_js__["a" /* default */].getInstance().getData("api/shop/members/" + this.shopId).then(function (res) {
-        _this.dataList = res.data.data.members;
-        _this.membersCount = res.data.data.count;
+        _this2.dataList = res.data.data.members;
+        _this2.membersCount = res.data.data.count;
         __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -69446,9 +69450,15 @@ var render = function() {
       "ul",
       { staticClass: "flex flex-wrap-on" },
       [
-        _vm._m(0, false, false),
-        _vm._v(" "),
-        _vm._m(1, false, false),
+        _c(
+          "li",
+          {
+            staticClass:
+              "minus-member flex flex-v flex-align-center flex-justify-center",
+            on: { click: _vm.openControlSwitch }
+          },
+          [_vm._m(0, false, false), _vm._v(" "), _c("span")]
+        ),
         _vm._v(" "),
         _vm._l(_vm.dataList, function(item) {
           return _c("li", { staticClass: "flex flex-v flex-align-center" }, [
@@ -69457,7 +69467,23 @@ var render = function() {
               attrs: { src: item.avatar, alt: "" }
             }),
             _vm._v(" "),
-            _c("h3", [_vm._v(_vm._s(_vm.SetString(item.name, 6)))])
+            _c("h3", [_vm._v(_vm._s(_vm.SetString(item.name, 6)))]),
+            _vm._v(" "),
+            _vm.controlSwitch
+              ? _c(
+                  "span",
+                  {
+                    staticClass:
+                      "notice flex flex-align-center flex-justify-center",
+                    on: {
+                      click: function($event) {
+                        _vm.deleteMember(item.id)
+                      }
+                    }
+                  },
+                  [_vm._v("\n              -\n            ")]
+                )
+              : _vm._e()
           ])
         })
       ],
@@ -69471,57 +69497,14 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "li",
-      {
-        staticClass:
-          "add-member flex flex-v flex-align-center flex-justify-center"
-      },
+      "div",
+      { staticClass: "img-wrap flex flex-align-center flex-justify-center" },
       [
         _c(
-          "div",
-          {
-            staticClass: "img-wrap flex flex-align-center flex-justify-center"
-          },
-          [
-            _c("i", { staticClass: "iconfont" }, [
-              _vm._v("\n                  \n              ")
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c("span")
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass:
-          "minus-member flex flex-v flex-align-center flex-justify-center"
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "img-wrap flex flex-align-center flex-justify-center"
-          },
-          [
-            _c(
-              "i",
-              {
-                staticClass: "iconfont",
-                staticStyle: { "margin-top": "-0.2em" }
-              },
-              [_vm._v("\n                  \n              ")]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c("span")
+          "i",
+          { staticClass: "iconfont", staticStyle: { "margin-top": "-0.2em" } },
+          [_vm._v("\n                  \n              ")]
+        )
       ]
     )
   }
