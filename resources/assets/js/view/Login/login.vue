@@ -181,8 +181,8 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-
-          this.userId = res.data.data.id;
+          console.log(self);
+          self.userId = res.data.data.id;
 
           if(res.data.data.wechat == 0){
             Toast("登录成功，请绑定微信");
@@ -202,12 +202,13 @@ export default {
           }
       }).then(res=>{
         if(res == true){
-          this.weChatBind(this.userId);
+          this.weChatBind(self.userId);
         }
       }).catch(function(err){
         // Toast(err.data.);
         console.log(err);
       });
+
     },
 
     // 微信登录
