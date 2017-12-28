@@ -442,7 +442,7 @@ class UserController extends Controller
         $user = JWTAuth::parseToken()->authenticate();
         $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $user->id);
         $times = Cache::get($key);
-        if ($times && $times > config("pay_pwd_validate_times", 5)) {
+        if ($times && $times >= config("pay_pwd_validate_times", 5)) {
             return response()->json(['code' => 0,'msg' => trans("api.over_max_times"),'data' => []]);
         }
         if (!Hash::check($request->password, $user->pay_password)) {
@@ -452,7 +452,7 @@ class UserController extends Controller
             else {
                 Cache::increment($key);
             }
-            return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => []]);
+            return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => ['times' => config("pay_pwd_validate_times", 5) - $times]]);
         } else {
             return response()->json(['code' => 1,'msg' => '','data' => []]);
         }
