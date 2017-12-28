@@ -184,7 +184,7 @@ class CardController extends Controller
         $cards->bank_id = $request->bank_id;
         $cards->holder_name = $this->user->name;
         $cards->holder_id = $this->user->id_number;
-        $cards->holder_mobile = $request->mobile;
+        $cards->holder_mobile = $this->user->mobile;
         $cards->province = $request->province;
         $cards->city = $request->city;
         $cards->branch = $request->branch??NULL;
