@@ -60,7 +60,7 @@
             <div class="box-body box">
                 <div class="lead">共 <span class="text-yellow">{{$count}}</span> 条支付记录 ，累计收款 <span
                             class="text-yellow">{{$get_amount}}</span> 元， 累计付款 <span
-                            class="text-yellow">{{$put_amount}}</span> 元
+                            class="text-yellow">{{abs($put_amount)}}</span> 元
                 </div>
             </div>
         </div>
@@ -150,7 +150,7 @@
                             @endswitch
                             <td>{{$item->amount}}</td>
                             <td>{{$item->stat == 2 ? $item->real_amount : 0 }}</td>
-                            <td>{{$item->stat == 1 ? $item->real_amount : 0 }}</td>
+                            <td>{{$item->stat == 1 ? abs($item->real_amount) : 0 }}</td>
                             <td>{{$item->stat == 3 ? '已撤销' : '正常' }}</td>
                             <td>{{$item->created_at}}</td>
                         </tr>

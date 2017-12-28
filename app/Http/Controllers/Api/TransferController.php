@@ -94,6 +94,9 @@ class TransferController extends Controller
         if (!$shop) {
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_exist'), 'data' => []]);
         }
+        if ($shop->status == 2) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_is_frozen'), 'data' => []]);
+        }
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
         $transfer = new Transfer();
@@ -183,6 +186,10 @@ class TransferController extends Controller
 
         //装填响应数据
         $transfer->id = $transfer->en_id();
+        $transfer->allow_reward = false;
+        if(config('shop_fee_status')) {
+            $transfer->allow_reward = true;
+        }
         $transfer->shop_id = $transfer->shop->en_id();
         $transfer->user->id = $transfer->user->en_id();
         foreach ($transfer->record as $key => $record) {
@@ -699,6 +706,10 @@ class TransferController extends Controller
      */
     public function feeRecord(Request $request)
     {
+        if (!config('shop_fee_status')) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.reward_is_turned_off'), 'data' => []]);
+        }
+
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
@@ -778,7 +789,7 @@ class TransferController extends Controller
     public function payFee(Request $request)
     {
         if (!config('shop_fee_status')) {
-            return response()->json(['code' => 0, 'msg' => 'something wrong', 'data' => []]);
+            return response()->json(['code' => 0, 'msg' => trans('trans.reward_is_turned_off'), 'data' => []]);
         }
 
         $validator = Validator::make($request->all(),
@@ -1049,8 +1060,8 @@ class TransferController extends Controller
     {
         $validator = Validator::make($request->all(),
             [
-                'mark' => 'bail|required|array',
-                'dismark' => 'bail|required|array'
+                'mark' => 'bail|required_without:dismark|array',
+                'dismark' => 'bail|required_without:mark|array'
             ],
             [
                 'required' => trans('trans.required'),
