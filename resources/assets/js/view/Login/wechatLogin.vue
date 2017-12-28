@@ -28,11 +28,17 @@ export default {
     init(){
         this.code = utils.getQueryString("code");
         this.state = utils.getQueryString("state");
+        this.bindMobile = window.location.href.split("mobile=")[1];
         
         var _data = {
             code :this.code,
-            state:this.state
+            state:this.state,
         };
+        
+        if(this.bindMobile){
+            _data.user_id = this.bindMobile;
+        }
+
         request.getInstance().postData("api/auth/login/wechat",_data).then(res=>{
 
             if(!res.data.data.token){
