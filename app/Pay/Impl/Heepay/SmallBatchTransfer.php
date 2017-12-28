@@ -82,6 +82,7 @@ class SmallBatchTransfer implements WithdrawInterface
             $params['key'] = $config['key'];
             ksort($params);
             $params['sign'] = $this->makeSign($params);
+            PayLogger::withdraw()->debug('md5', [$params['sign']]);
             unset($params['key']);
 
             $rep = new Crypt3Des(); // 初始化一个3des加密对象
@@ -132,7 +133,7 @@ class SmallBatchTransfer implements WithdrawInterface
         foreach ($params as $field => $val) {
             $string .= "&$field=$val";
         }
-        $string = ltrim($string, '&');
+        $string = ltrim(strtolower($string), '&');
         return md5($string);
     }
 

@@ -125,7 +125,7 @@
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 是否开启交易功能 </span>
             <span class="text flex-1 flex flex-reverse">
-                <mt-switch v-model="tradeStatus" @click="changeStatus(22)"></mt-switch>
+                <mt-switch v-model="tradeStatus"></mt-switch>
             </span>
         </div>
     </div>
@@ -674,7 +674,6 @@ export default {
       if(type == "shopName"){
 
         MessageBox.prompt("请输入新的店铺名称","修改店铺名称",).then(({ value, action }) => {
-          console.log(value);
           if(value.length ==0){
             Toast("新店铺名称不能为空");
             return;
@@ -710,9 +709,9 @@ export default {
           var _data = {
             percent:value
           };
+
           request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
-            console.log(res);
-            Loading.getInstance().close();            
+            Loading.getInstance().close();
             Toast("修改手续费率成功");
             setTimeout(()=>{
               this.init();
@@ -751,10 +750,6 @@ export default {
           }).catch(err=>{});
         }
     },
-
-    changeStatus(type){
-      console.log(type);
-    }
 
   },
   watch:{

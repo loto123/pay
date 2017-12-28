@@ -142,11 +142,11 @@
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
 import moment from 'moment'
+import {Toast} from 'mint-ui'
 
 export default {
 
   created(){
-    console.log(222);
     this.init();
   },
 
@@ -170,7 +170,7 @@ export default {
         this.shopId = this.$route.query.shopId;
         this.userId = this.$route.query.userId;
 
-        request.getInstance().getData("api/shop/detail/"+this.shopId).then(res=>{
+        request.getInstance().getData("api/shop/summary/"+this.shopId).then(res=>{
           this.shopName = res.data.data.name;
           this.membersCount = res.data.data.members_count;
           this.logo = res.data.data.logo;
@@ -186,7 +186,13 @@ export default {
         Loading.getInstance().open();
 
         if(!request.getInstance().getToken()){
-          localStorage.setItem("url",window.location.href);
+            Loading.getInstance().close();
+            localStorage.setItem("url",window.location.href);
+
+            Toast("当前用户未登录");
+            setTimeout(()=>{
+                this.$router.push("/login");
+            },1000)
         }
 
         request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{

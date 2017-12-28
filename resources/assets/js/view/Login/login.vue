@@ -201,6 +201,7 @@ export default {
           }
       }).then(res=>{
         if(res == true){
+          // 是否需要绑定微信
           this.weChatBind(self.userId);
         }
       }).catch(function(err){

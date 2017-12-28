@@ -471,7 +471,6 @@ export default {
 
         request.getInstance().postData("api/transfer/realget",_data)
           .then(res=>{
-            console.log(res);
             var _data = {
               amount:res.data.data.amount,
               real_amount:res.data.data.real_amount
@@ -480,7 +479,6 @@ export default {
             return Promise.resolve(_data);
           })
           .then(realData=>{
-            console.log(realData.amount);
             MessageBox.confirm("实际拿钱"+ realData.real_amount+ "元,手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "元").then(action => {
 
               var _data = {
@@ -557,8 +555,7 @@ export default {
             }
           }
           this.memberList.push(_temp);
-          console.log(this.memberList);
-          
+
         }
     },
     // 获取所有要提醒的成员名单

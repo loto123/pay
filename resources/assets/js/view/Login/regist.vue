@@ -209,7 +209,6 @@ export default {
   name: "regist",
   data() {
     return {
-      // step: 0,
       agrementState: false,           // 用户协议开关
       findPasswordSwitch: false,      // 找回密码开关
 
@@ -224,7 +223,6 @@ export default {
 
   mounted() {
     if (this.$store.state.regist.refindPassword == true) {
-      // this.findPasswordSwitch = this.$store.state.regist.refindPassword;
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
       localStorage.setItem("registStep", this.$store.state.regist.step);
     }
@@ -233,8 +231,8 @@ export default {
     var _findPassWord = localStorage.getItem("findPasswordSwitch");
 
     console.log(_findPassWord);
-    if(_step && _findPassWord){
 
+    if(_step && _findPassWord == true){
       this.$store.dispatch("setRefindPassWordState",true);
       this.$store.dispatch("setStep",_step);
       // localStorage.removeItem("registStep");

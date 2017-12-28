@@ -74,7 +74,7 @@ class WechatH5 implements DepositInterface
             $string .= "&$field={$params[$field]}";
         }
         $string = ltrim($string, '&') . "&key=$key";
-        return md5($string);
+        return md5(strtolower($string));
     }
 
     /**

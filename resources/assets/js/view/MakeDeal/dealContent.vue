@@ -65,7 +65,6 @@
   export default {
     props:["renderData"],
     mounted(){
-      console.log(this.renderData);
     }
   }
 </script>

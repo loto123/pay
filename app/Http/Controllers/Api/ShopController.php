@@ -291,6 +291,8 @@ class ShopController extends BaseController {
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
+                'is_manager' => $is_manager,
+                'is_member' => $is_member,
             ];
         } else {
             $data = [
@@ -301,6 +303,8 @@ class ShopController extends BaseController {
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
+                'is_manager' => $is_manager,
+                'is_member' => $is_member,
             ];
         }
         return $this->json($data);
