@@ -79,6 +79,10 @@ class ShopController extends BaseController {
         $shop->fee = $request->percent;
         $shop->container_id = $wallet->id;
         $shop->save();
+        $shop_user = new ShopUser();
+        $shop_user->shop_id = $shop->id;
+        $shop_user->user_id = $user->id;
+        $shop_user->save();
         return $this->json([$shop]);
     }
 
@@ -256,7 +260,7 @@ class ShopController extends BaseController {
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
-        if ($shop->manager_id != $user->id && $shop->shop_user()->where("id", $user->id)->count() == 0) {
+        if ($shop->manager_id != $user->id && ShopUser::where('user_id', $user->id)->where("shop_id", $shop->id)->count() == 0) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         /* @var $shop Shop */
@@ -349,6 +353,36 @@ class ShopController extends BaseController {
         ]);
     }
 
+    /**
+     * @SWG\Post(
+     *   path="/shop/members/{shop_id}/delete/{user_id}",
+     *   summary="删除店铺成员",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
+     *     in="path",
+     *     description="用户id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function member_delete($shop_id, $user_id) {
+        $shop = Shop::findByEnId($shop_id);
+        $user = User::findByEnId($user_id);
+        ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->delete();
+        return $this->json();
+    }
+    
     /**
      * @SWG\Post(
      *   path="/shop/close/{id}",
@@ -463,11 +497,11 @@ class ShopController extends BaseController {
         }
 
         if ($request->rate !== null) {
-            $shop->rate = $request->rate;
+            $shop->price = $request->rate;
         }
 
         if ($request->percent !== null) {
-            $shop->percent = $request->percent;
+            $shop->fee = $request->percent;
         }
         $shop->save();
         return $this->json();
@@ -821,6 +855,7 @@ class ShopController extends BaseController {
      */
     public function transfer($shop_id, Request $request) {
         $shop = Shop::findByEnId($shop_id);
+        
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
@@ -828,7 +863,14 @@ class ShopController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
-        $record->save();
+        try {
+            $record->save();
+            $shop->container->transfer($shop->manager->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
+        
         return $this->json();
     }
 
@@ -872,21 +914,41 @@ class ShopController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
-        $record->save();
+        try {
+            $record->save();
+            $shop->container->transfer($member->container, $request->amount, 0, false, false);
+        } catch (\Exception $e){
+            Log::info("shop transfer member error:".$e->getMessage());
+            return $this->json([], 'error', 0);
+        }
         return $this->json();
     }
 
     /**
      * @SWG\Get(
      *   path="/shop/transfer/records/{shop_id}",
-     *   summary="手机号搜索用户",
+     *   summary="店铺帐单明细",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="mobile",
-     *     in="path",
-     *     description="手机号",
-     *     required=true,
+     *     name="type",
+     *     in="query",
+     *     description="类型",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="start",
+     *     in="query",
+     *     description="结束日期",
+     *     required=false,
      *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="number"
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )

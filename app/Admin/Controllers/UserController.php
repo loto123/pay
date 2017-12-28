@@ -104,7 +104,7 @@ class UserController extends Controller
             $grid->model()->groupBy($user_table.'.id')->orderBy('transfer_count','DESC')->orderBy($user_table.'.id');
 
             $grid->id('编号');
-            $grid->avatar('用户头像')->image();
+            $grid->avatar('用户头像')->image('',70,70);
             $grid->column('user','用户')->display(function () {
                 return "<span style='color:black'>$this->name</span><br/><span style='color:gray'>$this->mobile</span>";
             });

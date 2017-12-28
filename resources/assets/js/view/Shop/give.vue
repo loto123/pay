@@ -1,6 +1,6 @@
 <template>
     <div id="give" class="give-container">
-        <topBack title="转账到店铺">
+        <topBack title="转账给店铺成员">
             <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
               <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
             </div>
@@ -18,7 +18,7 @@
             <div class="title">转账金额</div>
             <div class="give-money flex flex-justify-center">
                 <label>￥</label>
-                <input type="text" placeholder="请输入金额">
+                <input type="text" placeholder="请输入金额" v-model="amount">
             </div>
             <div class="all-money flex">
                 <div class="money">可转账余额 ¥<span>231321</span>, </div>
@@ -26,11 +26,11 @@
             </div>
            
             <div class="comment flex flex-align-center flex-justify-center">
-              <textarea name="" id="" cols="30" rows="10" placeholder="添加备注（50字以内）" maxlength="50"></textarea>
+              <textarea name="" id="" cols="30" rows="10" placeholder="添加备注（50字以内）" maxlength="50" v-model="comment"></textarea>
             </div>
 
             <a href="javascript:;" class="transAcc-btn"> 
-                <mt-button type="primary" size="large">转账</mt-button>    
+                <mt-button type="primary" size="large" @click="submitDate">转账</mt-button>
             </a>
         </div>
 
@@ -54,6 +54,7 @@ import topBack from "../../components/topBack.vue";
 import choiseMember from "../MakeDeal/choiseMember.vue"
 import Loading from "../../utils/loading.js"
 import request from "../../utils/userRequest.js"
+import {Toast} from "mint-ui"
 
 export default {
   created(){
@@ -65,7 +66,9 @@ export default {
       choiseMemberSwitch:true,
       memberList:[],
       shopId:null,
-      transferData:{}
+      transferData:{},
+      amount:null,                      // 转账金额
+      comment:""
     };
   },
   components: { topBack ,choiseMember},
@@ -76,6 +79,7 @@ export default {
     },
     getMemberData(data){
       this.transferData = data;
+      console.log(this.transferData);
     },
     hideMemberChoise(e){
       if(e){
@@ -86,7 +90,21 @@ export default {
     showMemberChoise(){
       this.choiseMemberSwitch = true;
     },
-
+    submitDate(){
+      // /shop/transfer/{shop_id}/{user_id}
+      Loading.getInstance().open();
+      var _data = {
+        amount : this.amount,
+        remark:comment
+      }
+      request.getInstance().postData('api/shop/transfer/'+this.shopId+"/"+this.transferData.id,_data).then(res=>{
+        Loading.getInstance().close();
+        Toast("转账成功");
+      }).catch(err=>{
+        Loading.getInstance().close();
+        Toast(err.data.data.msg);
+      });
+    },
     init(){
       Loading.getInstance().open();
       this.memberList = [];
