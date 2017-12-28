@@ -183,6 +183,10 @@ class TransferController extends Controller
 
         //装填响应数据
         $transfer->id = $transfer->en_id();
+        $transfer->allow_reward = false;
+        if(config('shop_fee_status')) {
+            $transfer->allow_reward = true;
+        }
         $transfer->shop_id = $transfer->shop->en_id();
         $transfer->user->id = $transfer->user->en_id();
         foreach ($transfer->record as $key => $record) {
@@ -699,6 +703,10 @@ class TransferController extends Controller
      */
     public function feeRecord(Request $request)
     {
+        if (!config('shop_fee_status')) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.reward_is_turned_off'), 'data' => []]);
+        }
+
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
@@ -778,7 +786,7 @@ class TransferController extends Controller
     public function payFee(Request $request)
     {
         if (!config('shop_fee_status')) {
-            return response()->json(['code' => 0, 'msg' => 'something wrong', 'data' => []]);
+            return response()->json(['code' => 0, 'msg' => trans('trans.reward_is_turned_off'), 'data' => []]);
         }
 
         $validator = Validator::make($request->all(),
