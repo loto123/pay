@@ -394,6 +394,7 @@ export default {
       }).catch((err)=>{
         Loading.getInstance().close();
         this.createShopSwitch = true;
+        Toast(err.data.data.message);
         console.error(err);
       });
     },
@@ -401,7 +402,6 @@ export default {
     // 数据处理
     getShopData(){
       Loading.getInstance().open();
-
       Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/profit"),request.getInstance().getData("api/shop/messages/count")])
         .then(res=>{
           this.shopList = res[0].data.data.data;

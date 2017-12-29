@@ -300,7 +300,18 @@ class DataController extends Controller
                 }
             }
         ])
-            ->withCount(['child_proxy', 'child_user'])
+            ->withCount([
+                'child_proxy' => function ($query) {
+                    $query->whereHas('roles', function ($query2) {
+                        $query2->where('name', 'like', 'agent%');
+                    });
+            },
+                'child_user' => function ($query) {
+                    $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'user');
+                    });
+                }
+            ])
             ->leftJoin('transfer_record', function ($join) use ($begin, $end) {
                 $join->on('users.id', '=', 'transfer_record.user_id');
                 $join->where('stat', '>', 0)->where('stat', '<>', 3);
@@ -336,7 +347,7 @@ class DataController extends Controller
         $role = $request->input('role');
         if ($role) {
             $listQuery->whereHas('roles', function ($query) use ($role) {
-                $query->where('name', $role);
+                $query->where('role_id', $role);
             });
         }
         //排序方式
@@ -425,7 +436,7 @@ class DataController extends Controller
             if ($begin && $end) {
                 $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
             }
-        })->where('users.operator_id',$operatorId)
+        })->where('users.operator_id', $operatorId)
             ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
             ->groupBy('users.id')->orderBy('proxy_fee_amount', 'DESC');
 

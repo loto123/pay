@@ -16,7 +16,7 @@
                     </div>
                     <div class="pull-left ml7">
                         <p>{{ $user->name }}</p>
-                        <span>id:<span class="text-yellow">{{ $user->id }}</span></span>
+                        <span>id:<span class="text-yellow">{{ $user->mobile }}</span></span>
                     </div>
                 </div>
             </td>
@@ -47,8 +47,7 @@
                         </div>
                         <div class="pull-left ml7">
                             <p>{{$user->parent->name}}</p>
-                            <span>id:<span
-                                        class="text-yellow">{{$user->parent->name}}</span></span>
+                            <span>id:<span class="text-yellow">{{$user->parent->mobile}}</span></span>
                         </div>
                     </div>
                 @endif
