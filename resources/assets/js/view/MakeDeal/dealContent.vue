@@ -34,7 +34,6 @@
   }
 
   .message {
-    // font-size:em;
     margin-top: 0.5em;
     color: #666;
   }

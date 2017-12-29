@@ -56,7 +56,6 @@
 
 <style scoped lang="scss">
 
-
 #makeDeal {
   padding-top: 2em;
   background: #eee;
@@ -338,6 +337,10 @@ export default {
         return
       }
 
+      if(_data.price){
+        console.log(_data.price);
+      }
+
       request
         .getInstance()
         .postData("api/transfer/create", _data)
@@ -347,7 +350,8 @@ export default {
           );
         })
         .catch(err => {
-          console.error(err);
+            Toast(err.data.msg);
+            console.error(err);
         });
     },
 

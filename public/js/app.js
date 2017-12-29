@@ -45813,7 +45813,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\ni[data-v-ebc8bb20] {\n  display: block;\n}\n#top[data-v-ebc8bb20] {\n  height: 12em;\n  background: #26a2ff;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top .message[data-v-ebc8bb20] {\n    height: 2em;\n    width: 100%;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#top .transaction[data-v-ebc8bb20] {\n    width: 100%;\n}\n#top .transaction .imggWrap[data-v-ebc8bb20] {\n      width: 5em;\n      height: 5em;\n}\n#top .transaction .imggWrap > img[data-v-ebc8bb20] {\n        width: 4em;\n        height: 4em;\n        border-radius: 50%;\n        display: block;\n}\n#top .transaction h3[data-v-ebc8bb20] {\n      font-size: 1.8em;\n      text-align: center;\n      color: #fff;\n}\n#top .transaction h4[data-v-ebc8bb20] {\n      color: #fff;\n      font-size: 0.9em;\n      margin-top: 0.6em;\n}\n.content[data-v-ebc8bb20] {\n  padding-top: 0.5em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.content ul li[data-v-ebc8bb20] {\n    padding-top: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 33.33%;\n    height: 6em;\n}\n.content ul li .common-icon[data-v-ebc8bb20] {\n      font-size: 3em;\n      color: #26a2ff;\n}\n.content ul li h3[data-v-ebc8bb20] {\n      color: #000;\n      font-size: 0.95em;\n}\n", ""]);
+exports.push([module.i, "\ni[data-v-ebc8bb20] {\n  display: block;\n}\n#top[data-v-ebc8bb20] {\n  height: 12em;\n  background: #26a2ff;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#top .message[data-v-ebc8bb20] {\n    height: 2em;\n    width: 100%;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    position: relative;\n}\n#top .message .notice[data-v-ebc8bb20] {\n      width: 0.6em;\n      height: 0.6em;\n      background: red;\n      border-radius: 50%;\n      position: absolute;\n      right: 0.7em;\n      top: 0em;\n}\n#top .transaction[data-v-ebc8bb20] {\n    width: 100%;\n}\n#top .transaction .imggWrap[data-v-ebc8bb20] {\n      width: 5em;\n      height: 5em;\n}\n#top .transaction .imggWrap > img[data-v-ebc8bb20] {\n        width: 4em;\n        height: 4em;\n        border-radius: 50%;\n        display: block;\n}\n#top .transaction h3[data-v-ebc8bb20] {\n      font-size: 1.8em;\n      text-align: center;\n      color: #fff;\n}\n#top .transaction h4[data-v-ebc8bb20] {\n      color: #fff;\n      font-size: 0.9em;\n      margin-top: 0.6em;\n}\n.content[data-v-ebc8bb20] {\n  padding-top: 0.5em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.content ul li[data-v-ebc8bb20] {\n    padding-top: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 33.33%;\n    height: 6em;\n}\n.content ul li .common-icon[data-v-ebc8bb20] {\n      font-size: 3em;\n      color: #26a2ff;\n}\n.content ul li h3[data-v-ebc8bb20] {\n      color: #000;\n      font-size: 0.95em;\n}\n", ""]);
 
 // exports
 
@@ -45966,6 +45966,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -45977,7 +45991,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       amount: null,
-      avatar: null
+      avatar: null,
+      newMessage: 0
     };
   },
   created: function created() {
@@ -45995,7 +46010,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/index").then(function (res) {
         _this.amount = res.data.data.balance;
         _this.avatar = res.data.data.avatar;
-        _this.message = res.data.data.message;
+        _this.newMessage = res.data.data.new_message;
 
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
@@ -52460,7 +52475,11 @@ var render = function() {
                 staticStyle: { color: "#fff", "font-size": "1.5em" }
               },
               [_vm._v("\n            \n          ")]
-            )
+            ),
+            _vm._v(" "),
+            _vm.newMessage > 0
+              ? _c("span", { staticClass: "notice" })
+              : _vm._e()
           ]
         ),
         _vm._v(" "),
@@ -52889,7 +52908,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         self.userId = res.data.data.id;
 
         if (res.data.data.wechat == 0) {
-          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，请绑定微信");
+          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，正在跳转绑定微信...");
+          Loading.getInstance().open();
           return Promise.resolve(true);
         }
 
@@ -52933,7 +52953,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
         window.location.href = res.data.data.url;
-      }).catch();
+        Loading.getInstance().close();
+      }).catch(function (err) {});
     },
     commitName: function commitName() {
       this.$store.dispatch("changeName", this.name);
@@ -57442,7 +57463,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -57601,9 +57621,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return;
       }
 
+      if (_data.price) {
+        console.log(_data.price);
+      }
+
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
         _this3.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
       }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])(err.data.msg);
         console.error(err);
       });
     },
@@ -59249,7 +59274,6 @@ exports.push([module.i, "\n.content .avatar[data-v-2b519d93] {\n  display: block
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
 //
 //
 //
@@ -67271,7 +67295,7 @@ var render = function() {
           "div",
           {
             key: item.id,
-            staticClass: "list-wrap",
+            staticClass: "list-wrap flex flex-v flex-align-center",
             on: {
               click: function($event) {
                 _vm.goDetail(item.id)
