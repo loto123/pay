@@ -20,22 +20,15 @@
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
 
-        <div class="list-wrap" v-for="item in shopList" :key = "item.id" @click="goDetail(item.id)">
+        <div class="list-wrap flex flex-v flex-align-center" v-for="item in shopList" :key = "item.id" @click="goDetail(item.id)">
           <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
-            <div class="notice"></div>
+            <!-- <div class="notice"></div> -->
             <img :src="item.logo"  alt="">
           </div>
 
           <h3>{{SetString(item.name,10)}}</h3>
         </div>
-        <!-- <div class="list-wrap">
-          <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
-            <div class="notice"></div>
-            <img src="/images/avatar.jpg" alt="">
-          </div>
-
-          <h3>店铺111</h3>
-        </div> -->
+        
       </div>
   </div>
 </template>

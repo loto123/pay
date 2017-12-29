@@ -30,7 +30,7 @@ class WechatH5 implements DepositInterface
             'agent_bill_time' => date('Ymdhis'),
             'agent_bill_id' => IdConfuse::mixUpDepositId($deposit_id, 30),
             'notify_url' => $notify_url,
-            'pay_amt' => $amount,
+            'pay_amt' => (int)$amount,
             'return_url' => $return_url,
             'user_ip' => str_replace('.', '_', request()->getClientIp()),
             'remark' => '',
@@ -56,10 +56,9 @@ class WechatH5 implements DepositInterface
      * @param $params
      * @param $fieldsToSign array 签名字段,保持顺序
      */
-    public function appendSign(&$params, $fieldsToSign, $key)
+    public static function appendSign(&$params, $fieldsToSign, $key)
     {
-        $params['sign'] = $this->makeSign($params, $fieldsToSign, $key);
-
+        $params['sign'] = self::makeSign($params, $fieldsToSign, $key);
     }
 
     /**
@@ -75,6 +74,7 @@ class WechatH5 implements DepositInterface
             $string .= "&$field={$params[$field]}";
         }
         $string = ltrim($string, '&') . "&key=$key";
+        PayLogger::deposit()->debug('签名原消息:' . $string);
         return md5($string);
     }
 

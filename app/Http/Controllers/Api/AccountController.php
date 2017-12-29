@@ -6,10 +6,13 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
+use App\Shop;
+use App\ShopFund;
 use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 
@@ -83,9 +86,17 @@ class AccountController extends BaseController {
         $record->balance = $user->container->balance + $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
+
+        $channel = $user->channel;
+        if ($channel->disabled) {
+            $channel = $user->channel->spareChannel;
+        }
         try {
-            $record->save();
-            $result = $user->container->initiateDeposit($request->amount, $user->channel, DepositMethod::find($request->way));
+            if ($result = $user->container->initiateDeposit($request->amount, $channel, DepositMethod::find($request->way))) {
+                $record->save();
+            } else {
+                return $this->json([], 'error', 0);
+            }
         } catch (\Exception $e) {
             return $this->json([], 'error', 0);
         }
@@ -151,17 +162,50 @@ class AccountController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $user->container->balance - $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
+
+        /**
+         * @var $channel Channel
+         */
+        $channel = $user->channel;
+        if ($channel->disabled) {
+            $channel = $user->channel->spareChannel;
+        }
+
         try {
-            $record->save();
-            $result = $user->container->initiateWithdraw(
+            $withdraw_method = WithdrawMethod::find($request->way);
+            if ($withdraw_method->targetPlatform->getKey() == 0) {
+                //提现到银行卡
+
+                if (!$channel->platform->isCardSupport($user->pay_card)) {
+                    return $this->json([], '暂不支持该银行卡', 0);
+                }
+
+                $receiver_info = ['bank_card' => $user->pay_card];
+            } else {
+                //其它提现方式,待扩展...
+                $receiver_info = [];
+            }
+
+            //计算手续费
+            if ($withdraw_method->fee_value <= 0) {
+                $fee = 0;
+            } else {
+                $fee = $withdraw_method->fee_mode == 0 ? round($request->amount * $withdraw_method->fee_value / 100, 2, PHP_ROUND_HALF_EVEN) : $withdraw_method->fee_value;
+            }
+
+
+            if ($result = $user->container->initiateWithdraw(
                 $request->amount,
-                [
-                    'bank_card' => $user->pay_card
-                ],
-                $user->channel,
-                WithdrawMethod::find($request->way),
-                0.1
-            );
+                $receiver_info,
+                $channel,
+                $withdraw_method,
+                $fee
+            )
+            ) {
+                $record->save();
+            } else {
+                return $this->json([], 'error', 0);
+            }
         } catch (\Exception $e) {
             return $this->json([], 'error'.$e->getMessage(), 0);
         }
@@ -194,15 +238,26 @@ class AccountController extends BaseController {
     public function transfer(Request $request) {
         $shop = Shop::findByEnId($request->shop_id);
         $user = $this->auth->user();
+        if ($user->container->balance < $request->amount) {
+            return $this->json([], trans("api.error_user_balance"), 0);
+        }
         $record = new UserFund();
         $record->user_id = $user->id;
-        $record->type = UserFund::TYPE_WITHDRAW;
+        $record->type = UserFund::TYPE_TRANSFER;
         $record->mode = UserFund::MODE_OUT;
         $record->amount = $request->amount;
         $record->balance = $user->container->balance - $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
+        $shop_record = new ShopFund();
+        $shop_record->shop_id = $shop->id;
+        $shop_record->type = ShopFund::TYPE_TRANAFER_IN;
+        $shop_record->mode = ShopFund::MODE_IN;
+        $shop_record->amount = $request->amount;
+        $shop_record->balance = $shop->container->balance + $request->amount;
+        $shop_record->status = ShopFund::STATUS_SUCCESS;
         try {
             $record->save();
+            $shop_record->save();
             $user->container->transfer($shop->container, $request->amount, 0, false, false);
         } catch (\Exception $e){
             Log::info("shop transfer member error:".$e->getMessage());
@@ -248,7 +303,7 @@ class AccountController extends BaseController {
             //dump($methods);
             return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
                 return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
-                    ($os == 'unknown' && $method->os == DepositMethod::OS_ANY || $method->os == $os);//未知系统且不限系统,或系统匹配
+                    ($method->os == DepositMethod::OS_ANY || $method->os == $os);//不限系统,或系统匹配
             })->map(function ($item) {
                 return ['id' => $item['id'], 'label' => $item['show_label']];
             })]);
@@ -282,7 +337,7 @@ class AccountController extends BaseController {
             return $this->json(null, '没有可用支付通道', 0);
         }
 
-        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get();
+        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode')->get();
         if (config('app.debug')) {
             $methods->each(function (&$item) {
                 $item['required-params'] = WithdrawMethod::find($item['id'])->getReceiverDescription();
@@ -367,8 +422,8 @@ class AccountController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => $fund->no,
-            'remark' => $fund->remark,
+            'no' => (string)$fund->no,
+            'remark' => (string)$fund->remark,
             'balance' => $fund->balance
         ]);
     }

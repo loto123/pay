@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\Heepay\Heepay;
 use App\Pay\Impl\Heepay\Reality;
+use App\PayInterfaceRecord;
 use App\User;
 use App\UserCard;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -354,12 +357,24 @@ class UserController extends Controller
         $cache_value = Cache::get($cache_key);
 //        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-//            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
+            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
         }
         Cache::forget($cache_key);
+        //添加记录
+        $bill_id = CardController::createUniqueId();
+        try{
+            $pay_record = new PayInterfaceRecord();
+            $pay_record->bill_id = $bill_id;
+            $pay_record->user_id = $this->user->id;
+            $pay_record->type = UserCard::IDENTIFY_TYPE;
+            $pay_record->platform = Heepay::PLATFORM;
+            $pay_record->save();
+        } catch (\Exception $e) {
+            return response()->json(['code' => 0,'msg' => '记录无法生成','data' => []]);
+        }
         //调用实名认证接口
-        $reality_res = Reality::identify($name,$id_number);
-        if($reality_res) {
+        $reality_res = Reality::identify($pay_record->id,$name,$id_number);
+        if($reality_res === true) {
             User::where('id',$this->user->id)->update([
                 'identify_status' => 1,
                 'name' => $name,
@@ -434,12 +449,24 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),
             ['password' => 'bail|required']
         );
+
         if ($validator->fails()) {
             return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
         }
         $user = JWTAuth::parseToken()->authenticate();
+        $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $user->id);
+        $times = Cache::get($key);
+        if ($times && $times >= config("pay_pwd_validate_times", 5)) {
+            return response()->json(['code' => 0,'msg' => trans("api.over_max_times"),'data' => []]);
+        }
         if (!Hash::check($request->password, $user->pay_password)) {
-            return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => []]);
+            if(!$times) {
+                Cache::put($key, 1, Carbon::now()->addDay(1));
+            }
+            else {
+                Cache::increment($key);
+            }
+            return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => ['times' => config("pay_pwd_validate_times", 5) - $times]]);
         } else {
             return response()->json(['code' => 1,'msg' => '','data' => []]);
         }

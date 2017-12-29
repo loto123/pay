@@ -9,6 +9,7 @@
 namespace App\Pay\Impl\MMSP;
 
 
+use App\Admin\Model\UploadFile;
 use App\Pay\IdConfuse;
 use App\Pay\Impl\Heepay\SmallBatchTransfer;
 use App\Pay\Model\Withdraw;
@@ -100,9 +101,17 @@ class SingleTransfer implements WithdrawInterface
      */
     private function initKeys(array $config)
     {
-        $this->our_pk_path = storage_path('app/pay/' . $config['our_pk_path']);
-        $this->our_sk_path = storage_path('app/pay/' . $config['our_sk_path']);
-        $this->their_pk_path = storage_path('app/pay/' . $config['their_pk_path']);
+        if (isset($config['our_pk_path'])) {
+            $this->our_pk_path = UploadFile::getFile($config['our_pk_path']);
+        }
+
+        if (isset($config['our_sk_path'])) {
+            $this->our_sk_path = UploadFile::getFile($config['our_sk_path']);
+        }
+
+        if (isset($config['their_pk_path'])) {
+            $this->their_pk_path = UploadFile::getFile($config['their_pk_path']);
+        }
     }
 
     public function receiverInfoDescription()

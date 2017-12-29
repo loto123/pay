@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('operator_id')->nullable()->default(0);
             $table->unsignedInteger('container_id');
             $table->unsignedSmallInteger('channel_id')->nullable()->default(0);
+            $table->decimal("percent", 5)->comment("代理分成比例");
             $table->rememberToken();
             $table->timestamps();
         });

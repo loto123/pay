@@ -103,6 +103,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
 
+    public function shop_tips() {
+        return $this->hasManyThrough(TipRecord::class, Shop::class, 'manager_id', 'shop_id');
+    }
+
     /**
      * 我参与的店铺
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany

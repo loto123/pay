@@ -1,6 +1,6 @@
 <template>
   <div id="settleInfo">
-    <topBack title="修改登录密码"></topBack>
+    <topBack title="修改登录密码" style="background:#eee;"></topBack>
     <div class="settleInfo-container">
       <mt-field label="原密码" placeholder="请填写原密码" v-model="old_password"></mt-field>
       <mt-field label="新密码" placeholder="请填写新密码" v-model="new_password"></mt-field>
@@ -12,14 +12,13 @@
     <div class="forget-password-box">
       <div class="notice">密码长度必须在6-16个字符之间个字符</div>
       <div class="forget-password">
-        <a href="javascript:;">
+        <a href="javascript:;" @click="forgetPassWord">
           忘记原密码?
         </a>
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
   import axios from "axios";
@@ -35,7 +34,15 @@
         confirm_password:null    //确认密码
       }
     },
+
     methods: {
+      forgetPassWord(){
+        this.$store.dispatch("setStep",1);
+        this.$store.dispatch("setRefindPassWordState",true);
+        localStorage.setItem("registStep",1);
+        this.$router.push("/login/regist");
+      },
+
       affirm() {
         var self=this;
         var data = {
@@ -75,9 +82,10 @@
 
 <style lang="scss" scoped>
   #settleInfo {
-    background: #efeef4;
+    background: #eee;
     height: 100vh;
     padding-top: 2em;
+    box-sizing: border-box;
   }
 
   .password-btn {

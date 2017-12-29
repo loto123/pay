@@ -20,7 +20,7 @@
         <transition name="fade">
             <section class="content step2" v-if="$store.state.regist.step==1?true:false">
                 <h3>
-                    {{findPasswordSwitch?"手机号验证":"输入手机号快速注册"}}
+                    {{$store.state.regist.refindPassword?"手机号验证":"输入手机号快速注册"}}
                 </h3>
 
                 <section class="input-wrap">
@@ -28,10 +28,10 @@
                 </section>
 
                 <div class="submit-button flex flex-justify-center">
-                    <mt-button type="primary" size="large" v-on:click="comfirm">{{findPasswordSwitch?"下一步":"注册"}}</mt-button>
+                    <mt-button type="primary" size="large" v-on:click="comfirm">{{$store.state.regist.refindPassword?"下一步":"注册"}}</mt-button>
                 </div>
 
-                <p class="agreement-btn" v-if="!findPasswordSwitch">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
+                <p class="agreement-btn" v-if="!$store.state.regist.refindPassword">注册代表你同意 <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a> </p>
             </section>
         </transition>  
 
@@ -209,7 +209,6 @@ export default {
   name: "regist",
   data() {
     return {
-      // step: 0,
       agrementState: false,           // 用户协议开关
       findPasswordSwitch: false,      // 找回密码开关
 
@@ -224,16 +223,21 @@ export default {
 
   mounted() {
     if (this.$store.state.regist.refindPassword == true) {
-      this.findPasswordSwitch = this.$store.state.regist.refindPassword;
-      // this.step = this.$store.state.regist.step;
-      
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
-      localStorage.setItem("registStep", this.step);
+      localStorage.setItem("registStep", this.$store.state.regist.step);
     }
-    var _step = localStorage.getItem("registStep")
-    if(_step){
-      console.log(_step);
+
+    var _step = localStorage.getItem("registStep");
+    var _findPassWord = localStorage.getItem("findPasswordSwitch");
+
+    console.log(_findPassWord);
+
+    if(_step && _findPassWord == true){
+      this.$store.dispatch("setRefindPassWordState",true);
+      this.$store.dispatch("setStep",_step);
+      // localStorage.removeItem("registStep");
     }
+   
   },
 
   methods: {
@@ -253,25 +257,47 @@ export default {
 
         });
       }else if(this.$store.state.regist.step == 1){
-        // 输入注册手机号
         var _data = {
           mobile:this.userAccountName
         };
-        Loading.getInstance().open();
-        request.getInstance().postData("api/auth/valid",_data).then(res=>{
-          Loading.getInstance().close();
-          this.goNextStep();
-        }).catch(err=>{
-          Loading.getInstance().close();
-          Toast("注册手机号输入有误");
-          console.error(err);
-        });
+        // 找回密码
+        if(this.$store.state.regist.refindPassword){
+          Loading.getInstance().open();
+          _data.exist = 1;
+          request.getInstance().postData("api/auth/valid",_data).then(res=>{
+            Loading.getInstance().close();
+            this.goNextStep();
+          }).catch(err=>{
+            Loading.getInstance().close();
+            Toast("手机号输入有误");
+            console.error(err);
+          });
+
+        }else {
+          // 输入注册手机号
+          Loading.getInstance().open();
+          request.getInstance().postData("api/auth/valid",_data).then(res=>{
+            Loading.getInstance().close();
+            this.goNextStep();
+          }).catch(err=>{
+            Loading.getInstance().close();
+            Toast("注册手机号输入有误");
+            console.error(err);
+          });
+        }
+
+        
       }else if(this.$store.state.regist.step == 2){
         // 验证手机号
         var _data = {
           mobile:this.userAccountName,
           code:this.validCode
         }
+
+        if(this.$store.state.regist.refindPassword == true){
+          _data.exist = 1;
+        }
+
         Loading.getInstance().open();
         request.getInstance().postData("api/auth/valid",_data).then(res=>{
           Loading.getInstance().close();
@@ -289,28 +315,47 @@ export default {
       var auther = this.$route.query.oauth_user;
 
       if (this.$store.state.regist.step >= 3) {
-        var data = {
-          mobile :this.userAccountName,
-          password :this.userPassword,
-          code:this.validCode,
-          invite_mobile:this.inviteMobile,
-          oauth_user:auther
+        Loading.getInstance().open();
+        if(this.$store.state.regist.refindPassword == true){
+
+          var _data = {
+            mobile :this.userAccountName,
+            password :this.userPassword,
+            code:this.validCode,
+          };
+          request.getInstance().postData('api/auth/password/reset',_data).then(res=>{
+            Loading.getInstance().close();
+            
+            Toast("密码设置成功，请重新登录...");
+            setTimeout(()=>{
+              this.$router.push('/index');
+            },1000);
+          }).catch(err=>{
+            Loading.getInstance().close();            
+          });
+          return;
+        }else {
+          var data = {
+            mobile :this.userAccountName,
+            password :this.userPassword,
+            code:this.validCode,
+            invite_mobile:this.inviteMobile,
+            oauth_user:auther
+          }
+          request.getInstance().postData('api/auth/register',data).then(function(res){
+              sessionStorage.setItem("_token",res.data.data.token);
+              Loading.getInstance().close();
+              Toast("注册成功");
+              self.$router.push("/login");
+            }).catch((err)=>{
+              Loading.getInstance().close();
+              console.error(err);
+              Toast("注册失败");
+            });
+            return;
+          }
         }
-
-        request.getInstance().postData('api/auth/register',data).then(function(res){
-          sessionStorage.setItem("_token",res.data.data.token);
-          Toast("注册成功");
-          self.$router.push("/login");
-        }).catch((err)=>{
-          console.error(err);
-          Toast("注册失败");
-        });
-        return;
-      }
-
-      console.log(this);
       this.$store.dispatch("addStep");
-      // this.step = this.step + 1;
     },
 
     showAgreement() {

@@ -87,6 +87,15 @@ $api->version('v1', function ($api) {
     });
 });
 
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => 'shop',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('summary/{id}', 'ShopController@shop_summary');
+    });
+});
+
 $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     $api->group([
         'prefix' => 'shop',
@@ -116,6 +125,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('transfer/{shop_id}/{user_id}', 'ShopController@transfer_member')->where('shop_id', '[0-9]+');
         $api->get('transfer/records/{shop_id}', 'ShopController@transfer_records')->where('shop_id', '[0-9]+');
         $api->get('transfer/records/month', 'ShopController@month_data');
+        $api->get('transfer/records/detail/{id}', 'ShopController@record_detail');
 
 
     });

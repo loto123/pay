@@ -34,7 +34,6 @@
   }
 
   .message {
-    // font-size:em;
     margin-top: 0.5em;
     color: #666;
   }
@@ -65,7 +64,6 @@
   export default {
     props:["renderData"],
     mounted(){
-      console.log(this.renderData);
     }
   }
 </script>
