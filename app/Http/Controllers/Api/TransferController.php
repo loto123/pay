@@ -97,6 +97,9 @@ class TransferController extends Controller
         if ($shop->status == 2) {
             return response()->json(['code' => 0, 'msg' => trans('trans.shop_is_frozen'), 'data' => []]);
         }
+        if ($shop->active == 0) {
+            return response()->json(['code' => 0, 'msg' => trans('trans.shop_not_allow_transfer'), 'data' => []]);
+        }
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
         $transfer = new Transfer();
