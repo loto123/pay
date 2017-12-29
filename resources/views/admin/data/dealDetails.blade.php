@@ -10,7 +10,7 @@
                         </div>
                         <div class="flex-1">
                             <div>{{$transfer->user->name}}</div>
-                            <div>ID:{{$transfer->user->id}}</div>
+                            <div>ID:{{$transfer->user->mobile}}</div>
                         </div>
                     </div>
                 </li>
@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="">
                                     <div>{{$item->user->name}}</div>
-                                    <div>ID:{{$item->user->id}}</div>
+                                    <div>ID:{{$item->user->mobile}}</div>
                                 </div>
                             </div>
                             <div class="money">
@@ -64,7 +64,7 @@
                         </div>
                         <div class="flex-1">
                             <div>{{$transfer->shop->manager->name}}</div>
-                            <div>ID:{{$transfer->shop->manager->id}}</div>
+                            <div>ID:{{$transfer->shop->manager->mobile}}</div>
                         </div>
                     </div>
                 </li>
