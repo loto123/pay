@@ -153,8 +153,8 @@
         </div>
 
         <div class="middle-content flex flex-align-center">
-          <div class="input-wrap flex-7 flex flex-align-center">
-            <input type="text" v-model="searchUserMobile" @click="searchInput" v-on:blur="inputBlur">
+          <div class="input-wrap flex-7 flex flex-align-center flex-justify-center">
+            <input type="text" v-model="searchUserMobile" @click="searchInput" v-on:blur="inputBlur" placeholder="点击搜索好友">
           </div>
 
           <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
@@ -451,8 +451,8 @@
             display: block;
             outline: none;
             border:none;
-            height: 90%;
-            width: 98%;
+            height: 2.5em;
+            width: 90%;
             text-indent: 2em;
             font-size:1.1em;
           }
