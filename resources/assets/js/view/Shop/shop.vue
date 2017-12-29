@@ -41,7 +41,7 @@
         </div>
 
         <div class="add-shop flex flex-v flex-align-center flex-justify-center" @click="addShop">
-          <div class="flex flex-align-center flex-justify-center">
+          <div class="">
             <i class="iconfont">
               &#xe600;
             </i>
