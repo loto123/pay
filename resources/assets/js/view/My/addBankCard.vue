@@ -245,24 +245,31 @@
 			},
 			//短信验证码
 			sendYZM() {
-				var _temp = {};
-				_temp.mobile = this.mobile;
+				if(this.computedTime !=null){
+					return;
+				}
+				var _data = {};
+				_data.mobile = this.mobile;
 
 				if (!this.mobile) {
 					Toast("请填写银行卡预留手机号");
 					return
 				}
-				request.getInstance().postData("api/auth/sms", _temp).then((res) => {
-					this.computedTime = 60;
-					this.timer = setInterval(() => {
-						this.computedTime--;
-						// console.log(this.computedTime);
-						if (this.computedTime == 0) {
-							clearInterval(this.timer)
-						}
-					}, 1000)
+				this.computedTime = 60;
+				var timer = setInterval(() => {
+					this.computedTime--;
+					if (this.computedTime == 0) {
+						this.computedTime=null;
+						clearInterval(timer);
+					}
+				}, 1000)
+				
+				Loading.getInstance().open();
+				request.getInstance().postData("api/auth/sms", _data).then((res) => {
+					Loading.getInstance().close();
 				}).catch((err) => {
 					console.error(err);
+					Loading.getInstance().close();
 				})
 			},
 			onAddressChange(picker, values) {

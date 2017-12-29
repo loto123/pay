@@ -118,11 +118,13 @@
 					amount: this.amount
 				}
 
-				if (!this.amount) {
+				if (this.amount<=0) {
 					Toast('请输入转账金额');
 					return
-				}
-				if (!this.shopId) {
+				}else if(this.amount>this.balance){
+					Toast('余额不足');
+					return
+				}else if (!this.shopId) {
 					Toast('请选择店铺');
 					return
 				}

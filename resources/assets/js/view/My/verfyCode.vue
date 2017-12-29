@@ -11,7 +11,7 @@
         </section>
         <section class="input-wrap-box">
           <div class="input-wrap flex flex-align-center">
-            <span>验证码:</span>
+            <span class="flex-1">验证码:</span>
             <input type="text" placeholder="请输入验证码" class="flex-1" v-model="code">
             <mt-button type="default" class="flex-1" @click="sendYZM">发送验证码{{computedTime?"("+computedTime+")":""}}</mt-button>
           </div>
@@ -25,9 +25,9 @@
 </template>
 
 <script>
-  import axios from "axios";  
   import topBack from "../../components/topBack";
   import request from '../../utils/userRequest';
+  import Loading from '../../utils/loading'
   import { Toast } from "mint-ui";
 
   export default {
@@ -57,19 +57,21 @@
       },
 
       sendYZM(){
+        if(this.computedTime !=null){
+          return;
+        }
         var _temp = {};
         _temp.mobile = this.$route.query.mobile;
-       
+        this.computedTime = 60;
+        var timer = setInterval(() => {
+            this.computedTime --;
+            if (this.computedTime == 0) {
+              this.computedTime = null;
+              clearInterval(timer)
+            }
+        }, 1000)
         request.getInstance().postData("api/auth/sms",_temp).then((res) => {
-          console.log(res);
-          this.computedTime = 60;
-          this.timer = setInterval(() => {
-              this.computedTime --;
-              console.log(this.computedTime); 
-              if (this.computedTime == 0) {
-                clearInterval(this.timer)
-              }
-          }, 1000)
+          Loading.getInstance().close();
         }).catch((err) => {
          console.error(err);
         })
