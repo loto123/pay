@@ -451,8 +451,8 @@
             display: block;
             outline: none;
             border:none;
-            height: 80%;
-            width: 80%;
+            height: 75%;
+            width: 85%;
             text-indent: 2em;
             font-size:1.1em;
           }
