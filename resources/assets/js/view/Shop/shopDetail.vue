@@ -614,10 +614,6 @@ export default {
           this.logo = res.data.data.logo;
 
 
-          if(!this.rate){
-            this.isGroupMaster = false;
-          }
-
           if (res.data.data.active == 1) {
             this.tradeStatus = true;
           } else {
@@ -690,7 +686,6 @@ export default {
     },
 
     updateShop(type){
-      console.log(this.isGroupMaster);
       if (!this.isGroupMaster){
           return;
       }
@@ -781,6 +776,11 @@ export default {
     "inviteLinkStatus":function(){
 
       var _link = null;
+
+      if(!this.isShow || !this.isGroupMaster){
+          return ;
+      }
+
       if(this.inviteLinkStatus == true){
         _link = 1;
       }else {
@@ -792,17 +792,19 @@ export default {
       };
 
       request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
-        setTimeout(()=>{
+
+      }).catch(err=>{
+          Toast("设置失败");
           this.init();
-        },1500);
-      }).catch();
+      });
     },
 
     "tradeStatus":function(){
       var _link = null;
-      if(!this.isShow){
+      if(!this.isShow || !this.isGroupMaster){
           return ;
       }
+
       if(this.tradeStatus == true){
         _link = 1;
       }else {
@@ -814,9 +816,7 @@ export default {
       };
 
       request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
-        setTimeout(()=>{
-//          this.init();
-        },1500);
+
       }).catch(err=>{
           Toast("设置失败");
           this.init();
