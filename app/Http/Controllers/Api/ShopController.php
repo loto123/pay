@@ -912,13 +912,6 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Parameter(
-     *     name="user_id",
-     *     in="path",
-     *     description="被邀请人id",
-     *     required=true,
-     *     type="string"
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
