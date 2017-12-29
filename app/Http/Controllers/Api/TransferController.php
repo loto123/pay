@@ -204,9 +204,9 @@ class TransferController extends Controller
         $transfer->shop_id = $transfer->shop->en_id();
         $transfer->user->id = $transfer->user->en_id();
         foreach ($transfer->record as $key => $record) {
-            $transfer->record->allow_cancel = false;
-            if($transfer->record->stat == 2 && $transfer->user_id == $user->id) {
-                $transfer->record->allow_cancel = true;
+            $transfer->record[$key]->allow_cancel = false;
+            if($transfer->record[$key]->stat == 2 && $transfer->record[$key]->user_id == $user->id) {
+                $transfer->record[$key]->allow_cancel = true;
             }
             $transfer->record[$key]->user->id = $record->user->en_id();
             unset($transfer->record[$key]->transfer_id);
