@@ -5,6 +5,9 @@
             <i class="iconfont" style="color:#fff; font-size:1.5em;">
               &#xe626;
             </i>
+
+            <span class="notice" v-if="newMessage>0">
+            </span>
           </div>
           <section class="transaction flex flex-justify-center">
             <a href="/#/myAccount">
@@ -74,10 +77,21 @@ i {
   box-sizing: border-box;
 
   .message{
-    height:2em;
-    width:100%;
-    padding-right:1em;
-    box-sizing: border-box;
+      height:2em;
+      width:100%;
+      padding-right:1em;
+      box-sizing: border-box;
+      position: relative;
+
+      .notice{
+          width: 0.6em;
+          height:0.6em;
+          background: red;
+          border-radius: 50%;
+          position: absolute;
+          right:0.7em;
+          top:0em;
+      }
   }
 
   .transaction {
@@ -147,7 +161,8 @@ export default {
   data(){
     return {
       amount:null,
-      avatar:null
+      avatar:null,
+      newMessage:0
     }
   },
   created(){
@@ -162,7 +177,7 @@ export default {
       request.getInstance().getData("api/index").then(res=>{
         this.amount = res.data.data.balance;
         this.avatar = res.data.data.avatar;
-        this.message = res.data.data.message;
+        this.newMessage = res.data.data.new_message;
 
         Loading.getInstance().close();
         
