@@ -38,7 +38,7 @@
 
         <div class="info-item flex flex-align-center flex-justify-between" @click="updateShop('shopName')">
             <span class="title flex-4"> 店铺名称 </span>
-            <span class="name flex-5">{{shopName}}</span>
+            <span class="name flex-5">{{SetString(shopName,16)}}</span>
             <i class="iconfont flex-1">
             &#xe62e;
             </i>
@@ -138,7 +138,8 @@
     </div>
 
     <div class="button-wrap">
-        <mt-button type="danger" size="large" @click = "dissShop">解散店铺</mt-button>
+        <mt-button type="danger" size="large" @click = "dissShop" v-if="isGroupMaster">解散店铺</mt-button>
+        <mt-button type="danger" size="large" @click = "exitShop" v-if="!isGroupMaster">退出店铺</mt-button>
     </div>
 
     <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch" v-bind:class="{poAbsolute:isFixed}">
@@ -507,6 +508,7 @@
 import topBack from "../../components/topBack";
 import { Toast,MessageBox } from "mint-ui";
 import request from "../../utils/userRequest";
+import utils from "../../utils/utils"
 import Loading from "../../utils/loading";
 
 export default {
@@ -587,7 +589,9 @@ export default {
         Loading.getInstance().close();
         Toast("邀请用户成功");
         this.closeMemberTab();
-      }).catch(error=>{
+      }).catch(err=>{
+          Loading.getInstance().close();
+          Toast(err.data.msg);
       });
     },
 
@@ -641,6 +645,30 @@ export default {
               .then(res => {
                 Loading.getInstance().close();
                 Toast("店铺解散成功");
+                setTimeout(()=>{
+                  this.$router.push("/shop");
+                },1000);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+        }).catch(err=>{
+
+        });
+      
+    },
+
+    exitShop(){
+      MessageBox.confirm('确定退出店铺?').then(action => {
+
+            Loading.getInstance().open();
+
+            request
+              .getInstance()
+              .postData("api/shop/quit/" + this.shopId)
+              .then(res => {
+                Loading.getInstance().close();
+                Toast("退出店铺成功");
                 setTimeout(()=>{
                   this.$router.push("/shop");
                 },1000);
@@ -770,6 +798,10 @@ export default {
           }).catch(err=>{});
         }
     },
+
+    SetString(str,len){
+        return utils.SetString(str,len);
+    }
 
   },
   watch:{
