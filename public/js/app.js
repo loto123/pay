@@ -56072,7 +56072,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-active[data-v-3cefe37e] {\n  -webkit-transition: all 0.3s ease;\n  transition: all 0.3s ease;\n}\n.slide-enter[data-v-3cefe37e],\n.slide-leave-to[data-v-3cefe37e] {\n  opacity: 0;\n}\n#drop-list-component[data-v-3cefe37e] {\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#drop-list-component .content[data-v-3cefe37e] {\n    width: 80%;\n    height: 70%;\n    background: #fff;\n    position: absolute;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#drop-list-component .content h3[data-v-3cefe37e] {\n      height: 3em;\n}\n#drop-list-component .content .list-wrap[data-v-3cefe37e] {\n      height: 70%;\n      overflow: scroll;\n}\n#drop-list-component .content .loading-more[data-v-3cefe37e] {\n      height: 3em;\n      width: 100%;\n      padding-left: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#drop-list-component .mask[data-v-3cefe37e] {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.4);\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-active[data-v-3cefe37e] {\n  -webkit-transition: all 0.3s ease;\n  transition: all 0.3s ease;\n}\n.slide-enter[data-v-3cefe37e],\n.slide-leave-to[data-v-3cefe37e] {\n  opacity: 0;\n}\n#drop-list-component[data-v-3cefe37e] {\n  height: 100vh;\n  width: 100vw;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#drop-list-component .content[data-v-3cefe37e] {\n    width: 80%;\n    height: 70%;\n    background: #fff;\n    position: absolute;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#drop-list-component .content h3[data-v-3cefe37e] {\n      height: 3em;\n}\n#drop-list-component .content .list-wrap[data-v-3cefe37e] {\n      height: 70%;\n      overflow: scroll;\n}\n#drop-list-component .content .loading-more[data-v-3cefe37e] {\n      height: 3em;\n      width: 100%;\n      padding-left: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#drop-list-component .mask[data-v-3cefe37e] {\n    width: 100vw;\n    height: 100vh;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.4);\n}\n", ""]);
 
 // exports
 
@@ -57551,6 +57551,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _t = {};
         _t.value = res.data.data.data[i].id.toString();
         _t.label = __WEBPACK_IMPORTED_MODULE_5__utils_utils__["a" /* default */].SetString(res.data.data.data[i].name, 10);
+        _t.price = res.data.data.data[i].price;
         _tempList.push(_t);
       }
 
@@ -57565,6 +57566,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       return "没有这个店铺";
     },
+    getDefaultPrice: function getDefaultPrice(id) {
+      for (var i = 0; i < this.shopList.length; i++) {
+        if (this.shopList[i].value == id) {
+          return this.shopList[i].price;
+        }
+      }
+
+      //          return "没有这个店铺";
+    },
     showDropList: function showDropList() {
       if (this.shopList.length == 0) {
         Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("当前无可选的店铺,请先加入店铺或创建店铺");
@@ -57577,6 +57587,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.dropListSwitch = false;
       this.dealShop = this.getShopName(data);
       this.shopId = data;
+      this.price = this.getDefaultPrice(data);
 
       this.memberList = []; // 清空店铺成员列表
     },
@@ -58263,12 +58274,8 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("choiseMember", {
-        attrs: {
-          isShow: _vm.choiseMemberSwitch,
-          dataList: _vm.memberList,
-          submit: _vm.getMemberData
-        },
-        on: { hide: _vm.hideMemberChoise }
+        attrs: { isShow: _vm.choiseMemberSwitch, dataList: _vm.memberList },
+        on: { hide: _vm.hideMemberChoise, submit: _vm.getMemberData }
       })
     ],
     1
@@ -60792,6 +60799,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
+//
+//
+//
+//
 //
 //
 //
@@ -66663,6 +66674,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
         _this.createShopSwitch = true;
+        Toast(err.data.data.message);
         console.error(err);
       });
     },
@@ -66673,7 +66685,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
-
       Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/messages/count")]).then(function (res) {
         _this2.shopList = res[0].data.data.data;
         _this2.total_profit = res[1].data.data.profit;
@@ -68790,7 +68801,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       membersCount: null,
       membersList: [],
       active: null,
-
+      platform_fee: null,
       addMemberSwitch: false, // 添加成员开关
       logo: null, // 店铺的头像
 
@@ -68862,6 +68873,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.shopId = res.data.data.id;
         _this2.shopName = res.data.data.name;
         _this2.rate = res.data.data.rate;
+        _this2.platform_fee = res.data.data.platform_fee;
         if (_this2.isGroupMaster) {
           _this2.percent = res.data.data.percent;
         }
@@ -68970,7 +68982,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       // 手续费率
       if (type == "percent") {
-        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的手续费率", "修改手续费率").then(function (_ref2) {
+        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的手续费率", "修改手续费率(不能超过平台交易费)").then(function (_ref2) {
           var value = _ref2.value,
               action = _ref2.action;
 
@@ -69345,7 +69357,9 @@ var render = function() {
                       _vm._v(" 平台交易费 ")
                     ]),
                     _vm._v(" "),
-                    _c("span", { staticClass: "text flex-1" }, [_vm._v("5%")])
+                    _c("span", { staticClass: "text flex-1" }, [
+                      _vm._v(_vm._s(_vm.platform_fee) + "%")
+                    ])
                   ]
                 )
               : _vm._e(),
@@ -71921,7 +71935,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/account/" + this.shopId).then(function (res) {
         _this.balance = res.data.data.balance;
         _this.today_profit = res.data.data.today_profit;
-        _this.yesterday_profit = res.data.data.yesterday_profit;
+        _this.yesterday_profit = res.data.data.last_profit;
         _this.total_profit = res.data.data.total_profit;
 
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();

@@ -42,7 +42,7 @@
 
 #drop-list-component{
     height:100vh;
-    width:100%;
+    width:100vw;
     position: fixed;
     top:0em;
     left: 0em;
@@ -74,8 +74,8 @@
     }
 
     .mask{
-        width:100%;
-        height:100%;
+        width:100vw;
+        height:100vh;
         position: absolute;
         background: rgba(0,0,0,0.4);
     }

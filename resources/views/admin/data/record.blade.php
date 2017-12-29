@@ -108,16 +108,16 @@
                                 @endif
                             </td>
                             <td>{{$item->transfer_id}}</td>
-                            @if($item->shop && $item->shop->manager)
+                            @if($item->transfer && $item->transfer->shop && $item->transfer->shop->manager)
                                 <td>
                                     <div class="user-panel clearfix">
                                         <div class="pull-left">
-                                            <img src="{{$item->shop->manager->avatar}}" width="40" height="40"
+                                            <img src="{{$item->transfer->shop->manager->avatar}}" width="40" height="40"
                                                  class="img-circle">
                                         </div>
                                         <div class="pull-left ml7">
-                                            <p>{{$item->shop->manager->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->shop->manager->id}}</span></span>
+                                            <p>{{$item->transfer->shop->manager->name}}</p>
+                                            <span>ID:<span class="text-yellow">{{$item->transfer->shop->manager->id}}</span></span>
                                         </div>
                                     </div>
                                 </td>
@@ -125,11 +125,11 @@
                                 <td>无</td>
                             @endif
                             <td>
-                                @if($item->shop)
+                                @if($item->transfer && $item->transfer->shop)
                                     <div class="user-panel clearfix">
                                         <div class="pull-left ml7">
-                                            <p>{{$item->shop->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->shop->id}}</span></span>
+                                            <p>{{$item->transfer->shop->name}}</p>
+                                            <span>ID:<span class="text-yellow">{{$item->transfer->shop->id}}</span></span>
                                         </div>
                                     </div>
                                 @else

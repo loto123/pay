@@ -104,14 +104,16 @@ class TransferController extends Controller
         $transfer->user_id = $user->id;
         $transfer->price = $request->price;
         $transfer->comment = $request->input('comment', '');
-        if ($shop->type == 0) {
-            $transfer->tip_type = 1;
-            $transfer->tip_amount = $shop->type_value;
-        }
-        if ($shop->type == 1) {
-            $transfer->tip_type = 2;
-            $transfer->tip_percent = $shop->type_value * 100;
-        }
+//        if ($shop->type == 0) {
+//            $transfer->tip_type = 1;
+//            $transfer->tip_amount = $shop->type_value;
+//        }
+//        if ($shop->type == 1) {
+//            $transfer->tip_type = 2;
+//            $transfer->tip_percent = $shop->type_value * 100;
+//        }
+        $transfer->tip_type = 2;
+        $transfer->tip_percent = $shop->fee;
         $transfer->fee_percent = config('platform_fee_percent');
         $transfer->container_id = $wallet->id;
         //交易关系包含自己
