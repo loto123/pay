@@ -44,8 +44,8 @@
     height:100vh;
     width:100vw;
     position: fixed;
-    top:0em;
-    left: 0em;
+    top:0;
+    left: 0;
     z-index: 1001;
     .content{
         width:80%;

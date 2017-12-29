@@ -56072,7 +56072,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-active[data-v-3cefe37e] {\n  -webkit-transition: all 0.3s ease;\n  transition: all 0.3s ease;\n}\n.slide-enter[data-v-3cefe37e],\n.slide-leave-to[data-v-3cefe37e] {\n  opacity: 0;\n}\n#drop-list-component[data-v-3cefe37e] {\n  height: 100vh;\n  width: 100vw;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n}\n#drop-list-component .content[data-v-3cefe37e] {\n    width: 80%;\n    height: 70%;\n    background: #fff;\n    position: absolute;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#drop-list-component .content h3[data-v-3cefe37e] {\n      height: 3em;\n}\n#drop-list-component .content .list-wrap[data-v-3cefe37e] {\n      height: 70%;\n      overflow: scroll;\n}\n#drop-list-component .content .loading-more[data-v-3cefe37e] {\n      height: 3em;\n      width: 100%;\n      padding-left: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#drop-list-component .mask[data-v-3cefe37e] {\n    width: 100vw;\n    height: 100vh;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.4);\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-active[data-v-3cefe37e] {\n  -webkit-transition: all 0.3s ease;\n  transition: all 0.3s ease;\n}\n.slide-enter[data-v-3cefe37e],\n.slide-leave-to[data-v-3cefe37e] {\n  opacity: 0;\n}\n#drop-list-component[data-v-3cefe37e] {\n  height: 100vh;\n  width: 100vw;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1001;\n}\n#drop-list-component .content[data-v-3cefe37e] {\n    width: 80%;\n    height: 70%;\n    background: #fff;\n    position: absolute;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#drop-list-component .content h3[data-v-3cefe37e] {\n      height: 3em;\n}\n#drop-list-component .content .list-wrap[data-v-3cefe37e] {\n      height: 70%;\n      overflow: scroll;\n}\n#drop-list-component .content .loading-more[data-v-3cefe37e] {\n      height: 3em;\n      width: 100%;\n      padding-left: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#drop-list-component .mask[data-v-3cefe37e] {\n    width: 100vw;\n    height: 100vh;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.4);\n}\n", ""]);
 
 // exports
 
@@ -57536,7 +57536,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
-      alert(1);
+      alert(2);
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/all").then(function (res) {
         _this.setShopList(res);
