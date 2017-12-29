@@ -16,7 +16,7 @@ class BaseController extends Controller {
     protected function json($data=[], $message = '', $code = 1) {
         $result = [
             'code' => (int)$code,
-            'message' => $message,
+            'msg' => $message,
             'data' => $data ? $data : new \stdClass()
         ];
         return $this->response()->array($result);
