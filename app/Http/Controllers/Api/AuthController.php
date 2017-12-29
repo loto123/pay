@@ -313,6 +313,9 @@ class AuthController extends BaseController {
         $oauth_user->groupid = isset($user['groupid']) ? $user['groupid'] : 0;
         $oauth_user->save();
         if ($request->user_id) {
+            if ($oauth_user->user_id) {
+                return $this->json([], trans("api.wechat_already_bind"), 0);
+            }
             $login_user = User::findByEnId($request->user_id);
             if ($login_user) {
                 $login_user->avatar = $oauth_user->headimgurl;

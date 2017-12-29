@@ -18,6 +18,9 @@
 			  </div>
 			  <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提现</a>
 			</div>
+			<div class="service-money flex">
+			  <div class="money">额外扣除¥{{balance}}手续费<span>(费率1%)</span></div>
+			</div>
 			<div class="withdraw-way">
 			  <div class="title">提现到</div>
 			  <div class="list-wrap">
@@ -89,14 +92,16 @@
 				way: this.value
 			  }
 	  
-			  if (!this.amount) {
-				Toast('请输入提现金额');
-				return
-			  }
-			  if (!this.value) {
-				Toast('请选择支付方式');
-				return
-			  }
+			  if (this.amount<=0) {
+          Toast('请输入提现金额');
+          return
+        }else if (this.amount>this.balance) {
+          Toast('余额不足');
+          return
+        }else if (!this.value) {
+          Toast('请选择支付方式');
+          return
+        }
 			  if (this.has_pay_password == 0) {
 				this.$router.push('/my/setting_password');//跳转到设置支付密码
 			  } else {
@@ -179,6 +184,17 @@
 			color: #199ed8;
 			margin-left: 0.4em;
 		  }
+		}
+
+		.service-money {
+		  margin-top: 1em;
+		  font-size: 0.7em;
+		  .money {
+			color: #666;
+			}
+			span{
+				margin-left: 0.5em;
+			}
 		}
 	  
 		.withdraw-way {

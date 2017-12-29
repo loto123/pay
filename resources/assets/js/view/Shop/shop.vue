@@ -41,7 +41,7 @@
         </div>
 
         <div class="add-shop flex flex-v flex-align-center flex-justify-center" @click="addShop">
-          <div class="flex flex-align-center flex-justify-center">
+          <div class="flex flex-v flex-align-center flex-justify-center">
             <i class="iconfont">
               &#xe600;
             </i>
@@ -250,8 +250,11 @@
       border: 1px dashed #eee;
 
       > i {
-        font-size: 4em;
-        color: #bbb;
+          font-size: 4em;
+          color: #bbb;
+          display: block;
+          width: 1em;
+          height: 1em;
       }
     }
 
