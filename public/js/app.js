@@ -56086,7 +56086,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-active[data-v-3cefe37e] {\n  -webkit-transition: all 0.3s ease;\n  transition: all 0.3s ease;\n}\n.slide-enter[data-v-3cefe37e],\n.slide-leave-to[data-v-3cefe37e] {\n  opacity: 0;\n}\n#drop-list-component[data-v-3cefe37e] {\n  height: 100vh;\n  width: 100vw;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1001;\n}\n#drop-list-component .content[data-v-3cefe37e] {\n    width: 80%;\n    height: 70%;\n    background: #fff;\n    position: absolute;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#drop-list-component .content h3[data-v-3cefe37e] {\n      height: 3em;\n}\n#drop-list-component .content .list-wrap[data-v-3cefe37e] {\n      height: 70%;\n      overflow: scroll;\n}\n#drop-list-component .content .loading-more[data-v-3cefe37e] {\n      height: 3em;\n      width: 100%;\n      padding-left: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#drop-list-component .mask[data-v-3cefe37e] {\n    width: 100vw;\n    height: 100vh;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.4);\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-active[data-v-3cefe37e] {\n  -webkit-transition: all 0.3s ease;\n  transition: all 0.3s ease;\n}\n.slide-enter[data-v-3cefe37e],\n.slide-leave-to[data-v-3cefe37e] {\n  opacity: 0;\n}\n#drop-list-component[data-v-3cefe37e] {\n  height: 100vh;\n  width: 100vw;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1001;\n}\n#drop-list-component .content[data-v-3cefe37e] {\n    left: 10vw;\n    top: 10vh;\n    width: 80vw;\n    height: 70vh;\n    background: #fff;\n    position: absolute;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#drop-list-component .content h3[data-v-3cefe37e] {\n      height: 3em;\n}\n#drop-list-component .content .list-wrap[data-v-3cefe37e] {\n      height: 70%;\n      overflow: scroll;\n}\n#drop-list-component .content .loading-more[data-v-3cefe37e] {\n      height: 3em;\n      width: 100%;\n      padding-left: 1em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n#drop-list-component .mask[data-v-3cefe37e] {\n    width: 100vw;\n    height: 100vh;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.4);\n}\n", ""]);
 
 // exports
 
@@ -56098,6 +56098,8 @@ exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-a
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(53);
+//
+//
 //
 //
 //
@@ -56216,47 +56218,40 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("transition", { attrs: { name: "slide" } }, [
     _vm.showSwitch
-      ? _c(
-          "div",
-          {
-            staticClass: "flex flex-v flex-align-center flex-justify-center",
-            attrs: { id: "drop-list-component" }
-          },
-          [
-            _c("div", { staticClass: "mask", on: { click: _vm.hideTab } }),
+      ? _c("div", { attrs: { id: "drop-list-component" } }, [
+          _c("div", { staticClass: "mask", on: { click: _vm.hideTab } }),
+          _vm._v(" "),
+          _c("div", { staticClass: "content" }, [
+            _c(
+              "h3",
+              { staticClass: "flex flex-align-center flex-justify-center" },
+              [_vm._v("\n              请选择您要发起交易的店铺\n          ")]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "content" }, [
-              _c(
-                "h3",
-                { staticClass: "flex flex-align-center flex-justify-center" },
-                [_vm._v("\n              请选择您要发起交易的店铺\n          ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "list-wrap" },
-                [
-                  _c("mt-radio", {
-                    staticStyle: { "font-size": "0.9em" },
-                    attrs: {
-                      align: "right",
-                      title: "",
-                      options: _vm.optionsList
+            _c(
+              "div",
+              { staticClass: "list-wrap" },
+              [
+                _c("mt-radio", {
+                  staticStyle: { "font-size": "0.9em" },
+                  attrs: {
+                    align: "right",
+                    title: "",
+                    options: _vm.optionsList
+                  },
+                  model: {
+                    value: _vm.choiseValue,
+                    callback: function($$v) {
+                      _vm.choiseValue = $$v
                     },
-                    model: {
-                      value: _vm.choiseValue,
-                      callback: function($$v) {
-                        _vm.choiseValue = $$v
-                      },
-                      expression: "choiseValue"
-                    }
-                  })
-                ],
-                1
-              )
-            ])
-          ]
-        )
+                    expression: "choiseValue"
+                  }
+                })
+              ],
+              1
+            )
+          ])
+        ])
       : _vm._e()
   ])
 }
@@ -57561,7 +57556,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this = this;
 
-      alert(2);
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/all").then(function (res) {
         _this.setShopList(res);

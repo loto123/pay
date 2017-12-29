@@ -214,7 +214,6 @@ export default {
 
   methods: {
     init() {
-        alert(2);
       Loading.getInstance().open();
       request
         .getInstance()
