@@ -1162,8 +1162,8 @@ class ShopController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $shop = Shop::findByEnId($shop_id);
-        $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("mode", ShopFund::MODE_OUT)->sum("amount");
-        $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", ">=", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+        $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 }
