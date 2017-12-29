@@ -9,7 +9,7 @@
 
     <div class="price flex">
         <label for="" class="flex-1">设置单价：</label>
-        <input type="text" value = "10" class="flex-1" v-model="price">
+        <input type="text" value = "10" class="flex-1" v-model="price" maxlength="6">
         <span class="cancer"></span>
     </div>
     
@@ -337,8 +337,16 @@ export default {
         return
       }
 
-      if(_data.price){
-        console.log(_data.price);
+      //  输入数据验证
+      if (!utils.testStringisNumber(parseFloat(_data.price)*10))
+      {
+          Toast("请输入正确的金额，最多只能包含一位小数");
+          return;
+      }
+
+      if(parseFloat(_data.price)>99999){
+          Toast("最大单价只能为99999");
+          return;
       }
 
       request

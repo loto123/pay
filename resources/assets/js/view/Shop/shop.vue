@@ -407,6 +407,7 @@ export default {
         })
         .catch(err=>{
           Loading.getInstance().close();
+
           console.error(err);
         });
     }

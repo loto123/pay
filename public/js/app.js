@@ -15224,6 +15224,7 @@ var Loading = function () {
         _classCallCheck(this, Loading);
 
         this._timer = null;
+        this.errSwitch = true;
     }
 
     _createClass(Loading, [{
@@ -15234,12 +15235,15 @@ var Loading = function () {
             if (!value) {
                 value = "加载中...";
             }
-
+            this.errSwitch = true;
             __WEBPACK_IMPORTED_MODULE_0_mint_ui__["Indicator"].open(value);
 
             if (this._timer == null) {
                 this._timer = setTimeout(function () {
                     __WEBPACK_IMPORTED_MODULE_0_mint_ui__["Indicator"].close();
+                    if (_this.errSwitch == true) {
+                        Object(__WEBPACK_IMPORTED_MODULE_0_mint_ui__["Toast"])("请求错误，请刷新页面");
+                    }
                     _this._timer = null;
                 }, 10000);
             } else {
@@ -15249,6 +15253,7 @@ var Loading = function () {
     }, {
         key: "close",
         value: function close() {
+            this.errSwitch = false;
             __WEBPACK_IMPORTED_MODULE_0_mint_ui__["Indicator"].close();
         }
     }]);
@@ -16879,6 +16884,18 @@ utils.SetString = function (str, len) {
 
     return s;
 };
+
+//检测一个输入是否为整数
+
+utils.testStringisNumber = function (testString) {
+    var t = Number(testString);
+    if (isNaN(t) || testString.toString().indexOf(".") != -1) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
 /* harmony default export */ __webpack_exports__["a"] = (utils);
 
 /***/ }),
@@ -57621,8 +57638,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return;
       }
 
-      if (_data.price) {
-        console.log(_data.price);
+      //  输入数据验证
+      if (!__WEBPACK_IMPORTED_MODULE_5__utils_utils__["a" /* default */].testStringisNumber(parseFloat(_data.price) * 10)) {
+        Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("请输入正确的金额，最多只能包含一位小数");
+        return;
+      }
+
+      if (parseFloat(_data.price) > 99999) {
+        Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("最大单价只能为99999");
+        return;
       }
 
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
@@ -58103,7 +58127,7 @@ var render = function() {
             }
           ],
           staticClass: "flex-1",
-          attrs: { type: "text", value: "10" },
+          attrs: { type: "text", value: "10", maxlength: "6" },
           domProps: { value: _vm.price },
           on: {
             input: function($event) {
@@ -66633,6 +66657,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+
         console.error(err);
       });
     }
@@ -69553,11 +69578,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().open();
 
-      // /shop/members/{shop_id}/delete/{user_id}
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest_js__["a" /* default */].getInstance().postData("api/shop/members/" + this.shopId + "/delete/" + id).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().close();
         Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])("删除成功");
         _this.controlSwitch = false;
+        _this.init();
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.data.msg);
       });
@@ -73713,9 +73738,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("h3", [
-                _vm._v(
-                  "\n        该二维码7天内（12月12日前）有效，重新进入将更新\n      "
-                )
+                _vm._v("\n        将二维码分享给好友，扫一扫加入店铺\n      ")
               ])
             ]
           )
@@ -75429,7 +75452,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
 
       __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/join/" + this.shopId).then(function (res) {
-
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("申请加入店铺成功");
       }).catch(function (error) {
