@@ -58431,7 +58431,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item .img-wrap img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
 
 // exports
 
@@ -58730,6 +58730,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -58749,6 +58753,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       passWordSwitch: false,
+      isShow: false,
+      isManager: false, // 是否是交易发起者
       renderData: {
         name: null,
         user: {
@@ -58818,6 +58824,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.recordList = res.data.data.record;
         _this2.shop_id = res.data.data.shop_id;
         _this2.allow_reward = res.data.data.allow_reward;
+        _this2.isManager = res.data.data.allow_cancel;
+        _this2.isShow = true;
+
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -60473,7 +60482,7 @@ var render = function() {
     { attrs: { id: "deal-detail" } },
     [
       _c("topBack", { staticStyle: { background: "#eee" } }, [
-        _vm.recordList.length == 0
+        _vm.recordList.length == 0 && _vm.isManager
           ? _c(
               "div",
               {
@@ -60622,87 +60631,96 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c(
-          "ul",
-          { staticClass: "flex flex-v flex-align-center" },
-          _vm._l(_vm.recordList, function(item) {
-            return _c(
-              "li",
-              [
-                _c(
-                  "slider",
-                  {
-                    attrs: {
-                      height: "3em",
-                      actionUser: "撤销",
-                      able: item.stat == 2 ? false : true
-                    },
-                    on: {
-                      deleteIt: function($event) {
-                        _vm.deleteIt(item.id)
-                      }
-                    }
-                  },
+        _vm.isShow
+          ? _c(
+              "ul",
+              { staticClass: "flex flex-v flex-align-center" },
+              _vm._l(_vm.recordList, function(item) {
+                return _c(
+                  "li",
                   [
                     _c(
-                      "div",
+                      "slider",
                       {
-                        staticClass:
-                          "slider-item flex flex-align-center flex-justify-between"
+                        attrs: {
+                          height: "3em",
+                          actionUser: "撤销",
+                          able:
+                            item.stat == 2 && item.allow_cancel ? false : true
+                        },
+                        on: {
+                          deleteIt: function($event) {
+                            _vm.deleteIt(item.id)
+                          }
+                        }
                       },
                       [
-                        _c("img", {
-                          attrs: { src: item.user.avatar, alt: "" }
-                        }),
-                        _vm._v(" "),
-                        _c("span", [_vm._v(_vm._s(item.user.name))]),
-                        _vm._v(" "),
                         _c(
                           "div",
                           {
                             staticClass:
-                              "pay-money-text flex flex-v flex-justify-between flex-align-center"
+                              "slider-item flex flex-align-center flex-justify-between"
                           },
                           [
+                            _c("div", { staticClass: "img-wrap flex-2" }, [
+                              _c("img", {
+                                attrs: { src: item.user.avatar, alt: "" }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "flex-8" }, [
+                              _vm._v(_vm._s(item.user.name))
+                            ]),
+                            _vm._v(" "),
                             _c(
-                              "span",
+                              "div",
                               {
-                                staticClass: "money",
-                                class: [item.stat == 1 ? "" : "green-color"]
+                                staticClass:
+                                  "pay-money-text flex flex-v flex-justify-between flex-align-center flex-4"
                               },
                               [
-                                _vm._v(
-                                  _vm._s(item.stat == 2 ? "+" : "") +
-                                    _vm._s(item.amount)
-                                )
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "money",
+                                    class: [item.stat == 1 ? "" : "green-color"]
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(item.stat == 2 ? "+" : "") +
+                                        _vm._s(item.amount)
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                item.stat != 3
+                                  ? _c("span", { staticClass: "title" }, [
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(
+                                            item.stat == 1 ? "付钱" : "拿钱"
+                                          )
+                                      )
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.stat == 3
+                                  ? _c("span", { staticClass: "title" }, [
+                                      _vm._v(" 已撤回")
+                                    ])
+                                  : _vm._e()
                               ]
-                            ),
-                            _vm._v(" "),
-                            item.stat != 3
-                              ? _c("span", { staticClass: "title" }, [
-                                  _vm._v(
-                                    " " +
-                                      _vm._s(item.stat == 1 ? "付钱" : "拿钱")
-                                  )
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            item.stat == 3
-                              ? _c("span", { staticClass: "title" }, [
-                                  _vm._v(" 已撤回")
-                                ])
-                              : _vm._e()
+                            )
                           ]
                         )
                       ]
                     )
-                  ]
+                  ],
+                  1
                 )
-              ],
-              1
+              })
             )
-          })
-        )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("section", {

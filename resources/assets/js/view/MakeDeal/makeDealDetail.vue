@@ -7,7 +7,7 @@
             box-sizing:border-box;" 
             class="flex flex-reverse"
 
-            v-if="recordList.length==0"
+            v-if="recordList.length==0 && isManager"
             @click="cancelTrade"
             >
               撤销交易
@@ -57,14 +57,16 @@
               </div>
             </div>
             
-            <ul class="flex flex-v flex-align-center">
+            <ul class="flex flex-v flex-align-center" v-if="isShow">
 
                 <li v-for=" item in recordList">
-                    <slider @deleteIt="deleteIt(item.id)" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==2?false:true">
+                    <slider @deleteIt="deleteIt(item.id)" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==2 && item.allow_cancel?false:true">
                         <div class="slider-item flex flex-align-center flex-justify-between">
-                            <img :src=item.user.avatar alt="">
-                            <span>{{item.user.name}}</span>
-                            <div class="pay-money-text flex flex-v flex-justify-between flex-align-center">
+                            <div class="img-wrap flex-2">
+                                <img :src=item.user.avatar alt="">
+                            </div>
+                            <span class="flex-8">{{item.user.name}}</span>
+                            <div class="pay-money-text flex flex-v flex-justify-between flex-align-center flex-4">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
                                 <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
@@ -235,12 +237,14 @@
             background: #fff;
           }
         }
+          .img-wrap{
+              img {
+                  width: 2.5em;
+                  height: 2.5em;
+                  display: block;
+              }
+          }
 
-        img {
-          width: 2.5em;
-          height: 2.5em;
-          display: block;
-        }
 
         span {
           display: block;
@@ -289,6 +293,8 @@ export default {
   data() {
     return {
       passWordSwitch: false,
+      isShow:false,
+      isManager:false,            // 是否是交易发起者
       renderData: {
         name: null,
         user:{
@@ -358,6 +364,9 @@ export default {
           this.recordList = res.data.data.record;
           this.shop_id = res.data.data.shop_id;
           this.allow_reward = res.data.data.allow_reward;
+          this.isManager = res.data.data.allow_cancel;
+          this.isShow = true;
+
           Loading.getInstance().close();
         })
         .catch(err => {
