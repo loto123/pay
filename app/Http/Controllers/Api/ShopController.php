@@ -185,6 +185,7 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
+                'price' => $_shop->price
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
