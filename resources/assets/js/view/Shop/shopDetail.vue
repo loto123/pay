@@ -718,7 +718,7 @@ export default {
 
       // 手续费率
       if(type=="percent"){
-         MessageBox.prompt("请输入新的手续费率","修改手续费率",).then(({ value, action }) => {
+         MessageBox.prompt("请输入新的手续费率","修改手续费率(不能超过平台交易费)",).then(({ value, action }) => {
           
           if(value.length ==0){
             Toast("手续费率不能为空");

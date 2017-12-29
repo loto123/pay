@@ -68971,7 +68971,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       // 手续费率
       if (type == "percent") {
-        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的手续费率", "修改手续费率").then(function (_ref2) {
+        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的手续费率", "修改手续费率(不能超过平台交易费)").then(function (_ref2) {
           var value = _ref2.value,
               action = _ref2.action;
 
