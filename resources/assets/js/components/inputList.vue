@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div id = "drop-list-component" class="flex flex-align-center flex-justify-center" v-if="showSwitch">
+    <div id = "drop-list-component" class="flex flex-v flex-align-center flex-justify-center" v-if="showSwitch">
         <div class="mask" @click="hideTab">
 
         </div>

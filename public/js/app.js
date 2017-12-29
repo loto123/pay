@@ -56219,7 +56219,7 @@ var render = function() {
       ? _c(
           "div",
           {
-            staticClass: "flex flex-align-center flex-justify-center",
+            staticClass: "flex flex-v flex-align-center flex-justify-center",
             attrs: { id: "drop-list-component" }
           },
           [
