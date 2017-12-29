@@ -189,17 +189,18 @@ class SmallBatchTransfer implements WithdrawInterface
     {
         do {
             $params = request()->query();
-
             //参数转为小写
             array_walk($params, function (&$val) {
                 $val = strtolower($val);
             });
 
+            $params['ret_msg'] = iconv("gbk//IGNORE", "utf-8", request()->query('ret_msg'));
             $params['detail_data'] = iconv("gbk//IGNORE", "utf-8", request()->query('detail_data'));
 
             //验证签名
             $validSign = WechatH5::makeSign($params, ['ret_code', 'ret_msg', 'agent_id', 'hy_bill_no', 'status', 'batch_no', 'batch_amt', 'batch_num', 'detail_data', 'ext_param1'], $config['key']);
             if ($validSign !== $params['sign']) {
+                PayLogger::withdraw()->error('签名错误,valid' . $validSign . ',give:' . $params['sign']);
                 break;
             }
 
