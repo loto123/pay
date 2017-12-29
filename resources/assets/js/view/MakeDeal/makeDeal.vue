@@ -33,7 +33,7 @@
     </div>
 
     <div class="commit-btn">
-        <mt-button type="primary" size="large" @click="submitData">确认</mt-button>
+        <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">确认</mt-button>
     </div>
 
     <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
@@ -202,6 +202,8 @@ export default {
       dealShop: null,
       shopList: null,
 
+      submitSwitch:true,
+
       shopId: null,
       price: 10,
       commentMessage: null,
@@ -321,7 +323,6 @@ export default {
       }
 
       var _members = this.getMembersId();
-
       var _data = {
         shop_id: this.shopId,
         price: this.price,
@@ -337,7 +338,7 @@ export default {
         return
       }
 
-      //  输入数据验证
+        //  输入数据验证
       if (!utils.testStringisNumber(parseFloat(_data.price)*10))
       {
           Toast("请输入正确的金额，最多只能包含一位小数");
@@ -348,17 +349,22 @@ export default {
           Toast("最大单价只能为99999");
           return;
       }
+        this.submitSwitch = false;
 
-      request
+        request
         .getInstance()
         .postData("api/transfer/create", _data)
         .then(res => {
           this.$router.push(
             "/makeDeal/deal_detail" + "?id=" + res.data.data.id
           );
+
+          this.submitSwitch = true;
+
         })
         .catch(err => {
             Toast(err.data.msg);
+            this.submitSwitch = true;
             console.error(err);
         });
     },

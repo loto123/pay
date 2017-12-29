@@ -55110,7 +55110,15 @@ var render = function() {
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.settingPasswordSwitch
-                  ? _c("h3", [_vm._v("请设置支付密码")])
+                  ? _c("h3", [
+                      _vm._v(
+                        _vm._s(
+                          _vm.secondValid
+                            ? "请再次输入支付密码"
+                            : "请设置支付密码"
+                        )
+                      )
+                    ])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.settingPasswordSwitch && _vm.secondValid
@@ -57504,6 +57512,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       dealShop: null,
       shopList: null,
 
+      submitSwitch: true,
+
       shopId: null,
       price: 10,
       commentMessage: null,
@@ -57622,7 +57632,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
 
       var _members = this.getMembersId();
-
       var _data = {
         shop_id: this.shopId,
         price: this.price,
@@ -57648,11 +57657,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("最大单价只能为99999");
         return;
       }
+      this.submitSwitch = false;
 
       __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/create", _data).then(function (res) {
         _this3.$router.push("/makeDeal/deal_detail" + "?id=" + res.data.data.id);
+
+        _this3.submitSwitch = true;
       }).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])(err.data.msg);
+        _this3.submitSwitch = true;
         console.error(err);
       });
     },
@@ -58218,7 +58231,11 @@ var render = function() {
           _c(
             "mt-button",
             {
-              attrs: { type: "primary", size: "large" },
+              attrs: {
+                type: "primary",
+                size: "large",
+                disabled: !_vm.submitSwitch
+              },
               on: { click: _vm.submitData }
             },
             [_vm._v("确认")]
@@ -63610,12 +63627,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	},
 
 	components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack___default.a, inputList: __WEBPACK_IMPORTED_MODULE_2__components_inputList___default.a },
-	beforeCreate: function beforeCreate() {
-		// request.getInstance().getData("api/card/getBankCardParams").then(res => {
-		// 		window.address = res.data.data;
-		// 		console.log(window.address);
-		// }).catch()
-	},
 	created: function created() {
 		this.personalInfo();
 
@@ -66592,6 +66603,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       addShopTabStatus: false, // 创建店铺拉起状态
       dealStatus: true, // 是否开启交易(创建店铺tab)
+      createShopSwitch: true, // 防看止按钮多次点击的
 
       openNewShop: {
         name: null,
@@ -66629,16 +66641,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 创建店铺
     createShop: function createShop() {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
-      var self = this;
       var data = this.openNewShop;
+      this.createShopSwitch = false;
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/create", data).then(function (res) {
-        self.addShopTabStatus = false;
-        self.getShopData();
+        _this.addShopTabStatus = false;
+        _this.getShopData();
+        _this.createShopSwitch = true;
+
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        _this.createShopSwitch = true;
         console.error(err);
       });
     },
@@ -66646,14 +66663,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 数据处理
     getShopData: function getShopData() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
 
       Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/messages/count")]).then(function (res) {
-        _this.shopList = res[0].data.data.data;
-        _this.total_profit = res[1].data.data.profit;
-        _this.messageCount = res[2].data.data.count;
+        _this2.shopList = res[0].data.data.data;
+        _this2.total_profit = res[1].data.data.profit;
+        _this2.messageCount = res[2].data.data.count;
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
@@ -66934,7 +66951,11 @@ var render = function() {
                     _c(
                       "mt-button",
                       {
-                        attrs: { type: "primary", size: "large" },
+                        attrs: {
+                          type: "primary",
+                          size: "large",
+                          disabled: !_vm.createShopSwitch
+                        },
                         on: { click: _vm.createShop }
                       },
                       [_vm._v("完成")]
@@ -67474,6 +67495,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_moment__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_moment__);
 //
 //
 //
@@ -67597,6 +67620,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -67607,7 +67631,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      messageList: []
+      messageList: [],
+      date: null,
+      time: null
     };
   },
 
@@ -67669,6 +67695,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     setString: function setString(str, len) {
       return __WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* default */].SetString(str, len);
+    },
+    toDate: function toDate(time) {
+      return __WEBPACK_IMPORTED_MODULE_5_moment___default()(time * 1000).format("YYYY-MM-DD");
+    },
+    toTime: function toTime(time) {
+      return __WEBPACK_IMPORTED_MODULE_5_moment___default()(time * 1000).format('h:mm:ss');
     }
   }
 });
@@ -67731,9 +67763,9 @@ var render = function() {
                   "notice-controller flex flex-align-center flex-justify-around"
               },
               [
-                _c("div", [_vm._v("2017-12-1")]),
+                _c("div", [_vm._v(_vm._s(_vm.toDate(item.created_at)))]),
                 _vm._v(" "),
-                _c("div", [_vm._v("14:55:45")]),
+                _c("div", [_vm._v(_vm._s(_vm.toTime(item.created_at)))]),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -75429,7 +75461,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.shopName = res.data.data.name;
         _this.membersCount = res.data.data.members_count;
         _this.logo = res.data.data.logo;
-        _this.timer = __WEBPACK_IMPORTED_MODULE_2_moment___default()(res.data.data.created_at).format("YYYY-MM-DD");
+        _this.timer = __WEBPACK_IMPORTED_MODULE_2_moment___default()(res.data.data.created_at * 1000).format("YYYY-MM-DD");
         _this.manager = res.data.data.manager;
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
