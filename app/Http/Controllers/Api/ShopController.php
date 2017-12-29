@@ -301,7 +301,7 @@ class ShopController extends BaseController {
                 'name' => $shop->name,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'percent' => $shop->fee,
+                'rate' => $shop->price,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
                 'is_manager' => $is_manager,
@@ -912,6 +912,13 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
+     *   @SWG\Parameter(
+     *     name="passwrod",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
      * @return \Illuminate\Http\Response
@@ -971,6 +978,13 @@ class ShopController extends BaseController {
      *     in="formData",
      *     description="备注",
      *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="passwrod",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
      *     type="string"
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
