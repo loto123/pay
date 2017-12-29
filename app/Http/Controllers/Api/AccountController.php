@@ -92,7 +92,6 @@ class AccountController extends BaseController {
             $channel = $user->channel->spareChannel;
         }
         try {
-
             if ($result = $user->container->initiateDeposit($request->amount, $channel, DepositMethod::find($request->way))) {
                 $record->save();
             } else {
@@ -335,7 +334,7 @@ class AccountController extends BaseController {
             return $this->json(null, '没有可用支付通道', 0);
         }
 
-        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label')->get();
+        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode')->get();
         if (config('app.debug')) {
             $methods->each(function (&$item) {
                 $item['required-params'] = WithdrawMethod::find($item['id'])->getReceiverDescription();
