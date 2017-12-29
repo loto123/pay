@@ -73,7 +73,7 @@
                             </div>
                             <div class="pull-left ml7">
                               <p>{{$item->name}}</p>
-                              <span>ID:<span class="text-yellow">{{$item->id}}</span></span>
+                              <span>ID:<span class="text-yellow">{{$item->mobile}}</span></span>
                             </div>
                          </div>
                     </td>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="pull-left ml7">
                                 <p>{{$item->proxy->name}}</p>
-                                <span>ID:<span class="text-yellow">{{$item->proxy->id}}</span></span>
+                                <span>ID:<span class="text-yellow">{{$item->proxy->mobile}}</span></span>
                             </div>
                         </div>
                     </td>
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="pull-left ml7">
                                     <p>{{$item->operator->name}}</p>
-                                    <span>ID:<span class="text-yellow">{{$item->operator->id}}</span></span>
+                                    <span>ID:<span class="text-yellow">{{$item->operator->username}}</span></span>
                                 </div>
                             </div>
                         </td>

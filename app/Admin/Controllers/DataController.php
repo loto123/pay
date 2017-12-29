@@ -9,6 +9,7 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Pay\Model\PayFactory;
 use App\Profit;
 use App\Role;
 use App\TipRecord;
@@ -170,11 +171,11 @@ class DataController extends Controller
             $transfer->status = 3;
             if ($transfer->save()) {
                 //解冻店铺茶水费资金
-                $shop = $transfer->shop;
-                if ($shop) {
-                    $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
-                    $shop->balance = $shop->balance + $transfer->tip_amount;
-                    $shop->save();
+                $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
+                if ($transfer->tip_amount > 0) {
+                    if (!$shop_container->unfreeze($transfer->tip_amount)) {
+                        return response()->json(['code' => 0, 'msg' => trans('trans.trans_closed_failed'), 'data' => []]);
+                    }
                 }
                 //公司分润 代理分润 运营分润
                 $records = $transfer->record()->where('stat', 2)->get();
@@ -183,18 +184,30 @@ class DataController extends Controller
                     $profit->record_id = $value->id;
                     $profit->user_id = $value->user_id;
                     $profit->fee_percent = $transfer->fee_percent;
-                    $profit->fee_amount = $value->fee_amount;
-                    if ($value->user->proxy) {
-                        $profit->proxy = $value->user->proxy->id;
-                        $profit->proxy_percent = $value->user->proxy->percent;
-                        $profit->proxy_amount = ($value->fee_amount * $value->user->proxy->percent) / 100;
+                    $profit->proxy = 0;
+                    $profit->operator = 0;
+                    if ($value->user->parent) {
+                        $profit->proxy = $value->user->parent->id;
+                        $profit->proxy_percent = $value->user->parent->percent;
+                        $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
+                        //解冻代理资金
+                        if ($profit->proxy_amount > 0) {
+                            $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+                            $proxy_container->unfreeze($profit->proxy_amount);
+                        }
                     }
+                    $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
                     if ($value->user->operator) {
                         $profit->operator = $value->user->operator->id;
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
                     }
-                    $profit->save();
+                    if ($profit->save()) {
+                        //发送通知
+                        if ($profit->proxy_amount > 0) {
+                            \App\Admin\Controllers\NoticeController::send($profit->user_id, 1, '', '', $profit->id);
+                        }
+                    }
                 }
                 DB::commit();
                 return response()->json(['code' => 1, 'msg' => trans('trans.trans_closed_success'), 'data' => []]);
@@ -300,6 +313,7 @@ class DataController extends Controller
                 }
             }
         ])
+//            ->withCount(['child_proxy','child_user'])
             ->withCount([
                 'child_proxy' => function ($query) {
                     $query->whereHas('roles', function ($query2) {

@@ -140,7 +140,6 @@
     <div class="button-wrap">
         <mt-button type="danger" size="large" @click = "dissShop" v-if="isGroupMaster">解散店铺</mt-button>
         <mt-button type="danger" size="large" @click = "exitShop" v-if="!isGroupMaster">退出店铺</mt-button>
-
     </div>
 
     <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch" v-bind:class="{poAbsolute:isFixed}">

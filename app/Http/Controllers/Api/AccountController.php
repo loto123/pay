@@ -445,6 +445,15 @@ class AccountController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function month_data(Request $request) {
-        return $this->json(['in' => 0, 'out' => 0]);
+        $validator = Validator::make($request->all(),
+            ['month' => 'required|regex:/^\d{4}-\d{2}$/']
+        );
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = $this->auth->user();
+        $in_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+        $out_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 }
