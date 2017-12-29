@@ -141,7 +141,7 @@
         <mt-button type="danger" size="large" @click = "dissShop">解散店铺</mt-button>
     </div>
 
-    <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch">
+    <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch" v-bind:class="{poAbsolute:isFixed}">
       <div class="content-tab">
 
         <div class="top-content flex flex-align-center">
@@ -154,7 +154,7 @@
 
         <div class="middle-content flex flex-align-center">
           <div class="input-wrap flex-7 flex flex-align-center">
-            <input type="text" v-model="searchUserMobile">
+            <input type="text" v-model="searchUserMobile" @click="searchInput" v-on:blur="inputBlur">
           </div>
 
           <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
@@ -188,6 +188,10 @@
 
 <style lang="scss" scoped>
 #shop-detail {
+  .poAbsolute{
+    position: absolute !important;
+  }
+
   background: #eee;
   min-height: 100vh;
 
@@ -411,7 +415,8 @@
   .add-members-pop{
     width:100%;
     height: 100vh;
-    position: absolute;
+    /*position: absolute;*/
+    position: fixed;
     background: rgba(0,0,0,0.7);
     top:0em;
     left: 0em;
@@ -518,6 +523,8 @@ export default {
       tradeStatus: true,         // 交易状态
       isGroupMaster: true,       // 是否是群主
       searchUserMobile:null,     // 搜索店铺成员的手机号
+
+      isFixed:false,
 
       shopId: null,
       shopName: null,
@@ -652,6 +659,14 @@ export default {
 
     openMemberTab(){
       this.addMemberSwitch = true;
+    },
+
+    searchInput(){
+      this.isFixed = true;
+    },
+
+    inputBlur(){
+      this.isFixed = false;
     },
 
     // 搜索用户
