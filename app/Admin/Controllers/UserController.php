@@ -6,6 +6,7 @@ use App\OauthUser;
 use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\Role;
+use App\Shop;
 use App\TransferRecord;
 use App\User;
 
@@ -143,7 +144,7 @@ class UserController extends Controller
             $grid->actions(function (Grid\Displayers\Actions $action) use ($grid) {
                 if(!Admin::user()->isRole('administrator')) {
                     $action->disableDelete();
-                } else if( User::where('parent_id',$action->getKey())->count() >0) {
+                } else if( User::where('parent_id',$action->getKey())->count() >0 || Shop::where("manager_id", $action->getKey())->count() > 0) {
                     $action->disableDelete();
                 }
                 //在操作按钮组前添加详情按钮
@@ -235,7 +236,11 @@ class UserController extends Controller
         if ($user->child_proxy()->count() > 0) {
             abort(404);
         }
+        if ($user->shop()->count() > 0) {
+            abort(404);
+        }
         if ($this->form()->destroy($id)) {
+            OauthUser::where("user_id", $id)->update(['user_id' => 0]);
             return response()->json([
                 'status'  => true,
                 'message' => trans('admin.delete_succeeded'),

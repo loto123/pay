@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\Heepay\Heepay;
 use App\Pay\Impl\Heepay\Reality;
 use App\Pay\Impl\Heepay\SmallBatchTransfer;
-use App\PayBanksSupport;
-use App\PayChannel;
+use App\PayInterfaceRecord;
 use App\User;
 use App\UserCard;
 use Illuminate\Support\Facades\Cache;
@@ -170,11 +170,32 @@ class CardController extends Controller
             return response()->json(['code' => 0,'msg' => '已经绑定的银行卡不能重复绑定','data' => []]);
         }
 
-        $bill_id = time();
-        $bill_time = date('YmdHis');
-        //调用银行卡鉴权接口
-        $auth_res = Reality::authentication($bill_id,$bill_time,$request->card_num,$this->user->id_number,$this->user->name);
-        if ($auth_res !== true){
+        if(!isset($this->user->channel['platform_id'])) {
+            return response()->json(['code' => 0,'msg' => '用户没有分配通道','data' => []]);
+        }
+
+        //添加记录
+        $bill_id = $this->createUniqueId();
+        try{
+            $pay_record = new PayInterfaceRecord();
+            $pay_record->bill_id = $bill_id;
+            $pay_record->user_id = $this->user->id;
+            $pay_record->type = UserCard::AUTH_TYPE;
+            $pay_record->platform = Heepay::PLATFORM;
+            $pay_record->save();
+        } catch (\Exception $e) {
+            return response()->json(['code' => 0,'msg' => '记录无法生成','data' => []]);
+        }
+        //鉴权
+        $auth_res = Reality::authentication(
+            $pay_record->id,
+            $bill_id,
+            date('YmdHis'),
+            $request->card_num,
+            $this->user->id_number,
+            $this->user->name
+        );
+        if ($auth_res !== true) {
             return response()->json(['code' => 0,'msg' => $auth_res,'data' => []]);
         }
 
@@ -270,7 +291,6 @@ class CardController extends Controller
                 }
             }
         }
-
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
     }
 
@@ -311,5 +331,11 @@ class CardController extends Controller
         $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
         $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
         return $maskBankCardNo;
+    }
+
+    //生成订单号
+    public static function createUniqueId()
+    {
+        return date('YmdHis') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
     }
 }

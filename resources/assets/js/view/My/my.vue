@@ -157,7 +157,7 @@
 							this.$router.push("/my/realAuth"+"?mobile="+this.mobile);
 						},
 						() => {
-							Toast("已经取消");
+
 						}
 					);
 				}else{

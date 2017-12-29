@@ -74,6 +74,7 @@ return [
             'image'  => 'images',
             'file' => '',
         ],
+        'host' => '/upload/admin'
     ],
 
     /*

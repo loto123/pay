@@ -129,17 +129,19 @@ class User extends Authenticatable
     //子代理
     public function child_proxy()
     {
-        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
-            $query->where('name', 'like', 'agent%');
-        });
+        return $this->hasMany('App\User', 'parent_id', 'id');
+//            ->whereHas('roles', function ($query) {
+//            $query->where('roles.name', 'like', 'agent%');
+//        });
     }
 
     //子用户
     public function child_user()
     {
-        return $this->hasMany('App\User', 'parent_id', 'id')->whereHas('roles', function ($query) {
-            $query->where('name', 'user');
-        });
+        return $this->hasMany('App\User', 'parent_id', 'id');
+//        ->whereHas('roles', function ($query) {
+//            $query->where('roles.name', 'user');
+//        });
     }
 
     protected static $skip32_id = '0123456789abcdef0123';

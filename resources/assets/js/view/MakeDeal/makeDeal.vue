@@ -9,7 +9,7 @@
 
     <div class="price flex">
         <label for="" class="flex-1">设置单价：</label>
-        <input type="text" value = "10" class="flex-1" v-model="price">
+        <input type="text" value = "10" class="flex-1" v-model="price" maxlength="6">
         <span class="cancer"></span>
     </div>
     
@@ -33,7 +33,7 @@
     </div>
 
     <div class="commit-btn">
-        <mt-button type="primary" size="large" @click="submitData">确认</mt-button>
+        <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">确认</mt-button>
     </div>
 
     <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
@@ -48,7 +48,7 @@
       :isShow = "choiseMemberSwitch"
       v-on:hide = "hideMemberChoise"
       :dataList = "memberList"
-      :submit  ="getMemberData"
+      v-on:submit  ="getMemberData"
     >
     </choiseMember>  
   </div>
@@ -202,6 +202,8 @@ export default {
       dealShop: null,
       shopList: null,
 
+      submitSwitch:true,
+
       shopId: null,
       price: 10,
       commentMessage: null,
@@ -212,6 +214,7 @@ export default {
 
   methods: {
     init() {
+        alert(2);
       Loading.getInstance().open();
       request
         .getInstance()
@@ -232,6 +235,7 @@ export default {
         var _t = {};
         _t.value = res.data.data.data[i].id.toString();
         _t.label = utils.SetString(res.data.data.data[i].name,10);
+        _t.price = res.data.data.data[i].price;
         _tempList.push(_t);
       }
 
@@ -248,6 +252,16 @@ export default {
       return "没有这个店铺";
     },
 
+      getDefaultPrice(id){
+          for (let i = 0; i < this.shopList.length; i++) {
+              if (this.shopList[i].value == id) {
+                  return this.shopList[i].price;
+              }
+          }
+
+//          return "没有这个店铺";
+      },
+
     showDropList() {
       if(this.shopList.length == 0){
         Toast("当前无可选的店铺,请先加入店铺或创建店铺");
@@ -256,10 +270,12 @@ export default {
 
       this.dropListSwitch = true;
     },
+
     hideDropList(data) {
       this.dropListSwitch = false;
       this.dealShop = this.getShopName(data);
       this.shopId = data;
+      this.price = this.getDefaultPrice(data);
 
       this.memberList = [];    // 清空店铺成员列表
     },
@@ -305,6 +321,7 @@ export default {
           _temp.checked = false;
           this.memberList.push(_temp);
         }
+
     },
 
     hideMemberChoise(){
@@ -321,7 +338,6 @@ export default {
       }
 
       var _members = this.getMembersId();
-
       var _data = {
         shop_id: this.shopId,
         price: this.price,
@@ -337,20 +353,33 @@ export default {
         return
       }
 
-      if(_data.price){
-        console.log(_data.price);
+        //  输入数据验证
+      if (!utils.testStringisNumber(parseFloat(_data.price)*10))
+      {
+          Toast("请输入正确的金额，最多只能包含一位小数");
+          return;
       }
 
-      request
+      if(parseFloat(_data.price)>99999){
+          Toast("最大单价只能为99999");
+          return;
+      }
+        this.submitSwitch = false;
+
+        request
         .getInstance()
         .postData("api/transfer/create", _data)
         .then(res => {
           this.$router.push(
             "/makeDeal/deal_detail" + "?id=" + res.data.data.id
           );
+
+          this.submitSwitch = true;
+
         })
         .catch(err => {
             Toast(err.data.msg);
+            this.submitSwitch = true;
             console.error(err);
         });
     },

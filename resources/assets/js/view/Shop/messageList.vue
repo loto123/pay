@@ -12,8 +12,8 @@
                   <span> {{item.type==0?"申请":"邀请你"}}加入 <i style="color:#26a2ff;">{{setString(item.shop_name,8)}}</i> </span>
               </div>
               <div class="notice-controller flex flex-align-center flex-justify-around">
-                  <div>2017-12-1</div>
-                  <div>14:55:45</div>
+                  <div>{{toDate(item.created_at)}}</div>
+                  <div>{{toTime(item.created_at)}}</div>
                   <div class="btn-wrap flex flex-align-center flex-justify-around">
                     <span class="cancel" @click="antiItem(item.id)">忽略</span>
                     <span class="agree" @click="agreeItem(item.id)">同意</span>
@@ -127,11 +127,14 @@ import Loading from "../../utils/loading"
 import request from "../../utils/userRequest"
 import utils from "../../utils/utils"
 import {Toast} from 'mint-ui'
+import moment from 'moment'
 
 export default {
   data(){
     return {
-      messageList:[]
+      messageList:[],
+      date:null,
+      time:null
     }
   },
   components: { topBack },
@@ -189,8 +192,17 @@ export default {
 
       });
     },
+
     setString(str,len){
       return utils.SetString(str,len);
+    },
+
+    toDate(time){
+        return moment(time * 1000).format("YYYY-MM-DD");
+    },
+
+    toTime(time){
+        return moment(time * 1000).format('h:mm:ss');
     }
   }
 };

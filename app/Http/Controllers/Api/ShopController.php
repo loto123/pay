@@ -7,6 +7,7 @@ use App\Pay\Model\PayFactory;
 use App\Shop;
 use App\ShopFund;
 use App\ShopUser;
+use App\Transfer;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -61,9 +62,9 @@ class ShopController extends BaseController {
      */
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|max:20',
             'rate' => 'required',
-            'percent' => 'required',
+            'percent' => 'required|regex:/^\d{0,2}(\.\d{1})?$/',
             'active' => 'required'
         ]);
 
@@ -184,6 +185,7 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
+                'price' => (double)$_shop->price
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -287,6 +289,7 @@ class ShopController extends BaseController {
                 'active' => $shop->active ? 1 : 0,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
+                'platform_fee' => config("platform_fee_percent"),
                 'rate' => $shop->price,
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
@@ -300,7 +303,7 @@ class ShopController extends BaseController {
                 'name' => $shop->name,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'percent' => $shop->fee,
+                'rate' => $shop->price,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
                 'is_manager' => $is_manager,
@@ -418,9 +421,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function member_delete($shop_id, $user_id) {
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
-        $user = User::findByEnId($user_id);
-        ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->delete();
+        $member = User::findByEnId($user_id);
+//        if ($shop->manager_id != $user->id) {
+//            return $this->json([], trans("api.error_shop_status"), 0);
+//        }
+        ShopUser::where("user_id", $member->id)->where("shop_id", $shop->id)->delete();
         return $this->json();
     }
     
@@ -441,7 +448,14 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function close($id) {
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (Transfer::where("shop_id", $shop->id)->where("status", 3)->count() > 0) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         $shop->status = Shop::STATUS_CLOSED;
         $shop->save();
         return $this->json();
@@ -523,6 +537,14 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'max:20',
+            'percent' => 'regex:/^\d{0,2}(\.\d{1})?$/',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
@@ -638,8 +660,11 @@ class ShopController extends BaseController {
      */
     public function account($id) {
         $shop = Shop::findByEnId($id);
-        return $this->json(['balance' => (double)$shop->container->balance, 'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-            'total_profit' => $shop->tips()->sum('amount')
+        return $this->json([
+            'balance' => (double)$shop->container->balance,
+            'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
+            'total_profit' => $shop->tips()->sum('amount'),
+            'last_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d", strtotime('-1 day')))->where("created_at", "<", date("Y-m-d"))->sum('amount')
         ]);
     }
 
@@ -694,7 +719,8 @@ class ShopController extends BaseController {
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
-                    'type' => $notification->data['type']
+                    'type' => $notification->data['type'],
+                    'created_at' => strtotime($notification->created_at)
                 ];
             } catch (\Exception $e){}
         }
@@ -892,9 +918,9 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="user_id",
-     *     in="path",
-     *     description="被邀请人id",
+     *     name="passwrod",
+     *     in="formData",
+     *     description="支付密码",
      *     required=true,
      *     type="string"
      *   ),
@@ -957,6 +983,13 @@ class ShopController extends BaseController {
      *     in="formData",
      *     description="备注",
      *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="passwrod",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
      *     type="string"
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -1063,8 +1096,8 @@ class ShopController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => $fund->no,
-            'remark' => $fund->remark,
+            'no' => (string)$fund->no,
+            'remark' => (string)$fund->remark,
             'balance' => $fund->balance
         ]);
     }

@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 
 class AgentController extends Controller
 {
-    public function relation() {
+    public function relation()
+    {
         $params = [];
         return Admin::content(function (Content $content) use ($params) {
             $content->header("关系查询");
@@ -18,9 +19,10 @@ class AgentController extends Controller
         });
     }
 
-    public function relation_update(Request $request) {
+    public function relation_update(Request $request)
+    {
         $aid = $request->input("player_id");
-        $user = User::find($aid);
+        $user = User::where('mobile', $aid)->first();
         if (!$user) {
             return response()->json([
                 'code' => -1,
