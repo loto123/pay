@@ -42,7 +42,7 @@
 
 #drop-list-component{
     height:100vh;
-    width:100%;
+    width:100vw;
     position: fixed;
     top:0em;
     left: 0em;
