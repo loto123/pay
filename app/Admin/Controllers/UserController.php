@@ -236,6 +236,7 @@ class UserController extends Controller
             abort(404);
         }
         if ($this->form()->destroy($id)) {
+            OauthUser::where("user_id", $id)->update(['user_id' => 0]);
             return response()->json([
                 'status'  => true,
                 'message' => trans('admin.delete_succeeded'),

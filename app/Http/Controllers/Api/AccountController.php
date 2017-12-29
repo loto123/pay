@@ -197,6 +197,9 @@ class AccountController extends BaseController {
     public function transfer(Request $request) {
         $shop = Shop::findByEnId($request->shop_id);
         $user = $this->auth->user();
+        if ($user->container->balance < $request->amount) {
+            return $this->json([], trans("api.error_user_balance"), 0);
+        }
         $record = new UserFund();
         $record->user_id = $user->id;
         $record->type = UserFund::TYPE_TRANSFER;
