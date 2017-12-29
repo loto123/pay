@@ -11,12 +11,15 @@
 			  <label>￥</label>
 			  <input type="text" placeholder="请输入金额" v-model="amount">
 			</div>
-			<div class="all-money flex">
+			<div class="all-money flex" v-if="iswithdraw">
 			  <div class="money">
 				可提现余额 ¥
 				<span>{{balance}}</span>,
 			  </div>
 			  <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提现</a>
+			</div>
+			<div class="service-money flex" v-if="amount">
+			  <div class="money">额外扣除¥ {{fee_mode=0?fee_value:fee}}手续费<span>{{fee_mode=0?"":"(费率"+fee_value+"%)"}}</span></div>
 			</div>
 			<div class="withdraw-way">
 			  <div class="title">提现到</div>
@@ -42,20 +45,41 @@
 	  
 		export default {
 		  data() {
-			return {
-			  balance: null,//可用余额
-			  showPasswordTag: false,       // 密码弹出开关
-	  
-			  amount: null,	//提现金钱
-			  options1: [],
-			  way: null,	//提现方式
-			  value: null,
-			  has_pay_password: null//是否设置支付密码
-			}
+				return {
+					balance: null,//可用余额
+					showPasswordTag: false,       // 密码弹出开关
+			
+					amount: null,	//提现金钱
+					options1: [],
+					way: null,	//提现方式
+					value: null,
+					has_pay_password: null,//是否设置支付密码
+					fee_mode:null,			//提现状态  1代表固定手续费   0代表百分比
+					fee_value:null,
+					isFee:false,//是否展示手续费
+					iswithdraw:true
+				}
 		  },
 		  created() {
-			this.init();
-		  },
+				this.init();
+			},
+			watch:{
+				amount:function(){
+					if(!this.amount){
+						this.isFee=true;
+						this.iswithdraw=true;
+					}else{
+						this.isFee=false;
+						this.iswithdraw=false;
+					}
+				}
+			},
+			computed: {
+				'fee': function () {
+					return this.amount*this.fee_value
+					// return 0
+				}
+			},
 		  components: { topBack, passWorld },
 		  methods: {
 			goIndex() {
@@ -71,7 +95,7 @@
 				.then((res) => {
 				  this.balance = res[0].data.data.balance;
 				  this.has_pay_password = res[0].data.data.has_pay_password;
-				  this.setBankList(res[1]);//获取提现方式列表
+					this.setBankList(res[1]);//获取提现方式列表
 				  Loading.getInstance().close();
 				})
 				.catch((err) => {
@@ -89,14 +113,16 @@
 				way: this.value
 			  }
 	  
-			  if (!this.amount) {
-				Toast('请输入提现金额');
-				return
-			  }
-			  if (!this.value) {
-				Toast('请选择支付方式');
-				return
-			  }
+			  if (this.amount<=0) {
+          Toast('请输入提现金额');
+          return
+        }else if (this.amount>this.balance) {
+          Toast('余额不足');
+          return
+        }else if (!this.value) {
+          Toast('请选择支付方式');
+          return
+        }
 			  if (this.has_pay_password == 0) {
 				this.$router.push('/my/setting_password');//跳转到设置支付密码
 			  } else {
@@ -116,7 +142,7 @@
 				.then((res) => {
 				  Toast('提现成功');
 				  this.$router.push('/myAccount');
-	  
+					
 				})
 				.catch((err) => {
 				  console.error(err);
@@ -128,6 +154,9 @@
 				var _t = {};
 				_t.value = res.data.data.methods[i].id.toString();
 				_t.label = res.data.data.methods[i].label;
+				this.fee_mode=res.data.data.methods[i].fee_mode;
+				this.fee_value=res.data.data.methods[i].fee_value;
+				console.log(this.fee_value);
 				_tempList.push(_t);
 			  }
 			  this.options1 = _tempList;
@@ -179,6 +208,17 @@
 			color: #199ed8;
 			margin-left: 0.4em;
 		  }
+		}
+
+		.service-money {
+		  margin-top: 1em;
+		  font-size: 0.8em;
+		  .money {
+			color: #666;
+			}
+			span{
+				margin-left: 0.5em;
+			}
 		}
 	  
 		.withdraw-way {

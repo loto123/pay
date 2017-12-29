@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div id = "drop-list-component" class="flex flex-align-center flex-justify-center" v-if="showSwitch">
+    <div id = "drop-list-component"  v-if="showSwitch">
         <div class="mask" @click="hideTab">
 
         </div>
@@ -24,8 +24,7 @@
             </div> -->
         </div>
 
-        
-    </div>  
+    </div>
   </transition>       
 </template>
 
@@ -42,14 +41,16 @@
 
 #drop-list-component{
     height:100vh;
-    width:100%;
+    width:100vw;
     position: fixed;
-    top:0em;
-    left: 0em;
+    top:0;
+    left: 0;
     z-index: 1001;
     .content{
-        width:80%;
-        height:70%;
+        left: 10vw;
+        top:10vh;
+        width:80vw;
+        height:70vh;
         background:#fff;
         position: absolute;
         padding-left: 1em;
@@ -74,8 +75,8 @@
     }
 
     .mask{
-        width:100%;
-        height:100%;
+        width:100vw;
+        height:100vh;
         position: absolute;
         background: rgba(0,0,0,0.4);
     }

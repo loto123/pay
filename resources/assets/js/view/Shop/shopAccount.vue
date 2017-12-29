@@ -177,7 +177,7 @@ export default {
   },
   methods: {
     goWithdraw(){
-      this.$router.push('/shop/shopAccount/withdraw');
+      this.$router.push('/shop/shopAccount/withdraw?shopId='+this.shopId);
     },
     goGive(){
       this.$router.push('/shop/shopAccount/give?shopId='+this.shopId);
@@ -190,7 +190,7 @@ export default {
       request.getInstance().getData("api/shop/account/"+this.shopId).then(res=>{
           this.balance = res.data.data.balance;
           this.today_profit = res.data.data.today_profit;
-          this.yesterday_profit = res.data.data.yesterday_profit;
+          this.yesterday_profit = res.data.data.last_profit;
           this.total_profit = res.data.data.total_profit;
 
           Loading.getInstance().close();

@@ -56,6 +56,8 @@
                         <th>总交易额</th>
                         <th>店铺收入</th>
                         <th>店铺余额</th>
+                        <th>店铺状态</th>
+                        <th>店铺交易状态</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -76,12 +78,28 @@
                                 </div>
                             </td>
                             <td>{{$item->shop_user_count}}</td>
-                            <td>{{(int)$item->type_value . '%'}}</td>
+                            <td>{{$item->fee . '%'}}</td>
                             <td>{{$item->fee_amount_cnt??0}}</td>
                             <td>{{$item->transfer_cnt}}</td>
                             <td>{{$item->summary??0}}</td>
                             <td>{{$item->tip_amount_cnt??0}}</td>
                             <td>{{$item->container['balance']}}</td>
+                            <td>
+                                @if($item->status == 0)
+                                    <span style='color:green'>正常</span>
+                                    @elseif($item->status == 1)
+                                    <span style='color:red'>已解散</span>
+                                    @else
+                                    <span style='color:blue'>已冻结</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($item->active==1)
+                                <span style='color:green'>开启</span>
+                                @else
+                                <span style='color:red'>关闭</span>
+                                @endif
+                            </td>
                             <td><a href="/admin/shop/detail/{{$item->id}}">详情</a></td>
                         </tr>
                     @endforeach

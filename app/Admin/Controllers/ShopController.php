@@ -81,17 +81,14 @@ class ShopController extends Controller
                 ->where('t.status', '=', '3');
         })->leftJoin('transfer_record as tfr', function ($join) {
             $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=' , '2');
-        })->with('manager')
+        })->with(['manager','users'])
             ->select( DB::raw($table_name.'.*'),
                 DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
                 DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
                 DB::raw('(SELECT SUM(amount) FROM tip_record WHERE tip_record.transfer_id = t.id ) as tip_amount_cnt'))
             ->where($table_name.'.id', $shop_id)->groupBy($table_name.'.id','t.id');
         $list = $listQuery->first();
-
-        $user_table = (new User)->getTable();
-        $users_arr = User::leftJoin('shop_users as su', 'su.user_id', '=', $user_table.'.id')->where('su.shop_id', '=', $shop_id)->select()->get();
-        $data = compact('list','users_arr');
+        $data = compact('list');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shopDetail', $data));
             $content->header('店铺详情');

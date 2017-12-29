@@ -30,7 +30,7 @@ class WechatH5 implements DepositInterface
             'agent_bill_time' => date('Ymdhis'),
             'agent_bill_id' => IdConfuse::mixUpDepositId($deposit_id, 30),
             'notify_url' => $notify_url,
-            'pay_amt' => (int)$amount,
+            'pay_amt' => $amount,
             'return_url' => $return_url,
             'user_ip' => str_replace('.', '_', request()->getClientIp()),
             'remark' => '',
