@@ -694,7 +694,8 @@ class ShopController extends BaseController {
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
-                    'type' => $notification->data['type']
+                    'type' => $notification->data['type'],
+                    'created_at' => strtotime($notification->created_at)
                 ];
             } catch (\Exception $e){}
         }
