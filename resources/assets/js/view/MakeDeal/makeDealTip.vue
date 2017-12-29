@@ -28,7 +28,11 @@
 
         </div>
 
-        <passwordTab :setSwitch = "passwordData.switch" v-on:hidePassword="hidePassword" v-on:callBack="getPassword"></passwordTab>
+        <passwordTab
+                :setSwitch = "passwordData.switch"
+                v-on:hidePassword="hidePassword"
+                v-on:callBack="getPassword">
+        </passwordTab>
     </div>
 </template>
 

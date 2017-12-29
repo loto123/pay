@@ -62,9 +62,9 @@ class ShopController extends BaseController {
      */
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|max:20',
             'rate' => 'required',
-            'percent' => 'required',
+            'percent' => 'required|regex:/^\d{0,2}(\.\d{1})?$/',
             'active' => 'required'
         ]);
 
@@ -72,6 +72,9 @@ class ShopController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
+        if ($user->shop()->count() >= 3) {
+            return $this->json([], trans("api.over_max_times"), 0);
+        }
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
         $shop  = new Shop();
@@ -113,9 +116,10 @@ class ShopController extends BaseController {
      */
     public function lists() {
         $user = $this->auth->user();
-        $count = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        $my_shop_ids = $user->shop()->pluck("id");
+        $count = $user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+        foreach ($user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->en_id(),
@@ -185,6 +189,7 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
+                'price' => (double)$_shop->price
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -288,6 +293,7 @@ class ShopController extends BaseController {
                 'active' => $shop->active ? 1 : 0,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
+                'platform_fee' => config("platform_fee_percent"),
                 'rate' => $shop->price,
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
@@ -301,7 +307,7 @@ class ShopController extends BaseController {
                 'name' => $shop->name,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'percent' => $shop->fee,
+                'rate' => $shop->price,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
                 'is_manager' => $is_manager,
@@ -374,9 +380,15 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function members($id, Request $request) {
+        $user = $this->auth->user();
         $size = $request->input('size', 20);
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $is_manager = $shop->manager_id == $user->id ? true : false;
+        $is_member = ShopUser::where('user_id', $user->id)->where("shop_id", $shop->id)->count() > 0;
+        if (!$is_manager && !$is_member) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         $members = [];
@@ -422,9 +434,12 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
         $member = User::findByEnId($user_id);
-//        if ($shop->manager_id != $user->id) {
-//            return $this->json([], trans("api.error_shop_status"), 0);
-//        }
+        if (!$shop || $shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($member->id == $user->id) {
+            return $this->json([], trans("api.cannot_delete_self"), 0);
+        }
         ShopUser::where("user_id", $member->id)->where("shop_id", $shop->id)->delete();
         return $this->json();
     }
@@ -448,7 +463,7 @@ class ShopController extends BaseController {
     public function close($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if (Transfer::where("shop_id", $shop->id)->where("status", 3)->count() > 0) {
+        if ($shop->container->balance > 0 || $shop->active || Transfer::where("shop_id", $shop->id)->where("status", 3)->count() > 0) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($shop->manager_id != $user->id) {
@@ -535,6 +550,14 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'max:20',
+            'percent' => 'regex:/^\d{0,2}(\.\d{1})?$/',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
@@ -604,8 +627,11 @@ class ShopController extends BaseController {
         /* @var $user User */
         $url = url(sprintf("/#/share/?shopId=%s&userId=%s", $shop->en_id(), $user->en_id()));
         $filename = md5($url."_".$size);
-        Storage::disk('public')->put('qrcode/'.$filename.'.png', QrCode::format('png')->size($size)->margin(1)->generate($url));
-        return $this->json(['url' => url('storage/qrcode/'.$filename.'.png')]);
+        $path = 'qrcode/'.$filename.'.png';
+        if (!Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->put($path, QrCode::format('png')->size($size)->margin(1)->generate($url));
+        }
+        return $this->json(['url' => url('storage/'.$path)]);
     }
 
     /**
@@ -627,6 +653,9 @@ class ShopController extends BaseController {
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (ShopUser::where("user_id", $user->id)->where("shop_ip", $shop->id)->exist()) {
+            return $this->json([], trans("api.shop_exist_member"), 0);
+        }
         //#todo
         Notification::send($shop->manager, new ShopApply(['user_id' => $user->id, 'shop_id' => $shop->id, 'type' => ShopApply::TYPE_APPLY]));
         return $this->json();
@@ -649,9 +678,19 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function account($id) {
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        return $this->json(['balance' => (double)$shop->container->balance, 'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-            'total_profit' => $shop->tips()->sum('amount')
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_perm"), 0);
+        }
+        return $this->json([
+            'balance' => (double)$shop->container->balance,
+            'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
+            'total_profit' => $shop->tips()->sum('amount'),
+            'last_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d", strtotime('-1 day')))->where("created_at", "<", date("Y-m-d"))->sum('amount')
         ]);
     }
 
@@ -837,6 +876,9 @@ class ShopController extends BaseController {
     public function invite($shop_id, $user_id) {
         $shop = Shop::findByEnId($shop_id);
         $user = User::findByEnId($user_id);
+        if (ShopUser::where("user_id", $user->id)->where("shop_ip", $shop->id)->exist()) {
+            return $this->json([], trans("api.shop_exist_member"), 0);
+        }
         Notification::send($user, new ShopApply(['user_id' => $user->id, 'invite_id' => $this->auth->user()->id, 'shop_id' => $shop->id, 'type' => ShopApply::TYPE_INVITE]));
 //        $user = $this->auth->user();
 //        if ($request->id) {
@@ -905,9 +947,9 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="user_id",
-     *     in="path",
-     *     description="被邀请人id",
+     *     name="passwrod",
+     *     in="formData",
+     *     description="支付密码",
      *     required=true,
      *     type="string"
      *   ),
@@ -970,6 +1012,13 @@ class ShopController extends BaseController {
      *     in="formData",
      *     description="备注",
      *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="passwrod",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
      *     type="string"
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -1076,8 +1125,8 @@ class ShopController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => $fund->no,
-            'remark' => $fund->remark,
+            'no' => (string)$fund->no,
+            'remark' => (string)$fund->remark,
             'balance' => $fund->balance
         ]);
     }

@@ -1,5 +1,5 @@
 <template>
-  <div id="shop-detail">
+  <div id="shop-detail" v-if="isShow">
       <topBack style="color:#fff; background:#26a2ff;"></topBack>
       
       <div class="top flex flex-v flex-align-center">
@@ -106,7 +106,7 @@
     <div class="platform">
         <div class="flex flex-align-center flex-justify-between" v-if="isGroupMaster">
             <span class="title flex-9"> 平台交易费 </span>
-            <span class="text flex-1">5%</span>
+            <span class="text flex-1">{{platform_fee}}%</span>
         </div>
 
         <div class="flex flex-align-center flex-justify-between" @click="updateShop('rate')">
@@ -141,7 +141,7 @@
         <mt-button type="danger" size="large" @click = "dissShop">解散店铺</mt-button>
     </div>
 
-    <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch">
+    <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch" v-bind:class="{poAbsolute:isFixed}">
       <div class="content-tab">
 
         <div class="top-content flex flex-align-center">
@@ -153,8 +153,8 @@
         </div>
 
         <div class="middle-content flex flex-align-center">
-          <div class="input-wrap flex-7 flex flex-align-center">
-            <input type="text" v-model="searchUserMobile">
+          <div class="input-wrap flex-7 flex flex-align-center flex-justify-center">
+            <input type="text" v-model="searchUserMobile" @click="searchInput" v-on:blur="inputBlur" placeholder="点击搜索好友">
           </div>
 
           <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
@@ -188,6 +188,10 @@
 
 <style lang="scss" scoped>
 #shop-detail {
+  .poAbsolute{
+    position: absolute !important;
+  }
+
   background: #eee;
   min-height: 100vh;
 
@@ -411,7 +415,8 @@
   .add-members-pop{
     width:100%;
     height: 100vh;
-    position: absolute;
+    /*position: absolute;*/
+    position: fixed;
     background: rgba(0,0,0,0.7);
     top:0em;
     left: 0em;
@@ -446,8 +451,8 @@
             display: block;
             outline: none;
             border:none;
-            height: 90%;
-            width: 98%;
+            height: 75%;
+            width: 85%;
             text-indent: 2em;
             font-size:1.1em;
           }
@@ -514,10 +519,14 @@ export default {
   components: { topBack },
   data() {
     return {
+      isShow:false,
+
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
       isGroupMaster: true,       // 是否是群主
       searchUserMobile:null,     // 搜索店铺成员的手机号
+
+      isFixed:false,
 
       shopId: null,
       shopName: null,
@@ -526,7 +535,7 @@ export default {
       membersCount: null,
       membersList:[],
       active: null,
-
+      platform_fee:null,
       addMemberSwitch: false,      // 添加成员开关
       logo:null,                    // 店铺的头像
 
@@ -592,18 +601,19 @@ export default {
         .getInstance()
         .getData("api/shop/detail/" + _id)
         .then(res => {
-
+          this.isShow = true;
+          this.isGroupMaster = res.data.data.is_manager;
           this.shopId = res.data.data.id;
           this.shopName = res.data.data.name;
           this.rate = res.data.data.rate;
-          this.percent = res.data.data.percent;
+          this.platform_fee = res.data.data.platform_fee;
+          if(this.isGroupMaster){
+              this.percent = res.data.data.percent;
+          }
           this.membersCount = res.data.data.members_count;
           this.membersList = res.data.data.members;
           this.logo = res.data.data.logo;
 
-          if(!this.rate){
-            this.isGroupMaster = false;
-          }
 
           if (res.data.data.active == 1) {
             this.tradeStatus = true;
@@ -654,6 +664,14 @@ export default {
       this.addMemberSwitch = true;
     },
 
+    searchInput(){
+      this.isFixed = true;
+    },
+
+    inputBlur(){
+      this.isFixed = false;
+    },
+
     // 搜索用户
     searchUser(){
       Loading.getInstance().open();
@@ -669,7 +687,9 @@ export default {
     },
 
     updateShop(type){
-
+      if (!this.isGroupMaster){
+          return;
+      }
       // 修改店铺名称
       if(type == "shopName"){
 
@@ -698,7 +718,7 @@ export default {
 
       // 手续费率
       if(type=="percent"){
-         MessageBox.prompt("请输入新的手续费率","修改手续费率",).then(({ value, action }) => {
+         MessageBox.prompt("请输入新的手续费率","修改手续费率(不能超过平台交易费)",).then(({ value, action }) => {
           
           if(value.length ==0){
             Toast("手续费率不能为空");
@@ -757,6 +777,11 @@ export default {
     "inviteLinkStatus":function(){
 
       var _link = null;
+
+      if(!this.isShow || !this.isGroupMaster){
+          return ;
+      }
+
       if(this.inviteLinkStatus == true){
         _link = 1;
       }else {
@@ -768,14 +793,19 @@ export default {
       };
 
       request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
-        setTimeout(()=>{
+
+      }).catch(err=>{
+          Toast("设置失败");
           this.init();
-        },1500);
-      }).catch();
+      });
     },
 
     "tradeStatus":function(){
       var _link = null;
+      if(!this.isShow || !this.isGroupMaster){
+          return ;
+      }
+
       if(this.tradeStatus == true){
         _link = 1;
       }else {
@@ -787,10 +817,11 @@ export default {
       };
 
       request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
-        setTimeout(()=>{
+
+      }).catch(err=>{
+          Toast("设置失败");
           this.init();
-        },1500);
-      }).catch();
+      });
     }
   }
 };
