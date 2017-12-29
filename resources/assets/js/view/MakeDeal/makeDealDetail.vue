@@ -498,6 +498,10 @@ export default {
 
                }).catch(err=>{
                   Loading.getInstance().close();
+                  Toast(err.data.msg);
+                  setTimeout(()=>{
+                      this.init();
+                  },1000);
                   console.error(err);
               });
 

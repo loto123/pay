@@ -653,7 +653,7 @@ class ShopController extends BaseController {
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if (ShopUser::where("user_id", $user->id)->where("shop_ip", $shop->id)->exist()) {
+        if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
         //#todo
@@ -876,7 +876,7 @@ class ShopController extends BaseController {
     public function invite($shop_id, $user_id) {
         $shop = Shop::findByEnId($shop_id);
         $user = User::findByEnId($user_id);
-        if (ShopUser::where("user_id", $user->id)->where("shop_ip", $shop->id)->exist()) {
+        if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
         Notification::send($user, new ShopApply(['user_id' => $user->id, 'invite_id' => $this->auth->user()->id, 'shop_id' => $shop->id, 'type' => ShopApply::TYPE_INVITE]));
@@ -1133,9 +1133,16 @@ class ShopController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/transfer/records/month",
+     *   path="/transfer/records/month/{shop_id}",
      *   summary="帐单月数据",
      *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Parameter(
      *     name="month",
      *     in="formData",
@@ -1147,7 +1154,16 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function month_data(Request $request) {
-        return $this->json(['in' => 0, 'out' => 0]);
+    public function month_data($shop_id, Request $request) {
+        $validator = Validator::make($request->all(),
+            ['month' => 'required|regex:/^\d{4}-\d{2}$/']
+        );
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $shop = Shop::findByEnId($shop_id);
+        $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+        $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 }
