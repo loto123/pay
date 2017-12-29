@@ -133,8 +133,8 @@ class SmallBatchTransfer implements WithdrawInterface
         foreach ($params as $field => $val) {
             $string .= "&$field=$val";
         }
-        $string = ltrim(strtolower($string), '&');
-        return md5($string);
+        $string = ltrim($string, '&');
+        return md5(strtolower($string));
     }
 
     /**
@@ -189,20 +189,23 @@ class SmallBatchTransfer implements WithdrawInterface
     {
         do {
             $params = request()->query();
+            $params['ret_msg'] = iconv("gbk//IGNORE", "utf-8", request()->query('ret_msg'));
+            $params['detail_data'] = iconv("gbk//IGNORE", "utf-8", request()->query('detail_data'));
+
             //参数转为小写
             array_walk($params, function (&$val) {
                 $val = strtolower($val);
             });
-
-            $params['ret_msg'] = iconv("gbk//IGNORE", "utf-8", request()->query('ret_msg'));
-            $params['detail_data'] = iconv("gbk//IGNORE", "utf-8", request()->query('detail_data'));
+            $key = strtolower($config['key']);//key和下单不一样，必须小写
 
             //验证签名
-            $validSign = WechatH5::makeSign($params, ['ret_code', 'ret_msg', 'agent_id', 'hy_bill_no', 'status', 'batch_no', 'batch_amt', 'batch_num', 'detail_data', 'ext_param1'], $config['key']);
+            $validSign = WechatH5::makeSign($params, ['ret_code', 'ret_msg', 'agent_id', 'hy_bill_no', 'status', 'batch_no', 'batch_amt', 'batch_num', 'detail_data', 'ext_param1'], $key);
             if ($validSign !== $params['sign']) {
-                PayLogger::withdraw()->error('签名错误,valid' . $validSign . ',give:' . $params['sign']);
+                PayLogger::withdraw()->error('签名错误,valid ' . $validSign . ',give:' . $params['sign']);
                 break;
             }
+
+            PayLogger::withdraw()->info('签名正确');
 
             $withdraw = Withdraw::where([['id', IdConfuse::recoveryDepositId($params['ext_param1'])], ['state', Withdraw::STATE_SUBMIT]])->lockForUpdate()->first();
             if (!$withdraw) {
