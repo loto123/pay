@@ -106,7 +106,7 @@
     <div class="platform">
         <div class="flex flex-align-center flex-justify-between" v-if="isGroupMaster">
             <span class="title flex-9"> 平台交易费 </span>
-            <span class="text flex-1">5%</span>
+            <span class="text flex-1">{{platform_fee}}%</span>
         </div>
 
         <div class="flex flex-align-center flex-justify-between" @click="updateShop('rate')">
@@ -535,7 +535,7 @@ export default {
       membersCount: null,
       membersList:[],
       active: null,
-
+      platform_fee:null,
       addMemberSwitch: false,      // 添加成员开关
       logo:null,                    // 店铺的头像
 
@@ -606,6 +606,7 @@ export default {
           this.shopId = res.data.data.id;
           this.shopName = res.data.data.name;
           this.rate = res.data.data.rate;
+          this.platform_fee = res.data.data.platform_fee;
           if(this.isGroupMaster){
               this.percent = res.data.data.percent;
           }

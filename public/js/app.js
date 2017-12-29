@@ -68790,7 +68790,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       membersCount: null,
       membersList: [],
       active: null,
-
+      platform_fee: null,
       addMemberSwitch: false, // 添加成员开关
       logo: null, // 店铺的头像
 
@@ -68862,6 +68862,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.shopId = res.data.data.id;
         _this2.shopName = res.data.data.name;
         _this2.rate = res.data.data.rate;
+        _this2.platform_fee = res.data.data.platform_fee;
         if (_this2.isGroupMaster) {
           _this2.percent = res.data.data.percent;
         }
@@ -69345,7 +69346,9 @@ var render = function() {
                       _vm._v(" 平台交易费 ")
                     ]),
                     _vm._v(" "),
-                    _c("span", { staticClass: "text flex-1" }, [_vm._v("5%")])
+                    _c("span", { staticClass: "text flex-1" }, [
+                      _vm._v(_vm._s(_vm.platform_fee) + "%")
+                    ])
                   ]
                 )
               : _vm._e(),
