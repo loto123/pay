@@ -86,9 +86,18 @@ class AccountController extends BaseController {
         $record->balance = $user->container->balance + $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
+
+        $channel = $user->channel;
+        if ($channel->disabled) {
+            $channel = $user->channel->spareChannel;
+        }
         try {
-            $record->save();
-            $result = $user->container->initiateDeposit($request->amount, $user->channel, DepositMethod::find($request->way));
+
+            if ($result = $user->container->initiateDeposit($request->amount, $channel, DepositMethod::find($request->way))) {
+                $record->save();
+            } else {
+                return $this->json([], 'error', 0);
+            }
         } catch (\Exception $e) {
             return $this->json([], 'error', 0);
         }
@@ -154,17 +163,50 @@ class AccountController extends BaseController {
         $record->amount = $request->amount;
         $record->balance = $user->container->balance - $request->amount;
         $record->status = UserFund::STATUS_SUCCESS;
+
+        /**
+         * @var $channel Channel
+         */
+        $channel = $user->channel;
+        if ($channel->disabled) {
+            $channel = $user->channel->spareChannel;
+        }
+
         try {
-            $record->save();
-            $result = $user->container->initiateWithdraw(
+            $withdraw_method = WithdrawMethod::find($request->way);
+            if ($withdraw_method->targetPlatform->getKey() == 0) {
+                //提现到银行卡
+
+                if (!$channel->platform->isCardSupport($user->pay_card)) {
+                    return $this->json([], '暂不支持该银行卡', 0);
+                }
+
+                $receiver_info = ['bank_card' => $user->pay_card];
+            } else {
+                //其它提现方式,待扩展...
+                $receiver_info = [];
+            }
+
+            //计算手续费
+            if ($withdraw_method->fee_value <= 0) {
+                $fee = 0;
+            } else {
+                $fee = $withdraw_method->fee_mode == 0 ? round($request->amount * $withdraw_method->fee_value / 100, 2, PHP_ROUND_HALF_EVEN) : $withdraw_method->fee_value;
+            }
+
+
+            if ($result = $user->container->initiateWithdraw(
                 $request->amount,
-                [
-                    'bank_card' => $user->pay_card
-                ],
-                $user->channel,
-                WithdrawMethod::find($request->way),
-                0.1
-            );
+                $receiver_info,
+                $channel,
+                $withdraw_method,
+                $fee
+            )
+            ) {
+                $record->save();
+            } else {
+                return $this->json([], 'error', 0);
+            }
         } catch (\Exception $e) {
             return $this->json([], 'error'.$e->getMessage(), 0);
         }
