@@ -58916,6 +58916,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
               }, 1500);
             }).catch(function (err) {
               __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+              Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
+              setTimeout(function () {
+                _this5.init();
+              }, 1000);
               console.error(err);
             });
           }).catch(function (err) {});
