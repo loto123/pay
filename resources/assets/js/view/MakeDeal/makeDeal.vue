@@ -48,7 +48,7 @@
       :isShow = "choiseMemberSwitch"
       v-on:hide = "hideMemberChoise"
       :dataList = "memberList"
-      :submit  ="getMemberData"
+      v-on:submit  ="getMemberData"
     >
     </choiseMember>  
   </div>
@@ -234,6 +234,7 @@ export default {
         var _t = {};
         _t.value = res.data.data.data[i].id.toString();
         _t.label = utils.SetString(res.data.data.data[i].name,10);
+        _t.price = res.data.data.data[i].price;
         _tempList.push(_t);
       }
 
@@ -250,6 +251,16 @@ export default {
       return "没有这个店铺";
     },
 
+      getDefaultPrice(id){
+          for (let i = 0; i < this.shopList.length; i++) {
+              if (this.shopList[i].value == id) {
+                  return this.shopList[i].price;
+              }
+          }
+
+//          return "没有这个店铺";
+      },
+
     showDropList() {
       if(this.shopList.length == 0){
         Toast("当前无可选的店铺,请先加入店铺或创建店铺");
@@ -258,10 +269,12 @@ export default {
 
       this.dropListSwitch = true;
     },
+
     hideDropList(data) {
       this.dropListSwitch = false;
       this.dealShop = this.getShopName(data);
       this.shopId = data;
+      this.price = this.getDefaultPrice(data);
 
       this.memberList = [];    // 清空店铺成员列表
     },
@@ -307,6 +320,7 @@ export default {
           _temp.checked = false;
           this.memberList.push(_temp);
         }
+
     },
 
     hideMemberChoise(){

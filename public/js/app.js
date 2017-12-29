@@ -57551,6 +57551,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _t = {};
         _t.value = res.data.data.data[i].id.toString();
         _t.label = __WEBPACK_IMPORTED_MODULE_5__utils_utils__["a" /* default */].SetString(res.data.data.data[i].name, 10);
+        _t.price = res.data.data.data[i].price;
         _tempList.push(_t);
       }
 
@@ -57565,6 +57566,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       return "没有这个店铺";
     },
+    getDefaultPrice: function getDefaultPrice(id) {
+      for (var i = 0; i < this.shopList.length; i++) {
+        if (this.shopList[i].value == id) {
+          return this.shopList[i].price;
+        }
+      }
+
+      //          return "没有这个店铺";
+    },
     showDropList: function showDropList() {
       if (this.shopList.length == 0) {
         Object(__WEBPACK_IMPORTED_MODULE_6_mint_ui__["Toast"])("当前无可选的店铺,请先加入店铺或创建店铺");
@@ -57577,6 +57587,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.dropListSwitch = false;
       this.dealShop = this.getShopName(data);
       this.shopId = data;
+      this.price = this.getDefaultPrice(data);
 
       this.memberList = []; // 清空店铺成员列表
     },
@@ -58263,12 +58274,8 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("choiseMember", {
-        attrs: {
-          isShow: _vm.choiseMemberSwitch,
-          dataList: _vm.memberList,
-          submit: _vm.getMemberData
-        },
-        on: { hide: _vm.hideMemberChoise }
+        attrs: { isShow: _vm.choiseMemberSwitch, dataList: _vm.memberList },
+        on: { hide: _vm.hideMemberChoise, submit: _vm.getMemberData }
       })
     ],
     1
@@ -66663,6 +66670,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
         _this.createShopSwitch = true;
+        Toast(err.data.data.message);
         console.error(err);
       });
     },
@@ -66673,7 +66681,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
-
       Promise.all([__WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/lists/mine"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/profit"), __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/messages/count")]).then(function (res) {
         _this2.shopList = res[0].data.data.data;
         _this2.total_profit = res[1].data.data.profit;
