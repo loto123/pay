@@ -653,7 +653,7 @@ class ShopController extends BaseController {
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if (ShopUser::where("user_id", $user->id)->where("shop_ip", $shop->id)->count() > 0) {
+        if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
         //#todo
