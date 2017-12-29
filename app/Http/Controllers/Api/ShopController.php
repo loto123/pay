@@ -678,7 +678,14 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function account($id) {
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_perm"), 0);
+        }
         return $this->json([
             'balance' => (double)$shop->container->balance,
             'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
