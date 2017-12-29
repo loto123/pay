@@ -876,7 +876,7 @@ class ShopController extends BaseController {
     public function invite($shop_id, $user_id) {
         $shop = Shop::findByEnId($shop_id);
         $user = User::findByEnId($user_id);
-        if (ShopUser::where("user_id", $user->id)->where("shop_ip", $shop->id)->count() > 0) {
+        if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
         Notification::send($user, new ShopApply(['user_id' => $user->id, 'invite_id' => $this->auth->user()->id, 'shop_id' => $shop->id, 'type' => ShopApply::TYPE_INVITE]));
