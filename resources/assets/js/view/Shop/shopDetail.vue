@@ -1,5 +1,5 @@
 <template>
-  <div id="shop-detail">
+  <div id="shop-detail" v-if="isShow">
       <topBack style="color:#fff; background:#26a2ff;"></topBack>
       
       <div class="top flex flex-v flex-align-center">
@@ -519,6 +519,8 @@ export default {
   components: { topBack },
   data() {
     return {
+      isShow:false,
+
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
       isGroupMaster: true,       // 是否是群主
@@ -599,14 +601,18 @@ export default {
         .getInstance()
         .getData("api/shop/detail/" + _id)
         .then(res => {
-
+          this.isShow = true;
+          this.isGroupMaster = res.data.data.is_manager;
           this.shopId = res.data.data.id;
           this.shopName = res.data.data.name;
           this.rate = res.data.data.rate;
-          this.percent = res.data.data.percent;
+          if(this.isGroupMaster){
+              this.percent = res.data.data.percent;
+          }
           this.membersCount = res.data.data.members_count;
           this.membersList = res.data.data.members;
           this.logo = res.data.data.logo;
+
 
           if(!this.rate){
             this.isGroupMaster = false;
@@ -684,7 +690,10 @@ export default {
     },
 
     updateShop(type){
-
+      console.log(this.isGroupMaster);
+      if (!this.isGroupMaster){
+          return;
+      }
       // 修改店铺名称
       if(type == "shopName"){
 
@@ -791,6 +800,9 @@ export default {
 
     "tradeStatus":function(){
       var _link = null;
+      if(!this.isShow){
+          return ;
+      }
       if(this.tradeStatus == true){
         _link = 1;
       }else {
@@ -803,9 +815,12 @@ export default {
 
       request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
         setTimeout(()=>{
-          this.init();
+//          this.init();
         },1500);
-      }).catch();
+      }).catch(err=>{
+          Toast("设置失败");
+          this.init();
+      });
     }
   }
 };
