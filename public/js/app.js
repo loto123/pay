@@ -52736,6 +52736,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading_js__ = __webpack_require__(10);
 //
 //
 //
@@ -52879,6 +52880,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -52924,11 +52926,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
         self.userId = res.data.data.id;
 
-        if (res.data.data.wechat == 0) {
-          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，正在跳转绑定微信...");
-          Loading.getInstance().open();
-          return Promise.resolve(true);
-        }
+        // if(res.data.data.wechat == 0){
+        //   Toast("登录成功，正在跳转绑定微信...");
+        //   setTimeout(()=>{
+        //       Loading.getInstance().open();
+        //   },1000);
+
+        //   return Promise.resolve(true);
+
+        // }
 
         __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功");
@@ -52970,7 +52976,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/auth/login/wechat/url", _data).then(function (res) {
         window.location.href = res.data.data.url;
-        Loading.getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_3__utils_loading_js__["a" /* default */].getInstance().close();
       }).catch(function (err) {});
     },
     commitName: function commitName() {
