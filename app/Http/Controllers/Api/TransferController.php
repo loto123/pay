@@ -189,7 +189,13 @@ class TransferController extends Controller
             $query->select('id', 'name', 'avatar');
         }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
 
+        $user = JWTAuth::parseToken()->authenticate();
         //装填响应数据
+        //是否允许撤销交易
+        $transfer->allow_cancel = false;
+        if(!$transfer->record->count() && $transfer->user->id == $user->id) {
+            $transfer->allow_cancel = true;
+        }
         $transfer->id = $transfer->en_id();
         $transfer->allow_reward = false;
         if(config('shop_fee_status')) {
@@ -198,6 +204,10 @@ class TransferController extends Controller
         $transfer->shop_id = $transfer->shop->en_id();
         $transfer->user->id = $transfer->user->en_id();
         foreach ($transfer->record as $key => $record) {
+            $transfer->record->allow_cancel = false;
+            if($transfer->record->stat == 2 && $transfer->user_id == $user->id) {
+                $transfer->record->allow_cancel = true;
+            }
             $transfer->record[$key]->user->id = $record->user->en_id();
             unset($transfer->record[$key]->transfer_id);
             unset($transfer->record[$key]->user_id);

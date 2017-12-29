@@ -313,17 +313,18 @@ class DataController extends Controller
                 }
             }
         ])
-            ->withCount(['child_proxy','child_user'
-//                'child_proxy' => function ($query) {
-//                    $query->whereHas('roles', function ($query2) {
-//                        $query2->where('name', 'like', 'agent%');
-//                    });
-//            },
-//                'child_user' => function ($query) {
-//                    $query->whereHas('roles', function ($query) {
-//                        $query->where('name', 'user');
-//                    });
-//                }
+//            ->withCount(['child_proxy','child_user'])
+            ->withCount([
+                'child_proxy' => function ($query) {
+                    $query->whereHas('roles', function ($query2) {
+                        $query2->where('name', 'like', 'agent%');
+                    });
+            },
+                'child_user' => function ($query) {
+                    $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'user');
+                    });
+                }
             ])
             ->leftJoin('transfer_record', function ($join) use ($begin, $end) {
                 $join->on('users.id', '=', 'transfer_record.user_id');
