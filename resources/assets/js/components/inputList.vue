@@ -24,8 +24,7 @@
             </div> -->
         </div>
 
-        
-    </div>  
+    </div>
   </transition>       
 </template>
 
