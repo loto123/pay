@@ -76,8 +76,6 @@ class WechatH5 implements DepositInterface
         $string = ltrim($string, '&') . "&key=$key";
         PayLogger::deposit()->debug('签名原消息:' . $string);
         return md5($string);
-        //2D55DF2A3CA24C61BA3F7FBE
-
     }
 
     /**
