@@ -50,5 +50,8 @@ for (var i in routerList) {
 }
 
 export default new Router({
-    routes: router
+    routes: router,
+    scrollBehavior (to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    }
 })

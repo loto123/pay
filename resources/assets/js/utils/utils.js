@@ -29,4 +29,17 @@ utils.SetString = function(str,len)
 
     return s;
 }
+
+//检测一个输入是否为整数
+
+utils.testStringisNumber = function (testString) {
+    var t= Number(testString);
+    if (isNaN(t) || testString.toString().indexOf(".")!=-1)
+    {
+        return false;
+    }else {
+        return true;
+    }
+}
+
 export default utils;

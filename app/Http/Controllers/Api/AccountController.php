@@ -238,6 +238,9 @@ class AccountController extends BaseController {
     public function transfer(Request $request) {
         $shop = Shop::findByEnId($request->shop_id);
         $user = $this->auth->user();
+        if ($user->container->balance < $request->amount) {
+            return $this->json([], trans("api.error_user_balance"), 0);
+        }
         $record = new UserFund();
         $record->user_id = $user->id;
         $record->type = UserFund::TYPE_TRANSFER;
@@ -419,8 +422,8 @@ class AccountController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => $fund->no,
-            'remark' => $fund->remark,
+            'no' => (string)$fund->no,
+            'remark' => (string)$fund->remark,
             'balance' => $fund->balance
         ]);
     }

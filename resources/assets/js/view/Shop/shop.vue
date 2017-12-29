@@ -84,7 +84,7 @@
           </div>
 
           <div class="btn-wrap">
-            <mt-button type="primary" size = "large" @click="createShop">完成</mt-button>
+            <mt-button type="primary" size = "large" @click="createShop" v-bind:disabled="!createShopSwitch">完成</mt-button>
           </div>
         </section>
     </transition>
@@ -344,6 +344,7 @@ export default {
     return {
       addShopTabStatus: false,      // 创建店铺拉起状态
       dealStatus: true,             // 是否开启交易(创建店铺tab)
+      createShopSwitch: true,     // 防看止按钮多次点击的
 
       openNewShop:{
         name :null,
@@ -380,16 +381,19 @@ export default {
     // 创建店铺
     createShop(){
       Loading.getInstance().open();
-      var self = this;
       var data = this.openNewShop;
+      this.createShopSwitch = false;
 
-      request.getInstance().postData("api/shop/create",data).then(function(res){
-        self.addShopTabStatus = false;
-        self.getShopData();
-        Loading.getInstance().close();
+      request.getInstance().postData("api/shop/create",data).then((res)=>{
+        this.addShopTabStatus = false;
+        this.getShopData();
+        this.createShopSwitch = true;
+
+          Loading.getInstance().close();
         
       }).catch((err)=>{
         Loading.getInstance().close();
+        this.createShopSwitch = true;
         console.error(err);
       });
     },
@@ -407,6 +411,7 @@ export default {
         })
         .catch(err=>{
           Loading.getInstance().close();
+
           console.error(err);
         });
     }

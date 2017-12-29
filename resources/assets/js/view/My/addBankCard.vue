@@ -110,13 +110,6 @@
 			}
 		},
 		components: { topBack, inputList },
-		beforeCreate() {
-			// request.getInstance().getData("api/card/getBankCardParams").then(res => {
-			// 		window.address = res.data.data;
-			// 		console.log(window.address);
-			// }).catch()
-		},
-
 		created() {
 			this.personalInfo();
 

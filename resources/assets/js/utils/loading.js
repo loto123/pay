@@ -1,4 +1,4 @@
-import { Indicator } from 'mint-ui';
+import { Indicator,Toast } from 'mint-ui';
 
 class Loading {
     static getInstance() {
@@ -11,18 +11,22 @@ class Loading {
 
     constructor() {
         this._timer = null;
+        this.errSwitch = true;
     }
 
     open(value) {
         if(!value){
             value = "加载中...";
         }
-
+        this.errSwitch = true;
         Indicator.open(value);
 
         if (this._timer == null) {
             this._timer = setTimeout(() => {
                 Indicator.close();
+                if(this.errSwitch == true){
+                    Toast("请求错误，请刷新页面");
+                }
                 this._timer = null;
             }, 10000);
         } else {
@@ -32,6 +36,7 @@ class Loading {
     }
 
     close() {
+        this.errSwitch = false;
         Indicator.close();
     }
 }

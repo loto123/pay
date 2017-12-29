@@ -10,6 +10,7 @@ namespace App\Pay\Impl\Heepay;
 
 
 use App\Pay\Crypt3Des;
+use App\PayInterfaceRecord;
 use function GuzzleHttp\Psr7\parse_response;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
@@ -22,8 +23,16 @@ class Reality
      * @param $name 姓名
      * @param $cert_no 身份证号
      * */
-    public static function identify($name, $cert_no)
+    public static function identify($record_id,$name, $cert_no)
     {
+        $record = PayInterfaceRecord::find($record_id);
+        if(empty($record)) {
+            Log::info([
+                'heepay_identify_fail'=>'找不到PayInterfaceRecord记录',
+                'record_id'=> $record_id,
+            ]);
+            return false;
+        }
         $heepay = Heepay::getConfig();
         $agent_id = $heepay['agent_id'];
         $key = $heepay['reality']['key'];
@@ -50,23 +59,40 @@ class Reality
         $res_xml = file_get_contents($request_url);
         $res_xml = iconv("gbk//IGNORE", "utf-8", $res_xml);
         $response = simplexml_load_string($res_xml);
-        if (empty($response)) {
-            return false;
+        $result = false;
+        if (!empty($response) && $response->ret_code == '0000' && $response->status=='Success') {
+            $result = true;
         }
-        if ($response->ret_code == '0000' && $response->status=='Success') {
-            return true;
+        //完善记录
+        $record->request = json_encode([
+            'params' => $params,
+            'request_url' => $request_url,
+        ]);
+        $record->response = $res_xml;
+        if($result === true) {
+            $record->status = PayInterfaceRecord::DEAL_SUCCESS;
         } else {
-            Log::info(['params'=>$params,'request_url'=>$request_url,'res_xml'=>$res_xml]);
-            return false;
+            $record->status = PayInterfaceRecord::DEAL_FAIL;
         }
+        $record->save();
+
+        return $result;
     }
 
 
     /*
      * 银行卡鉴权
      * */
-    public static function authentication($bill_id,$bill_time,$card_no,$cert_no,$name)
+    public static function authentication($record_id,$bill_id,$bill_time,$card_no,$cert_no,$name)
     {
+        $record = PayInterfaceRecord::find($record_id);
+        if(empty($record)) {
+            Log::info([
+                'heepay_authentication_fail'=>'找不到PayInterfaceRecord记录',
+                'record_id'=> $record_id,
+            ]);
+            return false;
+        }
         $heepay = Heepay::getConfig();
         $dsc = new Crypt3Des();
         $dsc->key = $heepay['auth']['des_key'];
@@ -96,18 +122,24 @@ class Reality
         $res = iconv("gbk//IGNORE", "utf-8", file_get_contents($request_url));
         parse_str($res,$data);
         if (isset($data['ret_code'])&& isset($data['status']) && $data['ret_code']==0 && $data['status']==1) {
-            return true;
+            $result = true;
         } else {
-            Log::info(
-                ['heepay_bank_card_authentication_fail'=>[
-                    'params' => $params,
-                    'request_url' => $request_url,
-                    'response' => $res
-                ]]
-            );
             $ret_msg= $data['ret_msg']??'失败';
-            return $ret_msg;
+            $result = $ret_msg;
         }
+        //完善记录
+        $record->request = json_encode([
+            'params' => $params,
+            'request_url' => $request_url,
+        ]);
+        $record->response = $res;
+        if($result === true) {
+            $record->status = PayInterfaceRecord::DEAL_SUCCESS;
+        } else {
+            $record->status = PayInterfaceRecord::DEAL_FAIL;
+        }
+        $record->save();
+        return $result;
     }
 
     //将数组以 键=值& 的方式拼接成字符串

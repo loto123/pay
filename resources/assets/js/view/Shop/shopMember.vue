@@ -172,11 +172,11 @@ export default {
     deleteMember(id){
       Loading.getInstance().open();
 
-      // /shop/members/{shop_id}/delete/{user_id}
       request.getInstance().postData("api/shop/members/"+this.shopId+"/delete/"+id).then(res=>{
         Loading.getInstance().close();
         Toast("删除成功");
         this.controlSwitch = false;
+        this.init();
       }).catch(err=>{
         Toast(err.data.data.msg);
       });
