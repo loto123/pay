@@ -9,7 +9,7 @@
 
     <div class="price flex">
         <label for="" class="flex-1">设置单价：</label>
-        <input type="text" value = "10" class="flex-1" v-model="price">
+        <input type="text" value = "10" class="flex-1" v-model="price" maxlength="6">
         <span class="cancer"></span>
     </div>
     
@@ -33,7 +33,7 @@
     </div>
 
     <div class="commit-btn">
-        <mt-button type="primary" size="large" @click="submitData">确认</mt-button>
+        <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">确认</mt-button>
     </div>
 
     <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
@@ -202,6 +202,8 @@ export default {
       dealShop: null,
       shopList: null,
 
+      submitSwitch:true,
+
       shopId: null,
       price: 10,
       commentMessage: null,
@@ -321,7 +323,6 @@ export default {
       }
 
       var _members = this.getMembersId();
-
       var _data = {
         shop_id: this.shopId,
         price: this.price,
@@ -337,20 +338,33 @@ export default {
         return
       }
 
-      if(_data.price){
-        console.log(_data.price);
+        //  输入数据验证
+      if (!utils.testStringisNumber(parseFloat(_data.price)*10))
+      {
+          Toast("请输入正确的金额，最多只能包含一位小数");
+          return;
       }
 
-      request
+      if(parseFloat(_data.price)>99999){
+          Toast("最大单价只能为99999");
+          return;
+      }
+        this.submitSwitch = false;
+
+        request
         .getInstance()
         .postData("api/transfer/create", _data)
         .then(res => {
           this.$router.push(
             "/makeDeal/deal_detail" + "?id=" + res.data.data.id
           );
+
+          this.submitSwitch = true;
+
         })
         .catch(err => {
             Toast(err.data.msg);
+            this.submitSwitch = true;
             console.error(err);
         });
     },
