@@ -93,8 +93,8 @@ export default class UserRequest {
     validToken(token){
         var url = window.location.href.indexOf("#/login");
         var urlShare = window.location.href.indexOf("#/share");
-        // var wechatLogin = window.location.href.indexOf("#/login/weChatLogin")
-        if(!token && url==-1 && urlShare){
+
+        if(!token && url==-1 && urlShare==-1){
             Loading.getInstance().close();
             Toast("用户未登录,即将跳转登录...");
             setTimeout(function(){

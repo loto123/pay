@@ -64,8 +64,9 @@ return [
         ],
         'admin' => [
             'driver' => 'local',
-            'root' => public_path("upload/admin"),
-            'url' => rtrim(config('app.url'), '/').'/upload/admin',
+            'visibility' => 'private',
+            'root' => storage_path('app/admin'),
+            //'url' => rtrim(config('app.url'), '/').'/upload/admin',
         ],
     ],
 

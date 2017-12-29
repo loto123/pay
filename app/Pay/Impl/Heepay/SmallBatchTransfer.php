@@ -9,6 +9,7 @@
 namespace App\Pay\Impl\Heepay;
 
 
+use App\Admin\Model\UploadFile;
 use App\Pay\Crypt3Des;
 use App\Pay\IdConfuse;
 use App\Pay\Model\Withdraw;
@@ -73,7 +74,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'batch_no' => $batch_no,
                 'batch_amt' => $amount,
                 'batch_num' => 1,
-                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^0^{$card->card_num}^{$card->holder_name}^$amount^余额提现^{$card->province}^{$card->city}^{$card->branch}",
+                'detail_data' => "$sub_batch^{$receiver_info['bank_no']}^0^{$card->card_num}^{$card->holder_name}^$amount^{$config['transfer_reason']}^{$card->province}^{$card->city}^{$card->bank->name}",
                 'notify_url' => $notify_url,
                 'ext_param1' => $batch_no,
             ];
@@ -81,6 +82,7 @@ class SmallBatchTransfer implements WithdrawInterface
             $params['key'] = $config['key'];
             ksort($params);
             $params['sign'] = $this->makeSign($params);
+            PayLogger::withdraw()->debug('md5', [$params['sign']]);
             unset($params['key']);
 
             $rep = new Crypt3Des(); // 初始化一个3des加密对象
@@ -131,7 +133,7 @@ class SmallBatchTransfer implements WithdrawInterface
         foreach ($params as $field => $val) {
             $string .= "&$field=$val";
         }
-        $string = ltrim($string, '&');
+        $string = ltrim(strtolower($string), '&');
         return md5($string);
     }
 
@@ -144,7 +146,6 @@ class SmallBatchTransfer implements WithdrawInterface
      */
     public static function send_post($url, $data, $cacert_url, $send_type = 'POST')
     {
-        $cacert_url = storage_path('app/pay/'. $cacert_url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -152,7 +153,7 @@ class SmallBatchTransfer implements WithdrawInterface
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $send_type);
         if ($cacert_url) {
-            curl_setopt($ch, CURLOPT_CAINFO, $cacert_url);     //证书地址
+            curl_setopt($ch, CURLOPT_CAINFO, UploadFile::getFile($cacert_url));     //证书地址
         }
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -188,17 +189,18 @@ class SmallBatchTransfer implements WithdrawInterface
     {
         do {
             $params = request()->query();
-
             //参数转为小写
             array_walk($params, function (&$val) {
                 $val = strtolower($val);
             });
 
+            $params['ret_msg'] = iconv("gbk//IGNORE", "utf-8", request()->query('ret_msg'));
             $params['detail_data'] = iconv("gbk//IGNORE", "utf-8", request()->query('detail_data'));
 
             //验证签名
             $validSign = WechatH5::makeSign($params, ['ret_code', 'ret_msg', 'agent_id', 'hy_bill_no', 'status', 'batch_no', 'batch_amt', 'batch_num', 'detail_data', 'ext_param1'], $config['key']);
             if ($validSign !== $params['sign']) {
+                PayLogger::withdraw()->error('签名错误,valid' . $validSign . ',give:' . $params['sign']);
                 break;
             }
 

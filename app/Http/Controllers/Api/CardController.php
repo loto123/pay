@@ -12,6 +12,7 @@ use App\UserCard;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use JWTAuth;
 use Validator;
 use Illuminate\Support\Facades\Log;
@@ -141,8 +142,8 @@ class CardController extends Controller
                 'bank_id' => 'bail|required',
 //                'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
                 'code' => 'bail|required',
-                // 'province' => 'bail|required',
-                // 'city' => 'bail|required',
+                'province' => 'bail|required',
+                'city' => 'bail|required',
             ],
             [
                 'required' => trans('trans.required'),
@@ -204,7 +205,7 @@ class CardController extends Controller
         $cards->bank_id = $request->bank_id;
         $cards->holder_name = $this->user->name;
         $cards->holder_id = $this->user->id_number;
-        $cards->holder_mobile = $request->mobile;
+        $cards->holder_mobile = $this->user->mobile;
         $cards->province = $request->province;
         $cards->city = $request->city;
         $cards->branch = $request->branch??NULL;
@@ -275,14 +276,19 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getBanks() {
-        $query = Bank::query()->select()->get();
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $platform_bank = DB::table('pay_banks_support as pbs')->join('pay_channel as pc','pc.platform_id','=','pbs.platform_id')
+            ->where('pc.id',$this->user->channel_id)->pluck('pbs.bank_id');
         $data = [];
-        if(!empty($query) && count($query)>0) {
-            foreach ($query as $item) {
-                $data[] = [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                ];
+        if (!empty($platform_bank) && count($platform_bank)>0){
+            $query = Bank::whereIn('id',$platform_bank)->select()->get();
+            if(!empty($query) && count($query)>0) {
+                foreach ($query as $item) {
+                    $data[] = [
+                        'id' => $item->id,
+                        'name' => $item->name,
+                    ];
+                }
             }
         }
         return response()->json(['code'=>1,'msg'=>'','data'=>$data]);

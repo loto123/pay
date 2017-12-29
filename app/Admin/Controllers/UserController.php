@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\OauthUser;
+use App\Pay\Model\Channel;
+use App\Pay\Model\PayFactory;
 use App\Role;
 use App\TransferRecord;
 use App\User;
@@ -71,7 +73,7 @@ class UserController extends Controller
 
         return Admin::grid(User::class, function (Grid $grid) {
 
-            $user_id = Request::input('user_id');
+            $user_id = User::decrypt(Request::input('user_id'));
             $parent_id = Request::input('parent_id');
             $operator_id = Request::input('operator_id');
             $channel_id = Request::input('channel_id');
@@ -103,7 +105,9 @@ class UserController extends Controller
             }
             $grid->model()->groupBy($user_table.'.id')->orderBy('transfer_count','DESC')->orderBy($user_table.'.id');
 
-            $grid->id('编号');
+            $grid->id('编号')->display(function(){
+                return $this->en_id();
+            });
             $grid->avatar('用户头像')->image('',70,70);
             $grid->column('user','用户')->display(function () {
                 return "<span style='color:black'>$this->name</span><br/><span style='color:gray'>$this->mobile</span>";
@@ -147,7 +151,7 @@ class UserController extends Controller
             });
             $grid->disableFilter();
             $grid->disableExport();
-            $grid->disableCreation();
+//            $grid->disableCreation();
         });
     }
 
@@ -160,27 +164,31 @@ class UserController extends Controller
     {
         return Admin::form(User::class, function (Form $form) use($id){
 
-            $form->display('id', '编号');
-            $form->display('name', '用户名');
+            $form->display('id', '编号')->with(function(){
+                return $this->en_id();
+            });
+            if ($id) {
+                $form->display('name', '用户名');
+            } else {
+                $form->text('name', '用户名');
+            }
+            $form->password('password', '密码');
             $form->text('mobile', '手机号码');
 //            $form->display('name', '身份角色');
-            $form->text('container.balance', '余额');
-            $form->display('role', '身份角色')->with(function () use($id){
-                $roles = '';
-                $user = User::where('id',$id)->with('roles')->get();
-                foreach ($user as $_user) {
-                    if(!empty($_user->roles) && count($_user->roles)>0) {
-                        foreach ($_user->roles as $_role) {
-                            $roles .= $_role->display_name .'、';
-                        }
-                        $roles = rtrim($roles,'、');
-                    }
-                }
-                return $roles;
-            });
-            $form->checkbox('wechat', '解绑微信号')->options(OauthUser::where('user_id',$id)->pluck('nickname','id'));
+            if ($id) {
+                $form->display('container.balance', '余额');
+            }
+            $form->multipleSelect('roles', '角色')->options(Role::all()->pluck('display_name', 'id'));
+            $form->select('operator_id','上级运营')->options(\App\Admin::whereHas("roles", function($query){
+                $query->where("slug", 'operator');
+            })->pluck("username", 'id'));
+            if ($id) {
+                $form->checkbox('wechat', '解绑微信号')->options(OauthUser::where('user_id',$id)->pluck('nickname','id'));
+            }
             $form->display('created_at', '账号创建时间');
             $form->switch('status', '冻结');
+            $form->hidden('container_id');
+            $form->hidden('channel_id');
             $form->ignore(['wechat']);
             $form->saving(function (Form $form) {
                 /*
@@ -202,6 +210,20 @@ class UserController extends Controller
                         OauthUser::whereIn('id',$wechat)->update(['user_id'=>'0']);
                     }
                 }
+                if ($form->password && $form->model()->password != $form->password) {
+                    $form->password = bcrypt($form->password);
+                } else {
+                    $form->password = $form->model()->password;
+                }
+                if (!$form->container_id) {
+                    $wallet = PayFactory::MasterContainer();
+                    $wallet->save();
+                    $form->container_id = $wallet->id;
+                }
+                if (!$form->channel_id) {
+                    $channel = Channel::where("disabled",0)->inRandomOrder()->first();
+                    $form->channel_id = $channel->id;
+                }
             });
 
         });
@@ -214,6 +236,7 @@ class UserController extends Controller
             abort(404);
         }
         if ($this->form()->destroy($id)) {
+            OauthUser::where("user_id", $id)->update(['user_id' => 0]);
             return response()->json([
                 'status'  => true,
                 'message' => trans('admin.delete_succeeded'),
@@ -224,6 +247,22 @@ class UserController extends Controller
                 'message' => trans('admin.delete_failed'),
             ]);
         }
+    }
+
+    /**
+     * Create interface.
+     *
+     * @return Content
+     */
+    public function create()
+    {
+        return Admin::content(function (Content $content) {
+
+            $content->header('用户管理');
+            $content->description('description');
+
+            $content->body($this->form());
+        });
     }
 
 

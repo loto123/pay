@@ -87,6 +87,15 @@ $api->version('v1', function ($api) {
     });
 });
 
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => 'shop',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('summary/{id}', 'ShopController@shop_summary');
+    });
+});
+
 $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     $api->group([
         'prefix' => 'shop',

@@ -7,6 +7,7 @@ use App\Pay\Model\PayFactory;
 use App\Shop;
 use App\ShopFund;
 use App\ShopUser;
+use App\Transfer;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -263,19 +264,20 @@ class ShopController extends BaseController {
         }
         /* @var $shop Shop */
 
-        $members = [];
         $is_manager = $shop->manager_id == $user->id ? true : false;
         $is_member = ShopUser::where('user_id', $user->id)->where("shop_id", $shop->id)->count() > 0;
-        if ($is_manager || $is_member) {
-            foreach ($shop->users()->limit($member_size)->get() as $_user) {
-                /* @var $_user User */
-                $members[] = [
-                    'id' => (int)$_user->id,
-                    'name' => $_user->name,
-                    'avatar' => $_user->avatar,
+        if (!$is_manager && !$is_member) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $members = [];
+        foreach ($shop->users()->limit($member_size)->get() as $_user) {
+            /* @var $_user User */
+            $members[] = [
+                'id' => (int)$_user->id,
+                'name' => $_user->name,
+                'avatar' => $_user->avatar,
 
-                ];
-            }
+            ];
         }
 
         if ($is_manager) {
@@ -289,9 +291,11 @@ class ShopController extends BaseController {
                 'rate' => $shop->price,
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg")
+                'logo' => asset("images/personal.jpg"),
+                'is_manager' => $is_manager,
+                'is_member' => $is_member,
             ];
-        } else if ($is_member) {
+        } else {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
@@ -299,18 +303,43 @@ class ShopController extends BaseController {
                 'members_count' => (int)$shop->users()->count(),
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg")
-            ];
-        } else {
-            $data = [
-                'id' => $shop->en_id(),
-                'name' => $shop->name,
-                'members_count' => (int)$shop->users()->count(),
-                'created_at' => strtotime($shop->created_at),
                 'logo' => asset("images/personal.jpg"),
-                'manager' => $shop->manager->name
+                'is_manager' => $is_manager,
+                'is_member' => $is_member,
             ];
         }
+        return $this->json($data);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/summary/{id}",
+     *   summary="店铺摘要（游客）",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="店铺id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function shop_summary($id) {
+        $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        $data = [
+            'id' => $shop->en_id(),
+            'name' => $shop->name,
+            'members_count' => (int)$shop->users()->count(),
+            'created_at' => strtotime($shop->created_at),
+            'logo' => asset("images/personal.jpg"),
+            'manager' => $shop->manager->name
+        ];
         return $this->json($data);
     }
 
@@ -390,9 +419,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function member_delete($shop_id, $user_id) {
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
-        $user = User::findByEnId($user_id);
-        ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->delete();
+        $member = User::findByEnId($user_id);
+//        if ($shop->manager_id != $user->id) {
+//            return $this->json([], trans("api.error_shop_status"), 0);
+//        }
+        ShopUser::where("user_id", $member->id)->where("shop_id", $shop->id)->delete();
         return $this->json();
     }
     
@@ -413,7 +446,14 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function close($id) {
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (Transfer::where("shop_id", $shop->id)->where("status", 3)->count() > 0) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         $shop->status = Shop::STATUS_CLOSED;
         $shop->save();
         return $this->json();
@@ -498,6 +538,12 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
+            return $this->json([], trans("api.error_shop_perm"), 0);
+        }
         if ($request->name) {
             $shop->name = $request->name;
         }
@@ -660,7 +706,8 @@ class ShopController extends BaseController {
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
-                    'type' => $notification->data['type']
+                    'type' => $notification->data['type'],
+                    'created_at' => strtotime($notification->created_at)
                 ];
             } catch (\Exception $e){}
         }

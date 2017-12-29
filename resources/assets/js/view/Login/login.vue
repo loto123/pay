@@ -181,11 +181,11 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-          console.log(self);
           self.userId = res.data.data.id;
 
           if(res.data.data.wechat == 0){
-            Toast("登录成功，请绑定微信");
+            Toast("登录成功，正在跳转绑定微信...");
+            Loading.getInstance().open();
             return Promise.resolve(true);
           }
 
@@ -202,6 +202,7 @@ export default {
           }
       }).then(res=>{
         if(res == true){
+          // 是否需要绑定微信
           this.weChatBind(self.userId);
         }
       }).catch(function(err){
@@ -229,7 +230,11 @@ export default {
 
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
-      }).catch();
+        Loading.getInstance().close();
+
+      }).catch(err=>{
+
+      });
     },
 
     commitName() {
@@ -238,7 +243,7 @@ export default {
 
     regist(){
         this.$store.dispatch("setStep",0);
-      localStorage.setItem("registStep",0);
+        localStorage.setItem("registStep",0);
         this.$store.dispatch("setRefindPassWordState",false);
         this.$router.push("/login/regist");
     },

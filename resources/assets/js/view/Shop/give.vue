@@ -79,7 +79,6 @@ export default {
     },
     getMemberData(data){
       this.transferData = data;
-      console.log(this.transferData);
     },
     hideMemberChoise(e){
       if(e){

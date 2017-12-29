@@ -14,7 +14,7 @@
           </div>
         </topBack>
 
-        <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage">
+        <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage" v-if="allow_reward">
             <p>打赏</p>
             <p>店家</p>
         </section>
@@ -69,8 +69,6 @@
                                 <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
-
-
                             </div>
                         </div>
                     </slider> 
@@ -294,21 +292,21 @@ export default {
       renderData: {
         name: null,
         user:{
-          avatar:{}
+          avatar:null
         },
-        avatar:{},
+        avatar:null,
         
       },
       moneyData: {
         payMoney: null,
         getMoney: null
       },
-      payType: null,    // 支付方式，取钱get 放钱put
-      transfer_id:"",   // 交易id
+      payType: null,              // 支付方式，取钱get 放钱put
+      transfer_id:"",             // 交易id
       shop_id:"",
-      password:"",       // 支付密码
-
-      joiner:[],         // 交易的参与者，需要提醒的人
+      password:"",                // 支付密码
+      allow_reward:false,         // 是否允许打赏
+      joiner:[],                  // 交易的参与者，需要提醒的人
       memberList:[],              //成员数组
       
       recordList:[],
@@ -359,6 +357,7 @@ export default {
           this.renderData = res.data.data;
           this.recordList = res.data.data.record;
           this.shop_id = res.data.data.shop_id;
+          this.allow_reward = res.data.data.allow_reward;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -472,7 +471,6 @@ export default {
 
         request.getInstance().postData("api/transfer/realget",_data)
           .then(res=>{
-            console.log(res);
             var _data = {
               amount:res.data.data.amount,
               real_amount:res.data.data.real_amount
@@ -481,7 +479,6 @@ export default {
             return Promise.resolve(_data);
           })
           .then(realData=>{
-            console.log(realData.amount);
             MessageBox.confirm("实际拿钱"+ realData.real_amount+ "元,手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "元").then(action => {
 
               var _data = {
@@ -558,8 +555,7 @@ export default {
             }
           }
           this.memberList.push(_temp);
-          console.log(this.memberList);
-          
+
         }
     },
     // 获取所有要提醒的成员名单
