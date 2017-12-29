@@ -660,8 +660,11 @@ class ShopController extends BaseController {
      */
     public function account($id) {
         $shop = Shop::findByEnId($id);
-        return $this->json(['balance' => (double)$shop->container->balance, 'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-            'total_profit' => $shop->tips()->sum('amount')
+        return $this->json([
+            'balance' => (double)$shop->container->balance,
+            'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
+            'total_profit' => $shop->tips()->sum('amount'),
+            'last_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d", strtotime('-1 day')))->where("created_at", "<", date("Y-m-d"))->sum('amount')
         ]);
     }
 
