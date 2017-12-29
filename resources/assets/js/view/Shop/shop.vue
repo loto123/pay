@@ -42,7 +42,7 @@
 
         <div class="add-shop flex flex-v flex-align-center flex-justify-center" @click="addShop">
           <div class="flex flex-v flex-align-center flex-justify-center">
-            <i class="iconfont">
+            <i class="iconfont ">
               &#xe600;
             </i>
           </div>
@@ -239,7 +239,7 @@
 
   .add-shop {
     width: 8em;
-    min-height: 7em;
+    height: 7em;
     margin-top: 1em;
     position: relative;
 
