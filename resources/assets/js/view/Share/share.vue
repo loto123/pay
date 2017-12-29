@@ -174,7 +174,7 @@ export default {
           this.shopName = res.data.data.name;
           this.membersCount = res.data.data.members_count;
           this.logo = res.data.data.logo;
-          this.timer = moment(res.data.data.created_at).format("YYYY-MM-DD");
+          this.timer = moment(res.data.data.created_at*1000).format("YYYY-MM-DD");
           this.manager = res.data.data.manager;
           Loading.getInstance().close();
           
@@ -196,7 +196,6 @@ export default {
         }
 
         request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{
-          
           Loading.getInstance().close();
           Toast("申请加入店铺成功");
         }).catch(error=>{

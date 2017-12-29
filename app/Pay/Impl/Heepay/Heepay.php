@@ -11,6 +11,7 @@ namespace App\Pay\Impl\Heepay;
 
 class Heepay
 {
+    const PLATFORM = 'Heepay';
     public static function getConfig()
     {
         return [
