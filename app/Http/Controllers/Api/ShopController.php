@@ -62,9 +62,9 @@ class ShopController extends BaseController {
      */
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|size:20',
             'rate' => 'required',
-            'percent' => 'required',
+            'percent' => 'required|regex:/^\d{0,2}(\.\d{1})?$/',
             'active' => 'required'
         ]);
 
@@ -535,6 +535,14 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'size:20',
+            'percent' => 'regex:/^\d{0,2}(\.\d{1})?$/',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
