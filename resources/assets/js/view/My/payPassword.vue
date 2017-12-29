@@ -54,7 +54,7 @@
           Toast('请确认新支付密码')
           return
         }else if(this.new_pay_password !== this.confirm_pay_password){
-          Toast('两次输入的新支付密码不一致')
+          Toast('两次新密码不一致')
           return
         }
 

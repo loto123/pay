@@ -177,7 +177,7 @@ export default {
   },
   methods: {
     goWithdraw(){
-      this.$router.push('/shop/shopAccount/withdraw');
+      this.$router.push('/shop/shopAccount/withdraw?shopId='+this.shopId);
     },
     goGive(){
       this.$router.push('/shop/shopAccount/give?shopId='+this.shopId);

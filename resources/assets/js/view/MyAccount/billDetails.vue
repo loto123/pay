@@ -3,7 +3,7 @@
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
 			<div class="money-box">
-				<span>{{mode == 1?'出':'入'}}账金额账金额</span>
+				<span>{{mode == 1?'出':'入'}}账金额</span>
 				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
 			</div>
 			<ul class="billDetails-list">
@@ -74,6 +74,22 @@
 						console.error(err);
                         Loading.getInstance().close();
 					})
+			},
+			monthData(){
+				Loading.getInstance().open("加载中...");
+				var self = this;
+				_data={
+					month :this.month 
+				}
+				request.getInstance().getData("api/account/records/month",_data)
+					.then((res) => {
+						console.log(res);
+                        Loading.getInstance().close();
+					})
+					.catch((err) => {
+						console.error(err);
+                        Loading.getInstance().close();
+					})	
 			},
 			changeTime(shijianchuo){
 				function add0(m){return m<10?'0'+m:m }
