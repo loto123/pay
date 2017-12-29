@@ -184,7 +184,8 @@ export default {
           self.userId = res.data.data.id;
 
           if(res.data.data.wechat == 0){
-            Toast("登录成功，请绑定微信");
+            Toast("登录成功，正在跳转绑定微信...");
+            Loading.getInstance().open();
             return Promise.resolve(true);
           }
 
@@ -229,7 +230,11 @@ export default {
 
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
-      }).catch();
+        Loading.getInstance().close();
+
+      }).catch(err=>{
+
+      });
     },
 
     commitName() {
