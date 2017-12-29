@@ -381,8 +381,8 @@ class AccountController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => $fund->no,
-            'remark' => $fund->remark,
+            'no' => (string)$fund->no,
+            'remark' => (string)$fund->remark,
             'balance' => $fund->balance
         ]);
     }
