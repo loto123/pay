@@ -2,11 +2,11 @@
     <div id="bill">
         <topBack title="账单明细">
             <div class="flex flex-reverse flex-align-center header-right">
-                <a href="javascript:;" @click="show">筛选</a>
+                <a href="javascript:;"</a>
             </div>
         </topBack>
         <div class="bill-box">
-            <div class="bill-date flex flex-align-center flex-justify-between">
+            <div class="bill-date flex flex-align-center flex-justify-between" style="display:none">
                 <div class="left-content">
                     <div class="cur-date">2017年11月</div>
                     <div class="month-money flex">
@@ -178,10 +178,10 @@
 
     .bill-box {
         font-size: 0.9em;
-        height: 3.4em;
-        line-height: 1.7em;
-        background: #eee;
-        padding-top: 0.5em;
+        /* height: 3.4em; */
+        /* line-height: 1.7em; */
+        /* background: #eee; */
+        /* padding-top: 0.5em; */
         .bill-date {
             padding: 0 1em;
             color: #666;
