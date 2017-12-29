@@ -178,7 +178,8 @@ export default {
         this.controlSwitch = false;
         this.init();
       }).catch(err=>{
-        Toast(err.data.data.msg);
+          Loading.getInstance().close();
+        Toast(err.data.msg);
       });
     },
 

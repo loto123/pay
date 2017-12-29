@@ -66129,6 +66129,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
@@ -66140,7 +66142,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "my-users" } }, [_vm._v("\n    我的用户\n")])
+  return _c("div", { attrs: { id: "my-users" } }, [
+    _vm._v("\n    \n    \n    我的用户\n")
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -68297,7 +68301,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(9);
 //
 //
 //
@@ -68803,6 +68808,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
 
 
 
@@ -68880,17 +68888,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     submitAddMember: function submitAddMember() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         shop_id: this.shopId,
         user_id: this.searchUserMobile
       };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/invite/" + this.shopId + "/" + this.searchData.id).then(function (res) {
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("邀请用户成功");
         _this.closeMemberTab();
-      }).catch(function (error) {});
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.msg);
+      });
     },
 
 
@@ -68898,7 +68909,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
       var self = this;
       var _id = this.$route.query.id;
 
@@ -68922,7 +68933,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this2.tradeStatus = false;
         }
 
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
         _this2.$router.go(-1);
@@ -68936,13 +68947,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm('确定删除店铺?').then(function (action) {
 
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
 
         __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + _this3.shopId).then(function (res) {
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("店铺解散成功");
           setTimeout(function () {
             _this3.$router.push("/shop");
+          }, 1000);
+        }).catch(function (error) {
+          console.error(error);
+        });
+      }).catch(function (err) {});
+    },
+    exitShop: function exitShop() {
+      var _this4 = this;
+
+      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm('确定退出店铺?').then(function (action) {
+
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+
+        __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/quit/" + _this4.shopId).then(function (res) {
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("退出店铺成功");
+          setTimeout(function () {
+            _this4.$router.push("/shop");
           }, 1000);
         }).catch(function (error) {
           console.error(error);
@@ -68967,21 +68996,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 搜索用户
     searchUser: function searchUser() {
-      var _this4 = this;
+      var _this5 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         mobile: this.searchUserMobile
       };
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/user/search', _data).then(function (res) {
-        _this4.searchData = res.data.data;
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        _this5.searchData = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       });
     },
     updateShop: function updateShop(type) {
-      var _this5 = this;
+      var _this6 = this;
 
       if (!this.isGroupMaster) {
         return;
@@ -68997,19 +69026,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("新店铺名称不能为空");
             return;
           }
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
           var _data = {
             name: value
           };
-          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this6.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("店铺改名成功");
             setTimeout(function () {
-              _this5.init();
+              _this6.init();
             }, 1500);
           }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
         }).catch(function (err) {});
@@ -69026,20 +69055,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("手续费率不能为空");
             return;
           }
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
 
           var _data = {
             percent: value
           };
 
-          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this6.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("修改手续费率成功");
             setTimeout(function () {
-              _this5.init();
+              _this6.init();
             }, 1500);
           }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
@@ -69060,26 +69089,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           var _data = {
             rate: value
           };
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
-          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this6.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("修改单价成功");
             setTimeout(function () {
-              _this5.init();
+              _this6.init();
             }, 1500);
           }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
         }).catch(function (err) {});
       }
+    },
+    SetString: function SetString(str, len) {
+      return __WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* default */].SetString(str, len);
     }
   },
   watch: {
     // 邀请链接修改
     "inviteLinkStatus": function inviteLinkStatus() {
-      var _this6 = this;
+      var _this7 = this;
 
       var _link = null;
 
@@ -69099,12 +69131,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + this.shopId, _data).then(function (res) {}).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("设置失败");
-        _this6.init();
+        _this7.init();
       });
     },
 
     "tradeStatus": function tradeStatus() {
-      var _this7 = this;
+      var _this8 = this;
 
       var _link = null;
       if (!this.isShow || !this.isGroupMaster) {
@@ -69123,7 +69155,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + this.shopId, _data).then(function (res) {}).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("设置失败");
-        _this7.init();
+        _this8.init();
       });
     }
   }
@@ -69240,7 +69272,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("span", { staticClass: "name flex-5" }, [
-                  _vm._v(_vm._s(_vm.shopName))
+                  _vm._v(_vm._s(_vm.SetString(_vm.shopName, 16)))
                 ]),
                 _vm._v(" "),
                 _c("i", { staticClass: "iconfont flex-1" }, [
@@ -69487,14 +69519,27 @@ var render = function() {
             "div",
             { staticClass: "button-wrap" },
             [
-              _c(
-                "mt-button",
-                {
-                  attrs: { type: "danger", size: "large" },
-                  on: { click: _vm.dissShop }
-                },
-                [_vm._v("解散店铺")]
-              )
+              _vm.isGroupMaster
+                ? _c(
+                    "mt-button",
+                    {
+                      attrs: { type: "danger", size: "large" },
+                      on: { click: _vm.dissShop }
+                    },
+                    [_vm._v("解散店铺")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.isGroupMaster
+                ? _c(
+                    "mt-button",
+                    {
+                      attrs: { type: "danger", size: "large" },
+                      on: { click: _vm.exitShop }
+                    },
+                    [_vm._v("退出店铺")]
+                  )
+                : _vm._e()
             ],
             1
           ),
@@ -70019,7 +70064,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.controlSwitch = false;
         _this.init();
       }).catch(function (err) {
-        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.data.msg);
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
       });
     },
     openSearchSwitch: function openSearchSwitch() {
