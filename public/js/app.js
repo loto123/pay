@@ -54762,8 +54762,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 	computed: {
 		'fee': function fee() {
-			return this.amount * this.fee_value;
-			// return 0
+			return this.amount * this.fee_value * 0.01;
 		}
 	},
 	components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_2__components_password___default.a },
@@ -63848,6 +63847,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				_this4.$router.push('/my/bankCardManage');
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
 				console.error(err);
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			});
@@ -66334,19 +66334,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -66386,14 +66373,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 显示店主用户
     showShopUserList: function showShopUserList() {
-      if (this.indexData.manager == 0) {
+      var _this2 = this;
+
+      if (this.indexData.manager_total == 0) {
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("当前店主用户为0");
         return;
       }
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/proxy/members").then(function (res) {}).catch(function (err) {});
+      if (this.isShopUserListShow == true) {
+        this.isShopUserListShow = false;
+        return;
+      }
 
-      this.isShopUserListShow = true;
+      var _data = {
+        type: 0
+      };
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/proxy/members", _data).then(function (res) {
+        _this2.shopUsers = res.data.data.list;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        _this2.isShopUserListShow = true;
+      }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
+      });
     },
     hideShopUserList: function hideShopUserList() {
       this.isShopUserListShow = false;
@@ -66402,12 +66404,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 显示普通用户
     showCommonUserList: function showCommonUserList() {
-      if (this.indexData.user == 0) {
+      var _this3 = this;
+
+      if (this.indexData.member_total == 0) {
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("当前普通用户为0");
         return;
       }
 
-      this.isCommonUserListShow = true;
+      if (this.isCommonUserListShow == true) {
+        this.isCommonUserListShow = false;
+        return;
+      }
+
+      var _data = {
+        type: 1
+      };
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/proxy/members", _data).then(function (res) {
+        _this3.commomUsers = res.data.data.list;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        _this3.isCommonUserListShow = true;
+      }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
+      });
     },
     hideCommonUserList: function hideCommonUserList() {
       this.isCommonUserListShow = false;
@@ -66450,7 +66469,7 @@ var render = function() {
           _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
           _vm._v(" "),
           _c("div", { staticClass: "flex-1" }, [
-            _vm._v(_vm._s(_vm.indexData.manager))
+            _vm._v(_vm._s(_vm.indexData.manager_total))
           ]),
           _vm._v(" "),
           _vm._m(1, false, false)
@@ -66459,37 +66478,25 @@ var render = function() {
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.isShopUserListShow
-          ? _c("ul", { staticClass: "shop-users-list" }, [
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ]),
-              _vm._v(" "),
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ]),
-              _vm._v(" "),
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ])
-            ])
+          ? _c(
+              "ul",
+              { staticClass: "shop-users-list" },
+              _vm._l(_vm.shopUsers, function(item) {
+                return _c("li", { staticClass: "flex flex-align-center" }, [
+                  _c("span", { staticClass: "flex-1" }, [
+                    _c("img", { attrs: { src: item.avatar, alt: "" } })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-3" }, [
+                    _vm._v(_vm._s(item.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-2" }, [
+                    _vm._v(_vm._s(item.mobile))
+                  ])
+                ])
+              })
+            )
           : _vm._e()
       ]),
       _vm._v(" "),
@@ -66505,7 +66512,7 @@ var render = function() {
           _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
           _vm._v(" "),
           _c("div", { staticClass: "flex-1" }, [
-            _vm._v(_vm._s(_vm.indexData.user))
+            _vm._v(_vm._s(_vm.indexData.member_total))
           ]),
           _vm._v(" "),
           _vm._m(3, false, false)
@@ -66514,17 +66521,25 @@ var render = function() {
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.isCommonUserListShow
-          ? _c("ul", { staticClass: "common-users-list" }, [
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ])
-            ])
+          ? _c(
+              "ul",
+              { staticClass: "common-users-list" },
+              _vm._l(_vm.commomUsers, function(item) {
+                return _c("li", { staticClass: "flex flex-align-center" }, [
+                  _c("span", { staticClass: "flex-1" }, [
+                    _c("img", { attrs: { src: item.avatar, alt: "" } })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-3" }, [
+                    _vm._v(_vm._s(item.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-2" }, [
+                    _vm._v(_vm._s(item.mobile))
+                  ])
+                ])
+              })
+            )
           : _vm._e()
       ])
     ],
