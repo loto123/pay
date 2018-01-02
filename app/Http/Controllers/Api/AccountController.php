@@ -6,6 +6,7 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
+use App\Pay\PayLogger;
 use App\Shop;
 use App\ShopFund;
 use App\User;
@@ -21,6 +22,8 @@ use JWTAuth;
  * @package App\Http\Controllers\Api
  */
 class AccountController extends BaseController {
+    const MINIMUM_WITHDRAW = 0.01; //最低提现金额
+    const MINIMUM_RECHARGE = 0.01; //最低充值金额
 
     /**
      * @SWG\Get(
@@ -91,13 +94,26 @@ class AccountController extends BaseController {
         if ($channel->disabled) {
             $channel = $user->channel->spareChannel;
         }
+
+        $method = $channel->platform->depositMethods()->find($request->way);
+
+        if (!$method) {
+            return $this->json([], '状态异常,请刷新页面重试', 0);
+        }
+
+        //限制充值金额
+        if ($request->amount < self::MINIMUM_RECHARGE) {
+            return $this->json([], '最低充值' . self::MINIMUM_RECHARGE . '元', 0);
+        }
+
         try {
-            if ($result = $user->container->initiateDeposit($request->amount, $channel, DepositMethod::find($request->way))) {
+            if ($result = $user->container->initiateDeposit($request->amount, $channel, $method)) {
                 $record->save();
             } else {
                 return $this->json([], 'error', 0);
             }
         } catch (\Exception $e) {
+            PayLogger::deposit()->error('下单接口错误', [$e->getTrace()]);
             return $this->json([], 'error', 0);
         }
 
@@ -171,13 +187,17 @@ class AccountController extends BaseController {
             $channel = $user->channel->spareChannel;
         }
 
-        try {
-            $withdraw_method = WithdrawMethod::find($request->way);
-            if ($withdraw_method->targetPlatform->getKey() == 0) {
-                //提现到银行卡
+        $method = $channel->platform->withdrawMethods()->find($request->way);
 
+        if (!$method) {
+            return $this->json([], '状态异常,请刷新页面重试', 0);
+        }
+
+        try {
+            if ($method->targetPlatform->getKey() == 0) {
+                //提现到银行卡
                 if (!$channel->platform->isCardSupport($user->pay_card)) {
-                    return $this->json([], '暂不支持该银行卡', 0);
+                    return $this->json([], '暂不支持该银行', 0);
                 }
 
                 $receiver_info = ['bank_card' => $user->pay_card];
@@ -186,19 +206,27 @@ class AccountController extends BaseController {
                 $receiver_info = [];
             }
 
-            //计算手续费
-            if ($withdraw_method->fee_value <= 0) {
-                $fee = 0;
-            } else {
-                $fee = $withdraw_method->fee_mode == 0 ? round($request->amount * $withdraw_method->fee_value / 100, 2, PHP_ROUND_HALF_EVEN) : $withdraw_method->fee_value;
+            //限制提现金额
+            if ($request->amount < self::MINIMUM_WITHDRAW) {
+                return $this->json([], '最低提现' . self::MINIMUM_WITHDRAW . '元', 0);
             }
 
+            //计算手续费
+            if ($method->fee_value <= 0) {
+                $fee = 0;
+            } else {
+                $fee = $method->fee_mode == 0 ? round($request->amount * $method->fee_value / 100, 2, PHP_ROUND_HALF_EVEN) : $method->fee_value;
+            }
+
+            if ($request->amount - $fee <= 0) {
+                return $this->json([], '提现金额必须大于0', 0);
+            }
 
             if ($result = $user->container->initiateWithdraw(
                 $request->amount,
                 $receiver_info,
                 $channel,
-                $withdraw_method,
+                $method,
                 $fee
             )
             ) {
@@ -452,8 +480,8 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-        $in_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
-        $out_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        $in_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
+        $out_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 }

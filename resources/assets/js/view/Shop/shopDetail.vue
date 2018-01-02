@@ -625,6 +625,12 @@ export default {
             this.tradeStatus = false;
           }
 
+          if(res.data.data.user_link == 1){
+            this.inviteLinkStatus = true;
+          }else {
+            this.inviteLinkStatus = false;
+          }
+
           Loading.getInstance().close();
         })
         .catch(error => {
@@ -746,12 +752,21 @@ export default {
 
       // 手续费率
       if(type=="percent"){
-         MessageBox.prompt("请输入新的手续费率","修改手续费率(不能超过平台交易费)",).then(({ value, action }) => {
+         MessageBox.prompt("请输入新的手续费率(0%~"+this.platform_fee+"%)","修改手续费率(小于平台交易费率)",).then(({ value, action }) => {
           
           if(value.length ==0){
             Toast("手续费率不能为空");
             return;
           }
+
+
+          console.log(value);
+          console.log(this.platform_fee);
+          if(Number(value)>= Number(this.platform_fee)){
+              Toast("手续费率必须小于平台交易费率"+this.platform_fee+"%");
+              return;
+          }
+
           Loading.getInstance().open();
           
           var _data = {

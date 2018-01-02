@@ -46,6 +46,16 @@ class DepositController extends Controller
                         'X-CSRF-TOKEN': '$token'
                     }
                 });
+                //单据弹层
+$('.bill_info').each(function(){
+$(this).popover(
+{
+    html:true,
+    content:'<p>商户订单号:<br/><input type="text" readonly value ="'+$(this).data('bill') +'"/></p><p>内部ID:<span class="text-danger">(仅限内部查询,刮开查看)</span><span style="background-color:#ccc;color:#ccc;display: block;">'+$(this).data('inner_id')+'</span></p>',
+    title:'凭据信息',
+}
+);});
+
 SCRIPT
 
             );
@@ -106,6 +116,13 @@ SCRIPT
                 $state = Deposit::getStateText($value);
 
                 return "<span class=\"label label-$class\">$state</span>";
+            });
+
+            $grid->method()->impl('凭据单号')->display(function ($impl) {
+                $bill_no = (new $impl)->mixUpDepositId($this->getKey());
+                $id = $this->getKey();
+                return '<a class="btn btn-primary bill_info" role="button" data-toggle="popover" data-bill="' . $bill_no . '" data-inner_id="' . $id . '">查看</a>';
+
             });
 
         });

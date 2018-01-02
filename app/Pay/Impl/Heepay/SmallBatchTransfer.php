@@ -66,7 +66,7 @@ class SmallBatchTransfer implements WithdrawInterface
 
         do {
             //网银提现
-            $batch_no = IdConfuse::mixUpDepositId($withdraw_id, 30); //对外统一30位长度
+            $batch_no = $this->mixUpWithdrawId($withdraw_id);
             $sub_batch = substr($batch_no, 0, 20);
             $params = [
                 'version' => 3,
@@ -79,7 +79,7 @@ class SmallBatchTransfer implements WithdrawInterface
                 'ext_param1' => $batch_no,
             ];
             PayLogger::withdraw()->debug('汇付宝提现', $params);
-            $params['key'] = $config['key'];
+            $params['key'] = $config['key_v3'];
             ksort($params);
             $params['sign'] = $this->makeSign($params);
             PayLogger::withdraw()->debug('md5', [$params['sign']]);
@@ -120,6 +120,11 @@ class SmallBatchTransfer implements WithdrawInterface
 
         return $result;
 
+    }
+
+    public function mixUpWithdrawId($withdrawId)
+    {
+        return IdConfuse::mixUpDepositId($withdrawId, 30); //对外统一30位长度
     }
 
     /**
@@ -196,7 +201,7 @@ class SmallBatchTransfer implements WithdrawInterface
             array_walk($params, function (&$val) {
                 $val = strtolower($val);
             });
-            $key = strtolower($config['key']);//key和下单不一样，必须小写
+            $key = strtolower($config['key_v3']);//key和下单不一样，必须小写
 
             //验证签名
             $validSign = WechatH5::makeSign($params, ['ret_code', 'ret_msg', 'agent_id', 'hy_bill_no', 'status', 'batch_no', 'batch_amt', 'batch_num', 'detail_data', 'ext_param1'], $key);
