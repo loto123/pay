@@ -10,7 +10,6 @@ namespace App\Pay\Impl\MMSP;
 
 
 use App\Pay\DepositInterface;
-use App\Pay\IdConfuse;
 use App\Pay\Impl\MMSP\SDK\wxscan;
 
 class WechatOfficialAccount extends WechatH5
@@ -20,7 +19,7 @@ class WechatOfficialAccount extends WechatH5
     {
         //Log::info($config);
         $amount *= 100; //单位:分
-        $outID = IdConfuse::mixUpDepositId($deposit_id, 20);
+        $outID = $this->mixUpDepositId($deposit_id);
         $wxscanMod = new wxscan();
         $wxscanMod->SetCommandID(hexdec($config['CommandID']));
 

@@ -28,7 +28,7 @@ class WechatH5 implements DepositInterface
             'is_frame' => (int)(strpos(request()->header('User-Agent'), 'MicroMessenger') !== false),
             'goods_name' => DepositInterface::GOOD_NAME,
             'agent_bill_time' => date('Ymdhis'),
-            'agent_bill_id' => IdConfuse::mixUpDepositId($deposit_id, 30),
+            'agent_bill_id' => $this->mixUpDepositId($deposit_id),
             'notify_url' => $notify_url,
             'pay_amt' => $amount,
             'return_url' => $return_url,
@@ -42,13 +42,18 @@ class WechatH5 implements DepositInterface
         });
 
         //坑爹,汇付宝说参数全部转换为小写,这个参数不要
-        $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding('{"s":"WAP","n":"游戏宝","id":"' . route('home') . '"}', "GB2312", "UTF-8")));
+        $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding('{"s":"WAP","n":"' . $config['website_name'] . '","id":"' . route('home') . '"}', "GB2312", "UTF-8")));
 
         //签名
         $fieldsToSign = ['version', 'agent_id', 'agent_bill_id', 'agent_bill_time', 'pay_type', 'pay_amt', 'notify_url', 'return_url', 'user_ip'];
-        self::appendSign($params, $fieldsToSign, $config['key']);
+        self::appendSign($params, $fieldsToSign, $config['key_v1']);
         $queryString = http_build_query($params);
         return $config['url'] . '?' . $queryString;
+    }
+
+    public function mixUpDepositId($depositId)
+    {
+        return IdConfuse::mixUpDepositId($depositId, 30);
     }
 
     /**
@@ -126,7 +131,4 @@ class WechatH5 implements DepositInterface
         echo 'error';
         return null;
     }
-
-
-
 }

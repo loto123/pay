@@ -84,7 +84,7 @@
                             </div>
                             <div class="pull-left ml7">
                                 <p>{{$item->shop->manager->name}}</p>
-                                <span>ID:<span class="text-yellow">{{$item->shop->manager->id}}</span></span>
+                                <span>ID:<span class="text-yellow">{{$item->shop->manager->mobile}}</span></span>
                             </div>
                         </div>
                     </td>

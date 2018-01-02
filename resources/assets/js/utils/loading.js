@@ -25,7 +25,7 @@ class Loading {
             this._timer = setTimeout(() => {
                 Indicator.close();
                 if(this.errSwitch == true){
-                    Toast("请求错误，请刷新页面");
+                    Toast("网络错误，请尝试刷新页面");
                 }
                 this._timer = null;
             }, 10000);
