@@ -130,7 +130,7 @@ class PayChannelController extends Controller
             $form->switch('disabled', '通道状态')->states([
                 'on' => ['value' => 1, 'text' => '禁用', 'color' => 'danger'],
                 'off' => ['value' => 0, 'text' => '启用', 'color' => 'success'],
-            ]);
+            ])->default(1);
 
             //保存回调
             $form->saving(function (Form $form) {

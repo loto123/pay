@@ -168,7 +168,7 @@ class MasterContainer extends Container
             //加入提现队列
             if ($withdraw->save()) {
                 DB::commit();
-                SubmitWithdrawRequest::dispatch($withdraw)->onQueue('withdraw');
+                SubmitWithdrawRequest::dispatch($withdraw)->onQueue('withdraw')->onConnection('redis');
                 $commit = true;
             }
         } while (false);
