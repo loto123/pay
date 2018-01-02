@@ -90,7 +90,21 @@ class ProxyController extends BaseController {
      */
     public function members(Request $request) {
         $user = $this->auth->user();
-        return $this->json(['total' => 0, 'list' => []]);
+        $list = [];
+        $query = $user->child_proxy();
+        if ($request->type == 0) {
+            $query->has("shop");
+        } else {
+            $query->doesntHave("shop");
+        }
+        foreach ($query->paginate($request->input('size', 20)) as $_user) {
+            $list[] = [
+                'avatar' => $_user->avatar,
+                'name' => $_user->name,
+                'mobile' => $_user->mobile
+            ];
+        }
+        return $this->json(['total' => (int)$query->count(), 'list' => $list]);
     }
 
     /**
@@ -104,6 +118,6 @@ class ProxyController extends BaseController {
      */
     public function members_count() {
         $user = $this->auth->user();
-        return $this->json(['total' => 0, 'manager' => 0, 'user' => 0]);
+        return $this->json(['total' => (int)$user->child_proxy()->count(), 'manager_total' => (int)$user->child_proxy()->has("shop")->count(), 'member_total' => (int)$user->child_proxy()->doesntHave("shop")->count()]);
     }
 }

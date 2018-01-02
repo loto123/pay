@@ -76,8 +76,7 @@
 			},
 			computed: {
 				'fee': function () {
-					return this.amount*this.fee_value
-					// return 0
+					return this.amount*this.fee_value*0.01
 				}
 			},
 		  components: { topBack, passWorld },
