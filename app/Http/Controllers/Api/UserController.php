@@ -10,21 +10,13 @@ use App\User;
 use App\UserCard;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
-    //
-//    public function __construct()
-//    {
-//        $this->middleware("jwt.auth");
-//    }
-
     /**
      * @SWG\GET(
      *   path="/my/index",
@@ -44,14 +36,14 @@ class UserController extends Controller
             $parent_name = $parent->name;
             $parent_mobile = $parent->mobile;
         }
-        return response()->json(['code'=>1,'msg'=>'','data'=>
+        return $this->json(
             [
                 'identify_status'=>$this->user->identify_status,
                 'card_count'=> $user_card_count,
                 'parent_name' => $parent_name,
                 'parent_mobile' => $parent_mobile,
                 'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
-            ]]);
+            ]);
     }
 
     /**
@@ -100,7 +92,7 @@ class UserController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
 
         $old_password = $request->input('old_password');
@@ -108,15 +100,15 @@ class UserController extends Controller
         $confirm_password = $request->input('confirm_password');
         //验证两次密码
         if ($confirm_password != $new_password) {
-            return response()->json(['code' => 0,'msg' => '两次新密码输入不一致！','data' => []]);
+            return $this->json([], '两次新密码输入不一致！',0);
         }
         //验证旧密码
         if (!Hash::check($old_password,$this->user->password)) {
-            return response()->json(['code' => 0,'msg' => '原密码输入错误！','data' => []]);
+            return $this->json([],'原密码输入错误！',0);
         }
         //更新密码
         User::where('id',$this->user->id)->update(['password'=>bcrypt($new_password)]);
-        return response()->json(['code' => 1,'msg' => '','data' => []]);
+        return $this->json([],'',1);
     }
 
     /**
@@ -148,17 +140,17 @@ class UserController extends Controller
             ]
         );
         if($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
 
         $user_pay_password = User::find($this->user->id)->pay_password;
         if(!empty($user_pay_password)) {
-            return response()->json(['code' => 0,'msg' => '您已经设置过支付密码了','data' => []]);
+            return $this->json([],'您已经设置过支付密码了',0);
         }
 
         $pay_password = $request->input('pay_password');
         User::where('id',$this->user->id)->update(['pay_password'=>bcrypt($pay_password)]);
-        return response()->json(['code' => 1,'msg' => '','data' => []]);
+        return $this->json();
     }
 
     /**
@@ -206,26 +198,26 @@ class UserController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
 
         $old_password = $request->input('old_pay_password');
         $new_password = $request->input('new_pay_password');
         $confirm_password = $request->input('confirm_pay_password');
         if(empty($this->user->pay_password)) {
-            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+            return $this->json([],'请先设置支付密码',0);
         }
         //验证两次密码
         if ($confirm_password != $new_password) {
-            return response()->json(['code' => 0,'msg' => '两次新密码输入不一致！','data' => []]);
+            return $this->json([],'两次新密码输入不一致',0);
         }
         //验证旧密码
         if (!Hash::check($old_password,$this->user->pay_password)) {
-            return response()->json(['code' => 0,'msg' => '原密码输入错误！','data' => []]);
+            return $this->json([],'原密码输入错误',0);
         }
         //更新密码
         User::where('id',$this->user->id)->update(['pay_password'=>bcrypt($new_password)]);
-        return response()->json(['code' => 1,'msg' => '','data' => []]);
+        return $this->json();
     }
 
     /**
@@ -257,20 +249,19 @@ class UserController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
         if(empty($this->user->pay_password)) {
-            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
+            return $this->json([],'请先设置支付密码',0);
         }
         $card_id = $request->input('card_id');
         $user_card = UserCard::where('id',$card_id)->where('user_id',$this->user->id)->first();
         if (empty($user_card) || count($user_card)==0) {
-            return response()->json(['code' => 0,'msg' => '您没有绑定该卡','data' => []]);
+            return $this->json([],'您没有绑定该卡',0);
         }
         $this->user->pay_card_id = $card_id;
         $this->user->save();
-        return response()->json(['code' => 1,'msg' => '','data' => []]);
-
+        return $this->json();
     }
 
     /**
@@ -286,11 +277,8 @@ class UserController extends Controller
     {
         $this->user = JWTAuth::parseToken()->authenticate();
         if(empty($this->user->pay_card_id)) {
-           return response()->json(['code'=>0,'msg'=>'请先绑定银行卡','data'=>[]]);
+            return $this->json([],'请先绑定银行卡',0);
         }
-//        if(empty($this->user->pay_password)) {
-//            return response()->json(['code' => 0,'msg' => '请先设置支付密码','data' => []]);
-//        }
         $user_card = UserCard::find($this->user->pay_card_id);
         $bank = Bank::find($user_card->bank_id);
         $data = [
@@ -300,7 +288,7 @@ class UserController extends Controller
             'card_num' => $this->formatNum($user_card->card_num,6,4),
             'bank' => $bank->name,
         ];
-        return response()->json(['code' => 1,'msg' => '','data' => $data]);
+        return $this->json($data);
     }
 
     /**
@@ -348,7 +336,7 @@ class UserController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([], $validator->errors()->first(), 0);
         }
 //        Log::info(['param'=>$request->all()]);
         $name = $request->input('name');
@@ -357,7 +345,7 @@ class UserController extends Controller
         $cache_value = Cache::get($cache_key);
 //        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
+            return $this->json([], '验证码已失效或填写错误', 0);
         }
         Cache::forget($cache_key);
         //添加记录
@@ -370,7 +358,7 @@ class UserController extends Controller
             $pay_record->platform = Heepay::PLATFORM;
             $pay_record->save();
         } catch (\Exception $e) {
-            return response()->json(['code' => 0,'msg' => '记录无法生成','data' => []]);
+            return $this->json([], '记录无法生成', 0);
         }
         //调用实名认证接口
         $reality_res = Reality::identify($pay_record->id,$name,$id_number);
@@ -380,10 +368,9 @@ class UserController extends Controller
                 'name' => $name,
                 'id_number' => $id_number,
             ]);
-            return response()->json(['code' => 1, 'msg' =>'', 'data' => []]);
+            return $this->json();
         }
-        return response()->json(['code' => 0, 'msg' =>'身份证号码与姓名不匹配，请核实后重新输入', 'data' => []]);
-
+        return $this->json([], '身份证号码与姓名不匹配，请核实后重新输入', 0);
     }
 
     /**
@@ -410,7 +397,7 @@ class UserController extends Controller
             'parent_mobile' => $parent->mobile??'',
             'pay_card_id' => $this->user->pay_card_id??'',
         ];
-        return response()->json(['code' => 1, 'msg' =>'', 'data' => $data]);
+        return $this->json($data);
     }
 
     //对字符串做掩码处理
@@ -451,13 +438,13 @@ class UserController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([], $validator->errors()->first(),0);
         }
         $user = JWTAuth::parseToken()->authenticate();
         $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $user->id);
         $times = Cache::get($key);
         if ($times && $times >= config("pay_pwd_validate_times", 5)) {
-            return response()->json(['code' => 0,'msg' => trans("api.over_max_times"),'data' => []]);
+            return $this->json([], trans("api.over_max_times"),0);
         }
         if (!Hash::check($request->password, $user->pay_password)) {
             if(!$times) {
@@ -466,9 +453,9 @@ class UserController extends Controller
             else {
                 Cache::increment($key);
             }
-            return response()->json(['code' => 0,'msg' => trans("api.error_pay_password"),'data' => ['times' => config("pay_pwd_validate_times", 5) - $times]]);
+            return $this->json(['times' => config("pay_pwd_validate_times", 5) - $times], trans("api.error_pay_password"),0);
         } else {
-            return response()->json(['code' => 1,'msg' => '','data' => []]);
+            return $this->json();
         }
     }
 
@@ -484,17 +471,17 @@ class UserController extends Controller
     public function parent() {
         $user = JWTAuth::parseToken()->authenticate();
         if (!$user->parent) {
-            return response()->json(['code' => 1,'msg' => '','data' => [
+            return $this->json([
                 'avatar' => "",
                 'name' => "",
                 'mobile' => "",
-            ]]);
+            ]);
         }
-        return response()->json(['code' => 1,'msg' => '','data' => [
+        return $this->json([
             'avatar' => $user->parent->avatar,
             'name' => $user->parent->name,
             'mobile' => $user->parent->mobile,
-        ]]);
+        ]);
     }
 
 }

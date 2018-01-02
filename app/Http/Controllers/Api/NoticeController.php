@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
 
-class NoticeController extends Controller
+class NoticeController extends BaseController
 {
 //    public function __construct()
 //    {
@@ -76,7 +76,7 @@ class NoticeController extends Controller
 
 
         }
-        return response()->json(['code' => 1,'msg' => '','data' => $list]);
+        return $this->json($list);
     }
 
     /**
@@ -141,7 +141,7 @@ class NoticeController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
 
         $user_id_arr = $request->input('user_id');
@@ -150,9 +150,9 @@ class NoticeController extends Controller
         $title = $request->input('title');
         $param = $request->input('param');
         if (\App\Admin\Controllers\NoticeController::send($user_id_arr,$type,$content,$title,$param)) {
-            return response()->json(['code' => 1,'msg' => '','data' => []]);
+            return $this->json();
         } else {
-            return response()->json(['code' => 0,'msg' => '失败','data' => []]);
+            return $this->json([],'操作失败',0);
         }
 
     }
@@ -185,12 +185,12 @@ class NoticeController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
         $notice_id = $request->input('notice_id');
         $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
         if (empty($notice)) {
-            return response()->json(['code' => 0,'msg' => '消息不存在','data' => []]);
+            return $this->json([],'消息不存在',0);
         }
         if($notice->type == 'App\Notifications\ProfitApply') {
             $profit_table = (new Profit)->getTable();
@@ -199,7 +199,7 @@ class NoticeController extends Controller
                 ->where($profit_table.'.id',$notice->data['param'])
                 ->select($profit_table.'.*','u.mobile as mobile','u.avatar as avatar','tr.transfer_id as transfer_id')->first();
             if (empty($profit)) {
-                return response()->json(['code' => 0,'msg' => '分润不存在','data' => []]);
+                return $this->json([],'分润不存在',0);
             }
             $data = [
                 'amount' => $profit->proxy_amount,
@@ -217,7 +217,7 @@ class NoticeController extends Controller
             ];
         }
 
-        return response()->json(['code' => 1,'msg' => '','data' => $data]);
+        return $this->json($data);
     }
 
     /**
@@ -248,19 +248,19 @@ class NoticeController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
 
         $notice_type = Notice::typeConfig();
         if(!isset($notice_type[$request->type])) {
-            return response()->json(['code' => 0,'msg' => '消息类型不存在','data' => []]);
+            return $this->json([],'消息类型不存在',0);
         }
 
         try{
             $this->user->unreadNotifications->where('type',$notice_type[$request->type])->markAsRead();
-            return response()->json(['code' => 1,'msg' => '','data' => []]);
+            return $this->json();
         } catch (\Exception $e) {
-            return response()->json(['code' => 0,'msg' => '删除失败','data' => []]);
+            return $this->json([],'操作失败',0);
         }
 
     }

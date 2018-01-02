@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Swagger\Annotations as SWG;
+
 
 /**
  *
@@ -56,7 +58,34 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="boolean"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="message",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="totalCount", type="integer", example=20),
+     *                  @SWG\Property(property="pageCount", type="integer", example=1),
+     *                  @SWG\Property(property="currentPage", type="integer", example=1),
+     *                  @SWG\Property(property="perPage", type="integer", example=20),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -88,7 +117,7 @@ class ShopController extends BaseController {
         $shop_user->shop_id = $shop->id;
         $shop_user->user_id = $user->id;
         $shop_user->save();
-        return $this->json([$shop]);
+        return $this->json();
     }
 
     /**
@@ -110,7 +139,31 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Schema(ref="#/definitions/CodeDefined"),
+     *              @SWG\Property(
+     *                  property="message",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="id", type="string", example="1234567890", description="店铺id"),
+     *                      @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
+     *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址")
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -124,7 +177,7 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
-                'logo' => asset("images/personal.jpg")
+                'logo' => $_shop->logo
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -228,7 +281,7 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
-                'logo' => asset("images/personal.jpg"),
+                'logo' => $_shop->logo,
                 'today_profit' => $_shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
                 'total_profit' => $_shop->tips()->sum('amount')
             ];
@@ -297,7 +350,7 @@ class ShopController extends BaseController {
                 'rate' => $shop->price,
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg"),
+                'logo' => $shop->logo,
                 'is_manager' => $is_manager,
                 'is_member' => $is_member,
             ];
@@ -309,7 +362,7 @@ class ShopController extends BaseController {
                 'members_count' => (int)$shop->users()->count(),
                 'rate' => $shop->price,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg"),
+                'logo' => $shop->logo,
                 'is_manager' => $is_manager,
                 'is_member' => $is_member,
             ];
@@ -343,7 +396,7 @@ class ShopController extends BaseController {
             'name' => $shop->name,
             'members_count' => (int)$shop->users()->count(),
             'created_at' => strtotime($shop->created_at),
-            'logo' => asset("images/personal.jpg"),
+            'logo' => $shop->logo,
             'manager' => $shop->manager->name
         ];
         return $this->json($data);
@@ -463,11 +516,17 @@ class ShopController extends BaseController {
     public function close($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if ($shop->container->balance > 0 || $shop->active || Transfer::where("shop_id", $shop->id)->where("status", 3)->count() > 0) {
+        if (!$shop) {
             return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->status == Shop::STATUS_CLOSED) {
+            return $this->json([], trans("api.shop_closed"), 0);
         }
         if ($shop->manager_id != $user->id) {
             return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->container->balance > 0 || $shop->active || Transfer::where("shop_id", $shop->id)->where("status", 3)->count() > 0) {
+            return $this->json([], trans("api.shop_cannot_close"), 0);
         }
         $shop->status = Shop::STATUS_CLOSED;
         $shop->save();
@@ -741,7 +800,7 @@ class ShopController extends BaseController {
                 $user = User::find($notification->data['user_id']);
                 $shop = Shop::find($notification->data['shop_id']);
                 $data[] = [
-                    'user_avatar' => asset("images/personal.jpg"),
+                    'user_avatar' => $user->avatar,
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
