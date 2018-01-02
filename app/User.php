@@ -130,7 +130,7 @@ class User extends Authenticatable
     public function child_proxy()
     {
         return $this->hasMany('App\User', 'parent_id', 'id');
-//            ->whereHas('roles', function ($query) {
+//        ->whereHas('roles', function ($query) {
 //            $query->where('roles.name', 'like', 'agent%');
 //        });
     }
@@ -139,7 +139,7 @@ class User extends Authenticatable
     public function child_user()
     {
         return $this->hasMany('App\User', 'parent_id', 'id');
-//        ->whereHas('roles', function ($query) {
+//            ->whereHas('roles', function ($query) {
 //            $query->where('roles.name', 'user');
 //        });
     }

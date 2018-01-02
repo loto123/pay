@@ -100,7 +100,7 @@
                                         </div>
                                         <div class="pull-left ml7">
                                             <p>{{$item->user->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->user->id}}</span></span>
+                                            <span>ID:<span class="text-yellow">{{$item->user->mobile}}</span></span>
                                         </div>
                                     </div>
                                 @else
@@ -117,7 +117,7 @@
                                         </div>
                                         <div class="pull-left ml7">
                                             <p>{{$item->transfer->shop->manager->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->transfer->shop->manager->id}}</span></span>
+                                            <span>ID:<span class="text-yellow">{{$item->transfer->shop->manager->mobile}}</span></span>
                                         </div>
                                     </div>
                                 </td>
