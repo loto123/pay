@@ -66157,7 +66157,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#my-users[data-v-5e89e994] {\n  padding-top: 2em;\n  min-height: 100vh;\n  background: #eee;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-users .users-count[data-v-5e89e994] {\n    height: 6em;\n    background: #26a2ff;\n}\n#my-users .users-count h3[data-v-5e89e994] {\n      padding-top: 0.5em;\n      font-size: 1.7em;\n      color: #fff;\n      text-align: center;\n}\n#my-users .users-count h4[data-v-5e89e994] {\n      padding-top: 0.8em;\n      color: #fff;\n      text-align: center;\n      font-size: 0.9em;\n}\n#my-users .shop-users[data-v-5e89e994], #my-users .common-users[data-v-5e89e994] {\n    width: 100%;\n    height: 3em;\n    background: #fff;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users .user-icon i[data-v-5e89e994], #my-users .common-users .user-icon i[data-v-5e89e994] {\n      font-size: 1.8em;\n      color: #f3ca7e;\n}\n#my-users .shop-users-list li[data-v-5e89e994], #my-users .common-users-list li[data-v-5e89e994] {\n    height: 3em;\n    width: 100%;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users-list li img[data-v-5e89e994], #my-users .common-users-list li img[data-v-5e89e994] {\n      width: 2em;\n      height: 2em;\n      border-radius: 0.2em;\n}\n#my-users .common-users[data-v-5e89e994] {\n    margin-top: 0.2em;\n}\n#my-users .common-users .user-icon i[data-v-5e89e994] {\n      color: #7dc5eb;\n}\n", ""]);
+exports.push([module.i, "\n.fade-enter-active[data-v-5e89e994] {\n  -webkit-transition: opacity 1s;\n  transition: opacity 1s;\n}\n.fade-enter[data-v-5e89e994],\n.fade-leave-to[data-v-5e89e994] {\n  opacity: 0;\n}\n#my-users[data-v-5e89e994] {\n  padding-top: 2em;\n  min-height: 100vh;\n  background: #eee;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-users .users-count[data-v-5e89e994] {\n    height: 6em;\n    background: #26a2ff;\n}\n#my-users .users-count h3[data-v-5e89e994] {\n      padding-top: 0.5em;\n      font-size: 1.7em;\n      color: #fff;\n      text-align: center;\n}\n#my-users .users-count h4[data-v-5e89e994] {\n      padding-top: 0.8em;\n      color: #fff;\n      text-align: center;\n      font-size: 0.9em;\n}\n#my-users .shop-users[data-v-5e89e994], #my-users .common-users[data-v-5e89e994] {\n    width: 100%;\n    height: 3em;\n    background: #fff;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users .user-icon i[data-v-5e89e994], #my-users .common-users .user-icon i[data-v-5e89e994] {\n      font-size: 1.8em;\n      color: #f3ca7e;\n}\n#my-users .shop-users-list li[data-v-5e89e994], #my-users .common-users-list li[data-v-5e89e994] {\n    height: 3em;\n    width: 100%;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users-list li img[data-v-5e89e994], #my-users .common-users-list li img[data-v-5e89e994] {\n      width: 2em;\n      height: 2em;\n      border-radius: 0.2em;\n}\n#my-users .common-users[data-v-5e89e994] {\n    margin-top: 0.2em;\n}\n#my-users .common-users .user-icon i[data-v-5e89e994] {\n      color: #7dc5eb;\n}\n", ""]);
 
 // exports
 
@@ -66170,6 +66170,8 @@ exports.push([module.i, "\n#my-users[data-v-5e89e994] {\n  padding-top: 2em;\n  
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
 //
 //
 //
@@ -66326,17 +66328,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  created: function created() {
+    this.init();
+  },
   data: function data() {
     return {
       shopUsers: [], // 店主用户
-      commomUsers: [] // 普通用户
+      commomUsers: [], // 普通用户
+      isShopUserListShow: false,
+      isCommonUserListShow: false
     };
+  },
+
+  methods: {
+    init: function init() {
+      //      Loading.getInstance().open();
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('').then(function (res) {}).catch(function (err) {});
+    },
+    showShopUserList: function showShopUserList() {
+      this.isShopUserListShow = true;
+    },
+    hideShopUserList: function hideShopUserList() {
+      this.isShopUserListShow = false;
+    },
+    showCommonUserList: function showCommonUserList() {
+      this.isCommonUserListShow = true;
+    },
+    hideCommonUserList: function hideCommonUserList() {
+      this.isCommonUserListShow = false;
+    }
   }
 });
 
@@ -66359,13 +66402,93 @@ var render = function() {
       _vm._v(" "),
       _vm._m(0, false, false),
       _vm._v(" "),
-      _vm._m(1, false, false),
+      _c("div", { staticClass: "shop-users flex flex-align-center" }, [
+        _vm._m(1, false, false),
+        _vm._v(" "),
+        _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
+        _vm._v(" "),
+        _c(
+          "span",
+          { staticClass: "flex-1", on: { click: _vm.showShopUserList } },
+          [
+            _c("i", { staticClass: "iconfont" }, [
+              _vm._v("\n        \n      ")
+            ])
+          ]
+        )
+      ]),
       _vm._v(" "),
-      _vm._m(2, false, false),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.isShopUserListShow
+          ? _c("ul", { staticClass: "shop-users-list" }, [
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ])
+            ])
+          : _vm._e()
+      ]),
       _vm._v(" "),
-      _vm._m(3, false, false),
+      _c("div", { staticClass: "common-users flex flex-align-center" }, [
+        _vm._m(2, false, false),
+        _vm._v(" "),
+        _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
+        _vm._v(" "),
+        _c(
+          "span",
+          { staticClass: "flex-1", on: { click: _vm.showCommonUserList } },
+          [
+            _c("i", { staticClass: "iconfont" }, [
+              _vm._v("\n        \n      ")
+            ])
+          ]
+        )
+      ]),
       _vm._v(" "),
-      _vm._m(4, false, false)
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.isCommonUserListShow
+          ? _c("ul", { staticClass: "common-users-list" }, [
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ])
+            ])
+          : _vm._e()
+      ])
     ],
     1
   )
@@ -66385,88 +66508,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "shop-users flex flex-align-center" }, [
-      _c("span", { staticClass: "user-icon flex-2" }, [
-        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
-      ]),
-      _vm._v(" "),
-      _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
-      _vm._v(" "),
-      _c("span", { staticClass: "flex-1" }, [
-        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
-      ])
+    return _c("span", { staticClass: "user-icon flex-2" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "shop-users-list" }, [
-      _c("li", { staticClass: "flex flex-align-center" }, [
-        _c("span", { staticClass: "flex-1" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-align-center" }, [
-        _c("span", { staticClass: "flex-1" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "flex flex-align-center" }, [
-        _c("span", { staticClass: "flex-1" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "common-users flex flex-align-center" }, [
-      _c("span", { staticClass: "user-icon flex-2" }, [
-        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
-      ]),
-      _vm._v(" "),
-      _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
-      _vm._v(" "),
-      _c("span", { staticClass: "flex-1" }, [
-        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "common-users-list" }, [
-      _c("li", { staticClass: "flex flex-align-center" }, [
-        _c("span", { staticClass: "flex-1" }, [
-          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-      ])
+    return _c("span", { staticClass: "user-icon flex-2" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
     ])
   }
 ]

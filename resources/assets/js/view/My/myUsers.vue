@@ -19,33 +19,35 @@
       </span>
       <h3 class="flex-9">店主用户</h3>
       <div class="flex-1">3</div>
-      <span class="flex-1">
+      <span class="flex-1" @click = "showShopUserList">
         <i class="iconfont">
           &#xe62e;
         </i>
       </span>
     </div>
 
-    <ul class="shop-users-list">
-      <li class="flex flex-align-center">
-        <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-        <div class="flex-1">Leaf</div>
-        <div class="flex-1">18173610305</div>
-      </li>
+    <transition name="fade">
+      <ul class="shop-users-list" v-if="isShopUserListShow">
+        <li class="flex flex-align-center">
+          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
+          <div class="flex-1">Leaf</div>
+          <div class="flex-1">18173610305</div>
+        </li>
 
-      <li class="flex flex-align-center">
-        <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-        <div class="flex-1">Leaf</div>
-        <div class="flex-1">18173610305</div>
-      </li>
+        <li class="flex flex-align-center">
+          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
+          <div class="flex-1">Leaf</div>
+          <div class="flex-1">18173610305</div>
+        </li>
 
-      <li class="flex flex-align-center">
-        <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-        <div class="flex-1">Leaf</div>
-        <div class="flex-1">18173610305</div>
-      </li>
+        <li class="flex flex-align-center">
+          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
+          <div class="flex-1">Leaf</div>
+          <div class="flex-1">18173610305</div>
+        </li>
 
-    </ul>
+      </ul>
+    </transition>
 
     <div class="common-users flex flex-align-center">
       <span class="user-icon flex-2">
@@ -55,25 +57,37 @@
       </span>
       <h3 class="flex-9">普通用户</h3>
       <div class="flex-1">3</div>
-      <span class="flex-1">
+      <span class="flex-1" @click="showCommonUserList">
          <i class="iconfont">
           &#xe62e;
         </i>
       </span>
     </div>
 
-    <ul class="common-users-list">
-      <li class="flex flex-align-center">
-        <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-        <div class="flex-1">Leaf</div>
-        <div class="flex-1">18173610305</div>
-      </li>
-    </ul>
+    <transition name="fade">
+      <ul class="common-users-list" v-if="isCommonUserListShow">
+        <li class="flex flex-align-center">
+          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
+          <div class="flex-1">Leaf</div>
+          <div class="flex-1">18173610305</div>
+        </li>
+      </ul>
+
+    </transition>
 
   </div>
 </template>
 
 <style lang="scss" scoped>
+
+.fade-enter-active {
+  transition: opacity 1s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 #my-users{
   padding-top:2em;
   min-height: 100vh;
@@ -157,13 +171,48 @@
 <script>
 
 import topBack from '../../components/topBack.vue'
+import Loading from '../../utils/loading'
+import request from '../../utils/userRequest'
 
 export default {
   components:{topBack},
+  created(){
+    this.init();
+  },
   data(){
     return {
       shopUsers:[],                // 店主用户
-      commomUsers:[]               // 普通用户
+      commomUsers:[],               // 普通用户
+      isShopUserListShow:false,
+      isCommonUserListShow:false,
+    }
+  },
+  methods:{
+    init(){
+//      Loading.getInstance().open();
+
+      request.getInstance().getData('').then(res=>{
+
+      }).catch(err=>{
+
+      });
+    },
+
+    showShopUserList(){
+      this.isShopUserListShow = true;
+    },
+
+    hideShopUserList(){
+      this.isShopUserListShow = false;
+
+    },
+
+    showCommonUserList(){
+      this.isCommonUserListShow = true;
+    },
+
+    hideCommonUserList(){
+      this.isCommonUserListShow = false;
     }
   }
 }
