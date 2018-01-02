@@ -97,7 +97,7 @@ class ProxyController extends BaseController {
         } else {
             $query->doesntHave("shop");
         }
-        foreach ($query->get() as $_user) {
+        foreach ($query->paginate($request->input('size', 20)) as $_user) {
             $list[] = [
                 'avatar' => $_user->avatar,
                 'name' => $_user->name,
