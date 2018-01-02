@@ -24,7 +24,7 @@ class WechatH5 implements DepositInterface
 
     public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
     {
-        $outID = IdConfuse::mixUpDepositId($deposit_id, 20);
+        $outID = $this->mixUpDepositId($deposit_id);
         $amount *= 100; //单位:分
         $wxh5payMod = new SDK\wxh5pay();
         $wxh5payMod->SetCommandID(hexdec('0x0911'));
@@ -55,6 +55,11 @@ class WechatH5 implements DepositInterface
             PayLogger::deposit()->error('微信H5预支付错误', [$result]);
             return null;
         }
+    }
+
+    public function mixUpDepositId($depositId)
+    {
+        return IdConfuse::mixUpDepositId($depositId, 20);
     }
 
     public function acceptNotify(array $config)

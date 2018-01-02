@@ -37,4 +37,10 @@ interface WithdrawInterface
      * @return Withdraw,不合法或交易不存在返回null
      */
     public function acceptNotify(array $config);
+
+    /**
+     * 混淆提现id给外部接口
+     * @return string
+     */
+    public function mixUpWithdrawId($withdrawId);
 }

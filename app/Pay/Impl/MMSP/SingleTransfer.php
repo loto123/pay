@@ -32,7 +32,7 @@ class SingleTransfer implements WithdrawInterface
             'CMDID' => hexdec('0x1001'),
             'VERSION' => '1.0',
             'MERNO' => $config['MERNO'],
-            'ORDERNO' => IdConfuse::mixUpDepositId($withdraw_id, 15, true),
+            'ORDERNO' => $this->mixUpWithdrawId($withdraw_id),
             'REQTIME' => date('YmdHis'),
             'AMT' => (int)$amount,
             'BUSITYPE' => '001',
@@ -87,6 +87,11 @@ class SingleTransfer implements WithdrawInterface
         }
 
         return $result;
+    }
+
+    public function mixUpWithdrawId($withdrawId)
+    {
+        return IdConfuse::mixUpDepositId($withdrawId, 15, true);
     }
 
     private function getEncryptor(array $config)
