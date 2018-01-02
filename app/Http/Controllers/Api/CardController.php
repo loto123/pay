@@ -17,12 +17,8 @@ use JWTAuth;
 use Validator;
 use Illuminate\Support\Facades\Log;
 
-class CardController extends Controller
+class CardController extends BaseController
 {
-//    public function __construct()
-//    {
-//        $this->middleware("jwt.auth");
-//    }
 
     /**
      * @SWG\GET(
@@ -37,7 +33,7 @@ class CardController extends Controller
     {
         $this->user = JWTAuth::parseToken()->authenticate();
         if($this->user->identify_status != 1) {
-            return response()->json(['code'=>0,'msg'=>'未实名认证，该功能不可用','data'=>[]]);
+            return $this->json([],'未实名认证，该功能不可用',0);
         }
         $user_card_table = (new UserCard)->getTable();
         $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank_id')
@@ -71,7 +67,7 @@ class CardController extends Controller
                 array_unshift($data, $item);
             }
         }
-        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+        return $this->json($data);
     }
 
     /**
@@ -154,24 +150,24 @@ class CardController extends Controller
 
 //        Log::info(['param'=>$request->all()]);
         if ($validator->fails()) {
-            return response()->json(['code' => 0,'msg' => $validator->errors()->first(),'data' => []]);
+            return $this->json([],$validator->errors()->first(),0);
         }
         $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
 //        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-             return response()->json(['code' => 0, 'msg' =>'验证码已失效或填写错误', 'data' => []]);
+            return $this->json([],'验证码已失效或填写错误',0);
         }
         Cache::forget($cache_key);
 
         //同一用户只能绑定一次
         $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$request->card_num)->first();
         if (!empty($card_list) && count($card_list)>0) {
-            return response()->json(['code' => 0,'msg' => '已经绑定的银行卡不能重复绑定','data' => []]);
+            return $this->json([],'已经绑定的银行卡不能重复绑定',0);
         }
 
         if(!isset($this->user->channel['platform_id'])) {
-            return response()->json(['code' => 0,'msg' => '用户没有分配通道','data' => []]);
+            return $this->json([],'用户没有分配通道',0);
         }
 
         //添加记录
@@ -184,7 +180,7 @@ class CardController extends Controller
             $pay_record->platform = Heepay::PLATFORM;
             $pay_record->save();
         } catch (\Exception $e) {
-            return response()->json(['code' => 0,'msg' => '记录无法生成','data' => []]);
+            return $this->json([],'记录无法生成',0);
         }
         //鉴权
         $auth_res = Reality::authentication(
@@ -196,7 +192,7 @@ class CardController extends Controller
             $this->user->name
         );
         if ($auth_res !== true) {
-            return response()->json(['code' => 0,'msg' => $auth_res,'data' => []]);
+            return $this->json([],$auth_res,0);
         }
 
         $cards = new UserCard();
@@ -214,7 +210,7 @@ class CardController extends Controller
             $this->user->pay_card_id =$cards->id;
             $this->user->save();
         }
-        return response()->json(['code' => 1,'msg' => '','data' => []]);
+        return $this->json();
     }
 
     /**
@@ -244,7 +240,7 @@ class CardController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['code'=>0,'msg'=>$validator->errors()->first(),'data'=>[]]);
+            return $this->json([],$validator->errors()->first(),0);
         }
         $card_id = $request->input('card_id');
 
@@ -254,15 +250,15 @@ class CardController extends Controller
             if ($user_card_count == 1){
                 $card->delete();
                 User::where('id',$this->user->id)->update(['pay_card_id'=>NULL]);
-                return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
+                return $this->json();
             }else if($this->user->pay_card_id == $card_id) {
-                return response()->json(['code'=>0,'msg'=>'操作无效，请先更换结算卡','data'=>[]]);
+                return $this->json([],'操作无效，请先更换结算卡',0);
             }else {
                 $card->delete();
-                return response()->json(['code'=>1,'msg'=>'','data'=>[]]);
+                return $this->json();
             }
         } else {
-            return response()->json(['code'=>0,'msg'=>'您未绑定该卡','data'=>[]]);
+            return $this->json([],'您未绑定该卡',0);
         }
     }
 
@@ -291,7 +287,7 @@ class CardController extends Controller
                 }
             }
         }
-        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+        return $this->json($data);
     }
 
     /**
@@ -313,7 +309,7 @@ class CardController extends Controller
             default :
             break;
         }
-        return response()->json(['code'=>1,'msg'=>'','data'=>$data]);
+        return $this->json($data);
     }
 
 
