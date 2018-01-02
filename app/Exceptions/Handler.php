@@ -53,7 +53,11 @@ class Handler extends ExceptionHandler
             if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
                 return response()->json(['code'=>2, 'message' => 'token_expired', 'data'=> '']);
             } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return response()->json(['code'=>2, 'message' => 'token_invalid', 'data'=> '']);
+                return response()->json(['code' => 2, 'message' => 'token_invalid', 'data' => '']);
+            } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\JWTException) {
+                return response()->json(['code' => 2, 'message' => 'token_invalid', 'data' => '']);
+            } else if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+                return response()->json(['code'=>0, 'message' => '404 Not Found', 'data'=> ''], 404);
             } else {
                 return response()->json(['code'=>0, 'message' => config("app.debug") ? $exception->getMessage() : 'error', 'data'=> '']);
             }
