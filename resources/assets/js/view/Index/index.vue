@@ -51,7 +51,7 @@
           </li>
 
           <li class="flex flex-v flex-align-center">
-            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
+            <a href="/#/my/my_users" class="flex flex-v flex-align-center">
               <i class="iconfont transaction-icon common-icon">
                 &#xe621;
               </i>

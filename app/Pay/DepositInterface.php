@@ -43,4 +43,10 @@ interface DepositInterface
      * @return DepositResult
      */
     public function parseReturn(DepositMethod $method);
+
+    /**
+     * 混淆充值id给外部接口
+     * @return string
+     */
+    public function mixUpDepositId($depositId);
 }
