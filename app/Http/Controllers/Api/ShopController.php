@@ -10,6 +10,7 @@ use App\ShopUser;
 use App\Transfer;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -117,6 +118,9 @@ class ShopController extends BaseController {
         $shop_user->shop_id = $shop->id;
         $shop_user->user_id = $user->id;
         $shop_user->save();
+        Artisan::queue('shop:logo', [
+            '--id' => $shop->id
+        ])->onConnection('redis')->onQueue('shop_logo');
         return $this->json();
     }
 
@@ -494,6 +498,9 @@ class ShopController extends BaseController {
             return $this->json([], trans("api.cannot_delete_self"), 0);
         }
         ShopUser::where("user_id", $member->id)->where("shop_id", $shop->id)->delete();
+        Artisan::queue('shop:logo', [
+            '--id' => $shop->id
+        ])->onConnection('redis')->onQueue('shop_logo');
         return $this->json();
     }
     
@@ -845,6 +852,7 @@ class ShopController extends BaseController {
      */
     public function agree(Request $request) {
         $user = $this->auth->user();
+        $shop_ids = [];
         if ($request->id) {
             $notification = $user->unreadNotifications()->where("id", $request->id)->first();
             if ($notification) {
@@ -858,6 +866,7 @@ class ShopController extends BaseController {
                         $shop_user->shop_id = $shop->id;
                         $shop_user->user_id = $user->id;
                         $shop_user->save();
+                        $shop_ids[] = $shop->id;
                     }
                 } catch (\Exception $e){}
             }
@@ -872,10 +881,16 @@ class ShopController extends BaseController {
                         $shop_user->shop_id = $shop->id;
                         $shop_user->user_id = $user->id;
                         $shop_user->save();
+                        $shop_ids[] = $shop->id;
                     }
                 } catch (\Exception $e){}
             }
             $user->unreadNotifications->markAsRead();
+        }
+        if ($shop_ids) {
+            Artisan::queue('shop:logo', [
+                '--id' => array_unique($shop_ids)
+            ])->onConnection('redis')->onQueue('shop_logo');
         }
         return $this->json();
     }
