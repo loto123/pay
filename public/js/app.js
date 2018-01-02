@@ -71,7 +71,7 @@ var global = __webpack_require__(10);
 var core = __webpack_require__(31);
 var hide = __webpack_require__(20);
 var redefine = __webpack_require__(21);
-var ctx = __webpack_require__(28);
+var ctx = __webpack_require__(27);
 var PROTOTYPE = 'prototype';
 
 var $export = function (type, name, source) {
@@ -5053,7 +5053,7 @@ module.exports = function normalizeComponent (
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_polyfill__ = __webpack_require__(308);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_polyfill__);
@@ -15230,7 +15230,7 @@ var Loading = function () {
                 this._timer = setTimeout(function () {
                     __WEBPACK_IMPORTED_MODULE_0_mint_ui__["Indicator"].close();
                     if (_this.errSwitch == true) {
-                        Object(__WEBPACK_IMPORTED_MODULE_0_mint_ui__["Toast"])("请求错误，请刷新页面");
+                        Object(__WEBPACK_IMPORTED_MODULE_0_mint_ui__["Toast"])("网络错误，请尝试刷新页面");
                     }
                     _this._timer = null;
                 }, 10000);
@@ -15290,7 +15290,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var store = __webpack_require__(63)('wks');
-var uid = __webpack_require__(43);
+var uid = __webpack_require__(44);
 var Symbol = __webpack_require__(10).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
 
@@ -15382,7 +15382,7 @@ module.exports = function (it, key) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(15);
-var createDesc = __webpack_require__(42);
+var createDesc = __webpack_require__(43);
 module.exports = __webpack_require__(14) ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
 } : function (object, key, value) {
@@ -15398,7 +15398,7 @@ module.exports = __webpack_require__(14) ? function (object, key, value) {
 var global = __webpack_require__(10);
 var hide = __webpack_require__(20);
 var has = __webpack_require__(19);
-var SRC = __webpack_require__(43)('src');
+var SRC = __webpack_require__(44)('src');
 var TO_STRING = 'toString';
 var $toString = Function[TO_STRING];
 var TPL = ('' + $toString).split(TO_STRING);
@@ -15780,7 +15780,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var pIE = __webpack_require__(59);
-var createDesc = __webpack_require__(42);
+var createDesc = __webpack_require__(43);
 var toIObject = __webpack_require__(24);
 var toPrimitive = __webpack_require__(32);
 var has = __webpack_require__(19);
@@ -15820,12 +15820,6 @@ module.exports = Object.getPrototypeOf || function (O) {
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(290);
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
 // optional / simple context binding
 var aFunction = __webpack_require__(18);
 module.exports = function (fn, that, length) {
@@ -15849,7 +15843,7 @@ module.exports = function (fn, that, length) {
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -15860,7 +15854,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15874,6 +15868,12 @@ module.exports = function (method, arg) {
   });
 };
 
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(290);
 
 /***/ }),
 /* 31 */
@@ -15951,7 +15951,7 @@ module.exports = function (KEY, exec) {
 // 4 -> Array#every
 // 5 -> Array#find
 // 6 -> Array#findIndex
-var ctx = __webpack_require__(28);
+var ctx = __webpack_require__(27);
 var IObject = __webpack_require__(58);
 var toObject = __webpack_require__(17);
 var toLength = __webpack_require__(16);
@@ -15997,32 +15997,32 @@ module.exports = function (TYPE, $create) {
 "use strict";
 
 if (__webpack_require__(14)) {
-  var LIBRARY = __webpack_require__(44);
+  var LIBRARY = __webpack_require__(45);
   var global = __webpack_require__(10);
   var fails = __webpack_require__(11);
   var $export = __webpack_require__(0);
   var $typed = __webpack_require__(73);
   var $buffer = __webpack_require__(103);
-  var ctx = __webpack_require__(28);
-  var anInstance = __webpack_require__(50);
-  var propertyDesc = __webpack_require__(42);
+  var ctx = __webpack_require__(27);
+  var anInstance = __webpack_require__(51);
+  var propertyDesc = __webpack_require__(43);
   var hide = __webpack_require__(20);
-  var redefineAll = __webpack_require__(52);
+  var redefineAll = __webpack_require__(53);
   var toInteger = __webpack_require__(34);
   var toLength = __webpack_require__(16);
   var toIndex = __webpack_require__(140);
-  var toAbsoluteIndex = __webpack_require__(46);
+  var toAbsoluteIndex = __webpack_require__(47);
   var toPrimitive = __webpack_require__(32);
   var has = __webpack_require__(19);
   var classof = __webpack_require__(60);
   var isObject = __webpack_require__(12);
   var toObject = __webpack_require__(17);
   var isArrayIter = __webpack_require__(94);
-  var create = __webpack_require__(47);
+  var create = __webpack_require__(48);
   var getPrototypeOf = __webpack_require__(26);
-  var gOPN = __webpack_require__(48).f;
+  var gOPN = __webpack_require__(49).f;
   var getIterFn = __webpack_require__(96);
-  var uid = __webpack_require__(43);
+  var uid = __webpack_require__(44);
   var wks = __webpack_require__(13);
   var createArrayMethod = __webpack_require__(36);
   var createArrayIncludes = __webpack_require__(64);
@@ -16030,7 +16030,7 @@ if (__webpack_require__(14)) {
   var ArrayIterators = __webpack_require__(99);
   var Iterators = __webpack_require__(56);
   var $iterDetect = __webpack_require__(68);
-  var setSpecies = __webpack_require__(49);
+  var setSpecies = __webpack_require__(50);
   var arrayFill = __webpack_require__(98);
   var arrayCopyWithin = __webpack_require__(130);
   var $DP = __webpack_require__(15);
@@ -16538,7 +16538,59 @@ module.exports = {
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var META = __webpack_require__(43)('meta');
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(541)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(543)
+/* template */
+var __vue_template__ = __webpack_require__(544)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-0ca9c772"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\password.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0ca9c772", Component.options)
+  } else {
+    hotAPI.reload("data-v-0ca9c772", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var META = __webpack_require__(44)('meta');
 var isObject = __webpack_require__(12);
 var has = __webpack_require__(19);
 var setDesc = __webpack_require__(15).f;
@@ -16594,7 +16646,7 @@ var meta = module.exports = {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.31 Array.prototype[@@unscopables]
@@ -16607,250 +16659,7 @@ module.exports = function (key) {
 
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(541)
-}
-var normalizeComponent = __webpack_require__(4)
-/* script */
-var __vue_script__ = __webpack_require__(543)
-/* template */
-var __vue_template__ = __webpack_require__(544)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-0ca9c772"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\password.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0ca9c772", Component.options)
-  } else {
-    hotAPI.reload("data-v-0ca9c772", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
 /* 42 */
-/***/ (function(module, exports) {
-
-module.exports = function (bitmap, value) {
-  return {
-    enumerable: !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable: !(bitmap & 4),
-    value: value
-  };
-};
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
-
-var id = 0;
-var px = Math.random();
-module.exports = function (key) {
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports) {
-
-module.exports = false;
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(116);
-var enumBugKeys = __webpack_require__(81);
-
-module.exports = Object.keys || function keys(O) {
-  return $keys(O, enumBugKeys);
-};
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toInteger = __webpack_require__(34);
-var max = Math.max;
-var min = Math.min;
-module.exports = function (index, length) {
-  index = toInteger(index);
-  return index < 0 ? max(index + length, 0) : min(index, length);
-};
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(8);
-var dPs = __webpack_require__(117);
-var enumBugKeys = __webpack_require__(81);
-var IE_PROTO = __webpack_require__(80)('IE_PROTO');
-var Empty = function () { /* empty */ };
-var PROTOTYPE = 'prototype';
-
-// Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function () {
-  // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(78)('iframe');
-  var i = enumBugKeys.length;
-  var lt = '<';
-  var gt = '>';
-  var iframeDocument;
-  iframe.style.display = 'none';
-  __webpack_require__(82).appendChild(iframe);
-  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-  // createDict = iframe.contentWindow.Object;
-  // html.removeChild(iframe);
-  iframeDocument = iframe.contentWindow.document;
-  iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-  iframeDocument.close();
-  createDict = iframeDocument.F;
-  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
-  return createDict();
-};
-
-module.exports = Object.create || function create(O, Properties) {
-  var result;
-  if (O !== null) {
-    Empty[PROTOTYPE] = anObject(O);
-    result = new Empty();
-    Empty[PROTOTYPE] = null;
-    // add "__proto__" for Object.getPrototypeOf polyfill
-    result[IE_PROTO] = O;
-  } else result = createDict();
-  return Properties === undefined ? result : dPs(result, Properties);
-};
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = __webpack_require__(116);
-var hiddenKeys = __webpack_require__(81).concat('length', 'prototype');
-
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-  return $keys(O, hiddenKeys);
-};
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var global = __webpack_require__(10);
-var dP = __webpack_require__(15);
-var DESCRIPTORS = __webpack_require__(14);
-var SPECIES = __webpack_require__(13)('species');
-
-module.exports = function (KEY) {
-  var C = global[KEY];
-  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
-    configurable: true,
-    get: function () { return this; }
-  });
-};
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports) {
-
-module.exports = function (it, Constructor, name, forbiddenField) {
-  if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
-    throw TypeError(name + ': incorrect invocation!');
-  } return it;
-};
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var ctx = __webpack_require__(28);
-var call = __webpack_require__(128);
-var isArrayIter = __webpack_require__(94);
-var anObject = __webpack_require__(8);
-var toLength = __webpack_require__(16);
-var getIterFn = __webpack_require__(96);
-var BREAK = {};
-var RETURN = {};
-var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
-  var iterFn = ITERATOR ? function () { return iterable; } : getIterFn(iterable);
-  var f = ctx(fn, that, entries ? 2 : 1);
-  var index = 0;
-  var length, step, iterator, result;
-  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
-  // fast case for arrays with default iterator
-  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
-    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
-    if (result === BREAK || result === RETURN) return result;
-  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
-    result = call(iterator, f, step.value, entries);
-    if (result === BREAK || result === RETURN) return result;
-  }
-};
-exports.BREAK = BREAK;
-exports.RETURN = RETURN;
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var redefine = __webpack_require__(21);
-module.exports = function (target, src, safe) {
-  for (var key in src) redefine(target, key, src[key], safe);
-  return target;
-};
-
-
-/***/ }),
-/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16897,6 +16706,197 @@ utils.testStringisNumber = function (testString) {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (utils);
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+module.exports = function (bitmap, value) {
+  return {
+    enumerable: !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable: !(bitmap & 4),
+    value: value
+  };
+};
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
+
+var id = 0;
+var px = Math.random();
+module.exports = function (key) {
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+module.exports = false;
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys = __webpack_require__(116);
+var enumBugKeys = __webpack_require__(81);
+
+module.exports = Object.keys || function keys(O) {
+  return $keys(O, enumBugKeys);
+};
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(34);
+var max = Math.max;
+var min = Math.min;
+module.exports = function (index, length) {
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject = __webpack_require__(8);
+var dPs = __webpack_require__(117);
+var enumBugKeys = __webpack_require__(81);
+var IE_PROTO = __webpack_require__(80)('IE_PROTO');
+var Empty = function () { /* empty */ };
+var PROTOTYPE = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function () {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = __webpack_require__(78)('iframe');
+  var i = enumBugKeys.length;
+  var lt = '<';
+  var gt = '>';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  __webpack_require__(82).appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+  if (O !== null) {
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty();
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys = __webpack_require__(116);
+var hiddenKeys = __webpack_require__(81).concat('length', 'prototype');
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+  return $keys(O, hiddenKeys);
+};
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var global = __webpack_require__(10);
+var dP = __webpack_require__(15);
+var DESCRIPTORS = __webpack_require__(14);
+var SPECIES = __webpack_require__(13)('species');
+
+module.exports = function (KEY) {
+  var C = global[KEY];
+  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
+    configurable: true,
+    get: function () { return this; }
+  });
+};
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports) {
+
+module.exports = function (it, Constructor, name, forbiddenField) {
+  if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
+    throw TypeError(name + ': incorrect invocation!');
+  } return it;
+};
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ctx = __webpack_require__(27);
+var call = __webpack_require__(128);
+var isArrayIter = __webpack_require__(94);
+var anObject = __webpack_require__(8);
+var toLength = __webpack_require__(16);
+var getIterFn = __webpack_require__(96);
+var BREAK = {};
+var RETURN = {};
+var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
+  var iterFn = ITERATOR ? function () { return iterable; } : getIterFn(iterable);
+  var f = ctx(fn, that, entries ? 2 : 1);
+  var index = 0;
+  var length, step, iterator, result;
+  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
+    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+    if (result === BREAK || result === RETURN) return result;
+  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
+    result = call(iterator, f, step.value, entries);
+    if (result === BREAK || result === RETURN) return result;
+  }
+};
+exports.BREAK = BREAK;
+exports.RETURN = RETURN;
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var redefine = __webpack_require__(21);
+module.exports = function (target, src, safe) {
+  for (var key in src) redefine(target, key, src[key], safe);
+  return target;
+};
+
 
 /***/ }),
 /* 54 */
@@ -16970,7 +16970,7 @@ module.exports = function (it, TYPE) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = __webpack_require__(29);
+var cof = __webpack_require__(28);
 // eslint-disable-next-line no-prototype-builtins
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
   return cof(it) == 'String' ? it.split('') : Object(it);
@@ -16989,7 +16989,7 @@ exports.f = {}.propertyIsEnumerable;
 /***/ (function(module, exports, __webpack_require__) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = __webpack_require__(29);
+var cof = __webpack_require__(28);
 var TAG = __webpack_require__(13)('toStringTag');
 // ES3 wrong here
 var ARG = cof(function () { return arguments; }()) == 'Arguments';
@@ -27759,7 +27759,7 @@ module.exports = function (key) {
 // true  -> Array#includes
 var toIObject = __webpack_require__(24);
 var toLength = __webpack_require__(16);
-var toAbsoluteIndex = __webpack_require__(46);
+var toAbsoluteIndex = __webpack_require__(47);
 module.exports = function (IS_INCLUDES) {
   return function ($this, el, fromIndex) {
     var O = toIObject($this);
@@ -27792,7 +27792,7 @@ exports.f = Object.getOwnPropertySymbols;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.2 IsArray(argument)
-var cof = __webpack_require__(29);
+var cof = __webpack_require__(28);
 module.exports = Array.isArray || function isArray(arg) {
   return cof(arg) == 'Array';
 };
@@ -27804,7 +27804,7 @@ module.exports = Array.isArray || function isArray(arg) {
 
 // 7.2.8 IsRegExp(argument)
 var isObject = __webpack_require__(12);
-var cof = __webpack_require__(29);
+var cof = __webpack_require__(28);
 var MATCH = __webpack_require__(13)('match');
 module.exports = function (it) {
   var isRegExp;
@@ -27919,10 +27919,10 @@ module.exports = function (O, D) {
 var global = __webpack_require__(10);
 var $export = __webpack_require__(0);
 var redefine = __webpack_require__(21);
-var redefineAll = __webpack_require__(52);
-var meta = __webpack_require__(39);
-var forOf = __webpack_require__(51);
-var anInstance = __webpack_require__(50);
+var redefineAll = __webpack_require__(53);
+var meta = __webpack_require__(40);
+var forOf = __webpack_require__(52);
+var anInstance = __webpack_require__(51);
 var isObject = __webpack_require__(12);
 var fails = __webpack_require__(11);
 var $iterDetect = __webpack_require__(68);
@@ -28008,7 +28008,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 
 var global = __webpack_require__(10);
 var hide = __webpack_require__(20);
-var uid = __webpack_require__(43);
+var uid = __webpack_require__(44);
 var TYPED = uid('typed_array');
 var VIEW = uid('view');
 var ABV = !!(global.ArrayBuffer && global.DataView);
@@ -28043,7 +28043,7 @@ module.exports = {
 "use strict";
 
 // Forced replacement prototype accessors methods
-module.exports = __webpack_require__(44) || !__webpack_require__(11)(function () {
+module.exports = __webpack_require__(45) || !__webpack_require__(11)(function () {
   var K = Math.random();
   // In FF throws only define methods
   // eslint-disable-next-line no-undef, no-useless-call
@@ -28080,8 +28080,8 @@ module.exports = function (COLLECTION) {
 // https://tc39.github.io/proposal-setmap-offrom/
 var $export = __webpack_require__(0);
 var aFunction = __webpack_require__(18);
-var ctx = __webpack_require__(28);
-var forOf = __webpack_require__(51);
+var ctx = __webpack_require__(27);
+var forOf = __webpack_require__(52);
 
 module.exports = function (COLLECTION) {
   $export($export.S, COLLECTION, { from: function from(source /* , mapFn, thisArg */) {
@@ -28225,7 +28225,7 @@ module.exports = function (it) {
 
 var global = __webpack_require__(10);
 var core = __webpack_require__(31);
-var LIBRARY = __webpack_require__(44);
+var LIBRARY = __webpack_require__(45);
 var wksExt = __webpack_require__(115);
 var defineProperty = __webpack_require__(15).f;
 module.exports = function (name) {
@@ -28239,7 +28239,7 @@ module.exports = function (name) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(63)('keys');
-var uid = __webpack_require__(43);
+var uid = __webpack_require__(44);
 module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
 };
@@ -28279,7 +28279,7 @@ module.exports = {
   set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
     function (test, buggy, set) {
       try {
-        set = __webpack_require__(28)(Function.call, __webpack_require__(25).f(Object.prototype, '__proto__').set, 2);
+        set = __webpack_require__(27)(Function.call, __webpack_require__(25).f(Object.prototype, '__proto__').set, 2);
         set(test, []);
         buggy = !(test instanceof Array);
       } catch (e) { buggy = true; }
@@ -28392,7 +28392,7 @@ module.exports = function (TO_STRING) {
 
 "use strict";
 
-var LIBRARY = __webpack_require__(44);
+var LIBRARY = __webpack_require__(45);
 var $export = __webpack_require__(0);
 var redefine = __webpack_require__(21);
 var hide = __webpack_require__(20);
@@ -28469,8 +28469,8 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
 
 "use strict";
 
-var create = __webpack_require__(47);
-var descriptor = __webpack_require__(42);
+var create = __webpack_require__(48);
+var descriptor = __webpack_require__(43);
 var setToStringTag = __webpack_require__(54);
 var IteratorPrototype = {};
 
@@ -28536,7 +28536,7 @@ module.exports = function (it) {
 "use strict";
 
 var $defineProperty = __webpack_require__(15);
-var createDesc = __webpack_require__(42);
+var createDesc = __webpack_require__(43);
 
 module.exports = function (object, index, value) {
   if (index in object) $defineProperty.f(object, index, createDesc(0, value));
@@ -28578,7 +28578,7 @@ module.exports = function (original, length) {
 // 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
 
 var toObject = __webpack_require__(17);
-var toAbsoluteIndex = __webpack_require__(46);
+var toAbsoluteIndex = __webpack_require__(47);
 var toLength = __webpack_require__(16);
 module.exports = function fill(value /* , start = 0, end = @length */) {
   var O = toObject(this);
@@ -28598,7 +28598,7 @@ module.exports = function fill(value /* , start = 0, end = @length */) {
 
 "use strict";
 
-var addToUnscopables = __webpack_require__(40);
+var addToUnscopables = __webpack_require__(41);
 var step = __webpack_require__(131);
 var Iterators = __webpack_require__(56);
 var toIObject = __webpack_require__(24);
@@ -28637,7 +28637,7 @@ addToUnscopables('entries');
 /* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ctx = __webpack_require__(28);
+var ctx = __webpack_require__(27);
 var invoke = __webpack_require__(121);
 var html = __webpack_require__(82);
 var cel = __webpack_require__(78);
@@ -28680,7 +28680,7 @@ if (!setTask || !clearTask) {
     delete queue[id];
   };
   // Node.js 0.8-
-  if (__webpack_require__(29)(process) == 'process') {
+  if (__webpack_require__(28)(process) == 'process') {
     defer = function (id) {
       process.nextTick(ctx(run, id, 1));
     };
@@ -28732,7 +28732,7 @@ var macrotask = __webpack_require__(100).set;
 var Observer = global.MutationObserver || global.WebKitMutationObserver;
 var process = global.process;
 var Promise = global.Promise;
-var isNode = __webpack_require__(29)(process) == 'process';
+var isNode = __webpack_require__(28)(process) == 'process';
 
 module.exports = function () {
   var head, last, notify;
@@ -28830,16 +28830,16 @@ module.exports.f = function (C) {
 
 var global = __webpack_require__(10);
 var DESCRIPTORS = __webpack_require__(14);
-var LIBRARY = __webpack_require__(44);
+var LIBRARY = __webpack_require__(45);
 var $typed = __webpack_require__(73);
 var hide = __webpack_require__(20);
-var redefineAll = __webpack_require__(52);
+var redefineAll = __webpack_require__(53);
 var fails = __webpack_require__(11);
-var anInstance = __webpack_require__(50);
+var anInstance = __webpack_require__(51);
 var toInteger = __webpack_require__(34);
 var toLength = __webpack_require__(16);
 var toIndex = __webpack_require__(140);
-var gOPN = __webpack_require__(48).f;
+var gOPN = __webpack_require__(49).f;
 var dP = __webpack_require__(15).f;
 var arrayFill = __webpack_require__(98);
 var setToStringTag = __webpack_require__(54);
@@ -30123,7 +30123,7 @@ module.exports = function (object, names) {
 
 var dP = __webpack_require__(15);
 var anObject = __webpack_require__(8);
-var getKeys = __webpack_require__(45);
+var getKeys = __webpack_require__(46);
 
 module.exports = __webpack_require__(14) ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
@@ -30142,7 +30142,7 @@ module.exports = __webpack_require__(14) ? Object.defineProperties : function de
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = __webpack_require__(24);
-var gOPN = __webpack_require__(48).f;
+var gOPN = __webpack_require__(49).f;
 var toString = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -30168,7 +30168,7 @@ module.exports.f = function getOwnPropertyNames(it) {
 "use strict";
 
 // 19.1.2.1 Object.assign(target, source, ...)
-var getKeys = __webpack_require__(45);
+var getKeys = __webpack_require__(46);
 var gOPS = __webpack_require__(65);
 var pIE = __webpack_require__(59);
 var toObject = __webpack_require__(17);
@@ -30289,7 +30289,7 @@ module.exports = 1 / $parseFloat(__webpack_require__(84) + '-0') !== -Infinity ?
 /* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var cof = __webpack_require__(29);
+var cof = __webpack_require__(28);
 module.exports = function (it, msg) {
   if (typeof it != 'number' && cof(it) != 'Number') throw TypeError(msg);
   return +it;
@@ -30407,7 +30407,7 @@ module.exports = function (that, callbackfn, aLen, memo, isRight) {
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 
 var toObject = __webpack_require__(17);
-var toAbsoluteIndex = __webpack_require__(46);
+var toAbsoluteIndex = __webpack_require__(47);
 var toLength = __webpack_require__(16);
 
 module.exports = [].copyWithin || function copyWithin(target /* = 0 */, start /* = 0, end = @length */) {
@@ -30516,16 +30516,16 @@ module.exports = __webpack_require__(72)(MAP, function (get) {
 "use strict";
 
 var dP = __webpack_require__(15).f;
-var create = __webpack_require__(47);
-var redefineAll = __webpack_require__(52);
-var ctx = __webpack_require__(28);
-var anInstance = __webpack_require__(50);
-var forOf = __webpack_require__(51);
+var create = __webpack_require__(48);
+var redefineAll = __webpack_require__(53);
+var ctx = __webpack_require__(27);
+var anInstance = __webpack_require__(51);
+var forOf = __webpack_require__(52);
 var $iterDefine = __webpack_require__(90);
 var step = __webpack_require__(131);
-var setSpecies = __webpack_require__(49);
+var setSpecies = __webpack_require__(50);
 var DESCRIPTORS = __webpack_require__(14);
-var fastKey = __webpack_require__(39).fastKey;
+var fastKey = __webpack_require__(40).fastKey;
 var validate = __webpack_require__(57);
 var SIZE = DESCRIPTORS ? '_s' : 'size';
 
@@ -30689,7 +30689,7 @@ module.exports = __webpack_require__(72)(SET, function (get) {
 
 var each = __webpack_require__(36)(0);
 var redefine = __webpack_require__(21);
-var meta = __webpack_require__(39);
+var meta = __webpack_require__(40);
 var assign = __webpack_require__(119);
 var weak = __webpack_require__(139);
 var isObject = __webpack_require__(12);
@@ -30753,12 +30753,12 @@ if (fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp)
 
 "use strict";
 
-var redefineAll = __webpack_require__(52);
-var getWeak = __webpack_require__(39).getWeak;
+var redefineAll = __webpack_require__(53);
+var getWeak = __webpack_require__(40).getWeak;
 var anObject = __webpack_require__(8);
 var isObject = __webpack_require__(12);
-var anInstance = __webpack_require__(50);
-var forOf = __webpack_require__(51);
+var anInstance = __webpack_require__(51);
+var forOf = __webpack_require__(52);
 var createArrayMethod = __webpack_require__(36);
 var $has = __webpack_require__(19);
 var validate = __webpack_require__(57);
@@ -30860,7 +30860,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // all object keys, includes non-enumerable and symbols
-var gOPN = __webpack_require__(48);
+var gOPN = __webpack_require__(49);
 var gOPS = __webpack_require__(65);
 var anObject = __webpack_require__(8);
 var Reflect = __webpack_require__(10).Reflect;
@@ -30881,7 +30881,7 @@ module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
 var isArray = __webpack_require__(66);
 var isObject = __webpack_require__(12);
 var toLength = __webpack_require__(16);
-var ctx = __webpack_require__(28);
+var ctx = __webpack_require__(27);
 var IS_CONCAT_SPREADABLE = __webpack_require__(13)('isConcatSpreadable');
 
 function flattenIntoArray(target, original, source, sourceLen, start, depth, mapper, thisArg) {
@@ -30943,7 +30943,7 @@ module.exports = function (that, maxLength, fillString, left) {
 /* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getKeys = __webpack_require__(45);
+var getKeys = __webpack_require__(46);
 var toIObject = __webpack_require__(24);
 var isEnum = __webpack_require__(59).f;
 module.exports = function (isEntries) {
@@ -30980,7 +30980,7 @@ module.exports = function (NAME) {
 /* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var forOf = __webpack_require__(51);
+var forOf = __webpack_require__(52);
 
 module.exports = function (iter, ITERATOR) {
   var result = [];
@@ -47409,11 +47409,11 @@ var has = __webpack_require__(19);
 var DESCRIPTORS = __webpack_require__(14);
 var $export = __webpack_require__(0);
 var redefine = __webpack_require__(21);
-var META = __webpack_require__(39).KEY;
+var META = __webpack_require__(40).KEY;
 var $fails = __webpack_require__(11);
 var shared = __webpack_require__(63);
 var setToStringTag = __webpack_require__(54);
-var uid = __webpack_require__(43);
+var uid = __webpack_require__(44);
 var wks = __webpack_require__(13);
 var wksExt = __webpack_require__(115);
 var wksDefine = __webpack_require__(79);
@@ -47422,12 +47422,12 @@ var isArray = __webpack_require__(66);
 var anObject = __webpack_require__(8);
 var toIObject = __webpack_require__(24);
 var toPrimitive = __webpack_require__(32);
-var createDesc = __webpack_require__(42);
-var _create = __webpack_require__(47);
+var createDesc = __webpack_require__(43);
+var _create = __webpack_require__(48);
 var gOPNExt = __webpack_require__(118);
 var $GOPD = __webpack_require__(25);
 var $DP = __webpack_require__(15);
-var $keys = __webpack_require__(45);
+var $keys = __webpack_require__(46);
 var gOPD = $GOPD.f;
 var dP = $DP.f;
 var gOPN = gOPNExt.f;
@@ -47550,11 +47550,11 @@ if (!USE_NATIVE) {
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
-  __webpack_require__(48).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(49).f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(59).f = $propertyIsEnumerable;
   __webpack_require__(65).f = $getOwnPropertySymbols;
 
-  if (DESCRIPTORS && !__webpack_require__(44)) {
+  if (DESCRIPTORS && !__webpack_require__(45)) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
@@ -47643,7 +47643,7 @@ setToStringTag(global.JSON, 'JSON', true);
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
-var getKeys = __webpack_require__(45);
+var getKeys = __webpack_require__(46);
 var gOPS = __webpack_require__(65);
 var pIE = __webpack_require__(59);
 module.exports = function (it) {
@@ -47665,7 +47665,7 @@ module.exports = function (it) {
 
 var $export = __webpack_require__(0);
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', { create: __webpack_require__(47) });
+$export($export.S, 'Object', { create: __webpack_require__(48) });
 
 
 /***/ }),
@@ -47722,7 +47722,7 @@ __webpack_require__(35)('getPrototypeOf', function () {
 
 // 19.1.2.14 Object.keys(O)
 var toObject = __webpack_require__(17);
-var $keys = __webpack_require__(45);
+var $keys = __webpack_require__(46);
 
 __webpack_require__(35)('keys', function () {
   return function keys(it) {
@@ -47747,7 +47747,7 @@ __webpack_require__(35)('getOwnPropertyNames', function () {
 
 // 19.1.2.5 Object.freeze(O)
 var isObject = __webpack_require__(12);
-var meta = __webpack_require__(39).onFreeze;
+var meta = __webpack_require__(40).onFreeze;
 
 __webpack_require__(35)('freeze', function ($freeze) {
   return function freeze(it) {
@@ -47762,7 +47762,7 @@ __webpack_require__(35)('freeze', function ($freeze) {
 
 // 19.1.2.17 Object.seal(O)
 var isObject = __webpack_require__(12);
-var meta = __webpack_require__(39).onFreeze;
+var meta = __webpack_require__(40).onFreeze;
 
 __webpack_require__(35)('seal', function ($seal) {
   return function seal(it) {
@@ -47777,7 +47777,7 @@ __webpack_require__(35)('seal', function ($seal) {
 
 // 19.1.2.15 Object.preventExtensions(O)
 var isObject = __webpack_require__(12);
-var meta = __webpack_require__(39).onFreeze;
+var meta = __webpack_require__(40).onFreeze;
 
 __webpack_require__(35)('preventExtensions', function ($preventExtensions) {
   return function preventExtensions(it) {
@@ -47964,11 +47964,11 @@ $export($export.G + $export.F * (parseFloat != $parseFloat), { parseFloat: $pars
 
 var global = __webpack_require__(10);
 var has = __webpack_require__(19);
-var cof = __webpack_require__(29);
+var cof = __webpack_require__(28);
 var inheritIfRequired = __webpack_require__(85);
 var toPrimitive = __webpack_require__(32);
 var fails = __webpack_require__(11);
-var gOPN = __webpack_require__(48).f;
+var gOPN = __webpack_require__(49).f;
 var gOPD = __webpack_require__(25).f;
 var dP = __webpack_require__(15).f;
 var $trim = __webpack_require__(55).trim;
@@ -47977,7 +47977,7 @@ var $Number = global[NUMBER];
 var Base = $Number;
 var proto = $Number.prototype;
 // Opera ~12 has broken Object#toString
-var BROKEN_COF = cof(__webpack_require__(47)(proto)) == NUMBER;
+var BROKEN_COF = cof(__webpack_require__(48)(proto)) == NUMBER;
 var TRIM = 'trim' in String.prototype;
 
 // 7.1.3 ToNumber(argument)
@@ -48565,7 +48565,7 @@ $export($export.S, 'Math', {
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var toAbsoluteIndex = __webpack_require__(46);
+var toAbsoluteIndex = __webpack_require__(47);
 var fromCharCode = String.fromCharCode;
 var $fromCodePoint = String.fromCodePoint;
 
@@ -49072,7 +49072,7 @@ $export($export.S, 'Array', { isArray: __webpack_require__(66) });
 
 "use strict";
 
-var ctx = __webpack_require__(28);
+var ctx = __webpack_require__(27);
 var $export = __webpack_require__(0);
 var toObject = __webpack_require__(17);
 var call = __webpack_require__(128);
@@ -49148,7 +49148,7 @@ var toIObject = __webpack_require__(24);
 var arrayJoin = [].join;
 
 // fallback for not array-like strings
-$export($export.P + $export.F * (__webpack_require__(58) != Object || !__webpack_require__(30)(arrayJoin)), 'Array', {
+$export($export.P + $export.F * (__webpack_require__(58) != Object || !__webpack_require__(29)(arrayJoin)), 'Array', {
   join: function join(separator) {
     return arrayJoin.call(toIObject(this), separator === undefined ? ',' : separator);
   }
@@ -49163,8 +49163,8 @@ $export($export.P + $export.F * (__webpack_require__(58) != Object || !__webpack
 
 var $export = __webpack_require__(0);
 var html = __webpack_require__(82);
-var cof = __webpack_require__(29);
-var toAbsoluteIndex = __webpack_require__(46);
+var cof = __webpack_require__(28);
+var toAbsoluteIndex = __webpack_require__(47);
 var toLength = __webpack_require__(16);
 var arraySlice = [].slice;
 
@@ -49210,7 +49210,7 @@ $export($export.P + $export.F * (fails(function () {
   // V8 bug
   test.sort(null);
   // Old WebKit
-}) || !__webpack_require__(30)($sort)), 'Array', {
+}) || !__webpack_require__(29)($sort)), 'Array', {
   // 22.1.3.25 Array.prototype.sort(comparefn)
   sort: function sort(comparefn) {
     return comparefn === undefined
@@ -49228,7 +49228,7 @@ $export($export.P + $export.F * (fails(function () {
 
 var $export = __webpack_require__(0);
 var $forEach = __webpack_require__(36)(0);
-var STRICT = __webpack_require__(30)([].forEach, true);
+var STRICT = __webpack_require__(29)([].forEach, true);
 
 $export($export.P + $export.F * !STRICT, 'Array', {
   // 22.1.3.10 / 15.4.4.18 Array.prototype.forEach(callbackfn [, thisArg])
@@ -49269,7 +49269,7 @@ module.exports = function (original) {
 var $export = __webpack_require__(0);
 var $map = __webpack_require__(36)(1);
 
-$export($export.P + $export.F * !__webpack_require__(30)([].map, true), 'Array', {
+$export($export.P + $export.F * !__webpack_require__(29)([].map, true), 'Array', {
   // 22.1.3.15 / 15.4.4.19 Array.prototype.map(callbackfn [, thisArg])
   map: function map(callbackfn /* , thisArg */) {
     return $map(this, callbackfn, arguments[1]);
@@ -49286,7 +49286,7 @@ $export($export.P + $export.F * !__webpack_require__(30)([].map, true), 'Array',
 var $export = __webpack_require__(0);
 var $filter = __webpack_require__(36)(2);
 
-$export($export.P + $export.F * !__webpack_require__(30)([].filter, true), 'Array', {
+$export($export.P + $export.F * !__webpack_require__(29)([].filter, true), 'Array', {
   // 22.1.3.7 / 15.4.4.20 Array.prototype.filter(callbackfn [, thisArg])
   filter: function filter(callbackfn /* , thisArg */) {
     return $filter(this, callbackfn, arguments[1]);
@@ -49303,7 +49303,7 @@ $export($export.P + $export.F * !__webpack_require__(30)([].filter, true), 'Arra
 var $export = __webpack_require__(0);
 var $some = __webpack_require__(36)(3);
 
-$export($export.P + $export.F * !__webpack_require__(30)([].some, true), 'Array', {
+$export($export.P + $export.F * !__webpack_require__(29)([].some, true), 'Array', {
   // 22.1.3.23 / 15.4.4.17 Array.prototype.some(callbackfn [, thisArg])
   some: function some(callbackfn /* , thisArg */) {
     return $some(this, callbackfn, arguments[1]);
@@ -49320,7 +49320,7 @@ $export($export.P + $export.F * !__webpack_require__(30)([].some, true), 'Array'
 var $export = __webpack_require__(0);
 var $every = __webpack_require__(36)(4);
 
-$export($export.P + $export.F * !__webpack_require__(30)([].every, true), 'Array', {
+$export($export.P + $export.F * !__webpack_require__(29)([].every, true), 'Array', {
   // 22.1.3.5 / 15.4.4.16 Array.prototype.every(callbackfn [, thisArg])
   every: function every(callbackfn /* , thisArg */) {
     return $every(this, callbackfn, arguments[1]);
@@ -49337,7 +49337,7 @@ $export($export.P + $export.F * !__webpack_require__(30)([].every, true), 'Array
 var $export = __webpack_require__(0);
 var $reduce = __webpack_require__(129);
 
-$export($export.P + $export.F * !__webpack_require__(30)([].reduce, true), 'Array', {
+$export($export.P + $export.F * !__webpack_require__(29)([].reduce, true), 'Array', {
   // 22.1.3.18 / 15.4.4.21 Array.prototype.reduce(callbackfn [, initialValue])
   reduce: function reduce(callbackfn /* , initialValue */) {
     return $reduce(this, callbackfn, arguments.length, arguments[1], false);
@@ -49354,7 +49354,7 @@ $export($export.P + $export.F * !__webpack_require__(30)([].reduce, true), 'Arra
 var $export = __webpack_require__(0);
 var $reduce = __webpack_require__(129);
 
-$export($export.P + $export.F * !__webpack_require__(30)([].reduceRight, true), 'Array', {
+$export($export.P + $export.F * !__webpack_require__(29)([].reduceRight, true), 'Array', {
   // 22.1.3.19 / 15.4.4.22 Array.prototype.reduceRight(callbackfn [, initialValue])
   reduceRight: function reduceRight(callbackfn /* , initialValue */) {
     return $reduce(this, callbackfn, arguments.length, arguments[1], true);
@@ -49373,7 +49373,7 @@ var $indexOf = __webpack_require__(64)(false);
 var $native = [].indexOf;
 var NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
 
-$export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(30)($native)), 'Array', {
+$export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(29)($native)), 'Array', {
   // 22.1.3.11 / 15.4.4.14 Array.prototype.indexOf(searchElement [, fromIndex])
   indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
     return NEGATIVE_ZERO
@@ -49397,7 +49397,7 @@ var toLength = __webpack_require__(16);
 var $native = [].lastIndexOf;
 var NEGATIVE_ZERO = !!$native && 1 / [1].lastIndexOf(1, -0) < 0;
 
-$export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(30)($native)), 'Array', {
+$export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(29)($native)), 'Array', {
   // 22.1.3.14 / 15.4.4.15 Array.prototype.lastIndexOf(searchElement [, fromIndex])
   lastIndexOf: function lastIndexOf(searchElement /* , fromIndex = @[*-1] */) {
     // convert -0 to +0
@@ -49422,7 +49422,7 @@ var $export = __webpack_require__(0);
 
 $export($export.P, 'Array', { copyWithin: __webpack_require__(130) });
 
-__webpack_require__(40)('copyWithin');
+__webpack_require__(41)('copyWithin');
 
 
 /***/ }),
@@ -49434,7 +49434,7 @@ var $export = __webpack_require__(0);
 
 $export($export.P, 'Array', { fill: __webpack_require__(98) });
 
-__webpack_require__(40)('fill');
+__webpack_require__(41)('fill');
 
 
 /***/ }),
@@ -49455,7 +49455,7 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-__webpack_require__(40)(KEY);
+__webpack_require__(41)(KEY);
 
 
 /***/ }),
@@ -49476,14 +49476,14 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-__webpack_require__(40)(KEY);
+__webpack_require__(41)(KEY);
 
 
 /***/ }),
 /* 413 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(49)('Array');
+__webpack_require__(50)('Array');
 
 
 /***/ }),
@@ -49493,7 +49493,7 @@ __webpack_require__(49)('Array');
 var global = __webpack_require__(10);
 var inheritIfRequired = __webpack_require__(85);
 var dP = __webpack_require__(15).f;
-var gOPN = __webpack_require__(48).f;
+var gOPN = __webpack_require__(49).f;
 var isRegExp = __webpack_require__(67);
 var $flags = __webpack_require__(69);
 var $RegExp = global.RegExp;
@@ -49532,7 +49532,7 @@ if (__webpack_require__(14) && (!CORRECT_NEW || __webpack_require__(11)(function
   __webpack_require__(21)(global, 'RegExp', $RegExp);
 }
 
-__webpack_require__(49)('RegExp');
+__webpack_require__(50)('RegExp');
 
 
 /***/ }),
@@ -49700,15 +49700,15 @@ __webpack_require__(70)('split', 2, function (defined, SPLIT, $split) {
 
 "use strict";
 
-var LIBRARY = __webpack_require__(44);
+var LIBRARY = __webpack_require__(45);
 var global = __webpack_require__(10);
-var ctx = __webpack_require__(28);
+var ctx = __webpack_require__(27);
 var classof = __webpack_require__(60);
 var $export = __webpack_require__(0);
 var isObject = __webpack_require__(12);
 var aFunction = __webpack_require__(18);
-var anInstance = __webpack_require__(50);
-var forOf = __webpack_require__(51);
+var anInstance = __webpack_require__(51);
+var forOf = __webpack_require__(52);
 var speciesConstructor = __webpack_require__(71);
 var task = __webpack_require__(100).set;
 var microtask = __webpack_require__(101)();
@@ -49884,7 +49884,7 @@ if (!USE_NATIVE) {
     this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
     this._n = false;          // <- notify
   };
-  Internal.prototype = __webpack_require__(52)($Promise.prototype, {
+  Internal.prototype = __webpack_require__(53)($Promise.prototype, {
     // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
     then: function then(onFulfilled, onRejected) {
       var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
@@ -49916,7 +49916,7 @@ if (!USE_NATIVE) {
 
 $export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
 __webpack_require__(54)($Promise, PROMISE);
-__webpack_require__(49)(PROMISE);
+__webpack_require__(50)(PROMISE);
 Wrapper = __webpack_require__(31)[PROMISE];
 
 // statics
@@ -50012,7 +50012,7 @@ var $export = __webpack_require__(0);
 var $typed = __webpack_require__(73);
 var buffer = __webpack_require__(103);
 var anObject = __webpack_require__(8);
-var toAbsoluteIndex = __webpack_require__(46);
+var toAbsoluteIndex = __webpack_require__(47);
 var toLength = __webpack_require__(16);
 var isObject = __webpack_require__(12);
 var ArrayBuffer = __webpack_require__(10).ArrayBuffer;
@@ -50052,7 +50052,7 @@ $export($export.P + $export.U + $export.F * __webpack_require__(11)(function () 
   }
 });
 
-__webpack_require__(49)(ARRAY_BUFFER);
+__webpack_require__(50)(ARRAY_BUFFER);
 
 
 /***/ }),
@@ -50192,7 +50192,7 @@ $export($export.S + $export.F * !__webpack_require__(11)(function () {
 
 // 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
 var $export = __webpack_require__(0);
-var create = __webpack_require__(47);
+var create = __webpack_require__(48);
 var aFunction = __webpack_require__(18);
 var anObject = __webpack_require__(8);
 var isObject = __webpack_require__(12);
@@ -50450,7 +50450,7 @@ var gOPD = __webpack_require__(25);
 var getPrototypeOf = __webpack_require__(26);
 var has = __webpack_require__(19);
 var $export = __webpack_require__(0);
-var createDesc = __webpack_require__(42);
+var createDesc = __webpack_require__(43);
 var anObject = __webpack_require__(8);
 var isObject = __webpack_require__(12);
 
@@ -50514,7 +50514,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(40)('includes');
+__webpack_require__(41)('includes');
 
 
 /***/ }),
@@ -50543,7 +50543,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(40)('flatMap');
+__webpack_require__(41)('flatMap');
 
 
 /***/ }),
@@ -50571,7 +50571,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(40)('flatten');
+__webpack_require__(41)('flatten');
 
 
 /***/ }),
@@ -50960,7 +50960,7 @@ $export($export.S, 'System', { global: __webpack_require__(10) });
 
 // https://github.com/ljharb/proposal-is-error
 var $export = __webpack_require__(0);
-var cof = __webpack_require__(29);
+var cof = __webpack_require__(28);
 
 $export($export.S, 'Error', {
   isError: function isError(it) {
@@ -51374,7 +51374,7 @@ $metadata.exp({ metadata: function metadata(metadataKey, metadataValue) {
 var $export = __webpack_require__(0);
 var microtask = __webpack_require__(101)();
 var process = __webpack_require__(10).process;
-var isNode = __webpack_require__(29)(process) == 'process';
+var isNode = __webpack_require__(28)(process) == 'process';
 
 $export($export.G, {
   asap: function asap(fn) {
@@ -51398,10 +51398,10 @@ var microtask = __webpack_require__(101)();
 var OBSERVABLE = __webpack_require__(13)('observable');
 var aFunction = __webpack_require__(18);
 var anObject = __webpack_require__(8);
-var anInstance = __webpack_require__(50);
-var redefineAll = __webpack_require__(52);
+var anInstance = __webpack_require__(51);
+var redefineAll = __webpack_require__(53);
 var hide = __webpack_require__(20);
-var forOf = __webpack_require__(51);
+var forOf = __webpack_require__(52);
 var RETURN = forOf.RETURN;
 
 var getMethod = function (fn) {
@@ -51587,7 +51587,7 @@ hide($Observable.prototype, OBSERVABLE, function () { return this; });
 
 $export($export.G, { Observable: $Observable });
 
-__webpack_require__(49)('Observable');
+__webpack_require__(50)('Observable');
 
 
 /***/ }),
@@ -51633,7 +51633,7 @@ $export($export.G + $export.B, {
 /***/ (function(module, exports, __webpack_require__) {
 
 var $iterators = __webpack_require__(99);
-var getKeys = __webpack_require__(45);
+var getKeys = __webpack_require__(46);
 var redefine = __webpack_require__(21);
 var global = __webpack_require__(10);
 var hide = __webpack_require__(20);
@@ -52593,7 +52593,7 @@ var staticRenderFns = [
             "a",
             {
               staticClass: "flex flex-v flex-align-center",
-              attrs: { href: "/#/makeDeal/my_deal" }
+              attrs: { href: "/#/my/my_users" }
             },
             [
               _c(
@@ -52734,7 +52734,7 @@ exports.push([module.i, "\n.top[data-v-5c93fb5e] {\n  height: 2em;\n  width: 100
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
@@ -54164,7 +54164,7 @@ exports.push([module.i, "", ""]);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_utils__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_utils__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mint_ui__);
 //
@@ -54664,7 +54664,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-1723c92d], body[data-v-1723c92d], div[data-v-1723c92d], span[data-v-1723c92d], applet[data-v-1723c92d], object[data-v-1723c92d], iframe[data-v-1723c92d],\nh1[data-v-1723c92d], h2[data-v-1723c92d], h3[data-v-1723c92d], h4[data-v-1723c92d], h5[data-v-1723c92d], h6[data-v-1723c92d], p[data-v-1723c92d], blockquote[data-v-1723c92d], pre[data-v-1723c92d],\na[data-v-1723c92d], abbr[data-v-1723c92d], acronym[data-v-1723c92d], address[data-v-1723c92d], big[data-v-1723c92d], cite[data-v-1723c92d], code[data-v-1723c92d],\ndel[data-v-1723c92d], dfn[data-v-1723c92d], em[data-v-1723c92d], img[data-v-1723c92d], ins[data-v-1723c92d], kbd[data-v-1723c92d], q[data-v-1723c92d], s[data-v-1723c92d], samp[data-v-1723c92d],\nsmall[data-v-1723c92d], strike[data-v-1723c92d], strong[data-v-1723c92d], sub[data-v-1723c92d], sup[data-v-1723c92d], tt[data-v-1723c92d], var[data-v-1723c92d],\nb[data-v-1723c92d], u[data-v-1723c92d], i[data-v-1723c92d], center[data-v-1723c92d],\ndl[data-v-1723c92d], dt[data-v-1723c92d], dd[data-v-1723c92d], ol[data-v-1723c92d], ul[data-v-1723c92d], li[data-v-1723c92d],\nfieldset[data-v-1723c92d], form[data-v-1723c92d], label[data-v-1723c92d], legend[data-v-1723c92d],\ntable[data-v-1723c92d], caption[data-v-1723c92d], tbody[data-v-1723c92d], tfoot[data-v-1723c92d], thead[data-v-1723c92d], tr[data-v-1723c92d], th[data-v-1723c92d], td[data-v-1723c92d],\narticle[data-v-1723c92d], aside[data-v-1723c92d], canvas[data-v-1723c92d], details[data-v-1723c92d], embed[data-v-1723c92d],\nfigure[data-v-1723c92d], figcaption[data-v-1723c92d], footer[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d],\nmenu[data-v-1723c92d], nav[data-v-1723c92d], output[data-v-1723c92d], ruby[data-v-1723c92d], section[data-v-1723c92d], summary[data-v-1723c92d],\ntime[data-v-1723c92d], mark[data-v-1723c92d], audio[data-v-1723c92d], video[data-v-1723c92d] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-1723c92d], aside[data-v-1723c92d], details[data-v-1723c92d], figcaption[data-v-1723c92d], figure[data-v-1723c92d],\nfooter[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d], menu[data-v-1723c92d], nav[data-v-1723c92d], section[data-v-1723c92d] {\n  display: block;\n}\nbody[data-v-1723c92d] {\n  line-height: 1;\n}\nol[data-v-1723c92d], ul[data-v-1723c92d] {\n  list-style: none;\n}\nblockquote[data-v-1723c92d], q[data-v-1723c92d] {\n  quotes: none;\n}\nblockquote[data-v-1723c92d]:before, blockquote[data-v-1723c92d]:after,\nq[data-v-1723c92d]:before, q[data-v-1723c92d]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-1723c92d] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-1723c92d] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-1723c92d] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-1723c92d] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-1723c92d] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-1723c92d] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-1723c92d] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-1723c92d] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-1723c92d] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-1723c92d] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-1723c92d] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-1723c92d] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-1723c92d] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-1723c92d] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-1723c92d] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-1723c92d] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-1723c92d] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-1723c92d] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-1723c92d] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-1723c92d] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-1723c92d] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-1723c92d] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-1723c92d] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-1723c92d] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-1723c92d] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-1723c92d] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-1723c92d] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-1723c92d] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-1723c92d] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-1723c92d] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-1723c92d] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-1723c92d] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.withdraw-container[data-v-1723c92d] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.withdraw-box[data-v-1723c92d] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.withdraw-box .tltle[data-v-1723c92d] {\n    font-size: 1em;\n    color: #999;\n}\n.withdraw-money[data-v-1723c92d] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 2em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.withdraw-money input[data-v-1723c92d] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.all-money[data-v-1723c92d] {\n  margin-top: 1em;\n  font-size: 1em;\n}\n.all-money .money[data-v-1723c92d] {\n    color: #666;\n}\n.all-money .all-withdraw[data-v-1723c92d] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.service-money[data-v-1723c92d] {\n  margin-top: 1em;\n  font-size: 0.7em;\n}\n.service-money .money[data-v-1723c92d] {\n    color: #666;\n}\n.service-money span[data-v-1723c92d] {\n    margin-left: 0.5em;\n}\n.withdraw-way[data-v-1723c92d] {\n  margin-top: 2em;\n}\n.withdraw-way .title[data-v-1723c92d] {\n    color: #999;\n    margin-bottom: 0.5em;\n}\n.withdraw-btn[data-v-1723c92d] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-1723c92d], body[data-v-1723c92d], div[data-v-1723c92d], span[data-v-1723c92d], applet[data-v-1723c92d], object[data-v-1723c92d], iframe[data-v-1723c92d],\nh1[data-v-1723c92d], h2[data-v-1723c92d], h3[data-v-1723c92d], h4[data-v-1723c92d], h5[data-v-1723c92d], h6[data-v-1723c92d], p[data-v-1723c92d], blockquote[data-v-1723c92d], pre[data-v-1723c92d],\na[data-v-1723c92d], abbr[data-v-1723c92d], acronym[data-v-1723c92d], address[data-v-1723c92d], big[data-v-1723c92d], cite[data-v-1723c92d], code[data-v-1723c92d],\ndel[data-v-1723c92d], dfn[data-v-1723c92d], em[data-v-1723c92d], img[data-v-1723c92d], ins[data-v-1723c92d], kbd[data-v-1723c92d], q[data-v-1723c92d], s[data-v-1723c92d], samp[data-v-1723c92d],\nsmall[data-v-1723c92d], strike[data-v-1723c92d], strong[data-v-1723c92d], sub[data-v-1723c92d], sup[data-v-1723c92d], tt[data-v-1723c92d], var[data-v-1723c92d],\nb[data-v-1723c92d], u[data-v-1723c92d], i[data-v-1723c92d], center[data-v-1723c92d],\ndl[data-v-1723c92d], dt[data-v-1723c92d], dd[data-v-1723c92d], ol[data-v-1723c92d], ul[data-v-1723c92d], li[data-v-1723c92d],\nfieldset[data-v-1723c92d], form[data-v-1723c92d], label[data-v-1723c92d], legend[data-v-1723c92d],\ntable[data-v-1723c92d], caption[data-v-1723c92d], tbody[data-v-1723c92d], tfoot[data-v-1723c92d], thead[data-v-1723c92d], tr[data-v-1723c92d], th[data-v-1723c92d], td[data-v-1723c92d],\narticle[data-v-1723c92d], aside[data-v-1723c92d], canvas[data-v-1723c92d], details[data-v-1723c92d], embed[data-v-1723c92d],\nfigure[data-v-1723c92d], figcaption[data-v-1723c92d], footer[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d],\nmenu[data-v-1723c92d], nav[data-v-1723c92d], output[data-v-1723c92d], ruby[data-v-1723c92d], section[data-v-1723c92d], summary[data-v-1723c92d],\ntime[data-v-1723c92d], mark[data-v-1723c92d], audio[data-v-1723c92d], video[data-v-1723c92d] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-1723c92d], aside[data-v-1723c92d], details[data-v-1723c92d], figcaption[data-v-1723c92d], figure[data-v-1723c92d],\nfooter[data-v-1723c92d], header[data-v-1723c92d], hgroup[data-v-1723c92d], menu[data-v-1723c92d], nav[data-v-1723c92d], section[data-v-1723c92d] {\n  display: block;\n}\nbody[data-v-1723c92d] {\n  line-height: 1;\n}\nol[data-v-1723c92d], ul[data-v-1723c92d] {\n  list-style: none;\n}\nblockquote[data-v-1723c92d], q[data-v-1723c92d] {\n  quotes: none;\n}\nblockquote[data-v-1723c92d]:before, blockquote[data-v-1723c92d]:after,\nq[data-v-1723c92d]:before, q[data-v-1723c92d]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-1723c92d] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-1723c92d] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-1723c92d] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-1723c92d] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-1723c92d] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-1723c92d] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-1723c92d] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-1723c92d] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-1723c92d] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-1723c92d] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-1723c92d] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-1723c92d] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-1723c92d] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-1723c92d] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-1723c92d] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-1723c92d] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-1723c92d] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-1723c92d] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-1723c92d] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-1723c92d] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-1723c92d] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-1723c92d] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-1723c92d] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-1723c92d] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-1723c92d] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-1723c92d] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-1723c92d] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-1723c92d] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-1723c92d] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-1723c92d] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-1723c92d] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-1723c92d] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-1723c92d] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-1723c92d] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-1723c92d] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n.withdraw-container[data-v-1723c92d] {\n  background: #eee;\n  height: 100vh;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.withdraw-box[data-v-1723c92d] {\n  background: #fff;\n  padding: 1em;\n  margin: 0 0.5em;\n}\n.withdraw-box .tltle[data-v-1723c92d] {\n    font-size: 1em;\n    color: #999;\n}\n.withdraw-money[data-v-1723c92d] {\n  border-bottom: 1px solid #ccc;\n  vertical-align: middle;\n  margin-top: 2em;\n  font-size: 1.2em;\n  padding: 0.2em 0;\n}\n.withdraw-money input[data-v-1723c92d] {\n    border: none;\n    outline: none;\n    width: 100%;\n    font-size: 0.9em;\n}\n.all-money[data-v-1723c92d] {\n  margin-top: 1em;\n  font-size: 1em;\n}\n.all-money .money[data-v-1723c92d] {\n    color: #666;\n}\n.all-money .all-withdraw[data-v-1723c92d] {\n    color: #199ed8;\n    margin-left: 0.4em;\n}\n.service-money[data-v-1723c92d] {\n  margin-top: 1em;\n  font-size: 0.8em;\n}\n.service-money .money[data-v-1723c92d] {\n    color: #666;\n}\n.service-money span[data-v-1723c92d] {\n    margin-left: 0.5em;\n}\n.withdraw-way[data-v-1723c92d] {\n  margin-top: 2em;\n}\n.withdraw-way .title[data-v-1723c92d] {\n    color: #999;\n    margin-bottom: 0.5em;\n}\n.withdraw-btn[data-v-1723c92d] {\n  display: block;\n  margin-top: 3em;\n  margin-bottom: 1em;\n}\n", ""]);
 
 // exports
 
@@ -54678,7 +54678,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(6);
@@ -54738,13 +54738,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			options1: [],
 			way: null, //提现方式
 			value: null,
-			has_pay_password: null //是否设置支付密码
+			has_pay_password: null, //是否设置支付密码
+			fee_mode: null, //提现状态  1代表固定手续费   0代表百分比
+			fee_value: null,
+			isFee: false, //是否展示手续费
+			iswithdraw: true
 		};
 	},
 	created: function created() {
 		this.init();
 	},
 
+	watch: {
+		amount: function amount() {
+			if (!this.amount) {
+				this.isFee = true;
+				this.iswithdraw = true;
+			} else {
+				this.isFee = false;
+				this.iswithdraw = false;
+			}
+		}
+	},
+	computed: {
+		'fee': function fee() {
+			return this.amount * this.fee_value;
+			// return 0
+		}
+	},
 	components: { topBack: __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default.a, passWorld: __WEBPACK_IMPORTED_MODULE_2__components_password___default.a },
 	methods: {
 		goIndex: function goIndex() {
@@ -54819,6 +54840,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				var _t = {};
 				_t.value = res.data.data.methods[i].id.toString();
 				_t.label = res.data.data.methods[i].label;
+				this.fee_mode = res.data.data.methods[i].fee_mode;
+				this.fee_value = res.data.data.methods[i].fee_value;
+				console.log(this.fee_value);
 				_tempList.push(_t);
 			}
 			this.options1 = _tempList;
@@ -55380,30 +55404,44 @@ var render = function() {
           })
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "all-money flex" }, [
-          _c("div", { staticClass: "money" }, [
-            _vm._v("\n\t\t可提现余额 ¥\n\t\t"),
-            _c("span", [_vm._v(_vm._s(_vm.balance))]),
-            _vm._v(",\n\t  ")
-          ]),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "all-withdraw",
-              attrs: { href: "javascript:;" },
-              on: { click: _vm.allWithdraw }
-            },
-            [_vm._v("全部提现")]
-          )
-        ]),
+        _vm.iswithdraw
+          ? _c("div", { staticClass: "all-money flex" }, [
+              _c("div", { staticClass: "money" }, [
+                _vm._v("\n\t\t可提现余额 ¥\n\t\t"),
+                _c("span", [_vm._v(_vm._s(_vm.balance))]),
+                _vm._v(",\n\t  ")
+              ]),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "all-withdraw",
+                  attrs: { href: "javascript:;" },
+                  on: { click: _vm.allWithdraw }
+                },
+                [_vm._v("全部提现")]
+              )
+            ])
+          : _vm._e(),
         _vm._v(" "),
-        _c("div", { staticClass: "service-money flex" }, [
-          _c("div", { staticClass: "money" }, [
-            _vm._v("额外扣除¥" + _vm._s(_vm.balance) + "手续费"),
-            _c("span", [_vm._v("(费率1%)")])
-          ])
-        ]),
+        _vm.amount
+          ? _c("div", { staticClass: "service-money flex" }, [
+              _c("div", { staticClass: "money" }, [
+                _vm._v(
+                  "额外扣除¥ " +
+                    _vm._s((_vm.fee_mode = 0 ? _vm.fee_value : _vm.fee)) +
+                    "手续费"
+                ),
+                _c("span", [
+                  _vm._v(
+                    _vm._s(
+                      (_vm.fee_mode = 0 ? "" : "(费率" + _vm.fee_value + "%)")
+                    )
+                  )
+                ])
+              ])
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "withdraw-way" }, [
           _c("div", { staticClass: "title" }, [_vm._v("提现到")]),
@@ -55886,7 +55924,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_inputList__ = __webpack_require__(104);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_inputList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_inputList__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(6);
@@ -56097,7 +56135,7 @@ exports.push([module.i, "\n.slide-enter-active[data-v-3cefe37e],\n.slide-leave-a
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(42);
 //
 //
 //
@@ -56491,7 +56529,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-e43bcdac], body[data-v-e43bcdac], div[data-v-e43bcdac], span[data-v-e43bcdac], applet[data-v-e43bcdac], object[data-v-e43bcdac], iframe[data-v-e43bcdac],\nh1[data-v-e43bcdac], h2[data-v-e43bcdac], h3[data-v-e43bcdac], h4[data-v-e43bcdac], h5[data-v-e43bcdac], h6[data-v-e43bcdac], p[data-v-e43bcdac], blockquote[data-v-e43bcdac], pre[data-v-e43bcdac],\na[data-v-e43bcdac], abbr[data-v-e43bcdac], acronym[data-v-e43bcdac], address[data-v-e43bcdac], big[data-v-e43bcdac], cite[data-v-e43bcdac], code[data-v-e43bcdac],\ndel[data-v-e43bcdac], dfn[data-v-e43bcdac], em[data-v-e43bcdac], img[data-v-e43bcdac], ins[data-v-e43bcdac], kbd[data-v-e43bcdac], q[data-v-e43bcdac], s[data-v-e43bcdac], samp[data-v-e43bcdac],\nsmall[data-v-e43bcdac], strike[data-v-e43bcdac], strong[data-v-e43bcdac], sub[data-v-e43bcdac], sup[data-v-e43bcdac], tt[data-v-e43bcdac], var[data-v-e43bcdac],\nb[data-v-e43bcdac], u[data-v-e43bcdac], i[data-v-e43bcdac], center[data-v-e43bcdac],\ndl[data-v-e43bcdac], dt[data-v-e43bcdac], dd[data-v-e43bcdac], ol[data-v-e43bcdac], ul[data-v-e43bcdac], li[data-v-e43bcdac],\nfieldset[data-v-e43bcdac], form[data-v-e43bcdac], label[data-v-e43bcdac], legend[data-v-e43bcdac],\ntable[data-v-e43bcdac], caption[data-v-e43bcdac], tbody[data-v-e43bcdac], tfoot[data-v-e43bcdac], thead[data-v-e43bcdac], tr[data-v-e43bcdac], th[data-v-e43bcdac], td[data-v-e43bcdac],\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], canvas[data-v-e43bcdac], details[data-v-e43bcdac], embed[data-v-e43bcdac],\nfigure[data-v-e43bcdac], figcaption[data-v-e43bcdac], footer[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac],\nmenu[data-v-e43bcdac], nav[data-v-e43bcdac], output[data-v-e43bcdac], ruby[data-v-e43bcdac], section[data-v-e43bcdac], summary[data-v-e43bcdac],\ntime[data-v-e43bcdac], mark[data-v-e43bcdac], audio[data-v-e43bcdac], video[data-v-e43bcdac] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], details[data-v-e43bcdac], figcaption[data-v-e43bcdac], figure[data-v-e43bcdac],\nfooter[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac], menu[data-v-e43bcdac], nav[data-v-e43bcdac], section[data-v-e43bcdac] {\n  display: block;\n}\nbody[data-v-e43bcdac] {\n  line-height: 1;\n}\nol[data-v-e43bcdac], ul[data-v-e43bcdac] {\n  list-style: none;\n}\nblockquote[data-v-e43bcdac], q[data-v-e43bcdac] {\n  quotes: none;\n}\nblockquote[data-v-e43bcdac]:before, blockquote[data-v-e43bcdac]:after,\nq[data-v-e43bcdac]:before, q[data-v-e43bcdac]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-e43bcdac] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-e43bcdac] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-e43bcdac] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-e43bcdac] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-e43bcdac] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-e43bcdac] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-e43bcdac] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-e43bcdac] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-e43bcdac] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-e43bcdac] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-e43bcdac] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-e43bcdac] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-e43bcdac] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-e43bcdac] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-e43bcdac] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-e43bcdac] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-e43bcdac] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-e43bcdac] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-e43bcdac] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-e43bcdac] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-e43bcdac] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-e43bcdac] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-e43bcdac] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-e43bcdac] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-e43bcdac] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-e43bcdac] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-e43bcdac] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-e43bcdac] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-e43bcdac] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-e43bcdac] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#bill[data-v-e43bcdac] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#bill .header-right[data-v-e43bcdac] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.bill-box[data-v-e43bcdac] {\n  font-size: 0.9em;\n  height: 3.4em;\n  line-height: 1.7em;\n  background: #eee;\n  padding-top: 0.5em;\n}\n.bill-box .bill-date[data-v-e43bcdac] {\n    padding: 0 1em;\n    color: #666;\n}\n.bill-box .month-money[data-v-e43bcdac] {\n    color: #999;\n}\n.bill-box .month-money .income[data-v-e43bcdac] {\n      margin-left: 1em;\n}\n.bill-list li[data-v-e43bcdac] {\n  padding: 0 1em;\n  border-top: 1px solid #ccc;\n}\n.bill-list li a[data-v-e43bcdac] {\n    width: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    height: 55px;\n    line-height: 20px;\n}\n.bill-list li .bill-content .time[data-v-e43bcdac] {\n    color: #999;\n    font-size: 0.8em;\n}\n.bill-list li .bill-money[data-v-e43bcdac] {\n    font-size: 1.2em;\n}\n.bill-list li .active[data-v-e43bcdac] {\n    color: #00cc00;\n}\n.bill-list li[data-v-e43bcdac]:last-child {\n    border-bottom: 1px solid #ccc;\n}\n.slide-enter-active[data-v-e43bcdac],\n.slide-leave-active[data-v-e43bcdac] {\n  -webkit-transition: all 1s ease;\n  transition: all 1s ease;\n}\n.slide-enter[data-v-e43bcdac],\n.slide-leave-to[data-v-e43bcdac] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n.sel-type-box h2[data-v-e43bcdac] {\n  height: 2.8em;\n  line-height: 2.8em;\n  text-align: center;\n  color: #333;\n  border: 1px solid #f1f1f1;\n  font-weight: 700;\n}\n.sel-type-box .type-list[data-v-e43bcdac] {\n  padding: 4%;\n  overflow: hidden;\n}\n.sel-type-box .type-list li[data-v-e43bcdac] {\n    width: 32%;\n    float: left;\n    text-align: center;\n    height: 60px;\n    line-height: 60px;\n}\n.sel-type-box .type-list a[data-v-e43bcdac] {\n    display: block;\n    width: 100%;\n    height: 100%;\n}\n.sel-type-box .type-list .active a[data-v-e43bcdac] {\n    background: #50b56a;\n    color: #fff;\n}\n.sel-type[data-v-e43bcdac] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 1000;\n  -webkit-transition: all 0.3s ease-in-out;\n  transition: all 0.3s ease-in-out;\n}\n.sel-type-box[data-v-e43bcdac] {\n  position: absolute;\n  z-index: 1002;\n  width: 100%;\n  background: #fff;\n  bottom: 0;\n  border-radius: 4px;\n}\n.cancel-btn[data-v-e43bcdac] {\n  margin-top: 1.5em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-e43bcdac], body[data-v-e43bcdac], div[data-v-e43bcdac], span[data-v-e43bcdac], applet[data-v-e43bcdac], object[data-v-e43bcdac], iframe[data-v-e43bcdac],\nh1[data-v-e43bcdac], h2[data-v-e43bcdac], h3[data-v-e43bcdac], h4[data-v-e43bcdac], h5[data-v-e43bcdac], h6[data-v-e43bcdac], p[data-v-e43bcdac], blockquote[data-v-e43bcdac], pre[data-v-e43bcdac],\na[data-v-e43bcdac], abbr[data-v-e43bcdac], acronym[data-v-e43bcdac], address[data-v-e43bcdac], big[data-v-e43bcdac], cite[data-v-e43bcdac], code[data-v-e43bcdac],\ndel[data-v-e43bcdac], dfn[data-v-e43bcdac], em[data-v-e43bcdac], img[data-v-e43bcdac], ins[data-v-e43bcdac], kbd[data-v-e43bcdac], q[data-v-e43bcdac], s[data-v-e43bcdac], samp[data-v-e43bcdac],\nsmall[data-v-e43bcdac], strike[data-v-e43bcdac], strong[data-v-e43bcdac], sub[data-v-e43bcdac], sup[data-v-e43bcdac], tt[data-v-e43bcdac], var[data-v-e43bcdac],\nb[data-v-e43bcdac], u[data-v-e43bcdac], i[data-v-e43bcdac], center[data-v-e43bcdac],\ndl[data-v-e43bcdac], dt[data-v-e43bcdac], dd[data-v-e43bcdac], ol[data-v-e43bcdac], ul[data-v-e43bcdac], li[data-v-e43bcdac],\nfieldset[data-v-e43bcdac], form[data-v-e43bcdac], label[data-v-e43bcdac], legend[data-v-e43bcdac],\ntable[data-v-e43bcdac], caption[data-v-e43bcdac], tbody[data-v-e43bcdac], tfoot[data-v-e43bcdac], thead[data-v-e43bcdac], tr[data-v-e43bcdac], th[data-v-e43bcdac], td[data-v-e43bcdac],\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], canvas[data-v-e43bcdac], details[data-v-e43bcdac], embed[data-v-e43bcdac],\nfigure[data-v-e43bcdac], figcaption[data-v-e43bcdac], footer[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac],\nmenu[data-v-e43bcdac], nav[data-v-e43bcdac], output[data-v-e43bcdac], ruby[data-v-e43bcdac], section[data-v-e43bcdac], summary[data-v-e43bcdac],\ntime[data-v-e43bcdac], mark[data-v-e43bcdac], audio[data-v-e43bcdac], video[data-v-e43bcdac] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-e43bcdac], aside[data-v-e43bcdac], details[data-v-e43bcdac], figcaption[data-v-e43bcdac], figure[data-v-e43bcdac],\nfooter[data-v-e43bcdac], header[data-v-e43bcdac], hgroup[data-v-e43bcdac], menu[data-v-e43bcdac], nav[data-v-e43bcdac], section[data-v-e43bcdac] {\n  display: block;\n}\nbody[data-v-e43bcdac] {\n  line-height: 1;\n}\nol[data-v-e43bcdac], ul[data-v-e43bcdac] {\n  list-style: none;\n}\nblockquote[data-v-e43bcdac], q[data-v-e43bcdac] {\n  quotes: none;\n}\nblockquote[data-v-e43bcdac]:before, blockquote[data-v-e43bcdac]:after,\nq[data-v-e43bcdac]:before, q[data-v-e43bcdac]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-e43bcdac] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-e43bcdac] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-e43bcdac] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-e43bcdac] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-e43bcdac] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-e43bcdac] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-e43bcdac] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-e43bcdac] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-e43bcdac] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-e43bcdac] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-e43bcdac] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-e43bcdac] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-e43bcdac] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-e43bcdac] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-e43bcdac] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-e43bcdac] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-e43bcdac] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-e43bcdac] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-e43bcdac] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-e43bcdac] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-e43bcdac] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-e43bcdac] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-e43bcdac] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-e43bcdac] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-e43bcdac] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-e43bcdac] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-e43bcdac] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-e43bcdac] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-e43bcdac] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-e43bcdac] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-e43bcdac] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-e43bcdac] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-e43bcdac] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-e43bcdac] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#bill[data-v-e43bcdac] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#bill .header-right[data-v-e43bcdac] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.bill-box[data-v-e43bcdac] {\n  font-size: 0.9em;\n  /* height: 3.4em; */\n  /* line-height: 1.7em; */\n  /* background: #eee; */\n  /* padding-top: 0.5em; */\n}\n.bill-box .bill-date[data-v-e43bcdac] {\n    padding: 0 1em;\n    color: #666;\n}\n.bill-box .month-money[data-v-e43bcdac] {\n    color: #999;\n}\n.bill-box .month-money .income[data-v-e43bcdac] {\n      margin-left: 1em;\n}\n.bill-list li[data-v-e43bcdac] {\n  padding: 0 1em;\n  border-top: 1px solid #ccc;\n}\n.bill-list li a[data-v-e43bcdac] {\n    width: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    height: 55px;\n    line-height: 20px;\n}\n.bill-list li .bill-content .time[data-v-e43bcdac] {\n    color: #999;\n    font-size: 0.8em;\n}\n.bill-list li .bill-money[data-v-e43bcdac] {\n    font-size: 1.2em;\n}\n.bill-list li .active[data-v-e43bcdac] {\n    color: #00cc00;\n}\n.bill-list li[data-v-e43bcdac]:last-child {\n    border-bottom: 1px solid #ccc;\n}\n.slide-enter-active[data-v-e43bcdac],\n.slide-leave-active[data-v-e43bcdac] {\n  -webkit-transition: all 1s ease;\n  transition: all 1s ease;\n}\n.slide-enter[data-v-e43bcdac],\n.slide-leave-to[data-v-e43bcdac] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n.sel-type-box h2[data-v-e43bcdac] {\n  height: 2.8em;\n  line-height: 2.8em;\n  text-align: center;\n  color: #333;\n  border: 1px solid #f1f1f1;\n  font-weight: 700;\n}\n.sel-type-box .type-list[data-v-e43bcdac] {\n  padding: 4%;\n  overflow: hidden;\n}\n.sel-type-box .type-list li[data-v-e43bcdac] {\n    width: 32%;\n    float: left;\n    text-align: center;\n    height: 60px;\n    line-height: 60px;\n}\n.sel-type-box .type-list a[data-v-e43bcdac] {\n    display: block;\n    width: 100%;\n    height: 100%;\n}\n.sel-type-box .type-list .active a[data-v-e43bcdac] {\n    background: #50b56a;\n    color: #fff;\n}\n.sel-type[data-v-e43bcdac] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 1000;\n  -webkit-transition: all 0.3s ease-in-out;\n  transition: all 0.3s ease-in-out;\n}\n.sel-type-box[data-v-e43bcdac] {\n  position: absolute;\n  z-index: 1002;\n  width: 100%;\n  background: #fff;\n  bottom: 0;\n  border-radius: 4px;\n}\n.cancel-btn[data-v-e43bcdac] {\n  margin-top: 1.5em;\n}\n", ""]);
 
 // exports
 
@@ -56695,17 +56733,9 @@ var render = function() {
     { attrs: { id: "bill" } },
     [
       _c("topBack", { attrs: { title: "账单明细" } }, [
-        _c(
-          "div",
-          { staticClass: "flex flex-reverse flex-align-center header-right" },
-          [
-            _c(
-              "a",
-              { attrs: { href: "javascript:;" }, on: { click: _vm.show } },
-              [_vm._v("筛选")]
-            )
-          ]
-        )
+        _c("div", {
+          staticClass: "flex flex-reverse flex-align-center header-right"
+        })
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "bill-box" }, [
@@ -56857,7 +56887,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "bill-date flex flex-align-center flex-justify-between" },
+      {
+        staticClass: "bill-date flex flex-align-center flex-justify-between",
+        staticStyle: { display: "none" }
+      },
       [
         _c("div", { staticClass: "left-content" }, [
           _c("div", { staticClass: "cur-date" }, [_vm._v("2017年11月")]),
@@ -57334,7 +57367,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__choiseMember_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_mint_ui__);
 //
@@ -58398,7 +58431,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
+exports.push([module.i, "\n.green-color[data-v-54aa27b5] {\n  color: green;\n}\n#deal-detail[data-v-54aa27b5] {\n  background: #eee;\n  min-height: 100vh;\n  padding-top: 2em;\n}\n.big-winner-tip[data-v-54aa27b5] {\n  width: 4em;\n  height: 4em;\n  border-radius: 50%;\n  background: #26a2ff;\n  position: absolute;\n  right: 2em;\n}\n.big-winner-tip p[data-v-54aa27b5] {\n    text-align: center;\n    font-size: 0.9em;\n    color: #fff;\n}\n.pay-wrap .pay-money[data-v-54aa27b5], .pay-wrap .get-money[data-v-54aa27b5] {\n  background: #fff;\n  width: 90%;\n  border-radius: 0.2em;\n  height: 2.5em;\n}\n.pay-wrap .pay-money label[data-v-54aa27b5], .pay-wrap .get-money label[data-v-54aa27b5] {\n    width: 40%;\n    padding-left: 0.5em;\n    padding-right: 0.5em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.pay-wrap .pay-money .input-wrap[data-v-54aa27b5], .pay-wrap .get-money .input-wrap[data-v-54aa27b5] {\n    height: 100%;\n    width: 60%;\n}\n.pay-wrap .pay-money .input-wrap input[data-v-54aa27b5], .pay-wrap .get-money .input-wrap input[data-v-54aa27b5] {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      font-size: 1em;\n      padding-left: 0.5em;\n      width: 100%;\n      border: none;\n      outline: none;\n      height: 100%;\n}\n.pay-wrap .get-money[data-v-54aa27b5] {\n  margin-top: 1em;\n}\n.mint-button[data-v-54aa27b5] {\n  margin-top: 1em;\n  width: 90%;\n}\n.pay-record[data-v-54aa27b5] {\n  padding-top: 0.5em;\n}\n.pay-record .title[data-v-54aa27b5] {\n    width: 90%;\n    height: 4.5em;\n    line-height: 2em;\n    background: #fff;\n    margin: 0 auto;\n}\n.pay-record .title .top[data-v-54aa27b5] {\n      height: 2em;\n      width: 100%;\n      padding-left: 0.5em;\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n}\n.pay-record .title .top span[data-v-54aa27b5] {\n        font-size: 1em;\n        color: #555;\n}\n.pay-record .title .bottom[data-v-54aa27b5] {\n      width: 100%;\n      height: 3.5em;\n}\n.pay-record .title .bottom img[data-v-54aa27b5] {\n        width: 2em;\n        height: 2em;\n        display: block;\n        margin-left: 0.5em;\n}\n.pay-record .title .info-friend[data-v-54aa27b5] {\n      margin-right: 0.5em;\n      background: green;\n      color: #fff;\n      padding-left: 0.3em;\n      padding-right: 0.3em;\n      border-radius: 0.3em;\n      font-size: 0.9em;\n}\n.pay-record ul[data-v-54aa27b5] {\n    margin-top: 0.5em;\n}\n.pay-record ul li[data-v-54aa27b5] {\n      margin-top: 0.2em;\n      width: 90%;\n      overflow-x: hidden;\n      /*#slider-component {\r\n        margin-top: 0.5em;\r\n      }*/\n}\n.pay-record ul li .slider-item[data-v-54aa27b5] {\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        padding-left: 0.5em;\n        padding-right: 0.5em;\n        height: 3em;\n}\n.pay-record ul li .slider-item .pay-money-text[data-v-54aa27b5] {\n          width: 20%;\n          height: 100%;\n}\n.pay-record ul li .slider-item .pay-money-text .money[data-v-54aa27b5] {\n            font-size: 1.1em;\n            width: 100%;\n            line-height: 2em;\n            height: 50%;\n}\n.pay-record ul li .slider-item .pay-money-text .title[data-v-54aa27b5] {\n            font-size: 0.9em;\n            height: 50%;\n            width: 100%;\n            background: #fff;\n}\n.pay-record ul li .slider-item .img-wrap img[data-v-54aa27b5] {\n          width: 2.5em;\n          height: 2.5em;\n          display: block;\n}\n.pay-record ul li .slider-item span[data-v-54aa27b5] {\n          display: block;\n          text-align: center;\n}\n#qrcode[data-v-54aa27b5] {\n  margin-top: 1.5em;\n}\n.notice[data-v-54aa27b5] {\n  margin-top: 1em;\n  padding-bottom: 1.5em;\n  text-align: center;\n  font-size: 0.9em;\n  color: #999;\n}\n", ""]);
 
 // exports
 
@@ -58415,7 +58448,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_slider___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_slider__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent__ = __webpack_require__(148);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dealContent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(6);
@@ -58425,6 +58458,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_qrCode__ = __webpack_require__(593);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_qrCode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__utils_qrCode__);
+//
+//
+//
+//
 //
 //
 //
@@ -58716,6 +58753,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       passWordSwitch: false,
+      isShow: false,
+      isManager: false, // 是否是交易发起者
       renderData: {
         name: null,
         user: {
@@ -58785,6 +58824,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.recordList = res.data.data.record;
         _this2.shop_id = res.data.data.shop_id;
         _this2.allow_reward = res.data.data.allow_reward;
+        _this2.isManager = res.data.data.allow_cancel;
+        _this2.isShow = true;
+
         __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -58873,6 +58915,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("放钱进店铺成功");
+          _this5.moneyData.payMoney = null;
           setTimeout(function () {
             _this5.init();
           }, 1500);
@@ -58910,12 +58953,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
               __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
               Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
-
+              _this5.moneyData.getMoney = null;
               setTimeout(function () {
                 _this5.init();
               }, 1500);
             }).catch(function (err) {
               __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
+              Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
+              setTimeout(function () {
+                _this5.init();
+              }, 1000);
               console.error(err);
             });
           }).catch(function (err) {});
@@ -60436,7 +60483,7 @@ var render = function() {
     { attrs: { id: "deal-detail" } },
     [
       _c("topBack", { staticStyle: { background: "#eee" } }, [
-        _vm.recordList.length == 0
+        _vm.recordList.length == 0 && _vm.isManager
           ? _c(
               "div",
               {
@@ -60585,87 +60632,96 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c(
-          "ul",
-          { staticClass: "flex flex-v flex-align-center" },
-          _vm._l(_vm.recordList, function(item) {
-            return _c(
-              "li",
-              [
-                _c(
-                  "slider",
-                  {
-                    attrs: {
-                      height: "3em",
-                      actionUser: "撤销",
-                      able: item.stat == 2 ? false : true
-                    },
-                    on: {
-                      deleteIt: function($event) {
-                        _vm.deleteIt(item.id)
-                      }
-                    }
-                  },
+        _vm.isShow
+          ? _c(
+              "ul",
+              { staticClass: "flex flex-v flex-align-center" },
+              _vm._l(_vm.recordList, function(item) {
+                return _c(
+                  "li",
                   [
                     _c(
-                      "div",
+                      "slider",
                       {
-                        staticClass:
-                          "slider-item flex flex-align-center flex-justify-between"
+                        attrs: {
+                          height: "3em",
+                          actionUser: "撤销",
+                          able:
+                            item.stat == 2 && item.allow_cancel ? false : true
+                        },
+                        on: {
+                          deleteIt: function($event) {
+                            _vm.deleteIt(item.id)
+                          }
+                        }
                       },
                       [
-                        _c("img", {
-                          attrs: { src: item.user.avatar, alt: "" }
-                        }),
-                        _vm._v(" "),
-                        _c("span", [_vm._v(_vm._s(item.user.name))]),
-                        _vm._v(" "),
                         _c(
                           "div",
                           {
                             staticClass:
-                              "pay-money-text flex flex-v flex-justify-between flex-align-center"
+                              "slider-item flex flex-align-center flex-justify-between"
                           },
                           [
+                            _c("div", { staticClass: "img-wrap flex-2" }, [
+                              _c("img", {
+                                attrs: { src: item.user.avatar, alt: "" }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "flex-8" }, [
+                              _vm._v(_vm._s(item.user.name))
+                            ]),
+                            _vm._v(" "),
                             _c(
-                              "span",
+                              "div",
                               {
-                                staticClass: "money",
-                                class: [item.stat == 1 ? "" : "green-color"]
+                                staticClass:
+                                  "pay-money-text flex flex-v flex-justify-between flex-align-center flex-4"
                               },
                               [
-                                _vm._v(
-                                  _vm._s(item.stat == 2 ? "+" : "") +
-                                    _vm._s(item.amount)
-                                )
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "money",
+                                    class: [item.stat == 1 ? "" : "green-color"]
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(item.stat == 2 ? "+" : "") +
+                                        _vm._s(item.amount)
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                item.stat != 3
+                                  ? _c("span", { staticClass: "title" }, [
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(
+                                            item.stat == 1 ? "付钱" : "拿钱"
+                                          )
+                                      )
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.stat == 3
+                                  ? _c("span", { staticClass: "title" }, [
+                                      _vm._v(" 已撤回")
+                                    ])
+                                  : _vm._e()
                               ]
-                            ),
-                            _vm._v(" "),
-                            item.stat != 3
-                              ? _c("span", { staticClass: "title" }, [
-                                  _vm._v(
-                                    " " +
-                                      _vm._s(item.stat == 1 ? "付钱" : "拿钱")
-                                  )
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            item.stat == 3
-                              ? _c("span", { staticClass: "title" }, [
-                                  _vm._v(" 已撤回")
-                                ])
-                              : _vm._e()
+                            )
                           ]
                         )
                       ]
                     )
-                  ]
+                  ],
+                  1
                 )
-              ],
-              1
+              })
             )
-          })
-        )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("section", {
@@ -60815,7 +60871,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dealContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dealContent__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_mint_ui__);
@@ -61007,7 +61063,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           });
         }
       }).catch(function (err) {
-        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
+        //          console.error(err);
       });
     },
     showPassWord: function showPassWord() {
@@ -61029,6 +61087,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         pay_password: this.passwordData.value
       };
 
+      this.hidePassword();
       // 打赏店家接口
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("打赏店家成功");
@@ -61287,7 +61346,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils_js__ = __webpack_require__(42);
 //
 //
 //
@@ -62866,12 +62925,12 @@ exports.push([module.i, "\n#bankManage[data-v-5865f0c9] {\n  padding-top: 2em;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
@@ -64267,7 +64326,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(6);
@@ -64834,7 +64893,7 @@ exports.push([module.i, "\n#settleInfo[data-v-87f34208] {\n  background: #eee;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(7);
@@ -65418,7 +65477,7 @@ exports.push([module.i, "\n#settleInfo[data-v-17eeec8a] {\n  background: #eee;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack__ = __webpack_require__(7);
@@ -65907,7 +65966,7 @@ exports.push([module.i, "", ""]);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
@@ -66102,7 +66161,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.fade-enter-active[data-v-5e89e994] {\n  -webkit-transition: opacity 1s;\n  transition: opacity 1s;\n}\n.fade-enter[data-v-5e89e994],\n.fade-leave-to[data-v-5e89e994] {\n  opacity: 0;\n}\n#my-users[data-v-5e89e994] {\n  padding-top: 2em;\n  min-height: 100vh;\n  background: #eee;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-users .users-count[data-v-5e89e994] {\n    height: 6em;\n    background: #26a2ff;\n}\n#my-users .users-count h3[data-v-5e89e994] {\n      padding-top: 0.5em;\n      font-size: 1.7em;\n      color: #fff;\n      text-align: center;\n}\n#my-users .users-count h4[data-v-5e89e994] {\n      padding-top: 0.8em;\n      color: #fff;\n      text-align: center;\n      font-size: 0.9em;\n}\n#my-users .shop-users[data-v-5e89e994], #my-users .common-users[data-v-5e89e994] {\n    width: 100%;\n    height: 3em;\n    background: #fff;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users .user-icon i[data-v-5e89e994], #my-users .common-users .user-icon i[data-v-5e89e994] {\n      font-size: 1.8em;\n      color: #f3ca7e;\n}\n#my-users .shop-users-list li[data-v-5e89e994], #my-users .common-users-list li[data-v-5e89e994] {\n    height: 3em;\n    width: 100%;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users-list li img[data-v-5e89e994], #my-users .common-users-list li img[data-v-5e89e994] {\n      width: 2em;\n      height: 2em;\n      border-radius: 0.2em;\n}\n#my-users .common-users[data-v-5e89e994] {\n    margin-top: 0.2em;\n}\n#my-users .common-users .user-icon i[data-v-5e89e994] {\n      color: #7dc5eb;\n}\n", ""]);
 
 // exports
 
@@ -66113,6 +66172,168 @@ exports.push([module.i, "", ""]);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -66126,7 +66347,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  created: function created() {
+    this.init();
+  },
+  data: function data() {
+    return {
+      shopUsers: [], // 店主用户
+      commomUsers: [], // 普通用户
+      isShopUserListShow: false,
+      isCommonUserListShow: false,
+      indexData: {}
+    };
+  },
+
+  methods: {
+    init: function init() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/proxy/members/count').then(function (res) {
+        console.log(res);
+
+        _this.indexData = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {});
+    },
+    showShopUserList: function showShopUserList() {
+      this.isShopUserListShow = true;
+    },
+    hideShopUserList: function hideShopUserList() {
+      this.isShopUserListShow = false;
+    },
+    showCommonUserList: function showCommonUserList() {
+      this.isCommonUserListShow = true;
+    },
+    hideCommonUserList: function hideCommonUserList() {
+      this.isCommonUserListShow = false;
+    }
+  }
+});
 
 /***/ }),
 /* 675 */
@@ -66136,9 +66403,148 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "my-users" } }, [_vm._v("\n    我的用户\n")])
+  return _c(
+    "div",
+    { attrs: { id: "my-users" } },
+    [
+      _c("topBack", {
+        staticStyle: { background: "#26a2ff", color: "#fff" },
+        attrs: { title: "我的用户" }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "users-count" }, [
+        _c("h3", [_vm._v(_vm._s(_vm.indexData.total))]),
+        _vm._v(" "),
+        _c("h4", [_vm._v("我的用户数（个）")])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "shop-users flex flex-align-center",
+          on: { click: _vm.showShopUserList }
+        },
+        [
+          _vm._m(0, false, false),
+          _vm._v(" "),
+          _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex-1" }, [
+            _vm._v(_vm._s(_vm.indexData.manager))
+          ]),
+          _vm._v(" "),
+          _vm._m(1, false, false)
+        ]
+      ),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.isShopUserListShow
+          ? _c("ul", { staticClass: "shop-users-list" }, [
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "common-users flex flex-align-center",
+          on: { click: _vm.showCommonUserList }
+        },
+        [
+          _vm._m(2, false, false),
+          _vm._v(" "),
+          _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex-1" }, [
+            _vm._v(_vm._s(_vm.indexData.user))
+          ]),
+          _vm._v(" "),
+          _vm._m(3, false, false)
+        ]
+      ),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.isCommonUserListShow
+          ? _c("ul", { staticClass: "common-users-list" }, [
+              _c("li", { staticClass: "flex flex-align-center" }, [
+                _c("span", { staticClass: "flex-1" }, [
+                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+              ])
+            ])
+          : _vm._e()
+      ])
+    ],
+    1
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "user-icon flex-2" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "flex-1" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "user-icon flex-2" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "flex-1" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -66287,7 +66693,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-active[data-v-2cbc9344] {\n  -webkit-transition: all 0.5s ease;\n  transition: all 0.5s ease;\n}\n.slide-enter[data-v-2cbc9344],\n.slide-leave-to[data-v-2cbc9344] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 100%;\n      height: 100%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n    text-align: center;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .add-shop[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .add-shop > div[data-v-2cbc9344] {\n    border-radius: 0.4em;\n    width: 85%;\n    height: 85%;\n    border: 1px dashed #eee;\n}\n.shop-list .add-shop > div > i[data-v-2cbc9344] {\n      font-size: 4em;\n      color: #bbb;\n      display: block;\n      width: 1em;\n      height: 1em;\n}\n.shop-list .add-shop h3[data-v-2cbc9344] {\n    padding-top: 0.3em;\n    color: #999;\n}\n.add-shop-tab[data-v-2cbc9344] {\n  width: 100%;\n  height: 100vh;\n  background: #eee;\n  padding-bottom: 2em;\n  padding-top: 1em;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.add-shop-tab h3[data-v-2cbc9344] {\n    font-size: 1.8em;\n    text-align: center;\n    padding-top: 0.5em;\n    padding-bottom: 0.5em;\n}\n.add-shop-tab p[data-v-2cbc9344] {\n    line-height: 1.5;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-left: 1em;\n    padding-right: 1em;\n    text-indent: 2em;\n}\n.add-shop-tab .item[data-v-2cbc9344] {\n    width: 95%;\n    margin: 0 auto;\n}\n.add-shop-tab .open-deal-switch[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 2.9em;\n    background: #fff;\n    border-top: 1px solid #ddd;\n    border-bottom: 1px solid #ddd;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.add-shop-tab .pay-wrap[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 3em;\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n.add-shop-tab .pay-wrap .origin[data-v-2cbc9344] {\n      margin-right: 1em;\n}\n.add-shop-tab .btn-wrap[data-v-2cbc9344] {\n    margin: 0 auto;\n    margin-top: 2em;\n    width: 95%;\n}\n", ""]);
+exports.push([module.i, "\n.slide-enter-active[data-v-2cbc9344],\n.slide-leave-active[data-v-2cbc9344] {\n  -webkit-transition: all 0.5s ease;\n  transition: all 0.5s ease;\n}\n.slide-enter[data-v-2cbc9344],\n.slide-leave-to[data-v-2cbc9344] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n#top[data-v-2cbc9344] {\n  height: 10em;\n  width: 100%;\n  background: #26a2ff;\n  padding-top: 2em;\n}\n#top .top-message[data-v-2cbc9344] {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    width: 100%;\n    height: 100%;\n    padding-right: 0.8em;\n    padding-top: 0.4em;\n    position: relative;\n}\n#top .top-message .notice[data-v-2cbc9344] {\n      position: absolute;\n      background: red;\n      width: 0.6em;\n      height: 0.6em;\n      top: 0.3em;\n      right: 0.6em;\n      border-radius: 50%;\n}\n#top .top-message > i[data-v-2cbc9344] {\n      font-size: 1.5em;\n      color: #fff;\n}\n#top .imgwrap[data-v-2cbc9344] {\n    width: 5em;\n    height: 5em;\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n}\n#top .imgwrap i[data-v-2cbc9344] {\n      display: block;\n}\n#top .imgwrap .myShop-icon[data-v-2cbc9344] {\n      font-size: 3.5em;\n      color: #26a2ff;\n}\n#top h3[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    color: #fff;\n    text-align: center;\n    font-size: 0.9em;\n}\n#top .money-text[data-v-2cbc9344] {\n    font-size: 1.3em;\n}\n.tab-menu[data-v-2cbc9344] {\n  width: 100%;\n  height: 3em;\n}\n.tab-menu > div[data-v-2cbc9344] {\n    width: 50%;\n    height: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.tab-menu .active[data-v-2cbc9344] {\n    border-bottom: 0.2em solid #26a2ff;\n    color: #26a2ff;\n}\n.shop-list .shop-item[data-v-2cbc9344] {\n  width: 8em;\n  min-height: 7em;\n  border-radius: 0.4em;\n  border: 1px solid #eee;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .shop-item .img-wrap[data-v-2cbc9344] {\n    margin-top: 0.2em;\n    border-radius: 0.4em;\n    padding: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    background: #eee;\n    width: 3.6em;\n    height: 3.6em;\n    position: relative;\n}\n.shop-list .shop-item .img-wrap .notice[data-v-2cbc9344] {\n      position: absolute;\n      width: 0.9em;\n      height: 0.9em;\n      background: red;\n      border-radius: 50%;\n      right: -0.2em;\n      top: -0.2em;\n}\n.shop-list .shop-item .img-wrap > img[data-v-2cbc9344] {\n      width: 100%;\n      height: 100%;\n      display: block;\n      margin-left: 1%;\n      margin-top: 1%;\n}\n.shop-list .shop-item h3[data-v-2cbc9344] {\n    font-size: 0.95em;\n    padding-top: 0.1em;\n    padding-bottom: 0.1em;\n    text-align: center;\n}\n.shop-list .shop-item p[data-v-2cbc9344] {\n    display: block;\n    width: 100%;\n    text-align: center;\n    background: #eee;\n    margin-top: 0.1em;\n}\n.shop-list .shop-item .today-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .shop-item .all-earn[data-v-2cbc9344] {\n    font-size: 0.9em;\n}\n.shop-list .add-shop[data-v-2cbc9344] {\n  width: 8em;\n  height: 7em;\n  margin-top: 1em;\n  position: relative;\n}\n.shop-list .add-shop > div[data-v-2cbc9344] {\n    border-radius: 0.4em;\n    width: 85%;\n    height: 85%;\n    border: 1px dashed #eee;\n}\n.shop-list .add-shop > div > i[data-v-2cbc9344] {\n      font-size: 4em;\n      color: #bbb;\n      display: block;\n      width: 1em;\n      height: 1em;\n}\n.shop-list .add-shop h3[data-v-2cbc9344] {\n    padding-top: 0.3em;\n    color: #999;\n}\n.add-shop-tab[data-v-2cbc9344] {\n  width: 100%;\n  height: 100vh;\n  background: #eee;\n  padding-bottom: 2em;\n  padding-top: 1em;\n  position: fixed;\n  top: 0em;\n  left: 0em;\n  z-index: 1001;\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n.add-shop-tab h3[data-v-2cbc9344] {\n    font-size: 1.8em;\n    text-align: center;\n    padding-top: 0.5em;\n    padding-bottom: 0.5em;\n}\n.add-shop-tab p[data-v-2cbc9344] {\n    line-height: 1.5;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-left: 1em;\n    padding-right: 1em;\n    text-indent: 2em;\n}\n.add-shop-tab .item[data-v-2cbc9344] {\n    width: 95%;\n    margin: 0 auto;\n}\n.add-shop-tab .open-deal-switch[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 2.9em;\n    background: #fff;\n    border-top: 1px solid #ddd;\n    border-bottom: 1px solid #ddd;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.add-shop-tab .pay-wrap[data-v-2cbc9344] {\n    margin-top: 0.4em;\n    height: 3em;\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1em;\n}\n.add-shop-tab .pay-wrap .origin[data-v-2cbc9344] {\n      margin-right: 1em;\n}\n.add-shop-tab .btn-wrap[data-v-2cbc9344] {\n    margin: 0 auto;\n    margin-top: 2em;\n    width: 95%;\n}\n", ""]);
 
 // exports
 
@@ -67044,7 +67450,7 @@ var staticRenderFns = [
       "div",
       { staticClass: "flex flex-v flex-align-center flex-justify-center" },
       [
-        _c("i", { staticClass: "iconfont" }, [
+        _c("i", { staticClass: "iconfont " }, [
           _vm._v("\n            \n          ")
         ])
       ]
@@ -67162,7 +67568,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_loading__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(42);
 //
 //
 //
@@ -67541,7 +67947,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_moment__ = __webpack_require__(1);
@@ -68293,7 +68699,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_loading__ = __webpack_require__(9);
 //
 //
 //
@@ -68799,6 +69206,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 
@@ -68876,17 +69285,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     submitAddMember: function submitAddMember() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         shop_id: this.shopId,
         user_id: this.searchUserMobile
       };
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/invite/" + this.shopId + "/" + this.searchData.id).then(function (res) {
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("邀请用户成功");
         _this.closeMemberTab();
-      }).catch(function (error) {});
+      }).catch(function (err) {
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.msg);
+      });
     },
 
 
@@ -68894,7 +69306,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     init: function init() {
       var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
       var self = this;
       var _id = this.$route.query.id;
 
@@ -68918,7 +69330,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this2.tradeStatus = false;
         }
 
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        if (res.data.data.user_link == 1) {
+          _this2.inviteLinkStatus = true;
+        } else {
+          _this2.inviteLinkStatus = false;
+        }
+
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (error) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("当前页面不存在");
         _this2.$router.go(-1);
@@ -68932,13 +69350,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm('确定删除店铺?').then(function (action) {
 
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
 
         __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/close/" + _this3.shopId).then(function (res) {
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("店铺解散成功");
           setTimeout(function () {
             _this3.$router.push("/shop");
+          }, 1000);
+        }).catch(function (error) {
+          console.error(error);
+        });
+      }).catch(function (err) {});
+    },
+    exitShop: function exitShop() {
+      var _this4 = this;
+
+      __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].confirm('确定退出店铺?').then(function (action) {
+
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+
+        __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/shop/quit/" + _this4.shopId).then(function (res) {
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("退出店铺成功");
+          setTimeout(function () {
+            _this4.$router.push("/shop");
           }, 1000);
         }).catch(function (error) {
           console.error(error);
@@ -68963,21 +69399,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // 搜索用户
     searchUser: function searchUser() {
-      var _this4 = this;
+      var _this5 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
       var _data = {
         mobile: this.searchUserMobile
       };
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/shop/user/search', _data).then(function (res) {
-        _this4.searchData = res.data.data;
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        _this5.searchData = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+        __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
       });
     },
     updateShop: function updateShop(type) {
-      var _this5 = this;
+      var _this6 = this;
 
       if (!this.isGroupMaster) {
         return;
@@ -68993,19 +69429,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("新店铺名称不能为空");
             return;
           }
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
           var _data = {
             name: value
           };
-          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this6.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("店铺改名成功");
             setTimeout(function () {
-              _this5.init();
+              _this6.init();
             }, 1500);
           }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
         }).catch(function (err) {});
@@ -69013,7 +69449,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       // 手续费率
       if (type == "percent") {
-        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的手续费率", "修改手续费率(不能超过平台交易费)").then(function (_ref2) {
+        __WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"].prompt("请输入新的手续费率(0%~" + this.platform_fee + "%)", "修改手续费率(小于平台交易费率)").then(function (_ref2) {
           var value = _ref2.value,
               action = _ref2.action;
 
@@ -69022,20 +69458,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("手续费率不能为空");
             return;
           }
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
+
+          console.log(value);
+          console.log(_this6.platform_fee);
+          if (Number(value) >= Number(_this6.platform_fee)) {
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("手续费率必须小于平台交易费率" + _this6.platform_fee + "%");
+            return;
+          }
+
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
 
           var _data = {
             percent: value
           };
 
-          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this6.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("修改手续费率成功");
             setTimeout(function () {
-              _this5.init();
+              _this6.init();
             }, 1500);
           }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
@@ -69056,26 +69500,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           var _data = {
             rate: value
           };
-          __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open();
-          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this5.shopId, _data).then(function (res) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().open();
+          __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + _this6.shopId, _data).then(function (res) {
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("修改单价成功");
             setTimeout(function () {
-              _this5.init();
+              _this6.init();
             }, 1500);
           }).catch(function (err) {
-            __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
+            __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
             Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
           });
         }).catch(function (err) {});
       }
+    },
+    SetString: function SetString(str, len) {
+      return __WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* default */].SetString(str, len);
     }
   },
   watch: {
     // 邀请链接修改
     "inviteLinkStatus": function inviteLinkStatus() {
-      var _this6 = this;
+      var _this7 = this;
 
       var _link = null;
 
@@ -69095,12 +69542,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + this.shopId, _data).then(function (res) {}).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("设置失败");
-        _this6.init();
+        _this7.init();
       });
     },
 
     "tradeStatus": function tradeStatus() {
-      var _this7 = this;
+      var _this8 = this;
 
       var _link = null;
       if (!this.isShow || !this.isGroupMaster) {
@@ -69119,7 +69566,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/shop/update/' + this.shopId, _data).then(function (res) {}).catch(function (err) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("设置失败");
-        _this7.init();
+        _this8.init();
       });
     }
   }
@@ -69236,7 +69683,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("span", { staticClass: "name flex-5" }, [
-                  _vm._v(_vm._s(_vm.shopName))
+                  _vm._v(_vm._s(_vm.SetString(_vm.shopName, 16)))
                 ]),
                 _vm._v(" "),
                 _c("i", { staticClass: "iconfont flex-1" }, [
@@ -69483,14 +69930,27 @@ var render = function() {
             "div",
             { staticClass: "button-wrap" },
             [
-              _c(
-                "mt-button",
-                {
-                  attrs: { type: "danger", size: "large" },
-                  on: { click: _vm.dissShop }
-                },
-                [_vm._v("解散店铺")]
-              )
+              _vm.isGroupMaster
+                ? _c(
+                    "mt-button",
+                    {
+                      attrs: { type: "danger", size: "large" },
+                      on: { click: _vm.dissShop }
+                    },
+                    [_vm._v("解散店铺")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.isGroupMaster
+                ? _c(
+                    "mt-button",
+                    {
+                      attrs: { type: "danger", size: "large" },
+                      on: { click: _vm.exitShop }
+                    },
+                    [_vm._v("退出店铺")]
+                  )
+                : _vm._e()
             ],
             1
           ),
@@ -69830,7 +70290,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils_js__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 //
@@ -70015,7 +70475,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.controlSwitch = false;
         _this.init();
       }).catch(function (err) {
-        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.data.msg);
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading_js__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
       });
     },
     openSearchSwitch: function openSearchSwitch() {
@@ -70249,7 +70710,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-c374acc2], body[data-v-c374acc2], div[data-v-c374acc2], span[data-v-c374acc2], applet[data-v-c374acc2], object[data-v-c374acc2], iframe[data-v-c374acc2],\nh1[data-v-c374acc2], h2[data-v-c374acc2], h3[data-v-c374acc2], h4[data-v-c374acc2], h5[data-v-c374acc2], h6[data-v-c374acc2], p[data-v-c374acc2], blockquote[data-v-c374acc2], pre[data-v-c374acc2],\na[data-v-c374acc2], abbr[data-v-c374acc2], acronym[data-v-c374acc2], address[data-v-c374acc2], big[data-v-c374acc2], cite[data-v-c374acc2], code[data-v-c374acc2],\ndel[data-v-c374acc2], dfn[data-v-c374acc2], em[data-v-c374acc2], img[data-v-c374acc2], ins[data-v-c374acc2], kbd[data-v-c374acc2], q[data-v-c374acc2], s[data-v-c374acc2], samp[data-v-c374acc2],\nsmall[data-v-c374acc2], strike[data-v-c374acc2], strong[data-v-c374acc2], sub[data-v-c374acc2], sup[data-v-c374acc2], tt[data-v-c374acc2], var[data-v-c374acc2],\nb[data-v-c374acc2], u[data-v-c374acc2], i[data-v-c374acc2], center[data-v-c374acc2],\ndl[data-v-c374acc2], dt[data-v-c374acc2], dd[data-v-c374acc2], ol[data-v-c374acc2], ul[data-v-c374acc2], li[data-v-c374acc2],\nfieldset[data-v-c374acc2], form[data-v-c374acc2], label[data-v-c374acc2], legend[data-v-c374acc2],\ntable[data-v-c374acc2], caption[data-v-c374acc2], tbody[data-v-c374acc2], tfoot[data-v-c374acc2], thead[data-v-c374acc2], tr[data-v-c374acc2], th[data-v-c374acc2], td[data-v-c374acc2],\narticle[data-v-c374acc2], aside[data-v-c374acc2], canvas[data-v-c374acc2], details[data-v-c374acc2], embed[data-v-c374acc2],\nfigure[data-v-c374acc2], figcaption[data-v-c374acc2], footer[data-v-c374acc2], header[data-v-c374acc2], hgroup[data-v-c374acc2],\nmenu[data-v-c374acc2], nav[data-v-c374acc2], output[data-v-c374acc2], ruby[data-v-c374acc2], section[data-v-c374acc2], summary[data-v-c374acc2],\ntime[data-v-c374acc2], mark[data-v-c374acc2], audio[data-v-c374acc2], video[data-v-c374acc2] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-c374acc2], aside[data-v-c374acc2], details[data-v-c374acc2], figcaption[data-v-c374acc2], figure[data-v-c374acc2],\nfooter[data-v-c374acc2], header[data-v-c374acc2], hgroup[data-v-c374acc2], menu[data-v-c374acc2], nav[data-v-c374acc2], section[data-v-c374acc2] {\n  display: block;\n}\nbody[data-v-c374acc2] {\n  line-height: 1;\n}\nol[data-v-c374acc2], ul[data-v-c374acc2] {\n  list-style: none;\n}\nblockquote[data-v-c374acc2], q[data-v-c374acc2] {\n  quotes: none;\n}\nblockquote[data-v-c374acc2]:before, blockquote[data-v-c374acc2]:after,\nq[data-v-c374acc2]:before, q[data-v-c374acc2]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-c374acc2] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-c374acc2] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-c374acc2] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-c374acc2] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-c374acc2] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-c374acc2] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-c374acc2] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-c374acc2] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-c374acc2] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-c374acc2] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-c374acc2] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-c374acc2] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-c374acc2] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-c374acc2] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-c374acc2] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-c374acc2] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-c374acc2] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-c374acc2] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-c374acc2] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-c374acc2] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-c374acc2] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-c374acc2] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-c374acc2] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-c374acc2] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-c374acc2] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-c374acc2] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-c374acc2] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-c374acc2] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-c374acc2] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-c374acc2] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-c374acc2] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-c374acc2] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-c374acc2] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-c374acc2] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-c374acc2] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-c374acc2] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#bill[data-v-c374acc2] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#bill .header-right[data-v-c374acc2] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.bill-box[data-v-c374acc2] {\n  font-size: 0.9em;\n  height: 3.4em;\n  line-height: 1.7em;\n  background: #eee;\n  padding-top: 0.5em;\n}\n.bill-box .bill-date[data-v-c374acc2] {\n    padding: 0 1em;\n    color: #666;\n}\n.bill-box .month-money[data-v-c374acc2] {\n    color: #999;\n}\n.bill-box .month-money .income[data-v-c374acc2] {\n      margin-left: 1em;\n}\n.bill-list li[data-v-c374acc2] {\n  padding: 0 1em;\n  border-top: 1px solid #ccc;\n}\n.bill-list li a[data-v-c374acc2] {\n    width: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    height: 55px;\n    line-height: 20px;\n}\n.bill-list li .bill-content .time[data-v-c374acc2] {\n    color: #999;\n    font-size: 0.8em;\n}\n.bill-list li .bill-money[data-v-c374acc2] {\n    font-size: 1.2em;\n}\n.bill-list li .active[data-v-c374acc2] {\n    color: #00cc00;\n}\n.bill-list li[data-v-c374acc2]:last-child {\n    border-bottom: 1px solid #ccc;\n}\n.slide-enter-active[data-v-c374acc2],\n.slide-leave-active[data-v-c374acc2] {\n  -webkit-transition: all 1s ease;\n  transition: all 1s ease;\n}\n.slide-enter[data-v-c374acc2],\n.slide-leave-to[data-v-c374acc2] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n.sel-type-box h2[data-v-c374acc2] {\n  height: 2.8em;\n  line-height: 2.8em;\n  text-align: center;\n  color: #333;\n  border: 1px solid #f1f1f1;\n  font-weight: 700;\n}\n.sel-type-box .type-list[data-v-c374acc2] {\n  padding: 4%;\n  overflow: hidden;\n}\n.sel-type-box .type-list li[data-v-c374acc2] {\n    width: 32%;\n    float: left;\n    text-align: center;\n    height: 60px;\n    line-height: 60px;\n}\n.sel-type-box .type-list a[data-v-c374acc2] {\n    display: block;\n    width: 100%;\n    height: 100%;\n}\n.sel-type-box .type-list .active a[data-v-c374acc2] {\n    background: #50b56a;\n    color: #fff;\n}\n.sel-type[data-v-c374acc2] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 1000;\n  -webkit-transition: all 0.3s ease-in-out;\n  transition: all 0.3s ease-in-out;\n}\n.sel-type-box[data-v-c374acc2] {\n  position: absolute;\n  z-index: 1002;\n  width: 100%;\n  background: #fff;\n  bottom: 0;\n  border-radius: 4px;\n}\n.cancel-btn[data-v-c374acc2] {\n  margin-top: 1.5em;\n}\n", ""]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *    面向移动端的flex布局库，使用面相对象css思想设计\r\n *    author: Sangliang\r\n *    data:2017-12-06\r\n */\n/* resetCss */\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml[data-v-c374acc2], body[data-v-c374acc2], div[data-v-c374acc2], span[data-v-c374acc2], applet[data-v-c374acc2], object[data-v-c374acc2], iframe[data-v-c374acc2],\nh1[data-v-c374acc2], h2[data-v-c374acc2], h3[data-v-c374acc2], h4[data-v-c374acc2], h5[data-v-c374acc2], h6[data-v-c374acc2], p[data-v-c374acc2], blockquote[data-v-c374acc2], pre[data-v-c374acc2],\na[data-v-c374acc2], abbr[data-v-c374acc2], acronym[data-v-c374acc2], address[data-v-c374acc2], big[data-v-c374acc2], cite[data-v-c374acc2], code[data-v-c374acc2],\ndel[data-v-c374acc2], dfn[data-v-c374acc2], em[data-v-c374acc2], img[data-v-c374acc2], ins[data-v-c374acc2], kbd[data-v-c374acc2], q[data-v-c374acc2], s[data-v-c374acc2], samp[data-v-c374acc2],\nsmall[data-v-c374acc2], strike[data-v-c374acc2], strong[data-v-c374acc2], sub[data-v-c374acc2], sup[data-v-c374acc2], tt[data-v-c374acc2], var[data-v-c374acc2],\nb[data-v-c374acc2], u[data-v-c374acc2], i[data-v-c374acc2], center[data-v-c374acc2],\ndl[data-v-c374acc2], dt[data-v-c374acc2], dd[data-v-c374acc2], ol[data-v-c374acc2], ul[data-v-c374acc2], li[data-v-c374acc2],\nfieldset[data-v-c374acc2], form[data-v-c374acc2], label[data-v-c374acc2], legend[data-v-c374acc2],\ntable[data-v-c374acc2], caption[data-v-c374acc2], tbody[data-v-c374acc2], tfoot[data-v-c374acc2], thead[data-v-c374acc2], tr[data-v-c374acc2], th[data-v-c374acc2], td[data-v-c374acc2],\narticle[data-v-c374acc2], aside[data-v-c374acc2], canvas[data-v-c374acc2], details[data-v-c374acc2], embed[data-v-c374acc2],\nfigure[data-v-c374acc2], figcaption[data-v-c374acc2], footer[data-v-c374acc2], header[data-v-c374acc2], hgroup[data-v-c374acc2],\nmenu[data-v-c374acc2], nav[data-v-c374acc2], output[data-v-c374acc2], ruby[data-v-c374acc2], section[data-v-c374acc2], summary[data-v-c374acc2],\ntime[data-v-c374acc2], mark[data-v-c374acc2], audio[data-v-c374acc2], video[data-v-c374acc2] {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\n/* HTML5 display-role reset for older browsers */\narticle[data-v-c374acc2], aside[data-v-c374acc2], details[data-v-c374acc2], figcaption[data-v-c374acc2], figure[data-v-c374acc2],\nfooter[data-v-c374acc2], header[data-v-c374acc2], hgroup[data-v-c374acc2], menu[data-v-c374acc2], nav[data-v-c374acc2], section[data-v-c374acc2] {\n  display: block;\n}\nbody[data-v-c374acc2] {\n  line-height: 1;\n}\nol[data-v-c374acc2], ul[data-v-c374acc2] {\n  list-style: none;\n}\nblockquote[data-v-c374acc2], q[data-v-c374acc2] {\n  quotes: none;\n}\nblockquote[data-v-c374acc2]:before, blockquote[data-v-c374acc2]:after,\nq[data-v-c374acc2]:before, q[data-v-c374acc2]:after {\n  content: '';\n  content: none;\n}\ntable[data-v-c374acc2] {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\na[data-v-c374acc2] {\n  color: black;\n  text-decoration: none;\n}\n\n/* flex */\n.flex[data-v-c374acc2] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row;\n  -moz-flex-direction: row;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n          flex-direction: row;\n}\n.flex-reverse[data-v-c374acc2] {\n  display: -webkit-box;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -moz-flex-direction: row-reverse;\n  -ms-flex-direction: row-reverse;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: reverse;\n          flex-direction: row-reverse;\n}\n.flex-v[data-v-c374acc2] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column;\n  -ms-flex-direction: column;\n  flex-direction: column;\n}\n.flex-v-reverse[data-v-c374acc2] {\n  -webkit-box-orient: vertical;\n  -moz-flex-direction: column-reverse;\n  -ms-flex-direction: column-reverse;\n  flex-direction: column-reverse;\n}\n.flex-wrap-on[data-v-c374acc2] {\n  -ms-flex-wrap: wrap;\n  flex-wrap: wrap;\n}\n.flex-wrap-off[data-v-c374acc2] {\n  -ms-flex-wrap: nowrap;\n  flex-wrap: nowrap;\n}\n.flex-wrap-reverse[data-v-c374acc2] {\n  -ms-flex-wrap: wrap-reverse;\n  flex-wrap: wrap-reverse;\n}\n.flex-1[data-v-c374acc2] {\n  -webkit-box-flex: 1;\n  -moz-flex: 1;\n  -ms-flex: 1;\n  flex: 1;\n}\n.flex-2[data-v-c374acc2] {\n  -webkit-box-flex: 2;\n  -moz-flex: 2;\n  -ms-flex: 2;\n  flex: 2;\n}\n.flex-3[data-v-c374acc2] {\n  -webkit-box-flex: 3;\n  -moz-flex: 3;\n  -ms-flex: 3;\n  flex: 3;\n}\n.flex-4[data-v-c374acc2] {\n  -webkit-box-flex: 4;\n  -moz-flex: 4;\n  -ms-flex: 4;\n  flex: 4;\n}\n.flex-5[data-v-c374acc2] {\n  -webkit-box-flex: 5;\n  -moz-flex: 5;\n  -ms-flex: 5;\n  flex: 5;\n}\n.flex-6[data-v-c374acc2] {\n  -webkit-box-flex: 6;\n  -moz-flex: 6;\n  -ms-flex: 6;\n  flex: 6;\n}\n.flex-7[data-v-c374acc2] {\n  -webkit-box-flex: 7;\n  -moz-flex: 7;\n  -ms-flex: 7;\n  flex: 7;\n}\n.flex-8[data-v-c374acc2] {\n  -webkit-box-flex: 8;\n  -moz-flex: 8;\n  -ms-flex: 8;\n  flex: 8;\n}\n.flex-9[data-v-c374acc2] {\n  -webkit-box-flex: 9;\n  -moz-flex: 9;\n  -ms-flex: 9;\n  flex: 9;\n}\n\n/* 子容器交叉轴分布方式 */\n.flex-align-center[data-v-c374acc2] {\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  -moz-align-item: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.flex-align-start[data-v-c374acc2] {\n  -ms-flex-align: flex-start;\n  -moz-flex-align: flex-start;\n  -webkit-box-align: start;\n          align-items: flex-start;\n}\n.flex-align-end[data-v-c374acc2] {\n  -ms-flex-align: flex-end;\n  -moz-flex-align: flex-end;\n  -webkit-box-align: end;\n          align-items: flex-end;\n}\n.flex-align-baseline[data-v-c374acc2] {\n  -ms-flex-align: baseline;\n  -moz-flex-align: baseline;\n  -webkit-box-align: baseline;\n          align-items: baseline;\n}\n.flex-align-stretch[data-v-c374acc2] {\n  -ms-flex-align: stretch;\n  -moz-flex-align: stretch;\n  -webkit-box-align: stretch;\n          align-items: stretch;\n}\n\n/* 子容器主轴分布方式 */\n.flex-justify-center[data-v-c374acc2] {\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  -ms-flex-pack: center;\n  -moz-flex-justify-content: center;\n  justify-content: center;\n}\n.flex-justify-between[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n  -moz-flex-justify-content: space-between;\n  -ms-flex-pack: justify;\n  justify-content: space-between;\n}\n.flex-justify-around[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -moz-flex-justify-content: space-around;\n  -ms-flex-pack: justify;\n  justify-content: space-around;\n}\n.flex-justify-start[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -webkit-justify-content: flex-start;\n  -moz-flex-justify-content: flex-start;\n  -ms-flex-pack: justify;\n  -webkit-box-pack: start;\n          justify-content: flex-start;\n}\n.flex-justify-end[data-v-c374acc2] {\n  -webkit-box-pack: justify;\n  -moz-justify-content: flex-end;\n  -ms-flex-pack: justify;\n  justify-content: flex-end;\n}\n.flex-order-0[data-v-c374acc2] {\n  -ms-order: 0;\n  -moz-order: 0;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.flex-order-1[data-v-c374acc2] {\n  -ms-order: 1;\n  -moz-order: 1;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.flex-order-2[data-v-c374acc2] {\n  -ms-order: 2;\n  -moz-order: 2;\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n}\n.flex-order-3[data-v-c374acc2] {\n  -moz-order: 3;\n  -ms-order: 3;\n  -webkit-box-ordinal-group: 4;\n      -ms-flex-order: 3;\n          order: 3;\n}\n.flex-order-4[data-v-c374acc2] {\n  -moz-order: 4;\n  -ms-order: 4;\n  -webkit-box-ordinal-group: 5;\n      -ms-flex-order: 4;\n          order: 4;\n}\n.flex-order-5[data-v-c374acc2] {\n  -moz-order: 5;\n  -ms-order: 5;\n  -webkit-box-ordinal-group: 6;\n      -ms-flex-order: 5;\n          order: 5;\n}\n\n/* self属性（可覆盖父组件align属性） */\n.flex-self-auto[data-v-c374acc2] {\n  -webkit-align-self: auto;\n  -ms-align-self: auto;\n  -ms-flex-item-align: auto;\n      align-self: auto;\n}\n.flex-self-start[data-v-c374acc2] {\n  -webkit-align-self: flex-start;\n  -ms-align-self: flex-start;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n}\n.flex-self-end[data-v-c374acc2] {\n  -webkit-align-self: flex-end;\n  -ms-align-self: flex-end;\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n}\n.flex-self-center[data-v-c374acc2] {\n  -webkit-align-self: center;\n  -ms-align-self: center;\n  -ms-flex-item-align: center;\n      align-self: center;\n}\n.flex-self-baseline[data-v-c374acc2] {\n  -webkit-align-self: baseline;\n  -ms-align-self: baseline;\n  -ms-flex-item-align: baseline;\n      align-self: baseline;\n}\n.flex-self-stretch[data-v-c374acc2] {\n  -webkit-align-self: stretch;\n  -ms-align-self: stretch;\n  -ms-flex-item-align: stretch;\n      align-self: stretch;\n}\n#bill[data-v-c374acc2] {\n  padding-top: 2em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#bill .header-right[data-v-c374acc2] {\n    width: 100%;\n    padding-right: 1em;\n    height: 2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.bill-box[data-v-c374acc2] {\n  font-size: 0.9em;\n  /* height: 3.4em; */\n  /* line-height: 1.7em; */\n  /* background: #eee; */\n  /* padding-top: 0.5em; */\n}\n.bill-box .bill-date[data-v-c374acc2] {\n    padding: 0 1em;\n    color: #666;\n}\n.bill-box .month-money[data-v-c374acc2] {\n    color: #999;\n}\n.bill-box .month-money .income[data-v-c374acc2] {\n      margin-left: 1em;\n}\n.bill-list li[data-v-c374acc2] {\n  padding: 0 1em;\n  border-top: 1px solid #ccc;\n}\n.bill-list li a[data-v-c374acc2] {\n    width: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    height: 55px;\n    line-height: 20px;\n}\n.bill-list li .bill-content .time[data-v-c374acc2] {\n    color: #999;\n    font-size: 0.8em;\n}\n.bill-list li .bill-money[data-v-c374acc2] {\n    font-size: 1.2em;\n}\n.bill-list li .active[data-v-c374acc2] {\n    color: #00cc00;\n}\n.bill-list li[data-v-c374acc2]:last-child {\n    border-bottom: 1px solid #ccc;\n}\n.slide-enter-active[data-v-c374acc2],\n.slide-leave-active[data-v-c374acc2] {\n  -webkit-transition: all 1s ease;\n  transition: all 1s ease;\n}\n.slide-enter[data-v-c374acc2],\n.slide-leave-to[data-v-c374acc2] {\n  -webkit-transform: translateY(100vh);\n          transform: translateY(100vh);\n}\n.sel-type-box h2[data-v-c374acc2] {\n  height: 2.8em;\n  line-height: 2.8em;\n  text-align: center;\n  color: #333;\n  border: 1px solid #f1f1f1;\n  font-weight: 700;\n}\n.sel-type-box .type-list[data-v-c374acc2] {\n  padding: 4%;\n  overflow: hidden;\n}\n.sel-type-box .type-list li[data-v-c374acc2] {\n    width: 32%;\n    float: left;\n    text-align: center;\n    height: 60px;\n    line-height: 60px;\n}\n.sel-type-box .type-list a[data-v-c374acc2] {\n    display: block;\n    width: 100%;\n    height: 100%;\n}\n.sel-type-box .type-list .active a[data-v-c374acc2] {\n    background: #50b56a;\n    color: #fff;\n}\n.sel-type[data-v-c374acc2] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 1000;\n  -webkit-transition: all 0.3s ease-in-out;\n  transition: all 0.3s ease-in-out;\n}\n.sel-type-box[data-v-c374acc2] {\n  position: absolute;\n  z-index: 1002;\n  width: 100%;\n  background: #fff;\n  bottom: 0;\n  border-radius: 4px;\n}\n.cancel-btn[data-v-c374acc2] {\n  margin-top: 1.5em;\n}\n", ""]);
 
 // exports
 
@@ -70454,17 +70915,9 @@ var render = function() {
     { attrs: { id: "bill" } },
     [
       _c("topBack", { attrs: { title: "账单明细" } }, [
-        _c(
-          "div",
-          { staticClass: "flex flex-reverse flex-align-center header-right" },
-          [
-            _c(
-              "a",
-              { attrs: { href: "javascript:;" }, on: { click: _vm.show } },
-              [_vm._v("筛选")]
-            )
-          ]
-        )
+        _c("div", {
+          staticClass: "flex flex-reverse flex-align-center header-right"
+        })
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "bill-box" }, [
@@ -70616,7 +71069,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "bill-date flex flex-align-center flex-justify-between" },
+      {
+        staticClass: "bill-date flex flex-align-center flex-justify-between",
+        staticStyle: { display: "none" }
+      },
       [
         _c("div", { staticClass: "left-content" }, [
           _c("div", { staticClass: "cur-date" }, [_vm._v("2017年11月")]),
@@ -72870,7 +73326,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_topBack_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui__ = __webpack_require__(6);
@@ -73211,7 +73667,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue__ = __webpack_require__(105);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MakeDeal_choiseMember_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_password__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_loading_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_userRequest_js__ = __webpack_require__(5);
@@ -74026,7 +74482,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(7);
@@ -74340,7 +74796,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(7);
@@ -74598,7 +75054,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(7);
@@ -74889,7 +75345,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(7);
@@ -75197,7 +75653,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/**\r\n *    ooflex css\r\n *   
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_topBack_vue__ = __webpack_require__(7);

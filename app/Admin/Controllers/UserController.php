@@ -16,6 +16,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use function foo\func;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
@@ -24,7 +25,6 @@ use Illuminate\Support\MessageBag;
 class UserController extends Controller
 {
     use ModelForm;
-
     /**
      * Index interface.
      *
@@ -75,11 +75,10 @@ class UserController extends Controller
         return Admin::grid(User::class, function (Grid $grid) {
 
             $user_id = User::decrypt(Request::input('user_id'));
-            $parent_id = Request::input('parent_id');
+            $parent_id = User::decrypt(Request::input('parent_id'));
             $operator_id = Request::input('operator_id');
             $channel_id = Request::input('channel_id');
             $role = Request::input('role');
-
             $user_table = (new User)->getTable();
             $grid->model()->leftJoin('transfer_record as tfr', 'tfr.user_id', '=', $user_table .'.id')
                 ->with(['roles', 'operator'])
@@ -94,14 +93,14 @@ class UserController extends Controller
                 $grid->model()->where($user_table.'.parent_id', $parent_id);
             }
             if ($operator_id) {
-                $grid->model()->where($user_table.'.operator_id', $operator_id);
+                $grid->model()->join('admin_users as au','au.id','=',$user_table.'.operator_id')->where('au.username', $operator_id);
             }
             if ($role > 0) {
                 $grid->model()->whereHas('roles', function ($query) use ($role) {
                     $query->where('id', $role);
                 });
             }
-            if ($channel_id) {
+            if (isset($channel_id)) {
                 $grid->model()->where($user_table.'.channel_id', $channel_id);
             }
             $grid->model()->groupBy($user_table.'.id')->orderBy('transfer_count','DESC')->orderBy($user_table.'.id');
@@ -134,7 +133,7 @@ class UserController extends Controller
             });
             $grid->parent_id('上级代理')->display(function () {
                 if($this->parent_id>0) {
-                    return $this->parent_id;
+                    return $this->parent->en_id();
                 } else{
                     return '无';
                 }
@@ -269,14 +268,15 @@ class UserController extends Controller
         });
     }
 
-
     public function details($id)
     {
         return Admin::content(function (Content $content) use($id) {
             $list = User::where('id',$id)->with(['roles','wechat_user'])->first();
+            $list->id = $list->en_id($list->id);
+            $list->parent_id = $list->parent_id==0?$list->parent_id:$list->parent->en_id($list->parent_id);
             $transfer_record = TransferRecord::where('user_id', $id)
-                ->select(DB::raw('SUM( CASE WHEN  stat=1 THEN amount ELSE 0 END) AS payment'),
-                    DB::raw('SUM( CASE WHEN  stat=2 THEN real_amount ELSE 0 END) AS profit'),
+                ->select(DB::raw('abs(SUM( CASE WHEN  stat=1 THEN amount ELSE 0 END)) AS payment'),
+                    DB::raw('abs(SUM( CASE WHEN  stat=2 THEN real_amount ELSE 0 END)) AS profit'),
                     DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(fee_amount) AS fee_amount_count'))
                 ->first();
             $data = compact('list', 'transfer_record');

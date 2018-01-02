@@ -29,9 +29,9 @@
         </div>
 
         <passwordTab
-                :setSwitch = "passwordData.switch"
-                v-on:hidePassword="hidePassword"
-                v-on:callBack="getPassword">
+            :setSwitch = "passwordData.switch"
+            v-on:hidePassword="hidePassword"
+            v-on:callBack="getPassword">
         </passwordTab>
     </div>
 </template>
@@ -193,7 +193,9 @@ export default {
           }
         })
         .catch(err => {
-          console.error(err);
+          Loading.getInstance().close();
+          Toast(err.data.msg);
+//          console.error(err);
         });
     },
 
@@ -214,6 +216,7 @@ export default {
         pay_password: this.passwordData.value
       };
 
+      this.hidePassword();
       // 打赏店家接口
       request
         .getInstance()

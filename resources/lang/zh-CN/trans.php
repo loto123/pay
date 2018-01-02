@@ -52,5 +52,6 @@ return [
     'user_check_pay_password_times_out' => '超出支付密码错误次数上限',
     'not_need_trans_closed' => '关闭交易失败，没有符合关闭条件的交易',
     'reward_is_turned_off' => '打赏功能已关闭',
-    'shop_is_frozen' => '店铺已被冻结'
+    'shop_is_frozen' => '店铺已被冻结',
+    'shop_not_allow_transfer' => '店铺尚未开启交易',
 ];
