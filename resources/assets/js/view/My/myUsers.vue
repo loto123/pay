@@ -18,7 +18,7 @@
         </i>
       </span>
       <h3 class="flex-9">店主用户</h3>
-      <div class="flex-1">{{indexData.manager}}</div>
+      <div class="flex-1">{{indexData.manager_total}}</div>
       <span class="flex-1" >
         <i class="iconfont">
           &#xe62e;
@@ -28,24 +28,11 @@
 
     <transition name="fade">
       <ul class="shop-users-list" v-if="isShopUserListShow">
-        <li class="flex flex-align-center">
-          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-          <div class="flex-1">Leaf</div>
-          <div class="flex-1">18173610305</div>
+        <li class="flex flex-align-center" v-for="item in shopUsers">
+          <span class="flex-1"><img :src="item.avatar" alt=""></span>
+          <div class="flex-3">{{item.name}}</div>
+          <div class="flex-2">{{item.mobile}}</div>
         </li>
-
-        <li class="flex flex-align-center">
-          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-          <div class="flex-1">Leaf</div>
-          <div class="flex-1">18173610305</div>
-        </li>
-
-        <li class="flex flex-align-center">
-          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-          <div class="flex-1">Leaf</div>
-          <div class="flex-1">18173610305</div>
-        </li>
-
       </ul>
     </transition>
 
@@ -56,7 +43,7 @@
         </i>
       </span>
       <h3 class="flex-9">普通用户</h3>
-      <div class="flex-1">{{indexData.user}}</div>
+      <div class="flex-1">{{indexData.member_total}}</div>
       <span class="flex-1" >
          <i class="iconfont">
           &#xe62e;
@@ -66,10 +53,10 @@
 
     <transition name="fade">
       <ul class="common-users-list" v-if="isCommonUserListShow">
-        <li class="flex flex-align-center">
-          <span class="flex-1"><img src="/images/avatar.jpg" alt=""></span>
-          <div class="flex-1">Leaf</div>
-          <div class="flex-1">18173610305</div>
+        <li class="flex flex-align-center" v-for="item in commomUsers">
+          <span class="flex-1"><img :src="item.avatar" alt=""></span>
+          <div class="flex-3">{{item.name}}</div>
+          <div class="flex-2">{{item.mobile}}</div>
         </li>
       </ul>
 
@@ -167,12 +154,12 @@
 
 </style>
 
-
 <script>
 
 import topBack from '../../components/topBack.vue'
 import Loading from '../../utils/loading'
 import request from '../../utils/userRequest'
+import {Toast} from 'mint-ui'
 
 export default {
   components:{topBack},
@@ -202,17 +189,60 @@ export default {
       });
     },
 
+    // 显示店主用户
     showShopUserList(){
-      this.isShopUserListShow = true;
+      if(this.indexData.manager_total == 0){
+        Toast("当前店主用户为0");
+        return;
+      }
+
+      if(this.isShopUserListShow == true){
+        this.isShopUserListShow = false;
+        return;
+      }
+
+      var _data = {
+        type:0
+      }
+      Loading.getInstance().open();
+      request.getInstance().getData("api/proxy/members",_data).then(res=>{
+        this.shopUsers = res.data.data.list;
+        Loading.getInstance().close();
+        this.isShopUserListShow = true;
+      }).catch(err=>{
+        Toast(err.data.msg);
+      });
+
     },
 
     hideShopUserList(){
       this.isShopUserListShow = false;
-
     },
 
+    // 显示普通用户
     showCommonUserList(){
-      this.isCommonUserListShow = true;
+      if(this.indexData.member_total == 0){
+        Toast("当前普通用户为0");
+        return;
+      }
+
+      if(this.isCommonUserListShow == true){
+        this.isCommonUserListShow = false;
+        return;
+      }
+
+      var _data = {
+        type:1
+      }
+      Loading.getInstance().open();
+      request.getInstance().getData("api/proxy/members",_data).then(res=>{
+        this.commomUsers = res.data.data.list;
+        Loading.getInstance().close();
+        this.isCommonUserListShow = true;
+      }).catch(err=>{
+        Toast(err.data.msg);
+      });
+
     },
 
     hideCommonUserList(){

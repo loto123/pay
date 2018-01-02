@@ -200,7 +200,7 @@ export default {
             offset :0
           }
           request.getInstance().getData('api/transfer/record',_data).then(res=>{
-            this.dataList = res.data.data;
+            this.dataList = res.data.data.data;
             Loading.getInstance().close();
             
           }).catch(err=>{
@@ -279,7 +279,7 @@ export default {
         offset :0
       }
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
-        this.dataList = res.data.data;
+        this.dataList = res.data.data.data;
         Loading.getInstance().close();
         
       }).catch(err=>{

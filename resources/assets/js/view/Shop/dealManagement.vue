@@ -237,8 +237,8 @@ export default {
 
         request.getInstance().getData("api/transfer/shop",_data).then(res=>{
             this.dataList = [];
-            for(let i = 0; i<res.data.data.length; i++){
-                var _temp  = res.data.data[i];
+            for(let i = 0; i<res.data.data.data.length; i++){
+                var _temp  = res.data.data.data[i];
                 _temp.checked = false;
                 this.dataList.push(_temp);
             }
@@ -345,8 +345,8 @@ export default {
 
         request.getInstance().getData("api/transfer/shop",_data).then(res=>{
             this.dataList = [];
-            for(let i = 0; i<res.data.data.length; i++){
-                var _temp  = res.data.data[i];
+            for(let i = 0; i<res.data.data.data.length; i++){
+                var _temp  = res.data.data.data[i];
                 _temp.checked = false;
                 this.dataList.push(_temp);
             }
