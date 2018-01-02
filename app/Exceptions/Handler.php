@@ -51,15 +51,15 @@ class Handler extends ExceptionHandler
     {
         if (preg_match("#^/".$request->server->get('API_PREFIX')."/#i", $request->getPathInfo())) {
             if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return response()->json(['code'=>2, 'message' => 'token_expired', 'data'=> '']);
+                return response()->json(['code'=>2, 'msg' => 'token_expired', 'data'=> new \stdClass()]);
             } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return response()->json(['code' => 2, 'message' => 'token_invalid', 'data' => '']);
+                return response()->json(['code' => 2, 'msg' => 'token_invalid', 'data' => new \stdClass()]);
             } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\JWTException) {
-                return response()->json(['code' => 2, 'message' => 'token_invalid', 'data' => '']);
+                return response()->json(['code' => 2, 'msg' => 'token_invalid', 'data' => new \stdClass()]);
             } else if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
-                return response()->json(['code'=>0, 'message' => '404 Not Found', 'data'=> ''], 404);
+                return response()->json(['code'=>0, 'msg' => '404 Not Found', 'data'=> new \stdClass()], 404);
             } else {
-                return response()->json(['code'=>0, 'message' => config("app.debug") ? $exception->getMessage() : 'error', 'data'=> '']);
+                return response()->json(['code'=>0, 'msg' => config("app.debug") ? $exception->getMessage() : 'error', 'data'=> new \stdClass()]);
             }
         }
         return parent::render($request, $exception);
