@@ -239,6 +239,7 @@
 					this.$router.push('/my/bankCardManage');
 					Loading.getInstance().close();
 				}).catch(err => {
+					Toast(err.data.msg)
 					console.error(err);
 					Loading.getInstance().close();
 				});

@@ -63,6 +63,17 @@ class WithdrawController extends Controller
                 
                 var exception_row = $('<tr><td colspan="10" style="text-align:center;"></td></tr>').hide();
 ;
+
+//单据弹层
+$('.bill_info').each(function(){
+$(this).popover(
+{
+    html:true,
+    content:'<p>商户订单号:<br/><input type="text" readonly value ="'+$(this).data('bill') +'"/></p><p>内部ID:<span class="text-danger">(仅限内部查询,刮开查看)</span><span style="background-color:#ccc;color:#ccc;display: block;">'+$(this).data('inner_id')+'</span></p>',
+    title:'凭据信息',
+}
+);});
+
 //异常记录
 $('.exception-detail').click(function () {
     $(this).toggleClass('detail-open');
@@ -92,7 +103,6 @@ SCRIPT
             WithdrawCancel::script();
 
             $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with('masterContainer.user');
-
             //工具按钮
             $grid->disableCreation();
             $grid->actions(function ($actions) {
@@ -164,6 +174,12 @@ SCRIPT
                 $state = Withdraw::getStateText($value);
 
                 return "<span class=\"label label-$class\">$state</span>";
+            });
+            $grid->method()->impl('凭据单号')->display(function ($impl) {
+                $bill_no = (new $impl)->mixUpWithdrawId($this->getKey());
+                $id = $this->getKey();
+                return '<a class="btn btn-primary bill_info" role="button" data-toggle="popover" data-bill="' . $bill_no . '" data-inner_id="' . $id . '">查看</a>';
+
             });
 
         });
