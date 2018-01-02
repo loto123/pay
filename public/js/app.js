@@ -66176,6 +66176,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -66345,7 +66347,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
+
 
 
 
@@ -66380,13 +66382,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {});
     },
+
+
+    // 显示店主用户
     showShopUserList: function showShopUserList() {
+      if (this.indexData.manager == 0) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("当前店主用户为0");
+        return;
+      }
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/proxy/members").then(function (res) {}).catch(function (err) {});
+
       this.isShopUserListShow = true;
     },
     hideShopUserList: function hideShopUserList() {
       this.isShopUserListShow = false;
     },
+
+
+    // 显示普通用户
     showCommonUserList: function showCommonUserList() {
+      if (this.indexData.user == 0) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("当前普通用户为0");
+        return;
+      }
+
       this.isCommonUserListShow = true;
     },
     hideCommonUserList: function hideCommonUserList() {

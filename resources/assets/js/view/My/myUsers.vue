@@ -167,12 +167,12 @@
 
 </style>
 
-
 <script>
 
 import topBack from '../../components/topBack.vue'
 import Loading from '../../utils/loading'
 import request from '../../utils/userRequest'
+import {Toast} from 'mint-ui'
 
 export default {
   components:{topBack},
@@ -202,17 +202,36 @@ export default {
       });
     },
 
+    // 显示店主用户
     showShopUserList(){
+      if(this.indexData.manager == 0){
+        Toast("当前店主用户为0");
+        return;
+      }
+
+      request.getInstance().getData("api/proxy/members").then(res=>{
+
+      }).catch(err=>{
+
+      });
+
       this.isShopUserListShow = true;
+
     },
 
     hideShopUserList(){
       this.isShopUserListShow = false;
-
     },
 
+    // 显示普通用户
     showCommonUserList(){
+      if(this.indexData.user == 0){
+        Toast("当前普通用户为0");
+        return;
+      }
+
       this.isCommonUserListShow = true;
+
     },
 
     hideCommonUserList(){
