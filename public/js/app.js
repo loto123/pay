@@ -15230,7 +15230,7 @@ var Loading = function () {
                 this._timer = setTimeout(function () {
                     __WEBPACK_IMPORTED_MODULE_0_mint_ui__["Indicator"].close();
                     if (_this.errSwitch == true) {
-                        Object(__WEBPACK_IMPORTED_MODULE_0_mint_ui__["Toast"])("请求错误，请刷新页面");
+                        Object(__WEBPACK_IMPORTED_MODULE_0_mint_ui__["Toast"])("网络错误，请尝试刷新页面");
                     }
                     _this._timer = null;
                 }, 10000);
@@ -52593,7 +52593,7 @@ var staticRenderFns = [
             "a",
             {
               staticClass: "flex flex-v flex-align-center",
-              attrs: { href: "/#/makeDeal/my_deal" }
+              attrs: { href: "/#/my/my_users" }
             },
             [
               _c(
@@ -66157,7 +66157,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n#my-users[data-v-5e89e994] {\n  padding-top: 2em;\n  min-height: 100vh;\n  background: #eee;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n#my-users .users-count[data-v-5e89e994] {\n    height: 6em;\n    background: #26a2ff;\n}\n#my-users .users-count h3[data-v-5e89e994] {\n      padding-top: 0.5em;\n      font-size: 1.7em;\n      color: #fff;\n      text-align: center;\n}\n#my-users .users-count h4[data-v-5e89e994] {\n      padding-top: 0.8em;\n      color: #fff;\n      text-align: center;\n      font-size: 0.9em;\n}\n#my-users .shop-users[data-v-5e89e994], #my-users .common-users[data-v-5e89e994] {\n    width: 100%;\n    height: 3em;\n    background: #fff;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users .user-icon i[data-v-5e89e994], #my-users .common-users .user-icon i[data-v-5e89e994] {\n      font-size: 1.8em;\n      color: #f3ca7e;\n}\n#my-users .shop-users-list li[data-v-5e89e994], #my-users .common-users-list li[data-v-5e89e994] {\n    height: 3em;\n    width: 100%;\n    padding-left: 1em;\n    padding-right: 1em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#my-users .shop-users-list li img[data-v-5e89e994], #my-users .common-users-list li img[data-v-5e89e994] {\n      width: 2em;\n      height: 2em;\n      border-radius: 0.2em;\n}\n#my-users .common-users[data-v-5e89e994] {\n    margin-top: 0.2em;\n}\n#my-users .common-users .user-icon i[data-v-5e89e994] {\n      color: #7dc5eb;\n}\n", ""]);
 
 // exports
 
@@ -66168,6 +66168,152 @@ exports.push([module.i, "", ""]);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -66181,7 +66327,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: { topBack: __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default.a },
+  data: function data() {
+    return {
+      shopUsers: [], // 店主用户
+      commomUsers: [] // 普通用户
+    };
+  }
+});
 
 /***/ }),
 /* 675 */
@@ -66191,9 +66348,128 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "my-users" } }, [_vm._v("\n    我的用户\n")])
+  return _c(
+    "div",
+    { attrs: { id: "my-users" } },
+    [
+      _c("topBack", {
+        staticStyle: { background: "#26a2ff", color: "#fff" },
+        attrs: { title: "我的用户" }
+      }),
+      _vm._v(" "),
+      _vm._m(0, false, false),
+      _vm._v(" "),
+      _vm._m(1, false, false),
+      _vm._v(" "),
+      _vm._m(2, false, false),
+      _vm._v(" "),
+      _vm._m(3, false, false),
+      _vm._v(" "),
+      _vm._m(4, false, false)
+    ],
+    1
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "users-count" }, [
+      _c("h3", [_vm._v("12")]),
+      _vm._v(" "),
+      _c("h4", [_vm._v("我的用户数（个）")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "shop-users flex flex-align-center" }, [
+      _c("span", { staticClass: "user-icon flex-2" }, [
+        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+      ]),
+      _vm._v(" "),
+      _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "flex-1" }, [
+        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "shop-users-list" }, [
+      _c("li", { staticClass: "flex flex-align-center" }, [
+        _c("span", { staticClass: "flex-1" }, [
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-align-center" }, [
+        _c("span", { staticClass: "flex-1" }, [
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "flex flex-align-center" }, [
+        _c("span", { staticClass: "flex-1" }, [
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "common-users flex flex-align-center" }, [
+      _c("span", { staticClass: "user-icon flex-2" }, [
+        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+      ]),
+      _vm._v(" "),
+      _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "flex-1" }, [
+        _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "common-users-list" }, [
+      _c("li", { staticClass: "flex flex-align-center" }, [
+        _c("span", { staticClass: "flex-1" }, [
+          _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -68977,6 +69253,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this2.tradeStatus = true;
         } else {
           _this2.tradeStatus = false;
+        }
+
+        if (res.data.data.user_link == 1) {
+          _this2.inviteLinkStatus = true;
+        } else {
+          _this2.inviteLinkStatus = false;
         }
 
         __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
