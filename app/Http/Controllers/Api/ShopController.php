@@ -177,7 +177,7 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
-                'logo' => asset("images/personal.jpg")
+                'logo' => $_shop->logo
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -281,7 +281,7 @@ class ShopController extends BaseController {
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
-                'logo' => asset("images/personal.jpg"),
+                'logo' => $_shop->logo,
                 'today_profit' => $_shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
                 'total_profit' => $_shop->tips()->sum('amount')
             ];
@@ -350,7 +350,7 @@ class ShopController extends BaseController {
                 'rate' => $shop->price,
                 'percent' => $shop->fee,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg"),
+                'logo' => $shop->logo,
                 'is_manager' => $is_manager,
                 'is_member' => $is_member,
             ];
@@ -362,7 +362,7 @@ class ShopController extends BaseController {
                 'members_count' => (int)$shop->users()->count(),
                 'rate' => $shop->price,
                 'created_at' => strtotime($shop->created_at),
-                'logo' => asset("images/personal.jpg"),
+                'logo' => $shop->logo,
                 'is_manager' => $is_manager,
                 'is_member' => $is_member,
             ];
@@ -396,7 +396,7 @@ class ShopController extends BaseController {
             'name' => $shop->name,
             'members_count' => (int)$shop->users()->count(),
             'created_at' => strtotime($shop->created_at),
-            'logo' => asset("images/personal.jpg"),
+            'logo' => $shop->logo,
             'manager' => $shop->manager->name
         ];
         return $this->json($data);
@@ -800,7 +800,7 @@ class ShopController extends BaseController {
                 $user = User::find($notification->data['user_id']);
                 $shop = Shop::find($notification->data['shop_id']);
                 $data[] = [
-                    'user_avatar' => asset("images/personal.jpg"),
+                    'user_avatar' => $user->avatar,
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
