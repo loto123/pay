@@ -459,6 +459,7 @@ export default {
         request.getInstance().postData("api/transfer/trade",_data).then(res=>{
           Loading.getInstance().close();
           Toast("放钱进店铺成功");
+          this.moneyData.payMoney = null;
           setTimeout(()=>{
             this.init();
           },1500);
@@ -500,7 +501,7 @@ export default {
                 .then(res=>{
                   Loading.getInstance().close();
                   Toast("从店铺中拿钱成功");
-
+                  this.moneyData.getMoney = null;
                   setTimeout(()=>{
                     this.init();
                   },1500);

@@ -58915,6 +58915,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
           __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
           Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("放钱进店铺成功");
+          _this5.moneyData.payMoney = null;
           setTimeout(function () {
             _this5.init();
           }, 1500);
@@ -58952,7 +58953,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_4__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/trade", _data).then(function (res) {
               __WEBPACK_IMPORTED_MODULE_7__utils_loading__["a" /* default */].getInstance().close();
               Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("从店铺中拿钱成功");
-
+              _this5.moneyData.getMoney = null;
               setTimeout(function () {
                 _this5.init();
               }, 1500);
@@ -61062,7 +61063,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           });
         }
       }).catch(function (err) {
-        console.error(err);
+        __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
+        //          console.error(err);
       });
     },
     showPassWord: function showPassWord() {
@@ -61084,6 +61087,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         pay_password: this.passwordData.value
       };
 
+      this.hidePassword();
       // 打赏店家接口
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().postData("api/transfer/payfee", _data).then(function (res) {
         Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])("打赏店家成功");
@@ -66358,15 +66362,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       shopUsers: [], // 店主用户
       commomUsers: [], // 普通用户
       isShopUserListShow: false,
-      isCommonUserListShow: false
+      isCommonUserListShow: false,
+      indexData: {}
     };
   },
 
   methods: {
     init: function init() {
-      //      Loading.getInstance().open();
+      var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('').then(function (res) {}).catch(function (err) {});
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/proxy/members/count').then(function (res) {
+        console.log(res);
+
+        _this.indexData = res.data.data;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+      }).catch(function (err) {});
     },
     showShopUserList: function showShopUserList() {
       this.isShopUserListShow = true;
@@ -66400,25 +66412,30 @@ var render = function() {
         attrs: { title: "我的用户" }
       }),
       _vm._v(" "),
-      _vm._m(0, false, false),
-      _vm._v(" "),
-      _c("div", { staticClass: "shop-users flex flex-align-center" }, [
-        _vm._m(1, false, false),
+      _c("div", { staticClass: "users-count" }, [
+        _c("h3", [_vm._v(_vm._s(_vm.indexData.total))]),
         _vm._v(" "),
-        _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
-        _vm._v(" "),
-        _c(
-          "span",
-          { staticClass: "flex-1", on: { click: _vm.showShopUserList } },
-          [
-            _c("i", { staticClass: "iconfont" }, [
-              _vm._v("\n        \n      ")
-            ])
-          ]
-        )
+        _c("h4", [_vm._v("我的用户数（个）")])
       ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "shop-users flex flex-align-center",
+          on: { click: _vm.showShopUserList }
+        },
+        [
+          _vm._m(0, false, false),
+          _vm._v(" "),
+          _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex-1" }, [
+            _vm._v(_vm._s(_vm.indexData.manager))
+          ]),
+          _vm._v(" "),
+          _vm._m(1, false, false)
+        ]
+      ),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.isShopUserListShow
@@ -66456,23 +66473,24 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "common-users flex flex-align-center" }, [
-        _vm._m(2, false, false),
-        _vm._v(" "),
-        _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex-1" }, [_vm._v("3")]),
-        _vm._v(" "),
-        _c(
-          "span",
-          { staticClass: "flex-1", on: { click: _vm.showCommonUserList } },
-          [
-            _c("i", { staticClass: "iconfont" }, [
-              _vm._v("\n        \n      ")
-            ])
-          ]
-        )
-      ]),
+      _c(
+        "div",
+        {
+          staticClass: "common-users flex flex-align-center",
+          on: { click: _vm.showCommonUserList }
+        },
+        [
+          _vm._m(2, false, false),
+          _vm._v(" "),
+          _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex-1" }, [
+            _vm._v(_vm._s(_vm.indexData.user))
+          ]),
+          _vm._v(" "),
+          _vm._m(3, false, false)
+        ]
+      ),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.isCommonUserListShow
@@ -66498,10 +66516,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "users-count" }, [
-      _c("h3", [_vm._v("12")]),
-      _vm._v(" "),
-      _c("h4", [_vm._v("我的用户数（个）")])
+    return _c("span", { staticClass: "user-icon flex-2" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "flex-1" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
     ])
   },
   function() {
@@ -66516,8 +66540,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "user-icon flex-2" }, [
-      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
+    return _c("span", { staticClass: "flex-1" }, [
+      _c("i", { staticClass: "iconfont" }, [_vm._v("\n        \n      ")])
     ])
   }
 ]

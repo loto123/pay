@@ -7,19 +7,19 @@
     </topBack>
 
     <div class="users-count">
-      <h3>12</h3>
+      <h3>{{indexData.total}}</h3>
       <h4>我的用户数（个）</h4>
     </div>
 
-    <div class="shop-users flex flex-align-center">
+    <div class="shop-users flex flex-align-center" @click = "showShopUserList">
       <span class="user-icon flex-2">
         <i class="iconfont">
           &#xe6a3;
         </i>
       </span>
       <h3 class="flex-9">店主用户</h3>
-      <div class="flex-1">3</div>
-      <span class="flex-1" @click = "showShopUserList">
+      <div class="flex-1">{{indexData.manager}}</div>
+      <span class="flex-1" >
         <i class="iconfont">
           &#xe62e;
         </i>
@@ -49,15 +49,15 @@
       </ul>
     </transition>
 
-    <div class="common-users flex flex-align-center">
+    <div class="common-users flex flex-align-center" @click="showCommonUserList">
       <span class="user-icon flex-2">
         <i class="iconfont">
           &#xe6a3;
         </i>
       </span>
       <h3 class="flex-9">普通用户</h3>
-      <div class="flex-1">3</div>
-      <span class="flex-1" @click="showCommonUserList">
+      <div class="flex-1">{{indexData.user}}</div>
+      <span class="flex-1" >
          <i class="iconfont">
           &#xe62e;
         </i>
@@ -185,14 +185,18 @@ export default {
       commomUsers:[],               // 普通用户
       isShopUserListShow:false,
       isCommonUserListShow:false,
+      indexData:{}
     }
   },
   methods:{
     init(){
-//      Loading.getInstance().open();
+      Loading.getInstance().open();
 
-      request.getInstance().getData('').then(res=>{
+      request.getInstance().getData('api/proxy/members/count').then(res=>{
+        console.log(res);
 
+        this.indexData = res.data.data;
+        Loading.getInstance().close();
       }).catch(err=>{
 
       });
