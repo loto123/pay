@@ -89,8 +89,8 @@ class ShopController extends BaseController {
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:20',
-            'rate' => 'required|integer',
-            'percent' => 'required|regex:/^\d{0,2}(\.\d{1})?$/',
+            'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
+            'percent' => 'required|integer|between:1,100',
             'active' => 'required'
         ]);
 
@@ -101,7 +101,7 @@ class ShopController extends BaseController {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
-        if ($user->shop()->count() >= 30) {
+        if ($user->shop()->count() >= 3) {
             return $this->json([], trans("api.over_max_times"), 0);
         }
         $wallet = PayFactory::MasterContainer();
@@ -889,8 +889,8 @@ class ShopController extends BaseController {
     public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'max:20',
-            'rate' => 'integer',
-            'percent' => 'regex:/^\d{0,2}(\.\d{1})?$/',
+            'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
+            'percent' => 'integer|between:1,100',
         ]);
 
         if ($validator->fails()) {

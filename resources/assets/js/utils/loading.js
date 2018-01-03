@@ -29,6 +29,7 @@ class Loading {
                 }
                 this._timer = null;
             }, 10000);
+            
         } else {
             return;
         }
@@ -37,6 +38,7 @@ class Loading {
 
     close() {
         this.errSwitch = false;
+        this._timer = null;
         Indicator.close();
     }
 }

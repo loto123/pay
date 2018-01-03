@@ -305,11 +305,11 @@ class TransferController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
-                'points' => 'bail|required|numeric|between:1,99999',
+                'points' => 'bail|required|integer|between:1,99999',
             ],
             [
                 'required' => trans('trans.required'),
-                'numeric' => trans('trans.numeric'),
+                'integer' => trans('trans.integer'),
                 'between' => trans('trans.between'),
             ]
         );
@@ -384,13 +384,13 @@ class TransferController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'transfer_id' => 'bail|required',
-                'points' => 'bail|required|numeric|between:1,99999',
+                'points' => 'bail|required|integer|between:1,99999',
                 'action' => ['bail', 'required', Rule::in(['put', 'get'])],
                 'pay_password' => 'required_if:action,put',
             ],
             [
                 'required' => trans('trans.required'),
-                'numeric' => trans('trans.numeric'),
+                'integer' => trans('trans.integer'),
                 'between' => trans('trans.between'),
             ]
         );
