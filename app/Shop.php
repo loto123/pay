@@ -32,7 +32,7 @@ class Shop extends Model
     const STATUS_FREEZE = 2;
 
     public function getLogoAttribute($value) {
-        return $value ? $value : asset("images/personal.jpg");
+        return $value ? url($value) : asset("images/personal.jpg");
     }
 
     //店铺铺主
