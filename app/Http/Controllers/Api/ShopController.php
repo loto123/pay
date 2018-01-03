@@ -101,7 +101,7 @@ class ShopController extends BaseController {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
-        if ($user->shop()->count() >= 30) {
+        if ($user->shop()->count() >= 3) {
             return $this->json([], trans("api.over_max_times"), 0);
         }
         $wallet = PayFactory::MasterContainer();
