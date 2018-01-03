@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="pull-left ml7">
                                         <p>{{$item->manager['name']}}</p>
-                                        <span>ID:<span>{{\App\User::encrypt($item->manager_id)}}</span></span>
+                                        <span>ID:<span>{{$item->manager['mobile']}}</span></span>
                                     </div>
                                 </div>
                             </td>
@@ -120,6 +120,7 @@
         var shop_id = $("#shop_id").val();
         var shop_name = $("#shop_name").val();
         var date_time = $("#reservation").val();
+        var manager_id = $("#manager_id").val();
         var form = $("<form></form>");
         form.attr('style', 'display:none');
         form.attr('method', 'post');
@@ -145,9 +146,9 @@
         input5.attr('name', 'shop_name');
         input5.val(shop_name);
         $('body').append(form);
+        form.append(input3);
         form.append(input1);
         form.append(input2);
-        form.append(input3);
         form.append(input4);
         form.append(input5);
         form.submit();
