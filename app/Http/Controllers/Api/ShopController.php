@@ -649,6 +649,9 @@ class ShopController extends BaseController {
         }
 
         if ($request->percent !== null) {
+            if ($request->percent > config("platform_fee_percent")) {
+                return $this->json([], trans("api.error_shop_percent"), 0);
+            }
             $shop->fee = $request->percent;
         }
         $shop->save();
