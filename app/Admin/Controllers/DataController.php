@@ -46,7 +46,7 @@ class DataController extends Controller
         //用户ID
         $aid = $request->input('aid');
         if ($aid) {
-            $query->where('users.id', $aid);
+            $query->where('users.mobile', $aid);
         }
         //推荐人ID
         $parent = $request->input('parent');
@@ -345,7 +345,7 @@ class DataController extends Controller
         //用户ID
         $aid = $request->input('aid');
         if ($aid) {
-            $listQuery->where('users.id', $aid);
+            $listQuery->where('users.mobile', $aid);
         }
         //上级代理ID
         $parent = $request->input('parent');
@@ -456,7 +456,7 @@ class DataController extends Controller
 
         $aid = $request->input('aid');
         if (!empty($aid)) {
-            $listQuery->where('users.id', $aid);
+            $listQuery->where('users.mobile', $aid);
         }
 
         //role 身份

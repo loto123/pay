@@ -657,6 +657,8 @@ export default {
               })
               .catch(error => {
                 console.error(error);
+                Loading.getInstance().close();
+                Toast(error.data.msg);
               });
         }).catch(err=>{
 
@@ -745,7 +747,7 @@ export default {
             },1500);
           }).catch(err=>{
             Loading.getInstance().close();
-            Toast(err.data.data.msg);
+            Toast(err.data.msg);
           });  
         }).catch(err=>{});
       }
@@ -782,7 +784,7 @@ export default {
           }).catch(err=>{
             Loading.getInstance().close();
             
-            Toast(err.data.data.msg);
+            Toast(err.data.msg);
           });  
         }).catch(err=>{});
       }
@@ -808,7 +810,7 @@ export default {
               },1500);
             }).catch(err=>{
               Loading.getInstance().close();
-              Toast(err.data.data.msg);
+              Toast(err.data.msg);
             });  
           }).catch(err=>{});
         }
