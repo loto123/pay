@@ -64,7 +64,6 @@
 
 				request.getInstance().postData('api/account/charge', _data)
 					.then((res) => {
-						Toast('充值成功');
 						location.href=res.data.data.redirect_url;
 					})
 					.catch((err) => {

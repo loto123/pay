@@ -107,7 +107,7 @@
                                     无
                                 @endif
                             </td>
-                            <td>{{$item->transfer_id}}</td>
+                            <td>{{$item->transfer->en_id()}}</td>
                             @if($item->transfer && $item->transfer->shop && $item->transfer->shop->manager)
                                 <td>
                                     <div class="user-panel clearfix">
@@ -129,7 +129,7 @@
                                     <div class="user-panel clearfix">
                                         <div class="pull-left ml7">
                                             <p>{{$item->transfer->shop->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->transfer->shop->id}}</span></span>
+                                            <span>ID:<span class="text-yellow">{{$item->transfer->shop->en_id()}}</span></span>
                                         </div>
                                     </div>
                                 @else

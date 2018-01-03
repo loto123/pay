@@ -26,13 +26,73 @@ use EasyWeChat;
  *   @SWG\Info(
  *     title="游戏宝接口列表",
  *     version="0.0.1"
- *   )
+ *   ),
+ *     @SWG\SecurityScheme(
+ *      name="登录",
+ *      securityDefinition="登录",
+ *      type="apiKey"
+ *     ),
+ *     @SWG\Tag(
+ *      name="登录",
+ *      description="登录相关接口"
+ *     ),
+ *     @SWG\Tag(
+ *      name="web微信登录",
+ *      description="web微信登录相关接口(web使用)"
+ *     ),
+ *     @SWG\Tag(
+ *      name="店铺",
+ *      description="店铺相关接口（需登录)"
+ *     ),
+ *      @SWG\Definition(
+ *          definition="CodeDefined",
+ *          @SWG\Property(
+ *              property="code",
+ *              type="integer",
+ *              format="int32"
+ *          )
+ *      ),
+ *      @SWG\Definition(
+ *          definition="SuccessModel",
+ *          required={"code", "msg", "data"},
+ *          @SWG\Property(
+ *              property="code",
+ *              type="integer",
+ *              format="int32",
+ *
+ *          ),
+ *          @SWG\Property(
+ *              property="msg",
+ *              type="string"
+ *          ),
+ *          @SWG\Property(
+ *              property="data",
+ *              type="object"
+ *          )
+ *      ),
+ *      @SWG\Definition(
+ *          definition="ErrorModel",
+ *          required={"code", "msg", "data"},
+ *          @SWG\Property(
+ *              property="code",
+ *              type="integer",
+ *              format="int32"
+ *          ),
+ *          @SWG\Property(
+ *              property="msg",
+ *              type="string"
+ *          ),
+ *          @SWG\Property(
+ *              property="data",
+ *              type="object"
+ *          )
+ *      ),
  * )
  * @package App\Http\Controllers\Api
  */
 class AuthController extends BaseController {
+
     /**
-     *
      * @SWG\Post(
      *   path="/auth/login",
      *   summary="手机号登录",
@@ -82,7 +142,6 @@ class AuthController extends BaseController {
     }
 
     /**
-     *
      * @SWG\Post(
      *   path="/auth/register",
      *   summary="手机号注册",
@@ -343,7 +402,6 @@ class AuthController extends BaseController {
 
 
     /**
-     *
      * @SWG\Post(
      *   path="/auth/valid",
      *   summary="注册验证",
@@ -417,7 +475,6 @@ class AuthController extends BaseController {
     }
 
     /**
-     *
      * @SWG\Post(
      *   path="/auth/sms",
      *   summary="发送手机验证码",
@@ -476,7 +533,6 @@ class AuthController extends BaseController {
     }
 
     /**
-     *
      * @SWG\Post(
      *   path="/auth/password/reset",
      *   summary="忘记密码",

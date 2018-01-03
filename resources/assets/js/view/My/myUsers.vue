@@ -243,7 +243,6 @@ export default {
         Toast(err.data.msg);
       });
 
-
     },
 
     hideCommonUserList(){
