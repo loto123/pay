@@ -10,7 +10,7 @@
                             </div>
                             <div class="pull-left ml7">
                                 <p>{{$list->manager['name']}}</p>
-                                <span>ID:<span class="text-yellow">{{\App\User::encrypt($list->manager_id)}}</span></span>
+                                <span>ID:<span class="text-yellow">{{$list->manager['mobile']}}</span></span>
                             </div>
                         </div>
                     </h4>
@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="pull-left ml7">
                                     <p>{{$_user->name}}</p>
-                                    <span>ID:<span class="text-yellow">{{\App\User::encrypt($_user->id)}}</span></span>
+                                    <span>ID:<span class="text-yellow">{{$_user->mobile}}</span></span>
                                 </div>
                             </div>
                             @endforeach
@@ -40,7 +40,7 @@
                     <h4 class="widget-user-desc">店铺收入：<span>{{$list->tip_amount_cnt??0}}</span></h4>
                     <h4 class="widget-user-desc">店铺余额：<span>{{$list->container['balance']}}</span></h4>
                     <h4 class="widget-user-desc">店铺状态：<span>{{$list->status>0 ? ($list->status==1?'已解散':'已冻结') :'正常'}}</span></h4>
-                    <h4 class="widget-user-desc">店铺是否开启交易：<span>{{$list->active}}</span></h4>
+                    <h4 class="widget-user-desc">店铺是否开启交易：<span>{{$list->active?'开启':'关闭'}}</span></h4>
                     <h4 class="widget-user-desc">店铺创建时间：<span>{{$list->created_at}}</span></h4>
                 </div>
                 <form class="form-horizontal" method="post" action="/admin/shop/updates">

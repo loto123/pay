@@ -28,6 +28,7 @@ Route::any('test', 'Api\TestController@index');
 Route::group([
     'prefix'       => '/my',
     'namespace'    => 'Api',
+    'middleware' => ['api.auth']
 ], function (Router $router){
     $router->get('index','UserController@index');
     $router->post('updatePassword','UserController@updatePassword');
@@ -44,6 +45,7 @@ Route::group([
 Route::group([
     'prefix'      => '/card',
     'namespace'   => 'Api',
+    'middleware' => ['api.auth']
 ], function(Router $router){
     $router->get('index', 'CardController@index');
     $router->post('create', 'CardController@create');
@@ -77,15 +79,15 @@ $api->version('v1', function ($api) {
         $api->post("password/reset", 'AuthController@reset_password');
     });
 });
-
-$api->version('v1', function ($api) {
-    $api->group([
-        'prefix' => '/',
-        'namespace' => 'App\Http\Controllers\Api',
-    ], function ($api) {
+//
+//$api->version('v1', function ($api) {
+//    $api->group([
+//        'prefix' => '/',
+//        'namespace' => 'App\Http\Controllers\Api',
+//    ], function ($api) {
 //        $api->get('time', 'CommonController@time');
-    });
-});
+//    });
+//});
 
 $api->version('v1', function ($api) {
     $api->group([
@@ -196,6 +198,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',
+    'middleware' => ['api.auth']
 ],function(Router $router){
     $router->get('index','NoticeController@index');
     $router->post('create', 'NoticeController@create');
