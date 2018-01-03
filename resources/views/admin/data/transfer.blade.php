@@ -63,13 +63,13 @@
                 <tbody>
                 @foreach ($list as $key => $item)
                 <tr>
-                    <td>{{$item->id}}</td>
+                    <td>{{$item->en_id()}}</td>
                     <td>
                         @if($item->shop)
                          <div class="user-panel clearfix">
                             <div class="pull-left ml7">
                               <p>{{$item->shop->name}}</p>
-                              <span>ID:<span class="text-yellow">{{$item->shop->id}}</span></span>
+                              <span>ID:<span class="text-yellow">{{$item->shop->en_id()}}</span></span>
                             </div>
                          </div>
                         @else

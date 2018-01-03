@@ -9,14 +9,14 @@
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{(mode==1)?'转账':'提现'}}</div>
+					<div class="content">{{status(mode)}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
 					<div class="content">{{changeTime(created_at)}}</div>
 				</li>
 				<li>
-					<div class="title">交易单号</div>
+					<div class="title">转账单号</div>
 					<div class="content">{{no}}</div>
 				</li>
 				<li>
@@ -24,8 +24,8 @@
 					<div class="content">{{balance}}</div>
 				</li>
 				<li>
-					<div class="title">备注</div>
-					<div class="content">{{status(type)}}</div>
+					<div class="title">转账账户</div>
+					<div class="content">{{remark}}</div>
 				</li>
 			</ul>
 		</div>
@@ -88,19 +88,13 @@
 				return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
 			},
 			status(type){
-				let result='';
+				let res='';
 				switch(type){
-					case 0: result='充值'; break;
-					case 1: result='提现'; break;
-					case 2: result='交易收入'; break;
-					case 3: result='交易支出'; break;
-					case 4: result='转账到店铺'; break;
-					case 5: result='店铺转入'; break;
-					case 6: result='交易手续费'; break;
-					case 7: result='提现手续费'; break;
-					default: result='打赏店家费'
+					case 0: res='提现'; break;
+					case 1: res='转账'; break;
+					case 2: res='收入'; break;
 				}
-				return result;
+				return res;
 			}
 		},
 		components: {

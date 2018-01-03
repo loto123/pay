@@ -74,7 +74,7 @@
                     <div class="title">店铺:</div>
                     <div class="flex-1">
                         <div>{{$transfer->shop->name}}</div>
-                        <div>ID:{{$transfer->shop->id}}</div>
+                        <div>ID:{{$transfer->shop->en_id()}}</div>
                     </div>
                 </li>
             @endif

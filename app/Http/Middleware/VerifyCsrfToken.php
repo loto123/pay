@@ -16,5 +16,6 @@ class VerifyCsrfToken extends Middleware
         '/withdraw-notify/*',//支付通知不验证
         '/pay-notify/*',//支付通知不验证
         '/pay-result/*',//支付返回不验证
+        'api/*'
     ];
 }
