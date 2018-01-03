@@ -388,23 +388,44 @@ export default {
     callPassword(){
 
       if(this.payType == "put"){
-        Loading.getInstance().open();
-        request.getInstance().getData("api/my/info").then(res=>{
-          var _passwordStatus = res.data.data.has_pay_password;
+        var _put = this.moneyData.payMoney;
 
-          if(!_passwordStatus){
-            Loading.getInstance().close();
-            Toast("您还未设置支付密码，即将跳转设置页面");
-            setTimeout(() => {
-              this.$router.push("/my/setting_password");
-            }, 2000);
-          }else {
-            Loading.getInstance().close();
-            this.showPassword();
-          }
+        if((parseFloat(_put)).toString().indexOf(".") != -1 || isNaN(Number(_put))){
+          this.moneyData.payMoney = null;
 
-        }).catch(err=>{
-        });
+          Toast("分数只能是整数");
+          Loading.getInstance().close();
+          return;
+
+        }else{
+
+          Loading.getInstance().open();
+
+          request.getInstance().getData("api/my/info").then(res=>{
+
+            var _passwordStatus = res.data.data.has_pay_password;
+
+            if(!_passwordStatus){
+
+              Loading.getInstance().close();
+              Toast("您还未设置支付密码，即将跳转设置页面");
+              setTimeout(() => {
+                this.$router.push("/my/setting_password");
+              }, 2000);
+
+            }else {
+
+              Loading.getInstance().close();
+              this.showPassword();
+
+            }
+
+          }).catch(err=>{
+
+            Loading.getInstance().close();
+
+          });
+        }
 
       }else if(this.payType == "get"){
         this.submitData();
@@ -438,8 +459,8 @@ export default {
         },2000);
         
       }).catch(err=>{
-        Loading.getInstance().close();   
-        console.error(err);
+        Loading.getInstance().close();
+        Toast(err.data.msg);
       });
 
     },
@@ -554,6 +575,7 @@ export default {
     hideMemberChoise(){
       this.choiseMemberSwitch = false;
     },
+    
     // 初始化提醒玩家列表
     initMemberList(res){
       this.memberList = [];
@@ -593,10 +615,7 @@ export default {
       });
 
     },
-
-    // getMemberData(data){
-    //   this.memberList = data;
-    // },
+    
   },
   watch: {
     "moneyData.payMoney": function() {
