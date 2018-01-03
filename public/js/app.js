@@ -61011,7 +61011,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open();
       var _id = this.$route.query.id;
       __WEBPACK_IMPORTED_MODULE_3__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/feerecord" + "?transfer_id=" + _id).then(function (res) {
-        _this.renderData = res.data.data;
+        _this.renderData = res.data.data.data;
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         console.error(err);
@@ -61549,7 +61549,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           offset: 0
         };
         __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/record', _data).then(function (res) {
-          _this.dataList = res.data.data;
+          _this.dataList = res.data.data.data;
           __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
         }).catch(function (err) {
           __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
@@ -61626,7 +61626,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         offset: 0
       };
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/transfer/record', _data).then(function (res) {
-        _this3.dataList = res.data.data;
+        _this3.dataList = res.data.data.data;
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
@@ -66175,6 +66175,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_loading__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_mint_ui__);
 //
 //
 //
@@ -66331,20 +66333,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -66379,14 +66368,64 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {});
     },
+
+
+    // 显示店主用户
     showShopUserList: function showShopUserList() {
-      this.isShopUserListShow = true;
+      var _this2 = this;
+
+      if (this.indexData.manager_total == 0) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("当前店主用户为0");
+        return;
+      }
+
+      if (this.isShopUserListShow == true) {
+        this.isShopUserListShow = false;
+        return;
+      }
+
+      var _data = {
+        type: 0
+      };
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/proxy/members", _data).then(function (res) {
+        _this2.shopUsers = res.data.data.list;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        _this2.isShopUserListShow = true;
+      }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
+      });
     },
     hideShopUserList: function hideShopUserList() {
       this.isShopUserListShow = false;
     },
+
+
+    // 显示普通用户
     showCommonUserList: function showCommonUserList() {
-      this.isCommonUserListShow = true;
+      var _this3 = this;
+
+      if (this.indexData.member_total == 0) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("当前普通用户为0");
+        return;
+      }
+
+      if (this.isCommonUserListShow == true) {
+        this.isCommonUserListShow = false;
+        return;
+      }
+
+      var _data = {
+        type: 1
+      };
+      __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
+      __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData("api/proxy/members", _data).then(function (res) {
+        _this3.commomUsers = res.data.data.list;
+        __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
+        _this3.isCommonUserListShow = true;
+      }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
+      });
     },
     hideCommonUserList: function hideCommonUserList() {
       this.isCommonUserListShow = false;
@@ -66429,7 +66468,7 @@ var render = function() {
           _c("h3", { staticClass: "flex-9" }, [_vm._v("店主用户")]),
           _vm._v(" "),
           _c("div", { staticClass: "flex-1" }, [
-            _vm._v(_vm._s(_vm.indexData.manager))
+            _vm._v(_vm._s(_vm.indexData.manager_total))
           ]),
           _vm._v(" "),
           _vm._m(1, false, false)
@@ -66438,37 +66477,25 @@ var render = function() {
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.isShopUserListShow
-          ? _c("ul", { staticClass: "shop-users-list" }, [
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ]),
-              _vm._v(" "),
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ]),
-              _vm._v(" "),
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ])
-            ])
+          ? _c(
+              "ul",
+              { staticClass: "shop-users-list" },
+              _vm._l(_vm.shopUsers, function(item) {
+                return _c("li", { staticClass: "flex flex-align-center" }, [
+                  _c("span", { staticClass: "flex-1" }, [
+                    _c("img", { attrs: { src: item.avatar, alt: "" } })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-3" }, [
+                    _vm._v(_vm._s(item.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-2" }, [
+                    _vm._v(_vm._s(item.mobile))
+                  ])
+                ])
+              })
+            )
           : _vm._e()
       ]),
       _vm._v(" "),
@@ -66484,7 +66511,7 @@ var render = function() {
           _c("h3", { staticClass: "flex-9" }, [_vm._v("普通用户")]),
           _vm._v(" "),
           _c("div", { staticClass: "flex-1" }, [
-            _vm._v(_vm._s(_vm.indexData.user))
+            _vm._v(_vm._s(_vm.indexData.member_total))
           ]),
           _vm._v(" "),
           _vm._m(3, false, false)
@@ -66493,17 +66520,25 @@ var render = function() {
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.isCommonUserListShow
-          ? _c("ul", { staticClass: "common-users-list" }, [
-              _c("li", { staticClass: "flex flex-align-center" }, [
-                _c("span", { staticClass: "flex-1" }, [
-                  _c("img", { attrs: { src: "/images/avatar.jpg", alt: "" } })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("Leaf")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "flex-1" }, [_vm._v("18173610305")])
-              ])
-            ])
+          ? _c(
+              "ul",
+              { staticClass: "common-users-list" },
+              _vm._l(_vm.commomUsers, function(item) {
+                return _c("li", { staticClass: "flex flex-align-center" }, [
+                  _c("span", { staticClass: "flex-1" }, [
+                    _c("img", { attrs: { src: item.avatar, alt: "" } })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-3" }, [
+                    _vm._v(_vm._s(item.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-2" }, [
+                    _vm._v(_vm._s(item.mobile))
+                  ])
+                ])
+              })
+            )
           : _vm._e()
       ])
     ],
@@ -69359,6 +69394,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }, 1000);
         }).catch(function (error) {
           console.error(error);
+          __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
+          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(error.data.msg);
         });
       }).catch(function (err) {});
     },
@@ -69441,7 +69478,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }, 1500);
           }).catch(function (err) {
             __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
-            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.msg);
           });
         }).catch(function (err) {});
       }
@@ -69480,7 +69517,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }).catch(function (err) {
             __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 
-            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.msg);
           });
         }).catch(function (err) {});
       }
@@ -69509,7 +69546,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }, 1500);
           }).catch(function (err) {
             __WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
-            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.data.msg);
+            Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.msg);
           });
         }).catch(function (err) {});
       }
@@ -71300,28 +71337,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
 		},
 		status: function status(type) {
-			var result = '';
+			var res = '';
 			switch (type) {
 				case 0:
-					result = '充值';break;
+					res = '提现';break;
 				case 1:
-					result = '提现';break;
+					res = '转账';break;
 				case 2:
-					result = '交易收入';break;
-				case 3:
-					result = '交易支出';break;
-				case 4:
-					result = '转账到店铺';break;
-				case 5:
-					result = '店铺转入';break;
-				case 6:
-					result = '交易手续费';break;
-				case 7:
-					result = '提现手续费';break;
-				default:
-					result = '打赏店家费';
+					res = '收入';break;
 			}
-			return result;
+			return res;
 		}
 	},
 	components: {
@@ -71357,7 +71382,7 @@ var render = function() {
             _c("div", { staticClass: "title" }, [_vm._v("类型")]),
             _vm._v(" "),
             _c("div", { staticClass: "content" }, [
-              _vm._v(_vm._s(_vm.mode == 1 ? "转账" : "提现"))
+              _vm._v(_vm._s(_vm.status(_vm.mode)))
             ])
           ]),
           _vm._v(" "),
@@ -71370,7 +71395,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("li", [
-            _c("div", { staticClass: "title" }, [_vm._v("交易单号")]),
+            _c("div", { staticClass: "title" }, [_vm._v("转账单号")]),
             _vm._v(" "),
             _c("div", { staticClass: "content" }, [_vm._v(_vm._s(_vm.no))])
           ]),
@@ -71382,11 +71407,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("li", [
-            _c("div", { staticClass: "title" }, [_vm._v("备注")]),
+            _c("div", { staticClass: "title" }, [_vm._v("转账账户")]),
             _vm._v(" "),
-            _c("div", { staticClass: "content" }, [
-              _vm._v(_vm._s(_vm.status(_vm.type)))
-            ])
+            _c("div", { staticClass: "content" }, [_vm._v(_vm._s(_vm.remark))])
           ])
         ])
       ])
@@ -71749,8 +71772,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {
                 _this.dataList = [];
-                for (var i = 0; i < res.data.data.length; i++) {
-                    var _temp = res.data.data[i];
+                for (var i = 0; i < res.data.data.data.length; i++) {
+                    var _temp = res.data.data.data[i];
                     _temp.checked = false;
                     _this.dataList.push(_temp);
                 }
@@ -71859,8 +71882,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/transfer/shop", _data).then(function (res) {
                 _this3.dataList = [];
-                for (var _i = 0; _i < res.data.data.length; _i++) {
-                    var _temp = res.data.data[_i];
+                for (var _i = 0; _i < res.data.data.data.length; _i++) {
+                    var _temp = res.data.data.data[_i];
                     _temp.checked = false;
                     _this3.dataList.push(_temp);
                 }
@@ -76725,7 +76748,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n#share[data-v-7d9c20c8] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  padding-top: 2em;\n  height: 100vh;\n  width: 100%;\n  background: #fff;\n}\n.back-img[data-v-7d9c20c8] {\n  background: url(/images/shareInvite.jpg) no-repeat;\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background-size: 100% 100%;\n}\n.share-btn[data-v-7d9c20c8] {\n  background: #FF7B54;\n  color: #fff;\n  width: 10em;\n  height: 3em;\n  line-height: 3em;\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 4em;\n  margin: 0 auto;\n  text-align: center;\n  border-radius: 5px;\n}\n", ""]);
+exports.push([module.i, "\n#share[data-v-7d9c20c8] {\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  padding-top: 2em;\n  height: 100vh;\n  width: 100%;\n  background: #fff;\n}\n.back-img[data-v-7d9c20c8] {\n  background: url(/images/shareInvite.jpg) no-repeat;\n  position: relative;\n  width: 100%;\n  height: 100%;\n  background-size: 100% 100%;\n}\n.share-btn[data-v-7d9c20c8] {\n  background: #FF7B54;\n  color: #fff;\n  width: 10em;\n  height: 3em;\n  line-height: 3em;\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 4.5em;\n  margin: 0 auto;\n  text-align: center;\n  border-radius: 5px;\n}\n.text[data-v-7d9c20c8] {\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 1em;\n  color: #fff;\n  width: 94%;\n  margin: auto;\n  line-height: 1.2em;\n}\n", ""]);
 
 // exports
 
@@ -76746,6 +76769,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_mint_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_mint_ui__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_weixin_js_sdk__ = __webpack_require__(790);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_weixin_js_sdk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_weixin_js_sdk__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -77316,7 +77352,13 @@ var render = function() {
             on: { click: _vm.shareBtn }
           },
           [_vm._v("分享")]
-        )
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "text" }, [
+          _vm._v(
+            "\n        分享到朋友圈或社交网络，可以获得更多的用户免费注册分享越多，收益越多\n    "
+          )
+        ])
       ])
     ],
     1

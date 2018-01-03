@@ -164,19 +164,24 @@ class ShopLogo extends Command
                 $start_y    = $start_y + $pic_h + $space_y;
             }
             $pathInfo    = pathinfo($pic_path);
-            switch( strtolower($pathInfo['extension']) ) {
-                case 'jpg':
-                case 'jpeg':
-                    $imagecreatefromjpeg    = 'imagecreatefromjpeg';
-                    break;
-                case 'png':
-                    $imagecreatefromjpeg    = 'imagecreatefrompng';
-                    break;
-                case 'gif':
-                default:
-                    $imagecreatefromjpeg    = 'imagecreatefromstring';
-                    $pic_path    = file_get_contents($pic_path);
-                    break;
+            if (isset($pathInfo['extension'])) {
+                switch( strtolower($pathInfo['extension']) ) {
+                    case 'jpg':
+                    case 'jpeg':
+                        $imagecreatefromjpeg    = 'imagecreatefromjpeg';
+                        break;
+                    case 'png':
+                        $imagecreatefromjpeg    = 'imagecreatefrompng';
+                        break;
+                    case 'gif':
+                    default:
+                        $imagecreatefromjpeg    = 'imagecreatefromstring';
+                        $pic_path    = file_get_contents($pic_path);
+                        break;
+                }
+            } else {
+                $imagecreatefromjpeg    = 'imagecreatefromstring';
+                $pic_path    = file_get_contents($pic_path);
             }
             $resource   = $imagecreatefromjpeg($pic_path);
             // $start_x,$start_y copy图片在背景中的位置
