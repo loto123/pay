@@ -89,13 +89,16 @@ class ShopController extends BaseController {
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:20',
-            'rate' => 'required',
+            'rate' => 'required|integer',
             'percent' => 'required|regex:/^\d{0,2}(\.\d{1})?$/',
             'active' => 'required'
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
+        }
+        if ($request->percent > config("platform_fee_percent")) {
+            return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
         if ($user->shop()->count() >= 30) {
@@ -886,6 +889,7 @@ class ShopController extends BaseController {
     public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'max:20',
+            'rate' => 'integer',
             'percent' => 'regex:/^\d{0,2}(\.\d{1})?$/',
         ]);
 
