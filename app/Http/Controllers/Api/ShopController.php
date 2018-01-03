@@ -211,7 +211,40 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="id", type="string", example="1234567890", description="店铺id"),
+     *                      @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
+     *                      @SWG\Property(property="price", type="double", example=9.9, description="店铺单价"),
+     *                  )
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1130,7 +1163,43 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="user_avatar", type="string", example="url",description="用户头像"),
+     *                  @SWG\Property(property="user_name", type="string", example="noname",description="用户名"),
+     *                  @SWG\Property(property="shop_name", type="string", example="我的店铺",description="店铺名"),
+     *                  @SWG\Property(property="id", type="string", example="12312312",description="消息id"),
+     *                  @SWG\Property(property="type", type="integer", example=0,description="消息类型 0=申请 1=邀请"),
+     *                  @SWG\Property(property="created_at", type="integer", example=15200000,description="创建时间戳"),
+     *                  )
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1147,12 +1216,12 @@ class ShopController extends BaseController {
                     'user_name' => $user->name,
                     'shop_name' => $shop->name,
                     'id' => $notification->id,
-                    'type' => $notification->data['type'],
+                    'type' => (int)$notification->data['type'],
                     'created_at' => strtotime($notification->created_at)
                 ];
             } catch (\Exception $e){}
         }
-        return $this->json($data);
+        return $this->json(['count' => (int)$user->unreadNotifications()->where("type", "App\Notifications\ShopApply")->count(), 'data' => $data]);
     }
 
     /**
@@ -1160,7 +1229,31 @@ class ShopController extends BaseController {
      *   path="/shop/messages/count",
      *   summary="店铺未读消息数",
      *   tags={"店铺"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=100,description="店铺未读消息数"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1182,7 +1275,30 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1243,7 +1359,30 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1279,7 +1418,30 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1314,7 +1476,34 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="avatar", type="string", example="url",description="用户头像"),
+     *                  @SWG\Property(property="name", type="string", example="noname",description="用户名"),
+     *                  @SWG\Property(property="id", type="string", example="12312312",description="用户id"),
+     *                  @SWG\Property(property="mobile", type="string", example="1333333333",description="用户手机号"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1363,7 +1552,30 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1431,7 +1643,30 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1485,7 +1720,42 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="number"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="id", type="string", example="12345676789",description="记录id"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给个人 2=从个人转账"),
+     *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
+     *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
+     *                  )
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1503,7 +1773,7 @@ class ShopController extends BaseController {
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['data' => $data]);
+        return $this->json(['count' => $shop->funds()->count(), 'data' => $data]);
     }
 
     /**
@@ -1518,7 +1788,38 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="id", type="string", example="12345676789",description="记录id"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给个人 2=从个人转账"),
+     *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
+     *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
+     *                  @SWG\Property(property="no", type="string", example="123123",description="交易单号"),
+     *                  @SWG\Property(property="remark", type="string", example="xxxx",description="备注"),
+     *                  @SWG\Property(property="balance", type="double", example=9.9,description="交易后余额"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1560,7 +1861,32 @@ class ShopController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="in", type="double", example=123.4,description="店铺当月收入总数"),
+     *                  @SWG\Property(property="out", type="double", example=123.4,description="店铺当月支出总数"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
