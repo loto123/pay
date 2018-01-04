@@ -24,13 +24,14 @@ class Loading {
         if (this._timer == null) {
             this._timer = setTimeout(() => {
                 Indicator.close();
-                if(this.errSwitch == true){
-                    Toast("网络错误，请尝试刷新页面");
-                }
+                // if(this.errSwitch == true){
+                //     Toast("网络错误，请尝试刷新页面");
+                // }
                 this._timer = null;
             }, 10000);
             
         } else {
+            this.errSwitch = false;
             return;
         }
 
@@ -38,7 +39,7 @@ class Loading {
 
     close() {
         this.errSwitch = false;
-        this._timer = null;
+        // this._timer = null;
         Indicator.close();
     }
 }

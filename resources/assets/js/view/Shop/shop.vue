@@ -380,15 +380,29 @@ export default {
     },
     hide() {
       this.addShopTabStatus = false;
+
+      this.openNewShop = {
+        name :null,
+        rate :null,
+        percent :null,
+        active :true
+      }
+
     },
 
     // 创建店铺
     createShop(){
       
       var data = this.openNewShop;
+      console.log(parseFloat(data.rate));
 
-      if(data.rate.toString().indexOf(".")!=-1){
-        Toast("请输入正确的单价(整数)");
+      if((parseFloat(data.rate)*10).toString().indexOf(".")!=-1 || parseFloat(data.rate) < 0){
+        Toast("请输入正确的单价(允许有一位小数)");
+        return;
+      }
+
+      if(data.rate > 99999){
+        Toast("单价不能超过99999");
         return;
       }
 
@@ -407,8 +421,6 @@ export default {
         Loading.getInstance().close();
         Toast(err.data.msg);
         this.createShopSwitch = true;
-        // this.addShopTabStatus = false;
-        console.error(err.data.msg);
       });
     },
 

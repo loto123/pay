@@ -26,4 +26,8 @@ class ShopFund extends Model
     use Skip32Trait;
 
     protected static $skip32_id = '0123456789abcdef0123';
+
+    public function shop() {
+        return $this->belongsTo(Shop::class, 'id', 'shop_id');
+    }
 }

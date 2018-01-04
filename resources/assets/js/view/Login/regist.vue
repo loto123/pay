@@ -315,14 +315,21 @@ export default {
       var auther = this.$route.query.oauth_user;
 
       if (this.$store.state.regist.step >= 3) {
-        Loading.getInstance().open();
-        if(this.$store.state.regist.refindPassword == true){
+        if(this.$store.state.regist.refindPassword == true){          // 重置密码
+
+          if(this.userPassword.length<8){
+            Toast("密码长度最少为8位");
+            return;
+          }
 
           var _data = {
             mobile :this.userAccountName,
             password :this.userPassword,
             code:this.validCode,
           };
+
+          Loading.getInstance().open();
+
           request.getInstance().postData('api/auth/password/reset',_data).then(res=>{
             Loading.getInstance().close();
             
@@ -334,7 +341,14 @@ export default {
             Loading.getInstance().close();            
           });
           return;
-        }else {
+
+        }else {                                                      // 注册逻辑
+
+          if(this.userPassword.length<8){
+            Toast("密码长度最少为8位");
+            return;
+          }
+
           var data = {
             mobile :this.userAccountName,
             password :this.userPassword,
@@ -342,6 +356,9 @@ export default {
             invite_mobile:this.inviteMobile,
             oauth_user:auther
           }
+
+          Loading.getInstance().open();
+
           request.getInstance().postData('api/auth/register',data).then(function(res){
               sessionStorage.setItem("_token",res.data.data.token);
               Loading.getInstance().close();
@@ -354,7 +371,9 @@ export default {
             });
             return;
           }
+
         }
+
       this.$store.dispatch("addStep");
     },
 
