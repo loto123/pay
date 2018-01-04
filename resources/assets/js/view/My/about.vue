@@ -8,6 +8,10 @@
 				</div>
 				<div class="versions">聚宝朋 1.0.1</div>
 			</div>
+			<div class="copyright">
+				<p>长沙找找公司 版权所有</p>
+				<p>Copyright © 2017 ZhaoZhao .All Rights Reserved.</p>
+			</div>
 		</section>
 	</div>
 </template>
@@ -40,6 +44,17 @@
 			font-size: 1em;
 			text-align: center;
 			margin-top: 0.5em;
+		}
+	}
+	.copyright{
+		width: 100%;
+		position: fixed;
+		bottom: 1.5em;
+		color: #666;
+		text-align: center;
+		font-size: 0.9em;
+		p{
+			margin-bottom:0.5em;
 		}
 	}
 </style>
