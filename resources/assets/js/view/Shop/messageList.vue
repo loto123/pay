@@ -145,10 +145,10 @@ export default {
     init(){
       Loading.getInstance().open();
       request.getInstance().getData("api/shop/messages").then(res=>{
-        this.messageList = res.data.data;
+        this.messageList = res.data.data.data;
         Loading.getInstance().close();
       }).catch(err=>{
-
+          Toast(err.data.msg);
       });
     },
     // 同意加入店铺的请求
@@ -202,7 +202,7 @@ export default {
     },
 
     toTime(time){
-        return moment(time * 1000).format('h:mm:ss');
+        return moment(time * 1000).format('h:mm:ss a');
     }
   }
 };

@@ -317,11 +317,12 @@ export default {
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
+            Toast("成功关闭所有已平账交易");
+            this.init();
 
         }).catch(err=>{
             Loading.getInstance().close();
             Toast(err.data.msg)
-            console.error(err);
         });
     },
 

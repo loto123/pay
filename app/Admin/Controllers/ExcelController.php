@@ -15,7 +15,7 @@ class ExcelController extends Controller
     public function shop(Request $request)
     {
         $manager_id = $request->input('manager_id');
-        $shop_id = $request->input('shop_id');
+        $shop_id = Shop::decrypt($request->input('shop_id'));
         $shop_name = $request->input('shop_name');
         $date_time = $request->input('date_time');
         $begin = '';
@@ -27,49 +27,54 @@ class ExcelController extends Controller
         }
 
         $table_name = (new Shop)->getTable();
-        $query = Shop::leftJoin('transfer as t', function ($join) use ($table_name) {
-            $join->on($table_name . '.id', '=', 't.shop_id')
+        $listQuery = Shop::leftJoin('transfer as t',function ($join) use($table_name) {
+            $join->on( $table_name.'.id' ,'=' ,'t.shop_id' )
                 ->where('t.status', '=', '3');
         })->leftJoin('transfer_record as tfr', function ($join) {
-            $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=', '2');
-        })->leftJoin('users as u', 'u.id', '=', $table_name . '.manager_id')
-            ->select(DB::raw($table_name . '.*'), 'u.id as manager_id', 'u.name as manager_name',
+            $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=' , '2');
+        })->leftJoin('tip_record as tr','tr.transfer_id','=','t.id')
+            ->with(['container','manager'])
+            ->select( DB::raw($table_name.'.*'),
                 DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
                 DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
-                DB::raw('(SELECT SUM(amount) FROM tip_record WHERE tip_record.transfer_id = t.id ) as tip_amount_cnt'));
-        if (!empty($manager_id)) {
-            $query->where('u.id', $manager_id);
+                DB::raw('SUM(tr.amount) as tip_amount_cnt'));
+        if(!empty($manager_id)) {
+            $listQuery->whereHas('manager', function ($query) use($manager_id) {
+                $query->where('mobile',$manager_id);
+            });
         }
-        if (!empty($shop_id)) {
-            $query->where($table_name . '.id', $shop_id);
+        if(!empty($shop_id)) {
+            $listQuery->where($table_name.'.id', $shop_id);
         }
-        if (!empty($shop_name)) {
-            $query->where($table_name . '.name', $shop_name);
+        if(!empty($shop_name)) {
+            $listQuery->where($table_name.'.name', 'like', '%'.$shop_name.'%');
         }
-        if ($begin && $end) {
-            $query->where($table_name . '.created_at', '>=', $begin)->where($table_name . '.created_at', '<=', $end);
+        if($begin && $end) {
+            $listQuery->where($table_name.'.created_at', '>=', $begin)->where($table_name.'.created_at', '<=', $end);
         }
-        $query->groupBy($table_name . '.id', 't.id')->orderBy('tip_amount_cnt', 'DESC')->withCount('shop_user');
+        $listQuery->groupBy($table_name.'.id')->orderBy('tip_amount_cnt','DESC')->withCount('shop_user');
 
-        $list = $query->get();
+        $list = $listQuery->get();
         $cellData = [
-            ['排名', '店铺ID', '店铺名', '店主ID', '店主名', '店铺会员数', '店铺手续费率', '已付平台交易费', '交易笔数', '总交易额', '店铺收入', '店铺余额']
+            ['排名', '店铺ID', '店铺名', '店主ID', '店主名', '店铺会员数', '店铺手续费率', '已付平台交易费', '交易笔数', '总交易额', '店铺收入', '店铺余额','店铺状态','店铺交易状态']
         ];
         if (!empty($list) && count($list) > 0) {
             foreach ($list as $key => $value) {
                 $cellData[] = [
                     $key + 1,
-                    $value->id,
+                    Shop::encrypt($value->id),
                     $value->name,
-                    $value->manager_id,
-                    $value->manager_name,
+                    $value->manager['mobile'],
+                    $value->manager['name'],
                     $value->shop_user_count,
-                    (int)$value->type_value . '%',
+                    $value->fee . '%',
                     $value->fee_amount_cnt ?? 0,
                     $value->transfer_cnt,
                     $value->summary ?? 0,
                     $value->tip_amount_cnt ?? 0,
-                    $value->balance,
+                    $value->container['balance'],
+                    $value->status>0 ? ($value->status==1?'已解散':'已冻结') :'正常',
+                    $value->active ? '开启' : '关闭',
                 ];
             }
         }
@@ -83,7 +88,7 @@ class ExcelController extends Controller
     public function user(Request $request)
     {
         $cellData = [
-            ['编号', '用户', '身份', '交易笔数', '余额', '收益', '收款', '付款', '上级运营', '上级代理', '支付渠道']
+            ['编号', '用户id','用户名称', '身份', '交易笔数', '余额', '收益', '收款', '付款', '上级运营id','上级运营名称', '上级代理', '支付渠道']
         ];
 
         Log::info($request->all());
@@ -122,16 +127,18 @@ class ExcelController extends Controller
                     }
                 }
                 $cellData[] = [
-                    $item->id,
-                    $item->name . ' ' . $item->mobile,
+                    User::encrypt($item->id),
+                    $item->mobile,
+                    $item->name,
                     $role_name,
                     $item->transfer_count??0,
                     $item->balance,
                     ($item->profit - $item->payment)??0,
                     $item->profit??0,
                     $item->payment??0,
-                    $item->operator['username'] . ' ' . $item->operator['name'],
-                    $item->parent_id,
+                    $item->operator['username'],
+                    $item->operator['name'],
+                    $item->parent['mobile'],
                     $item->channel_id,
                 ];
             }

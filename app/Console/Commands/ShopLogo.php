@@ -58,7 +58,7 @@ class ShopLogo extends Command
                 $pic_list[] = $_user->avatar;
             }
             if ($pic_list) {
-                $path = 'logo/'.$shop->id.'.jpg';
+                $path = 'logo/'.md5(sprintf("%d_%d", $shop->id, time())).'.jpg';
                 Storage::disk('public')->put($path, $this->logo($pic_list));
                 $this->info($path);
                 $shop->logo = 'storage/'.$path;

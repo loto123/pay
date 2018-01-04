@@ -24,7 +24,33 @@ class IndexController extends BaseController {
      *   path="/index",
      *   summary="首页",
      *   tags={"首页"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="avatar", type="string", example="url",description="用户头像"),
+     *                  @SWG\Property(property="balance", type="double", example=123.4,description="用户余额"),
+     *                  @SWG\Property(property="new_message", type="boolean", example=0,description="是否有新消息"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */

@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Pay\Model\PayFactory;
 use App\Profit;
 use App\Role;
+use App\Shop;
 use App\TipRecord;
 use App\Transfer;
 use App\TransferRecord;
@@ -51,12 +52,12 @@ class DataController extends Controller
         //推荐人ID
         $parent = $request->input('parent');
         if ($parent) {
-            $query->where('users.parent_id', $parent);
+            $query->where('users.parent_id', User::where('mobile', $parent)->first()->id);
         }
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $query->where('users.operator_id', $operator);
+            $query->where('users.operator_id', AdminUser::where('username',$operator)->first()->id);
         }
         $date_time = $request->input('date_time');
         if (!empty($date_time)) {
@@ -109,7 +110,7 @@ class DataController extends Controller
         //店铺ID
         $shop_id = $request->input('shop_id');
         if ($shop_id) {
-            $listQuery->where('shop_id', $shop_id);
+            $listQuery->where('shop_id', Shop::decrypt($shop_id));
         }
         //店铺名称
         $shop_name = $request->input('shop_name');
@@ -233,7 +234,7 @@ class DataController extends Controller
         $shop_id = $request->input('shop_id');
         if ($shop_id) {
             $listQuery->whereHas('transfer', function ($query) use ($shop_id) {
-                $query->where('id', $shop_id);
+                $query->where('id', Shop::decrypt($shop_id));
             });
         }
         //店主ID
@@ -319,7 +320,7 @@ class DataController extends Controller
                     $query->whereHas('roles', function ($query2) {
                         $query2->where('name', 'like', 'agent%');
                     });
-            },
+                },
                 'child_user' => function ($query) {
                     $query->whereHas('roles', function ($query) {
                         $query->where('name', 'user');
@@ -350,12 +351,12 @@ class DataController extends Controller
         //上级代理ID
         $parent = $request->input('parent');
         if ($parent) {
-            $listQuery->where('users.parent_id', $parent);
+            $listQuery->where('users.parent_id', User::where('mobile', $parent)->first()->id);
         }
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $listQuery->where('users.operator_id', $operator);
+            $listQuery->where('users.operator_id', AdminUser::where('username',$operator)->first()->id);
         }
         //role 身份
         $role = $request->input('role');

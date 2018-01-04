@@ -35,7 +35,7 @@
             
           </div>
 
-          <h3>{{item.name}}</h3>
+          <h3>{{SetString(item.name,6)}}</h3>
           <p class="today-earn">今日收益:{{item.today_profit}}</p>
           <p class="all-earn">总收益:{{item.total_profit}}</p>
         </div>
@@ -332,9 +332,10 @@
 
 <script>
 import topBack from "../../components/topBack"
-import {Indicator} from 'mint-ui'
+import {Indicator,Toast} from 'mint-ui'
 import request from '../../utils/userRequest'
 import Loading from '../../utils/loading'
+import utils from '../../utils/utils.js'
 
 export default {
   components: { topBack },
@@ -383,10 +384,18 @@ export default {
 
     // 创建店铺
     createShop(){
-      Loading.getInstance().open();
+      
       var data = this.openNewShop;
+
+      if(data.rate.toString().indexOf(".")!=-1){
+        Toast("请输入正确的单价(整数)");
+        return;
+      }
+
       this.createShopSwitch = false;
 
+      Loading.getInstance().open();
+      
       request.getInstance().postData("api/shop/create",data).then((res)=>{
         this.addShopTabStatus = false;
         this.getShopData();
@@ -396,9 +405,10 @@ export default {
         
       }).catch((err)=>{
         Loading.getInstance().close();
+        Toast(err.data.msg);
         this.createShopSwitch = true;
-        Toast(err.data.data.message);
-        console.error(err);
+        // this.addShopTabStatus = false;
+        console.error(err.data.msg);
       });
     },
 
@@ -417,6 +427,10 @@ export default {
 
           console.error(err);
         });
+    },
+
+    SetString(str,len){
+      return utils.SetString(str,len);
     }
 
   }

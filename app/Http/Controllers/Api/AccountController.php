@@ -30,7 +30,33 @@ class AccountController extends BaseController {
      *   path="/account",
      *   summary="账户余额",
      *   tags={"账户"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="has_pay_password", type="boolean", example=0,description="是否设置了支付密码"),
+     *                  @SWG\Property(property="balance", type="double", example=123.4,description="用户余额"),
+     *                  @SWG\Property(property="has_pay_card", type="boolean", example=0,description="是否有结算卡"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -63,7 +89,31 @@ class AccountController extends BaseController {
      *     required=true,
      *     type="number"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="redirect_url", type="string", example="url",description="充值跳转链接"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -108,6 +158,7 @@ class AccountController extends BaseController {
 
         try {
             if ($result = $user->container->initiateDeposit($request->amount, $channel, $method)) {
+                $record->no = $result['deposit_id'];
                 $record->save();
             } else {
                 return $this->json([], 'error', 0);
@@ -117,7 +168,7 @@ class AccountController extends BaseController {
             return $this->json([], 'error', 0);
         }
 
-        return $this->json(['redirect_url' => $result]);
+        return $this->json(['redirect_url' => $result['pay_info']]);
     }
 
     /**
@@ -146,7 +197,30 @@ class AccountController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -222,14 +296,16 @@ class AccountController extends BaseController {
                 return $this->json([], '提现金额必须大于0', 0);
             }
 
-            if ($result = $user->container->initiateWithdraw(
+            $result = $user->container->initiateWithdraw(
                 $request->amount,
                 $receiver_info,
                 $channel,
                 $method,
                 $fee
-            )
-            ) {
+            );
+
+            if ($result['success']) {
+                $record->no = $result['withdraw_id'];
                 $record->save();
             } else {
                 return $this->json([], 'error', 0);
@@ -259,7 +335,30 @@ class AccountController extends BaseController {
      *     required=true,
      *     type="number"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -401,7 +500,42 @@ class AccountController extends BaseController {
      *     required=false,
      *     type="number"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="id", type="string", example="12345676789",description="记录id"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给个人 2=从个人转账"),
+     *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
+     *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
+     *                  )
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -418,7 +552,7 @@ class AccountController extends BaseController {
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['data' => $data]);
+        return $this->json(['count' => (int)$user->funds()->count(), 'data' => $data]);
     }
 
     /**
@@ -433,7 +567,38 @@ class AccountController extends BaseController {
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="id", type="string", example="12345676789",description="记录id"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=充值,1=提现,2=交易收入,3=交易支出,4=转账到店铺,5=店铺转入,6=交易手续费,7=提现手续费,8=大赢家茶水费"),
+     *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
+     *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
+     *                  @SWG\Property(property="no", type="string", example="123123",description="交易单号"),
+     *                  @SWG\Property(property="remark", type="string", example="xxxx",description="备注"),
+     *                  @SWG\Property(property="balance", type="double", example=9.9,description="交易后余额"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -468,7 +633,32 @@ class AccountController extends BaseController {
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="in", type="double", example=123.4,description="用户当月收入总数"),
+     *                  @SWG\Property(property="out", type="double", example=123.4,description="用户当月支出总数"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
