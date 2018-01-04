@@ -46004,6 +46004,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -52607,6 +52616,25 @@ var staticRenderFns = [
               ),
               _vm._v(" "),
               _c("h3", [_vm._v("我的用户")])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "flex flex-v flex-align-center" }, [
+          _c(
+            "a",
+            {
+              staticClass: "flex flex-v flex-align-center",
+              attrs: { href: "/#/shareUser" }
+            },
+            [
+              _c(
+                "i",
+                { staticClass: "iconfont transaction-icon common-icon" },
+                [_vm._v("\n              \n            ")]
+              ),
+              _vm._v(" "),
+              _c("h3", [_vm._v("展业")])
             ]
           )
         ])
@@ -77758,7 +77786,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_0w53ynvuyvr96bt9.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: 'iconfont';\n  /* project id 493383 */\n  src: url(\"//at.alicdn.com/t/font_493383_ofefr3r86v67p66r.eot\");\n  src: url(\"//at.alicdn.com/t/font_493383_ofefr3r86v67p66r.eot?#iefix\") format(\"embedded-opentype\"), url(\"//at.alicdn.com/t/font_493383_ofefr3r86v67p66r.woff\") format(\"woff\"), url(\"//at.alicdn.com/t/font_493383_ofefr3r86v67p66r.ttf\") format(\"truetype\"), url(\"//at.alicdn.com/t/font_493383_ofefr3r86v67p66r.svg#iconfont\") format(\"svg\"); }\n\n.iconfont {\n  font-family: \"iconfont\" !important;\n  font-size: 16px;\n  font-style: normal;\n  -webkit-font-smoothing: antialiased;\n  -webkit-text-stroke-width: 0.2px;\n  -moz-osx-font-smoothing: grayscale; }\n", ""]);
 
 // exports
 
