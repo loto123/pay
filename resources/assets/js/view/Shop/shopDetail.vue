@@ -766,7 +766,6 @@ export default {
             return;
           }
 
-
           console.log(Number(value));
           console.log(this.platform_fee);
           if(Number(value)>= Number(this.platform_fee)){
@@ -796,7 +795,8 @@ export default {
 
       // 设置单价
       if(type=="rate"){
-          MessageBox.prompt("请输入新的单价(只能为整数)","修改单价",).then(({ value, action }) => {
+          MessageBox.prompt("请输入新的单价(允许有1位小数)","修改单价",).then(({ value, action }) => {
+
             if(!value){
               Toast("单价不能为空");
               return;
@@ -807,9 +807,13 @@ export default {
               return;
             }
 
-            if(value.toString().indexOf(".")!=-1){
-              Toast("请输入正确的单价(整数)");
+            if((parseFloat(value)*10).toString().indexOf(".")!=-1 && parseFloat(value) > 0){
+              Toast("请输入正确的单价(允许有1位小数)");
               return;
+            }
+
+            if(parseFloat(value) >=100000){
+              Toast("单价的最大值位99999");
             }
 
             var _data = {
