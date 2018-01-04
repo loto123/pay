@@ -211,7 +211,7 @@ export default {
           this.weChatBind(self.userId);
         }
       }).catch(function(err){
-        // Toast(err.data.);
+        Toast(err.data.msg);
         console.log(err);
       });
 
@@ -225,7 +225,9 @@ export default {
         
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
-      }).catch();
+      }).catch(err=>{
+        Toast(err.data.msg);
+      });
     },
 
     weChatBind(mobile){
@@ -238,7 +240,7 @@ export default {
         Loading.getInstance().close();
 
       }).catch(err=>{
-
+        Toast(err.data.msg);
       });
     },
 
@@ -262,5 +264,6 @@ export default {
     }
   }
 };
+
 </script>
 

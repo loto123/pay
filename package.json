@@ -24,6 +24,7 @@
         "babel-polyfill": "^6.26.0",
         "element-ui": "^2.0.5",
         "mint-ui": "^2.2.11",
-        "moment": "^2.19.4"
+        "moment": "^2.19.4",
+        "weixin-js-sdk": "^1.2.0"
     }
 }

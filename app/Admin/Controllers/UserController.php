@@ -74,8 +74,8 @@ class UserController extends Controller
 
         return Admin::grid(User::class, function (Grid $grid) {
 
-            $user_id = User::decrypt(Request::input('user_id'));
-            $parent_id = User::decrypt(Request::input('parent_id'));
+            $user_mobile = Request::input('user_id');
+            $parent_mobile = Request::input('parent_id');
             $operator_id = Request::input('operator_id');
             $channel_id = Request::input('channel_id');
             $role = Request::input('role');
@@ -86,11 +86,13 @@ class UserController extends Controller
                     DB::raw('abs(SUM( CASE WHEN stat=1 THEN amount ELSE 0 END)) AS payment'),
                     DB::raw('abs(SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END)) AS profit'),
                     DB::raw('COUNT(tfr.id) AS transfer_count'));
-            if ($user_id) {
-                $grid->model()->where($user_table.'.id', $user_id);
+            if ($user_mobile) {
+                $grid->model()->where($user_table.'.mobile', $user_mobile);
             }
-            if ($parent_id) {
-                $grid->model()->where($user_table.'.parent_id', $parent_id);
+            if ($parent_mobile) {
+                $grid->model()->whereHas('parent',function ($query) use($parent_mobile) {
+                    $query->where('mobile',$parent_mobile);
+                });
             }
             if ($operator_id) {
                 $grid->model()->join('admin_users as au','au.id','=',$user_table.'.operator_id')->where('au.username', $operator_id);
@@ -133,7 +135,7 @@ class UserController extends Controller
             });
             $grid->parent_id('上级代理')->display(function () {
                 if($this->parent_id>0) {
-                    return $this->parent->en_id();
+                    return $this->parent->mobile;
                 } else{
                     return '无';
                 }

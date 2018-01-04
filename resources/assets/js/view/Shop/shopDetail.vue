@@ -657,6 +657,8 @@ export default {
               })
               .catch(error => {
                 console.error(error);
+                Loading.getInstance().close();
+                Toast(error.data.msg);
               });
         }).catch(err=>{
 
@@ -745,7 +747,7 @@ export default {
             },1500);
           }).catch(err=>{
             Loading.getInstance().close();
-            Toast(err.data.data.msg);
+            Toast(err.data.msg);
           });  
         }).catch(err=>{});
       }
@@ -759,8 +761,13 @@ export default {
             return;
           }
 
+          if(isNaN(Number(value))){
+            Toast("请输入正确的手续费率");
+            return;
+          }
 
-          console.log(value);
+
+          console.log(Number(value));
           console.log(this.platform_fee);
           if(Number(value)>= Number(this.platform_fee)){
               Toast("手续费率必须小于平台交易费率"+this.platform_fee+"%");
@@ -782,22 +789,33 @@ export default {
           }).catch(err=>{
             Loading.getInstance().close();
             
-            Toast(err.data.data.msg);
+            Toast(err.data.msg);
           });  
         }).catch(err=>{});
       }
 
       // 设置单价
       if(type=="rate"){
-          MessageBox.prompt("请输入新的单价","修改单价",).then(({ value, action }) => {
+          MessageBox.prompt("请输入新的单价(只能为整数)","修改单价",).then(({ value, action }) => {
             if(!value){
               Toast("单价不能为空");
+              return;
+            }
+
+            if(isNaN(Number(value))){
+              Toast("请输入正确的单价");
+              return;
+            }
+
+            if(value.toString().indexOf(".")!=-1){
+              Toast("请输入正确的单价(整数)");
               return;
             }
 
             var _data = {
               rate:value
             };
+
             Loading.getInstance().open();
             request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
               Loading.getInstance().close();
@@ -808,7 +826,7 @@ export default {
               },1500);
             }).catch(err=>{
               Loading.getInstance().close();
-              Toast(err.data.data.msg);
+              Toast(err.data.msg);
             });  
           }).catch(err=>{});
         }
