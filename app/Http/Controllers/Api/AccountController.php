@@ -158,6 +158,7 @@ class AccountController extends BaseController {
 
         try {
             if ($result = $user->container->initiateDeposit($request->amount, $channel, $method)) {
+                $record->no = $request['deposit_id'];
                 $record->save();
             } else {
                 return $this->json([], 'error', 0);
@@ -167,7 +168,7 @@ class AccountController extends BaseController {
             return $this->json([], 'error', 0);
         }
 
-        return $this->json(['redirect_url' => $result]);
+        return $this->json(['redirect_url' => $result['pay_info']]);
     }
 
     /**
@@ -295,14 +296,16 @@ class AccountController extends BaseController {
                 return $this->json([], '提现金额必须大于0', 0);
             }
 
-            if ($result = $user->container->initiateWithdraw(
+            $result = $user->container->initiateWithdraw(
                 $request->amount,
                 $receiver_info,
                 $channel,
                 $method,
                 $fee
-            )
-            ) {
+            );
+
+            if ($result['success']) {
+                $record->no = $result['withdraw_id'];
                 $record->save();
             } else {
                 return $this->json([], 'error', 0);
