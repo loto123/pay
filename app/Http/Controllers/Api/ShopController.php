@@ -578,6 +578,13 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="integer"
      *   ),
+     *   @SWG\Parameter(
+     *     name="keyword",
+     *     in="query",
+     *     description="搜索关键字",
+     *     required=false,
+     *     type="string"
+     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -627,8 +634,13 @@ class ShopController extends BaseController {
         if (!$is_manager && !$is_member) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
+        if ($request->keyword) {
+            $query = $shop->users()->where("name", 'like', '%'.$request->keyword.'%');
+        } else {
+            $query = $shop->users();
+        }
         $members = [];
-        foreach ($shop->users()->paginate($size) as $_user) {
+        foreach ($query->paginate($size) as $_user) {
             /* @var $_user User */
             $members[] = [
                 'id' => (string)$_user->en_id(),
@@ -638,7 +650,7 @@ class ShopController extends BaseController {
             ];
         }
         return $this->json([
-            'count' => (int)$shop->users()->count(),
+            'count' => (int)$query->count(),
             'members' => $members,
         ]);
     }
