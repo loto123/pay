@@ -13,6 +13,7 @@ use App\TransferUserRelation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use JWTAuth;
 use Skip32;
@@ -488,7 +489,9 @@ class TransferController extends BaseController
                     if ($user->parent) {
                         $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
-                        $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
+                        if ($proxy_fee) {
+                            $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
+                        }
                     }
                 }
                 //实际获得
@@ -502,6 +505,7 @@ class TransferController extends BaseController
                 $transfer_container = PayFactory::MasterContainer($transfer->container->id);
                 $pay_transfer = $transfer_container->transfer($user_container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
                 if (!$pay_transfer) {
+                    Log::error('拿钱失败,容器转账失败', [$transfer_container->getKey(), $user_container->getKey(), $record->amount - $tips, $record->fee_amount - $proxy_fee, json_encode($profit_shares)]);
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }
             }
@@ -532,6 +536,7 @@ class TransferController extends BaseController
             DB::commit();
             return $this->json([], trans('trans.trade_success'), 1);
         } catch (\Exception $e) {
+            Log::error('店铺交易失败,异常', $e->getTrace());
             DB::rollBack();
         }
         return $this->json([], trans('trans.trade_failed'), 0);

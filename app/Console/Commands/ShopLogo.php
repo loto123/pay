@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ShopLogo extends Command
 {
+    private $content_cache = [];
     /**
      * The name and signature of the console command.
      *
@@ -165,27 +166,13 @@ class ShopLogo extends Command
                 $start_x    = $line_x;
                 $start_y    = $start_y + $pic_h + $space_y;
             }
-            $pathInfo    = pathinfo($pic_path);
-            if (isset($pathInfo['extension'])) {
-                switch( strtolower($pathInfo['extension']) ) {
-                    case 'jpg':
-                    case 'jpeg':
-                        $imagecreatefromjpeg    = 'imagecreatefromjpeg';
-                        break;
-                    case 'png':
-                        $imagecreatefromjpeg    = 'imagecreatefrompng';
-                        break;
-                    case 'gif':
-                    default:
-                        $imagecreatefromjpeg    = 'imagecreatefromstring';
-                        $pic_path    = file_get_contents($pic_path);
-                        break;
-                }
+            if (isset($this->content_cache[$pic_path]) && $this->content_cache[$pic_path]) {
+                $file_content = $this->content_cache[$pic_path];
             } else {
-                $imagecreatefromjpeg    = 'imagecreatefromstring';
-                $pic_path    = file_get_contents($pic_path);
+                $this->content_cache[$pic_path] = $file_content = file_get_contents($pic_path);
             }
-            $resource   = $imagecreatefromjpeg($pic_path);
+            $resource = imagecreatefromstring($file_content);
+
             // $start_x,$start_y copy图片在背景中的位置
             // 0,0 被copy图片的位置
             // $pic_w,$pic_h copy后的高度和宽度
