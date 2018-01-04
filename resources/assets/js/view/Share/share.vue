@@ -23,7 +23,7 @@
         </div>
 
         <div class="submit">
-          <mt-button type="primary" size="large" @click="submit">申请加入</mt-button>
+          <mt-button type="primary" size="large" @click="submit" :disabled="clickEnable">申请加入</mt-button>
         </div>
       </div>
 
@@ -159,7 +159,9 @@ export default {
           shopName:null,
           membersCount:null,
           manager:null,
-          timer:null
+          timer:null,
+
+          clickEnable:false
 
       }
   },
@@ -182,6 +184,7 @@ export default {
           Loading.getInstance().close();
         });
       },
+
       submit(){
         Loading.getInstance().open();
 
@@ -195,11 +198,25 @@ export default {
             },1000)
         }
 
+        // 防止连续点击
+        this.clickEnable = true;
+
         request.getInstance().postData("api/shop/join/"+this.shopId).then(res=>{
+
           Loading.getInstance().close();
           Toast("申请加入店铺成功");
+          setTimeout(()=>{
+            this.clickEnable = false;
+          },1500);
+
         }).catch(error=>{
+
           Loading.getInstance().close();
+          Toast(error.data.msg);
+          setTimeout(()=>{
+            this.clickEnable = false;
+          },1500);
+
         });
       }
   }
