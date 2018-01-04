@@ -119,7 +119,7 @@ class ShopController extends BaseController {
         $shop_user->save();
         Artisan::queue('shop:logo', [
             '--id' => $shop->id
-        ])->onConnection('redis')->onQueue('shop_logo');
+        ]);
         return $this->json();
     }
 
@@ -702,7 +702,7 @@ class ShopController extends BaseController {
         ShopUser::where("user_id", $member->id)->where("shop_id", $shop->id)->delete();
         Artisan::queue('shop:logo', [
             '--id' => $shop->id
-        ])->onConnection('redis')->onQueue('shop_logo');
+        ]);
         return $this->json();
     }
     
@@ -809,6 +809,9 @@ class ShopController extends BaseController {
 
         $shop = Shop::findByEnId($id);
         ShopUser::where('shop_id', $shop->id)->where("user_id", $user->id)->delete();
+        Artisan::queue('shop:logo', [
+            '--id' => $shop->id
+        ]);
         return $this->json();
     }
 
@@ -1346,7 +1349,7 @@ class ShopController extends BaseController {
         if ($shop_ids) {
             Artisan::queue('shop:logo', [
                 '--id' => array_unique($shop_ids)
-            ])->onConnection('redis')->onQueue('shop_logo');
+            ]);
         }
         return $this->json();
     }
