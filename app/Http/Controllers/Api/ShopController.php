@@ -809,6 +809,9 @@ class ShopController extends BaseController {
 
         $shop = Shop::findByEnId($id);
         ShopUser::where('shop_id', $shop->id)->where("user_id", $user->id)->delete();
+        Artisan::queue('shop:logo', [
+            '--id' => $shop->id
+        ]);
         return $this->json();
     }
 
