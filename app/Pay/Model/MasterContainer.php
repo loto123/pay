@@ -80,7 +80,7 @@ class MasterContainer extends Container
      * @param $amount float
      * @param $byChannel Channel 支付通道
      * @param DepositMethod $byMethod WithdrawMethod 支付方式
-     * @return mixed 返回一个支付信息字符串或null
+     * @return array
      */
     public function initiateDeposit($amount, Channel $byChannel, DepositMethod $byMethod)
     {
@@ -124,7 +124,7 @@ class MasterContainer extends Container
         if (!$response) {
             throw new Exception('当前支付方式异常');
         }
-        return $response;
+        return ['pay_info' => $response, 'deposit_id' => $order->getKey()];
     }
 
 
@@ -137,7 +137,7 @@ class MasterContainer extends Container
      * @param Channel $byChannel
      * @param WithdrawMethod $byMethod
      * @param $system_fee
-     * @return bool
+     * @return array
      */
     public function initiateWithdraw($amount, array $receiver_info, Channel $byChannel, WithdrawMethod $byMethod, $system_fee)
     {
@@ -177,7 +177,7 @@ class MasterContainer extends Container
         if (!$commit) {
             DB::rollBack();
         }
-        return $commit;
+        return ['success' => $commit, 'withdraw_id' => $commit ? $withdraw->getKey() : 0];
     }
 
 }
