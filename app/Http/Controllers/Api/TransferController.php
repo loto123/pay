@@ -489,7 +489,9 @@ class TransferController extends BaseController
                     if ($user->parent) {
                         $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
-                        $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
+                        if ($proxy_fee) {
+                            $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
+                        }
                     }
                 }
                 //实际获得
