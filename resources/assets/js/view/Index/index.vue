@@ -58,6 +58,15 @@
               <h3>我的用户</h3>
             </a>
           </li>
+
+          <li class="flex flex-v flex-align-center">
+            <a href="/#/shareUser" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe64f;
+              </i>
+              <h3>展业</h3>
+            </a>
+          </li>
           
         </ul>
       </section>
