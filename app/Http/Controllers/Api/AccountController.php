@@ -158,7 +158,7 @@ class AccountController extends BaseController {
 
         try {
             if ($result = $user->container->initiateDeposit($request->amount, $channel, $method)) {
-                $record->no = $request['deposit_id'];
+                $record->no = $result['deposit_id'];
                 $record->save();
             } else {
                 return $this->json([], 'error', 0);
