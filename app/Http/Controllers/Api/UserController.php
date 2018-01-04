@@ -22,7 +22,36 @@ class UserController extends BaseController
      *   path="/my/index",
      *   summary="我的列表",
      *   tags={"我的"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="identify_status", type="integer", example=1,description="实名认证状态:1 已认证，0 未认证"),
+     *                  @SWG\Property(property="card_count", type="integer", example=0,description="已绑定银行卡张数"),
+     *                  @SWG\Property(property="parent_name", type="string", example="张三",description="推荐人姓名"),
+     *                  @SWG\Property(property="parent_mobile", type="string", example="13333333333",description="推荐人手机号"),
+     *                  @SWG\Property(property="has_pay_password", type="integer", example=1,description="是否设置支付密码：1 已设置，0 未设置"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     *
      * )
      * @return \Illuminate\Http\Response
      */
@@ -72,7 +101,30 @@ class UserController extends BaseController
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -123,7 +175,30 @@ class UserController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -179,7 +254,30 @@ class UserController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -232,7 +330,30 @@ class UserController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -269,7 +390,35 @@ class UserController extends BaseController
      *   path="/my/getPayCard",
      *   summary="查看结算卡",
      *   tags={"我的"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="user_mobile", type="string", example="13333333333",description="用户手机号(账号)"),
+     *                  @SWG\Property(property="holder_name", type="string", example="张三",description="持卡人姓名"),
+     *                  @SWG\Property(property="holder_id", type="string", example="123456******1234",description="持卡人身份证号"),
+     *                  @SWG\Property(property="card_num", type="string", example="123456******1234",description="银行卡号"),
+     *                  @SWG\Property(property="bank", type="string", example="中国银行",description="开户行名称"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -317,7 +466,30 @@ class UserController extends BaseController
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -378,7 +550,39 @@ class UserController extends BaseController
      *   path="/my/info",
      *   summary="用户信息",
      *   tags={"我的"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="name", type="string", example="张三",description="昵称"),
+     *                  @SWG\Property(property="mobile", type="string", example="13333333333",description="手机号"),
+     *                  @SWG\Property(property="thumb", type="string", example="url",description="头像"),
+     *                  @SWG\Property(property="has_pay_password", type="integer", example="1",description="是否已设置支付密码 1：已设置，0：未设置"),
+     *                  @SWG\Property(property="id_number", type="string", example="123456******1234",description="身份证号"),
+     *                  @SWG\Property(property="has_parent", type="integer", example="1",description="是否有推荐人 1:有，0：没有"),
+     *                  @SWG\Property(property="parent_name", type="string", example="李四",description="推荐人昵称"),
+     *                  @SWG\Property(property="parent_mobile", type="string", example="14444444444",description="推荐人手机号"),
+     *                  @SWG\Property(property="pay_card_id", type="integer", example="1",description="结算卡id"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -428,7 +632,45 @@ class UserController extends BaseController
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(
+     *             @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="time", type="integer", example="1",description="当日剩余错误次数（当次数为0时，不会返回此字段）"),
+     *              )
+     *         )
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -464,7 +706,33 @@ class UserController extends BaseController
      *   path="/my/parent",
      *   summary="推荐人信息",
      *   tags={"我的"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="name", type="string", example="张三",description="昵称"),
+     *                  @SWG\Property(property="mobile", type="string", example="13333333333",description="手机号"),
+     *                  @SWG\Property(property="avatar", type="string", example="url",description="头像")
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */

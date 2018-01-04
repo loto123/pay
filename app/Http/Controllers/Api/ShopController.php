@@ -90,7 +90,7 @@ class ShopController extends BaseController {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:20',
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'required|integer|between:1,100',
+            'percent' => 'required|integer|between:0,100',
             'active' => 'required'
         ]);
 
@@ -905,7 +905,7 @@ class ShopController extends BaseController {
         $validator = Validator::make($request->all(), [
             'name' => 'max:20',
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'integer|between:1,100',
+            'percent' => 'integer|between:0,100',
         ]);
 
         if ($validator->fails()) {

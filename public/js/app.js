@@ -65113,7 +65113,11 @@ var render = function() {
         { staticClass: "settleInfo-container" },
         [
           _c("mt-field", {
-            attrs: { label: "原密码", placeholder: "请填写原密码" },
+            attrs: {
+              label: "原密码",
+              placeholder: "请填写原密码",
+              type: "password"
+            },
             model: {
               value: _vm.old_password,
               callback: function($$v) {
@@ -65124,7 +65128,11 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("mt-field", {
-            attrs: { label: "新密码", placeholder: "请填写新密码" },
+            attrs: {
+              label: "新密码",
+              placeholder: "请填写新密码",
+              type: "password"
+            },
             model: {
               value: _vm.new_password,
               callback: function($$v) {
@@ -65138,7 +65146,7 @@ var render = function() {
             attrs: {
               label: "确认新密码",
               placeholder: "请确认新密码",
-              type: "text"
+              type: "password"
             },
             model: {
               value: _vm.confirm_password,
@@ -65690,7 +65698,11 @@ var render = function() {
         { staticClass: "settleInfo-container" },
         [
           _c("mt-field", {
-            attrs: { label: "原密码", placeholder: "请填写原支付密码" },
+            attrs: {
+              label: "原密码",
+              placeholder: "请填写原支付密码",
+              type: "password"
+            },
             model: {
               value: _vm.old_pay_password,
               callback: function($$v) {
@@ -65701,7 +65713,11 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("mt-field", {
-            attrs: { label: "新密码", placeholder: "请填写新支付密码" },
+            attrs: {
+              label: "新密码",
+              placeholder: "请填写新支付密码",
+              type: "password"
+            },
             model: {
               value: _vm.new_pay_password,
               callback: function($$v) {
@@ -65715,7 +65731,7 @@ var render = function() {
             attrs: {
               label: "确认新密码",
               placeholder: "请再次输入新支付密码",
-              type: "text"
+              type: "password"
             },
             model: {
               value: _vm.confirm_pay_password,
@@ -65756,13 +65772,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "forget-password-box" }, [
-      _c("div", { staticClass: "notice" }, [_vm._v("支付密码必须为6位纯数字")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "forget-password" }, [
-        _c("a", { attrs: { href: "javascript:;" } }, [
-          _vm._v("\n        忘记原支付密码？\n      ")
-        ])
-      ])
+      _c("div", { staticClass: "notice" }, [_vm._v("支付密码必须为6位纯数字")])
     ])
   }
 ]
@@ -65862,7 +65872,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.header-container[data-v-2cc65e36] {\n  padding-top: 2em;\n  padding-bottom: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  background: #eee;\n  height: 100vh;\n}\n.header[data-v-2cc65e36] {\n  text-align: center;\n  border-top: 1px solid #ccc;\n  padding-top: 2em;\n}\n.header .imgWrap > img[data-v-2cc65e36] {\n    width: 4em;\n    height: 4em;\n    display: block;\n    margin: auto;\n    border-radius: 50%;\n    padding: 1em;\n    background: #fff;\n}\n.header .versions[data-v-2cc65e36] {\n    font-size: 1em;\n    text-align: center;\n    margin-top: 0.5em;\n}\n", ""]);
+exports.push([module.i, "\n.header-container[data-v-2cc65e36] {\n  padding-top: 2em;\n  padding-bottom: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  background: #eee;\n  height: 100vh;\n}\n.header[data-v-2cc65e36] {\n  text-align: center;\n  border-top: 1px solid #ccc;\n  padding-top: 2em;\n}\n.header .imgWrap > img[data-v-2cc65e36] {\n    width: 4em;\n    height: 4em;\n    display: block;\n    margin: auto;\n    border-radius: 50%;\n    padding: 1em;\n    background: #fff;\n}\n.header .versions[data-v-2cc65e36] {\n    font-size: 1em;\n    text-align: center;\n    margin-top: 0.5em;\n}\n.copyright[data-v-2cc65e36] {\n  width: 100%;\n  position: fixed;\n  bottom: 1.5em;\n  color: #666;\n  text-align: center;\n  font-size: 0.9em;\n}\n.copyright p[data-v-2cc65e36] {\n    margin-bottom: 0.5em;\n}\n", ""]);
 
 // exports
 
@@ -65875,6 +65885,21 @@ exports.push([module.i, "\n.header-container[data-v-2cc65e36] {\n  padding-top: 
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_topBack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_topBack__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -65963,6 +65988,12 @@ var staticRenderFns = [
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "versions" }, [_vm._v("聚宝朋 1.0.1")])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "copyright" }, [
+        _c("p", [_vm._v("长沙找找公司 版权所有")]),
+        _vm._v(" "),
+        _c("p", [_vm._v("Copyright © 2017 ZhaoZhao .All Rights Reserved.")])
       ])
     ])
   }
@@ -77033,6 +77064,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData("api/proxy/share", data).then(function (res) {
         var Data = res.data.data;
         var content = JSON.parse(Data.config);
+        console.log(content);
         __WEBPACK_IMPORTED_MODULE_5_weixin_js_sdk___default.a.config(content);
       }).catch(function (err) {
         console.error(err);
@@ -77047,8 +77079,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           desc: '这是一段文字', // 分享描述
           link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: '', // 分享图标
-          type: '', // 分享类型,music、video或link，不填默认为link
-          dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
           success: function success() {
             // 用户确认分享后执行的回调函数
             Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])('分享成功');
@@ -77069,6 +77099,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           },
           cancel: function cancel() {
             // 用户取消分享后执行的回调函数
+            console.log(2222);
           }
         });
       });
