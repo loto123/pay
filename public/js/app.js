@@ -52599,44 +52599,6 @@ var staticRenderFns = [
               _c("h3", [_vm._v("我的交易")])
             ]
           )
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-          _c(
-            "a",
-            {
-              staticClass: "flex flex-v flex-align-center",
-              attrs: { href: "/#/my/my_users" }
-            },
-            [
-              _c(
-                "i",
-                { staticClass: "iconfont transaction-icon common-icon" },
-                [_vm._v("\n              \n            ")]
-              ),
-              _vm._v(" "),
-              _c("h3", [_vm._v("我的用户")])
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "flex flex-v flex-align-center" }, [
-          _c(
-            "a",
-            {
-              staticClass: "flex flex-v flex-align-center",
-              attrs: { href: "/#/shareUser" }
-            },
-            [
-              _c(
-                "i",
-                { staticClass: "iconfont transaction-icon common-icon" },
-                [_vm._v("\n              \n            ")]
-              ),
-              _vm._v(" "),
-              _c("h3", [_vm._v("展业")])
-            ]
-          )
         ])
       ])
     ])
@@ -52961,15 +52923,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData('api/auth/login', data).then(function (res) {
         self.userId = res.data.data.id;
 
-        // if(res.data.data.wechat == 0){
-        //   Toast("登录成功，正在跳转绑定微信...");
-        //   setTimeout(()=>{
-        //       Loading.getInstance().open();
-        //   },1000);
+        if (res.data.data.wechat == 0) {
+          Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功，正在跳转绑定微信...");
+          setTimeout(function () {
+            __WEBPACK_IMPORTED_MODULE_3__utils_loading_js__["a" /* default */].getInstance().open();
+          }, 1000);
 
-        //   return Promise.resolve(true);
-
-        // }
+          return Promise.resolve(true);
+        }
 
         __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().setToken(res.data.data.token);
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])("登录成功");
