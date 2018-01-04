@@ -61,6 +61,7 @@
   import moment from 'moment'
   import { Toast } from 'mint-ui'
   import wx from 'weixin-js-sdk'
+  
   export default {
     created() {
       this.init();
@@ -81,14 +82,8 @@
         request.getInstance().getData("api/proxy/share", data)
           .then((res) => {
             var Data = res.data.data;
-            wx.config({
-              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-              appId: Data.appId,   // 必填，公众号的唯一标识
-              timestamp: Data.timestamp, // 必填，生成签名的时间戳
-              nonceStr: Data.nonceStr,   // 必填，生成签名的随机串
-              signature: Data.signature, // 必填，签名，见附录1
-              jsApiList: Data.jsApiList  // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-            });
+            var content=JSON.parse(Data.config);
+            wx.config(content);
           })
           .catch((err) => {
             console.error(err);
@@ -96,34 +91,41 @@
       },
       shareContent() {
         wx.ready(() => {
+          console.log(1111);
           //分享给朋友
           wx.onMenuShareAppMessage({
-            title: '', // 分享标题
-            desc: '', // 分享描述
+            title: '聚宝朋', // 分享标题
+            desc: '这是一段文字', // 分享描述
             link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: '', // 分享图标
             type: '', // 分享类型,music、video或link，不填默认为link
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
               // 用户确认分享后执行的回调函数
+              Toast('分享成功');
             },
             cancel: function () {
               // 用户取消分享后执行的回调函数
+              console.log(2222);
             }
           })
           //分享到朋友圈
           wx.onMenuShareTimeline({
-            title: '', // 分享标题
+            title: '聚宝朋', // 分享标题
             link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: '', // 分享图标
             success: function () {
               // 用户确认分享后执行的回调函数
+              Toast('分享成功');
             },
             cancel: function () {
               // 用户取消分享后执行的回调函数
             }
           })
         })
+      },
+      shareBtn(){
+        console.log('进来了');
       }
     },
     components: { topBack },
