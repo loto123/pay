@@ -46088,7 +46088,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\ni[data-v-21c80755] {\n  display: block;\n}\n.active[data-v-21c80755] {\n  color: #26a2ff;\n}\n.normal[data-v-21c80755] {\n  color: #666;\n}\n#tabBar[data-v-21c80755] {\n  position: absolute;\n  bottom: 0em;\n  left: 0em;\n  height: 3em;\n  border-top: 1px solid #eee;\n  width: 100%;\n  background: #f5f7fb;\n}\n#tabBar ul[data-v-21c80755] {\n    padding-top: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#tabBar ul li .comonIcon[data-v-21c80755] {\n      font-size: 1.7em;\n}\n#tabBar ul li p[data-v-21c80755] {\n      margin-top: 0.2em;\n      text-align: center;\n      font-size: 0.8em;\n}\n#tabBar ul li .make-deal[data-v-21c80755] {\n      width: 4.5em;\n      height: 4.5em;\n      background: #f5f7fb;\n      border-radius: 50%;\n      margin-top: -4em;\n}\n#tabBar ul li .make-deal i[data-v-21c80755] {\n        margin-top: 0.4em;\n        padding: 0.4em;\n        background: #26a2ff;\n        border-radius: 50%;\n        color: #fff;\n}\n#tabBar ul li .make-deal p[data-v-21c80755] {\n        margin-top: 0.5em;\n}\n", ""]);
+exports.push([module.i, "\ni[data-v-21c80755] {\n  /*display: block;*/\n}\n.active[data-v-21c80755] {\n  color: #26a2ff;\n}\n.normal[data-v-21c80755] {\n  color: #666;\n}\n#tabBar[data-v-21c80755] {\n  position: absolute;\n  bottom: 0em;\n  left: 0em;\n  height: 3em;\n  border-top: 1px solid #eee;\n  width: 100%;\n  background: #f5f7fb;\n}\n#tabBar ul[data-v-21c80755] {\n    padding-top: 0.2em;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n#tabBar ul li .comonIcon[data-v-21c80755] {\n      font-size: 1.7em;\n}\n#tabBar ul li p[data-v-21c80755] {\n      margin-top: 0.2em;\n      text-align: center;\n      font-size: 0.8em;\n}\n#tabBar ul li .make-deal[data-v-21c80755] {\n      width: 4.5em;\n      height: 4.5em;\n      background: #f5f7fb;\n      border-radius: 50%;\n      margin-top: -3.2em;\n}\n#tabBar ul li .make-deal i[data-v-21c80755] {\n        width: 1.9em;\n        height: 1.9em;\n        margin-top: 0.4em;\n        /*padding: 0.45em;*/\n        background: #26a2ff;\n        border-radius: 50%;\n        color: #fff;\n}\n#tabBar ul li .make-deal p[data-v-21c80755] {\n        margin-top: 0.5em;\n}\n", ""]);
 
 // exports
 
@@ -46099,6 +46099,8 @@ exports.push([module.i, "\ni[data-v-21c80755] {\n  display: block;\n}\n.active[d
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -46268,9 +46270,14 @@ var staticRenderFns = [
       [
         _c("div", { staticClass: "make-deal flex flex-v flex-align-center" }, [
           _c("a", { attrs: { href: "/#/makeDeal" } }, [
-            _c("i", { staticClass: "iconfont message-icon comonIcon normal" }, [
-              _vm._v("")
-            ]),
+            _c(
+              "i",
+              {
+                staticClass:
+                  "iconfont message-icon comonIcon normal flex flex-align-center flex-justify-center"
+              },
+              [_vm._v("")]
+            ),
             _vm._v(" "),
             _c("p", { staticClass: "normal" }, [_vm._v("发起交易")])
           ])
