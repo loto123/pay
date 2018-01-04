@@ -450,7 +450,7 @@ class AuthController extends BaseController {
             $validator = Validator::make($request->all(), [
                 'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable().',mobile',
                 'code' => 'regex:/^\d{4}$/',
-            ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.unique' => trans("api.user_exist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
+            ], ['mobile.regex'=>trans("api.error_mobile_format"), 'invite_mobile.regex'=>trans("api.error_invite_mobile_format"), 'mobile.exists' => trans("api.user_unexist"), 'invite_mobile.exists' => trans("api.invite_unexist")]);
         } else {
             $validator = Validator::make($request->all(), [
                 'mobile' => 'required_with:code|regex:/^1[34578][0-9]{9}$/|unique:'.(new User)->getTable().',mobile',
