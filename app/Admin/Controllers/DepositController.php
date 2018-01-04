@@ -86,13 +86,13 @@ SCRIPT
 
                 $filter->where(function ($query) {
                     $query->whereHas('masterContainer.user', function ($query) {
-                        $query->where('id', '=', $this->input);
+                        $query->where('mobile', '=', $this->input);
                     });
 
                 }, '用户ID');
             });
             $grid->column('user_id', '用户ID')->display(function () {
-                return $this->masterContainer->user->getKey();
+                return $this->masterContainer->user->mobile;
             });
             $grid->column('nickname', '昵称')->display(function () {
                 return $this->masterContainer->user->name;

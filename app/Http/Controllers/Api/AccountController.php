@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\Channel;
+use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
+use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawMethod;
 use App\Pay\PayLogger;
 use App\Shop;
@@ -543,7 +545,18 @@ class AccountController extends BaseController {
         $data = [];
         $user = $this->auth->user();
         /* @var $user User */
-        foreach ($user->funds()->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
+        $query = UserFund::with(['charge_order', 'withdraw_order'])->where("user_id", $user->id)->where(function ($query1) {
+            $query1->orWhere(function($query2){
+                $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function($q){
+                    $q->where("state", Deposit::STATE_COMPLETE);
+                });
+            })->orWhere(function($query3){
+                $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function($q){
+                    $q->where("state", Withdraw::STATE_COMPLETE);
+                });
+            })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
+        });
+        foreach ($query->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
@@ -552,7 +565,7 @@ class AccountController extends BaseController {
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['count' => (int)$user->funds()->count(), 'data' => $data]);
+        return $this->json(['count' => (int)$query->count(), 'data' => $data]);
     }
 
     /**

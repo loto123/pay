@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Pay\Model\Deposit;
+use App\Pay\Model\Withdraw;
 use Illuminate\Database\Eloquent\Model;
 
 class UserFund extends Model
@@ -27,4 +29,11 @@ class UserFund extends Model
 
     protected static $skip32_id = '0123456789abcdef0123';
 
+    public function charge_order() {
+        return $this->hasOne(Deposit::class, 'id', 'no');
+    }
+
+    public function withdraw_order() {
+        return $this->hasOne(Withdraw::class, 'id', 'no');
+    }
 }
