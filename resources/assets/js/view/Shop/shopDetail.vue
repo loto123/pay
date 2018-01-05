@@ -625,7 +625,7 @@ export default {
             this.tradeStatus = false;
           }
 
-          if(res.data.data.user_link == 1){
+          if(res.data.data.use_link == 1){
             this.inviteLinkStatus = true;
           }else {
             this.inviteLinkStatus = false;
