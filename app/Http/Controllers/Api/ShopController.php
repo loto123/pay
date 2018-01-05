@@ -406,7 +406,7 @@ class ShopController extends BaseController {
      *                  type="object",
      *                  @SWG\Property(property="id", type="string", example="1234567",description="店铺id"),
      *                  @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
-     *                  @SWG\Property(property="user_link", type="boolean", example=0, description="是否开启邀请链接 0=关闭 1=开启"),
+     *                  @SWG\Property(property="use_link", type="boolean", example=0, description="是否开启邀请链接 0=关闭 1=开启"),
      *                  @SWG\Property(property="active", type="boolean", example=1, description="是否开启交易  0=关闭 1=开启"),
      *                  @SWG\Property(property="members", type="array", description="成员列表",
      *                  @SWG\Items(
@@ -462,7 +462,7 @@ class ShopController extends BaseController {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
-                'user_link' => $shop->use_link ? 1 : 0,
+                'use_link' => $shop->use_link ? 1 : 0,
                 'active' => $shop->active ? 1 : 0,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
