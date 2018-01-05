@@ -1181,6 +1181,8 @@ class TransferController extends BaseController
                         $profit->fee_percent = $transfer->fee_percent;
                         $profit->proxy = 0;
                         $profit->operator = 0;
+                        $profit->proxy_percent = 0;
+                        $profit->proxy_amount = 0;
                         if ($value->user->parent && $value->user->parent->percent) {
                             $profit->proxy = $value->user->parent->id;
                             $profit->proxy_percent = $value->user->parent->percent;
