@@ -422,7 +422,7 @@ class TransferController extends BaseController
                 }
                 //验证支付密码
                 try {
-                    $user->check_pay_password();
+                    $user->check_pay_password($request->input('pay_password'));
                 } catch (\Exception $e) {
                     return $this->json([], $e->getMessage(), 0);
                 }
@@ -831,7 +831,7 @@ class TransferController extends BaseController
         if ($request->action) {
             //验证支付密码
             try {
-                $user->check_pay_password();
+                $user->check_pay_password($request->input('pay_password'));
             } catch (\Exception $e) {
                 return $this->json([], $e->getMessage(), 0);
             }
