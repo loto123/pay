@@ -28,6 +28,6 @@ class ShopFund extends Model
     protected static $skip32_id = '0123456789abcdef0123';
 
     public function shop() {
-        return $this->belongsTo(Shop::class, 'id', 'shop_id');
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
 }
