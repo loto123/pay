@@ -177,7 +177,7 @@ class User extends Authenticatable
         $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $this->id);
         $times = Cache::get($key);
         if ($times && $times >= config("pay_pwd_validate_times", 5)) {
-            throw new \Exception(trans("api.over_max_times"));
+            throw new \Exception(trans("api.over_pay_password_max_times"));
         }
         if (!Hash::check($input, $this->pay_password)) {
             if(!$times) {

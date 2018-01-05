@@ -5,6 +5,7 @@ return [
     'error_shop_perm' => '没有操作该店铺的权限',
     'error_shop_percent' => '交易费用不能超过平台交易费',
     'over_max_times' => '超过最大开店次数',
+    'over_pay_password_max_times' => '密码错误次数超过限制，请稍后重试',
     'cannot_delete_self' => '不能从成员里删除自己',
     'shop_closed' => '店铺已关闭',
     'shop_cannot_close' => '当前店铺状态不能关闭,请关闭店铺交易及交易开关，提现店铺余额后重试',
