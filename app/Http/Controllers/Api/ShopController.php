@@ -1766,6 +1766,13 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="number"
      *   ),
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页码",
+     *     required=false,
+     *     type="number"
+     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -1809,17 +1816,24 @@ class ShopController extends BaseController {
         $data = [];
         $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
+        $query = $shop->funds();
+        if ($request->type !== null) {
+            $query->where("type", $request->type);
+        }
+        if ($request->start) {
+            $query->where("created_at", "<=", $request->start);
+        }
         /* @var $user User */
-        foreach ($shop->funds()->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
+        foreach ($query->orderBy('id',  'DESC')->paginate($request->input('size', 20)) as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
                 'mode' => (int)$_fund->mode,
-                'amount' => $_fund->amount,
+                'amount' => (double)$_fund->amount,
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['count' => $shop->funds()->count(), 'data' => $data]);
+        return $this->json(['count' => $query->count(), 'data' => $data]);
     }
 
     /**
