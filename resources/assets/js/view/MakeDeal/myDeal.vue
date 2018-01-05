@@ -12,7 +12,7 @@
         </div>
 
         <div class="deal-wrap" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50">
+            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
@@ -36,12 +36,13 @@
                     </div>
                 </li>
 
-              <p v-show="loading" class="page-infinite-loading">
-                <mt-spinner type="fading-circle"></mt-spinner>
-                加载中...
-              </p>
-
             </ul>
+            <p v-show="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+              <!--<span>-->
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+              <!--</span>-->
+            </p>
         </div>
   </div>
 </template>
@@ -165,6 +166,12 @@
         }
       }
     }
+
+    .page-infinite-loading{
+      height: 2.5em;
+      text-align: center;
+    }
+
   }
 }
 </style>
@@ -189,43 +196,51 @@ export default {
       wrapperHeight:null,
       loading: false,
       allLoaded: false,
+      canLoading:true,
     };
   },
 
   mounted(){
     this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
-    console.log(document.documentElement.clientHeight);
-    console.log(this.$refs.wrapper.getBoundingClientRect().top);
-    console.log(this.wrapperHeight);
   },
   methods: {
     loadMore() {
-      this.loading = true;
-      var _status = 0;
-      setTimeout(() => {
 
+      if(this.dataList.length==0 || !this.canLoading){
+        return;
+      }
+
+      this.loading = true;
+
+      var _status = 1;
+
+      this.canLoading = false;
+      setTimeout(() => {
         var _data = {
           status:_status,
-          limit:50,
+          limit:100,
           offset :this.dataList.length-1
         }
-        request.getInstance().getData('api/transfer/record',_data).then(res=>{
+
+      request.getInstance().getData('api/transfer/record',_data).then(res=>{
           for(var i = 0; i< res.data.data.data.length; i ++){
             this.dataList.push(res.data.data.data[i]);
+            this.loading = false;
+
+            if(res.data.data.data.length==0){
+              console.log("sssssssssssssssssssssssss");
+              this.canLoading = false;
+              this.loading = false;
+            }else {
+              this.canLoading = true;
+            }
+
+
           }
-//          this.dataList = res.data.data.data;
-          Loading.getInstance().close();
-
         }).catch(err=>{
-          Loading.getInstance().close();
-        });
 
-//        let last = this.dataList[this.dataList.length - 1];
-//        for (let i = 1; i <= 10; i++) {
-//          this.dataList.push(last + i);
-//        }
-        this.loading = false;
-      }, 2500);
+        });
+      }, 1500);
 
     },
 
