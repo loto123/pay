@@ -46,7 +46,7 @@ class CardController extends BaseController
      *                  @SWG\Property(property="card_num", type="string", example="123456******1234",description="银行卡号"),
      *                  @SWG\Property(property="bank", type="string", example="中国银行",description="开户行"),
      *                  @SWG\Property(property="card_type", type="string", example="储蓄卡",description="卡类型"),
-     *                  @SWG\Property(property="card_logo", type="string", example="url",description="银行卡logo"),
+     *                  @SWG\Property(property="card_logo", type="string", example="/image/1.jpg",description="银行卡logo"),
      *                  @SWG\Property(property="is_pay_card", type="integer", example=1,description="是否是结算卡 1：是，0：否"),
      *                  ),
      *              )
@@ -88,7 +88,7 @@ class CardController extends BaseController
                     'card_num' => $this->formatNum($item->card_num), //做掩码处理
                     'bank' => $item->bank_name,
                     'card_type' => $card_type,
-                    'card_logo' => $item->bank_logo,
+                    'card_logo' => Bank::LOGO_PRE . $item->bank_logo,
                     'is_pay_card' => ($item->id == $this->user->pay_card_id)? 1:0,
                 ];
             }
