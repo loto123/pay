@@ -124,7 +124,7 @@ class AccountController extends BaseController {
 //        $stdClass->pay_info = 'http://www.alipay.com';
 //        return $this->json($stdClass);
         $validator = Validator::make($request->all(), [
-            'amount' => 'required',
+            'amount' => 'required|min:0',
             'way' => 'required'
         ]);
 
@@ -193,7 +193,7 @@ class AccountController extends BaseController {
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -229,7 +229,7 @@ class AccountController extends BaseController {
     public function withdraw(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required',
+            'amount' => 'required|min:0',
             'way' => 'required',
             'password' => 'required'
         ]);
@@ -369,6 +369,13 @@ class AccountController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($request->shop_id);
         $user = $this->auth->user();
         if ($user->container->balance < $request->amount) {

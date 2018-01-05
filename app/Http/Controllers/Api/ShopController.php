@@ -466,9 +466,9 @@ class ShopController extends BaseController {
                 'active' => $shop->active ? 1 : 0,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'platform_fee' => config("platform_fee_percent"),
-                'rate' => $shop->price,
-                'percent' => $shop->fee,
+                'platform_fee' => (double)config("platform_fee_percent"),
+                'rate' => (double)$shop->price,
+                'percent' => (double)$shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => $shop->logo,
                 'is_manager' => $is_manager ? 1 : 0,
@@ -480,7 +480,7 @@ class ShopController extends BaseController {
                 'name' => $shop->name,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'rate' => $shop->price,
+                'rate' => (double)$shop->price,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => $shop->logo,
                 'is_manager' => $is_manager ? 1 : 0,
@@ -1056,6 +1056,9 @@ class ShopController extends BaseController {
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (!$shop || !$shop->use_link) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
@@ -1599,6 +1602,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer($shop_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
 
         if ($shop->container->balance < $request->amount) {
@@ -1666,7 +1676,7 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -1700,6 +1710,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer_member($shop_id, $user_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("error_balance"), 0);
