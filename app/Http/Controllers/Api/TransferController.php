@@ -1149,8 +1149,11 @@ class TransferController extends BaseController
                 $query->select('id', 'name');
             }])
             ->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
-        if ($request->limit && $request->offset) {
-            $query->offset($request->offset)->limit($request->limit);
+        if ($request->limit) {
+            $query->limit($request->limit);
+        }
+        if($request->offset) {
+            $query->offset($request->offset);
         }
         $list = $query->get();
         $data = [];
@@ -1274,8 +1277,11 @@ class TransferController extends BaseController
         $query = $shop->transfer()->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }])->where('status', $status)->select('id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
-        if ($request->limit && $request->offset) {
-            $query->offset($request->offset)->limit($request->limit);
+        if ($request->limit) {
+            $query->limit($request->limit);
+        }
+        if($request->offset) {
+            $query->offset($request->offset);
         }
         $list = $query->get();
         //装填响应数据
