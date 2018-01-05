@@ -193,7 +193,7 @@ class AccountController extends BaseController {
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
