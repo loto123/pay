@@ -92,7 +92,7 @@ class ShopController extends BaseController {
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
-        ]);
+        ],['name.required'=>'店铺名必填','name.max'=>'店铺名不能超过10']);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
