@@ -39,7 +39,7 @@
             this.content=res.data.data.content;
           })
           .catch((err) => {
-            console.error(err);
+            Toast(err.data.msg);
           })
       }
     }

@@ -67,7 +67,7 @@
 						location.href=res.data.data.redirect_url;
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
 					})
 			},
 			// watch: {
@@ -79,7 +79,7 @@
 						this.setBankList(res);
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
 					})
 			},
 			setBankList(res) {

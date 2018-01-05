@@ -130,7 +130,7 @@
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
 					})
 			},
 
@@ -144,7 +144,7 @@
 						Loading.getInstance().close();
 					})
 					.catch(err => {
-						console.error(err);
+						Toast(err.data.msg);
 						Loading.getInstance().close();
 					});
 			},
@@ -175,7 +175,7 @@
 					Loading.getInstance().close();
 				})
 					.catch(err => {
-						console.error(err);
+						Toast(err.data.msg);
 						Loading.getInstance().close();
 					});
 			},
@@ -239,8 +239,7 @@
 					this.$router.push('/my/bankCardManage');
 					Loading.getInstance().close();
 				}).catch(err => {
-					Toast(err.data.msg)
-					console.error(err);
+					Toast(err.data.msg);
 					Loading.getInstance().close();
 				});
 			},
@@ -269,7 +268,7 @@
 				request.getInstance().postData("api/auth/sms", _data).then((res) => {
 					Loading.getInstance().close();
 				}).catch((err) => {
-					console.error(err);
+					Toast(err.data.msg);
 					Loading.getInstance().close();
 				})
 			},

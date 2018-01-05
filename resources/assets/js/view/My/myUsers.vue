@@ -180,12 +180,10 @@ export default {
       Loading.getInstance().open();
 
       request.getInstance().getData('api/proxy/members/count').then(res=>{
-        console.log(res);
-
         this.indexData = res.data.data;
         Loading.getInstance().close();
       }).catch(err=>{
-
+        Toast(err.data.msg);
       });
     },
 

@@ -52,7 +52,7 @@
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
 						Loading.getInstance().close();
 					})
 			},
@@ -62,13 +62,12 @@
 
 				request.getInstance().postData('api/my/updatePayCard?'+'card_id='+card_id)
 					.then((res) => {
-						console.log(res);
 						Toast('更换成功');
 						this.bank();
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
 						Loading.getInstance().close();
 					})
 			}

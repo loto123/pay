@@ -62,7 +62,7 @@
            }
           })
           .catch((err) => {
-            console.log(err);
+            Toast(err.data.msg);
           })
       },
       //支付密码验证
@@ -82,7 +82,7 @@
             Loading.getInstance().close();
           })
           .catch((err) => {
-            console.log(err);
+            Toast(err.data.msg);
           })
       },
       //删除银行卡
@@ -98,7 +98,7 @@
               this.bank();
             })
             .catch((err) => {
-              console.log(err);
+              Toast(err.data.msg);
             })
           },
           () => {
@@ -119,7 +119,7 @@
             }
           })
           .catch((err) => {
-            console.error(err.data.msg);
+            Toast(err.data.msg);
           })
       }
     }

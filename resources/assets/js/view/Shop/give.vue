@@ -122,7 +122,7 @@
           })
           .catch((err) => {
             Loading.getInstance().close();
-            Toast(err.data.data.msg);
+            Toast(err.data.msg);
           })
       },
       init() {
@@ -153,7 +153,7 @@
             this.balance = res[1].data.data.balance;
             Loading.getInstance().close();
           }).catch(err => {
-            console.error(err);
+            Toast(err.data.msg);
             Loading.getInstance().close();
           });
       },

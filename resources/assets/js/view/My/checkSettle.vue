@@ -97,7 +97,7 @@
 						}
 					})
 					.catch((err) => {
-						// console.error(err.data.msg);
+						Toast(err.data.msg);
 					})
 			}
 		}

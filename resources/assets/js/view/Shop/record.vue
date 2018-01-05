@@ -119,12 +119,11 @@
                 console.log(this.shopId);
                 request.getInstance().getData("api/shop/transfer/records/"+this.shopId)
                     .then((res) => {
-                        console.log(res);
                         this.recordList=res.data.data.data;
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
-                        console.error(err);
+                        Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
             },
