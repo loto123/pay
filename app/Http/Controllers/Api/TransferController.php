@@ -196,20 +196,20 @@ class TransferController extends BaseController
      *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
      *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
      *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
-     *                  @SWG\Property(property="comment", type="string", example='大吉大利，恭喜发财', description="备注"),
+     *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
      *                  @SWG\Property(property="status", type="int", example="1", description="1 待结算 2 已平账 3 已关闭"),
      *                  @SWG\Property(
      *                      property="user",
      *                      type="object",
-     *                      description="发起交易红包人信息"
+     *                      description="发起交易红包人信息",
      *                      @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
      *                      @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
      *                      @SWG\Property(property="avatar", type="double", example=9.9, description="发起交易红包人头像"),
-     *                  )
+     *                  ),
      *                  @SWG\Property(
      *                      property="record",
      *                      type="array",
-     *                      description="交易记录"
+     *                      description="交易记录",
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
@@ -219,22 +219,22 @@ class TransferController extends BaseController
      *                          @SWG\Property(
      *                              property="user",
      *                              type="object",
-     *                              description="发起交易人信息"
+     *                              description="发起交易人信息",
      *                              @SWG\Property(property="id", type="string", example="1234567",description="发起交易人id"),
      *                              @SWG\Property(property="name", type="string", example="1234567", description="发起交易人昵称"),
      *                              @SWG\Property(property="avatar", type="double", example=9.9, description="发起交易人头像"),
      *                          )
      *                      )
-     *                  )
+     *                  ),
      *                  @SWG\Property(
      *                      property="joiner",
      *                      type="object",
-     *                      description="交易参与人列表"
+     *                      description="交易参与人列表",
      *                      @SWG\Items(
      *                          @SWG\Property(
      *                              property="user",
      *                              type="object",
-     *                              description="交易参与人信息"
+     *                              description="交易参与人信息",
      *                              @SWG\Property(property="id", type="string", example="1234567",description="交易参与人id"),
      *                              @SWG\Property(property="name", type="string", example="1234567", description="交易参与人昵称"),
      *                              @SWG\Property(property="avatar", type="double", example=9.9, description="交易参与人头像"),
@@ -851,27 +851,27 @@ class TransferController extends BaseController
      *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
      *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
      *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
-     *                  @SWG\Property(property="comment", type="string", example='大吉大利，恭喜发财', description="备注"),
+     *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
      *                  @SWG\Property(property="status", type="int", example="1", description="1 待结算 2 已平账 3 已关闭"),
      *                  @SWG\Property(
      *                      property="user",
      *                      type="object",
-     *                      description="发起交易红包人信息"
+     *                      description="发起交易红包人信息",
      *                      @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
      *                      @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
      *                      @SWG\Property(property="avatar", type="double", example=9.9, description="发起交易红包人头像"),
-     *                  )
+     *                  ),
      *                  @SWG\Property(
      *                      property="tips",
      *                      type="array",
-     *                      description="茶水费记录"
+     *                      description="茶水费记录",
      *                      @SWG\Items(
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="缴纳茶水费金额"),
      *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="缴纳茶水费时间"),
      *                          @SWG\Property(
      *                              property="user",
      *                              type="object",
-     *                              description="茶水费缴纳人信息"
+     *                              description="茶水费缴纳人信息",
      *                              @SWG\Property(property="id", type="string", example="1234567",description="茶水费缴纳人id"),
      *                              @SWG\Property(property="name", type="string", example="1234567", description="茶水费缴纳人昵称"),
      *                              @SWG\Property(property="avatar", type="double", example=9.9, description="茶水费缴纳人头像"),
@@ -1094,7 +1094,7 @@ class TransferController extends BaseController
      *                  @SWG\Property(
      *                      property="data",
      *                      type="array",
-     *                      description="交易记录"
+     *                      description="交易记录",
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
      *                          @SWG\Property(property="transfer_id", type="string", example="1234567",description="交易红包ID"),
@@ -1219,7 +1219,7 @@ class TransferController extends BaseController
      *                  @SWG\Property(
      *                      property="data",
      *                      type="array",
-     *                      description="交易记录"
+     *                      description="交易记录",
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
      *                          @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
@@ -1229,7 +1229,7 @@ class TransferController extends BaseController
      *                          @SWG\Property(
      *                              property="user",
      *                              type="object",
-     *                              description="发起交易红包人信息"
+     *                              description="发起交易红包人信息",
      *                              @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
      *                              @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
      *                              @SWG\Property(property="avatar", type="double", example=9.9, description="发起交易红包人头像"),
