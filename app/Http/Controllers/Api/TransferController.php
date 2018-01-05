@@ -1209,7 +1209,8 @@ class TransferController extends BaseController
             DB::commit();
             return $this->json([], trans('trans.trans_closed_success'), 1);
         } catch (\Exception $e) {
-            Log::error('关闭交易失败：' . $e->getTraceAsString());
+            Log::info('$profit：' . $profit);
+            Log::error('关闭交易失败：' . $e->getMessage());
             DB::rollBack();
         }
         return $this->json([], trans('trans.trans_closed_failed'), 0);
