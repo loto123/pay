@@ -88,7 +88,7 @@ class ShopController extends BaseController {
      */
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:20',
+            'name' => 'required|max:10',
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
@@ -903,7 +903,7 @@ class ShopController extends BaseController {
      */
     public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
-            'name' => 'max:20',
+            'name' => 'max:10',
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
             'percent' => 'integer|between:0,100',
         ]);
