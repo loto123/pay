@@ -54876,7 +54876,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.setBankList(res[1]); //获取提现方式列表
 				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
 			});
 		},
 		allWithdraw: function allWithdraw() {
@@ -54922,7 +54922,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])('提现成功');
 				_this2.$router.push('/myAccount');
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
 			});
 		},
 		setBankList: function setBankList(res) {
@@ -55761,7 +55761,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/account/charge', _data).then(function (res) {
 				location.href = res.data.data.redirect_url;
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.data.msg);
 			});
 		},
 
@@ -55774,7 +55774,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData('api/account/pay-methods/unknown/2').then(function (res) {
 				_this.setBankList(res);
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.data.msg);
 			});
 		},
 		setBankList: function setBankList(res) {
@@ -56097,7 +56097,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.has_pay_password = res[0].data.data.has_pay_password;
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -56173,7 +56173,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])('转账成功');
 				_this2.$router.push('/myAccount');
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
 			});
 		}
 	}
@@ -56758,11 +56758,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account/records").then(function (res) {
-                console.log(res);
                 _this.billList = res.data.data.data;
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
-                console.error(err);
+                Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             });
         },
@@ -57201,10 +57200,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				month: this.month
 			};
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/account/records/month", _data).then(function (res) {
-				console.log(res);
 				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -62218,7 +62216,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.data.msg);
 			});
 		},
 		realAuth: function realAuth(e) {
@@ -62845,7 +62843,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.mobile = res.data.data.mobile;
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["Toast"])(err.data.msg);
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       });
     }
@@ -63108,7 +63106,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this.showPasswordTag = true; //密码层弹出
         }
       }).catch(function (err) {
-        console.log(err);
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
       });
     },
 
@@ -63128,7 +63126,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.bankList = res.data.data;
         __WEBPACK_IMPORTED_MODULE_5__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        console.log(err);
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
       });
     },
     //删除银行卡
@@ -63143,7 +63141,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           });
           _this3.bank();
         }).catch(function (err) {
-          console.log(err);
+          Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
         });
       }, function () {
         //取消操作
@@ -63163,7 +63161,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this4.$router.push('/my/bankCardManage/addBankCard');
         }
       }).catch(function (err) {
-        console.error(err.data.msg);
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
       });
     }
   }
@@ -63468,7 +63466,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }
         }, 1000);
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.data.msg);
       });
     }
   }
@@ -63854,7 +63852,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				_this.mobile = res.data.data.mobile;
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
 			});
 		},
 		init: function init() {
@@ -63865,7 +63863,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				_this2.setBankList(res);
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -63894,7 +63892,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				_this3.pickerShow = true;
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -63958,7 +63956,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
 				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
-				console.error(err);
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -63990,7 +63987,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _data).then(function (res) {
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_4__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -64544,7 +64541,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this2.$router.push('/my/checkSettle/list');
 				}
 			}).catch(function (err) {
-				// console.error(err.data.msg);
+				Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
 			});
 		}
 	}
@@ -64802,7 +64799,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.bankList = res.data.data;
 				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -64813,12 +64810,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().open("加载中...");
 
 			__WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData('api/my/updatePayCard?' + 'card_id=' + card_id).then(function (res) {
-				console.log(res);
 				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])('更换成功');
 				_this2.bank();
 				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
 			});
 		}
@@ -65085,7 +65081,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('密码修改成功');
         _this.$router.push('/login'); //调转到登录页
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
       });
     }
   }
@@ -65386,7 +65382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/sms", _temp).then(function (res) {
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
       });
     }
   }
@@ -65669,7 +65665,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])('密码修改成功');
         _this.$router.push('/my/set');
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
       });
     }
   }
@@ -66170,7 +66166,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             _this.backToLastPage();
                         }, 1500);
                     }).catch(function (err) {
-                        console.error(err);
+                        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
                     });
                 }
             }
@@ -66504,11 +66500,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().open();
 
       __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().getData('api/proxy/members/count').then(function (res) {
-        console.log(res);
-
         _this.indexData = res.data.data;
         __WEBPACK_IMPORTED_MODULE_1__utils_loading__["a" /* default */].getInstance().close();
-      }).catch(function (err) {});
+      }).catch(function (err) {
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
+      });
     },
 
 
@@ -71075,11 +71071,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.shopId = this.$route.query.id;
             console.log(this.shopId);
             __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().getData("api/shop/transfer/records/" + this.shopId).then(function (res) {
-                console.log(res);
                 _this.recordList = res.data.data.data;
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             }).catch(function (err) {
-                console.error(err);
+                Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
                 __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
             });
         },
@@ -71507,7 +71502,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.mode = res.data.data.mode;
 				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
 			}).catch(function (err) {
-				console.error(err);
+				Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
 				__WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
 			});
 		},
@@ -73614,7 +73609,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.balance = res[1].data.data.balance;
         __WEBPACK_IMPORTED_MODULE_3__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_4_mint_ui__["Toast"])(err.data.msg);
       });
     },
     allWithdraw: function allWithdraw() {
@@ -74011,7 +74006,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.$router.push('/shop/shopAccount?id=' + _this.shopId);
       }).catch(function (err) {
         __WEBPACK_IMPORTED_MODULE_3__utils_loading_js__["a" /* default */].getInstance().close();
-        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.data.msg);
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
       });
     },
     init: function init() {
@@ -74043,7 +74038,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this3.balance = res[1].data.data.balance;
         __WEBPACK_IMPORTED_MODULE_3__utils_loading_js__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_5_mint_ui__["Toast"])(err.data.msg);
         __WEBPACK_IMPORTED_MODULE_3__utils_loading_js__["a" /* default */].getInstance().close();
       });
     },
@@ -75083,7 +75078,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.transfer_id = res.data.data.transfer_id;
         _this.type = res.data.data.type;
       }).catch(function (err) {
-        console.error(err);
+        Toast(err.data.msg);
       });
     }
   },
@@ -75334,7 +75329,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_1__utils_userRequest__["a" /* default */].getInstance().getData('api/notice/index').then(function (res) {
         self.registerList = res.data.data[2];
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
       });
     },
 
@@ -75350,7 +75345,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           });
           _this.registerInfo();
         }).catch(function (err) {
-          console.log(err);
+          Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
         });
       }, function () {
         //取消操作
@@ -75631,7 +75626,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         self.systemList = res.data.data[3];
         // console.log(systemInfo);
       }).catch(function (err) {
-        console.error(err);
+        Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
       });
     },
 
@@ -75647,7 +75642,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           });
           _this.systemInfo();
         }).catch(function (err) {
-          console.error(err);
+          Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])(err.data.msg);
         });
       }, function () {
         //取消操作
@@ -75914,7 +75909,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.time = res.data.data.time;
         _this.content = res.data.data.content;
       }).catch(function (err) {
-        console.error(err);
+        Toast(err.data.msg);
       });
     }
   }
