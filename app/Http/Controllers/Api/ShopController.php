@@ -1056,6 +1056,9 @@ class ShopController extends BaseController {
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (!$shop || !$shop->use_link) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
@@ -1599,6 +1602,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer($shop_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
 
         if ($shop->container->balance < $request->amount) {
@@ -1700,6 +1710,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer_member($shop_id, $user_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("error_balance"), 0);
