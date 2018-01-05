@@ -37,7 +37,7 @@
                 </li>
 
             </ul>
-            <p v-show="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
               <!--<span>-->
                 <mt-spinner type="fading-circle"></mt-spinner>
                 <span style="margin-left: 0.5em;color:#999;">加载中...</span>
@@ -205,39 +205,43 @@ export default {
   },
   methods: {
     loadMore() {
-
+      this.loading =false;
       if(this.dataList.length==0 || !this.canLoading){
         return;
       }
 
       this.loading = true;
 
-      var _status = 1;
+      var _status = 0;
+      for(var i = 0; i<this.tabItem.length; i++){
+        if(this.tabItem[i] == true){
+          _status = i+1;
+        }
+      }
 
       this.canLoading = false;
       setTimeout(() => {
         var _data = {
           status:_status,
-          limit:100,
+          limit:50,
           offset :this.dataList.length-1
         }
 
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
-          for(var i = 0; i< res.data.data.data.length; i ++){
+
+        if(res.data.data.data.length == 0){
+          this.canLoading = false;
+          this.loading = false;
+          return;
+        }
+
+        for(var i = 0; i< res.data.data.data.length; i ++){
             this.dataList.push(res.data.data.data[i]);
-            this.loading = false;
+        }
 
-            if(res.data.data.data.length==0){
-              console.log("sssssssssssssssssssssssss");
-              this.canLoading = false;
-              this.loading = false;
-            }else {
-              this.canLoading = true;
-            }
-
-
-          }
-        }).catch(err=>{
+        this.canLoading = true;
+        this.loading = false;
+      }).catch(err=>{
 
         });
       }, 1500);

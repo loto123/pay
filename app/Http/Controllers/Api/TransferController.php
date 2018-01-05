@@ -451,6 +451,7 @@ class TransferController extends BaseController
         $tips = 0;
         if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
             $tips = $transfer->tip_percent * $amount / 100;
+            Log::info('$tips:'.$tips);
         }
         //收手续费
         $fee_amount = 0;
