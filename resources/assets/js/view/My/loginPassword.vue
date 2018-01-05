@@ -73,7 +73,7 @@
             this.$router.push('/login');  //调转到登录页
           })
           .catch((err) => {
-            console.error(err);
+            Toast(err.data.msg);
           })
       }
     }

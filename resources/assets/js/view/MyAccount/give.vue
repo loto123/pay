@@ -74,7 +74,7 @@
 						Loading.getInstance().close();
 					})
 					.catch(err => {
-						console.error(err);
+						Toast(err.data.msg);
 						Loading.getInstance().close();
 					});
 			},
@@ -152,7 +152,7 @@
 					this.$router.push('/myAccount');
 				})
 				.catch((err) => {
-					console.error(err);
+					Toast(err.data.msg);
 				})
 			}
 

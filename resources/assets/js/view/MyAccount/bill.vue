@@ -118,12 +118,11 @@
 
                 request.getInstance().getData("api/account/records")
                     .then((res) => {
-                        console.log(res);
                         this.billList=res.data.data.data
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
-                        console.error(err);
+                        Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
             },

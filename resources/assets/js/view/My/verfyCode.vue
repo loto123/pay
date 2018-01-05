@@ -73,7 +73,7 @@
         request.getInstance().postData("api/auth/sms",_temp).then((res) => {
           Loading.getInstance().close();
         }).catch((err) => {
-         console.error(err);
+          Toast(err.data.msg);
         })
       }
     }
