@@ -12,7 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    // .sourceMaps()                                       // 开发环境打开  生产环境注释掉
+    .sourceMaps()                                       // 开发环境打开  生产环境注释掉
     .version()
     .extract(['vue','axios','moment','mint-ui'])
     .sass('resources/assets/sass/app.scss', 'public/css');
