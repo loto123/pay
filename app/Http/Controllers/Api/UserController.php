@@ -683,22 +683,15 @@ class UserController extends BaseController
             return $this->json([], $validator->errors()->first(),0);
         }
         $user = JWTAuth::parseToken()->authenticate();
-        $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $user->id);
-        $times = Cache::get($key);
-        if ($times && $times >= config("pay_pwd_validate_times", 5)) {
-            return $this->json([], trans("api.over_max_times"),0);
-        }
-        if (!Hash::check($request->password, $user->pay_password)) {
-            if(!$times) {
-                Cache::put($key, 1, Carbon::now()->addDay(1));
+        /* @var $user User */
+        try {
+            if (!$user->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
             }
-            else {
-                Cache::increment($key);
-            }
-            return $this->json(['times' => config("pay_pwd_validate_times", 5) - $times], trans("api.error_pay_password"),0);
-        } else {
-            return $this->json();
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
         }
+        return $this->json();
     }
 
     /**

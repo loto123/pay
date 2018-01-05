@@ -238,8 +238,12 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-        if (!Hash::check($request->password, $user->pay_password)) {
-            return $this->json([], trans("api.error_pay_password"), 0);
+        try {
+            if (!$user->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
+            }
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
         }
         if (!$user->pay_card) {
             return $this->json([], trans("api.error_pay_card"), 0);

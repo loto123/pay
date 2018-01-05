@@ -90,7 +90,7 @@ class ShopController extends BaseController {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:20',
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'required|integer|between:1,100',
+            'percent' => 'required|integer|between:0,100',
             'active' => 'required'
         ]);
 
@@ -905,7 +905,7 @@ class ShopController extends BaseController {
         $validator = Validator::make($request->all(), [
             'name' => 'max:20',
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'integer|between:1,100',
+            'percent' => 'integer|between:0,100',
         ]);
 
         if ($validator->fails()) {
@@ -1565,7 +1565,7 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -1603,6 +1603,16 @@ class ShopController extends BaseController {
 
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("error_balance"), 0);
+        }
+        if (!$shop->manager) {
+            return $this->json([], trans("error_shop_manager"), 0);
+        }
+        try {
+            if (!$shop->manager->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
+            }
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
         }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
