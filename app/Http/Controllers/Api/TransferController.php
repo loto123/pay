@@ -422,7 +422,7 @@ class TransferController extends BaseController
                 }
                 //验证支付密码
                 try {
-                    $user->check_pay_password();
+                    $user->check_pay_password($request->input('pay_password'));
                 } catch (\Exception $e) {
                     return $this->json([], $e->getMessage(), 0);
                 }
@@ -479,7 +479,7 @@ class TransferController extends BaseController
                     //红包手续费金额
                     $transfer->fee_amount = $transfer->fee_amount + $record->fee_amount;
                     //代理分润
-                    if ($user->parent) {
+                    if ($user->parent && $user->parent->percent) {
                         $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
                         if ($proxy_fee) {
@@ -831,7 +831,7 @@ class TransferController extends BaseController
         if ($request->action) {
             //验证支付密码
             try {
-                $user->check_pay_password();
+                $user->check_pay_password($request->input('pay_password'));
             } catch (\Exception $e) {
                 return $this->json([], $e->getMessage(), 0);
             }
@@ -1181,7 +1181,9 @@ class TransferController extends BaseController
                         $profit->fee_percent = $transfer->fee_percent;
                         $profit->proxy = 0;
                         $profit->operator = 0;
-                        if ($value->user->parent) {
+                        $profit->proxy_percent = 0;
+                        $profit->proxy_amount = 0;
+                        if ($value->user->parent && $value->user->parent->percent) {
                             $profit->proxy = $value->user->parent->id;
                             $profit->proxy_percent = $value->user->parent->percent;
                             $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
@@ -1209,7 +1211,8 @@ class TransferController extends BaseController
             DB::commit();
             return $this->json([], trans('trans.trans_closed_success'), 1);
         } catch (\Exception $e) {
-            Log::error('关闭交易失败：' . $e->getTraceAsString());
+            Log::info('$profit：' . $profit);
+            Log::error('关闭交易失败：' . $e->getMessage());
             DB::rollBack();
         }
         return $this->json([], trans('trans.trans_closed_failed'), 0);
