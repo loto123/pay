@@ -421,17 +421,10 @@ class TransferController extends BaseController
                     return $this->json([], trans('trans.user_not_enough_money'), 0);
                 }
                 //验证支付密码
-                $today = date('Y-m-d');
-                $times = $user->paypwd_record()->where('created_at', '>=', $today)->where('created_at', '<=', $today . '23:59:59')->count();
-                if ($times >= config('pay_pwd_validate_times')) {
-                    return $this->json([], trans('trans.user_check_pay_password_times_out'), 0);
-                }
-                if (!Hash::check($request->pay_password, $user->pay_password)) {
-                    //验证错误次数+1
-                    $paypwdRecord = new PaypwdValidateRecord();
-                    $paypwdRecord->user_id = $user->id;
-                    $paypwdRecord->save();
-                    return $this->json([], trans('trans.user_pay_password_error'), 0);
+                try {
+                    $user->check_pay_password();
+                } catch (\Exception $e) {
+                    return $this->json([], $e->getMessage(), 0);
                 }
                 $record->stat = 1;
                 //用户减钱
@@ -837,17 +830,10 @@ class TransferController extends BaseController
         }
         if ($request->action) {
             //验证支付密码
-            $today = date('Y-m-d');
-            $times = $user->paypwd_record()->where('created_at', '>=', $today)->where('created_at', '<=', $today . '23:59:59')->count();
-            if ($times >= config('pay_pwd_validate_times')) {
-                return $this->json([], trans('trans.user_check_pay_password_times_out'), 0);
-            }
-            if (!Hash::check($request->pay_password, $user->pay_password)) {
-                //验证错误次数+1
-                $paypwdRecord = new PaypwdValidateRecord();
-                $paypwdRecord->user_id = $user->id;
-                $paypwdRecord->save();
-                return $this->json([], trans('trans.user_pay_password_error'), 0);
+            try {
+                $user->check_pay_password();
+            } catch (\Exception $e) {
+                return $this->json([], $e->getMessage(), 0);
             }
             DB::beginTransaction();
             try {
@@ -856,7 +842,7 @@ class TransferController extends BaseController
                 $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
                 $pay_transfer = $user_container->transfer($shop_container, $request->fee, 0, 0, 0);
                 if (!$pay_transfer) {
-                    return $this->json([], "111" . trans('trans.trade_failed'), 0);
+                    return $this->json([], trans('trans.trade_failed'), 0);
                 }
                 //减用户余额
 //                $user->balance = $user->balance - $request->fee;
@@ -1223,6 +1209,7 @@ class TransferController extends BaseController
             DB::commit();
             return $this->json([], trans('trans.trans_closed_success'), 1);
         } catch (\Exception $e) {
+            Log::error('关闭交易失败：' . $e->getTraceAsString());
             DB::rollBack();
         }
         return $this->json([], trans('trans.trans_closed_failed'), 0);
