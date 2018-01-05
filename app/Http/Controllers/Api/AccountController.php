@@ -513,6 +513,13 @@ class AccountController extends BaseController {
      *     required=false,
      *     type="number"
      *   ),
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页码",
+     *     required=false,
+     *     type="number"
+     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -567,7 +574,7 @@ class AccountController extends BaseController {
                 });
             })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
         });
-        foreach ($query->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
+        foreach ($query->orderBy('id',  'DESC')->paginate($request->input("size", 20)) as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,

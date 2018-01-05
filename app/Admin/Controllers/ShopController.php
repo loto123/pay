@@ -63,7 +63,7 @@ class ShopController extends Controller
             $listQuery->where($table_name.'.created_at', '>=', $begin)->where($table_name.'.created_at', '<=', $end);
             $countQuery->where($table_name.'.created_at', '>=', $begin)->where($table_name.'.created_at', '<=', $end);
         }
-        $listQuery->groupBy($table_name.'.id')->orderBy('tip_amount_cnt','DESC')->withCount('shop_user');
+        $listQuery->groupBy($table_name.'.id')->orderBy('tip_amount_cnt','DESC')->orderBy($table_name.'.id','DESC')->withCount('shop_user');
 
         $count = $countQuery->count();
         $list = $listQuery->paginate($this->limit);
