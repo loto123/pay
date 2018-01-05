@@ -98,7 +98,7 @@
         <div class="invite-link-switch flex flex-align-center flex-justify-between" v-if="isGroupMaster">
             <span class="title flex-9"> 邀请链接 </span>
             <span class="text flex-1 flex flex-reverse">
-                <mt-switch v-model="inviteLinkStatus"></mt-switch>
+                <mt-switch v-model="inviteLinkStatus" @change = "changeInviteLinkStatus"></mt-switch>
             </span>
         </div>
     </div>
@@ -125,7 +125,7 @@
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 是否开启交易功能 </span>
             <span class="text flex-1 flex flex-reverse">
-                <mt-switch v-model="tradeStatus"></mt-switch>
+                <mt-switch v-model="tradeStatus" @change = "changeTradeStatus"></mt-switch>
             </span>
         </div>
     </div>
@@ -605,7 +605,6 @@ export default {
         .getInstance()
         .getData("api/shop/detail/" + _id)
         .then(res => {
-          this.isShow = true;
           this.isGroupMaster = res.data.data.is_manager;
           this.shopId = res.data.data.id;
           this.shopName = res.data.data.name;
@@ -632,9 +631,12 @@ export default {
           }
 
           Loading.getInstance().close();
+
+          this.isShow = true;
+
         })
         .catch(error => {
-          Toast("当前页面不存在");
+          Toast(error.data.msg);
           this.$router.go(-1);
         });
     },
@@ -838,18 +840,13 @@ export default {
 
     SetString(str,len){
         return utils.SetString(str,len);
-    }
+    },
 
-  },
-  watch:{
-    // 邀请链接修改
-    "inviteLinkStatus":function(){
-
+    changeInviteLinkStatus(){
       var _link = null;
-
-      if(!this.isShow || !this.isGroupMaster){
-          return ;
-      }
+//      if(!this.isShow || !this.isGroupMaster){
+//        return ;
+//      }
 
       if(this.inviteLinkStatus == true){
         _link = 1;
@@ -864,16 +861,17 @@ export default {
       request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
 
       }).catch(err=>{
-          Toast("设置失败");
-          this.init();
+        Toast("设置失败");
+        this.init();
       });
     },
 
-    "tradeStatus":function(){
+    changeTradeStatus(){
       var _link = null;
-      if(!this.isShow || !this.isGroupMaster){
-          return ;
-      }
+
+//      if(!this.isShow || !this.isGroupMaster){
+//        return ;
+//      }
 
       if(this.tradeStatus == true){
         _link = 1;
@@ -888,11 +886,23 @@ export default {
       request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
 
       }).catch(err=>{
-          Toast("设置失败");
-          this.init();
+        Toast("设置失败");
+        this.init();
       });
     }
-  }
+
+  },
+//  watch:{
+//    // 邀请链接修改
+//    "inviteLinkStatus":function(){
+//
+//
+//    },
+//
+//    "tradeStatus":function(){
+//
+//    }
+//  }
 };
 </script>
 
