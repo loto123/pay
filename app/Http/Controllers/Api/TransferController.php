@@ -228,7 +228,7 @@ class TransferController extends BaseController
      *                  ),
      *                  @SWG\Property(
      *                      property="joiner",
-     *                      type="object",
+     *                      type="array",
      *                      description="交易参与人列表",
      *                      @SWG\Items(
      *                          @SWG\Property(
