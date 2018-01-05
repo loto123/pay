@@ -1,4 +1,4 @@
 deploy1:
  stage: deploy
  script:
-   - cd /data/pay/pay && git pull && php artisan l5-swagger:generate
+   - cd /data/pay/pay && git pull && php artisan l5-swagger:generate && cd /data/jubaopen && git pull /data/pay/pay && git svn dcommit
