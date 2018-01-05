@@ -224,7 +224,7 @@ export default {
         var _data = {
           status:_status,
           limit:50,
-          offset :this.dataList.length-1
+          offset :this.dataList.length
         }
 
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
@@ -256,6 +256,7 @@ export default {
       if (item > 2 || item < 0) {
         return;
       } else {
+        this.canLoading = true;
         this.tabItem = [false, false, false];
         this.tabItem[item] = true;
 
