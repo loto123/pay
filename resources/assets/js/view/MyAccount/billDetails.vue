@@ -83,11 +83,10 @@
 				}
 				request.getInstance().getData("api/account/records/month",_data)
 					.then((res) => {
-						console.log(res);
                         Loading.getInstance().close();
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
                         Loading.getInstance().close();
 					})	
 			},

@@ -135,7 +135,7 @@ export default {
         .getInstance()
         .getData("api/transfer/feerecord" + "?transfer_id=" + _id)
         .then(res => {
-          this.renderData = res.data.data.data;
+          this.renderData = res.data.data;
           Loading.getInstance().close();
         })
         .catch(err => {

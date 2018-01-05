@@ -28,7 +28,7 @@ Route::any('test', 'Api\TestController@index');
 Route::group([
     'prefix'       => '/my',
     'namespace'    => 'Api',
-    'middleware' => ['api.auth']
+    'middleware' => ['api.auth', 'block']
 ], function (Router $router){
     $router->get('index','UserController@index');
     $router->post('updatePassword','UserController@updatePassword');
@@ -45,7 +45,7 @@ Route::group([
 Route::group([
     'prefix'      => '/card',
     'namespace'   => 'Api',
-    'middleware' => ['api.auth']
+    'middleware' => ['api.auth', 'block']
 ], function(Router $router){
     $router->get('index', 'CardController@index');
     $router->post('create', 'CardController@create');
@@ -98,7 +98,7 @@ $api->version('v1', function ($api) {
     });
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'shop',
         'namespace' => 'App\Http\Controllers\Api',
@@ -133,7 +133,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     });
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'transfer',
         'namespace' => 'App\Http\Controllers\Api',
@@ -155,7 +155,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     });
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'account',
         'namespace' => 'App\Http\Controllers\Api',
@@ -173,7 +173,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
 
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'proxy',
         'namespace' => 'App\Http\Controllers\Api',
@@ -185,7 +185,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
 
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'index',
         'namespace' => 'App\Http\Controllers\Api',
@@ -198,7 +198,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',
-    'middleware' => ['api.auth']
+    'middleware' => ['api.auth', 'block']
 ],function(Router $router){
     $router->get('index','NoticeController@index');
     $router->post('create', 'NoticeController@create');

@@ -63,7 +63,31 @@ class TransferController extends BaseController
      *             format="int32"
      *      )
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="id", type="string", example="1234567",description="交易id"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -152,7 +176,79 @@ class TransferController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
+     *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
+     *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
+     *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
+     *                  @SWG\Property(property="status", type="int", example="1", description="1 待结算 2 已平账 3 已关闭"),
+     *                  @SWG\Property(
+     *                      property="user",
+     *                      type="object",
+     *                      description="发起交易红包人信息",
+     *                      @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
+     *                      @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
+     *                      @SWG\Property(property="avatar",type="string", example="url", description="发起交易红包人头像"),
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="record",
+     *                      type="array",
+     *                      description="交易记录",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
+     *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
+     *                          @SWG\Property(property="avatar",type="string", example="url", description="实际交易金额"),
+     *                          @SWG\Property(property="stat", type="int", example="1", description="状态 0 未知 1 付钱 2 提钱 3 撤回"),
+     *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="交易记录时间"),
+     *                          @SWG\Property(
+     *                              property="user",
+     *                              type="object",
+     *                              description="发起交易人信息",
+     *                              @SWG\Property(property="id", type="string", example="1234567",description="发起交易人id"),
+     *                              @SWG\Property(property="name", type="string", example="1234567", description="发起交易人昵称"),
+     *                              @SWG\Property(property="avatar",type="string", example="url", description="发起交易人头像"),
+     *                          )
+     *                      )
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="joiner",
+     *                      type="array",
+     *                      description="交易参与人列表",
+     *                      @SWG\Items(
+     *                          @SWG\Property(
+     *                              property="user",
+     *                              type="object",
+     *                              description="交易参与人信息",
+     *                              @SWG\Property(property="id", type="string", example="1234567",description="交易参与人id"),
+     *                              @SWG\Property(property="name", type="string", example="1234567", description="交易参与人昵称"),
+     *                              @SWG\Property(property="avatar",type="string", example="url", description="交易参与人头像"),
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -186,7 +282,7 @@ class TransferController extends BaseController
             $query->select('transfer_id', 'user_id');
         }, 'joiner.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
-        }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+        }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status')->first();
 
         $user = JWTAuth::parseToken()->authenticate();
         //装填响应数据
@@ -297,7 +393,32 @@ class TransferController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="交易获得"),
+     *                  @SWG\Property(property="real_amount", type="double", example=9.9, description="实际获得")
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -421,17 +542,10 @@ class TransferController extends BaseController
                     return $this->json([], trans('trans.user_not_enough_money'), 0);
                 }
                 //验证支付密码
-                $today = date('Y-m-d');
-                $times = $user->paypwd_record()->where('created_at', '>=', $today)->where('created_at', '<=', $today . '23:59:59')->count();
-                if ($times >= config('pay_pwd_validate_times')) {
-                    return $this->json([], trans('trans.user_check_pay_password_times_out'), 0);
-                }
-                if (!Hash::check($request->pay_password, $user->pay_password)) {
-                    //验证错误次数+1
-                    $paypwdRecord = new PaypwdValidateRecord();
-                    $paypwdRecord->user_id = $user->id;
-                    $paypwdRecord->save();
-                    return $this->json([], trans('trans.user_pay_password_error'), 0);
+                try {
+                    $user->check_pay_password($request->input('pay_password'));
+                } catch (\Exception $e) {
+                    return $this->json([], $e->getMessage(), 0);
                 }
                 $record->stat = 1;
                 //用户减钱
@@ -486,7 +600,7 @@ class TransferController extends BaseController
                     //红包手续费金额
                     $transfer->fee_amount = $transfer->fee_amount + $record->fee_amount;
                     //代理分润
-                    if ($user->parent) {
+                    if ($user->parent && $user->parent->percent) {
                         $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
                         if ($proxy_fee) {
@@ -717,7 +831,61 @@ class TransferController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
+     *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
+     *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
+     *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
+     *                  @SWG\Property(property="status", type="int", example="1", description="1 待结算 2 已平账 3 已关闭"),
+     *                  @SWG\Property(
+     *                      property="user",
+     *                      type="object",
+     *                      description="发起交易红包人信息",
+     *                      @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
+     *                      @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
+     *                      @SWG\Property(property="avatar",type="string", example="url", description="发起交易红包人头像"),
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="tips",
+     *                      type="array",
+     *                      description="茶水费记录",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="amount", type="double", example=9.9, description="缴纳茶水费金额"),
+     *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="缴纳茶水费时间"),
+     *                          @SWG\Property(
+     *                              property="user",
+     *                              type="object",
+     *                              description="茶水费缴纳人信息",
+     *                              @SWG\Property(property="id", type="string", example="1234567",description="茶水费缴纳人id"),
+     *                              @SWG\Property(property="name", type="string", example="1234567", description="茶水费缴纳人昵称"),
+     *                              @SWG\Property(property="avatar",type="string", example="url", description="茶水费缴纳人头像"),
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -751,7 +919,7 @@ class TransferController extends BaseController
             $query->select('transfer_id', 'user_id', 'amount', 'created_at')->orderBy('created_at', 'DESC');
         }, 'tips.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
-        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status', 'tip_type')->first();
+        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status')->first();
 
         //装填响应数据
         $transfer->id = $transfer->en_id();
@@ -763,7 +931,7 @@ class TransferController extends BaseController
         }
         unset($transfer->user_id);
 
-        return $this->json(['code' => 1, 'ok', 'data' => $transfer]);
+        return $this->json($transfer, 'ok', 1);
     }
 
     /**
@@ -837,17 +1005,10 @@ class TransferController extends BaseController
         }
         if ($request->action) {
             //验证支付密码
-            $today = date('Y-m-d');
-            $times = $user->paypwd_record()->where('created_at', '>=', $today)->where('created_at', '<=', $today . '23:59:59')->count();
-            if ($times >= config('pay_pwd_validate_times')) {
-                return $this->json([], trans('trans.user_check_pay_password_times_out'), 0);
-            }
-            if (!Hash::check($request->pay_password, $user->pay_password)) {
-                //验证错误次数+1
-                $paypwdRecord = new PaypwdValidateRecord();
-                $paypwdRecord->user_id = $user->id;
-                $paypwdRecord->save();
-                return $this->json([], trans('trans.user_pay_password_error'), 0);
+            try {
+                $user->check_pay_password($request->input('pay_password'));
+            } catch (\Exception $e) {
+                return $this->json([], $e->getMessage(), 0);
             }
             DB::beginTransaction();
             try {
@@ -856,7 +1017,7 @@ class TransferController extends BaseController
                 $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
                 $pay_transfer = $user_container->transfer($shop_container, $request->fee, 0, 0, 0);
                 if (!$pay_transfer) {
-                    return $this->json([], "111" . trans('trans.trade_failed'), 0);
+                    return $this->json([], trans('trans.trade_failed'), 0);
                 }
                 //减用户余额
 //                $user->balance = $user->balance - $request->fee;
@@ -913,7 +1074,44 @@ class TransferController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example="10",description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                      description="交易记录",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
+     *                          @SWG\Property(property="transfer_id", type="string", example="1234567",description="交易红包ID"),
+     *                          @SWG\Property(property="shop_name", type="string", example="XX的店",description="交易红包所属店铺名称"),
+     *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
+     *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="参与交易时间"),
+     *                          @SWG\Property(property="makr", type="integer", example="1",description="是否标记 0 未标记 1 已标记"),
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -935,6 +1133,9 @@ class TransferController extends BaseController
         }
         $status = $request->status;
         $user = JWTAuth::parseToken()->authenticate();
+        $count = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
+            $query->where('status', $status);
+        })->count();
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
         })->with(['transfer' => function ($query) {
@@ -948,8 +1149,11 @@ class TransferController extends BaseController
                 $query->select('id', 'name');
             }])
             ->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
-        if ($request->limit && $request->offset) {
-            $query->offset($request->offset)->limit($request->limit);
+        if ($request->limit) {
+            $query->limit($request->limit);
+        }
+        if($request->offset) {
+            $query->offset($request->offset);
         }
         $list = $query->get();
         $data = [];
@@ -962,7 +1166,7 @@ class TransferController extends BaseController
                 ->where('stat', '<>', 3)->where('stat', '<>', 0)->sum('amount') : 0;
             $data[$key]['makr'] = $item->mark;
         }
-        return $this->json(['code' => 1, 'ok', 'data' => $data]);
+        return $this->json(['data' => $data, 'count' => $count], 'ok', 1);
     }
 
     /**
@@ -998,7 +1202,51 @@ class TransferController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example="10",description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                      description="交易记录",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
+     *                          @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
+     *                          @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
+     *                          @SWG\Property(property="tip_amount", type="double", example=9.9, description="收益"),
+     *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="交易红包创建时间"),
+     *                          @SWG\Property(
+     *                              property="user",
+     *                              type="object",
+     *                              description="发起交易红包人信息",
+     *                              @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
+     *                              @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
+     *                              @SWG\Property(property="avatar",type="string", example="url", description="发起交易红包人头像"),
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -1025,11 +1273,15 @@ class TransferController extends BaseController
         if (!$shop) {
             return $this->json([], trans('trans.shop_not_exist'), 0);
         }
+        $count = $shop->transfer()->where('status', $status)->count();
         $query = $shop->transfer()->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }])->where('status', $status)->select('id', 'user_id', 'amount', 'tip_amount', 'created_at')->orderBy('created_at', 'DESC');
-        if ($request->limit && $request->offset) {
-            $query->offset($request->offset)->limit($request->limit);
+        if ($request->limit) {
+            $query->limit($request->limit);
+        }
+        if($request->offset) {
+            $query->offset($request->offset);
         }
         $list = $query->get();
         //装填响应数据
@@ -1039,7 +1291,7 @@ class TransferController extends BaseController
             $list[$key]->user->id = $value->user->en_id();
             unset($list[$key]->user_id);
         }
-        return $this->json(['code' => 1, 'ok', 'data' => $list]);
+        return $this->json(['data' => $list, 'count' => $count], 'ok', 1);
     }
 
     /**
@@ -1195,7 +1447,9 @@ class TransferController extends BaseController
                         $profit->fee_percent = $transfer->fee_percent;
                         $profit->proxy = 0;
                         $profit->operator = 0;
-                        if ($value->user->parent) {
+                        $profit->proxy_percent = 0;
+                        $profit->proxy_amount = 0;
+                        if ($value->user->parent && $value->user->parent->percent) {
                             $profit->proxy = $value->user->parent->id;
                             $profit->proxy_percent = $value->user->parent->percent;
                             $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
@@ -1223,6 +1477,8 @@ class TransferController extends BaseController
             DB::commit();
             return $this->json([], trans('trans.trans_closed_success'), 1);
         } catch (\Exception $e) {
+            Log::info('$profit：' . $profit);
+            Log::error('关闭交易失败：' . $e->getMessage());
             DB::rollBack();
         }
         return $this->json([], trans('trans.trans_closed_failed'), 0);

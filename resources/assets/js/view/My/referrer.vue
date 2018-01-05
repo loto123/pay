@@ -56,7 +56,7 @@
           this.mobile=res.data.data.mobile
           Loading.getInstance().close();
         }).catch(err => {
-          console.error(err);
+          Toast(err.data.msg);
           Loading.getInstance().close();
         });
       }

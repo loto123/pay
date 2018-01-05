@@ -25,7 +25,38 @@ class CardController extends BaseController
      *   path="/card/index",
      *   summary="银行卡列表",
      *   tags={"我的"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="card_id", type="integer", example="1",description="银行卡id"),
+     *                  @SWG\Property(property="card_num", type="string", example="123456******1234",description="银行卡号"),
+     *                  @SWG\Property(property="bank", type="string", example="中国银行",description="开户行"),
+     *                  @SWG\Property(property="card_type", type="string", example="储蓄卡",description="卡类型"),
+     *                  @SWG\Property(property="card_logo", type="string", example="url",description="银行卡logo"),
+     *                  @SWG\Property(property="is_pay_card", type="integer", example=1,description="是否是结算卡 1：是，0：否"),
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -124,7 +155,30 @@ class CardController extends BaseController
      *     required=false,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -225,7 +279,30 @@ class CardController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -267,7 +344,32 @@ class CardController extends BaseController
      *   path="/card/getBanks",
      *   summary="银行列表",
      *   tags={"我的"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="id", type="integer", example="1",description="银行id"),
+     *                  @SWG\Property(property="name", type="string", example="中国银行",description="银行名称")
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -293,9 +395,39 @@ class CardController extends BaseController
     /**
      * @SWG\GET(
      *   path="/card/getBankCardParams",
-     *   summary="添加银行卡支付通道需要参数",
+     *   summary="添加银行卡支付通道需要参数（开户行省市）",
      *   tags={"我的"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="湖南省", type="array",
+     *                          @SWG\Items(
+     *                              @SWG\Property(property="长沙市", type="string"),
+     *                          )
+     *                      ),
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */

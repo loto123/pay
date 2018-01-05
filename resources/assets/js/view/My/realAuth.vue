@@ -96,7 +96,7 @@
               }
           }, 1000)
         }).catch((err) => {
-         console.error(err);
+          Toast(err.data.msg);
         })
       }
     }

@@ -11,8 +11,8 @@
             <div class="menu-item flex flex-justify-center flex-align-center" v-bind:class="{active:tabItem[2]}" @click = "changeTab(2)">已关闭</div>
         </div>
 
-        <div class="deal-wrap">
-            <ul>
+        <div class="deal-wrap" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50">
                 <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
@@ -35,6 +35,12 @@
                       </i>
                     </div>
                 </li>
+
+              <p v-show="loading" class="page-infinite-loading">
+                <mt-spinner type="fading-circle"></mt-spinner>
+                加载中...
+              </p>
+
             </ul>
         </div>
   </div>
@@ -178,10 +184,51 @@ export default {
     return {
       tabItem: [true, false, false],
       isStar:false,
-      dataList:[]
+      dataList:[],
+
+      wrapperHeight:null,
+      loading: false,
+      allLoaded: false,
     };
   },
+
+  mounted(){
+    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+    console.log(document.documentElement.clientHeight);
+    console.log(this.$refs.wrapper.getBoundingClientRect().top);
+    console.log(this.wrapperHeight);
+  },
   methods: {
+    loadMore() {
+      this.loading = true;
+      var _status = 0;
+      setTimeout(() => {
+
+        var _data = {
+          status:_status,
+          limit:50,
+          offset :this.dataList.length-1
+        }
+        request.getInstance().getData('api/transfer/record',_data).then(res=>{
+          for(var i = 0; i< res.data.data.data.length; i ++){
+            this.dataList.push(res.data.data.data[i]);
+          }
+//          this.dataList = res.data.data.data;
+          Loading.getInstance().close();
+
+        }).catch(err=>{
+          Loading.getInstance().close();
+        });
+
+//        let last = this.dataList[this.dataList.length - 1];
+//        for (let i = 1; i <= 10; i++) {
+//          this.dataList.push(last + i);
+//        }
+        this.loading = false;
+      }, 2500);
+
+    },
+
     SettingString(str,len){
       return utils.SetString(str,len);
     },

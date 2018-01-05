@@ -90,7 +90,7 @@ class ShopController extends BaseController {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:20',
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'required|integer|between:1,100',
+            'percent' => 'required|integer|between:0,100',
             'active' => 'required'
         ]);
 
@@ -406,7 +406,7 @@ class ShopController extends BaseController {
      *                  type="object",
      *                  @SWG\Property(property="id", type="string", example="1234567",description="店铺id"),
      *                  @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
-     *                  @SWG\Property(property="user_link", type="boolean", example=0, description="是否开启邀请链接 0=关闭 1=开启"),
+     *                  @SWG\Property(property="use_link", type="boolean", example=0, description="是否开启邀请链接 0=关闭 1=开启"),
      *                  @SWG\Property(property="active", type="boolean", example=1, description="是否开启交易  0=关闭 1=开启"),
      *                  @SWG\Property(property="members", type="array", description="成员列表",
      *                  @SWG\Items(
@@ -462,13 +462,13 @@ class ShopController extends BaseController {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
-                'user_link' => $shop->use_link ? 1 : 0,
+                'use_link' => $shop->use_link ? 1 : 0,
                 'active' => $shop->active ? 1 : 0,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'platform_fee' => config("platform_fee_percent"),
-                'rate' => $shop->price,
-                'percent' => $shop->fee,
+                'platform_fee' => (double)config("platform_fee_percent"),
+                'rate' => (double)$shop->price,
+                'percent' => (double)$shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => $shop->logo,
                 'is_manager' => $is_manager ? 1 : 0,
@@ -480,7 +480,7 @@ class ShopController extends BaseController {
                 'name' => $shop->name,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'rate' => $shop->price,
+                'rate' => (double)$shop->price,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => $shop->logo,
                 'is_manager' => $is_manager ? 1 : 0,
@@ -905,7 +905,7 @@ class ShopController extends BaseController {
         $validator = Validator::make($request->all(), [
             'name' => 'max:20',
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'integer|between:1,100',
+            'percent' => 'integer|between:0,100',
         ]);
 
         if ($validator->fails()) {
@@ -1056,6 +1056,9 @@ class ShopController extends BaseController {
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (!$shop || !$shop->use_link) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
@@ -1565,7 +1568,7 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -1599,10 +1602,27 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer($shop_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
 
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("error_balance"), 0);
+        }
+        if (!$shop->manager) {
+            return $this->json([], trans("error_shop_manager"), 0);
+        }
+        try {
+            if (!$shop->manager->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
+            }
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
         }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
@@ -1656,7 +1676,7 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -1690,6 +1710,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer_member($shop_id, $user_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("error_balance"), 0);
