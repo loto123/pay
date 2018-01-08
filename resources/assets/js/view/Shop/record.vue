@@ -20,8 +20,11 @@
                 </div>
                 <div>图标</div>
             </div>
-			<div v-if="recordList.length == 0" class="flex flex-align-center flex-justify-center" style="height:3em;font-size:1.5em;color:#999;">
-				当前无记录
+			<div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
+                <i class="iconfont">
+                    &#xe655;
+                </i>
+                <div>暂无数据</div>
 			</div>
             <ul class="bill-list" v-else>
                 <li  v-for="item in recordList" @click="details(item.id)">
@@ -292,5 +295,18 @@
 
     .cancel-btn {
         margin-top: 1.5em;
+    }
+    .nodata{
+        margin-top:10%;
+        i,div{
+            color: #ddd;
+        }
+        i{
+            font-size: 3.5em;
+        }
+        div{
+            font-size: 2em;
+            margin-top:0.3em;
+        }
     }
 </style>
