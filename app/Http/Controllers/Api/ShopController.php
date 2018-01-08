@@ -271,7 +271,7 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn('id', array_keys($shops));
+        $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
         $count += $query1->count();
         if (count($shops) < $limit) {
             foreach ($query1->limit($limit - count($shops))->get() as $_shop) {
@@ -280,7 +280,7 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn('id', array_keys($shops));
+        $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
         $count += $query2->count();
         if (count($shops) < $limit) {
             foreach ($query2->limit($limit - count($shops))->get() as $_shop) {
