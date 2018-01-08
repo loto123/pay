@@ -271,17 +271,19 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $count += $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
+        $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
+        $count += $query1->count();
         if (count($shops) < $limit) {
-            foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+            foreach ($query1->limit($limit - count($shops))->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
                     $shops[$_shop->id] = $_shop;
                 }
             }
         }
-        $count += $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
+        $count += $query2->count();
         if (count($shops) < $limit) {
-            foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+            foreach ($query2->limit($limit - count($shops))->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
                     $shops[$_shop->id] = $_shop;
                 }
@@ -1852,7 +1854,7 @@ class ShopController extends BaseController {
      * @SWG\Get(
      *   path="/shop/transfer/records/detail/{id}",
      *   summary="帐单详情",
-     *   tags={"账户"},
+     *   tags={"店铺"},
      *   @SWG\Parameter(
      *     name="id",
      *     in="path",
