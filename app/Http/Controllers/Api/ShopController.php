@@ -92,6 +92,13 @@ class ShopController extends BaseController {
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
+        ],['name.required'=>'店铺名必填',
+        'name.max'=>'店铺名不能超过10',
+        'rate.required'=>'单价必填',
+        'rate.regex'=>'格式错误',
+        'percent.required'=>'手续费率不能为空',
+        'percent.integer'=>'手续费必须为0-100的整数',
+        'percent.between'=>'手续费必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -908,6 +915,11 @@ class ShopController extends BaseController {
             'name' => 'max:10',
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
             'percent' => 'integer|between:0,100',
+        ],[
+        'name.max'=>'店铺名不能超过10',
+        'rate.regex'=>'格式错误',
+        'percent.integer'=>'手续费必须为0-100的整数',
+        'percent.between'=>'手续费必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
