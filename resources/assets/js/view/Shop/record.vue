@@ -20,7 +20,10 @@
                 </div>
                 <div>图标</div>
             </div>
-            <ul class="bill-list">
+			<div v-if="recordList.length == 0" class="flex flex-align-center flex-justify-center" style="height:3em;font-size:1.5em;color:#999;">
+				当前无记录
+			</div>
+            <ul class="bill-list" v-else>
                 <li  v-for="item in recordList" @click="details(item.id)">
                     <a href="javascript:;" class="flex">
                         <div class="bill-content">
