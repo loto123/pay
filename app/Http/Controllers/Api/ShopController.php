@@ -1809,7 +1809,7 @@ class ShopController extends BaseController {
      *                      type="array",
      *                  @SWG\Items(
      *                  @SWG\Property(property="id", type="string", example="12345676789",description="记录id"),
-     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给个人 2=从个人转账"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给成员 2=从个人转账"),
      *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
      *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
