@@ -101,6 +101,9 @@
                                 @endif
                             </td>
                             <td><a href="/admin/shop/detail/{{$item->id}}">详情</a></td>
+                            @if(Admin::user()->isRole('administrator') && $unclose_cnt_list[$item->id] == 0)
+                                <td><a href="/admin/shop/delete/{{$item->id}}">删除</a></td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>
