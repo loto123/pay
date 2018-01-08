@@ -1854,7 +1854,7 @@ class ShopController extends BaseController {
      * @SWG\Get(
      *   path="/shop/transfer/records/detail/{id}",
      *   summary="帐单详情",
-     *   tags={"账户"},
+     *   tags={"店铺"},
      *   @SWG\Parameter(
      *     name="id",
      *     in="path",
