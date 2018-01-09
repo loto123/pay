@@ -10,7 +10,7 @@ import My from './my'
 import Shop from './shop'
 import Inform from './inform'
 import Share from './share'
-import ShareProfit from 'shareProfit'
+import ShareProfit from './shareProfit'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'

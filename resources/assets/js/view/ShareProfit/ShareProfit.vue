@@ -1,7 +1,7 @@
 <template>
 	<div id = "share-profit">
 		<div class="top">
-
+			this is share-profit
 		</div>	
 	</div>	
 </template>
