@@ -50,6 +50,7 @@ class ShopLogo extends Command
         } else {
             $shops = Shop::all();
         }
+        Log::info("update shop logo begin:".var_export($shop_ids, true));
         foreach ($shops as $shop) {
             /* @var $shop Shop */
             $this->info("shop logo:".$shop->id);
@@ -65,6 +66,7 @@ class ShopLogo extends Command
                 $shop->save();
             }
         }
+        Log::info("update shop logo end:");
     }
 
     private function logo($pic_list) {
