@@ -32,7 +32,7 @@ class DataController extends Controller
     {
         //交易总笔数
 //        $transfer_count = Transfer::count();
-        $transfer_count = TransferRecord::where('stat', 1)->count();
+        $transfer_count = TransferRecord::where('stat', 2)->count();
         //总收款
         $amount = abs(TransferRecord::where('stat', 1)->sum('amount'));
         //店铺分润
