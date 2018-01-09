@@ -145,8 +145,12 @@ class ShopController extends Controller
         if($shop && $shop->transfer_count > 0) {
             abort(404,'该店铺有交易未关闭，不能删除！');
         }
-        $shop->delete();
-        return redirect('/admin/shop/');
+        if($shop->delete()) {
+            return redirect('/admin/shop')->with('status', '删除成功！');
+        } else {
+            return redirect('/admin/shop')->with('status','删除失败！');
+        }
+
     }
 
 }

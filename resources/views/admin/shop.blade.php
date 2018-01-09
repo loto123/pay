@@ -1,5 +1,11 @@
 <div class="container-fluid">
     <!--查询开始-->
+
+    @if(session('status'))
+        <div class="alert alert-info"> {{session('status')}}
+        </div>
+    @endif
+
     <div class="box box-primary">
         <div class="box-header">
             <form class="form-horizontal" method="post" action="/admin/shop">
