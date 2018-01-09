@@ -44,7 +44,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="box-body box">
-                <div class="lead">总交易笔数:<span class="text-yellow">{{$transfer_count}}</span></div>
+                <div class="lead">总收款笔数:<span class="text-yellow">{{$transfer_count}}</span></div>
                 <div class="lead">总收款金额（元）:<span class="text-yellow">{{$amount}}</span></div>
                 <div class="lead">店铺分润（元）含收手续费 {{$tip_amount}} 元:<span class="text-yellow">{{$shop_amount}}</span></div>
                 <div class="lead">代理分润（元）:<span class="text-yellow">{{$proxy_amount}}</span></div>
