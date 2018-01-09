@@ -37,7 +37,42 @@ class NoticeController extends BaseController
      *     required=false,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="1", type="array",
+     *                      @SWG\Items(
+     *                              @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
+     *                              @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
+     *                              @SWG\Property(property="title", type="string", example="17673161856",description="消息标题"),
+     *                              @SWG\Property(property="content", type="string", example="10",description="消息内容"),
+     *                              @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间"),
+     *                              @SWG\Property(property="thumb", type="string", example="url",description="分润消息中的头像"),
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -169,7 +204,58 @@ class NoticeController extends BaseController
      *     required=true,
      *     type="string"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回(type为1,分润详情)",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="amount", type="string", example="10",description="入账金额"),
+     *                  @SWG\Property(property="type", type="string", example="分润",description="类型"),
+     *                  @SWG\Property(property="time", type="string", example="2018-01-01 12:00:00",description="时间"),
+     *                  @SWG\Property(property="transfer_id", type="string", example="111111",description="交易单号"),
+     *                  @SWG\Property(property="mobile", type="string", example="13333333333",description="分润来源的账号"),
+     *                  @SWG\Property(property="thumb", type="string", example="url",description="分润来源的头像"),
+     *              )
+     *          )
+     *      ),
+     *     @SWG\Response(
+     *          response=202,
+     *          description="成功返回(type为3,系统详情)",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="content", type="string", example="这是一条系统消息",description="消息内容"),
+     *                  @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
+     *                  @SWG\Property(property="time", type="string", example="2018-01-01 12:00:00",description="时间")
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -232,7 +318,30 @@ class NoticeController extends BaseController
      *     required=true,
      *     type="integer"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */

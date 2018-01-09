@@ -65,7 +65,7 @@
             this.balance = res[1].data.data.balance;
             Loading.getInstance().close();
           }).catch(err=>{
-              console.error(err);
+            Toast(err.data.msg);
           });
       },
       allWithdraw() {

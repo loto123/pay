@@ -20,7 +20,13 @@
                 </div>
                 <div>图标</div>
             </div>
-            <ul class="bill-list">
+			<div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
+                <i class="iconfont">
+                    &#xe655;
+                </i>
+                <div>暂无数据</div>
+			</div>
+            <ul class="bill-list" v-else>
                 <li  v-for="item in recordList" @click="details(item.id)">
                     <a href="javascript:;" class="flex">
                         <div class="bill-content">
@@ -119,12 +125,11 @@
                 console.log(this.shopId);
                 request.getInstance().getData("api/shop/transfer/records/"+this.shopId)
                     .then((res) => {
-                        console.log(res);
                         this.recordList=res.data.data.data;
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
-                        console.error(err);
+                        Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
             },
@@ -290,5 +295,18 @@
 
     .cancel-btn {
         margin-top: 1.5em;
+    }
+    .nodata{
+        margin-top:10%;
+        i,div{
+            color: #ddd;
+        }
+        i{
+            font-size: 3.5em;
+        }
+        div{
+            font-size: 2em;
+            margin-top:0.3em;
+        }
     }
 </style>

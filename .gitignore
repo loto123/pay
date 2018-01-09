@@ -19,3 +19,4 @@ resources/assets/.idea/inspectionProfiles/Project_Default.xml
 resources/assets/.idea/workspace.xml
 resources/assets/.idea/codeStyleSettings.xml
 resources/assets/.idea/
+*.un~

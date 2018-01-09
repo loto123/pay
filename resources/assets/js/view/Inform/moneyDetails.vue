@@ -65,7 +65,7 @@
             this.type=res.data.data.type;
           })
           .catch((err) => {
-            console.error(err);
+            Toast(err.data.msg);
           })
       }
     },

@@ -7,7 +7,7 @@ import shopStore from './modules/shop'
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  strict: true,// 生产环境记得关闭
+  strict: false,// 生产环境记得关闭
   modules: {
     regist: registStore,
     shop:shopStore

@@ -10,6 +10,7 @@ import My from './my'
 import Shop from './shop'
 import Inform from './inform'
 import Share from './share'
+import ShareProfit from './shareProfit'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -41,7 +42,10 @@ var routerList = {
     inform:Inform,
 
     // 分享
-    share:Share
+    share:Share,
+
+	// 分润
+	shareProfit:ShareProfit 
 };
 
 var router = [];
@@ -51,6 +55,7 @@ for (var i in routerList) {
 
 export default new Router({
     routes: router,
+    // 新页面不记录滑动位置
     scrollBehavior (to, from, savedPosition) {
       return { x: 0, y: 0 }
     }

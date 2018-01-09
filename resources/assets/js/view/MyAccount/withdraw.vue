@@ -98,7 +98,7 @@
 				  Loading.getInstance().close();
 				})
 				.catch((err) => {
-				  console.error(err);
+					Toast(err.data.msg);
 				})
 			},
 			allWithdraw() {
@@ -144,7 +144,7 @@
 					
 				})
 				.catch((err) => {
-				  console.error(err);
+				  Toast(err.data.msg);
 				})
 			},
 			setBankList(res) {

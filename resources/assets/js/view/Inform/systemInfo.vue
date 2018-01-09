@@ -62,7 +62,7 @@
             // console.log(systemInfo);
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
 					})
       },
       //清空消息
@@ -78,7 +78,7 @@
 					this.systemInfo();
 					})
 					.catch((err) => {
-					  console.error(err);
+					  Toast(err.data.msg);
 					})
 				},
 				() => {

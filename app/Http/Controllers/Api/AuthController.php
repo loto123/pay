@@ -136,6 +136,9 @@ class AuthController extends BaseController {
 
         // all good so return the token
         $user = JWTAuth::toUser($token);
+        if ($user->status == User::STATUS_BLOCK) {
+            return $this->json([], trans('api.user_block'), 0);
+        }
         $wechat = $user->wechat_user ? 1 : 0;
         $id = $user->en_id();
         return $this->json(compact('token', 'wechat', 'id'));

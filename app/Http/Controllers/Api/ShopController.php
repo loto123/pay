@@ -88,10 +88,17 @@ class ShopController extends BaseController {
      */
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:20',
+            'name' => 'required|max:10',
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'required|integer|between:1,100',
+            'percent' => 'required|integer|between:0,100',
             'active' => 'required'
+        ],['name.required'=>'店铺名必填',
+        'name.max'=>'店铺名不能超过10',
+        'rate.required'=>'单价必填',
+        'rate.regex'=>'格式错误',
+        'percent.required'=>'手续费率不能为空',
+        'percent.integer'=>'手续费必须为0-100的整数',
+        'percent.between'=>'手续费必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -264,17 +271,19 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $count += $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
+        $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
+        $count += $query1->count();
         if (count($shops) < $limit) {
-            foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+            foreach ($query1->limit($limit - count($shops))->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
                     $shops[$_shop->id] = $_shop;
                 }
             }
         }
-        $count += $user->in_shops()->where("status", Shop::STATUS_NORMAL)->count();
+        $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
+        $count += $query2->count();
         if (count($shops) < $limit) {
-            foreach ($user->in_shops()->where("status", Shop::STATUS_NORMAL)->limit($limit - count($shops))->get() as $_shop) {
+            foreach ($query2->limit($limit - count($shops))->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
                     $shops[$_shop->id] = $_shop;
                 }
@@ -406,7 +415,7 @@ class ShopController extends BaseController {
      *                  type="object",
      *                  @SWG\Property(property="id", type="string", example="1234567",description="店铺id"),
      *                  @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
-     *                  @SWG\Property(property="user_link", type="boolean", example=0, description="是否开启邀请链接 0=关闭 1=开启"),
+     *                  @SWG\Property(property="use_link", type="boolean", example=0, description="是否开启邀请链接 0=关闭 1=开启"),
      *                  @SWG\Property(property="active", type="boolean", example=1, description="是否开启交易  0=关闭 1=开启"),
      *                  @SWG\Property(property="members", type="array", description="成员列表",
      *                  @SWG\Items(
@@ -462,13 +471,13 @@ class ShopController extends BaseController {
             $data = [
                 'id' => $shop->en_id(),
                 'name' => $shop->name,
-                'user_link' => $shop->use_link ? 1 : 0,
+                'use_link' => $shop->use_link ? 1 : 0,
                 'active' => $shop->active ? 1 : 0,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'platform_fee' => config("platform_fee_percent"),
-                'rate' => $shop->price,
-                'percent' => $shop->fee,
+                'platform_fee' => (double)config("platform_fee_percent"),
+                'rate' => (double)$shop->price,
+                'percent' => (double)$shop->fee,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => $shop->logo,
                 'is_manager' => $is_manager ? 1 : 0,
@@ -480,7 +489,7 @@ class ShopController extends BaseController {
                 'name' => $shop->name,
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
-                'rate' => $shop->price,
+                'rate' => (double)$shop->price,
                 'created_at' => strtotime($shop->created_at),
                 'logo' => $shop->logo,
                 'is_manager' => $is_manager ? 1 : 0,
@@ -903,9 +912,14 @@ class ShopController extends BaseController {
      */
     public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
-            'name' => 'max:20',
+            'name' => 'max:10',
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
-            'percent' => 'integer|between:1,100',
+            'percent' => 'integer|between:0,100',
+        ],[
+        'name.max'=>'店铺名不能超过10',
+        'rate.regex'=>'格式错误',
+        'percent.integer'=>'手续费必须为0-100的整数',
+        'percent.between'=>'手续费必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -1056,6 +1070,9 @@ class ShopController extends BaseController {
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
+        if (!$shop || !$shop->use_link) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
@@ -1565,7 +1582,7 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -1599,10 +1616,27 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer($shop_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
 
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("error_balance"), 0);
+        }
+        if (!$shop->manager) {
+            return $this->json([], trans("error_shop_manager"), 0);
+        }
+        try {
+            if (!$shop->manager->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
+            }
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
         }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
@@ -1656,7 +1690,7 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -1690,6 +1724,13 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer_member($shop_id, $user_id, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($shop_id);
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("error_balance"), 0);
@@ -1739,6 +1780,13 @@ class ShopController extends BaseController {
      *     required=false,
      *     type="number"
      *   ),
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页码",
+     *     required=false,
+     *     type="number"
+     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -1761,7 +1809,7 @@ class ShopController extends BaseController {
      *                      type="array",
      *                  @SWG\Items(
      *                  @SWG\Property(property="id", type="string", example="12345676789",description="记录id"),
-     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给个人 2=从个人转账"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给成员 2=从个人转账"),
      *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
      *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
@@ -1782,24 +1830,31 @@ class ShopController extends BaseController {
         $data = [];
         $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
+        $query = $shop->funds();
+        if ($request->type !== null) {
+            $query->where("type", $request->type);
+        }
+        if ($request->start) {
+            $query->where("created_at", "<=", $request->start);
+        }
         /* @var $user User */
-        foreach ($shop->funds()->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
+        foreach ($query->orderBy('id',  'DESC')->paginate($request->input('size', 20)) as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
                 'mode' => (int)$_fund->mode,
-                'amount' => $_fund->amount,
+                'amount' => (double)$_fund->amount,
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['count' => $shop->funds()->count(), 'data' => $data]);
+        return $this->json(['count' => $query->count(), 'data' => $data]);
     }
 
     /**
      * @SWG\Get(
      *   path="/shop/transfer/records/detail/{id}",
      *   summary="帐单详情",
-     *   tags={"账户"},
+     *   tags={"店铺"},
      *   @SWG\Parameter(
      *     name="id",
      *     in="path",
@@ -1824,7 +1879,7 @@ class ShopController extends BaseController {
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="id", type="string", example="12345676789",description="记录id"),
-     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给个人 2=从个人转账"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="帐单类别 0=转账给个人 1=转账给成员 2=从个人转账"),
      *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
      *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),

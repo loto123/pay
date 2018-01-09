@@ -58,7 +58,7 @@
             self.registerList = res.data.data[2];
           })
           .catch((err) => {
-            console.error(err);
+            Toast(err.data.msg);
           })
       },
       //清空消息
@@ -74,7 +74,7 @@
 					this.registerInfo();
 					})
 					.catch((err) => {
-					console.log(err);
+            Toast(err.data.msg);
 					})
 				},
 				() => {
