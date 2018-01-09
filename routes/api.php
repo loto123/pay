@@ -196,6 +196,15 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
 
 });
 
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => 'app',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get("version", 'AppController@version');
+    });
+});
+
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',
