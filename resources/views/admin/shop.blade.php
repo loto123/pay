@@ -1,5 +1,11 @@
 <div class="container-fluid">
     <!--查询开始-->
+
+    @if(session('status'))
+        <div class="alert alert-info"> {{session('status')}}
+        </div>
+    @endif
+
     <div class="box box-primary">
         <div class="box-header">
             <form class="form-horizontal" method="post" action="/admin/shop">
@@ -101,6 +107,9 @@
                                 @endif
                             </td>
                             <td><a href="/admin/shop/detail/{{$item->id}}">详情</a></td>
+                            @if(Admin::user()->isRole('administrator') && $unclose_cnt_list[$item->id] == 0)
+                                <td><a href="/admin/shop/delete/{{$item->id}}">删除</a></td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>

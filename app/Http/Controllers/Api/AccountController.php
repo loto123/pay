@@ -124,7 +124,7 @@ class AccountController extends BaseController {
 //        $stdClass->pay_info = 'http://www.alipay.com';
 //        return $this->json($stdClass);
         $validator = Validator::make($request->all(), [
-            'amount' => 'required',
+            'amount' => 'required|min:0',
             'way' => 'required'
         ]);
 
@@ -193,7 +193,7 @@ class AccountController extends BaseController {
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="passwrod",
+     *     name="password",
      *     in="formData",
      *     description="支付密码",
      *     required=true,
@@ -229,7 +229,7 @@ class AccountController extends BaseController {
     public function withdraw(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required',
+            'amount' => 'required|min:0',
             'way' => 'required',
             'password' => 'required'
         ]);
@@ -238,8 +238,12 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-        if (!Hash::check($request->password, $user->pay_password)) {
-            return $this->json([], trans("api.error_pay_password"), 0);
+        try {
+            if (!$user->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
+            }
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
         }
         if (!$user->pay_card) {
             return $this->json([], trans("api.error_pay_card"), 0);
@@ -365,6 +369,13 @@ class AccountController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function transfer(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
         $shop = Shop::findByEnId($request->shop_id);
         $user = $this->auth->user();
         if ($user->container->balance < $request->amount) {
@@ -502,6 +513,13 @@ class AccountController extends BaseController {
      *     required=false,
      *     type="number"
      *   ),
+     *   @SWG\Parameter(
+     *     name="page",
+     *     in="query",
+     *     description="页码",
+     *     required=false,
+     *     type="number"
+     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -556,7 +574,7 @@ class AccountController extends BaseController {
                 });
             })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
         });
-        foreach ($query->orderBy('id',  'DESC')->paginate($request->size) as $_fund) {
+        foreach ($query->orderBy('id',  'DESC')->paginate($request->input("size", 20)) as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,

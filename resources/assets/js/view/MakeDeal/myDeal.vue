@@ -11,8 +11,8 @@
             <div class="menu-item flex flex-justify-center flex-align-center" v-bind:class="{active:tabItem[2]}" @click = "changeTab(2)">已关闭</div>
         </div>
 
-        <div class="deal-wrap">
-            <ul>
+        <div class="deal-wrap" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
@@ -35,7 +35,14 @@
                       </i>
                     </div>
                 </li>
+
             </ul>
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+              <!--<span>-->
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+              <!--</span>-->
+            </p>
         </div>
   </div>
 </template>
@@ -159,6 +166,12 @@
         }
       }
     }
+
+    .page-infinite-loading{
+      height: 2.5em;
+      text-align: center;
+    }
+
   }
 }
 </style>
@@ -178,10 +191,63 @@ export default {
     return {
       tabItem: [true, false, false],
       isStar:false,
-      dataList:[]
+      dataList:[],
+
+      wrapperHeight:null,
+      loading: false,
+      allLoaded: false,
+      canLoading:true,
     };
   },
+
+  mounted(){
+    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+  },
   methods: {
+    loadMore() {
+      this.loading =false;
+      if(this.dataList.length==0 || !this.canLoading){
+        return;
+      }
+
+      this.loading = true;
+
+      var _status = 0;
+      for(var i = 0; i<this.tabItem.length; i++){
+        if(this.tabItem[i] == true){
+          _status = i+1;
+        }
+      }
+
+      this.canLoading = false;
+      setTimeout(() => {
+        var _data = {
+          status:_status,
+          limit:50,
+          offset :this.dataList.length
+        }
+
+      request.getInstance().getData('api/transfer/record',_data).then(res=>{
+
+        if(res.data.data.data.length == 0){
+          this.canLoading = false;
+          this.loading = false;
+          return;
+        }
+
+        for(var i = 0; i< res.data.data.data.length; i ++){
+            this.dataList.push(res.data.data.data[i]);
+        }
+
+        this.canLoading = true;
+        this.loading = false;
+      }).catch(err=>{
+
+        });
+      }, 1500);
+
+    },
+
     SettingString(str,len){
       return utils.SetString(str,len);
     },
@@ -190,6 +256,7 @@ export default {
       if (item > 2 || item < 0) {
         return;
       } else {
+        this.canLoading = true;
         this.tabItem = [false, false, false];
         this.tabItem[item] = true;
 

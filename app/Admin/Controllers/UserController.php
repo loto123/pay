@@ -153,6 +153,12 @@ class UserController extends Controller
             });
             $grid->disableFilter();
             $grid->disableExport();
+            //去掉批量删除
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
 //            $grid->disableCreation();
         });
     }

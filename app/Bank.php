@@ -9,6 +9,7 @@ class Bank extends Model
 {
     protected $table = 'banks';
 
+    const LOGO_PRE = '/storage/admin/';
     /**
      * 支持的支付平台
      */

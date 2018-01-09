@@ -17,5 +17,6 @@
     <p>外部交易号:{{$result->out_batch_no}}</p>
     <p>充值金额:{{$result->amount}}</p>
 @endif
+<p><a href="/#/myAccount">返回</a></p>
 </body>
 </html>

@@ -6,8 +6,11 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
 use Skip32;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 
 /**
  * Class User
@@ -24,6 +27,10 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 class User extends Authenticatable
 {
     protected $keyType = 'string';
+
+    const STATUS_NORMAL = 0;
+
+    const STATUS_BLOCK = 1;
 
     use Notifiable;
     use EntrustUserTrait;
@@ -168,5 +175,25 @@ class User extends Authenticatable
 
     public function pay_card() {
         return $this->hasOne(UserCard::class, 'id', 'pay_card_id');
+    }
+
+    public function check_pay_password($input) {
+        $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $this->id);
+        $times = Cache::get($key);
+        if ($times && $times >= config("pay_pwd_validate_times", 5)) {
+            throw new \Exception(trans("api.over_pay_password_max_times"));
+        }
+        if (!Hash::check($input, $this->pay_password)) {
+            if(!$times) {
+                Cache::put($key, 1, Carbon::now()->addDay(1));
+            }
+            else {
+                Cache::increment($key);
+            }
+            throw new \Exception(trans("api.error_pay_password"));
+//            return $this->json(['times' => config("pay_pwd_validate_times", 5) - $times], trans("api.error_pay_password"),0);
+        } else {
+            return true;
+        }
     }
 }

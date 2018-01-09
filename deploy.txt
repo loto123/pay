@@ -32,7 +32,7 @@ REDIS_PORT=6379
 
 QUEUE_DRIVER=redis
 
-;APP_LOG_LEVEL=info 仅生产环境开启
+;APP_LOG_LEVEL=info 仅生产环境设置
 
 APP_URL=https://实际域名
 API_DOMAIN=实际域名(不含http://和端口)
@@ -42,9 +42,12 @@ php composer.phar install
 
 php artisan key:generate
 
-运行以下命令
 php artisan key:generate --show
 生成类似base64:RxlUe7FP7vWS5Npl3hqsQuuUaCQ9CN5qIPZfJ4y8z5Y=这样的key设置.env中的JWT_SECRET的值
+
+;php artisan config:cache 配置缓存,仅生产环境执行
+;composer install --optimize-autoloader 优化自动加载,仅生产环境执行
+
 
 
 任务队列处理，应该使用进程监控工具,比如 Supervisor 来保证队列处理器没有停止运行:

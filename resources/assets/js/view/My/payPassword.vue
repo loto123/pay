@@ -2,20 +2,20 @@
   <div id="settleInfo">
     <topBack title="修改支付密码" style="background:#eee;"></topBack>
     <div class="settleInfo-container">
-      <mt-field label="原密码" placeholder="请填写原支付密码" v-model="old_pay_password"></mt-field>
-      <mt-field label="新密码" placeholder="请填写新支付密码" v-model="new_pay_password"></mt-field>
-      <mt-field label="确认新密码" placeholder="请再次输入新支付密码" type="text" v-model="confirm_pay_password"></mt-field>
+      <mt-field label="原密码" placeholder="请填写原支付密码" type="password" v-model="old_pay_password"></mt-field>
+      <mt-field label="新密码" placeholder="请填写新支付密码" type="password" v-model="new_pay_password"></mt-field>
+      <mt-field label="确认新密码" placeholder="请再次输入新支付密码" type="password" v-model="confirm_pay_password"></mt-field>
     </div>
     <div class="password-btn flex flex-justify-center">
       <mt-button type="primary" size="large" @click="affirm">确定</mt-button>
     </div>
     <div class="forget-password-box">
       <div class="notice">支付密码必须为6位纯数字</div>
-      <div class="forget-password">
+      <!-- <div class="forget-password">
         <a href="javascript:;">
           忘记原支付密码？
         </a>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -64,7 +64,7 @@
             this.$router.push('/my/set');
           })
           .catch((err) => {
-            console.error(err);
+            Toast(err.data.msg);
           })
       }
     }

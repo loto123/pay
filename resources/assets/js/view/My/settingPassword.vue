@@ -55,7 +55,7 @@ export default {
                     },1500);
                     
                 }).catch(err=>{
-                    console.error(err);
+                    Toast(err.data.msg);
                 });
             }
         }

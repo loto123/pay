@@ -122,7 +122,7 @@ class DataController extends Controller
         //交易ID
         $id = $request->input('id');
         if ($id) {
-            $listQuery->where('id', $id);
+            $listQuery->where('id', Transfer::decrypt($id));
         }
         $date_time = $request->input('date_time');
         if (!empty($date_time)) {

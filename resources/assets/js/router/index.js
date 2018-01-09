@@ -55,6 +55,7 @@ for (var i in routerList) {
 
 export default new Router({
     routes: router,
+    // 新页面不记录滑动位置
     scrollBehavior (to, from, savedPosition) {
       return { x: 0, y: 0 }
     }
