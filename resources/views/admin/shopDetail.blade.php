@@ -34,7 +34,7 @@
                     <h4 class="widget-user-desc">店铺交易笔数：<span>{{$list->transfer_cnt}}</span></h4>
                     <h4 class="widget-user-desc">平台交易费率：<span>{{config('platform_fee_percent') . '%'}}</span></h4>
                     <h4 class="widget-user-desc">已付平台交易费：<span>{{$list->fee_amount_cnt??0}}</span></h4>
-                    <h4 class="widget-user-desc">店铺手续费率：<span>{{$list->fee . '%'}}</span>
+                    <h4 class="widget-user-desc">店铺手续费率：<span>{{$list->fee . '%'}}</span></h4>
                     <h4 class="widget-user-desc">店铺默认单价：<span>{{$list->price}}</span></h4>
                     <h4 class="widget-user-desc">总交易额：<span>{{$list->summary??0}}</span></h4>
                     <h4 class="widget-user-desc">店铺收入：<span>{{$list->tip_amount_cnt??0}}</span></h4>
@@ -43,13 +43,14 @@
                     <h4 class="widget-user-desc">店铺是否开启交易：<span>{{$list->active?'开启':'关闭'}}</span></h4>
                     <h4 class="widget-user-desc">店铺创建时间：<span>{{$list->created_at}}</span></h4>
                 </div>
+                @if(Admin::user()->isRole('administrator'))
                 <form class="form-horizontal" method="post" action="/admin/shop/updates">
                     {{csrf_field()}}
                     <input type="hidden" name="shop_id" value={{$list->id}}>
                     <div class="form-group">
                         <div class="col-sm-8">
                             <h4 class="widget-user-desc">
-                                <input type="checkbox" name="status" {{($list->status==2)?'checked':''}} value="2">冻结店铺
+                                <input type="checkbox" name="status" {{($list->status==\App\Shop::STATUS_FREEZE)?'checked':''}} value="1">冻结店铺
                             </h4>
                         </div>
                         <span class="col-sm-8">
@@ -58,6 +59,7 @@
                         </span>
                     </div>
                 </form>
+                @endif
             </div>
         </div>
     </div>

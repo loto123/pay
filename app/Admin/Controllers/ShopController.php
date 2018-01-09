@@ -4,7 +4,9 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Shop;
+use App\Transfer;
 use App\User;
+use Dingo\Api\Http\Response;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use function foo\func;
@@ -67,10 +69,22 @@ class ShopController extends Controller
 
         $count = $countQuery->count();
         $list = $listQuery->paginate($this->limit);
+
+        //未关闭交易
+        $unclose_transfer = Shop::query()->withCount(['transfer' => function ($query) {
+            $query->where('status','<>','3');
+        }])->get();
+        $unclose_cnt_list = [];
+        if(!empty($unclose_transfer) && count($unclose_transfer)) {
+            foreach ($unclose_transfer as $item) {
+                $unclose_cnt_list[$item->id] = $item->transfer_count;
+            }
+        }
+
         $offset = ($request->page>1 ? $request->page-1 : 0 ) * $this->limit;
         $manager_id = $request->input('manager_id');
         $shop_id = $request->input('shop_id');
-        $data = compact('list','count','date_time','manager_id','shop_id','shop_name','offset');
+        $data = compact('list','count','date_time','manager_id','shop_id','shop_name','offset','unclose_cnt_list');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shop',$data));
             $content->header("店铺管理");
@@ -100,17 +114,43 @@ class ShopController extends Controller
         });
     }
 
+    /*
+     * 更新店铺状态
+     * 返回店铺详情页面
+     * */
     public function updates(Request $request)
     {
         $status = $request->input('status');
         $shop_id = $request->input('shop_id');
-        //这里可能需要判断后台登录者的角色，是否具有权限
+        //只有管理员才能操作
+        //只能在冻结和正常两种状态互切
+        if(!Admin::user()->isRole('administrator')) {
+            abort(404);
+        }
         if (isset($status)) {
-            Shop::where('id',$shop_id)->update(['status'=>'2']);
+            Shop::where('id',$shop_id)->update(['status'=>Shop::STATUS_FREEZE]);
         } else {
-            Shop::where('id',$shop_id)->update(['status'=>'0']);
+            Shop::where('id',$shop_id)->update(['status'=>Shop::STATUS_NORMAL]);
         }
         return redirect('/admin/shop/detail/'.$shop_id);
+    }
+
+    public function delete($shop_id) {
+        if(!Admin::user()->isRole('administrator')) {
+            abort(404);
+        }
+        $shop = Shop::where('id',$shop_id)->withCount(['transfer' => function ($query) {
+            $query->where('status','<>','3');
+        }])->first();
+        if($shop && $shop->transfer_count > 0) {
+            abort(404,'该店铺有交易未关闭，不能删除！');
+        }
+        if($shop->delete()) {
+            return redirect('/admin/shop')->with('status', '删除成功！');
+        } else {
+            return redirect('/admin/shop')->with('status','删除失败！');
+        }
+
     }
 
 }

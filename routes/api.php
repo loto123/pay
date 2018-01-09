@@ -52,6 +52,7 @@ Route::group([
     $router->post('delete', 'CardController@delete');
     $router->get('getBanks','CardController@getBanks');
     $router->get('getBankCardParams','CardController@getBankCardParams');
+    $router->get('otherCards','CardController@otherCards');
 });
 
 $api = app('Dingo\Api\Routing\Router');
