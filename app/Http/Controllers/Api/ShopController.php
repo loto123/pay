@@ -1839,7 +1839,8 @@ class ShopController extends BaseController {
             $query->where("type", $request->type);
         }
         if ($request->start) {
-            $query->where("created_at", "<=", $request->start);
+            $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
+            $query->where("created_at", "<", $start);
         }
         /* @var $user User */
         foreach ($query->orderBy('id',  'DESC')->paginate($request->input('size', 20)) as $_fund) {
