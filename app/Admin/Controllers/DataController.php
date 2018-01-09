@@ -31,7 +31,8 @@ class DataController extends Controller
     public function profit(Request $request)
     {
         //交易总笔数
-        $transfer_count = Transfer::count();
+//        $transfer_count = Transfer::count();
+        $transfer_count = TransferRecord::where('stat', 1)->count();
         //总收款
         $amount = abs(TransferRecord::where('stat', 1)->sum('amount'));
         //店铺分润
