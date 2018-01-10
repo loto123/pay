@@ -18,4 +18,9 @@ class Card extends Model
     {
         return IdConfuse::mixUpDepositId($id, 8, true);
     }
+
+    public function setIdAttribute($value)
+    {
+        $this->attributes['id'] = IdConfuse::recoveryDepositId($value, true);
+    }
 }
