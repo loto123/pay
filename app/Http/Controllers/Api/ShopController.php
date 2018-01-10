@@ -1484,6 +1484,10 @@ class ShopController extends BaseController {
     public function invite($shop_id, $user_id) {
         $shop = Shop::findByEnId($shop_id);
         $user = User::findByEnId($user_id);
+        if (!$user || $user->status == User::STATUS_BLOCK) {
+            return $this->json([], trans("api.user_unexist"), 0);
+
+        }
         if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
             return $this->json([], trans("api.shop_exist_member"), 0);
         }
@@ -1835,7 +1839,8 @@ class ShopController extends BaseController {
             $query->where("type", $request->type);
         }
         if ($request->start) {
-            $query->where("created_at", "<=", $request->start);
+            $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
+            $query->where("created_at", "<", $start);
         }
         /* @var $user User */
         foreach ($query->orderBy('id',  'DESC')->paginate($request->input('size', 20)) as $_fund) {
@@ -1918,7 +1923,7 @@ class ShopController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/transfer/records/month/{shop_id}",
+     *   path="/shop/transfer/records/month/{shop_id}",
      *   summary="帐单月数据",
      *   tags={"店铺"},
      *   @SWG\Parameter(
