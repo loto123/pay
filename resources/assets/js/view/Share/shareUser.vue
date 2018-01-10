@@ -2,16 +2,16 @@
   <div id="share">
     <topBack title="展业" style="background:#38C3EC;color:#fff;"></topBack>
     <ul class="share-user">
-      <li class="flex flex-justify-around" @click="goGeneralize">
-        <div>图标</div>
+      <li class="flex flex-justify-around flex-align-center" @click="goGeneralize">
+        <img src="/images/code2.png" style="width:30px;">
         <div>二维码图片链接</div>
         <div class="iconfont">&#xe62e;</div>
       </li>
-      <li class="flex flex-justify-around" @click="goInviteLink">
-          <div>图标</div>
-          <div>分享注册邀请链接</div>
-          <div class="iconfont">&#xe62e;</div>
-        </li>
+      <li class="flex flex-justify-around flex-align-center" @click="goInviteLink">
+        <img src="/images/share.png" style="width:40px;">
+        <div>分享注册邀请链接</div>
+        <div class="iconfont">&#xe62e;</div>
+      </li>
     </ul>
   </div>
 </template>
@@ -29,9 +29,9 @@
     padding: 1em 0.5em;
     li {
       height: 5em;
-      line-height:5em;
+      line-height: 5em;
       background: #fff;
-      margin-bottom:1em;
+      margin-bottom: 1em;
     }
   }
 </style>
@@ -55,13 +55,13 @@
       }
     },
     methods: {
-      goGeneralize(){
+      goGeneralize() {
         this.$router.push('/shareUser/generalize')
       },
-      goInviteLink(){
+      goInviteLink() {
         this.$router.push('/shareUser/inviteLink')
       }
     },
-    components: { topBack},
+    components: { topBack },
   }
 </script>

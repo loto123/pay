@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use EasyWeChat;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
  *
@@ -119,5 +121,60 @@ class ProxyController extends BaseController {
     public function members_count() {
         $user = $this->auth->user();
         return $this->json(['total' => (int)$user->child_proxy()->count(), 'manager_total' => (int)$user->child_proxy()->has("shop")->count(), 'member_total' => (int)$user->child_proxy()->doesntHave("shop")->count()]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/proxy/qrcode",
+     *   summary="代理二维码",
+     *   tags={"代理"},
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="二维码尺寸",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="url", type="string", example="http://url",description="二维码链接"),
+     *                  @SWG\Property(property="thumb", type="string", example="http://url",description="用户头像"),
+     *                  @SWG\Property(property="name", type="string", example="用户名",description="用户名"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function qrcode(Request $request) {
+        $size = $request->input("size", 200);
+        $user = $this->auth->user();
+        /* @var $user User */
+        $url = url(sprintf("/#/shareUser/inviteLink/download?mobile=%s", $user->mobile));
+        $filename = md5($url."_".$size);
+        $path = 'qrcode/'.$filename.'.png';
+        if (!Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->put($path, QrCode::format('png')->size($size)->margin(1)->generate($url));
+        }
+        return $this->json(['url' => url('storage/'.$path), 'thumb' => $user->avatar, 'name' => $user->name]);
     }
 }

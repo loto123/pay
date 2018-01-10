@@ -184,15 +184,17 @@ export default {
       request.getInstance().postData('api/auth/login',data).then(function(res){
           self.userId = res.data.data.id;
 
-           if(res.data.data.wechat == 0){
-             Toast("登录成功，正在跳转绑定微信...");
-             setTimeout(()=>{
-                 Loading.getInstance().open();
-             },1000);
+          // 微信登录控制，生产环境开启
 
-             return Promise.resolve(true);
+          //  if(res.data.data.wechat == 0){
+          //    Toast("登录成功，正在跳转绑定微信...");
+          //    setTimeout(()=>{
+          //        Loading.getInstance().open();
+          //    },1000);
 
-           }
+          //    return Promise.resolve(true);
+
+          //  }
 
           request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");

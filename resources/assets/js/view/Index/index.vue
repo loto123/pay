@@ -42,6 +42,15 @@
           </li>
 
           <li class="flex flex-v flex-align-center">
+            <a href="/#/share_profit" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe63b;
+              </i>
+              <h3>我的分润</h3>
+            </a>
+          </li>
+
+          <li class="flex flex-v flex-align-center">
             <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
               <i class="iconfont transaction-icon common-icon">
                 &#xe63b;
@@ -50,12 +59,21 @@
             </a>
           </li>
 
-          <!-- <li class="flex flex-v flex-align-center">
+          <li class="flex flex-v flex-align-center">
             <a href="/#/my/my_users" class="flex flex-v flex-align-center">
               <i class="iconfont transaction-icon common-icon">
                 &#xe621;
               </i>
               <h3>我的用户</h3>
+            </a>
+          </li>
+
+          <li class="flex flex-v flex-align-center">
+            <a href="/#/my_vip" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe6e1;
+              </i>
+              <h3>我的vip</h3>
             </a>
           </li>
 
@@ -66,7 +84,7 @@
               </i>
               <h3>展业</h3>
             </a>
-          </li> -->
+          </li>
           
         </ul>
       </section>
