@@ -75,14 +75,19 @@ class VersionController extends Controller
         return Admin::grid(Version::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-            $grid->column('platform', '平台');
+            $grid->column('platform', '平台')->display(function($platform){
+                return $platform == Version::PLATFORM_ANDROID ? "Android" : "iOS";
+            });
             $grid->column('ver_name', '版本名');
             $grid->column('ver_code', '版本号');
             $grid->column('url', '下载地址')->display(function ($url) {
                 return "<a target='_blank' href='".$url."'>".$url."</a>";
             });
             $grid->column('changelog', '更新日志');
-
+            $grid->filter(function($filter){
+                $filter->disableIdFilter();
+                $filter->equal('platform', '平台')->select([Version::PLATFORM_IOS => 'iOS',Version::PLATFORM_ANDROID => 'Android']);
+            });
             $grid->created_at("添加时间");
         });
     }
