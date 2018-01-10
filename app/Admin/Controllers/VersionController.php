@@ -45,7 +45,7 @@ class VersionController extends Controller
             $content->header('header');
             $content->description('description');
 
-            $content->body($this->form()->edit($id));
+            $content->body($this->form()->edit($id)->render());
         });
     }
 
@@ -118,6 +118,15 @@ class VersionController extends Controller
             $form->ignore(['url_file', 'url_link']);
             $form->saving(function (Form $form) {
 
+
+                foreach (['ver_name', 'ver_code'] as $_key) {
+                    if ($form->model()->$_key != $form->$_key) {
+                        $exist = Version::where('platform', $form->platform)->where($_key, $form->$_key)->first();
+                        if ($exist && $exist->id != $form->model()->id) {
+                            return back()->withErrors([$_key => '已存在相同版本']);
+                        }
+                    }
+                }
                 if (Request::hasFile("url_file")) {
 //                    $file = Storage::disk(config('admin.upload.disk'))->get(request()->url_file);
 //                    if ($file) {
