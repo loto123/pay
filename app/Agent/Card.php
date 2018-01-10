@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Card extends Model
 {
+    const UPDATED_AT = false;
     protected $table = 'agent_card';
     protected $guarded = ['id'];
 
@@ -53,5 +54,13 @@ class Card extends Model
     public function type()
     {
         return $this->belongsTo(CardType::class, 'card_type');
+    }
+
+    /**
+     * 持有人
+     */
+    public function holder()
+    {
+        return $this->hold_by_operator ? DB::table('admin_users')->find($this->owner) : $this->belongsTo(User::class, 'owner');
     }
 }

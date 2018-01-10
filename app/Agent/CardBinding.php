@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CardBinding extends Model
 {
+    const UPDATED_AT = false;
     protected $table = 'agent_card_binding';
     protected $guarded = ['id'];
 

@@ -25,8 +25,7 @@ class VersionController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('版本管理');
 
             $content->body($this->grid());
         });
@@ -42,10 +41,9 @@ class VersionController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('版本管理');
 
-            $content->body($this->form()->edit($id));
+            $content->body($this->form()->edit($id)->render());
         });
     }
 
@@ -58,8 +56,7 @@ class VersionController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('版本管理');
 
             $content->body($this->form()->render());
         });
@@ -73,7 +70,7 @@ class VersionController extends Controller
     protected function grid()
     {
         return Admin::grid(Version::class, function (Grid $grid) {
-
+            $grid->model()->orderBy("id", "DESC");
             $grid->id('ID')->sortable();
             $grid->column('platform', '平台')->display(function($platform){
                 return $platform == Version::PLATFORM_ANDROID ? "Android" : "iOS";
@@ -104,7 +101,7 @@ class VersionController extends Controller
             $form->display('id', 'ID');
             $form->select('platform','平台')->options([0=>'iOS', 1=>'Android'])->rules('required');
             $form->text('ver_name', '版本名')->help("a.b.c形式。a为大版本号,大版本号变化则强制非该大版本号的客户端强制更新。b为功能版本号,增加了新功能。c为修复版本号,修复了问题")->rules('required');
-            $form->text('ver_code', '版本号')->help("数字形式，小于该版本号的客户端会被提示更新")->rules('required');
+            $form->number('ver_code', '版本号')->help("数字形式，小于该版本号的客户端会被提示更新")->rules('required')->default(1);
             $form->file('url_file', '文件包');
             $form->text('url_link', '文件下载链接');
             $form->hidden("url");
@@ -118,6 +115,15 @@ class VersionController extends Controller
             $form->ignore(['url_file', 'url_link']);
             $form->saving(function (Form $form) {
 
+
+                foreach (['ver_name', 'ver_code'] as $_key) {
+                    if ($form->model()->$_key != $form->$_key) {
+                        $exist = Version::where('platform', $form->platform)->where($_key, $form->$_key)->first();
+                        if ($exist && $exist->id != $form->model()->id) {
+                            return back()->withErrors([$_key => '已存在相同版本']);
+                        }
+                    }
+                }
                 if (Request::hasFile("url_file")) {
 //                    $file = Storage::disk(config('admin.upload.disk'))->get(request()->url_file);
 //                    if ($file) {
