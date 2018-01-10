@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Agent\Card;
 use App\Agent\CardBinding;
+use App\Agent\CardTransfer;
 use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
 use Carbon\Carbon;
@@ -73,14 +75,51 @@ class User extends Authenticatable
 
     //茶水费
 
+    /*<!----------------代理VIP卡功能BEGIN-----------------*/
+
     /**
-     * 我的vip绑定
-     * @return \Illuminate\Database\Eloquent\Model|null|static
+     * 我目前被绑定的vip卡
+     * @return Card|null
      */
     public function myVipCard()
     {
-        return $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->first();
+        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->first();
+        if ($binding) {
+            return $binding->card;
+        } else {
+            return null;
+        }
     }
+
+    /**
+     * 我的绑卡记录
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function myCardBindings()
+    {
+        return $this->hasMany(CardBinding::class, 'promoter_id');
+    }
+
+    /**
+     * 我持有的卡
+     * @return mixed
+     */
+    public function myCardsHold()
+    {
+        return Card::where([['hold_by_operator', 0], ['owner', $this->getKey()]])->whereNull('expired_at')->get();
+    }
+
+    /**
+     * 我的转卡
+     * @return mixed
+     */
+    public function myCardsTransfer()
+    {
+        return CardTransfer::where([['from_promoter', 1], ['sender_id', $this->getKey()]])->get();
+    }
+
+    /*----------------代理VIP卡功能END----------------!>*/
+
 
     //产出利润
 

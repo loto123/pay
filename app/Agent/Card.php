@@ -55,4 +55,12 @@ class Card extends Model
     {
         return $this->belongsTo(CardType::class, 'card_type');
     }
+
+    /**
+     * 持有人
+     */
+    public function holder()
+    {
+        return $this->hold_by_operator ? DB::table('admin_users')->find($this->owner) : $this->belongsTo(User::class, 'owner');
+    }
 }
