@@ -72,7 +72,7 @@ return [
 
         'directory'  => [
             'image'  => 'images',
-            'file' => '',
+            'file' => 'files',
         ],
         'host' => '/upload/admin'
     ],

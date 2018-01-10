@@ -182,6 +182,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->get('share', 'ProxyController@share');
         $api->get('members/count', 'ProxyController@members_count');
         $api->get('members', 'ProxyController@members');
+        $api->get('qrcode', 'ProxyController@qrcode');
     });
 
 });
@@ -194,6 +195,15 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->get('/', 'IndexController@index');
     });
 
+});
+
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => 'app',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get("version", 'AppController@version');
+    });
 });
 
 Route::group([
