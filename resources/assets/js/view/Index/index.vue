@@ -69,6 +69,15 @@
           </li>
 
           <li class="flex flex-v flex-align-center">
+            <a href="/#/my_vip" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe6e1;
+              </i>
+              <h3>我的vip</h3>
+            </a>
+          </li>
+
+          <li class="flex flex-v flex-align-center">
             <a href="/#/shareUser" class="flex flex-v flex-align-center">
               <i class="iconfont transaction-icon common-icon">
                 &#xe64f;
