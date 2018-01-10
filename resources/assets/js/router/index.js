@@ -11,16 +11,15 @@ import Shop from './shop'
 import Inform from './inform'
 import Share from './share'
 import ShareProfit from './shareProfit'
+import Vip from './vip'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
 import '../../sass/iconfont.scss'
 
-// import Loading from '../utils/loading'
-
 Vue.use(Mint)
 Vue.use(Router)
-// Vue.use(Loading);
+
 var index = [
     { path: '/index', name: 'index', component: Index },
 ]
@@ -45,7 +44,10 @@ var routerList = {
     share:Share,
 
 	// 分润
-	shareProfit:ShareProfit 
+    shareProfit:ShareProfit ,
+    
+    // vip
+    vip:Vip
 };
 
 var router = [];
