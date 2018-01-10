@@ -10,7 +10,7 @@
                     <h4 class="widget-user-desc">身份：<span>
                         @if(!empty($list->roles) && count($list->roles)>0)
                             @foreach($list->roles as $_role)
-                                {{$_role->display_name}}&nbsp&nbsp
+                                {{$_role->display_name}}
                             @endforeach
                         @endif
                         </span></h4>

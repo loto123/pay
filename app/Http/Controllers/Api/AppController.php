@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
 use App\Version;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -55,6 +53,7 @@ class AppController extends BaseController {
      *                  @SWG\Property(property="changelog", type="string", example="标题
 正文",description="更新日志"),
      *                  @SWG\Property(property="download_url", type="string", example="url",description="下载地址"),
+     *                  @SWG\Property(property="sign", type="string", example="c98acf99b6a2c980cae2dd54ac774bc6",description="校验值 android对应安装包的md5，ios对应下载链接md5"),
      *              )
      *          )
      *      ),
@@ -76,13 +75,14 @@ class AppController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $last_version = Version::where("platform", $request->platform == 'ios' ? Version::PLATFORM_IOS : Version::PLATFORM_ANDROID)->where("ver_code", ">", $request->ver_code)->orderBy("ver_code", "DESC")->first();
-        $result = ['version' => "", 'type' => Version::TYPE_DEFAULT, 'changelog' => "", 'download_url' => ''];
+        $result = ['version' => "", 'type' => Version::TYPE_DEFAULT, 'changelog' => "", 'download_url' => '', 'sign' => ''];
         $client_version = Version::where("ver_code", $request->ver_code)->first();
         if ($last_version) {
             $result['type'] = Version::TYPE_UPGRADE;
             $result['version'] = $last_version->ver_name;
             $result['changelog'] = $last_version->changelog;
-            $result['download_url'] = Storage::disk(config('admin.upload.disk'))->url($last_version->url);
+            $result['download_url'] = $last_version->url;
+            $result['sign'] = $last_version->md5;
             if ($client_version) {
                 list($major,) = explode('.', $client_version->ver_code);
                 list($last_version_major,) = explode('.', $last_version->ver_code);

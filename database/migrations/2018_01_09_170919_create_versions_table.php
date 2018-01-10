@@ -19,6 +19,7 @@ class CreateVersionsTable extends Migration
             $table->string('ver_name');
             $table->unsignedSmallInteger('ver_code');
             $table->string("url");
+            $table->string('md5');
             $table->text('changelog');
             $table->timestamps();
             $table->index(['platform', 'ver_code']);

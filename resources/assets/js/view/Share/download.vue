@@ -1,31 +1,30 @@
 <template>
   <div id="share">
-    <topBack title="二维码推广" style="background:#38C3EC;color:#fff;"></topBack>
     <div class="back-img">
-        <a href="javascript:;" class="regist-btn" id="regist" @click="regist">立即注册</a>
-        <a href="javascript:;" class="download-btn" id="downloadBtn">下载APP</a>
-      </div>
+      <a href="javascript:;" class="regist-btn" id="regist" @click="regist">立即注册</a>
+      <a href="javascript:;" class="download-btn" id="downloadBtn">下载APP</a>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
   #share {
     box-sizing: border-box;
-    padding-top: 2em;
     height: 100vh;
     width: 100%;
     background: #fff;
   }
+
   .back-img {
     background: url(/images/share2.jpg) no-repeat;
     position: relative;
     width: 100%;
     height: 100%;
     background-size: 100% 100%;
-    a{
+    a {
       background: #38C3EC;
       color: #fff;
-      width: 12em;
+      width: 13em;
       height: 2.5em;
       line-height: 2.5em;
       position: absolute;
@@ -40,10 +39,10 @@
   .regist-btn {
     bottom: 4.5em;
   }
-  .download-btn{
+
+  .download-btn {
     bottom: 1em;
   }
-  
 </style>
 
 <script>
@@ -56,14 +55,18 @@
   export default {
     data() {
       return {
-
+        mobile:null
       }
+    },
+    created(){
+      this.init();
     },
     methods: {
-      regist(){
-        this.$router.push('/login/regist');
+      regist() {
+        this.mobile=this.$route.query.mobile;
+        this.$router.push("/login/regist?mobile="+this.mobile);
       }
     },
-    components: { topBack},
+    components: { topBack },
   }
 </script>

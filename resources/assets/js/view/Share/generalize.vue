@@ -1,19 +1,19 @@
 <template>
   <div id="share">
     <topBack title="二维码推广" style="background:#38C3EC;color:#fff;"></topBack>
-    <h2>服务于百万用户的聚合收付款工具</h2>
     <div class="reffer-box">
-      <div class="reffer-image">
-        <img src="/images/avatar.jpg">
+      <div class="header">
+        <div class="imgWrap">
+          <img :src="thumb">
+        </div>
+        <h3>推荐人: {{name}}</h3>
       </div>
-      <div class="reffer">推荐人:<span>刘**</span></div>
       <div class="code-box">
-          <div class="code">
-            <img src="/images/code.png">
-          </div>
-          <div>打开微信扫一扫</div>
+        <div class="code">
+            <img :src="QRCode">
+        </div>
+        <div>打开微信扫一扫</div>
       </div>
-     
     </div>
   </div>
 </template>
@@ -25,36 +25,42 @@
     height: 100vh;
     width: 100%;
     background: #fff;
-    h2{
-      font-weight:700;
-      font-size:1.5em;
-      margin:1em auto;
-      width:60%;
-      text-align:center;
-      line-height:1.2em;
-    }
   }
-  .reffer-box{
-    width: 100%;
-    margin:0 auto;
-    margin-top:10em;
-    text-align: center;
-    .reffer-image{
-      margin-bottom:0.2em;
-      img{
-        width:4em;
-        height:4em;
-        border-radius:50%;
+
+  .header {
+    padding-top: 7em;
+    .imgWrap {
+      img {
+        width: 4.5em;
+        height: 4.5em;
+        border-radius: 50%;
       }
+
     }
-    .reffer{
-      margin-top:0.2em;
+    h3 {
+      font-size: 1em;
+      margin-top: 0.5em;
+      color: #fff;
     }
   }
-  .code-box{
-    margin-top:0.5em;
-    .code{
-      margin-bottom:0.2em;
+
+  .reffer-box {
+    width: 100%;
+    margin: 0 auto;
+    height: 21em;
+    text-align: center;
+    background: #38C3EC;
+    position: relative;
+  }
+
+  .code-box {
+    position: absolute;
+    left: 0;
+    right:0;
+    bottom:-115px;
+    margin: auto;
+    .code {
+      margin-bottom: 0.2em;
     }
   }
 </style>
@@ -68,17 +74,29 @@
 
   export default {
     created() {
+      this.init();
     },
 
     data() {
       return {
-
-
+        thumb:null,
+        name:null,
+        QRCode:null
       }
     },
     methods: {
-     
+      init() {
+        Loading.getInstance().open();
+        request.getInstance().getData("api/proxy/qrcode").then(res => {
+          this.QRCode=res.data.data.url;
+          this.name=res.data.data.name;
+          this.thumb=res.data.data.thumb;
+          Loading.getInstance().close();
+        }).catch(err => {
+          Toast(err.data.msg);
+        });
+      }
     },
-    components: { topBack},
+    components: { topBack },
   }
 </script>
