@@ -50,8 +50,8 @@ class AppController extends BaseController {
      *              @SWG\Property(
      *                  property="data",
      *                  type="object",
-     *                  @SWG\Property(property="need_upgrade", type="boolean", example=0,description="是否需要升级"),
-     *                  @SWG\Property(property="upgrade_type", type="boolean", example=1,description="升级类型 0=普通更新 1=强制更新"),
+     *                  @SWG\Property(property="version", type="string", example="2.3.4",description="最新版本名"),
+     *                  @SWG\Property(property="type", type="integer", example=1,description="升级类型 0=不用更新 1=普通更新 2=强制更新"),
      *                  @SWG\Property(property="changelog", type="string", example="标题
 正文",description="更新日志"),
      *                  @SWG\Property(property="download_url", type="string", example="url",description="下载地址"),
@@ -75,17 +75,22 @@ class AppController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $last_version = Version::where("platform", $request->platform == 'ios' ? 0:1)->where("ver_code", ">", $request->ver_code)->orderBy("ver_code", "DESC")->first();
-        $result = ['need_upgrade' => 0, 'upgrade_type' => 0, 'changelog' => "", 'download_url' => ''];
-        /* @var $user User */
+        $last_version = Version::where("platform", $request->platform == 'ios' ? Version::PLATFORM_IOS : Version::PLATFORM_ANDROID)->where("ver_code", ">", $request->ver_code)->orderBy("ver_code", "DESC")->first();
+        $result = ['version' => "", 'type' => Version::TYPE_DEFAULT, 'changelog' => "", 'download_url' => ''];
+        $client_version = Version::where("ver_code", $request->ver_code)->first();
         if ($last_version) {
-            $result['need_upgrade'] = 1;
+            $result['type'] = Version::TYPE_UPGRADE;
+            $result['version'] = $last_version->ver_name;
             $result['changelog'] = $last_version->changelog;
             $result['download_url'] = Storage::disk(config('admin.upload.disk'))->url($last_version->url);
-            list($major,) = explode('.', $request->ver_code);
-            list($last_version_major,) = explode('.', $last_version->ver_code);
-            if ($last_version_major > $major) {
-                $result['upgrade_type'] = 1;
+            if ($client_version) {
+                list($major,) = explode('.', $client_version->ver_code);
+                list($last_version_major,) = explode('.', $last_version->ver_code);
+                if ($last_version_major > $major) {
+                    $result['type'] = Version::TYPE_FORCE_UPGRADE;
+                }
+            } else {
+                $result['type'] = Version::TYPE_FORCE_UPGRADE;
             }
         }
         return $this->json($result);
