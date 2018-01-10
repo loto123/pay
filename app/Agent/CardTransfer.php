@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
  */
 class CardTransfer extends Model
 {
+    const UPDATED_AT = false;
     protected $table = 'agent_card_transfer';
     protected $guarded = ['id'];
 
