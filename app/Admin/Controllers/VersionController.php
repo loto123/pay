@@ -104,7 +104,7 @@ class VersionController extends Controller
             $form->display('id', 'ID');
             $form->select('platform','平台')->options([0=>'iOS', 1=>'Android'])->rules('required');
             $form->text('ver_name', '版本名')->help("a.b.c形式。a为大版本号,大版本号变化则强制非该大版本号的客户端强制更新。b为功能版本号,增加了新功能。c为修复版本号,修复了问题")->rules('required');
-            $form->text('ver_code', '版本号')->help("数字形式，小于该版本号的客户端会被提示更新")->rules('required');
+            $form->number('ver_code', '版本号')->help("数字形式，小于该版本号的客户端会被提示更新")->rules('required')->default(1);
             $form->file('url_file', '文件包');
             $form->text('url_link', '文件下载链接');
             $form->hidden("url");
