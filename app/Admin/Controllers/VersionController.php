@@ -25,8 +25,7 @@ class VersionController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('版本管理');
 
             $content->body($this->grid());
         });
@@ -42,8 +41,7 @@ class VersionController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('版本管理');
 
             $content->body($this->form()->edit($id)->render());
         });
@@ -58,8 +56,7 @@ class VersionController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('版本管理');
 
             $content->body($this->form()->render());
         });
