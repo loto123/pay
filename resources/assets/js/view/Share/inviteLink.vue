@@ -83,7 +83,6 @@
           .then((res) => {
             var Data = res.data.data;
             var content=JSON.parse(Data.config);
-            console.log(content);
             wx.config(content);
           })
           .catch((err) => {
@@ -92,7 +91,6 @@
       },
       shareContent() {
         wx.ready(() => {
-          console.log(1111);
           //分享给朋友
           wx.onMenuShareAppMessage({
             title: '聚宝朋', // 分享标题
@@ -105,7 +103,7 @@
             },
             cancel: function () {
               // 用户取消分享后执行的回调函数
-              console.log(2222);
+              Toast('已取消');
             }
           })
           //分享到朋友圈
@@ -119,7 +117,7 @@
             },
             cancel: function () {
               // 用户取消分享后执行的回调函数
-              console.log(2222);
+              Toast('已取消');
             }
           })
         })
