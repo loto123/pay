@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
 use App\Version;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -82,7 +80,7 @@ class AppController extends BaseController {
             $result['type'] = Version::TYPE_UPGRADE;
             $result['version'] = $last_version->ver_name;
             $result['changelog'] = $last_version->changelog;
-            $result['download_url'] = Storage::disk(config('admin.upload.disk'))->url($last_version->url);
+            $result['download_url'] = $last_version->url;
             if ($client_version) {
                 list($major,) = explode('.', $client_version->ver_code);
                 list($last_version_major,) = explode('.', $last_version->ver_code);
