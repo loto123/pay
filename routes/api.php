@@ -182,6 +182,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->get('share', 'ProxyController@share');
         $api->get('members/count', 'ProxyController@members_count');
         $api->get('members', 'ProxyController@members');
+        $api->get('qrcode', 'ProxyController@qrcode');
     });
 
 });
