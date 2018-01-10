@@ -70,7 +70,7 @@ class VersionController extends Controller
     protected function grid()
     {
         return Admin::grid(Version::class, function (Grid $grid) {
-
+            $grid->model()->orderBy("id", "DESC");
             $grid->id('ID')->sortable();
             $grid->column('platform', '平台')->display(function($platform){
                 return $platform == Version::PLATFORM_ANDROID ? "Android" : "iOS";
