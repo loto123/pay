@@ -257,7 +257,7 @@ class AuthController extends BaseController {
         if ($invite) {
             $user->parent_id = $invite->id;
             $user->operator_id = $invite->operator_id;
-            Notification::send($invite, new UserApply(['user_name' =>  $user->name, 'user_id' => $user->id]));
+            \App\Admin\Controllers\NoticeController::send([$invite->id],2,'您推荐的'.$user->mobile.'注册成功');
         }
         $user->channel_id = $channel->id;
         $user->save();

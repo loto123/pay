@@ -7,6 +7,7 @@ use App\Notifications\ProfitApply;
 use App\Notifications\UserApply;
 use App\User;
 use Encore\Admin\Controllers\ModelForm;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SystemApply;
 
@@ -35,15 +36,15 @@ class NoticeController extends Controller
                     return false;
                 }
                 $data['param'] = $param;
-                $data['title'] = $title??'分润通知';
+                $data['title'] = empty($title)?'分润通知':$title;
                 $notice_data = new ProfitApply($data);
                 break;
             case 2:
-                $data['title'] = $title??'新用户注册通知';
+                $data['title'] = empty($title)?'新用户注册通知':$title;
                 $notice_data = new UserApply($data);
                 break;
             case 3:
-                $data['title'] = $title??'系统通知';
+                $data['title'] = empty($title)?'系统通知':$title;
                 $notice_data = new SystemApply($data);
                 break;
         }

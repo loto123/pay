@@ -19,10 +19,17 @@ class NoticeController extends BaseController
 
     //消息列表
     /**
-     * @SWG\GET(
+     * @SWG\Post(
      *   path="/notice/index",
      *   summary="消息列表",
      *   tags={"消息"},
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="path",
+     *     description="消息类型：1：分润，2：用户注册，3：系统",
+     *     required=true,
+     *     type="integer"
+     *   ),
      *   @SWG\Parameter(
      *     name="page",
      *     in="path",
@@ -39,7 +46,7 @@ class NoticeController extends BaseController
      *   ),
      *   @SWG\Response(
      *          response=200,
-     *          description="成功返回",
+     *          description="成功返回(type=1 分润消息)",
      *          @SWG\Schema(
      *              @SWG\Property(
      *                  property="code",
@@ -58,10 +65,40 @@ class NoticeController extends BaseController
      *                      @SWG\Items(
      *                              @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
      *                              @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
-     *                              @SWG\Property(property="title", type="string", example="17673161856",description="消息标题"),
-     *                              @SWG\Property(property="content", type="string", example="10",description="消息内容"),
-     *                              @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间"),
-     *                              @SWG\Property(property="thumb", type="string", example="url",description="分润消息中的头像"),
+     *                              @SWG\Property(property="mobile", type="string", example="17673161856",description="分润来源者的账号"),
+     *                              @SWG\Property(property="thumb", type="string", example="url",description="分润来源者的头像"),
+     *                              @SWG\Property(property="amount", type="string", example="10",description="分润金额"),
+     *                              @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *     @SWG\Response(
+     *          response=302,
+     *          description="成功返回(type:2,3 用户注册、系统消息)",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="1", type="array",
+     *                      @SWG\Items(
+     *                              @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
+     *                              @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
+     *                              @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
+     *                              @SWG\Property(property="content", type="string", example="这是一条系统消息...",description="消息内容"),
+     *                              @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
      *                          )
      *                      )
      *                  )
@@ -79,37 +116,58 @@ class NoticeController extends BaseController
     public function index(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
-
-        $notice_type = ['App\Notifications\ProfitApply','App\Notifications\UserApply','App\Notifications\SystemApply'];
-        $notice = $this->user->unreadNotifications()->whereIn('type',$notice_type)->paginate($request->input('size', 20));
+        $validator = Validator::make($request->all(),
+            [
+                'type' => 'bail|required|numeric',
+            ],
+            [
+                'required' => trans('trans.required'),
+                'numeric' => trans('trans.numeric'),
+            ]
+        );
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $type = $request->type;
+        if (!isset(Notice::typeConfig()[$type])) {
+            return $this->json([], '请求的消息类型不存在', 0);
+        }
+        $notice_type = Notice::typeConfig()[$type];
+        $notice = $this->user->unreadNotifications()->where('type', $notice_type)->paginate($request->input('size', 20));
         $list = [];
-        if (!empty($notice) && count($notice)>0) {
-            foreach($notice as $item) {
-                $thumb = '';
-                $title = $item->data['title'];
-                $content = $item->data['content'];
-                if($item->type == 'App\Notifications\ProfitApply') { //分润
+        if (!empty($notice) && count($notice)> 0) {
+            switch ($type){
+                case '1'://分润
+                foreach ($notice as $item) {
                     $profit_table = (new Profit)->getTable();
-                    $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
-                        ->where($profit_table.'.id',$item->data['param'])->select('proxy_amount','u.mobile as mobile', 'u.avatar as avatar')->first();
-                    if(empty($profit)) {
+                    $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
+                        ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
+                    if (empty($profit)) {
                         continue;
                     }
-                    $thumb = $profit->avatar??'';
-                    $title = $profit->mobile;
-                    $content = $profit->proxy_amount;
+                    $list[] = [
+                        'type' => $type,
+                        'notice_id' => $item->id,
+                        'mobile' => $profit->mobile,
+                        'thumb' => $profit->avatar??'',
+                        'amount' => $profit->proxy_amount,
+                        'created_at' => (string)$item->created_at,
+                    ];
                 }
-                $list[$item->data['type']][] = [
-                    'type' => $item->data['type'],
-                    'notice_id' => $item->id,
-                    'title' => $title,
-                    'content' => $content,
-                    'created_at' => (string)$item->created_at,
-                    'thumb'=> $thumb,
-                ];
+                break;
+                case '2'://用户注册
+                case '3'://系统消息
+                    foreach ($notice as $item) {
+                        $list[] = [
+                            'type' => $type,
+                            'notice_id' => $item->id,
+                            'title' => $item->data['title'],
+                            'content' => $item->data['content'],
+                            'created_at' => (string)$item->created_at,
+                        ];
+                    }
+                break;
             }
-
-
         }
         return $this->json($list);
     }
