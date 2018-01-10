@@ -1,6 +1,6 @@
 <template>
   <div id="share">
-    <topBack title="分享" style="background:#38C3EC;color:#fff;"></topBack>
+    <topBack title="分享" style="background:#428FE2;color:#fff;"></topBack>
     <div class="back-img">
       <a href="javascript:;" class="share-btn" id="shareBtn" @click="shareBtn">分享</a>
       <div class="text">
@@ -86,44 +86,48 @@
             wx.config(content);
           })
           .catch((err) => {
-            console.error(err);
+            Toast(err.data.msg);
           })
       },
       shareContent() {
+        let links = 'https://qp-jubaopen-test.supernano.com/#/shareUser/inviteLink/download';
+        let title = '聚宝朋';
+        let desc = '这是一段文字';
+        let imgUrl = '';
         wx.ready(() => {
           //分享给朋友
           wx.onMenuShareAppMessage({
-            title: '聚宝朋', // 分享标题
-            desc: '这是一段文字', // 分享描述
-            link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: '', // 分享图标
+            title: title, // 分享标题
+            desc: desc, // 分享描述
+            link: links, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: imgUrl, // 分享图标
             success: function () {
               // 用户确认分享后执行的回调函数
-              Toast('分享成功');
+              Toast('成功分享给朋友');
             },
             cancel: function () {
               // 用户取消分享后执行的回调函数
-              Toast('已取消');
+              Toast('分享失败，您取消了分享');
             }
           })
           //分享到朋友圈
           wx.onMenuShareTimeline({
-            title: '聚宝朋', // 分享标题
-            link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: '', // 分享图标
+            title: title, // 分享标题
+            link: links, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: imgUrl, // 分享图标
             success: function () {
               // 用户确认分享后执行的回调函数
-              Toast('分享成功');
+              Toast('成功分享到朋友圈');
             },
             cancel: function () {
               // 用户取消分享后执行的回调函数
-              Toast('已取消');
+              Toast('分享失败，您取消了分享');
             }
           })
         })
       },
       shareBtn(){
-        console.log('进来了');
+        Toast('请点击右上角分享');
       }
     },
     components: { topBack },
