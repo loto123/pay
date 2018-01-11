@@ -28,10 +28,10 @@
 
 
 <script>
-  import axios from "axios";
   import request from '../../utils/userRequest';
   import topBack from "../../components/topBack.vue";
   import { MessageBox,Toast } from "mint-ui";
+  import Loading from '../../utils/loading'
 
   export default {
     data() {
@@ -52,13 +52,19 @@
       },
       registerInfo() {
         var self = this;
-
-        request.getInstance().getData('api/notice/index')
+        var data={
+					type:2
+				}
+        Loading.getInstance().open("加载中...");
+        
+        request.getInstance().postData('api/notice/index',data)
           .then((res) => {
-            self.registerList = res.data.data[2];
+            self.registerList = res.data.data;
+            Loading.getInstance().close();
           })
           .catch((err) => {
             Toast(err.data.msg);
+            Loading.getInstance().close();
           })
       },
       //清空消息
