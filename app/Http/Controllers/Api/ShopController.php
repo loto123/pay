@@ -574,16 +574,16 @@ class ShopController extends BaseController {
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="成员数目",
      *     required=false,
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页面",
+     *     description="最后一条记录的id，默认0",
      *     required=false,
      *     type="integer"
      *   ),
@@ -633,7 +633,6 @@ class ShopController extends BaseController {
      */
     public function members($id, Request $request) {
         $user = $this->auth->user();
-        $size = $request->input('size', 20);
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
@@ -648,8 +647,13 @@ class ShopController extends BaseController {
         } else {
             $query = $shop->users();
         }
+        $count = $query->count();
         $members = [];
-        foreach ($query->paginate($size) as $_user) {
+        $query->orderBy("id");
+        if ($request->offset) {
+            $query->where("id", ">", User::decrypt($request->offset));
+        }
+        foreach ($query->limit($request->input("limit", 20))->get() as $_user) {
             /* @var $_user User */
             $members[] = [
                 'id' => (string)$_user->en_id(),
@@ -659,7 +663,7 @@ class ShopController extends BaseController {
             ];
         }
         return $this->json([
-            'count' => (int)$query->count(),
+            'count' => (int)$count,
             'members' => $members,
         ]);
     }
@@ -1778,16 +1782,16 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上一次记录的最后一条ID,默认0",
      *     required=false,
      *     type="number"
      *   ),
@@ -1842,8 +1846,13 @@ class ShopController extends BaseController {
             $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
             $query->where("created_at", "<", $start);
         }
+        $count = $query->count();
+        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
+        if ($request->offset) {
+            $query->where("id", "<", ShopFund::decrypt($request->offset));
+        }
         /* @var $user User */
-        foreach ($query->orderBy('id',  'DESC')->paginate($request->input('size', 20)) as $_fund) {
+        foreach ($query->get() as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
@@ -1852,7 +1861,7 @@ class ShopController extends BaseController {
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['count' => $query->count(), 'data' => $data]);
+        return $this->json(['count' => (int)$count, 'data' => $data]);
     }
 
     /**
