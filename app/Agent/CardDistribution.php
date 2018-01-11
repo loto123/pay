@@ -7,6 +7,7 @@ namespace App\Agent;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CardDistribution extends Model
 {
@@ -14,12 +15,12 @@ class CardDistribution extends Model
     protected $guarded = ['id'];
 
     /**
-     * 卡类型
+     * 对应的库存
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function cardType()
+    public function stock()
     {
-        return $this->belongsTo(CardType::class, 'card_type');
+        return $this->belongsTo(CardStock::class, 'stock_id');
     }
 
     /**

@@ -15,12 +15,13 @@ class CardStock extends Model
     protected $guarded = ['id'];
 
     /**
-     * 卡类型
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * 配卡人
+     * @param $id
+     * @return mixed
      */
-    public function cardType()
+    public function getAllocateByAttribute($id)
     {
-        return $this->belongsTo(CardType::class, 'card_type');
+        return DB::table('admin_users')->find($id);
     }
 
     /**
@@ -31,5 +32,14 @@ class CardStock extends Model
     public function getOperatorAttribute($id)
     {
         return DB::table('admin_users')->find($id);
+    }
+
+    /**
+     * 卡信息
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function card()
+    {
+        return $this->belongsTo(Card::class);
     }
 }
