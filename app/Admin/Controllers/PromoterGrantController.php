@@ -48,12 +48,14 @@ class PromoterGrantController extends Controller
                 }
                 $actions->disableEdit();
             });
-            $grid->column('grantBy.name', '授权人')->display(function ($name) {
+            $grid->grantBy('授权人')->display(function () {
+                $grantBy = $this->grantBy();
                 $c = $this->by_admin ? 'success' : 'info';
                 $role = $this->by_admin ? '后台' : '推广员';
-                return "<span class=\"label label-$c\">$role</span>&nbsp;" . $name;
+                $display = $this->by_admin ? $grantBy->name : $grantBy->mobile;
+                return "<span class=\"label label-$c\">$role</span>&nbsp;" . $display;
             });
-            $grid->column('grantTo.name', '被授权人');
+            $grid->column('grantTo.name', '授权给');
             $grid->column('grantTo.mobile', '被授权ID');
             $grid->created_at('授权时间');
             $grid->deleted_at('取消时间');
@@ -84,15 +86,23 @@ class PromoterGrantController extends Controller
     protected function form()
     {
         return Admin::form(PromoterGrant::class, function (Form $form) {
-            $form->text('grant_to', '用户id')->rules('digits:11', ['digits' => '请输入有效的手机号码']);
+            $form->text('grant_to', '用户id')->placeholder('输入11位数手机号码')->rules('digits:11', ['digits' => '请输入有效的手机号码']);
             $form->hidden('grant_by')->value(Admin::user()->id);
             $form->hidden('by_admin')->value(1);
             $form->saving(function (Form $form) {
-                $uid = User::where('mobile', $form->grant_to)->value('id');
-                if (!$uid) {
+                $user = User::where('mobile', $form->grant_to)->first();
+                if (!$user) {
                     throw new Exception('用户不存在');
                 }
-                $form->input('grant_to', $uid);
+
+                /**
+                 * @var $user User
+                 */
+                if ($user->isPromoter()) {
+                    throw new Exception('该用户已经是推广员');
+                }
+
+                $form->input('grant_to', $user->getKey());
                 $form->input('by_admin', 1);
             });
         });

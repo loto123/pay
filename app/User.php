@@ -13,7 +13,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
-use Mockery\Exception;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -126,15 +125,13 @@ class User extends Authenticatable
      */
     public function grantPromoterTo(User $grantTo)
     {
-        if ($this->isPromoter()) {
-            $grant = new PromoterGrant([
-                'grant_by' => $this->getKey(),
-                'by_admin' => false,
-            ]);
-            $grant->grantTo()->associate($grantTo);
-            return $grant->save();
-        }
-        throw new Exception('您不是推广员');
+        $grant = new PromoterGrant([
+            'grant_by' => $this->getKey(),
+            'by_admin' => false,
+        ]);
+        $grant->grantTo()->associate($grantTo);
+        return $grant->save();
+
     }
 
     /**
