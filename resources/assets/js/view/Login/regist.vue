@@ -245,10 +245,14 @@ export default {
       inviteMobile:null,              // 邀请人手机号
       validCode:null,                 // 验证码
 
-      smsTimer:null                     //短信验证倒计时
+      smsTimer:null,                     //短信验证倒计时
+
+      mobile:null
     };
   },
-
+  created () {
+    this.init();
+  },
   mounted() {
     if (this.$store.state.regist.refindPassword == true) {
       localStorage.setItem("findPasswordSwitch", this.findPasswordSwitch);
@@ -269,6 +273,14 @@ export default {
   },
 
   methods: {
+    init(){
+      this.mobile=this.$route.query.mobile;
+      if (!this.mobile) {
+        return
+      }else{
+        this.inviteMobile=this.mobile;
+      }
+    },
     comfirm() {
       if (this.$store.state.regist.step == 0) {
         // 输入推荐人手机号
