@@ -61,16 +61,12 @@ class NoticeController extends BaseController
      *                  property="data",
      *                  type="array",
      *                  @SWG\Items(
-     *                  @SWG\Property(property="1", type="array",
-     *                      @SWG\Items(
-     *                              @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
-     *                              @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
-     *                              @SWG\Property(property="mobile", type="string", example="17673161856",description="分润来源者的账号"),
-     *                              @SWG\Property(property="thumb", type="string", example="url",description="分润来源者的头像"),
-     *                              @SWG\Property(property="amount", type="string", example="10",description="分润金额"),
-     *                              @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
-     *                          )
-     *                      )
+     *                      @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
+     *                      @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
+     *                      @SWG\Property(property="mobile", type="string", example="17673161856",description="分润来源者的账号"),
+     *                      @SWG\Property(property="thumb", type="string", example="url",description="分润来源者的头像"),
+     *                      @SWG\Property(property="amount", type="string", example="10",description="分润金额"),
+     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
      *                  )
      *              )
      *          )
@@ -92,15 +88,11 @@ class NoticeController extends BaseController
      *                  property="data",
      *                  type="array",
      *                  @SWG\Items(
-     *                  @SWG\Property(property="1", type="array",
-     *                      @SWG\Items(
-     *                              @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
-     *                              @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
-     *                              @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
-     *                              @SWG\Property(property="content", type="string", example="这是一条系统消息...",description="消息内容"),
-     *                              @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
-     *                          )
-     *                      )
+     *                      @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
+     *                      @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
+     *                      @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
+     *                      @SWG\Property(property="content", type="string", example="这是一条系统消息...",description="消息内容"),
+     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
      *                  )
      *              )
      *          )
