@@ -87,6 +87,7 @@ class NoticeController extends BaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
+     *                  @SWG\Property(property="count", type="integer", example="10",description="消息总数"),
      *                  @SWG\Items(
      *                      @SWG\Property(property="type", type="integer", example="1",description="消息类型 1：分润，2：注册，3：系统"),
      *                      @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
@@ -125,7 +126,9 @@ class NoticeController extends BaseController
             return $this->json([], '请求的消息类型不存在', 0);
         }
         $notice_type = Notice::typeConfig()[$type];
-        $notice = $this->user->unreadNotifications()->where('type', $notice_type)->paginate($request->input('size', 20));
+        $notice_query = $this->user->unreadNotifications()->where('type', $notice_type);
+        $count = $notice_query->count();
+        $notice = $notice_query->paginate($request->input('size', 20));
         $list = [];
         if (!empty($notice) && count($notice)> 0) {
             switch ($type){
@@ -161,7 +164,7 @@ class NoticeController extends BaseController
                 break;
             }
         }
-        return $this->json($list);
+        return $this->json(compact('count','list'));
     }
 
     /**
