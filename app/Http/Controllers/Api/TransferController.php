@@ -601,7 +601,9 @@ class TransferController extends BaseController
                     $transfer->fee_amount = $transfer->fee_amount + $record->fee_amount;
                     //代理分润
                     if ($user->parent && $user->parent->percent) {
-                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
+//                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
+                        //分润至代理分润账户
+                        $user_receiver = PayFactory::MasterContainer($user->parent->proxy_container->id);
                         $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
                         if ($proxy_fee) {
                             $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
@@ -1455,7 +1457,9 @@ class TransferController extends BaseController
                             $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
                             //解冻代理资金
                             if ($profit->proxy_amount > 0) {
-                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+//                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+                                //解冻代理分润账户资金
+                                $proxy_container = PayFactory::MasterContainer($value->user->parent->proxy_container->id);
                                 $proxy_container->unfreeze($profit->proxy_amount);
                             }
                         }

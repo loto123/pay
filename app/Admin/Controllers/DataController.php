@@ -58,7 +58,7 @@ class DataController extends Controller
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $query->where('users.operator_id', AdminUser::where('username',$operator)->first()->id);
+            $query->where('users.operator_id', AdminUser::where('username', $operator)->first()->id);
         }
         $date_time = $request->input('date_time');
         if (!empty($date_time)) {
@@ -194,7 +194,9 @@ class DataController extends Controller
                         $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
                         //解冻代理资金
                         if ($profit->proxy_amount > 0) {
-                            $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+//                            $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+                            //解冻代理分润账户资金
+                            $proxy_container = PayFactory::MasterContainer($value->user->parent->proxy_container->id);
                             $proxy_container->unfreeze($profit->proxy_amount);
                         }
                     }
@@ -357,7 +359,7 @@ class DataController extends Controller
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $listQuery->where('users.operator_id', AdminUser::where('username',$operator)->first()->id);
+            $listQuery->where('users.operator_id', AdminUser::where('username', $operator)->first()->id);
         }
         //role 身份
         $role = $request->input('role');
