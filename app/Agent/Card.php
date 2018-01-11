@@ -3,8 +3,8 @@
 namespace App\Agent;
 
 use App\Pay\IdConfuse;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * 代理VIP卡
@@ -23,28 +23,12 @@ class Card extends Model
      */
     public function getIdAttribute($id)
     {
-        return IdConfuse::mixUpDepositId($id, 8, true);
+        return IdConfuse::mixUpId($id, 8, true);
     }
 
     public function setIdAttribute($value)
     {
-        $this->attributes['id'] = IdConfuse::recoveryDepositId($value, true);
-    }
-
-    /**
-     * 取得配卡人
-     */
-    public function allocateBy()
-    {
-        return DB::table('admin_users')->find($this->allocator_id);
-    }
-
-    /**
-     * 取得运营
-     */
-    public function allocateTo()
-    {
-        return DB::table('admin_users')->find($this->allocator_to);
+        $this->attributes['id'] = IdConfuse::recoveryId($value, true);
     }
 
     /**
@@ -59,8 +43,8 @@ class Card extends Model
     /**
      * 持有人
      */
-    public function holder()
+    public function owner()
     {
-        return $this->hold_by_operator ? DB::table('admin_users')->find($this->owner) : $this->belongsTo(User::class, 'owner');
+        return $this->belongsTo(User::class, 'owner');
     }
 }
