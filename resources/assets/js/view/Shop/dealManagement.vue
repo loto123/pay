@@ -256,7 +256,7 @@ export default {
         var _data = {
           status:_status,
           limit:50,
-          offset :this.dataList.length,
+          offset :[].concat[this.dataList].pop().id,
           shop_id:this.shop_id,
         }
 
