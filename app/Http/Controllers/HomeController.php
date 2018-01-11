@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Pay\IdConfuse;
-
 class HomeController extends Controller
 {
     /**
@@ -13,7 +11,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -23,8 +21,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        for ($i = 1; $i < 100; $i++) {
-            echo $i, ' recovery: ', IdConfuse::mixUpId($i, 8, true), '<br/>';
-        }
+        return view('home');
     }
 }
