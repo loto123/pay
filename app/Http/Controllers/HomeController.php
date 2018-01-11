@@ -11,7 +11,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -21,6 +21,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        for ($i = 0; $i < 10; $i++) {
+            for ($k = 0; $k < 10; $k++) {
+                dump(sprintf('%u', $i ^ $k));
+            }
+        }
+        //return IdConfuse::mixUpDepositId(132, 8, true);
     }
 }

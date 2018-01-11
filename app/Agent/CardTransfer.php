@@ -4,7 +4,6 @@ namespace App\Agent;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * 卡转让
@@ -23,16 +22,16 @@ class CardTransfer extends Model
      */
     public function from()
     {
-        return $this->from_promoter ? $this->belongsTo(User::class, 'sender_id') : DB::table('admin_users')->find($this->sender_id);
+        $this->belongsTo(User::class, 'from');
     }
 
     /**
      * 接收人
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function receiver()
+    public function to()
     {
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->belongsTo(User::class, 'to');
     }
 
     /**

@@ -106,7 +106,7 @@ class User extends Authenticatable
      */
     public function myCardsHold()
     {
-        return Card::where([['hold_by_operator', 0], ['owner', $this->getKey()]])->whereNull('expired_at')->get();
+        return Card::where('owner', $this->getKey())->whereNull('expired_at')->get();
     }
 
     /**
@@ -115,7 +115,7 @@ class User extends Authenticatable
      */
     public function myCardsTransfer()
     {
-        return CardTransfer::where([['from_promoter', 1], ['sender_id', $this->getKey()]])->get();
+        return CardTransfer::where('from', $this->getKey())->get();
     }
 
     /*----------------代理VIP卡功能END----------------!>*/
