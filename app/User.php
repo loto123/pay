@@ -245,6 +245,11 @@ class User extends Authenticatable
         return $this->hasOne(MasterContainer::class, 'id', 'container_id');
     }
 
+    public function proxy_container()
+    {
+        return $this->hasOne(MasterContainer::class, 'id', 'proxy_container');
+    }
+
     public function channel()
     {
         return $this->hasOne(Channel::class, 'id', 'channel_id');
