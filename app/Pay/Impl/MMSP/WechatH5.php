@@ -59,7 +59,7 @@ class WechatH5 implements DepositInterface
 
     public function mixUpDepositId($depositId)
     {
-        return IdConfuse::mixUpDepositId($depositId, 20);
+        return IdConfuse::mixUpId($depositId, 20);
     }
 
     public function acceptNotify(array $config)
@@ -71,7 +71,7 @@ class WechatH5 implements DepositInterface
             $chkStatus = $resultMod->ckSign($params, $config['KEY']);
             if ($chkStatus) {
                 if ($params['STATUS'] == 1) {
-                    $deposit = Deposit::find(IdConfuse::recoveryDepositId($params['MERORDERID']));
+                    $deposit = Deposit::find(IdConfuse::recoveryId($params['MERORDERID']));
                     if ($deposit) {
                         //把支付结果更改商户自己的交易流水
                         $deposit->out_batch_no = $params['ORDERNO'];
@@ -88,7 +88,7 @@ class WechatH5 implements DepositInterface
     public function parseReturn(DepositMethod $method)
     {
         $outID = request()->query('batch');
-        $deposit = $method->deposits()->where('id', IdConfuse::recoveryDepositId($outID))->first();
+        $deposit = $method->deposits()->where('id', IdConfuse::recoveryId($outID))->first();
         if (!$deposit) {
             throw new Exception('无效订单');
         }

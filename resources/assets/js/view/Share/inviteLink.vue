@@ -59,21 +59,35 @@
   import request from "../../utils/userRequest"
   import Loading from "../../utils/loading"
   import moment from 'moment'
-  import { Toast } from 'mint-ui'
+  import { Toast,MessageBox  } from 'mint-ui'
   import wx from 'weixin-js-sdk'
   
   export default {
     created() {
+      this.getMobile();
       this.init();
       this.shareContent();
     },
 
     data() {
       return {
-
+        mobile:null
       }
     },
     methods: {
+      getMobile(){
+        Loading.getInstance().open("加载中...");
+
+        request.getInstance().getData("api/my/info")
+          .then((res) => {
+            this.mobile=res.data.data.mobile;
+            Loading.getInstance().close();
+          })
+          .catch((err) => {
+            Toast(err.data.msg);
+            Loading.getInstance().close();
+          })
+      },
       init() {
         var data = {
           share_url: window.location.href.split('#')[0],
@@ -90,7 +104,7 @@
           })
       },
       shareContent() {
-        let links = 'https://qp-jubaopen-test.supernano.com/#/shareUser/inviteLink/download';
+        let links = 'https://qp-jubaopen-test.supernano.com/#/shareUser/inviteLink/download?mobile='+this.mobile;
         let title = '聚宝朋';
         let desc = '这是一段文字';
         let imgUrl = '';
@@ -127,7 +141,12 @@
         })
       },
       shareBtn(){
-        Toast('请点击右上角分享');
+        MessageBox({
+          title: '提示',
+          message: '请点击微信右上角进行分享',
+          showCancelButton: false,
+          confirmButtonText:'ok'
+        });
       }
     },
     components: { topBack },

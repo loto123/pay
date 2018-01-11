@@ -2,15 +2,17 @@
 
 namespace App;
 
+use App\Agent\Card;
+use App\Agent\CardBinding;
+use App\Agent\CardTransfer;
 use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Hash;
-use Skip32;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
-use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
  * Class User
@@ -26,20 +28,14 @@ use Carbon\Carbon;
  */
 class User extends Authenticatable
 {
-    protected $keyType = 'string';
-
     const STATUS_NORMAL = 0;
-
     const STATUS_BLOCK = 1;
+    protected static $skip32_id = '0123456789abcdef0123';
 
     use Notifiable;
     use EntrustUserTrait;
     use Skip32Trait;
-
-    public function getAvatarAttribute($value) {
-        return $value ? $value : asset("images/personal.jpg");
-    }
-
+    protected $keyType = 'string';
     /**
      * The attributes that are mass assignable.
      *
@@ -59,42 +55,100 @@ class User extends Authenticatable
     ];
 
     //发起的交易
+
+    public function getAvatarAttribute($value)
+    {
+        return $value ? $value : asset("images/personal.jpg");
+    }
+
+    //交易记录
+
     public function transfer()
     {
         return $this->hasMany('App\Transfer', 'user_id', 'id');
     }
 
-    //交易记录
     public function transfer_record()
     {
         return $this->hasMany('App\TransferRecord', 'user_id', 'id');
     }
 
     //茶水费
+
+    /*<!----------------代理VIP卡功能BEGIN-----------------*/
+
+    /**
+     * 我目前被绑定的vip卡
+     * @return Card|null
+     */
+    public function myVipCard()
+    {
+        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->first();
+        if ($binding) {
+            return $binding->card;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 我的绑卡记录
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function myCardBindings()
+    {
+        return $this->hasMany(CardBinding::class, 'promoter_id');
+    }
+
+    /**
+     * 我持有的卡
+     * @return mixed
+     */
+    public function myCardsHold()
+    {
+        return $this->hasMany(Card::class, 'owner')->whereNull('expired_at');
+    }
+
+    /**
+     * 我的转卡
+     * @return mixed
+     */
+    public function myCardsTransfer()
+    {
+        return $this->hasMany(CardTransfer::class, 'from');
+    }
+
+    /*----------------代理VIP卡功能END----------------!>*/
+
+
+    //产出利润
+
     public function tips()
     {
         return $this->hasMany('App\TipRecord', 'user_id', 'id');
     }
 
-    //产出利润
+    //参与的交易
+
     public function output_profit()
     {
         return $this->hasMany('App\Profit', 'user_id', 'id');
     }
 
-    //参与的交易
+    //代理
+
     public function involved_transfer()
     {
         return $this->hasMany('App\TransferUserRelation', 'user_id', 'id');
     }
 
-    //代理
+    //运营
+
     public function parent()
     {
         return $this->hasOne('App\User', 'id', 'parent_id');
     }
 
-    //运营
     public function operator()
     {
         return $this->hasOne('App\Admin', 'id', 'operator_id');
@@ -128,12 +182,15 @@ class User extends Authenticatable
         return $this->hasOne(OauthUser::class, 'user_id');
     }
 
+    //子代理
+
     public function paypwd_record()
     {
         return $this->hasMany('App\PaypwdValidateRecord', 'user_id');
     }
 
-    //子代理
+    //子用户
+
     public function child_proxy()
     {
         return $this->hasMany('App\User', 'parent_id', 'id');
@@ -142,7 +199,6 @@ class User extends Authenticatable
 //        });
     }
 
-    //子用户
     public function child_user()
     {
         return $this->hasMany('App\User', 'parent_id', 'id');
@@ -150,8 +206,6 @@ class User extends Authenticatable
 //            $query->where('roles.name', 'user');
 //        });
     }
-
-    protected static $skip32_id = '0123456789abcdef0123';
 
     public function funds()
     {
@@ -191,8 +245,7 @@ class User extends Authenticatable
         if (!Hash::check($input, $this->pay_password)) {
             if(!$times) {
                 Cache::put($key, 1, Carbon::now()->addDay(1));
-            }
-            else {
+            } else {
                 Cache::increment($key);
             }
             throw new \Exception(trans("api.error_pay_password"));

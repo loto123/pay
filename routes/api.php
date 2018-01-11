@@ -211,7 +211,7 @@ Route::group([
     'namespace'   => 'Api',
     'middleware' => ['api.auth', 'block']
 ],function(Router $router){
-    $router->get('index','NoticeController@index');
+    $router->post('index','NoticeController@index');
     $router->post('create', 'NoticeController@create');
     $router->post('delete', 'NoticeController@delete');
     $router->post('detail', 'NoticeController@detail');

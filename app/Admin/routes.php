@@ -33,6 +33,9 @@ Route::group([
     $router->resource('pay/withdraws', WithdrawController::class);
     $router->resource('uploads', UploadFileController::class);
 
+    //代理vip卡模块
+    $router->resource('agent/card-type', AgentCardTypeController::class);
+
     $router->post('pay/support_banks/{platform}', 'PayPlatformController@bankSupport')->name('associate_bank');
 
     //支付重试
