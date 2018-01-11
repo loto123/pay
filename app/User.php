@@ -5,6 +5,7 @@ namespace App;
 use App\Agent\Card;
 use App\Agent\CardBinding;
 use App\Agent\CardTransfer;
+use App\Agent\PromoterGrant;
 use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
 use Carbon\Carbon;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Mockery\Exception;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -116,6 +118,32 @@ class User extends Authenticatable
     public function myCardsTransfer()
     {
         return $this->hasMany(CardTransfer::class, 'from');
+    }
+
+    /**
+     * 授权推广员
+     * @param User $grantTo
+     */
+    public function grantPromoterTo(User $grantTo)
+    {
+        if ($this->isPromoter()) {
+            $grant = new PromoterGrant([
+                'grant_by' => $this->getKey(),
+                'by_admin' => false,
+            ]);
+            $grant->grantTo()->associate($grantTo);
+            return $grant->save();
+        }
+        throw new Exception('您不是推广员');
+    }
+
+    /**
+     * 是否推广员
+     * @return bool
+     */
+    public function isPromoter()
+    {
+        return $this->hasRole(PromoterGrant::PROMOTER_ROLE_NAME);
     }
 
     /*----------------代理VIP卡功能END----------------!>*/

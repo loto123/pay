@@ -35,6 +35,7 @@ Route::group([
 
     //代理vip卡模块
     $router->resource('agent/card-type', AgentCardTypeController::class);
+    $router->resource('agent/promoter-grant', PromoterGrantController::class);
 
     $router->post('pay/support_banks/{platform}', 'PayPlatformController@bankSupport')->name('associate_bank');
 
