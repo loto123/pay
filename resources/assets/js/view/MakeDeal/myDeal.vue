@@ -224,7 +224,7 @@ export default {
         var _data = {
           status:_status,
           limit:50,
-          offset :this.dataList.length
+          offset :[].concat[this.dataList].pop().id
         }
 
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
