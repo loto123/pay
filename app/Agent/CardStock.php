@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class CardStock extends Model
 {
+    protected $table = 'agent_card_stock';
     public $timestamps = false;
     protected $guarded = ['id'];
 

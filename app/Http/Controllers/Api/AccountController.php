@@ -574,6 +574,9 @@ class AccountController extends BaseController {
                 });
             })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
         });
+        if ($request->type !== null) {
+            $query->where("type", $request->type);
+        }
         if ($request->start) {
             $query->where("created_at", '<=', $request->start);
         }
