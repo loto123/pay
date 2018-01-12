@@ -1,8 +1,8 @@
 <template>
     <div id="bill">
         <topBack title="账单明细">
-            <div class="flex flex-reverse flex-align-center header-right">
-                <a href="javascript:;"</a>
+            <div class="flex flex-reverse flex-align-center header-right" @click="show">
+                <a href="javascript:;">筛选</a>
             </div>
         </topBack>
         <div class="bill-box">
@@ -43,35 +43,8 @@
                 <div class="sel-type-box">
                     <h2>选择交易类型</h2>
                     <ul class="type-list">
-                        <li class="active">
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">店铺转账</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
-                        </li>
-                        <li class="active">
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">店铺转账</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
+                        <li v-for="item in items" @click="selContent(item.type)">
+                            <a href="javascript:;">{{item.title}}</a>
                         </li>
                     </ul>
                     <div class="cancel-btn">
@@ -98,7 +71,17 @@
                 type:null,		//类型
                 created_at:null,		//结束时间
                 size:null,  //数目
-                billList:[]
+                billList:[],
+                items:[
+                    {type:null,title:'全部'},
+                    {type:0,title:'充值'},
+                    {type:1,title:'提现'},
+                    {type:2,title:'交易收入'},
+                    {type:3,title:'交易支出'},
+                    {type:4,title:'转账到店铺'},
+                    {type:5,title:'店铺转入'},
+                    {type:6,title:'打赏店家费'},
+                ]
             };
         },
         created(){
@@ -159,6 +142,21 @@
                     default: result='打赏店家费'
                 }
                 return result;
+            },
+            selContent(type){
+                Loading.getInstance().open("加载中...");
+
+                request.getInstance().getData("api/account/records?type="+type)
+                    .then((res) => {
+                        console.log(res);
+                        this.init();
+                        this.showAlert = false;
+                        Loading.getInstance().close();
+                    })
+                    .catch((err) => {
+                        Toast(err.data.msg);
+                        Loading.getInstance().close();
+                    })
             }
 
         },
