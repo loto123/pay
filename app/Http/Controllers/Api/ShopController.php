@@ -1793,7 +1793,7 @@ class ShopController extends BaseController {
      *     in="query",
      *     description="上一次记录的最后一条ID,默认0",
      *     required=false,
-     *     type="number"
+     *     type="string"
      *   ),
      *     @SWG\Response(
      *          response=200,
