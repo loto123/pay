@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Role;
-use App\User;
-
 class HomeController extends Controller
 {
     /**
@@ -14,7 +11,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -24,6 +21,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        User::find(9)->attachRole(Role::where('name', 'agent')->first());
+        return view('home');
     }
 }

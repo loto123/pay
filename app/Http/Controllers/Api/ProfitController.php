@@ -9,7 +9,6 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Profit;
 use Illuminate\Http\Request;
 
 class ProfitController extends BaseController

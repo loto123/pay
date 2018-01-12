@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\PayFactory;
-use App\PaypwdValidateRecord;
 use App\Profit;
 use App\Shop;
 use App\TipRecord;
@@ -12,7 +11,6 @@ use App\TransferRecord;
 use App\TransferUserRelation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use JWTAuth;
