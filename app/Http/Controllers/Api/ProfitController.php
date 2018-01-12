@@ -101,7 +101,7 @@ class ProfitController extends BaseController
     }
 
     /**
-     * @SWG\GET(
+     * @SWG\POST(
      *   path="/profit/count",
      *   summary="月收益总额",
      *   tags={"我的分润"},
@@ -163,7 +163,7 @@ class ProfitController extends BaseController
     }
 
     /**
-     * @SWG\GET(
+     * @SWG\POST(
      *   path="/profit/data",
      *   summary="收益明细",
      *   tags={"我的分润"},
