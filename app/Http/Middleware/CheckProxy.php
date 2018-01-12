@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Dingo\Api\Routing\Helpers;
 
 class CheckProxy
 {
+    use Helpers;
     /**
      * Handle an incoming request.
      *

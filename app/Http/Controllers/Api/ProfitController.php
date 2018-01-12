@@ -292,17 +292,26 @@ class ProfitController extends BaseController
         return $this->json($data, 'ok', 1);
     }
 
+    //提现
     public function withdraw(Request $request)
     {
 
     }
 
+    //月提现总额
     public function withdrawCount(Request $request)
     {
 
     }
 
+    //提现记录
     public function withdrawData(Request $request)
+    {
+
+    }
+
+    //提现详情
+    public function withdrawShow($id)
     {
 
     }
