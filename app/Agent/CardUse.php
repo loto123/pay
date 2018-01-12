@@ -6,40 +6,43 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * VIP卡绑定
- * Class CardBinding
+ * 卡使用
+ * Class CardTransfer
  * @package App\Agent
  */
-class CardBinding extends Model
+class CardUse extends Model
 {
+    const TYPE_TRANSFER = 0; //卡转让
+    const TYPE_BINDING = 1; //卡绑定
+
     const UPDATED_AT = false;
-    protected $table = 'agent_card_binding';
+    protected $table = 'agent_card_use';
     protected $guarded = ['id'];
 
     /**
-     * 绑定代理
+     * 发出人
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function agent()
+    public function from()
     {
-        return $this->belongsTo(User::class, 'agent_id');
+        $this->belongsTo(User::class, 'from');
     }
 
     /**
-     * 绑定卡
+     * 接受人
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function to()
+    {
+        return $this->belongsTo(User::class, 'to');
+    }
+
+    /**
+     * 卡
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function card()
     {
         return $this->belongsTo(Card::class);
-    }
-
-    /**
-     * 取得推广员
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function promoter()
-    {
-        return $this->belongsTo(User::class, 'promoter_id');
     }
 }
