@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProfitController extends BaseController
 {
@@ -295,7 +296,16 @@ class ProfitController extends BaseController
     //提现
     public function withdraw(Request $request)
     {
-
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|min:0',
+        ]);
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = JWTAuth::parseToken()->authenticate();
+        if($user->profit < $request->amount) {
+            return $this->json([], trans("profit_not_enough_money"), 0);
+        }
     }
 
     //月提现总额
