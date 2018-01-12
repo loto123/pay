@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Dingo\Api\Routing\Helpers;
 
 class CheckProxy
 {
+    use Helpers;
     /**
      * Handle an incoming request.
      *
@@ -15,7 +17,7 @@ class CheckProxy
      */
     public function handle($request, Closure $next)
     {
-        if (!$this->auth->user()->inRoles(['agent-vip', 'agent']) || $this->auth->user()->proxy_container) {
+        if (!$this->auth->user()->hasRole(['agent-vip', 'agent']) || $this->auth->user()->proxy_container) {
             return $this->response()->array([
                 'code' => 3,
                 'msg' => trans('trans.permission_denied'),

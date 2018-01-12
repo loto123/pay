@@ -235,17 +235,83 @@ class ProfitController extends BaseController
         return $this->json($list, 'ok', 1);
     }
 
+    /**
+     * @SWG\GET(
+     *   path="/profit/show",
+     *   summary="收益明细详情",
+     *   tags={"我的分润"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="formData",
+     *     description="收益记录ID",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="proxy_amount", type="double", example=9.9, description="分润收益"),
+     *                  @SWG\Property(property="type", type="string", example="分润收益", description="类型"),
+     *                  @SWG\Property(property="created_at", type="string", example="2018-01-12 14:35:46", description="创建时间"),
+     *                  @SWG\Property(property="user_nick", type="string", example="傻逼", description="来源人昵称"),
+     *                  @SWG\Property(property="user_mobile", type="string", example="13873152488", description="来源人账号"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+        $item = $user->proxy_profit()->where('id',$id)->first();
+        //组装响应数据
+        $data['proxy_amount'] = $item->proxy_amount;
+        $data['type'] = '分润收益';
+        $data['created_at'] = $item->created_at;
+        $data['user_nick'] = $item->user->name;
+        $data['user_mobile'] = $item->user->mobile;
+        return $this->json($data, 'ok', 1);
+    }
+
+    //提现
     public function withdraw(Request $request)
     {
 
     }
 
+    //月提现总额
     public function withdrawCount(Request $request)
     {
 
     }
 
+    //提现记录
     public function withdrawData(Request $request)
+    {
+
+    }
+
+    //提现详情
+    public function withdrawShow($id)
     {
 
     }

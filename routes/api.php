@@ -252,4 +252,5 @@ Route::group([
     $router->get('balance', 'ProfitController@balance');
     $router->post('count', 'ProfitController@count');
     $router->post('data', 'ProfitController@data');
+    $router->get('show/{id}','ProfitController@show')->where('id', '[0-9]+');
 });
