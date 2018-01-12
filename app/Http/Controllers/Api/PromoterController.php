@@ -314,7 +314,7 @@ class PromoterController extends BaseController
     /**
      * 出卡总数
      * @SWG\Get(
-     *   path="/promoter/cards_used_num,
+     *   path="/promoter/cards_used_num",
      *   summary="已出卡总数",
      *   tags={"推广员功能"},
      *     @SWG\Response(
