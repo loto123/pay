@@ -257,12 +257,18 @@ class User extends Authenticatable
 
     public function getBalanceAttribute()
     {
-        return $this->container->balance;
+        if($this->container) {
+            return $this->container->balance;
+        }
+        return 0;
     }
 
     public function getProfitAttribute()
     {
-        return $this->proxy_container->balance;
+        if($this->proxy_container) {
+            return $this->proxy_container->balance;
+        }
+        return 0;
     }
 
     public function pay_card()
@@ -288,5 +294,11 @@ class User extends Authenticatable
         } else {
             return true;
         }
+    }
+
+    //分润提现记录
+    public function proxy_withdraw()
+    {
+        return $this->hasMany(ProxyWithdraw::class, 'user_id');
     }
 }
