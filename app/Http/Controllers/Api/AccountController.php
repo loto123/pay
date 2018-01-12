@@ -507,16 +507,16 @@ class AccountController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上一次记录的最后一条ID,默认0",
      *     required=false,
      *     type="number"
      *   ),
@@ -574,7 +574,15 @@ class AccountController extends BaseController {
                 });
             })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
         });
-        foreach ($query->orderBy('id',  'DESC')->paginate($request->input("size", 20)) as $_fund) {
+        if ($request->start) {
+            $query->where("created_at", '<=', $request->start);
+        }
+        $count = $query->count();
+        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
+        if ($request->offset) {
+            $query->where("id", "<", UserFund::decrypt($request->offset));
+        }
+        foreach ($query->get() as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
@@ -583,7 +591,7 @@ class AccountController extends BaseController {
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['count' => (int)$query->count(), 'data' => $data]);
+        return $this->json(['count' => (int)$count, 'data' => $data]);
     }
 
     /**

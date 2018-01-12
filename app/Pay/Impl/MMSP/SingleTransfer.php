@@ -91,7 +91,7 @@ class SingleTransfer implements WithdrawInterface
 
     public function mixUpWithdrawId($withdrawId)
     {
-        return IdConfuse::mixUpDepositId($withdrawId, 15, true);
+        return IdConfuse::mixUpId($withdrawId, 15, true);
     }
 
     private function getEncryptor(array $config)

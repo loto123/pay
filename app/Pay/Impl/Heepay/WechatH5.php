@@ -53,7 +53,7 @@ class WechatH5 implements DepositInterface
 
     public function mixUpDepositId($depositId)
     {
-        return IdConfuse::mixUpDepositId($depositId, 30);
+        return IdConfuse::mixUpId($depositId, 30);
     }
 
     /**
@@ -110,7 +110,7 @@ class WechatH5 implements DepositInterface
                 /*
                  *@var $deposit Deposit
                  */
-                $deposit = Deposit::where([['id', IdConfuse::recoveryDepositId($params['agent_bill_id'])], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
+                $deposit = Deposit::where([['id', IdConfuse::recoveryId($params['agent_bill_id'])], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
                 if (!$deposit) {
                     return null;
                 }
