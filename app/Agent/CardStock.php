@@ -15,6 +15,8 @@ class CardStock extends Model
     public $timestamps = false;
     protected $guarded = ['id'];
 
+    const SALE = 0; //待售
+    const SOLD = 1; //已售
     /**
      * 配卡人
      * @param $id
