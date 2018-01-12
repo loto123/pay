@@ -174,6 +174,17 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
 
 });
 
+//代理相关接口
+$api->version('v1', ['middleware' => ['api.auth', 'block', 'role:agent']], function ($api) {
+    $api->group([
+        'prefix' => 'agent',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/bound_vip', 'AgentController@myVip');
+    });
+
+});
+
 $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'proxy',
@@ -211,10 +222,10 @@ Route::group([
     'namespace'   => 'Api',
     'middleware' => ['api.auth', 'block']
 ],function(Router $router){
-    $router->post('index','NoticeController@index');
+    $router->get('index','NoticeController@index');
     $router->post('create', 'NoticeController@create');
     $router->post('delete', 'NoticeController@delete');
-    $router->post('detail', 'NoticeController@detail');
+    $router->get('detail', 'NoticeController@detail');
 });
 
 Route::group([

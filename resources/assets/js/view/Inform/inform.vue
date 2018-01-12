@@ -13,19 +13,19 @@
 			<div class="flex flex-align-center flex-justify-center" @click="goSystemInfo">系统通知</div>
 		</div>
 		<div class="shareBenefit-box">
-			<ul v-for="item in moneyList">
-				<li class="flex flex-align-center flex-justify-between" @click="goDetails(item.notice_id)">
+			<ul>
+				<li class="flex flex-align-center flex-justify-between"  v-for="item in moneyList" @click="goDetails(item.notice_id)">
 					<div class="left-content">
 						<div class="personal-info flex">
 							<div class="flex-1 flex">
 								<div class="personal-img">从
-									<img src="/images/avatar.jpg">
-									<span>{{item.title}}</span>获得</div>
+									<img :src="thumb">
+									<span>{{item.mobile}}</span>获得</div>
 							</div>
 						</div>
 						<div class="date">{{item.created_at}}</div>
 					</div>
-					<div class="shareBenefit-money active">{{item.content}}</div>
+					<div class="shareBenefit-money active">{{item.amount}}</div>
 				</li>
 			</ul>
 		</div>
@@ -34,11 +34,10 @@
 
 
 <script>
-	import axios from "axios";
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack.vue";
 	import { MessageBox,Toast } from "mint-ui";
-
+	import Loading from '../../utils/loading'
 	export default {
 		data() {
 			return {
@@ -61,13 +60,16 @@
 			},
 			moneyInfo() {
 				var self=this;
+				Loading.getInstance().open("加载中...");
 
-				request.getInstance().getData('api/notice/index')
+				request.getInstance().getData('api/notice/index?type=1')
 					.then((res) => {
-						self.moneyList=res.data.data[1];
+						self.moneyList=res.data.data;
+						Loading.getInstance().close();
 					})
 					.catch((err) => {
-						console.error(err);
+						Toast(err.data.msg);
+						Loading.getInstance().close();
 					})
 			},
 			//清空消息

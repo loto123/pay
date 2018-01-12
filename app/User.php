@@ -5,6 +5,7 @@ namespace App;
 use App\Agent\Card;
 use App\Agent\CardBinding;
 use App\Agent\CardTransfer;
+use App\Agent\PromoterGrant;
 use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
 use Carbon\Carbon;
@@ -83,7 +84,7 @@ class User extends Authenticatable
      */
     public function myVipCard()
     {
-        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->first();
+        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->with('type')->first();
         if ($binding) {
             return $binding->card;
         } else {
@@ -116,6 +117,30 @@ class User extends Authenticatable
     public function myCardsTransfer()
     {
         return $this->hasMany(CardTransfer::class, 'from');
+    }
+
+    /**
+     * 授权推广员
+     * @param User $grantTo
+     */
+    public function grantPromoterTo(User $grantTo)
+    {
+        $grant = new PromoterGrant([
+            'grant_by' => $this->getKey(),
+            'by_admin' => false,
+        ]);
+        $grant->grantTo()->associate($grantTo);
+        return $grant->save();
+
+    }
+
+    /**
+     * 是否推广员
+     * @return bool
+     */
+    public function isPromoter()
+    {
+        return $this->hasRole(PromoterGrant::PROMOTER_ROLE_NAME);
     }
 
     /*----------------代理VIP卡功能END----------------!>*/

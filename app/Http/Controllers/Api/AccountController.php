@@ -14,7 +14,6 @@ use App\ShopFund;
 use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -409,8 +408,8 @@ class AccountController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/account/pay-method",
-     *   summary="充值方式列表",
+     *   path="/account/pay-methods/{os}/{scene}",
+     *   summary="充值方式列表:占位符{os}表示操作系统:andriod,ios,unknown(未知), {scene}表示支付场景id，见后台 支付管理-支付场景",
      *   tags={"账户"},
      *   @SWG\Response(response=200, description="successful operation"),
      * )
@@ -454,7 +453,7 @@ class AccountController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/account/withdraw-method",
+     *   path="/account/withdraw-methods",
      *   summary="提现方式列表",
      *   tags={"账户"},
      *   @SWG\Response(response=200, description="successful operation"),
@@ -507,16 +506,16 @@ class AccountController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上一次记录的最后一条ID,默认0",
      *     required=false,
      *     type="number"
      *   ),
@@ -574,7 +573,18 @@ class AccountController extends BaseController {
                 });
             })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
         });
-        foreach ($query->orderBy('id',  'DESC')->paginate($request->input("size", 20)) as $_fund) {
+        if ($request->type !== null) {
+            $query->where("type", $request->type);
+        }
+        if ($request->start) {
+            $query->where("created_at", '<=', $request->start);
+        }
+        $count = $query->count();
+        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
+        if ($request->offset) {
+            $query->where("id", "<", UserFund::decrypt($request->offset));
+        }
+        foreach ($query->get() as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
@@ -583,7 +593,7 @@ class AccountController extends BaseController {
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['count' => (int)$query->count(), 'data' => $data]);
+        return $this->json(['count' => (int)$count, 'data' => $data]);
     }
 
     /**

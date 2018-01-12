@@ -20,11 +20,11 @@
           <div class="content">{{transfer_id}}</div>
         </li>
         <li>
-          <div class="title">分润来源</div>
+          <div class="title" style="line-height: 42px;">分润来源</div>
           <div class="content flex flex-align-center">
             <div>{{mobile}}</div>
             <div class="personal-img">
-              <img src="/images/avatar.jpg" width="40" height="40">
+              <img :src="thumb" width="40" height="40">
             </div>
           </div>
         </li>

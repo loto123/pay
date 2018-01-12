@@ -136,14 +136,14 @@ class ShopController extends BaseController {
      *   summary="我参与的店铺",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上次记录ID",
      *     required=false,
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
@@ -186,12 +186,17 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function lists() {
+    public function lists(Request $request) {
         $user = $this->auth->user();
         $my_shop_ids = $user->shop()->pluck("id");
-        $count = $user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+        $query = $user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL);
+        $count = (int)$query->count();
+        if ($request->offset) {
+            $query->where("id", "<", Shop::decrypt($request->offset));
+        }
+        $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
+        foreach ($query->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->en_id(),
@@ -208,14 +213,7 @@ class ShopController extends BaseController {
      *   summary="我所有店铺（创建交易）",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="page",
-     *     in="query",
-     *     description="页码",
-     *     required=false,
-     *     type="integer"
-     *   ),
-     *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
@@ -259,7 +257,7 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function all(Request $request) {
-        $limit = $request->input('size', 10);
+        $limit = $request->input('limit', 10);
         $user = $this->auth->user();
         $shops = [];
         $count = 0;
@@ -308,14 +306,14 @@ class ShopController extends BaseController {
      *   summary="我创建的店铺",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上次记录ID",
      *     required=false,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
@@ -360,12 +358,16 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function my_lists() {
+    public function my_lists(Request $request) {
         $user = $this->auth->user();
-        $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-
-        foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+        $query = $user->shop()->where("status", Shop::STATUS_NORMAL);
+        $count = (int)$query->count();
+        if ($request->offset) {
+            $query->where("id", "<", Shop::decrypt($request->offset));
+        }
+        $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
+        foreach ($query->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->en_id(),
@@ -574,16 +576,16 @@ class ShopController extends BaseController {
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="成员数目",
      *     required=false,
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页面",
+     *     description="最后一条记录的id，默认0",
      *     required=false,
      *     type="integer"
      *   ),
@@ -633,7 +635,6 @@ class ShopController extends BaseController {
      */
     public function members($id, Request $request) {
         $user = $this->auth->user();
-        $size = $request->input('size', 20);
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
@@ -648,8 +649,13 @@ class ShopController extends BaseController {
         } else {
             $query = $shop->users();
         }
+        $count = $query->count();
         $members = [];
-        foreach ($query->paginate($size) as $_user) {
+        $query->orderBy("id");
+        if ($request->offset) {
+            $query->where("id", ">", User::decrypt($request->offset));
+        }
+        foreach ($query->limit($request->input("limit", 20))->get() as $_user) {
             /* @var $_user User */
             $members[] = [
                 'id' => (string)$_user->en_id(),
@@ -659,7 +665,7 @@ class ShopController extends BaseController {
             ];
         }
         return $this->json([
-            'count' => (int)$query->count(),
+            'count' => (int)$count,
             'members' => $members,
         ]);
     }
@@ -1778,18 +1784,18 @@ class ShopController extends BaseController {
      *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上一次记录的最后一条ID,默认0",
      *     required=false,
-     *     type="number"
+     *     type="string"
      *   ),
      *     @SWG\Response(
      *          response=200,
@@ -1842,8 +1848,13 @@ class ShopController extends BaseController {
             $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
             $query->where("created_at", "<", $start);
         }
+        $count = $query->count();
+        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
+        if ($request->offset) {
+            $query->where("id", "<", ShopFund::decrypt($request->offset));
+        }
         /* @var $user User */
-        foreach ($query->orderBy('id',  'DESC')->paginate($request->input('size', 20)) as $_fund) {
+        foreach ($query->get() as $_fund) {
             $data[] = [
                 'id' => $_fund->en_id(),
                 'type' => (int)$_fund->type,
@@ -1852,7 +1863,7 @@ class ShopController extends BaseController {
                 'created_at' => strtotime($_fund->created_at)
             ];
         }
-        return $this->json(['count' => $query->count(), 'data' => $data]);
+        return $this->json(['count' => (int)$count, 'data' => $data]);
     }
 
     /**

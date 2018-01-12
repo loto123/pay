@@ -35,6 +35,7 @@ Route::group([
 
     //代理vip卡模块
     $router->resource('agent/card-type', AgentCardTypeController::class);
+    $router->resource('agent/promoter-grant', PromoterGrantController::class);
 
     $router->post('pay/support_banks/{platform}', 'PayPlatformController@bankSupport')->name('associate_bank');
 
@@ -83,4 +84,13 @@ Route::group([
 ], function (Router $router) {
     $router->get('relation', 'AgentController@relation');
     $router->post('relation/update', 'AgentController@relation_update');
+});
+
+Route::group([
+    'prefix'        => config('admin.route.prefix').'/agent_card',
+    'namespace'     => config('admin.route.namespace'),
+    'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+    $router->get('operate', 'AgentCardDataController@operate');
+    $router->post('create_agent_card', 'AgentCardDataController@create_agent_card');
 });
