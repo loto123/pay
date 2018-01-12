@@ -4,14 +4,17 @@ namespace App\Admin\Controllers;
 
 use App\Admin as AdminUser;
 use App\Agent\Card;
+use App\Agent\CardDistribution;
 use App\Agent\CardStock;
 use App\Agent\CardType;
 use App\Http\Controllers\Controller;
+use App\User;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AgentCardDataController extends Controller
 {
@@ -22,6 +25,7 @@ class AgentCardDataController extends Controller
     {
         $operators = [];
         $operator_username = $request->operator_username;
+
         if(!empty($operator_username)) {
             $operators = AdminUser::where('username',$operator_username)->withCount('agent_card')->first();
             if(empty($operators) || !$operators->isRole('operator')) {
@@ -29,11 +33,12 @@ class AgentCardDataController extends Controller
             }
             $card_type = CardType::query()->select('id','name')->get();
             if(empty($card_type)) {
-                $_error = '没有可选卡种，请添加卡片类型';
+                $_error = '没有可选的卡片，请先添加卡片类型';
             }
 
         }
-        $data = compact('operators','_error','operator_username','card_type');
+
+        $data = isset($_error)?compact('_error','operator_username'):compact('operators','operator_username','card_type');
         return Admin::content(function (Content $content) use ($data) {
             $content->header("添加VIP卡");
             $content->body(view('admin.agent_card.operator', $data));
@@ -45,43 +50,32 @@ class AgentCardDataController extends Controller
         $card_type = $request->card_type;
         $num = $request->num;
         $operator_username = $request->operator_username;
+
         //判断权限
         if(!Admin::user()->can('create_agent_card')) {
-            return response()->json([
-                'code' => -1,
-                'msg' => '您没有操作权限',
-                'data' => []
-            ]);
+            return response()->json(['code' => -1,'msg' => '您没有操作权限','data' => []]);
         }
+
         //判断卡类型是否存在
         $agent_card_type = CardType::find($card_type);
         if(empty($agent_card_type)) {
-            return response()->json([
-                'code' => -1,
-                'msg' => '不存在此类型的卡',
-                'data' => []
-            ]);
+            return response()->json(['code' => -1,'msg' => '不存在此类型的卡','data' => []]);
         };
         $card_expired = $agent_card_type->valid_days>0 ? date('Y-m-d H:i:s',strtotime("+{$agent_card_type->valid_days} days")) : NULL;
+
         //运营是否存在，可开卡数是否足够
         $operators = AdminUser::where('username',$operator_username)->whereHas('roles',function($query) {
             $query->where('slug','operator');
         })->first();
         if(empty($operators)) {
-            return response()->json([
-                'code' => -1,
-                'msg' => '该用户不是运营',
-                'data' => []
-            ]);
+            return response()->json(['code' => -1,'msg' => '该用户不是运营','data' => []]);
         }
+
         if(CardStock::where('operator',$operators->id)->count() + $num
             > config('admin.max_agent_card','50')) {
-            return response()->json([
-                'code' => -1,
-                'msg' => '开卡数目超出上限',
-                'data' => []
-            ]);
+            return response()->json(['code' => -1,'msg' => '开卡数目超出上限','data' => []]);
         }
+
         //生成卡
         $time = date('Y-m-d H:i:s');
         $card_stock_data = [];
@@ -104,13 +98,11 @@ class AgentCardDataController extends Controller
                 'created_at' => $time,
             ];
         }
+
         if(empty($card_id_arr) || empty($card_stock_data)) {
-            return response()->json([
-                'code' => -1,
-                'msg' => '数据有误',
-                'data' => []
-            ]);
+            return response()->json(['code' => -1,'msg' => '数据有误','data' => []]);
         }
+
         //添加记录到运营的卡库存
         DB::beginTransaction();
         try {
@@ -118,18 +110,100 @@ class AgentCardDataController extends Controller
         }   catch (\Exception $e){
             DB::rollBack();
             Card::destroy($card_id_arr);
-            return response()->json([
-                'code' => -1,
-                'msg' => '请求失败',
-                'data' => []
-            ]);
+            return response()->json(['code' => -1,'msg' => '请求失败','data' => []]);
         }
         DB::commit();
-        return response()->json([
-            'code' => 0,
-            'msg' => '请求成功',
-            'data' => []
-        ]);
+
+        return response()->json(['code' => 0,'msg' => '成功为'.$operator_username.'添加'.$num.'张卡','data' => []]);
+    }
+
+    public function promoter(Request $request)
+    {
+        if(!Admin::user()->isRole('operator')) {
+            $_error = '没有操作权限';
+        }
+
+        $request_promoter = $request->promoter;
+        if(!empty($request_promoter)) {
+            $promoter = User::where('mobile',$request_promoter)->first();
+            $sale_card_cnt = CardStock::where('operator',Admin::user()->id)->where('state',CardStock::SALE)->count();
+            if(empty($promoter) || !$promoter->isPromoter()) {
+                $_error = '该推广员不存在';
+            }
+            if(empty($sale_card_cnt)) {
+                $_error = '您没有可用的VIP卡';
+            }
+        }
+
+        $data= isset($_error)?compact('_error','request_promoter'):compact('promoter','operator','sale_card_cnt','request_promoter');
+        return Admin::content(function (Content $content) use($data) {
+            $content->header("添加VIP卡");
+            $content->body(view('admin.agent_card.promoter', $data));
+        });
+    }
+
+    //给推广员添加VIP卡
+    public function send_card_to_promoter(Request $request)
+    {
+        $request_promoter = $request->promoter;
+        $num = $request->num;
+        //操作权限
+        if(!Admin::user()->isRole('operator')) {
+            return response()->json(['code' => -1,'msg' => '没有操作权限','data' => []]);
+        }
+
+        //卡数目
+        $card_stock_query = DB::table((new CardStock())->getTable())->where('operator',Admin::user()->id)
+            ->where('state',CardStock::SALE);
+        $sale_card_cnt = $card_stock_query->count();
+        if($sale_card_cnt < $num) {
+            return response()->json(['code' => -1,'msg' => '余量不足','data' => []]);
+        }
+
+        //推广员
+        $promoter = User::where('mobile',$request_promoter)->first();
+        if(empty($promoter) || !$promoter->isPromoter()) {
+            return response()->json(['code' => -1,'msg' => '该推广员不存在','data' => []]);
+        }
+
+        //更新运营库存中对应卡的state,更新VIP卡的owner，添加记录到运营分销表
+        //准备数据
+        $card_stock = $card_stock_query->limit($num)->get();
+        $card_ids = [];
+        $card_stock_id = [];
+        $distributions = [];
+        foreach ($card_stock as $item) {
+            $card_ids[] = $item->card_id;
+            $card_stock_id[] = $item->id;
+            $distributions[] = [
+                'stock_id' => $item->id,
+                'to_promoter' => $promoter->id
+            ];
+        }
+        if(empty($card_ids) || empty($card_stock_id) ||empty($distributions)) {
+            return response()->json(['code' => -1,'msg' => '数据异常','data' => []]);
+        }
+
+        //更新记录
+        DB::beginTransaction();
+        try{
+            DB::table((new CardStock())->getTable())->whereIn ('id',$card_stock_id)->update([
+                'state' => CardStock::SOLD,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+            DB::table((new Card())->getTable())->whereIn('id',$card_ids)->update([
+                'owner'=>$promoter->id,
+                'is_bound' => Card::BOUND
+            ]);
+            DB::table((new CardDistribution())->getTable())->insert($distributions);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['code' => -1,'msg' => '操作失败','data' => []]);
+        }
+        DB::commit();
+
+        return response()->json(['code' => 0,'msg' => '成功为'.$request_promoter.'添加'.$num.'张卡','data' => []]);
+
     }
 
 }

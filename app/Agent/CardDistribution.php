@@ -13,6 +13,7 @@ class CardDistribution extends Model
 {
     const UPDATED_AT = false;
     protected $guarded = ['id'];
+    protected $table = 'agent_card_distribution';
 
     /**
      * 对应的库存
