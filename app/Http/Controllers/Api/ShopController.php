@@ -193,7 +193,7 @@ class ShopController extends BaseController {
         $query = $user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL);
         $count = (int)$query->count();
         if ($request->offset) {
-            $query->where("id", "<", Shop::decrypt($request->offset));
+            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
         }
         $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
         foreach ($query->get() as $_shop) {
@@ -364,7 +364,7 @@ class ShopController extends BaseController {
         $query = $user->shop()->where("status", Shop::STATUS_NORMAL);
         $count = (int)$query->count();
         if ($request->offset) {
-            $query->where("id", "<", Shop::decrypt($request->offset));
+            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
         }
         $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
         foreach ($query->get() as $_shop) {
