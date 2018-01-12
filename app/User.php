@@ -120,35 +120,37 @@ class User extends Authenticatable
 
     /*----------------代理VIP卡功能END----------------!>*/
 
-
-    //产出利润
-
+    //缴纳的茶水费
     public function tips()
     {
         return $this->hasMany('App\TipRecord', 'user_id', 'id');
     }
 
-    //参与的交易
+    //获得利润
+    public function proxy_profit()
+    {
+        return $this->hasMany('App\Profit', 'proxy', 'id');
+    }
 
+    //产出利润
     public function output_profit()
     {
         return $this->hasMany('App\Profit', 'user_id', 'id');
     }
 
-    //代理
-
+    //参与的交易
     public function involved_transfer()
     {
         return $this->hasMany('App\TransferUserRelation', 'user_id', 'id');
     }
 
-    //运营
-
+    //代理
     public function parent()
     {
         return $this->hasOne('App\User', 'id', 'parent_id');
     }
 
+    //运营
     public function operator()
     {
         return $this->hasOne('App\Admin', 'id', 'operator_id');
@@ -164,7 +166,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
 
-    public function shop_tips() {
+    public function shop_tips()
+    {
         return $this->hasManyThrough(TipRecord::class, Shop::class, 'manager_id', 'shop_id');
     }
 
@@ -232,18 +235,25 @@ class User extends Authenticatable
         return $this->container->balance;
     }
 
-    public function pay_card() {
+    public function getProfitAttribute()
+    {
+        return $this->proxy_container->balance;
+    }
+
+    public function pay_card()
+    {
         return $this->hasOne(UserCard::class, 'id', 'pay_card_id');
     }
 
-    public function check_pay_password($input) {
+    public function check_pay_password($input)
+    {
         $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $this->id);
         $times = Cache::get($key);
         if ($times && $times >= config("pay_pwd_validate_times", 5)) {
             throw new \Exception(trans("api.over_pay_password_max_times"));
         }
         if (!Hash::check($input, $this->pay_password)) {
-            if(!$times) {
+            if (!$times) {
                 Cache::put($key, 1, Carbon::now()->addDay(1));
             } else {
                 Cache::increment($key);

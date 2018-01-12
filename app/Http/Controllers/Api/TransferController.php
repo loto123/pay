@@ -36,7 +36,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="店铺ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
      *     name="price",
@@ -59,8 +59,7 @@ class TransferController extends BaseController
      *     required=false,
      *     type="array",
      *     @SWG\Items(
-     *             type="integer",
-     *             format="int32"
+     *             type="string"
      *      )
      *   ),
      *   @SWG\Response(
@@ -174,7 +173,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Response(
      *          response=200,
@@ -327,7 +326,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
      *     name="points",
@@ -384,7 +383,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
      *     name="points",
@@ -472,7 +471,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
      *     name="points",
@@ -759,7 +758,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *    @SWG\Parameter(
      *     name="friend_id",
@@ -768,8 +767,7 @@ class TransferController extends BaseController
      *     required=false,
      *     type="array",
      *     @SWG\Items(
-     *             type="integer",
-     *             format="int32"
+     *             type="string"
      *      )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -831,7 +829,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Response(
      *          response=200,
@@ -946,7 +944,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
      *     name="fee",
@@ -1072,9 +1070,8 @@ class TransferController extends BaseController
      *   @SWG\Parameter(
      *     name="offset",
      *     in="formData",
-     *     description="起始位置",
-     *     required=true,
-     *     type="integer"
+     *     description="起始位置(初始默认0或者不传该参数 后续传最后一条数据的id)",
+     *     type="string"
      *   ),
      *   @SWG\Response(
      *          response=200,
@@ -1123,7 +1120,6 @@ class TransferController extends BaseController
             [
                 'status' => ['bail', 'required', Rule::in([0, 1, 2, 3])],
                 'limit' => 'bail|integer',
-                'offset' => 'bail|integer',
             ],
             [
                 'required' => trans('trans.required'),
@@ -1154,8 +1150,8 @@ class TransferController extends BaseController
         if ($request->limit) {
             $query->limit($request->limit);
         }
-        if($request->offset) {
-            $query->offset($request->offset);
+        if ($request->offset) {
+            $query->where('id', '<', $request->offset);
         }
         $list = $query->get();
         $data = [];
@@ -1181,7 +1177,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="店铺ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
      *     name="status",
@@ -1200,8 +1196,7 @@ class TransferController extends BaseController
      *   @SWG\Parameter(
      *     name="offset",
      *     in="formData",
-     *     description="起始位置",
-     *     required=true,
+     *     description="起始位置(初始默认0或者不传该参数 后续传最后一条数据的id)",
      *     type="integer"
      *   ),
      *   @SWG\Response(
@@ -1259,7 +1254,6 @@ class TransferController extends BaseController
                 'shop_id' => 'bail|required',
                 'status' => ['bail', 'required', Rule::in([0, 1, 2, 3])],
                 'limit' => 'bail|integer',
-                'offset' => 'bail|integer',
             ],
             [
                 'required' => trans('trans.required'),
@@ -1282,8 +1276,8 @@ class TransferController extends BaseController
         if ($request->limit) {
             $query->limit($request->limit);
         }
-        if($request->offset) {
-            $query->offset($request->offset);
+        if ($request->offset) {
+            $query->where('id', '<', Transfer::decrypt($request->offset));
         }
         $list = $query->get();
         //装填响应数据
@@ -1359,7 +1353,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="店铺ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
      *     name="transfer_id",
@@ -1368,8 +1362,7 @@ class TransferController extends BaseController
      *     required=false,
      *     type="array",
      *     @SWG\Items(
-     *             type="integer",
-     *             format="int32"
+     *             type="string"
      *      )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -1498,7 +1491,7 @@ class TransferController extends BaseController
      *     in="formData",
      *     description="交易ID",
      *     required=true,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      * )
