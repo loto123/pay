@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Swagger\Annotations as SWG;
 
 
 /**
@@ -136,14 +135,14 @@ class ShopController extends BaseController {
      *   summary="我参与的店铺",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上次记录ID",
      *     required=false,
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
@@ -186,12 +185,18 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function lists() {
+    public function lists(Request $request)
+    {
         $user = $this->auth->user();
         $my_shop_ids = $user->shop()->pluck("id");
-        $count = $user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-        foreach ($user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+        $query = $user->in_shops()->whereNotIn((new Shop)->getTable() . ".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL);
+        $count = (int)$query->count();
+        if ($request->offset) {
+            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
+        }
+        $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
+        foreach ($query->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->en_id(),
@@ -208,14 +213,7 @@ class ShopController extends BaseController {
      *   summary="我所有店铺（创建交易）",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="page",
-     *     in="query",
-     *     description="页码",
-     *     required=false,
-     *     type="integer"
-     *   ),
-     *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
@@ -259,7 +257,7 @@ class ShopController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function all(Request $request) {
-        $limit = $request->input('size', 10);
+        $limit = $request->input('limit', 10);
         $user = $this->auth->user();
         $shops = [];
         $count = 0;
@@ -308,14 +306,14 @@ class ShopController extends BaseController {
      *   summary="我创建的店铺",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="query",
-     *     description="页码",
+     *     description="上次记录ID",
      *     required=false,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="query",
      *     description="数目",
      *     required=false,
@@ -360,12 +358,17 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function my_lists() {
+    public function my_lists(Request $request)
+    {
         $user = $this->auth->user();
-        $count = $user->shop()->where("status", Shop::STATUS_NORMAL)->count();
         $data = [];
-
-        foreach ($user->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
+        $query = $user->shop()->where("status", Shop::STATUS_NORMAL);
+        $count = (int)$query->count();
+        if ($request->offset) {
+            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
+        }
+        $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
+        foreach ($query->get() as $_shop) {
             /* @var $_shop Shop */
             $data[] = [
                 'id' => $_shop->en_id(),
@@ -1793,7 +1796,7 @@ class ShopController extends BaseController {
      *     in="query",
      *     description="上一次记录的最后一条ID,默认0",
      *     required=false,
-     *     type="number"
+     *     type="string"
      *   ),
      *     @SWG\Response(
      *          response=200,

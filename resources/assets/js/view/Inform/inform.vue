@@ -13,8 +13,8 @@
 			<div class="flex flex-align-center flex-justify-center" @click="goSystemInfo">系统通知</div>
 		</div>
 		<div class="shareBenefit-box">
-			<ul v-for="item in moneyList">
-				<li class="flex flex-align-center flex-justify-between" @click="goDetails(item.notice_id)">
+			<ul>
+				<li class="flex flex-align-center flex-justify-between"  v-for="item in moneyList" @click="goDetails(item.notice_id)">
 					<div class="left-content">
 						<div class="personal-info flex">
 							<div class="flex-1 flex">

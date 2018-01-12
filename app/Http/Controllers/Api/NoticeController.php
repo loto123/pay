@@ -7,6 +7,7 @@ use App\Profit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use JWTAuth;
 use Validator;
 
@@ -19,27 +20,27 @@ class NoticeController extends BaseController
 
     //消息列表
     /**
-     * @SWG\Post(
+     * @SWG\Get(
      *   path="/notice/index",
      *   summary="消息列表",
      *   tags={"消息"},
      *   @SWG\Parameter(
      *     name="type",
-     *     in="path",
+     *     in="query",
      *     description="消息类型：1：分润，2：用户注册，3：系统",
      *     required=true,
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
-     *     in="path",
-     *     description="页码",
+     *     name="offset",
+     *     in="query",
+     *     description="最后记录id",
      *     required=false,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
-     *     in="path",
+     *     name="limit",
+     *     in="query",
      *     description="数目",
      *     required=false,
      *     type="integer"
@@ -128,7 +129,13 @@ class NoticeController extends BaseController
         $notice_type = Notice::typeConfig()[$type];
         $notice_query = $this->user->unreadNotifications()->where('type', $notice_type);
         $count = $notice_query->count();
-        $notice = $notice_query->paginate($request->input('size', 20));
+        if ($request->offset) {
+            $last_notification = Notice::where("id", $request->offset)->first();
+            if ($last_notification) {
+                $notice_query->where('uid', "<", $last_notification->uid);
+            }
+        }
+        $notice = $notice_query->orderBy("uid", "DESC")->limit($request->input('limit', 20))->get();
         $list = [];
         if (!empty($notice) && count($notice)> 0) {
             switch ($type){
@@ -246,13 +253,13 @@ class NoticeController extends BaseController
     }
 
     /**
-     * @SWG\Post(
+     * @SWG\Get(
      *   path="/notice/detail",
      *   summary="详情",
      *   tags={"消息"},
      *   @SWG\Parameter(
      *     name="notice_id",
-     *     in="formData",
+     *     in="query",
      *     description="消息ID",
      *     required=true,
      *     type="string"
