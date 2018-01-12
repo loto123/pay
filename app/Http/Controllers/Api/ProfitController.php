@@ -264,10 +264,10 @@ class ProfitController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="proxy_amount", type="double", example=9.9, description="分润收益"),
-     *                  @SWG\Property(property="type", type="string", example=分润收益, description="类型"),
-     *                  @SWG\Property(property="created_at", type="string", example=2018-01-12 14:35:46, description="创建时间"),
-     *                  @SWG\Property(property="user_nick", type="string", example=傻逼, description="来源人昵称"),
-     *                  @SWG\Property(property="user_mobile", type="string", example=13873152488, description="来源人账号"),
+     *                  @SWG\Property(property="type", type="string", example="分润收益", description="类型"),
+     *                  @SWG\Property(property="created_at", type="string", example="2018-01-12 14:35:46", description="创建时间"),
+     *                  @SWG\Property(property="user_nick", type="string", example="傻逼", description="来源人昵称"),
+     *                  @SWG\Property(property="user_mobile", type="string", example="13873152488", description="来源人账号"),
      *              )
      *          )
      *      ),
