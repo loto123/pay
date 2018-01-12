@@ -13,8 +13,8 @@
       <div class="flex flex-align-center flex-justify-center" @click="goSystemInfo">系统通知</div>
     </div>
     <div class="userRegister-box">
-      <ul v-for="item in registerList">
-        <li>
+      <ul>
+        <li v-for="item in registerList">
           <div class="info-header flex flex-align-end flex-justify-between">
             <div class="title">{{item.title}}</div>
             <div class="date">{{item.created_at}}</div>
