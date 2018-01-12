@@ -227,3 +227,15 @@ Route::group([
     $router->post('delete', 'NoticeController@delete');
     $router->get('detail', 'NoticeController@detail');
 });
+
+Route::group([
+    'prefix' => '/profit',
+    'namespace' => 'Api',
+    'middleware' => ['api.auth', 'block', 'proxy']
+], function (Router $router) {
+    $router->get('index', 'ProfitController@index');
+    $router->get('balance', 'ProfitController@balance');
+    $router->post('count', 'ProfitController@count');
+    $router->post('data', 'ProfitController@data');
+    $router->get('show/{id}','ProfitController@show')->where('id', '[0-9]+');
+});

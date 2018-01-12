@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Swagger\Annotations as SWG;
 
 
 /**
@@ -186,14 +185,15 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function lists(Request $request) {
+    public function lists(Request $request)
+    {
         $user = $this->auth->user();
         $my_shop_ids = $user->shop()->pluck("id");
         $data = [];
-        $query = $user->in_shops()->whereNotIn((new Shop)->getTable().".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL);
+        $query = $user->in_shops()->whereNotIn((new Shop)->getTable() . ".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL);
         $count = (int)$query->count();
         if ($request->offset) {
-            $query->where("id", "<", Shop::decrypt($request->offset));
+            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
         }
         $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
         foreach ($query->get() as $_shop) {
@@ -358,13 +358,14 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function my_lists(Request $request) {
+    public function my_lists(Request $request)
+    {
         $user = $this->auth->user();
         $data = [];
         $query = $user->shop()->where("status", Shop::STATUS_NORMAL);
         $count = (int)$query->count();
         if ($request->offset) {
-            $query->where("id", "<", Shop::decrypt($request->offset));
+            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
         }
         $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
         foreach ($query->get() as $_shop) {
