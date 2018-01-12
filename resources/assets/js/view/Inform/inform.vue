@@ -60,12 +60,9 @@
 			},
 			moneyInfo() {
 				var self=this;
-				var data={
-					type:1
-				}
 				Loading.getInstance().open("加载中...");
 
-				request.getInstance().postData('api/notice/index',data)
+				request.getInstance().getData('api/notice/index?type=1')
 					.then((res) => {
 						self.moneyList=res.data.data;
 						Loading.getInstance().close();
