@@ -84,7 +84,7 @@ class User extends Authenticatable
      */
     public function myVipCard()
     {
-        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->first();
+        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->with('type')->first();
         if ($binding) {
             return $binding->card;
         } else {
