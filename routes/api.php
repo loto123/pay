@@ -235,7 +235,6 @@ Route::group([
 ],function(Router $router){
     $router->get('index','ProfitController@index');
     $router->get('balance','ProfitController@balance');
-    $router->post('count', 'NoticeController@count');
-    $router->post('delete', 'NoticeController@delete');
-    $router->post('detail', 'NoticeController@detail');
+    $router->post('count', 'ProfitController@count');
+    $router->post('data', 'ProfitController@data');
 });

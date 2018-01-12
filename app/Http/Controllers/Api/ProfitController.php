@@ -162,9 +162,78 @@ class ProfitController extends BaseController
         return $this->json(['total' => $total], 'ok', 1);
     }
 
+    /**
+     * @SWG\GET(
+     *   path="/profit/data",
+     *   summary="收益明细",
+     *   tags={"我的分润"},
+     *  @SWG\Parameter(
+     *     name="limit",
+     *     in="formData",
+     *     description="每页条数",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="offset",
+     *     in="formData",
+     *     description="起始位置(初始默认0或者不传该参数 后续传最后一条数据的id)",
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  description="收益明细",
+     *                  @SWG\Items(
+     *                          @SWG\Property(property="id", type="string", example="1234567",description="收益记录ID"),
+     *                          @SWG\Property(property="proxy_percent", type="integer", example=9, description="分成比例"),
+     *                          @SWG\Property(property="proxy_amount", type="double", example=9.9, description="收益"),
+     *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="创建时间"),
+     *                      )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
     public function data(Request $request)
     {
-
+        $user = JWTAuth::parseToken()->authenticate();
+        $validator = Validator::make($request->all(),
+            [
+                'limit' => 'bail|integer',
+            ]
+        );
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $query = $user->proxy_profit();
+        if ($request->limit) {
+            $query->limit($request->limit);
+        }
+        if ($request->offset) {
+            $query->where('id', '<', $request->offset);
+        }
+        $list = $query->select('id', 'proxy_percent', 'proxy_amount', 'created_at')->orderBy('created_at', 'DESC')->get();
+        return $this->json($list, 'ok', 1);
     }
 
     public function withdraw(Request $request)
