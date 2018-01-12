@@ -1,6 +1,5 @@
 <template>
   <div id="share">
-    <topBack title="分享" style="background:#428FE2;color:#fff;"></topBack>
     <div class="back-img">
       <a href="javascript:;" class="share-btn" id="shareBtn" @click="shareBtn">分享</a>
       <div class="text">
@@ -13,7 +12,6 @@
 <style lang="scss" scoped>
   #share {
     box-sizing: border-box;
-    padding-top: 2em;
     height: 100vh;
     width: 100%;
     background: #fff;
@@ -55,7 +53,6 @@
 </style>
 
 <script>
-  import topBack from "../../components/topBack";
   import request from "../../utils/userRequest"
   import Loading from "../../utils/loading"
   import moment from 'moment'
@@ -144,11 +141,9 @@
         MessageBox({
           title: '提示',
           message: '请点击微信右上角进行分享',
-          showCancelButton: false,
-          confirmButtonText:'ok'
+          showCancelButton: false
         });
       }
-    },
-    components: { topBack },
+    }
   }
 </script>

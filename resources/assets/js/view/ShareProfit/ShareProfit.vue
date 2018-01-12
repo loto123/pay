@@ -2,7 +2,9 @@
   <div id = "share-profit">
     <div class="top">
             <topBack :title="'我的分润'" style="background: #26a2ff; color:#fff;">
-              <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;">
+              <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;"
+                @click="goRecord"
+              >
                 提转记录
               </div>
             </topBack>
@@ -182,6 +184,9 @@ export default{
     },
     record(){
       
+    },
+    goRecord(){
+      this.$router.push("/profit_record");
     }
   }
 }

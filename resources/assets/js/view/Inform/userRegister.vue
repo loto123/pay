@@ -13,8 +13,8 @@
       <div class="flex flex-align-center flex-justify-center" @click="goSystemInfo">系统通知</div>
     </div>
     <div class="userRegister-box">
-      <ul v-for="item in registerList">
-        <li>
+      <ul>
+        <li v-for="item in registerList">
           <div class="info-header flex flex-align-end flex-justify-between">
             <div class="title">{{item.title}}</div>
             <div class="date">{{item.created_at}}</div>
@@ -28,10 +28,10 @@
 
 
 <script>
-  import axios from "axios";
   import request from '../../utils/userRequest';
   import topBack from "../../components/topBack.vue";
   import { MessageBox,Toast } from "mint-ui";
+  import Loading from '../../utils/loading'
 
   export default {
     data() {
@@ -52,13 +52,16 @@
       },
       registerInfo() {
         var self = this;
-
-        request.getInstance().getData('api/notice/index')
+        Loading.getInstance().open("加载中...");
+        
+        request.getInstance().getData('api/notice/index?type=2')
           .then((res) => {
-            self.registerList = res.data.data[2];
+            self.registerList = res.data.data;
+            Loading.getInstance().close();
           })
           .catch((err) => {
             Toast(err.data.msg);
+            Loading.getInstance().close();
           })
       },
       //清空消息

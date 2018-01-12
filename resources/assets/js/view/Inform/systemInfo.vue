@@ -13,8 +13,8 @@
       <div class="flex flex-align-center flex-justify-center active">系统通知</div>
     </div>
     <div class="systemInfo-box">
-      <ul v-for="item in systemList">
-        <li @click="goDetails(item.notice_id)">
+      <ul>
+        <li  v-for="item in systemList" @click="goDetails(item.notice_id)">
           <div class="info-header flex flex-align-end flex-justify-between">
             <div class="title">{{item.title}}</div>
             <div class="date">{{item.created_at}}</div>
@@ -28,10 +28,10 @@
 
 
 <script>
-  import axios from "axios";
   import request from '../../utils/userRequest';
   import topBack from "../../components/topBack.vue";
   import { MessageBox,Toast } from "mint-ui";
+  import Loading from '../../utils/loading'
 
   export default {
     data() {
@@ -55,14 +55,16 @@
       },
       systemInfo() { //列表
         var self=this;
+        Loading.getInstance().open("加载中...");
 
-				request.getInstance().getData('api/notice/index')
+				request.getInstance().getData('api/notice/index?type=3')
 					.then((res) => {
-            self.systemList=res.data.data[3];
-            // console.log(systemInfo);
+            self.systemList=res.data.data;
+            Loading.getInstance().close();
 					})
 					.catch((err) => {
-						Toast(err.data.msg);
+            Toast(err.data.msg);
+            Loading.getInstance().close();
 					})
       },
       //清空消息
