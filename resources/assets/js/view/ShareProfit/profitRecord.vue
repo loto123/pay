@@ -9,8 +9,8 @@
         </topBack>
 
         <div class="change-tab flex">
-            <div class="flex-1 flex flex-justify-center flex-align-center active">收益明细</div>
-            <div class="flex-1 flex flex-justify-center flex-align-center">提现记录</div>
+            <div class="flex-1 flex flex-justify-center flex-align-center active" @click="changeTab(0)">收益明细</div>
+            <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(1)">提现记录</div>
         </div>
 
         <div class="tab-fixed flex flex-v flex-align-start">
@@ -120,7 +120,8 @@
                 recordList:[],
 
                 _headList:[],      // timeTab数组
-                timeInfo:""
+                timeInfo:"",
+                tabStatus:[true,false]
             };
         },
         created(){
@@ -341,6 +342,10 @@
                 return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
             },
             
+            changeTab(tabindex){
+                
+            },
+
             status(type){
                 let result='';
                 switch(type){
