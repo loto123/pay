@@ -54,4 +54,6 @@ return [
     'reward_is_turned_off' => '打赏功能已关闭',
     'shop_is_frozen' => '店铺已被冻结',
     'shop_not_allow_transfer' => '店铺尚未开启交易',
+    'permission_denied' => '仅代理身份才可以访问',
+    'date_format' => '日期格式错误',
 ];
