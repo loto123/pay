@@ -19,7 +19,7 @@ class DepositMethod extends Model
      * 适用操作系统
      */
     const OS_IOS = 1;
-    const OS_ANDRIOD = 2;
+    const OS_ANDROID = 2;
     const OS_ANY = 3;
     public $timestamps = false;
     protected $table = 'pay_deposit_method';

@@ -162,7 +162,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/', 'AccountController@index');
-        $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|andriod|ios', 'scene' => '\d+']);
+        $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|android|ios', 'scene' => '\d+']);
         $api->get('withdraw-methods', 'AccountController@withdrawMethods');
         $api->get('records', 'AccountController@records');
         $api->get('records/detail/{id}', 'AccountController@record_detail');
@@ -181,6 +181,21 @@ $api->version('v1', ['middleware' => ['api.auth', 'block', 'role:agent']], funct
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/bound_vip', 'AgentController@myVip');
+    });
+
+});
+
+//推广员接口
+
+$api->version('v1', ['middleware' => ['api.auth', 'block', 'role:promoter']], function ($api) {
+    $api->group([
+        'prefix' => 'promoter',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->post('/transfer-card', 'PromoterController@transferCard');
+        $api->post('/bind-card', 'PromoterController@bindCard');
+        $api->post('/bind-card', 'PromoterController@bindCard');
+
     });
 
 });

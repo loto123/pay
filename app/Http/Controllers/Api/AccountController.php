@@ -424,7 +424,7 @@ class AccountController extends BaseController {
 //            'channel' => 1,
 //            'methods' => [['id' => 1, 'label' => '微信']]
 //        ]);
-        $os = $os == 'unknown' ? $os : ['ios' => DepositMethod::OS_IOS, 'andriod' => DepositMethod::OS_ANDRIOD][$os];
+        $os = $os == 'unknown' ? $os : ['ios' => DepositMethod::OS_IOS, 'android' => DepositMethod::OS_ANDROID][$os];
 
         $scene = Scene::find($scene);
         if ($os && $scene) {

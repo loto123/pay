@@ -3,8 +3,7 @@
 namespace App;
 
 use App\Agent\Card;
-use App\Agent\CardBinding;
-use App\Agent\CardTransfer;
+use App\Agent\CardUse;
 use App\Agent\PromoterGrant;
 use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
@@ -84,7 +83,7 @@ class User extends Authenticatable
      */
     public function myVipCard()
     {
-        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->with('type')->first();
+        $binding = $this->hasMany(CardUse::class, 'to')->where('type', CardUse::TYPE_BINDING)->orderByDesc('id')->first();
         if ($binding) {
             return $binding->card;
         } else {
@@ -93,12 +92,12 @@ class User extends Authenticatable
     }
 
     /**
-     * 我的绑卡记录
+     * 我的卡使用记录
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function myCardBindings()
+    public function myCardUsing()
     {
-        return $this->hasMany(CardBinding::class, 'promoter_id');
+        return $this->hasMany(CardUse::class, 'from')->with('card');
     }
 
     /**
@@ -107,16 +106,7 @@ class User extends Authenticatable
      */
     public function myCardsHold()
     {
-        return $this->hasMany(Card::class, 'owner')->whereNull('expired_at');
-    }
-
-    /**
-     * 我的转卡
-     * @return mixed
-     */
-    public function myCardsTransfer()
-    {
-        return $this->hasMany(CardTransfer::class, 'from');
+        return $this->hasMany(Card::class, 'owner')->where('is_bound', 0)->with('type');
     }
 
     /**
@@ -131,7 +121,6 @@ class User extends Authenticatable
         ]);
         $grant->grantTo()->associate($grantTo);
         return $grant->save();
-
     }
 
     /**
