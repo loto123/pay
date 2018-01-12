@@ -229,12 +229,12 @@ Route::group([
 });
 
 Route::group([
-    'prefix'      => '/profit',
-    'namespace'   => 'Api',
+    'prefix' => '/profit',
+    'namespace' => 'Api',
     'middleware' => ['api.auth', 'block', 'proxy']
-],function(Router $router){
-    $router->get('index','ProfitController@index');
-    $router->get('balance','ProfitController@balance');
+], function (Router $router) {
+    $router->get('index', 'ProfitController@index');
+    $router->get('balance', 'ProfitController@balance');
     $router->post('count', 'ProfitController@count');
     $router->post('data', 'ProfitController@data');
     $router->get('show/{id}','ProfitController@show')->where('id', '[0-9]+');
