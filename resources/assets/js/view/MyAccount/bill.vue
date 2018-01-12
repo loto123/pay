@@ -43,7 +43,10 @@
                 <div class="sel-type-box">
                     <h2>选择交易类型</h2>
                     <ul class="type-list">
-                        <li v-for="item in items" @click="selContent(item.type)">
+                        <li @click="selAll" class="active">
+                            <a href="javascript:;">全部</a>
+                        </li>
+                        <li v-for="item in items" @click="selContent(item.type)" v-bind:class="active">
                             <a href="javascript:;">{{item.title}}</a>
                         </li>
                     </ul>
@@ -73,7 +76,6 @@
                 size:null,  //数目
                 billList:[],
                 items:[
-                    {type:null,title:'全部'},
                     {type:0,title:'充值'},
                     {type:1,title:'提现'},
                     {type:2,title:'交易收入'},
@@ -148,8 +150,7 @@
 
                 request.getInstance().getData("api/account/records?type="+type)
                     .then((res) => {
-                        console.log(res);
-                        this.init();
+                        this.billList=res.data.data.data;
                         this.showAlert = false;
                         Loading.getInstance().close();
                     })
@@ -157,8 +158,11 @@
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
+            },
+            selAll(){
+                this.init();
+                this.showAlert = false;
             }
-
         },
         components: {
             topBack
