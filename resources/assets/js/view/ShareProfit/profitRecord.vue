@@ -20,28 +20,27 @@
                 </div>
                 <div>图标</div>
             </div>
-			<div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
+			<!-- <div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
                 <i class="iconfont">
                     &#xe655;
                 </i>
                 <div>暂无数据</div>
-			</div>
-            <ul class="bill-list" v-else>
+			</div> -->
+            <ul class="bill-list" >
 
                 <li  v-for="item in recordList" @click="details(item.id)">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false">
                         <div class="bill-content">
                             <h5>{{status(item.type)}}</h5>
-                            <div class="time">{{changeTime(item.created_at)}}</div>
+                            <div class="time">{{item.created_at}}</div>
                         </div>
                         <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
                     </a>
 
                     <div v-if="item.isTimePanel == true">
-
+                        helloworld
                     </div>
                 </li>
-
             </ul>
         </div>
         <!-- <transition name="slide">
@@ -128,7 +127,78 @@
                 }
                 // Loading.getInstance().open("加载中...");
                 this.shopId = this.$route.query.id;
-                console.log(this.shopId);
+                this.recordList  = [{
+                    type:"分润",
+                    created_at:"2017-1-1",
+                    mode:1,
+                    amount:100,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-1-1",
+                    mode:1,
+                    amount:100,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-2-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },
+                {
+                    type:"分润",
+                    created_at:"2017-2-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },
+                {
+                    type:"分润",
+                    created_at:"2017-3-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },
+                {
+                    type:"分润",
+                    created_at:"2017-3-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-3-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-3-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-3-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-3-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                }
+                ];
+                this.buildTimePanel();
                 // request.getInstance().getData("api/shop/transfer/records/"+this.shopId)
                 //     .then((res) => {
                 //         this.recordList=res.data.data.data;
@@ -166,6 +236,52 @@
                     default: result='打赏店家费'
                 }
                 return result;
+            },
+
+            buildTimePanel(){
+
+                var _head=0;
+                var _headList = [];
+                var getTheDate = (timecode)=>{
+                    var _t = timecode.split("-");
+                    var data = _t[0]+_t[1];
+                    return data;
+                }
+
+                if(this.recordList.length!=0){
+                    var _head = this.recordList[0];
+                }
+
+                for(var i = 0; i <this.recordList.length; i++){
+                    if(_head == 0){
+                        _head = getTheDate(this.recordList[i].created_at);
+                        var data = {
+                            time:_head,
+                            index:i
+                        }
+                        _headList.push(data);
+                    }
+
+                    if(_head != getTheDate(this.recordList[i].created_at)){
+                        _head = getTheDate(this.recordList[i].created_at);
+                        var data = {
+                            time:_head,
+                            index:i
+                        }
+                        _headList.push(data);
+                    }
+                    
+                }
+                console.log(_headList);
+                var count=  0;
+
+                // 插入数值
+                for(var k=0 ;k<_headList.length;k++){
+                    console.log(_headList[k].index);
+                    this.recordList.splice(_headList[k].index+count,0,{isTimePanel:true});
+                    count++;
+                }
+
             }
 
         },
