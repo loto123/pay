@@ -311,15 +311,21 @@
                 }
                 ];
                 this.buildTimePanel();
-                // request.getInstance().getData("api/shop/transfer/records/"+this.shopId)
-                //     .then((res) => {
-                //         this.recordList=res.data.data.data;
-                //         Loading.getInstance().close();
-                //     })
-                //     .catch((err) => {
-                //         Toast(err.data.msg);
-                //         Loading.getInstance().close();
-                //     })
+                var _data = {
+                    limit:10,
+                    offset:0
+                }
+                Loading.getInstance().open();
+                request.getInstance().postData("api/profit/data",_data)
+                    .then((res) => {
+                        console.log(res);
+                        // this.recordList=res.data.data.data;
+                        Loading.getInstance().close();
+                    })
+                    .catch((err) => {
+                        Toast(err.data.msg);
+                        Loading.getInstance().close();
+                    })
             },
 
             changeTime(shijianchuo){
@@ -334,6 +340,7 @@
                 var s = time.getSeconds();
                 return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
             },
+            
             status(type){
                 let result='';
                 switch(type){
