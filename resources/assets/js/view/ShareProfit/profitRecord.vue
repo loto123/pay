@@ -27,7 +27,7 @@
                 <div>暂无数据</div>
 			</div> -->
             <ul class="bill-list" >
-
+ 
                 <li  v-for="item in recordList" @click="details(item.id)">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false">
                         <div class="bill-content">

@@ -55,12 +55,9 @@
       },
       systemInfo() { //列表
         var self=this;
-        var data={
-					type:3
-				}
         Loading.getInstance().open("加载中...");
 
-				request.getInstance().postData('api/notice/index',data)
+				request.getInstance().getData('api/notice/index?type=3')
 					.then((res) => {
             self.systemList=res.data.data;
             Loading.getInstance().close();

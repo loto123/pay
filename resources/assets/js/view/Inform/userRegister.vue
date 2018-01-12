@@ -52,12 +52,9 @@
       },
       registerInfo() {
         var self = this;
-        var data={
-					type:2
-				}
         Loading.getInstance().open("加载中...");
         
-        request.getInstance().postData('api/notice/index',data)
+        request.getInstance().getData('api/notice/index?type=2')
           .then((res) => {
             self.registerList = res.data.data;
             Loading.getInstance().close();
