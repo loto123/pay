@@ -14,7 +14,6 @@ use App\ShopFund;
 use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -409,8 +408,8 @@ class AccountController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/account/pay-method",
-     *   summary="充值方式列表",
+     *   path="/account/pay-methods/{os}/{scene}",
+     *   summary="充值方式列表:占位符{os}表示操作系统:andriod,ios,unknown(未知), {scene}表示支付场景id，见后台 支付管理-支付场景",
      *   tags={"账户"},
      *   @SWG\Response(response=200, description="successful operation"),
      * )
@@ -454,7 +453,7 @@ class AccountController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/account/withdraw-method",
+     *   path="/account/withdraw-methods",
      *   summary="提现方式列表",
      *   tags={"账户"},
      *   @SWG\Response(response=200, description="successful operation"),
