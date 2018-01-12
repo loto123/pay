@@ -337,7 +337,7 @@ class PromoterController extends BaseController
     }
 
 
-    /*
+    /**
      * 查询代理用户
      * @SWG\Post(
      *   path="/promoter/query-agent",
@@ -386,7 +386,7 @@ class PromoterController extends BaseController
         ]);
     }
 
-    /*
+    /**
      * 查询推广员
      * @SWG\Post(
      *   path="/promoter/query-promoter",
