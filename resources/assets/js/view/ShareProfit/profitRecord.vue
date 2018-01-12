@@ -1,10 +1,23 @@
 <template>
     <div id="profit-record">
-        <topBack title="账单明细">
+        <topBack title="账单明细"
+            style="background:#26a2ff;color:#fff;"
+        >
             <div class="flex flex-reverse flex-align-center header-right">
                 <!-- <a href="javascript:;" @click="show">筛选</a> -->
             </div>
         </topBack>
+
+        <div class="change-tab flex">
+            <div class="flex-1 flex flex-justify-center flex-align-center active">收益明细</div>
+            <div class="flex-1 flex flex-justify-center flex-align-center">提现记录</div>
+        </div>
+
+        <div class="tab-fixed flex flex-v flex-align-start">
+            <div class="month">{{timeInfo}}</div>
+            <div class="amount">100</div>
+           
+        </div>
         <div class="bill-box">
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
                 <div class="left-content">
@@ -28,7 +41,7 @@
 			</div> -->
             <ul class="bill-list" >
  
-                <li  v-for="item in recordList" @click="details(item.id)">
+                <li  v-for="item in recordList" @click="details(item.id)" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false">
                         <div class="bill-content">
                             <h5>{{status(item.type)}}</h5>
@@ -37,8 +50,9 @@
                         <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
                     </a>
 
-                    <div v-if="item.isTimePanel == true">
-                        helloworld
+                    <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
+                        <div class="month">{{item.time}}</div>
+                        <div class="amount">100</div>
                     </div>
                 </li>
             </ul>
@@ -103,12 +117,20 @@
                 type:null,		//类型
                 created_at:null,		//结束时间
                 size:null,  //数目
-                recordList:[]
+                recordList:[],
+
+                _headList:[],      // timeTab数组
+                timeInfo:""
             };
         },
         created(){
             this.init();
         },
+
+        mounted(){
+            window.addEventListener('scroll', this.handleScroll)
+        },
+
         methods: {
             show() {
                 this.showAlert = true;
@@ -196,6 +218,96 @@
                     mode:1,
                     amount:200,
                     isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
+                },{
+                    type:"分润",
+                    created_at:"2017-4-1",
+                    mode:1,
+                    amount:200,
+                    isTimePanel:false
                 }
                 ];
                 this.buildTimePanel();
@@ -241,7 +353,7 @@
             buildTimePanel(){
 
                 var _head=0;
-                var _headList = [];
+                this._headList = [];
                 var getTheDate = (timecode)=>{
                     var _t = timecode.split("-");
                     var data = _t[0]+_t[1];
@@ -259,7 +371,7 @@
                             time:_head,
                             index:i
                         }
-                        _headList.push(data);
+                        this._headList.push(data);
                     }
 
                     if(_head != getTheDate(this.recordList[i].created_at)){
@@ -268,22 +380,36 @@
                             time:_head,
                             index:i
                         }
-                        _headList.push(data);
+                        this._headList.push(data);
                     }
                     
                 }
-                console.log(_headList);
+
+                console.log(this._headList);
                 var count=  0;
 
+                this.timeInfo = this._headList[0].time;
+
                 // 插入数值
-                for(var k=0 ;k<_headList.length;k++){
-                    console.log(_headList[k].index);
-                    this.recordList.splice(_headList[k].index+count,0,{isTimePanel:true});
+                for(var k=0 ;k<this._headList.length;k++){
+                    this.recordList.splice(this._headList[k].index+count,0,{isTimePanel:true,time:this._headList[k].time});
                     count++;
                 }
 
-            }
+            },
+            handleScroll(){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
+                for(var i = 0; i< this.$refs.timeTab.length; i++){
+                    if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
+                        this.timeInfo = this._headList[i].time;
+                    }
+                    
+                    // if(this.$refs.timeTab[i].getBoundingClientRect().top > "30") {
+                    //     // this.$refs.timeTab[i].className ="";
+                    // }
+                }
+            }
         },
         components: {
             topBack
@@ -292,8 +418,44 @@
 </script>
 
 <style lang="scss" scoped>
+    .tab-fixed{
+        position: fixed;
+        top:5em;
+        left: 0em;
+        z-index:1001;
+        width:100%;
+        height:3em;
+        background:#eee;
+    }
+
+    .time-tab{
+        width:100%;
+        height:3em;
+        background:#eee;
+        padding:0;
+    }
+
+    .change-tab{
+        width:100%;
+        height: 3em;
+        background:#26a2ff;
+        position: fixed;
+        top:2em;
+        border:1px solid #fff;
+        box-sizing: border-box;
+
+        >div{
+            color:#fff;
+        }
+
+        .active{
+            background:#fff;
+            color:#26a2ff;
+        }
+    }
+
     #profit-record {
-        padding-top: 2em;
+        padding-top: 5em;
         box-sizing: border-box;
         .header-right {
             width: 100%;
