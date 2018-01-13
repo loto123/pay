@@ -32,7 +32,7 @@
       details() {
         var _temp = {};
         _temp.notice_id = this.$route.query.notice_id;
-        request.getInstance().postData('api/notice/detail', _temp)
+        request.getInstance().getData('api/notice/detail', _temp)
           .then((res) => {
             this.title=res.data.data.title;
             this.time=res.data.data.time;

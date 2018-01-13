@@ -453,6 +453,14 @@
         width:100%;
         height:3em;
         background:#eee;
+        box-sizing:border-box;
+        padding-left: 1em;
+        padding-right:1em;
+
+        >div{
+            color: #555;
+            margin-top:0.3em;
+        }
     }
 
     .time-tab{

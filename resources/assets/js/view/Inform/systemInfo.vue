@@ -59,7 +59,7 @@
 
 				request.getInstance().getData('api/notice/index?type=3')
 					.then((res) => {
-            self.systemList=res.data.data;
+            self.systemList=res.data.data.list;
             Loading.getInstance().close();
 					})
 					.catch((err) => {
