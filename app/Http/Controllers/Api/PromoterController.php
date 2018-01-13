@@ -333,7 +333,7 @@ class PromoterController extends BaseController
      */
     public function cardsUsedNum()
     {
-        return ['used_cards' => 6];
+        return $this->json(['used_cards' => 6]);
     }
 
 
