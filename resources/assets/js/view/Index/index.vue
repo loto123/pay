@@ -42,7 +42,7 @@
           </li>
 
           <li class="flex flex-v flex-align-center">
-            <a href="/#/share_profit" class="flex flex-v flex-align-center">
+            <a class="flex flex-v flex-align-center" @click="goShareProfit">
               <i class="iconfont transaction-icon common-icon">
                 &#xe63b;
               </i>
@@ -60,7 +60,7 @@
           </li>
 
           <li class="flex flex-v flex-align-center">
-            <a href="/#/my/my_users" class="flex flex-v flex-align-center">
+            <a class="flex flex-v flex-align-center" @click="goMyUsers">
               <i class="iconfont transaction-icon common-icon">
                 &#xe621;
               </i>
@@ -189,6 +189,7 @@ i {
 import tabBar from "../../components/tabBar";
 import Loading from "../../utils/loading"
 import request from "../../utils/userRequest"
+import {MessageBox , Toast} from 'mint-ui'
 
 export default {
   name: "index",
@@ -197,7 +198,8 @@ export default {
     return {
       amount:null,
       avatar:null,
-      newMessage:0
+      newMessage:0,
+      isAgent:0
     }
   },
   created(){
@@ -207,13 +209,56 @@ export default {
     goInform(){
       this.$router.push("/inform");
     },
+
+    goShareProfit(){
+      if(this.isAgent == 0){
+
+        MessageBox({
+            title: '温馨提示',
+            message: '此功能只对代理开放，是否开通代理？?',
+            confirmButtonText:'开通',
+            showCancelButton: true
+        }).then(res=>{
+          request.getInstance().postData("api/proxy/create").then(res=>{
+            Toast("成功开通代理...");
+          }).catch(err=>{
+            Toast(err.data.msg)
+          })
+        });
+
+      }else if(this.isAgent == 1){
+        this.$router.push("/share_profit");
+      }
+    },
+
+    goMyUsers(){
+      if(this.isAgent == 0){
+       
+        MessageBox({
+            title: '温馨提示',
+            message: '此功能只对代理开放，是否开通代理？?',
+            confirmButtonText:'开通',
+            showCancelButton: true
+        }).then(res=>{
+          request.getInstance().postData("api/proxy/create").then(res=>{
+            Toast("成功开通代理...");
+          }).catch(err=>{
+            Toast(err.data.msg)
+          })
+        });
+
+      }else if(this.isAgent == 1){
+        this.$router.push("/my/my_users");
+      }
+    },
+
     init(){
       Loading.getInstance().open();
       request.getInstance().getData("api/index").then(res=>{
         this.amount = res.data.data.balance;
         this.avatar = res.data.data.avatar;
         this.newMessage = res.data.data.new_message;
-
+        this.isAgent = res.data.data.is_agent;
         Loading.getInstance().close();
         
       }).catch(err=>{
