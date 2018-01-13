@@ -56,7 +56,7 @@
         
         request.getInstance().getData('api/notice/index?type=2')
           .then((res) => {
-            self.registerList = res.data.data;
+            self.registerList = res.data.data.list;
             Loading.getInstance().close();
           })
           .catch((err) => {

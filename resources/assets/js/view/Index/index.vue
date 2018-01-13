@@ -85,6 +85,14 @@
               <h3>展业</h3>
             </a>
           </li>
+          <li class="flex flex-v flex-align-center">
+            <a href="/#/vipCard" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                  &#xe639;
+              </i>
+              <h3>vip开卡</h3>
+            </a>
+          </li>
           
         </ul>
       </section>

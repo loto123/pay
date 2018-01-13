@@ -55,7 +55,7 @@
       details() {
         var _temp = {};
         _temp.notice_id = this.$route.query.notice_id;
-        request.getInstance().postData('api/notice/detail', _temp)
+        request.getInstance().getData('api/notice/detail', _temp)
           .then((res) => {
             this.amount=res.data.data.amount;
             this.mobile=res.data.data.mobile;
