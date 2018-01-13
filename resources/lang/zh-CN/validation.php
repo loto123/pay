@@ -126,6 +126,7 @@ return [
         'friend_id' => '好友ID',
         'fee' => '茶水费',
         'record_id' => '交易记录ID',
+        'date' => '查询日期',
     ],
 
 ];

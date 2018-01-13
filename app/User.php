@@ -3,8 +3,7 @@
 namespace App;
 
 use App\Agent\Card;
-use App\Agent\CardBinding;
-use App\Agent\CardTransfer;
+use App\Agent\CardUse;
 use App\Agent\PromoterGrant;
 use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
@@ -84,7 +83,7 @@ class User extends Authenticatable
      */
     public function myVipCard()
     {
-        $binding = $this->hasMany(CardBinding::class, 'agent_id')->orderByDesc('id')->first();
+        $binding = $this->hasMany(CardUse::class, 'to')->where('type', CardUse::TYPE_BINDING)->orderByDesc('id')->first();
         if ($binding) {
             return $binding->card;
         } else {
@@ -93,12 +92,12 @@ class User extends Authenticatable
     }
 
     /**
-     * 我的绑卡记录
+     * 我的卡使用记录
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function myCardBindings()
+    public function myCardUsing()
     {
-        return $this->hasMany(CardBinding::class, 'promoter_id');
+        return $this->hasMany(CardUse::class, 'from')->with('card');
     }
 
     /**
@@ -107,16 +106,7 @@ class User extends Authenticatable
      */
     public function myCardsHold()
     {
-        return $this->hasMany(Card::class, 'owner')->whereNull('expired_at');
-    }
-
-    /**
-     * 我的转卡
-     * @return mixed
-     */
-    public function myCardsTransfer()
-    {
-        return $this->hasMany(CardTransfer::class, 'from');
+        return $this->hasMany(Card::class, 'owner')->where('is_bound', 0)->with('type');
     }
 
     /**
@@ -131,7 +121,6 @@ class User extends Authenticatable
         ]);
         $grant->grantTo()->associate($grantTo);
         return $grant->save();
-
     }
 
     /**
@@ -145,35 +134,37 @@ class User extends Authenticatable
 
     /*----------------代理VIP卡功能END----------------!>*/
 
-
-    //产出利润
-
+    //缴纳的茶水费
     public function tips()
     {
         return $this->hasMany('App\TipRecord', 'user_id', 'id');
     }
 
-    //参与的交易
+    //获得利润
+    public function proxy_profit()
+    {
+        return $this->hasMany('App\Profit', 'proxy', 'id');
+    }
 
+    //产出利润
     public function output_profit()
     {
         return $this->hasMany('App\Profit', 'user_id', 'id');
     }
 
-    //代理
-
+    //参与的交易
     public function involved_transfer()
     {
         return $this->hasMany('App\TransferUserRelation', 'user_id', 'id');
     }
 
-    //运营
-
+    //代理
     public function parent()
     {
         return $this->hasOne('App\User', 'id', 'parent_id');
     }
 
+    //运营
     public function operator()
     {
         return $this->hasOne('App\Admin', 'id', 'operator_id');
@@ -189,7 +180,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
 
-    public function shop_tips() {
+    public function shop_tips()
+    {
         return $this->hasManyThrough(TipRecord::class, Shop::class, 'manager_id', 'shop_id');
     }
 
@@ -254,21 +246,34 @@ class User extends Authenticatable
 
     public function getBalanceAttribute()
     {
-        return $this->container->balance;
+        if($this->container) {
+            return $this->container->balance;
+        }
+        return 0;
     }
 
-    public function pay_card() {
+    public function getProfitAttribute()
+    {
+        if($this->proxy_container) {
+            return $this->proxy_container->balance;
+        }
+        return 0;
+    }
+
+    public function pay_card()
+    {
         return $this->hasOne(UserCard::class, 'id', 'pay_card_id');
     }
 
-    public function check_pay_password($input) {
+    public function check_pay_password($input)
+    {
         $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $this->id);
         $times = Cache::get($key);
         if ($times && $times >= config("pay_pwd_validate_times", 5)) {
             throw new \Exception(trans("api.over_pay_password_max_times"));
         }
         if (!Hash::check($input, $this->pay_password)) {
-            if(!$times) {
+            if (!$times) {
                 Cache::put($key, 1, Carbon::now()->addDay(1));
             } else {
                 Cache::increment($key);
@@ -278,5 +283,11 @@ class User extends Authenticatable
         } else {
             return true;
         }
+    }
+
+    //分润提现记录
+    public function proxy_withdraw()
+    {
+        return $this->hasMany(ProxyWithdraw::class, 'user_id');
     }
 }

@@ -18,6 +18,7 @@ return [
     'integer' => ':attribute必须是整数',
     'not_enough_money' => '红包余额不足',
     'user_not_enough_money' => '用户余额不足',
+    'profit_not_enough_money' => '可提现余额不足',
     'trade_success' => '交易成功',
     'trade_failed' => '交易失败',
     'trans_already_closed' => '交易已关闭',
@@ -54,4 +55,6 @@ return [
     'reward_is_turned_off' => '打赏功能已关闭',
     'shop_is_frozen' => '店铺已被冻结',
     'shop_not_allow_transfer' => '店铺尚未开启交易',
+    'permission_denied' => '仅代理身份才可以访问',
+    'date_format' => '日期格式错误',
 ];

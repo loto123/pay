@@ -162,7 +162,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/', 'AccountController@index');
-        $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|andriod|ios', 'scene' => '\d+']);
+        $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|android|ios', 'scene' => '\d+']);
         $api->get('withdraw-methods', 'AccountController@withdrawMethods');
         $api->get('records', 'AccountController@records');
         $api->get('records/detail/{id}', 'AccountController@record_detail');
@@ -170,6 +170,37 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
         $api->get('records/month', 'AccountController@month_data');
+    });
+
+});
+
+//代理相关接口
+$api->version('v1', ['middleware' => ['api.auth', 'block', 'role:agent']], function ($api) {
+    $api->group([
+        'prefix' => 'agent',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/bound_vip', 'AgentController@myVip');
+    });
+
+});
+
+//推广员接口
+
+$api->version('v1', ['middleware' => ['api.auth', 'block', 'role:promoter']], function ($api) {
+    $api->group([
+        'prefix' => 'promoter',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->post('/transfer-card', 'PromoterController@transferCard');
+        $api->post('/bind-card', 'PromoterController@bindCard');
+        $api->post('/grant', 'PromoterController@grant');
+        $api->get('/cards-used', 'PromoterController@cardsUseRecords');
+        $api->get('/grant-history', 'PromoterController@grantRecords');
+        $api->get('/cards-reserve', 'PromoterController@cardsReserve');
+        $api->get('/cards_used_num', 'PromoterController@cardsUsedNum');
+        $api->post('/query-agent', 'PromoterController@queryAgent');
+        $api->post('/query-promoter', 'PromoterController@queryPromoter');
     });
 
 });
@@ -215,4 +246,16 @@ Route::group([
     $router->post('create', 'NoticeController@create');
     $router->post('delete', 'NoticeController@delete');
     $router->get('detail', 'NoticeController@detail');
+});
+
+Route::group([
+    'prefix' => '/profit',
+    'namespace' => 'Api',
+    'middleware' => ['api.auth', 'block', 'proxy']
+], function (Router $router) {
+    $router->get('index', 'ProfitController@index');
+    $router->get('balance', 'ProfitController@balance');
+    $router->post('count', 'ProfitController@count');
+    $router->post('data', 'ProfitController@data');
+    $router->get('show/{id}','ProfitController@show')->where('id', '[0-9]+');
 });

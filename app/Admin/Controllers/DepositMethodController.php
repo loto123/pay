@@ -17,7 +17,7 @@ class DepositMethodController extends Controller
 {
     use ModelForm;
 
-    private static $supportOS = [DepositMethod::OS_ANY => '不限', DepositMethod::OS_ANDRIOD => '安卓', DepositMethod::OS_IOS => '苹果'];
+    private static $supportOS = [DepositMethod::OS_ANY => '不限', DepositMethod::OS_ANDROID => '安卓', DepositMethod::OS_IOS => '苹果'];
 
     /**
      * Index interface.
