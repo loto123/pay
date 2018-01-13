@@ -18,6 +18,7 @@ return [
     'integer' => ':attribute必须是整数',
     'not_enough_money' => '红包余额不足',
     'user_not_enough_money' => '用户余额不足',
+    'profit_not_enough_money' => '可提现余额不足',
     'trade_success' => '交易成功',
     'trade_failed' => '交易失败',
     'trans_already_closed' => '交易已关闭',

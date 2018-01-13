@@ -32,6 +32,7 @@ export default class UserRequest {
                 headers:{Authorization:"Bearer "+_token}
             })
                 .then(function (res) {
+
                     if(res.data.code == 1){
                         resolve(res);
                     }else if(res.data.code == 2){
@@ -40,6 +41,7 @@ export default class UserRequest {
                         setTimeout(function(){
                             window.location.href = "/#/login";
                         },1000);
+                        
                         reject(res);
                     }
                     else {

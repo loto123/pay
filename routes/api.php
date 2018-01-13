@@ -194,8 +194,13 @@ $api->version('v1', ['middleware' => ['api.auth', 'block', 'role:promoter']], fu
     ], function ($api) {
         $api->post('/transfer-card', 'PromoterController@transferCard');
         $api->post('/bind-card', 'PromoterController@bindCard');
-        $api->post('/bind-card', 'PromoterController@bindCard');
-
+        $api->post('/grant', 'PromoterController@grant');
+        $api->get('/cards-used', 'PromoterController@cardsUseRecords');
+        $api->get('/grant-history', 'PromoterController@grantRecords');
+        $api->get('/cards-reserve', 'PromoterController@cardsReserve');
+        $api->get('/cards_used_num', 'PromoterController@cardsUsedNum');
+        $api->post('/query-agent', 'PromoterController@queryAgent');
+        $api->post('/query-promoter', 'PromoterController@queryPromoter');
     });
 
 });

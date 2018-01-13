@@ -28,7 +28,7 @@ class AgentController extends Controller
      *              @SWG\Property(
      *                  property="if_bound",
      *                  type="boolean",
-     *                  example=false,
+     *                  example=true,
      *                  description="是否有绑定vip卡",
      *              ),
      *              @SWG\Property(
@@ -62,6 +62,13 @@ class AgentController extends Controller
 
     public function myVip()
     {
+        return [
+            "if_bound" => false,
+            "card_name" => "vip金卡",
+            "percent" => "5",
+            "expired_at" => "2017-01-01 0:0:0",
+            "card_no" => "12345678"
+        ];
         $card = Auth::user()->myVipCard();
         $json = ['if_bound' => !empty($card)];//是否绑定
         if ($json['if_bound']) {
