@@ -257,5 +257,9 @@ Route::group([
     $router->get('balance', 'ProfitController@balance');
     $router->post('count', 'ProfitController@count');
     $router->post('data', 'ProfitController@data');
+    $router->post('withdraw', 'ProfitController@withdraw');
     $router->get('show/{id}','ProfitController@show')->where('id', '[0-9]+');
+    $router->post('withdraw/count', 'ProfitController@withdrawCount');
+    $router->post('withdraw/data', 'ProfitController@withdrawData');
+    $router->get('withdraw/show/{id}','ProfitController@withdrawShow')->where('id', '[0-9]+');
 });

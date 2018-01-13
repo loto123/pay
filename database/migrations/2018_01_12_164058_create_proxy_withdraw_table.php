@@ -16,7 +16,6 @@ class CreateProxyWithdrawTable extends Migration
         Schema::create('proxy_withdraw', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->comment('提现用户')->index('user_id', 'idx_user_id');
-            $table->string('orderno', 255)->comment('提现单号')->unique();
             $table->decimal('amount', 11, 2)->comment('提现金额')->default(0);
             $table->timestamps();
         });
