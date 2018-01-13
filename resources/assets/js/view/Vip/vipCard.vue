@@ -172,7 +172,6 @@
                 Loading.getInstance().open("加载中...");
                 request.getInstance().getData("api/promoter/cards_used_num")
                 .then((res)=>{
-                    console.log(res);
                     this.used_cards=res.data.data.used_cards;
                     Loading.getInstance().close();
                 })
