@@ -7,7 +7,7 @@
                 </div>
             </topBack>
             <div class="card-amount">
-                <div>6</div>
+                <div>{{used_cards}}</div>
                 <h3>已出卡数(张)</h3>
             </div>
         </div>
@@ -154,13 +154,14 @@
     import topBack from '../../components/topBack'
     import Loading from "../../utils/loading"
     import request from "../../utils/userRequest"
-    import {Indicator,Toast} from 'mint-ui'
+    import {Toast} from 'mint-ui'
 
     export default {
         components: { topBack },
         data() {
             return {
-                isBindVIP: false
+                isBindVIP: false,
+                used_cards:null
             }
         },
         created () {
@@ -169,12 +170,13 @@
         methods:{
             init(){
                 Loading.getInstance().open("加载中...");
-                request.getInstance.getData("api/promoter/cards_used_num")
-                .then(res=>{
+                request.getInstance().getData("api/promoter/cards_used_num")
+                .then((res)=>{
                     console.log(res);
+                    this.used_cards=res.data.data.used_cards;
                     Loading.getInstance().close();
                 })
-                .catch(err=>{
+                .catch((err) => {
                     Toast(err.data.msg);
                     Loading.getInstance().close();
                 })
