@@ -495,7 +495,7 @@ class ProfitController extends BaseController
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $query = $user->proxy_profit();
+        $query = $user->proxy_withdraw();
         if ($request->limit) {
             $query->limit($request->limit);
         }
@@ -556,7 +556,7 @@ class ProfitController extends BaseController
     public function withdrawShow($id)
     {
         $user = JWTAuth::parseToken()->authenticate();
-        $item = $user->proxy_profit()->where('id', ProxyWithdraw::decrypt($id))->first();
+        $item = $user->proxy_withdraw()->where('id', ProxyWithdraw::decrypt($id))->first();
         //组装响应数据
         $data['id'] = $item->en_id();
         $data['amount'] = $item->amount;
