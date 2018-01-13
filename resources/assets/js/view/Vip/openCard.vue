@@ -33,26 +33,26 @@
         </div>
         <div class="middle-content flex flex-align-center">
             <div class="input-wrap flex-7 flex flex-align-center flex-justify-center">
-                <input type="text" v-model="searchUserMobile" @click="searchInput" v-on:blur="inputBlur" placeholder="输入您要开卡的账号">
+                <input type="text" v-model="searchUserMobile" placeholder="输入您要开卡的账号">
             </div>
 
             <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
                 搜索
             </div>
         </div>
-        <div class="search-result">
+        <div class="search-result" v-if="searchData.user_id">
             <div class="user-info flex flex-align-center flex-justify-center">
                 <div class="info">
                     <div class="info-wrap">
-                        <img src="/images/avatar.jpg">
+                        <img :src="searchData.avatar">
                     </div>
                     <div class="info-right">
-                        <span style="margin-top:0.5em;">loto</span>
-                        <span>账号:231321</span>
+                        <span style="margin-top:0.5em;">{{searchData.name}}</span>
+                        <span>账号:{{searchData.user_id}}</span>
                     </div>
                 </div>
             </div>
-            <div class="submit flex flex-justify-center" @click="submit">
+            <div class="submit flex flex-justify-center" @click="openVip">
                 <mt-button type="primary" size="large" style="width:90%;">开通VIP</mt-button>
             </div>
         </div>
@@ -146,7 +146,7 @@
                     height: 75%;
                     width: 85%;
                     text-indent: 2em;
-                    font-size: 1.1em;
+                    font-size: 1em;
                 }
             }
 
@@ -180,6 +180,9 @@
                 }
             }
         }
+        .pop-content{
+            text-align: center;
+        }
     }
 </style>
 
@@ -187,19 +190,77 @@
     import topBack from '../../components/topBack'
     import Loading from "../../utils/loading"
     import request from "../../utils/userRequest"
-    import { Indicator, Toast } from 'mint-ui'
+    import { MessageBox, Toast } from 'mint-ui'
 
     export default {
         components: { topBack },
         data() {
             return {
-                isBindVIP: false
+                isBindVIP: false,
+                searchUserMobile: null,
+                searchData: {                 // 搜索出来的数据
+                    avatar: null,
+                    user_id: null,
+                    name: null
+                }
             }
         },
         methods: {
             //转卡给推广员
             giveCard() {
-                this.$router.push('/vipCard/giveCard')
+                this.$router.push('/vipCard/giveCard');
+            },
+            // 搜索用户
+            searchUser() {
+                if (!this.searchUserMobile) {
+                    Toast('请输入您要开卡的账号');
+                    return
+                }
+
+                var _data = {
+                    user_id: this.searchUserMobile
+                }
+                Loading.getInstance().open();
+                request.getInstance().postData('api/promoter/query-agent', _data).then(res => {
+                    this.searchData = res.data.data;
+                    Loading.getInstance().close();
+                }).catch(err => {
+                    Toast(err.data.msg);
+                    Loading.getInstance().close();
+                });
+            },
+            //开通vip
+            openVip() {
+                var _data = {
+                    card_no: 12345678,
+                    user_id: this.searchUserMobile
+                }
+                const htmls = `
+                    <div class="pop-content">
+                        <div class="isunbind">确认给用户：17673181869 开通VIP卡？</div>
+                        <div class="notice">(开卡成功后不可撤回)</div>
+                    </div>
+                    `;
+                MessageBox.confirm('',{
+                    message: htmls,
+                    title: '确认信息',
+                })
+                .then(
+                    () => {
+                        request.getInstance().postData("api/promoter/bind-card", _data)
+                            .then((res) => {
+                                Toast('开通成功');
+                                this.$router.push('/vipCard');
+                            })
+                            .catch((err) => {
+                                Toast(err.data.msg);
+                            })
+                    },
+                    () => {
+                        //取消操作
+                        console.log("已经取消");
+                    }
+                );
             }
         }
     }
