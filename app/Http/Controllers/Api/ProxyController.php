@@ -74,14 +74,14 @@ class ProxyController extends BaseController {
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="path",
-     *     description="页码",
+     *     description="最后记录id",
      *     required=false,
-     *     type="number"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="path",
      *     description="数目",
      *     required=false,
@@ -100,14 +100,19 @@ class ProxyController extends BaseController {
         } else {
             $query->doesntHave("shop");
         }
-        foreach ($query->paginate($request->input('size', 20)) as $_user) {
+        $count = (int)$query->count();
+        if ($request->offset) {
+
+        }
+        $query->limit($request->input('limit', 20));
+        foreach ($query->get() as $_user) {
             $list[] = [
                 'avatar' => $_user->avatar,
                 'name' => $_user->name,
                 'mobile' => $_user->mobile
             ];
         }
-        return $this->json(['total' => (int)$query->count(), 'list' => $list]);
+        return $this->json(['total' => $count, 'list' => $list]);
     }
 
     /**
