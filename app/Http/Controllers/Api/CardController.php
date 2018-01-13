@@ -499,6 +499,9 @@ class CardController extends BaseController
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
+                if($item->id == $this->user->pay_card_id) {
+                    continue;
+                }
                 $card_type = '';
                 switch ($item->type) {
                     case 1:
