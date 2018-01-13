@@ -290,7 +290,7 @@ class ProfitController extends BaseController
         //组装响应数据
         $data['proxy_amount'] = $item->proxy_amount;
         $data['type'] = '分润收益';
-        $data['created_at'] = $item->created_at;
+        $data['created_at'] = (string)$item->created_at;
         $data['user_nick'] = $item->user->name;
         $data['user_mobile'] = $item->user->mobile;
         return $this->json($data, 'ok', 1);
@@ -503,7 +503,7 @@ class ProfitController extends BaseController
             $query->where('id', '<', ProxyWithdraw::decrypt($request->offset));
         }
         $list = $query->select('id', 'amount', 'created_at')->orderBy('created_at', 'DESC')->get();
-        foreach($list as $key => $value) {
+        foreach ($list as $key => $value) {
             $list[$key]['id'] = $value->en_id();
         }
         return $this->json($list, 'ok', 1);
@@ -561,7 +561,7 @@ class ProfitController extends BaseController
         $data['id'] = $item->en_id();
         $data['amount'] = $item->amount;
         $data['type'] = '提现';
-        $data['created_at'] = $item->created_at;
+        $data['created_at'] = (string)$item->created_at;
         $data['user_mobile'] = $item->user->mobile;
         return $this->json($data, 'ok', 1);
     }
