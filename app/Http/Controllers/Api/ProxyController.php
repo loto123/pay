@@ -107,6 +107,7 @@ class ProxyController extends BaseController {
         $query->limit($request->input('limit', 20));
         foreach ($query->get() as $_user) {
             $list[] = [
+                'id' => $_user->en_id(),
                 'avatar' => $_user->avatar,
                 'name' => $_user->name,
                 'mobile' => $_user->mobile
