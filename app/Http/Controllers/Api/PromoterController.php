@@ -176,13 +176,13 @@ class PromoterController extends BaseController
      */
     public function cardsUseRecords()
     {
-        return [
+        return $this->json([
             ['id' => 12, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
             ['id' => 13, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
             ['id' => 14, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
             ['id' => 15, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
             ['id' => 16, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-        ];
+        ]);
     }
 
     /**
@@ -223,7 +223,7 @@ class PromoterController extends BaseController
      */
     public function grantRecords()
     {
-        return [
+        return $this->json([
             [
                 "id" => "12",
                 "name" => "张三",
@@ -245,7 +245,7 @@ class PromoterController extends BaseController
                 "avatar" => "http://x.com/img/a.gif",
                 "created_at" => "2017-01-01 0:0:0"
             ]
-        ];
+        ]);
     }
 
     /**
@@ -285,7 +285,7 @@ class PromoterController extends BaseController
      */
     public function cardsReserve()
     {
-        return [[
+        return $this->json([[
             "id" => "12",
             "card_no" => "12345678",
             "card_name" => "vip金卡",
@@ -308,13 +308,13 @@ class PromoterController extends BaseController
                 "card_no" => "12345678",
                 "card_name" => "vip金卡",
                 "percent" => "5"
-            ]];
+            ]]);
     }
 
     /**
      * 出卡总数
      * @SWG\Get(
-     *   path="/promoter/cards_used_num,
+     *   path="/promoter/cards_used_num",
      *   summary="已出卡总数",
      *   tags={"推广员功能"},
      *     @SWG\Response(
@@ -333,11 +333,11 @@ class PromoterController extends BaseController
      */
     public function cardsUsedNum()
     {
-        return ['used_cards' => 6];
+        return $this->json(['used_cards' => 6]);
     }
 
 
-    /*
+    /**
      * 查询代理用户
      * @SWG\Post(
      *   path="/promoter/query-agent",
@@ -386,7 +386,7 @@ class PromoterController extends BaseController
         ]);
     }
 
-    /*
+    /**
      * 查询推广员
      * @SWG\Post(
      *   path="/promoter/query-promoter",

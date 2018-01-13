@@ -9,13 +9,13 @@
         </topBack>
 
         <div class="change-tab flex">
-            <div class="flex-1 flex flex-justify-center flex-align-center active" @click="changeTab(0)">收益明细</div>
-            <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(1)">提现记录</div>
+            <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(0)" :class="{active:tabStatus[0]}">收益明细</div>
+            <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(1)" :class="{active:tabStatus[1]}">提现记录</div>
         </div>
 
-        <div class="tab-fixed flex flex-v flex-align-start">
+        <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
             <div class="month">{{timeInfo}}</div>
-            <div class="amount">100</div>
+            <div class="amount">{{tabStatus[0]?'收益：':'提现：'}}100</div>
            
         </div>
         <div class="bill-box">
@@ -33,13 +33,15 @@
                 </div>
                 <div>图标</div>
             </div>
-			<!-- <div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
+
+			<div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
                 <i class="iconfont">
                     &#xe655;
                 </i>
                 <div>暂无数据</div>
-			</div> -->
-            <ul class="bill-list" >
+			</div>
+
+            <ul class="bill-list" v-else>
  
                 <li  v-for="item in recordList" @click="details(item.id)" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false">
@@ -142,6 +144,7 @@
             details(id) {
                 this.$router.push({ path: "/shop/record/record_details?id="+id});
             },
+
             init(){
                 var data={
                     type:this.type,
@@ -149,181 +152,190 @@
                     size:this.size
                 }
                 // Loading.getInstance().open("加载中...");
-                this.shopId = this.$route.query.id;
-                this.recordList  = [{
-                    type:"分润",
-                    created_at:"2017-1-1",
-                    mode:1,
-                    amount:100,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-1-1",
-                    mode:1,
-                    amount:100,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-2-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },
-                {
-                    type:"分润",
-                    created_at:"2017-2-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },
-                {
-                    type:"分润",
-                    created_at:"2017-3-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },
-                {
-                    type:"分润",
-                    created_at:"2017-3-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-3-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-3-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-3-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-3-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                },{
-                    type:"分润",
-                    created_at:"2017-4-1",
-                    mode:1,
-                    amount:200,
-                    isTimePanel:false
-                }
-                ];
-                this.buildTimePanel();
+                // this.shopId = this.$route.query.id;
+                // this.recordList  = [{
+                //     type:"分润",
+                //     created_at:"2017-1-1",
+                //     mode:1,
+                //     amount:100,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-1-1",
+                //     mode:1,
+                //     amount:100,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-2-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },
+                // {
+                //     type:"分润",
+                //     created_at:"2017-2-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },
+                // {
+                //     type:"分润",
+                //     created_at:"2017-3-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },
+                // {
+                //     type:"分润",
+                //     created_at:"2017-3-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-3-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-3-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-3-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-3-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // },{
+                //     type:"分润",
+                //     created_at:"2017-4-1",
+                //     mode:1,
+                //     amount:200,
+                //     isTimePanel:false
+                // }
+                // ];
+
                 var _data = {
                     limit:10,
                     offset:0
                 }
+                
                 Loading.getInstance().open();
                 request.getInstance().postData("api/profit/data",_data)
                     .then((res) => {
-                        console.log(res);
-                        // this.recordList=res.data.data.data;
+
+                        var _dataList = res.data.data;
+
+                        for(var i = 0; i <_dataList.length;i++){
+                            _dataList[i].isTimePanel = false;
+                        }
+                        
+                        this.recordList = _dataList;
+                        this.buildTimePanel();
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
+                        // console.log(err);
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
@@ -343,7 +355,8 @@
             },
             
             changeTab(tabindex){
-                
+                this.tabStatus = [false,false];
+                this.tabStatus[tabindex] = true;
             },
 
             status(type){
@@ -362,13 +375,14 @@
                 return result;
             },
 
+            // 建立时间面板
             buildTimePanel(){
 
                 var _head=0;
                 this._headList = [];
                 var getTheDate = (timecode)=>{
                     var _t = timecode.split("-");
-                    var data = _t[0]+_t[1];
+                    var data = _t[0]+"年"+_t[1]+"月";
                     return data;
                 }
 
@@ -423,6 +437,7 @@
                 }
             }
         },
+
         components: {
             topBack
         }
@@ -438,6 +453,14 @@
         width:100%;
         height:3em;
         background:#eee;
+        box-sizing:border-box;
+        padding-left: 1em;
+        padding-right:1em;
+
+        >div{
+            color: #555;
+            margin-top:0.3em;
+        }
     }
 
     .time-tab{
@@ -592,7 +615,7 @@
         margin-top: 1.5em;
     }
     .nodata{
-        margin-top:10%;
+        margin-top:20vh;
         i,div{
             color: #ddd;
         }

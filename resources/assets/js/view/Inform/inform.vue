@@ -64,7 +64,7 @@
 
 				request.getInstance().getData('api/notice/index?type=1')
 					.then((res) => {
-						self.moneyList=res.data.data;
+						self.moneyList=res.data.data.list;
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
