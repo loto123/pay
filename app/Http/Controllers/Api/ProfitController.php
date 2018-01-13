@@ -241,7 +241,7 @@ class ProfitController extends BaseController
 
     /**
      * @SWG\GET(
-     *   path="/profit/show",
+     *   path="/profit/show/{id}",
      *   summary="收益明细详情",
      *   tags={"我的分润"},
      *  @SWG\Parameter(
@@ -511,7 +511,7 @@ class ProfitController extends BaseController
 
     /**
      * @SWG\GET(
-     *   path="/profit/withdraw/show",
+     *   path="/profit/withdraw/show/{id}",
      *   summary="提现详情",
      *   tags={"我的分润"},
      *  @SWG\Parameter(
