@@ -210,7 +210,7 @@ class ProfitController extends BaseController
      *                  description="收益明细",
      *                  @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="收益记录ID"),
-     *                          @SWG\Property(property="proxy_percent", type="double", example=9.9, description="分成比例(百分比)"),
+     *                          @SWG\Property(property="proxy_percent", type="string", example="999‰", description="分成比例"),
      *                          @SWG\Property(property="proxy_amount", type="double", example=9.9, description="收益"),
      *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="创建时间"),
      *                      )
@@ -251,6 +251,9 @@ class ProfitController extends BaseController
             $query->where('id', '<', $request->offset);
         }
         $list = $query->select('id', 'proxy_percent', 'proxy_amount', 'created_at')->orderBy('created_at', 'DESC')->get();
+        foreach ($list as $key => $value) {
+            $list[$key]->proxy_percent = $value->proxy_percent * 10 . '‰';
+        }
         return $this->json($list, 'ok', 1);
     }
 
@@ -323,6 +326,13 @@ class ProfitController extends BaseController
      *     required=true,
      *     type="string"
      *   ),
+     *  @SWG\Parameter(
+     *     name="password",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -353,6 +363,7 @@ class ProfitController extends BaseController
     public function withdraw(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'password' => 'bail|required',
             'amount' => 'required|min:0',
         ]);
         if ($validator->fails()) {

@@ -3,9 +3,9 @@
 namespace App\Channels;
 
 use App\User;
-use Log;
 use Illuminate\Notifications\Notification;
 use JPush\Client as JPush;
+use Log;
 
 class JPushChannel
 {
@@ -42,7 +42,7 @@ class JPushChannel
                 ->setNotificationAlert('Hi, JPush')
                 ->iosNotification('Hello IOS', array(
 //                'sound' => 'sound.caf',
-                     'badge' => $user->unreadNotifications()->count(),
+                    'badge' => $user->unreadNotifications()->count(),
                     // 'content-available' => true,
                     // 'mutable-content' => true,
                     'extras' => array(
