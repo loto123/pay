@@ -63,9 +63,10 @@ class Card extends Model
         return $this->belongsToMany('App\Admin',(new CardStock())->getTable(),'operator','id');
     }
 
-    //推广员
-//    public function promoters()
-//    {
-//        return $this->belongsToMany('App\user',(new CardUse())->getTable(),'card_id','from');
-//    }
+    //分销记录
+    public function distributions()
+    {
+        return $this->hasOne('App\Agent\CardDistribution','','id');
+    }
+
 }
