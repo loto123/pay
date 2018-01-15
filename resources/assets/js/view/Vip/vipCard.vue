@@ -21,18 +21,17 @@
                     &#xe6e1;
                 </i>
             </div>
-            <div class="flex-3">我的VIP卡(3张)</div>
+            <div class="flex-3">我的VIP卡({{cardNumber}}张)</div>
         </div>
 
         <ul class="card-list">
-            <li class="flex flex-align-center" @click="openCard">
-                <div class="flex-3 card-number">NO.123456</div>
+            <li class="flex flex-align-center" v-for="item in cardList"  @click="openCard">
+                <div class="flex-3 card-number">NO.{{item.card_no}}</div>
                 <div class="flex-6 card-type">
                     <div class="type">
-                        <em>VIP</em>
-                        <span>金卡</span>
+                        <em>{{item.card_name}}</em>
                     </div>
-                    <div class="share-profit">尊享分润比例：5‰</div>
+                    <div class="share-profit">尊享分润比例：{{item.percent}}‰</div>
                 </div>
                 <div class="flex-1 right-arrow">
                     <i class="iconfont" style="font-size:1.5em;">
@@ -125,20 +124,13 @@
                     margin: auto;
                     color: #fff;
                     .type {
-                        em,
-                        span {
+                        em{
                             font-weight: 700;
                             display: inline-block;
-                        }
-                        em {
-                            font-size: 2em;
+                            font-size: 1.5em;
                             margin-bottom: 0.2em;
                         }
-                        span {
-                            font-size: 1em;
-                        }
                     }
-
                 }
                 .right-arrow{
                     height: 3em;
@@ -161,7 +153,9 @@
         data() {
             return {
                 isBindVIP: false,
-                used_cards:null
+                used_cards:null,
+                cardList:[],
+                cardNumber:null      //多少张卡
             }
         },
         created () {
@@ -170,9 +164,11 @@
         methods:{
             init(){
                 Loading.getInstance().open("加载中...");
-                request.getInstance().getData("api/promoter/cards_used_num")
+                Promise.all([request.getInstance().getData('api/promoter/cards_used_num'),request.getInstance().getData('api/promoter/cards-reserve')])
                 .then((res)=>{
-                    this.used_cards=res.data.data.used_cards;
+                    this.used_cards=res[0].data.data.used_cards;
+                    this.cardList=res[1].data.data;
+                    this.cardNumber=this.cardList.length;
                     Loading.getInstance().close();
                 })
                 .catch((err) => {
