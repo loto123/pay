@@ -43,10 +43,10 @@
                 <div class="sel-type-box">
                     <h2>选择交易类型</h2>
                     <ul class="type-list">
-                        <li @click="selAll" class="active">
+                        <li @click="selAll">
                             <a href="javascript:;">全部</a>
                         </li>
-                        <li v-for="item in items" @click="selContent(item.type)" v-bind:class="active">
+                        <li v-for="item in items" @click="selContent(item.type)">
                             <a href="javascript:;">{{item.title}}</a>
                         </li>
                     </ul>
@@ -82,8 +82,9 @@
                     {type:3,title:'交易支出'},
                     {type:4,title:'转账到店铺'},
                     {type:5,title:'店铺转入'},
-                    {type:6,title:'打赏店家费'},
-                ]
+                    {type:8,title:'打赏店家费'},
+                ],
+                selected: null
             };
         },
         created(){
@@ -141,13 +142,12 @@
                     case 5: result='店铺转入'; break;
                     case 6: result='交易手续费'; break;
                     case 7: result='提现手续费'; break;
-                    default: result='打赏店家费'
+                    case 8: result='打赏店家费'; break;
                 }
                 return result;
             },
             selContent(type){
                 Loading.getInstance().open("加载中...");
-
                 request.getInstance().getData("api/account/records?type="+type)
                     .then((res) => {
                         this.billList=res.data.data.data;

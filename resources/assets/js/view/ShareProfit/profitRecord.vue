@@ -142,7 +142,7 @@
                 this.showAlert = false;
             },
             details(id) {
-                this.$router.push({ path: "/shop/record/record_details?id="+id});
+                this.$router.push({ path: "/profit_record/detail/?id="+id});
             },
 
             init(){
@@ -453,13 +453,29 @@
         width:100%;
         height:3em;
         background:#eee;
+        box-sizing:border-box;
+        padding-left: 1em;
+        padding-right:1em;
+
+        >div{
+            color: #555;
+            margin-top:0.3em;
+        }
     }
 
     .time-tab{
         width:100%;
-        height:3em;
+        // height:3em;
         background:#eee;
         padding:0;
+        box-sizing:border-box;
+        padding-left: 1em;
+        padding-right:1em;
+
+         >div{
+            color: #555;
+            margin-top:0.3em;
+        }
     }
 
     .change-tab{

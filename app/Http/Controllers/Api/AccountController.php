@@ -340,6 +340,13 @@ class AccountController extends BaseController {
      *     required=true,
      *     type="number"
      *   ),
+     *   @SWG\Parameter(
+     *     name="password",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -377,6 +384,16 @@ class AccountController extends BaseController {
         }
         $shop = Shop::findByEnId($request->shop_id);
         $user = $this->auth->user();
+        if (!$shop || $shop->manager_id != $user->id) {
+            return $this->json([], 'error', 0);
+        }
+        try {
+            if (!$user->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
+            }
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
+        }
         if ($user->container->balance < $request->amount) {
             return $this->json([], trans("api.error_user_balance"), 0);
         }
