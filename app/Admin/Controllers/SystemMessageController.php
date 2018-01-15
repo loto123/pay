@@ -2,14 +2,14 @@
 
 namespace App\Admin\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\SystemMessage;
 use Carbon\Carbon;
+use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
 
 class SystemMessageController extends Controller
 {
@@ -31,6 +31,26 @@ class SystemMessageController extends Controller
     }
 
     /**
+     * Make a grid builder.
+     *
+     * @return Grid
+     */
+    protected function grid()
+    {
+        return Admin::grid(SystemMessage::class, function (Grid $grid) {
+
+            $grid->model()->orderBy("id", "DESC");
+            $grid->id('ID')->sortable();
+            $grid->title('标题');
+            $grid->column('send_at', '发送时间')->display(function ($send_at) {
+                return $send_at ? $send_at : (string)$this->created_at;
+            });
+            $grid->column("link", '链接')->link();
+            $grid->created_at("创建时间");
+        });
+    }
+
+    /**
      * Edit interface.
      *
      * @param $id
@@ -44,46 +64,6 @@ class SystemMessageController extends Controller
 
             $content->body($this->form($id)->edit($id)->render());
         });
-    }
-
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('系统消息');
-
-            $content->body($this->form()->render());
-        });
-    }
-
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Admin::grid(SystemMessage::class, function (Grid $grid) {
-
-            $grid->model()->orderBy("id", "DESC");
-            $grid->id('ID')->sortable();
-            $grid->title('标题');
-            $grid->column('send_at', '发送时间')->display(function($send_at){
-                return $send_at ? $send_at : (string)$this->created_at;
-            });
-            $grid->column("link", '链接')->link();
-            $grid->created_at("创建时间");
-        });
-    }
-
-    public function update($id)
-    {
-        return $this->form($id)->update($id);
     }
 
     /**
@@ -112,5 +92,25 @@ class SystemMessageController extends Controller
                 }
             });
         });
+    }
+
+    /**
+     * Create interface.
+     *
+     * @return Content
+     */
+    public function create()
+    {
+        return Admin::content(function (Content $content) {
+
+            $content->header('系统消息');
+
+            $content->body($this->form()->render());
+        });
+    }
+
+    public function update($id)
+    {
+        return $this->form($id)->update($id);
     }
 }

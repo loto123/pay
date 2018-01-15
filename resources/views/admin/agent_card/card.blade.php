@@ -25,29 +25,33 @@
 
                     <label class="col-sm-1 control-label">运营ID：</label>
                     <div class="col-sm-2">
-                        <input type="text" name="operator_id" id="operator_id" class="form-control" placeholder="请输入运营ID"
+                        <input type="text" name="operator_id" id="operator_id" class="form-control"
+                               placeholder="请输入运营ID"
                                value="{{$operator_id??''}}">
                     </div>
 
                     <label class="col-sm-1 control-label">推广员ID：</label>
                     <div class="col-sm-2">
-                        <input type="text" name="promoter_id" id="promoter_id" class="form-control" placeholder="请输入推广员ID"
+                        <input type="text" name="promoter_id" id="promoter_id" class="form-control"
+                               placeholder="请输入推广员ID"
                                value="{{$promoter_id??''}}">
                     </div>
                     <label class="col-sm-1 control-label">使用状态：</label>
                     <div class="col-sm-2">
-                            <select name="is_bound" id="is_bound">
+                        <select name="is_bound" id="is_bound">
                                 <option value="">所有</option>
-                                <option value="{{\App\Agent\Card::BOUND}}"
-                                        @if (isset($is_bound) && $is_bound == \App\Agent\Card::BOUND)
-                                        selected="selected"
-                                        @endif
-                                >已使用</option>
-                                <option value="{{\App\Agent\Card::UNBOUND}}"
-                                        @if (isset($is_bound) && $is_bound == \App\Agent\Card::UNBOUND)
-                                        selected="selected"
-                                        @endif
-                                >未使用</option>
+                            <option value="{{\App\Agent\Card::BOUND}}"
+                                    @if (isset($is_bound) && $is_bound == \App\Agent\Card::BOUND)
+                                    selected="selected"
+                                    @endif
+                            >已使用
+                            </option>
+                            <option value="{{\App\Agent\Card::UNBOUND}}"
+                                    @if (isset($is_bound) && $is_bound == \App\Agent\Card::UNBOUND)
+                                    selected="selected"
+                                    @endif
+                            >未使用
+                            </option>
                             </select>
                     </div>
                     <label class="col-sm-1 control-label">是否冻结：</label>
@@ -57,11 +61,13 @@
                             <option value="{{\App\Agent\Card::FROZEN}}"
                                     @if (isset($is_frozen) && $is_frozen == \App\Agent\Card::FROZEN)
                                     selected="selected"
-                                    @endif>已冻结</option>
+                                    @endif>已冻结
+                            </option>
                             <option value="{{\App\Agent\Card::UNFROZEN}}"
                                     @if (isset($is_frozen) && $is_frozen == \App\Agent\Card::UNFROZEN)
                                     selected="selected"
-                                    @endif>未冻结</option>
+                                    @endif>未冻结
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -105,7 +111,8 @@
                                 @if($promoter = $item->stock['operators'])
                                     <div class="user-panel clearfix">
                                         <div class="pull-left">
-                                            <img src="{{$promoter['avatar']}}" width="40" height="40" class="img-circle">
+                                            <img src="{{$promoter['avatar']}}" width="40" height="40"
+                                                 class="img-circle">
                                         </div>
                                         <div class="pull-left ml7">
                                             <p>{{$promoter['name']}}</p>
@@ -120,7 +127,8 @@
                                 @if($promoter = $item->promoter)
                                     <div class="user-panel clearfix">
                                         <div class="pull-left">
-                                            <img src="{{$promoter['avatar']}}" width="40" height="40" class="img-circle">
+                                            <img src="{{$promoter['avatar']}}" width="40" height="40"
+                                                 class="img-circle">
                                         </div>
                                         <div class="pull-left ml7">
                                             <p>{{$promoter['name']}}</p>

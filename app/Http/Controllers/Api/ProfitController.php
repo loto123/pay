@@ -251,7 +251,7 @@ class ProfitController extends BaseController
             $query->where('id', '<', $request->offset);
         }
         $list = $query->select('id', 'proxy_percent', 'proxy_amount', 'created_at')->orderBy('created_at', 'DESC')->get();
-        foreach($list as $key => $value) {
+        foreach ($list as $key => $value) {
             $list[$key]->proxy_percent = $value->proxy_percent * 10 . '‰';
         }
         return $this->json($list, 'ok', 1);
