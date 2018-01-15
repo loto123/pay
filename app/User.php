@@ -318,6 +318,6 @@ class User extends Authenticatable
     //代理分润百分比
     public function getPercentAttribute($value)
     {
-        return $value + vip();
+        return $value + $this->myVipProfitShareRate();
     }
 }
