@@ -62,20 +62,20 @@ class AgentController extends Controller
 
     public function myVip()
     {
-        return [
-            "if_bound" => false,
-            "card_name" => "vip金卡",
-            "percent" => "5",
-            "expired_at" => "2017-01-01 0:0:0",
-            "card_no" => "12345678"
-        ];
+//        return [
+//            "if_bound" => false,
+//            "card_name" => "vip金卡",
+//            "percent" => "5",
+//            "expired_at" => "2017-01-01 0:0:0",
+//            "card_no" => "12345678"
+//        ];
         $card = Auth::user()->myVipCard();
         $json = ['if_bound' => !empty($card)];//是否绑定
         if ($json['if_bound']) {
             $json['card_name'] = $card->type->name; //卡名
             $json['percent'] = $card->type->percent * 10;//卡分润比例(千分比)
             $json['expired_at'] = $card->expired_at;//过期时间
-            $json['card_no'] = $card->getKey();//卡号
+            $json['card_no'] = $card->mix_id();//卡号
         }
         return $json;
     }

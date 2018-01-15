@@ -78,12 +78,36 @@ class User extends Authenticatable
     /*<!----------------代理VIP卡功能BEGIN-----------------*/
 
     /**
+     * 我的vip分润加成比例(百分比)
+     * @return float
+     */
+    public function myVipProfitShareRate()
+    {
+        $boundCard = $this->myVipCard();
+        if (!$boundCard) {
+            return 0;
+        } else {
+            if ($boundCard->is_frozen) {
+                //冻结
+                return 0;
+            }
+
+            if ($boundCard->expired_at !== null) {
+                //过期判断
+                return strtotime($boundCard->expired_at) > now() ? $boundCard->type->percent : 0;
+            } else {
+                return $boundCard->type->percent;
+            }
+        }
+    }
+
+    /**
      * 我目前被绑定的vip卡
      * @return Card|null
      */
     public function myVipCard()
     {
-        $binding = $this->hasMany(CardUse::class, 'to')->where('type', CardUse::TYPE_BINDING)->orderByDesc('id')->first();
+        $binding = $this->hasMany(CardUse::class, 'to')->where('type', CardUse::TYPE_BINDING)->orderByDesc('id')->with('card')->first();
         if ($binding) {
             return $binding->card;
         } else {

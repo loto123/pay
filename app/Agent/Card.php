@@ -30,9 +30,14 @@ class Card extends Model
         return IdConfuse::mixUpId($this->id, 8, true);
     }
 
-    public function recover_id()
+    /**
+     * 从卡号取得卡id
+     * @param $mixed
+     * @return int
+     */
+    public function recover_id($mixed)
     {
-        $this->attributes['id'] = IdConfuse::recoveryId($this->id, true);
+        return IdConfuse::recoveryId($mixed, true);
     }
 
     /**
