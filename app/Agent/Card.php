@@ -59,8 +59,8 @@ class Card extends Model
     }
 
     //推广员
-    public function promoters()
-    {
-        return $this->belongsToMany('App\user',(new CardUse())->getTable(),'card_id','from');
-    }
+//    public function promoters()
+//    {
+//        return $this->belongsToMany('App\user',(new CardUse())->getTable(),'card_id','from');
+//    }
 }
