@@ -70,6 +70,7 @@ class SystemMessageController extends Controller
     {
         return Admin::grid(SystemMessage::class, function (Grid $grid) {
 
+            $grid->model()->orderBy("id", "DESC");
             $grid->id('ID')->sortable();
             $grid->title('标题');
             $grid->column('send_at', '发送时间')->display(function($send_at){
