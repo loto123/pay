@@ -181,7 +181,15 @@ class ProfitController extends BaseController
      *     name="offset",
      *     in="formData",
      *     description="起始位置(初始默认0或者不传该参数 后续传最后一条数据的id)",
+     *     required=false,
      *     type="integer"
+     *   ),
+     *  @SWG\Parameter(
+     *     name="date",
+     *     in="formData",
+     *     description="月(2017-12形式)",
+     *     required=false,
+     *     type="string"
      *   ),
      *   @SWG\Response(
      *          response=200,
@@ -223,12 +231,19 @@ class ProfitController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'limit' => 'bail|integer',
+                'date' => 'bail|date_format:Y-m',
             ]
         );
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $query = $user->proxy_profit();
+        if ($request->date) {
+            $date = $request->input('date', date('Y-m'));
+            $begin = $date . '-1';
+            $end = date("Y-m-d", strtotime("$begin +1 month"));
+            $query->where('created_at', '>=', $begin)->where('created_at', '<', $end);
+        }
         if ($request->limit) {
             $query->limit($request->limit);
         }
@@ -449,6 +464,14 @@ class ProfitController extends BaseController
      *     name="offset",
      *     in="formData",
      *     description="起始位置(初始默认0或者不传该参数 后续传最后一条数据的id)",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *  @SWG\Parameter(
+     *     name="date",
+     *     in="formData",
+     *     description="月(2017-12形式)",
+     *     required=false,
      *     type="string"
      *   ),
      *   @SWG\Response(
@@ -490,12 +513,19 @@ class ProfitController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'limit' => 'bail|integer',
+                'date' => 'bail|date_format:Y-m',
             ]
         );
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $query = $user->proxy_withdraw();
+        if ($request->date) {
+            $date = $request->input('date', date('Y-m'));
+            $begin = $date . '-1';
+            $end = date("Y-m-d", strtotime("$begin +1 month"));
+            $query->where('created_at', '>=', $begin)->where('created_at', '<', $end);
+        }
         if ($request->limit) {
             $query->limit($request->limit);
         }
