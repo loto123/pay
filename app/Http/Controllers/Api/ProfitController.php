@@ -326,6 +326,13 @@ class ProfitController extends BaseController
      *     required=true,
      *     type="string"
      *   ),
+     *  @SWG\Parameter(
+     *     name="password",
+     *     in="formData",
+     *     description="支付密码",
+     *     required=true,
+     *     type="string"
+     *   ),
      *   @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -356,6 +363,7 @@ class ProfitController extends BaseController
     public function withdraw(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'password' => 'bail|required',
             'amount' => 'required|min:0',
         ]);
         if ($validator->fails()) {
