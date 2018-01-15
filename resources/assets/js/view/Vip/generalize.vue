@@ -191,10 +191,10 @@
                 }
 
                 var _data = {
-                    user_id: this.searchUserMobile
+                    user_id: this.searchMobile
                 }
                 Loading.getInstance().open();
-                request.getInstance().postData('api/promoter/query-promoter', _data).then(res => {
+                request.getInstance().postData('api/promoter/query-none-promoter', _data).then(res => {
                     this.searchData = res.data.data;
                     Loading.getInstance().close();
                 }).catch(err => {
@@ -205,7 +205,7 @@
             //开通vip
             authGener() {
                 var _data = {
-                    user_id: this.searchUserMobile
+                    user_id: this.searchMobile
                 }
                 const htmls = `
                     <div class="pop-content">
@@ -215,18 +215,16 @@
                 MessageBox.confirm('',{
                     message: htmls,
                     title: '确认信息',
-                })
-                .then(
+                }).then(
                     () => {
                         request.getInstance().postData("api/promoter/grant", _data)
                             .then((res) => {
-                                Toast('开通成功');
+                                Toast('授权成功,等待对方接受');
                             })
                             .catch((err) => {
                                 Toast(err.data.msg);
                             })
-                    },
-                    () => {
+                    },() => {
                         //取消操作
                         console.log("已经取消");
                     }

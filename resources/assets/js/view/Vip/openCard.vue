@@ -33,7 +33,7 @@
         </div>
         <div class="middle-content flex flex-align-center">
             <div class="input-wrap flex-7 flex flex-align-center flex-justify-center">
-                <input type="text" v-model="searchUserMobile" placeholder="输入您要开卡的账号">
+                <input type="text" v-model="searchMobile" placeholder="输入您要开卡的账号">
             </div>
 
             <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
@@ -197,7 +197,7 @@
         data() {
             return {
                 isBindVIP: false,
-                searchUserMobile: null,
+                searchMobile: null,
                 searchData: {                 // 搜索出来的数据
                     avatar: null,
                     user_id: null,
@@ -212,13 +212,13 @@
             },
             // 搜索用户
             searchUser() {
-                if (!this.searchUserMobile) {
+                if (!this.searchMobile) {
                     Toast('请输入您要开卡的账号');
                     return
                 }
 
                 var _data = {
-                    user_id: this.searchUserMobile
+                    user_id: this.searchMobile
                 }
                 Loading.getInstance().open();
                 request.getInstance().postData('api/promoter/query-agent', _data).then(res => {
@@ -233,11 +233,11 @@
             openVip() {
                 var _data = {
                     card_no: 12345678,
-                    user_id: this.searchUserMobile
+                    user_id: this.searchMobile
                 }
                 const htmls = `
                     <div class="pop-content">
-                        <div class="isunbind">确认给用户：17673181869 开通VIP卡？</div>
+                        <div class="isunbind">确认给用户：`+this.searchMobile+` 开通VIP卡？</div>
                         <div class="notice">(开卡成功后不可撤回)</div>
                     </div>
                     `;
