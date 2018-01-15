@@ -35,7 +35,7 @@ class Card extends Model
      * @param $mixed
      * @return int
      */
-    public function recover_id($mixed)
+    public static function recover_id($mixed)
     {
         return IdConfuse::recoveryId($mixed, true);
     }
@@ -52,21 +52,28 @@ class Card extends Model
     /**
      * 持有人
      */
-    public function owner()
+    public function owner_user()
     {
         return $this->belongsTo(User::class, 'owner');
     }
 
-    //运营
-    public function operators()
+
+    //库存
+    public function stock()
     {
-        return $this->belongsToMany('App\Admin',(new CardStock())->getTable(),'operator','id');
+        return $this->hasOne('App\Agent\CardStock','card_id','id');
     }
 
-    //分销记录
-    public function distributions()
+    //使用记录
+    public function card_use()
     {
-        return $this->hasOne('App\Agent\CardDistribution','','id');
+        return $this->hasMany('App\Agent\CardUse','card_id','id');
+    }
+
+    //推广员
+    public function promoter()
+    {
+        return $this->belongsTo('App\User','promoter_id','id');
     }
 
 }
