@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Pay\Model\Channel;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
+use App\Pay\Model\MasterContainer;
 use App\Pay\Model\Scene;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawMethod;
@@ -214,6 +215,9 @@ class AccountController extends BaseController {
      *              @SWG\Property(
      *                  property="data",
      *                  type="object",
+     *                  description="余额信息",
+     *                  @SWG\Property(property="balance", type="float", example=20.00,description="可用余额"),
+     *                  @SWG\Property(property="frozen", type="float", example=0.00,description="冻结余额")
      *              )
      *          )
      *      ),
@@ -318,7 +322,8 @@ class AccountController extends BaseController {
         } catch (\Exception $e) {
             return $this->json([], 'error'.$e->getMessage(), 0);
         }
-        return $this->json();
+        $container = MasterContainer::find($user->container->getKey());
+        return $this->json(['balance' => $container->balance, 'frozen' => $container->frozen_balance]);
     }
 
     /**
