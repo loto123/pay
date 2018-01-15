@@ -59,12 +59,7 @@ class CardStock extends Model
         return $this->belongsTo('App\Admin','operator','id');
     }
 
-    //推广员
-    public function promoters()
-    {
-        return $this->belongsToMany('App\User',(new CardDistribution())->getTable(),'stock_id','to_promoter');
-    }
-
+    //分销
     public function distributions()
     {
         return $this->hasOne('App\Agent\CardDistribution','stock_id','id');

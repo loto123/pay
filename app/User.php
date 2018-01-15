@@ -326,4 +326,24 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Agent\CardDistribution','to_promoter','id');
     }
+
+    //持有的vip卡
+    public function owner_cards()
+    {
+        return $this->hasMany('App\Agent\Card','owner','id');
+    }
+
+    //推广员的vip卡
+    public function promoter_cards()
+    {
+        return $this->hasMany('App\Agent\Card','promoter_id','id');
+    }
+
+//    //VIP卡的转出记录
+//    public function agent_card_use()
+//    {
+//        return $this->hasMany('App\Agent\CardUse','from','id');
+//    }
+
+
 }
