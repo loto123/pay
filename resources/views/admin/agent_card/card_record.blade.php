@@ -94,7 +94,7 @@
                             </td>
                             <td>{{$item->card->mix_id()}}</td>
                             <td>
-                                @if($promoter = $item->promoters->first())
+                                @if($promoter = $item->distributions['promoter'])
                                 <div class="user-panel clearfix">
                                     <div class="pull-left">
                                         <img src="{{$promoter['avatar']}}" width="40" height="40" class="img-circle">

@@ -320,4 +320,10 @@ class User extends Authenticatable
     {
         return $value + $this->myVipProfitShareRate();
     }
+
+    //vip卡的分销记录
+    public function distributions()
+    {
+        return $this->hasMany('App\Agent\CardDistribution','to_promoter','id');
+    }
 }
