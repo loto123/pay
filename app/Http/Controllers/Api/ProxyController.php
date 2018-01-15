@@ -94,7 +94,7 @@ class ProxyController extends BaseController {
     public function members(Request $request) {
         $user = $this->auth->user();
         $list = [];
-        $query = $user->child_proxy();
+        $query = User::where("parent_id", $user->id)->where("status", User::STATUS_NORMAL);
         if ($request->type == 0) {
             $query->has("shop");
         } else {
@@ -102,11 +102,12 @@ class ProxyController extends BaseController {
         }
         $count = (int)$query->count();
         if ($request->offset) {
-
+            $query->where("id", "<", User::decrypt($request->offset));
         }
-        $query->limit($request->input('limit', 20));
+        $query->orderBy("id", "DESC")->limit($request->input('limit', 20));
         foreach ($query->get() as $_user) {
             $list[] = [
+                'id' => $_user->en_id(),
                 'avatar' => $_user->avatar,
                 'name' => $_user->name,
                 'mobile' => $_user->mobile

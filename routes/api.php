@@ -201,6 +201,8 @@ $api->version('v1', ['middleware' => ['api.auth', 'block', 'role:promoter']], fu
         $api->get('/cards_used_num', 'PromoterController@cardsUsedNum');
         $api->post('/query-agent', 'PromoterController@queryAgent');
         $api->post('/query-promoter', 'PromoterController@queryPromoter');
+        $api->post('/query-none-promoter', 'PromoterController@queryNonePromoter');
+        $api->post('/card-detail', 'PromoterController@cardDetail');
     });
 
 });

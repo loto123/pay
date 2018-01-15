@@ -40,7 +40,7 @@
                                     </li>
                                     <li class="clearfix">
                                         <div>现有VIP卡:</div>
-                                        <div>{{ $operators->agent_card_count}}</div>
+                                        <div>{{ $operators->card_stock_count}}</div>
                                     </li>
                                 </ul>
                                 <div class="divide-prop-box"><label for="divideProp">添加VIP卡数量</label><input
