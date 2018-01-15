@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Channels\JPushChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,7 +35,7 @@ class ShopApply extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return [JPushChannel::class, 'database'];
     }
 
     /**
@@ -58,6 +59,11 @@ class ShopApply extends Notification
      * @return array
      */
     public function toArray($notifiable)
+    {
+        return $this->data;
+    }
+
+    public function toApp()
     {
         return $this->data;
     }

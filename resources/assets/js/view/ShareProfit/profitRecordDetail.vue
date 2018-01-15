@@ -54,8 +54,13 @@
                 Loading.getInstance().open("加载中...");
                 var self = this;
                 var _id = this.$route.query.id;
-               
-                request.getInstance().getData("api/profit/show/"+_id)
+
+                // 获取当前的模式
+                this.mode = this.$route.query.type;
+                console.log(this.mode);
+
+                if(this.mode == 'profit'){
+                     request.getInstance().getData("api/profit/show/"+_id)
                     .then((res) => {
                         
                         this.created_at=res.data.data.created_at.date;
@@ -70,7 +75,27 @@
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
+                }
+
+                else if(this.mode == "withDraw"){
+                    request.getInstance().getData("api/profit/show/"+_id)
+                    .then((res) => {
+                        
+                        this.created_at=res.data.data.created_at.date;
+                        this.amount=res.data.data.proxy_amount;
+                        this.type=res.data.data.type;
+                        this.nick = res.data.data.user_nick;
+                        this.nickAccount = res.data.data.user_mobile;
+                        Loading.getInstance().close();
+
+                    })
+                    .catch((err) => {
+                        Toast(err.data.msg);
+                        Loading.getInstance().close();
+                    })
+                }
             },
+            
             changeTime(shijianchuo){
                 function add0(m){return m<10?'0'+m:m }
                 

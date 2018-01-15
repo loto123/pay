@@ -34,7 +34,7 @@
               <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
             </div>
             <div class="transfer-accounts" @click="goGive">
-              <mt-button type="primary" size="large" >转账给店铺会员</mt-button>
+              <!-- <mt-button type="primary" size="large" >转账给店铺会员</mt-button> -->
             </div>
 
             <div class="foot flex flex-v flex-align-center">
@@ -127,7 +127,7 @@
     }
 
     .withdraw-cash {
-      margin-top: 2em;
+      margin-top: 4em;
       width: 70%;
     }
 
@@ -158,8 +158,9 @@
 
 <script>
 import topBack from "../../components/topBack";
-import Loading from "../../utils/loading"
-import request from "../../utils/userRequest"
+import Loading from "../../utils/loading";
+import request from "../../utils/userRequest";
+import {Toast} from "mint-ui"
 
 export default{
   components:{ topBack},
@@ -177,7 +178,9 @@ export default{
   },
   methods:{
     goWithdraw(){
-      this.$router.push();
+      this.$router.push('/profit_record/withdraw/');
+      console.log("Go with draw");
+      // this.$router.push();
     },
     goGive(){
       console.log("say go Give");
@@ -185,13 +188,17 @@ export default{
 
     init(){
       
+      Loading.getInstance().open();
       request.getInstance().getData("api/profit/index").then(res=>{
         this.balance = res.data.data.profit;
         this.today_profit = res.data.data.today;
         this.yesterday_profit = res.data.data.yesterday;
         this.total_profit = res.data.data.total;
-        // this.shopId = 
-      }).catch();
+        Loading.getInstance().close();
+      }).catch(err=>{
+        Toast(err.data.msg);
+        Loading.getInstance().close();
+      });
     },
     record(){
       

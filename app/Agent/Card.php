@@ -30,9 +30,14 @@ class Card extends Model
         return IdConfuse::mixUpId($this->id, 8, true);
     }
 
-    public function recover_id()
+    /**
+     * 从卡号取得卡id
+     * @param $mixed
+     * @return int
+     */
+    public function recover_id($mixed)
     {
-        $this->attributes['id'] = IdConfuse::recoveryId($this->id, true);
+        return IdConfuse::recoveryId($mixed, true);
     }
 
     /**
@@ -58,9 +63,10 @@ class Card extends Model
         return $this->belongsToMany('App\Admin',(new CardStock())->getTable(),'operator','id');
     }
 
-    //推广员
-//    public function promoters()
-//    {
-//        return $this->belongsToMany('App\user',(new CardUse())->getTable(),'card_id','from');
-//    }
+    //分销记录
+    public function distributions()
+    {
+        return $this->hasOne('App\Agent\CardDistribution','','id');
+    }
+
 }
