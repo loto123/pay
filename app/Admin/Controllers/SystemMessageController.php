@@ -100,7 +100,7 @@ class SystemMessageController extends Controller
             $form->display('updated_at', '更新时间');
             $form->saved(function (Form $form) use ($id) {
                 if (!$id) {
-                    \App\Jobs\SystemMessage::dispatch($form->model());
+                    \App\Jobs\SystemMessage::dispatch($form->model())->onQueue("messages");
                 }
             });
         });

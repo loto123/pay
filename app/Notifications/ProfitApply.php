@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Channels\JPushChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,7 +30,7 @@ class ProfitApply extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return [JPushChannel::class, 'database'];
     }
 
     /**
@@ -61,6 +62,11 @@ class ProfitApply extends Notification
 
     //设置在notifications表中的data字段对应格式
     public function toDatabase($notifiable)
+    {
+        return $this->data;
+    }
+
+    public function toApp()
     {
         return $this->data;
     }

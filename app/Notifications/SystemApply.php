@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Channels\JPushChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,6 +20,7 @@ class SystemApply extends Notification implements ShouldQueue
     public function __construct($data)
     {
         $this->data=$data;
+        $this->queue = "messages";
     }
 
     /**
@@ -29,7 +31,7 @@ class SystemApply extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return [JPushChannel::class, 'database'];
     }
 
     /**
@@ -61,6 +63,11 @@ class SystemApply extends Notification implements ShouldQueue
 
     //设置在notifications表中的data字段对应格式
     public function toDatabase($notifiable)
+    {
+        return $this->data;
+    }
+
+    public function toApp()
     {
         return $this->data;
     }
