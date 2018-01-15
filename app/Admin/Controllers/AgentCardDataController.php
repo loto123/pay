@@ -8,6 +8,7 @@ use App\Agent\CardDistribution;
 use App\Agent\CardStock;
 use App\Agent\CardType;
 use App\Http\Controllers\Controller;
+use App\Pay\IdConfuse;
 use App\User;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 class AgentCardDataController extends Controller
 {
     use ModelForm;
+    private $limit = 20;
 
     //查询运营
     public function operate(Request $request)
@@ -27,7 +29,7 @@ class AgentCardDataController extends Controller
         $operator_username = $request->operator_username;
 
         if(!empty($operator_username)) {
-            $operators = AdminUser::where('username',$operator_username)->withCount('agent_card')->first();
+            $operators = AdminUser::where('username',$operator_username)->withCount('card_stock')->first();
             if(empty($operators) || !$operators->isRole('operator')) {
                 $_error = '运营不存在';
             }
@@ -204,6 +206,67 @@ class AgentCardDataController extends Controller
 
         return response()->json(['code' => 0,'msg' => '成功为'.$request_promoter.'添加'.$num.'张卡','data' => []]);
 
+    }
+
+    //拨卡记录
+    public function card_record(Request $request)
+    {
+        $allocate_id = $request->allocate_id;
+        $operator_id = $request->operator_id;
+        $card_id = $request->card_id;
+        $en_card_id = IdConfuse::recoveryId($card_id, true);
+        $promoter_id = $request->promoter_id;
+        $date_time = $request->date_time;
+        $begin = '';
+        $end = '';
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $date_time);
+            $begin = $date_time_arr[0];
+            $end = $end = $date_time_arr[1] . ' 23:59:59';
+        }
+
+        $query = CardStock::query()->with(['promoters','allocate_bys','operators']);
+        //运营只能看到自己的
+        if(!Admin::user()->can('create_agent_card') && Admin::user()->isRole('operator')) {
+            $query = $query->where('operator',Admin::user()->id);
+        }
+        if(!empty($allocate_id)) {
+            $query = $query->whereHas('allocate_bys',function($query) use($allocate_id) {
+                $query->where('username',$allocate_id);
+            });
+        }
+        if(!empty($operator_id)) {
+            $query = $query->whereHas('operators',function($query) use($operator_id) {
+                $query->where('username',$operator_id);
+            });
+        }
+        if(!empty($promoter_id)) {
+            $query = $query->whereHas('promoters',function($query) use($promoter_id){
+                $query->where('mobile',$promoter_id);
+            });
+        }
+        if(!empty($card_id)) {
+            $query = $query->where('card_id',$en_card_id);
+        }
+        if(!empty($begin) && !empty($end)) {
+            $query = $query->where('created_at','>=',$begin)->where('created_at','<=',$end);
+        }
+        $list = $query->select()->get();
+        $data = compact('list','allocate_id','operator_id','card_id','promoter_id','date_time');
+        return Admin::content(function (Content $content) use ($data) {
+            $content->header("拨卡记录");
+            $content->body(view('admin.agent_card.card_record', $data));
+        });
+    }
+
+    //VIP卡查询
+    public function cards(Request $request)
+    {
+        $data = [];
+        return Admin::content(function (Content $content) use ($data) {
+            $content->header("VIP卡查询");
+//            $content->body(view('admin.agent_card.card', $data));
+        });
     }
 
 }

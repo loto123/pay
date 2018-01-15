@@ -237,16 +237,18 @@ class CardController extends BaseController
             return $this->json([],'记录无法生成',0);
         }
         //鉴权
-        $auth_res = Reality::authentication(
-            $pay_record->id,
-            $bill_id,
-            date('YmdHis'),
-            $request->card_num,
-            $this->user->id_number,
-            $this->user->name
-        );
-        if ($auth_res !== true) {
-            return $this->json([],$auth_res,0);
+        if(!config('app.debug')) {
+            $auth_res = Reality::authentication(
+                $pay_record->id,
+                $bill_id,
+                date('YmdHis'),
+                $request->card_num,
+                $this->user->id_number,
+                $this->user->name
+            );
+            if ($auth_res !== true) {
+                return $this->json([],$auth_res,0);
+            }
         }
 
         $cards = new UserCard();

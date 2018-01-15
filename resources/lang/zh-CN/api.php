@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'error_password' => '用户名或密码错误',
     'user_block' => '用户已被冻结',
     'error_shop_status' => '店铺不存在或已被关闭',
     'error_shop_perm' => '没有操作该店铺的权限',
