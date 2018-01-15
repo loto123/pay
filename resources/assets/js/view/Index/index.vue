@@ -219,13 +219,14 @@ export default {
             confirmButtonText:'开通',
             showCancelButton: true
         }).then(res=>{
-          
+
            if(res!=confirm){
             return;
           }
 
           request.getInstance().postData("api/proxy/create").then(res=>{
             Toast("成功开通代理...");
+            this.init();
           }).catch(err=>{
             Toast(err.data.msg)
           })
@@ -251,6 +252,7 @@ export default {
 
           request.getInstance().postData("api/proxy/create").then(res=>{
             Toast("成功开通代理...");
+            this.init();
           }).catch(err=>{
             Toast(err.data.msg)
           })

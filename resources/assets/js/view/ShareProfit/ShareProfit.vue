@@ -158,8 +158,9 @@
 
 <script>
 import topBack from "../../components/topBack";
-import Loading from "../../utils/loading"
-import request from "../../utils/userRequest"
+import Loading from "../../utils/loading";
+import request from "../../utils/userRequest";
+import {Toast} from "mint-ui"
 
 export default{
   components:{ topBack},
@@ -177,7 +178,8 @@ export default{
   },
   methods:{
     goWithdraw(){
-      this.$router.push();
+      console.log(goWithdraw);
+      // this.$router.push();
     },
     goGive(){
       console.log("say go Give");
@@ -185,13 +187,17 @@ export default{
 
     init(){
       
+      Loading.getInstance().open();
       request.getInstance().getData("api/profit/index").then(res=>{
         this.balance = res.data.data.profit;
         this.today_profit = res.data.data.today;
         this.yesterday_profit = res.data.data.yesterday;
         this.total_profit = res.data.data.total;
-        // this.shopId = 
-      }).catch();
+        Loading.getInstance().close();
+      }).catch(err=>{
+        Toast(err.data.msg);
+        Loading.getInstance().close();
+      });
     },
     record(){
       

@@ -16,7 +16,6 @@
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
             <div class="month">{{timeInfo}}</div>
             <div class="amount">{{tabStatus[0]?'收益：':'提现：'}}100</div>
-           
         </div>
         <div class="bill-box">
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
@@ -34,15 +33,15 @@
                 <div>图标</div>
             </div>
 
-			<div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
+            <div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
                 <i class="iconfont">
                     &#xe655;
                 </i>
                 <div>暂无数据</div>
-			</div>
+            </div>
 
-            <ul class="bill-list" v-else>
- 
+            <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
+
                 <li  v-for="item in recordList" @click="details(item.id)" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false">
                         <div class="bill-content">
@@ -58,51 +57,15 @@
                     </div>
                 </li>
             </ul>
+
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+                <!--<span>-->
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+                <!--</span>-->
+            </p>
         </div>
-        <!-- <transition name="slide">
-            <div class="sel-type" v-if="showAlert">
-                <div class="sel-type-box">
-                    <h2>选择交易类型</h2>
-                    <ul class="type-list">
-                        <li class="active">
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">店铺转账</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
-                        </li>
-                        <li class="active">
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">店铺转账</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">交易</a>
-                        </li>
-                    </ul>
-                    <div class="cancel-btn">
-                        <a href="javascript:;" @click="cancel">
-                            <mt-button type="default" size="large">取消</mt-button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </transition> -->
+       
     </div>
 </template>
 
@@ -116,14 +79,19 @@
         data() {
             return {
                 showAlert: false,
-                type:null,		//类型
+                type:null,		        //类型
                 created_at:null,		//结束时间
-                size:null,  //数目
+                size:null,              //数目
                 recordList:[],
 
-                _headList:[],      // timeTab数组
+                _headList:[],            // timeTab数组
                 timeInfo:"",
-                tabStatus:[true,false]
+                tabStatus:[true,false],
+
+                wrapperHeight:null,
+                loading: false,
+                allLoaded: false,
+                canLoading:true,
             };
         },
         created(){
@@ -142,178 +110,19 @@
                 this.showAlert = false;
             },
             details(id) {
-                this.$router.push({ path: "/profit_record/detail/?id="+id});
+                if(this.tabStatus[0] == true){
+                    // 分润状态
+                    this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=profit"});
+                }else if(this.tabStatus[1] == true){
+                    // 提现状态
+                    this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=withDraw"});
+                }
+
             },
 
             init(){
-                var data={
-                    type:this.type,
-                    created_at:this.created_at,
-                    size:this.size
-                }
-                // Loading.getInstance().open("加载中...");
-                // this.shopId = this.$route.query.id;
-                // this.recordList  = [{
-                //     type:"分润",
-                //     created_at:"2017-1-1",
-                //     mode:1,
-                //     amount:100,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-1-1",
-                //     mode:1,
-                //     amount:100,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-2-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },
-                // {
-                //     type:"分润",
-                //     created_at:"2017-2-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },
-                // {
-                //     type:"分润",
-                //     created_at:"2017-3-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },
-                // {
-                //     type:"分润",
-                //     created_at:"2017-3-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-3-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-3-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-3-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-3-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // },{
-                //     type:"分润",
-                //     created_at:"2017-4-1",
-                //     mode:1,
-                //     amount:200,
-                //     isTimePanel:false
-                // }
-                // ];
+
+                Loading.getInstance().open();
 
                 var _data = {
                     limit:10,
@@ -321,10 +130,18 @@
                 }
                 
                 Loading.getInstance().open();
-                request.getInstance().postData("api/profit/data",_data)
+
+                if(this.tabStatus[0] == true){
+                    request.getInstance().postData("api/profit/data",_data)
                     .then((res) => {
 
                         var _dataList = res.data.data;
+
+                        if(_dataList.length == 0){
+                            this.recordList = [];
+                            Loading.getInstance().close();
+                            return;
+                        }
 
                         for(var i = 0; i <_dataList.length;i++){
                             _dataList[i].isTimePanel = false;
@@ -335,10 +152,39 @@
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
-                        // console.log(err);
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
+                } else if(this.tabStatus[1] == true){
+                    var _data = {
+                        limit:10,
+                        offset:0
+                    }
+
+                    request.getInstance().postData("api/profit/withdraw/data",_data)
+                    .then((res) => {
+
+                        var _dataList = res.data.data;
+
+                        if(_dataList.length == 0){
+                            Loading.getInstance().close();
+                            this.recordList = [];
+                            return;
+                        }
+                        for(var i = 0; i <_dataList.length;i++){
+                            _dataList[i].isTimePanel = false;
+                        }
+                        
+                        this.recordList = _dataList;
+                        this.buildTimePanel();
+                        Loading.getInstance().close();
+                    })
+                    .catch((err) => {
+                        Toast(err.data.msg);
+                        Loading.getInstance().close();
+                    })
+                }
+                
             },
 
             changeTime(shijianchuo){
@@ -357,6 +203,7 @@
             changeTab(tabindex){
                 this.tabStatus = [false,false];
                 this.tabStatus[tabindex] = true;
+                this.init();
             },
 
             status(type){
@@ -391,6 +238,11 @@
                 }
 
                 for(var i = 0; i <this.recordList.length; i++){
+
+                    if(this.recordList[i].isTimePanel == true){
+                        continue;
+                    }
+
                     if(_head == 0){
                         _head = getTheDate(this.recordList[i].created_at);
                         var data = {
@@ -411,7 +263,6 @@
                     
                 }
 
-                console.log(this._headList);
                 var count=  0;
 
                 this.timeInfo = this._headList[0].time;
@@ -428,14 +279,63 @@
 
                 for(var i = 0; i< this.$refs.timeTab.length; i++){
                     if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
-                        this.timeInfo = this._headList[i].time;
+                        if(i>1){
+                            this.timeInfo = this._headList[i-1].time;
+                        }
                     }
                     
                     // if(this.$refs.timeTab[i].getBoundingClientRect().top > "30") {
                     //     // this.$refs.timeTab[i].className ="";
                     // }
                 }
-            }
+            },
+
+            loadMore() {
+                this.loading =false;
+                if(this.recordList.length==0 || !this.canLoading){
+                    return;
+                }
+
+                this.loading = true;
+
+                var _status = 0;
+
+                for(var i = 0; i<this.tabStatus.length; i++){
+                    if(this.tabStatus[i] == true){
+                    _status = i+1;
+                    }
+                }
+
+                this.canLoading = false;
+
+                setTimeout(() => {
+
+                    var _data = {
+                        limit:50,
+                        offset :[].concat(this.recordList).pop().id,
+                    }
+
+                    request.getInstance().postData('api/profit/data',_data).then(res=>{
+                    if(res.data.data.length == 0){
+                        this.canLoading = false;
+                        this.loading = false;
+                        return;
+                    }
+    
+                    for(var i = 0; i< res.data.data.length; i ++){
+                        res.data.data[i].isTimePanel = false;
+                        this.recordList.push(res.data.data[i]);
+                    }
+
+                    this.canLoading = true;
+                    this.loading = false;
+                    this.buildTimePanel();
+                    }).catch(err=>{
+
+                    });
+                }, 1500);
+            },
+
         },
 
         components: {
