@@ -38,7 +38,7 @@ class Admin extends Administrator
     }
 
     //拥有的VIP卡
-    public function agent_card()
+    public function card_stock()
     {
         return $this->hasMany('App\Agent\CardStock','operator','id');
     }
