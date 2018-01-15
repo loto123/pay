@@ -94,7 +94,7 @@ class User extends Authenticatable
 
             if ($boundCard->expired_at !== null) {
                 //过期判断
-                return strtotime($boundCard->expired_at) > now() ? $boundCard->type->percent : 0;
+                return strtotime($boundCard->expired_at->toDateTimeString()) > now() ? $boundCard->type->percent : 0;
             } else {
                 return $boundCard->type->percent;
             }
@@ -130,7 +130,7 @@ class User extends Authenticatable
      */
     public function myCardsHold()
     {
-        return $this->hasMany(Card::class, 'owner')->where('is_bound', 0)->with('type');
+        return $this->hasMany(Card::class, 'promoter_id')->where('is_bound', 0)->with('type');
     }
 
     /**

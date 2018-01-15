@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class CardDistribution extends Model
 {
-    const UPDATED_AT = false;
+    const UPDATED_AT = null;
     protected $guarded = ['id'];
     protected $table = 'agent_card_distribution';
 

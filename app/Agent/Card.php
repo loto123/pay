@@ -13,7 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Card extends Model
 {
-    const UPDATED_AT = false;
+    const CARD_NO_LENGTH = 8;
+    const UPDATED_AT = null;
     const UNBOUND = 0;
     const BOUND = 1;
     const FROZEN = 1;
@@ -22,22 +23,22 @@ class Card extends Model
     protected $guarded = ['id'];
 
     /**
+     * 从卡号取得卡id
+     * @param $mixed
+     * @return int
+     */
+    public static function recover_id($mixed)
+    {
+        return IdConfuse::recoveryId($mixed, true);
+    }
+
+    /**
      * 取得卡号
      * @return string 8位卡号
      */
     public function mix_id()
     {
-        return IdConfuse::mixUpId($this->id, 8, true);
-    }
-
-    /**
-     * 从卡号取得卡id
-     * @param $mixed
-     * @return int
-     */
-    public function recover_id($mixed)
-    {
-        return IdConfuse::recoveryId($mixed, true);
+        return IdConfuse::mixUpId($this->id, self::CARD_NO_LENGTH, true);
     }
 
     /**
