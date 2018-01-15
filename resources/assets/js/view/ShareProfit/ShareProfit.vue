@@ -163,6 +163,9 @@ import request from "../../utils/userRequest"
 
 export default{
   components:{ topBack},
+  created(){
+    this.init();
+  },
   data(){
     return{
       balance:null,
@@ -179,8 +182,16 @@ export default{
     goGive(){
       console.log("say go Give");
     },
+
     init(){
       
+      request.getInstance().getData("api/profit/index").then(res=>{
+        this.balance = res.data.data.profit;
+        this.today_profit = res.data.data.today;
+        this.yesterday_profit = res.data.data.yesterday;
+        this.total_profit = res.data.data.total;
+        // this.shopId = 
+      }).catch();
     },
     record(){
       

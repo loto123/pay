@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -73,14 +74,14 @@ class ProxyController extends BaseController {
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="path",
-     *     description="页码",
+     *     description="最后记录id",
      *     required=false,
-     *     type="number"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="path",
      *     description="数目",
      *     required=false,
@@ -93,20 +94,26 @@ class ProxyController extends BaseController {
     public function members(Request $request) {
         $user = $this->auth->user();
         $list = [];
-        $query = $user->child_proxy();
+        $query = User::where("parent_id", $user->id)->where("status", User::STATUS_NORMAL);
         if ($request->type == 0) {
             $query->has("shop");
         } else {
             $query->doesntHave("shop");
         }
-        foreach ($query->paginate($request->input('size', 20)) as $_user) {
+        $count = (int)$query->count();
+        if ($request->offset) {
+            $query->where("id", "<", User::decrypt($request->offset));
+        }
+        $query->orderBy("id", "DESC")->limit($request->input('limit', 20));
+        foreach ($query->get() as $_user) {
             $list[] = [
+                'id' => $_user->en_id(),
                 'avatar' => $_user->avatar,
                 'name' => $_user->name,
                 'mobile' => $_user->mobile
             ];
         }
-        return $this->json(['total' => (int)$query->count(), 'list' => $list]);
+        return $this->json(['total' => $count, 'list' => $list]);
     }
 
     /**
@@ -176,5 +183,49 @@ class ProxyController extends BaseController {
             Storage::disk('public')->put($path, QrCode::format('png')->size($size)->margin(1)->generate($url));
         }
         return $this->json(['url' => url('storage/'.$path), 'thumb' => $user->avatar, 'name' => $user->name]);
+    }
+
+    /**
+     * 成为代理
+     * @SWG\Post(
+     *   path="/proxy/create",
+     *   summary="成为代理",
+     *   tags={"代理"},
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function create() {
+        $user = $this->auth->user();
+        /* @var $user \App\User */
+        if ($user->hasRole('agent')) {
+            return $this->json([], trans("api.user_already_is_proxy"), 0);
+        }
+        $role = Role::where("name", 'agent')->first();
+        $user->attachRole($role);
+        return $this->json();
     }
 }

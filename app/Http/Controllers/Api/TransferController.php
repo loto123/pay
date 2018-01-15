@@ -548,9 +548,10 @@ class TransferController extends BaseController
                 //用户减钱
 //                $user->balance = $user->balance - $record->real_amount;
                 //容器转账
-                $user_container = PayFactory::MasterContainer($user->container->id);
-                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
-                $pay_transfer = $user_container->transfer($transfer_container, $record->amount, 0, 0, 0);
+//                $user_container = PayFactory::MasterContainer($user->container->id);
+//                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
+//                $pay_transfer = $user_container->transfer($transfer_container, $record->amount, 0, 0, 0);
+                $pay_transfer = $user->container->transfer($transfer->container, $record->amount, 0, 0, 0);
                 if (!$pay_transfer) {
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }
@@ -614,11 +615,12 @@ class TransferController extends BaseController
                 //红包减钱
                 $transfer->amount = $transfer->amount - $record->amount;
                 //容器转账
-                $user_container = PayFactory::MasterContainer($user->container->id);
-                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
-                $pay_transfer = $transfer_container->transfer($user_container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
+//                $user_container = PayFactory::MasterContainer($user->container->id);
+//                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
+//                $pay_transfer = $transfer_container->transfer($user_container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
+                $pay_transfer = $transfer->container->transfer($user->container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
                 if (!$pay_transfer) {
-                    Log::error('拿钱失败,容器转账失败', [$transfer_container->getKey(), $user_container->getKey(), $record->amount - $tips, $record->fee_amount - $proxy_fee, json_encode($profit_shares)]);
+                    Log::error('拿钱失败,容器转账失败', [$transfer->container->getKey(), $user->container->getKey(), $record->amount - $tips, $record->fee_amount - $proxy_fee, json_encode($profit_shares)]);
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }
             }
@@ -1011,9 +1013,10 @@ class TransferController extends BaseController
             DB::beginTransaction();
             try {
                 //容器转账
-                $user_container = PayFactory::MasterContainer($user->container->id);
-                $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
-                $pay_transfer = $user_container->transfer($shop_container, $request->fee, 0, 0, 0);
+//                $user_container = PayFactory::MasterContainer($user->container->id);
+//                $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
+//                $pay_transfer = $user_container->transfer($shop_container, $request->fee, 0, 0, 0);
+                $pay_transfer = $user->container->transfer($transfer->shop->container, $request->fee, 0, 0, 0);
                 if (!$pay_transfer) {
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }

@@ -43,6 +43,7 @@ class IndexController extends BaseController {
      *                  @SWG\Property(property="avatar", type="string", example="url",description="用户头像"),
      *                  @SWG\Property(property="balance", type="double", example=123.4,description="用户余额"),
      *                  @SWG\Property(property="new_message", type="boolean", example=0,description="是否有新消息"),
+     *                  @SWG\Property(property="is_agent", type="boolean", example=0,description="是否为代理"),
      *              )
      *          )
      *      ),
@@ -60,7 +61,8 @@ class IndexController extends BaseController {
         return $this->json([
             'avatar' => $user->avatar,
             'balance' => $user->container->balance,
-            'new_message' => 0
+            'new_message' => 0,
+            'is_agent' => $user->hasRole("agent") ? 1 : 0
         ]);
     }
 
