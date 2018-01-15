@@ -16,6 +16,8 @@ class Card extends Model
     const UPDATED_AT = false;
     const UNBOUND = 0;
     const BOUND = 1;
+    const FROZEN = 1;
+    const UNFROZEN = 0;
     protected $table = 'agent_card';
     protected $guarded = ['id'];
 
@@ -23,14 +25,14 @@ class Card extends Model
      * 取得卡号
      * @return string 8位卡号
      */
-    public function getIdAttribute($id)
+    public function mix_id()
     {
-        return IdConfuse::mixUpId($id, 8, true);
+        return IdConfuse::mixUpId($this->id, 8, true);
     }
 
-    public function setIdAttribute($value)
+    public function recover_id()
     {
-        $this->attributes['id'] = IdConfuse::recoveryId($value, true);
+        $this->attributes['id'] = IdConfuse::recoveryId($this->id, true);
     }
 
     /**
@@ -49,4 +51,16 @@ class Card extends Model
     {
         return $this->belongsTo(User::class, 'owner');
     }
+
+    //运营
+    public function operators()
+    {
+        return $this->belongsToMany('App\Admin',(new CardStock())->getTable(),'operator','id');
+    }
+
+    //推广员
+//    public function promoters()
+//    {
+//        return $this->belongsToMany('App\user',(new CardUse())->getTable(),'card_id','from');
+//    }
 }

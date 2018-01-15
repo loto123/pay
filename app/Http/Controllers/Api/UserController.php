@@ -533,7 +533,11 @@ class UserController extends BaseController
             return $this->json([], '记录无法生成', 0);
         }
         //调用实名认证接口
-        $reality_res = Reality::identify($pay_record->id,$name,$id_number);
+        if(config('app.debug')) {
+            $reality_res = true;
+        } else {
+            $reality_res = Reality::identify($pay_record->id,$name,$id_number);
+        }
         if($reality_res === true) {
             User::where('id',$this->user->id)->update([
                 'identify_status' => 1,
