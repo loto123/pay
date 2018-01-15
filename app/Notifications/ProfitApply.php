@@ -30,7 +30,7 @@ class ProfitApply extends Notification
      */
     public function via($notifiable)
     {
-        return [JPushChannel::class, 'database'];
+        return ['database', JPushChannel::class];
     }
 
     /**

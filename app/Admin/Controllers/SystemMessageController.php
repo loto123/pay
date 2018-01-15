@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\SystemMessage;
+use Carbon\Carbon;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -100,7 +101,13 @@ class SystemMessageController extends Controller
             $form->display('updated_at', '更新时间');
             $form->saved(function (Form $form) use ($id) {
                 if (!$id) {
-                    \App\Jobs\SystemMessage::dispatch($form->model())->onQueue("messages");
+                    if ($form->model()->send_at) {
+                        $date = Carbon::parse($form->model()->send_at);
+                        \App\Jobs\SystemMessage::dispatch($form->model())->delay($date)->onQueue("messages");
+
+                    } else {
+                        \App\Jobs\SystemMessage::dispatch($form->model())->onQueue("messages");
+                    }
                 }
             });
         });
