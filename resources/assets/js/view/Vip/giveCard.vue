@@ -33,27 +33,26 @@
         </div>
         <div class="middle-content flex flex-align-center">
             <div class="input-wrap flex-7 flex flex-align-center flex-justify-center">
-                <input type="text" v-model="searchUserMobile" @click="searchInput" v-on:blur="inputBlur" placeholder="输入您要开卡的账号">
+                <input type="text" v-model="searchMobile" placeholder="输入您要转卡的推广员账号">
             </div>
-
             <div class="search-btn flex-3 flex flex-align-center flex-justify-center" @click="searchUser">
                 搜索
             </div>
         </div>
-        <div class="search-result">
+        <div class="search-result" v-if="searchData.user_id">
             <div class="user-info flex flex-align-center flex-justify-center">
                 <div class="info">
                     <div class="info-wrap">
-                        <img src="/images/avatar.jpg">
+                        <img :src="searchData.avatar">
                     </div>
                     <div class="info-right">
-                        <span style="margin-top:0.5em;">loto</span>
-                        <span>账号:231321</span>
+                        <span style="margin-top:0.5em;">{{searchData.name}}</span>
+                        <span>账号:{{searchData.user_id}}</span>
                     </div>
                 </div>
             </div>
-            <div class="submit flex flex-justify-center" @click="submit">
-                <mt-button type="primary" size="large" style="width:90%;">开通VIP</mt-button>
+            <div class="submit flex flex-justify-center" @click="giveCard">
+                <mt-button type="primary" size="large" style="width:90%;">转卡</mt-button>
             </div>
         </div>
     </div>
@@ -146,8 +145,7 @@
                     border: none;
                     height: 75%;
                     width: 85%;
-                    text-indent: 2em;
-                    font-size: 1.1em;
+                    font-size: 1em;
                 }
             }
 
@@ -158,29 +156,29 @@
                 border-right: none;
             }
         }
-        .user-info{
-        width:100%;
-        text-align: center;
-        margin: 2em 0 3em 0;
-        .info{
-          width:100%;
-          .info-wrap{
-            >img{
-              width:4em;
-              height:4em;
-              border-radius:50%;
-            }
-          }
+        .user-info {
+            width: 100%;
+            text-align: center;
+            margin: 2em 0 3em 0;
+            .info {
+                width: 100%;
+                .info-wrap {
+                    >img {
+                        width: 4em;
+                        height: 4em;
+                        border-radius: 50%;
+                    }
+                }
 
-          .info-right{
-            >span{
-              margin-top:0.5em;
-              display: block;
-              width:100%;
+                .info-right {
+                    >span {
+                        margin-top: 0.5em;
+                        display: block;
+                        width: 100%;
+                    }
+                }
             }
-          }
         }
-      }
     }
 </style>
 
@@ -188,18 +186,74 @@
     import topBack from '../../components/topBack'
     import Loading from "../../utils/loading"
     import request from "../../utils/userRequest"
-    import {Indicator,Toast} from 'mint-ui'
+    import { MessageBox, Toast } from 'mint-ui'
 
     export default {
         components: { topBack },
         data() {
             return {
-                isBindVIP: false
+                isBindVIP: false,
+                searchMobile: null,
+                searchData: {                 // 搜索出来的数据
+                    avatar: null,
+                    user_id: null,
+                    name: null
+                }
             }
         },
-        methods:{
-            openCard(){
+        methods: {
+            openCard() {
                 this.$router.push('/vipCard/openCard')
+            },
+            // 搜索用户
+            searchUser() {
+                if (!this.searchMobile) {
+                    Toast('请输入您要开卡的账号');
+                    return
+                }
+
+                var _data = {
+                    user_id: this.searchMobile
+                }
+                Loading.getInstance().open();
+                request.getInstance().postData('api/promoter/query-agent', _data).then(res => {
+                    this.searchData = res.data.data;
+                    Loading.getInstance().close();
+                }).catch(err => {
+                    Toast(err.data.msg);
+                    Loading.getInstance().close();
+                });
+            },
+            //开通vip
+            giveCard() {
+                var _data = {
+                    card_no: 12345678,
+                    user_id: this.searchMobile
+                }
+                const htmls = `
+                    <div class="pop-content">
+                        <div class="isunbind">确认转让卡给用户：`+this.searchMobile+`？</div>
+                        <div class="notice">(开卡成功后不可撤回)</div>
+                    </div>
+                    `;
+                MessageBox.confirm('', {
+                    message: htmls,
+                    title: '确认信息',
+                }).then(
+                    () => {
+                        request.getInstance().postData("api/promoter/transfer-card", _data)
+                            .then((res) => {
+                                Toast('转卡成功');
+                                // this.$router.push('/vipCard');
+                            })
+                            .catch((err) => {
+                                Toast(err.data.msg);
+                            })
+                    },() => {
+                        //取消操作
+                        console.log("已经取消");
+                    }
+               );
             }
         }
     }

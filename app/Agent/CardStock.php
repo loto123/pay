@@ -37,6 +37,7 @@ class CardStock extends Model
 //        return DB::table('admin_users')->find($id);
 //    }
 
+
     /**
      * 卡信息
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -58,9 +59,9 @@ class CardStock extends Model
         return $this->belongsTo('App\Admin','operator','id');
     }
 
-    //推广员
-    public function promoters()
+    //分销
+    public function distributions()
     {
-        return $this->belongsToMany('App\User',(new CardDistribution())->getTable(),'stock_id','to_promoter');
+        return $this->hasOne('App\Agent\CardDistribution','stock_id','id');
     }
 }

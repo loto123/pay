@@ -314,4 +314,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProxyWithdraw::class, 'user_id');
     }
+
+    //代理分润百分比
+    public function getPercentAttribute($value)
+    {
+        return $value + $this->myVipProfitShareRate();
+    }
+
+    //vip卡的分销记录
+    public function distributions()
+    {
+        return $this->hasMany('App\Agent\CardDistribution','to_promoter','id');
+    }
+
+    //持有的vip卡
+    public function owner_cards()
+    {
+        return $this->hasMany('App\Agent\Card','owner','id');
+    }
+
+    //推广员的vip卡
+    public function promoter_cards()
+    {
+        return $this->hasMany('App\Agent\Card','promoter_id','id');
+    }
+
+//    //VIP卡的转出记录
+//    public function agent_card_use()
+//    {
+//        return $this->hasMany('App\Agent\CardUse','from','id');
+//    }
+
+
 }

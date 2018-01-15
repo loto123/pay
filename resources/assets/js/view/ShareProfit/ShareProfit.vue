@@ -34,7 +34,7 @@
               <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
             </div>
             <div class="transfer-accounts" @click="goGive">
-              <mt-button type="primary" size="large" >转账给店铺会员</mt-button>
+              <!-- <mt-button type="primary" size="large" >转账给店铺会员</mt-button> -->
             </div>
 
             <div class="foot flex flex-v flex-align-center">
@@ -127,7 +127,7 @@
     }
 
     .withdraw-cash {
-      margin-top: 2em;
+      margin-top: 4em;
       width: 70%;
     }
 
@@ -178,7 +178,8 @@ export default{
   },
   methods:{
     goWithdraw(){
-      console.log(goWithdraw);
+      this.$router.push('/profit_record/withdraw/');
+      console.log("Go with draw");
       // this.$router.push();
     },
     goGive(){

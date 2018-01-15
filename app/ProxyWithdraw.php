@@ -8,6 +8,8 @@ class ProxyWithdraw extends Model
 {
     protected $table = 'proxy_withdraw';
 
+    protected static $skip32_id = '0123456789abcdef0123';
+
     use Skip32Trait;
 
     public function user() {
