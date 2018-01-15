@@ -98,4 +98,6 @@ Route::group([
     $router->post('send_card_to_promoter', 'AgentCardDataController@send_card_to_promoter');
     $router->any('card_record', 'AgentCardDataController@card_record');
     $router->any('cards', 'AgentCardDataController@cards');
+    $router->any('/updates_card/{card_id}','AgentCardDataController@updates_card');
+    $router->any('/card_trace/{card_id}','AgentCardDataController@card_trace');
 });

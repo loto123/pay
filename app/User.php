@@ -339,11 +339,6 @@ class User extends Authenticatable
         return $this->hasMany('App\Agent\Card','promoter_id','id');
     }
 
-//    //VIP卡的转出记录
-//    public function agent_card_use()
-//    {
-//        return $this->hasMany('App\Agent\CardUse','from','id');
-//    }
 
 
 }
