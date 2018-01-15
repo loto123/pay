@@ -14,6 +14,7 @@ Route::group([
     $router->resource('versions',VersionController::class);
     $router->resource('/roles', RoleController::class);
     $router->resource('/permissions', PermissionController::class);
+    $router->resource('/system_message', SystemMessageController::class);
     $router->any('/user/detail/{id}','UserController@details');
 
     $router->any('shop','ShopController@index');
