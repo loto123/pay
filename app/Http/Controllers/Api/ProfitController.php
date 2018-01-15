@@ -210,7 +210,7 @@ class ProfitController extends BaseController
      *                  description="收益明细",
      *                  @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="收益记录ID"),
-     *                          @SWG\Property(property="proxy_percent", type="integer", example=9, description="分成比例"),
+     *                          @SWG\Property(property="proxy_percent", type="double", example=9.9, description="分成比例(百分比)"),
      *                          @SWG\Property(property="proxy_amount", type="double", example=9.9, description="收益"),
      *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="创建时间"),
      *                      )

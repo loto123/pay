@@ -290,4 +290,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProxyWithdraw::class, 'user_id');
     }
+
+    //代理分润百分比
+    public function getPercentAttribute($value)
+    {
+        return $value + vip();
+    }
 }
