@@ -53,6 +53,7 @@ class PromoterController extends BaseController
      */
     public function transferCard()
     {
+        //卡片从推广员->推广员
         return $this->json();
     }
 
@@ -486,7 +487,7 @@ class PromoterController extends BaseController
 
     /**
      * 卡片详情
-     * @SWG\Get(
+     * @SWG\Post(
      *   path="/promoter/card-detail",
      *   summary="卡片详情",
      *   tags={"推广员功能"},
