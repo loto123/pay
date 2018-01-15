@@ -17,7 +17,7 @@
             <div class="month">{{timeInfo}}</div>
             <div class="amount">{{tabStatus[0]?'收益：':'提现：'}}100</div>
         </div>
-        <div class="bill-box">
+        <div class="bill-box"  >
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
                 <div class="left-content">
                     <div class="cur-date">2017年11月</div>
@@ -40,7 +40,7 @@
                 <div>暂无数据</div>
             </div>
 
-            <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
+            <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80" >
 
                 <li  v-for="item in recordList" @click="details(item.id)" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false">
@@ -84,7 +84,7 @@
                 size:null,              //数目
                 recordList:[],
 
-                _headList:[],            // timeTab数组
+                headList:[],            // timeTab数组
                 timeInfo:"",
                 tabStatus:[true,false],
 
@@ -99,7 +99,8 @@
         },
 
         mounted(){
-            window.addEventListener('scroll', this.handleScroll)
+            // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            window.addEventListener('scroll', this.handleScroll);
         },
 
         methods: {
@@ -152,10 +153,12 @@
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
+                        console.error(err);
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
                 } else if(this.tabStatus[1] == true){
+                    
                     var _data = {
                         limit:10,
                         offset:0
@@ -224,55 +227,89 @@
 
             // 建立时间面板
             buildTimePanel(){
-
                 var _head=0;
-                this._headList = [];
+
                 var getTheDate = (timecode)=>{
+                    if(!timecode){
+                        return null;
+                    }
+
+                    var _index = timecode.indexOf("-");
+                    if(_index == -1){
+                        return null
+                    }
                     var _t = timecode.split("-");
                     var data = _t[0]+"年"+_t[1]+"月";
                     return data;
                 }
-
+                
+                var key = 0;
+                // 设置头部
                 if(this.recordList.length!=0){
-                    var _head = this.recordList[0];
+                    if(this.recordList[0].isTimePanel == false){
+                        key = 0;
+                        var _head = getTheDate(this.recordList[key].created_at);
+                    }else if(this.recordList[1].isTimePanel == false){
+                        key = 1;
+                        var _head = getTheDate(this.recordList[key].created_at);
+                    }
+                }
+                
+                if(this.headList.length == 0){
+
+                    var _initialData = {
+                        time:_head,
+                        index:key
+                    }
+
+                    this.headList.push(_initialData);
                 }
 
                 for(var i = 0; i <this.recordList.length; i++){
-
                     if(this.recordList[i].isTimePanel == true){
+                        _head =getTheDate(this.recordList[i+1].created_at);
                         continue;
                     }
 
-                    if(_head == 0){
-                        _head = getTheDate(this.recordList[i].created_at);
-                        var data = {
-                            time:_head,
-                            index:i
-                        }
-                        this._headList.push(data);
-                    }
+                    try{
+                         var label = getTheDate(this.recordList[i].created_at);
+                         
+                        //  当头部与当前的创建时间不一致时
 
-                    if(_head != getTheDate(this.recordList[i].created_at)){
-                        _head = getTheDate(this.recordList[i].created_at);
-                        var data = {
-                            time:_head,
-                            index:i
+                         if(_head != getTheDate(this.recordList[i].created_at)){
+                            // 更新头部
+                            _head = getTheDate(this.recordList[i].created_at);
+                            var data = {
+                                time:_head,
+                                index:i
+                            }
+                          
+                            if(this.headList.length == 0){
+                                this.headList.push(data);
+                            }else {
+                                 this.headList.push(data);
+                            }
                         }
-                        this._headList.push(data);
+                    }catch(e){
+                        console.log(e);
                     }
-                    
+                   
                 }
 
                 var count=  0;
-
-                this.timeInfo = this._headList[0].time;
+                this.timeInfo = this.headList[0].time;
 
                 // 插入数值
-                for(var k=0 ;k<this._headList.length;k++){
-                    this.recordList.splice(this._headList[k].index+count,0,{isTimePanel:true,time:this._headList[k].time});
+                for(let k=0 ;k<this.headList.length;k++){
+                    var _index = this.headList[k].index+count;
+
+                    if(this.recordList[_index].isTimePanel == true){
+                        continue;
+                    }
+                    this.recordList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time});
                     count++;
                 }
-
+                count = 0;
             },
             handleScroll(){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -280,7 +317,7 @@
                 for(var i = 0; i< this.$refs.timeTab.length; i++){
                     if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
                         if(i>1){
-                            this.timeInfo = this._headList[i-1].time;
+                            this.timeInfo = this.headList[i-1].time;
                         }
                     }
                     
@@ -311,7 +348,7 @@
                 setTimeout(() => {
 
                     var _data = {
-                        limit:50,
+                        limit:5,
                         offset :[].concat(this.recordList).pop().id,
                     }
 
@@ -356,6 +393,7 @@
         box-sizing:border-box;
         padding-left: 1em;
         padding-right:1em;
+        display: none;
 
         >div{
             color: #555;
@@ -423,6 +461,12 @@
             .income {
                 margin-left: 1em;
             }
+        }
+
+        ul{
+            width: 100%;
+            height: auto;
+            display: block;
         }
     }
 

@@ -31,7 +31,7 @@ class SystemApply extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return [JPushChannel::class, 'database'];
+        return ['database', JPushChannel::class];
     }
 
     /**
