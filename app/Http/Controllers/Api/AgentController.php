@@ -74,7 +74,7 @@ class AgentController extends Controller
         if ($json['if_bound']) {
             $json['card_name'] = $card->type->name; //卡名
             $json['percent'] = $card->type->percent * 10;//卡分润比例(千分比)
-            $json['expired_at'] = $card->expired_at;//过期时间
+            $json['expired_at'] = $card->expired_at ? $card->expired_at->toDateTimeString() : null;//过期时间
             $json['card_no'] = $card->mix_id();//卡号
         }
         return $json;
