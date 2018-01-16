@@ -77,7 +77,8 @@ class SystemMessageController extends Controller
             $form->display('id', 'ID');
             $form->text('title', '主题');
             $form->datetime('send_at', '发送时间')->help("不填则立即发送");
-            $form->url('link', '链接');
+            $form->editor("content", '内容');
+            $form->text('link', '链接');
             $form->display('created_at', '创建时间');
             $form->display('updated_at', '更新时间');
             $form->saved(function (Form $form) use ($id) {
