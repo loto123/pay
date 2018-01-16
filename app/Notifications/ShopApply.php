@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ShopApply extends Notification
+class ShopApply extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -25,6 +25,7 @@ class ShopApply extends Notification
     {
         //
         $this->data=$data;
+        $this->queue = "messages";
     }
 
     /**

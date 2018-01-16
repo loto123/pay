@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ProfitApply extends Notification
+class ProfitApply extends Notification implements ShouldQueue
 {
     use Queueable;
     public $data;
@@ -20,6 +20,7 @@ class ProfitApply extends Notification
     public function __construct($data)
     {
         $this->data=$data;
+        $this->queue = "messages";
     }
 
     /**
