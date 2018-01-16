@@ -10,20 +10,11 @@
         </div>
         <ul class="card-list">
             <li class="list">
-                <div class="card-content flex flex-v flex-justify-around">
-                    <div class="top-content flex flex-align-baseline flex-justify-center">
-                        <div class="card-type">
-                            <div class="type">
-                                <em>{{card_name}}</em>
-                            </div>
-                            <div class="share-profit">尊享分润比例：{{percent}}‰</div>
-                        </div>
-                        <div class="openCard">
-                            <img src="/images/giveCard.png">
-                        </div>
+                <card :cardName="card_name" :percent="percent" :cardNumber="card_no" style="height:10em;">
+                    <div class="openCard">
+                        <img src="/images/giveCard.png">
                     </div>
-                    <div class="bottom-content card-number">NO.{{card_no}}</div>
-                </div>
+                </card>
             </li>
         </ul>
         <div class="flex flex-justify-center" style="margin:0.5em 0;">
@@ -92,47 +83,18 @@
         .card-list {
             padding: 0 0.6em;
             li {
-                padding-left: 1em;
-                padding-right: 1em;
+                padding: 0 0.6em;
                 box-sizing: border-box;
                 background: url('/images/vipBack2.png') no-repeat;
                 background-size: 100% 100%;
                 width: 100%;
                 border-radius: 5px;
-                .card-content {
-                    height: 10em;
-                }
-                .top-content {
-                    padding-top: 2em;
-                    .card-type {
-                        text-align: center;
-                        margin: auto;
-                        .type {
-                            color: #fff;
-                            em {
-                                font-weight: 700;
-                                display: inline-block;
-                                font-size: 2em;
-                                margin-bottom: 0.2em;
-                            }
-                        }
-                        .share-profit{
-                            color: #826c69;
-                        }
-
-                    }
-                    .openCard {
-                        margin-top: -2em;
-                        img {
-                            width: 40px;
-                        }
+                .openCard {
+                    margin-top: -2em;
+                    img {
+                        width: 40px;
                     }
                 }
-                .card-number {
-                    margin-top:1em;
-                    font-size: 0.9em;
-                }
-
             }
         }
 
@@ -194,12 +156,13 @@
 
 <script>
     import topBack from '../../components/topBack'
+    import card from '../../components/card'
     import Loading from "../../utils/loading"
     import request from "../../utils/userRequest"
     import { MessageBox, Toast } from 'mint-ui'
 
     export default {
-        components: { topBack },
+        components: { topBack,card },
         data() {
             return {
                 isBindVIP: false,

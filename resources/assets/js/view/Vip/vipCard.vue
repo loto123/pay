@@ -26,24 +26,14 @@
 
         <ul class="card-list">
             <li class="list" v-for="item in cardList" @click="openCard(item.id)">
-                <div class="card-content flex flex-v flex-justify-around">
-                    <div class="top-content flex flex-justify-center flex-align-center">
-                        <div class="flex-9 card-type">
-                            <div class="type">
-                                <em>{{item.card_name}}</em>
-                            </div>
-                            <div class="share-profit">尊享分润比例：{{item.percent}}‰</div>
-                        </div>
-                        <div class="flex-1 right-arrow">
-                            <i class="iconfont" style="font-size:1.5em;">
-                                &#xe62e;
-                            </i>
-                        </div>
-                    </div>
-                    <div class="bottom-content card-number">NO.{{item.card_no}}</div>
-                </div>
+                <card :cardName="item.card_name" :percent="item.percent" :cardNumber="item.card_no" style="height:6em;">
+                    <i class="iconfont" style="font-size:1.5em;">
+                        &#xe62e;
+                    </i>
+                </card>
             </li>
         </ul>
+        <passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
     </div>
 </template>
 
@@ -96,7 +86,6 @@
             }
         }
 
-
         .infos {
             height: 4em;
             padding: 0 1em;
@@ -112,31 +101,9 @@
                 background-size: 100% 100%;
                 width: 100%;
                 margin-bottom: 0.5em;
-                padding: 0 0.8em;
-                .card-content {
-                    height: 6em;
-                }
-                .top-content{
-                    .card-type {
-                        text-align: center;
-                        margin: auto;
-                        color: #fff;
-                        .type {
-                            em {
-                                font-weight: 700;
-                                display: inline-block;
-                                font-size: 1.5em;
-                                margin-bottom: 0.2em;
-                            }
-                        }
-                    }
-                    .right-arrow {
-                        color: #fff;
-                    }
-                }
-                .card-number {
-                    font-size: 0.8em;
-                    color: #000;
+                padding: 0 0.6em;
+                .bottom-content{
+                    height: 30% !important;
                 }
             }
         }
@@ -145,17 +112,21 @@
 
 <script>
     import topBack from '../../components/topBack'
+    import card from '../../components/card'
     import Loading from "../../utils/loading"
     import request from "../../utils/userRequest"
+    import passWorld from "../../components/password"
     import { Toast } from 'mint-ui'
 
     export default {
-        components: { topBack },
+        components: { topBack, passWorld, card },
         data() {
             return {
+                showPasswordTag: false,       // 密码弹出开关
                 isBindVIP: false,
                 used_cards: null,
                 cardList: [],
+                curCard_id: null,
                 cardNumber: null      //多少张卡
             }
         },
@@ -163,6 +134,21 @@
             this.init();
         },
         methods: {
+            hidePassword() {
+                this.showPasswordTag = false;
+            },
+            //支付密码验证
+            callBack(password) {
+                var temp = {};
+                temp.password = password;
+                request.getInstance().postData('api/my/pay_password', temp)
+                    .then((res) => {
+                        this.$router.push('/vipCard/openCard?card_id=' + this.curCard_id);
+                    })
+                    .catch((err) => {
+                        Toast(err.data.msg);
+                    })
+            },
             init() {
                 Loading.getInstance().open("加载中...");
                 Promise.all([request.getInstance().getData('api/promoter/cards_used_num'), request.getInstance().getData('api/promoter/cards-reserve')])
@@ -179,7 +165,8 @@
             },
             //开卡
             openCard(card_id) {
-                this.$router.push('/vipCard/openCard?card_id=' + card_id);
+                this.curCard_id = card_id;
+                this.showPasswordTag = true;
             },
             //推广授权
             goGeneralize() {
