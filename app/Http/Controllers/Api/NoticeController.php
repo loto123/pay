@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Notice;
 use App\Notifications\ConfirmExecuteResult;
-use App\Notifications\UserConfirmCallback;
 use App\Profit;
+use App\SystemMessage;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use JWTAuth;
 use Validator;
 
@@ -151,43 +148,45 @@ class NoticeController extends BaseController
         if (!empty($notice) && count($notice)> 0) {
             switch ($type){
                 case '1'://分润
-                foreach ($notice as $item) {
-                    $operator_state = 0;
-                    $operator_options = [];
-                    $profit_table = (new Profit)->getTable();
-                    $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
-                        ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
-                    if (empty($profit)) {
-                        continue;
-                    }
-                    //是否需要操作
-                    if(!empty($item->data['operators'])) {
-                        $operators = $item->data['operators'];
-                        //判断操作是否过期
-                        if(!empty($operators['expire_time'])
-                            && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
+                    foreach ($notice as $item) {
+                        $operator_state = 0;
+                        $operator_options = [];
+                        $profit_table = (new Profit)->getTable();
+                        $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
+                            ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
+                        if (empty($profit)) {
                             continue;
                         }
-                        if(!empty($operators['options']) && isset($operators['options']['color']) && isset($operators['options']['text'])) {
-                            $operator_options = $operators['options'];
+                        //是否需要操作
+                        if(!empty($item->data['operators'])) {
+                            $operators = $item->data['operators'];
+                            //判断操作是否过期
+                            if(!empty($operators['expire_time'])
+                                && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
+                                continue;
+                            }
+                            if(!empty($operators['options']) && isset($operators['options']['color']) && isset($operators['options']['text'])) {
+                                $operator_options = $operators['options'];
+                            }
+                            $operator_state = 1;
                         }
-                        $operator_state = 1;
+                        $list[] = [
+                            'type' => $type,
+                            'notice_id' => $item->id,
+                            'mobile' => $profit->mobile,
+                            'thumb' => $profit->avatar??'',
+                            'amount' => $profit->proxy_amount,
+                            'created_at' => (string)$item->created_at,
+                            'operator_state' => $operator_state,
+                            'operator_options' => $operator_options
+                        ];
                     }
-                    $list[] = [
-                        'type' => $type,
-                        'notice_id' => $item->id,
-                        'mobile' => $profit->mobile,
-                        'thumb' => $profit->avatar??'',
-                        'amount' => $profit->proxy_amount,
-                        'created_at' => (string)$item->created_at,
-                        'operator_state' => $operator_state,
-                        'operator_options' => $operator_options
-                    ];
-                }
-                break;
+                    break;
                 case '2'://用户注册
                 case '3'://系统消息
                     foreach ($notice as $item) {
+                        $title = $item->data['title'];
+                        $content = $item->data['content'];
                         $operator_state = 0;
                         $operator_options = [];
                         //是否需要操作
@@ -203,17 +202,23 @@ class NoticeController extends BaseController
                             }
                             $operator_state = 1;
                         }
+                        //后台消息
+                        if(isset($item->data['param']) && isset($item->data['param']['message_id'])) {
+                            $system = SystemMessage::find($item->data['param']['message_id']);
+                            $content = $system['content'];
+                            $title = $system['title'];
+                        }
                         $list[] = [
                             'type' => $type,
                             'notice_id' => $item->id,
-                            'title' => $item->data['title'],
-                            'content' => $item->data['content'],
+                            'title' => $title,
+                            'content' => $content,
                             'created_at' => (string)$item->created_at,
                             'operator_state' => $operator_state,
                             'operator_options' => $operator_options
                         ];
                     }
-                break;
+                    break;
             }
         }
         return $this->json(compact('count','list'));
@@ -565,9 +570,6 @@ class NoticeController extends BaseController
         }
 
     }
-
-
-
 
 
 }
