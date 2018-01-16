@@ -7,6 +7,7 @@ use App\Agent\Card;
 use App\Agent\CardDistribution;
 use App\Agent\CardStock;
 use App\Agent\CardType;
+use App\Agent\CardUse;
 use App\Http\Controllers\Controller;
 use App\Pay\IdConfuse;
 use App\User;
@@ -193,7 +194,10 @@ class AgentCardDataController extends Controller
                 'state' => CardStock::SOLD,
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
-            DB::table((new Card())->getTable())->whereIn('id',$card_ids)->update(['owner'=>$promoter->id]);
+            DB::table((new Card())->getTable())->whereIn('id',$card_ids)->update([
+                'owner' => $promoter->id,
+                'promoter_id' => $promoter->id,
+            ]);
             DB::table((new CardDistribution())->getTable())->insert($distributions);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -222,36 +226,43 @@ class AgentCardDataController extends Controller
             $end = $end = $date_time_arr[1] . ' 23:59:59';
         }
 
-        $query = CardStock::query()->with(['distributions.promoter','allocate_bys','operators','card']);
+        $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card']);
         //运营只能看到自己的
         if(!Admin::user()->can('create_agent_card') && Admin::user()->isRole('operator')) {
             $query = $query->where('operator',Admin::user()->id);
         }
+
         if(!empty($allocate_id)) {
             $query = $query->whereHas('allocate_bys',function($query) use($allocate_id) {
                 $query->where('username',$allocate_id);
             });
         }
+
         if(!empty($operator_id)) {
             $query = $query->whereHas('operators',function($query) use($operator_id) {
                 $query->where('username',$operator_id);
             });
         }
         if(!empty($promoter_id)) {
-            $query = $query->whereHas('distributions',function($query) use($promoter_id){
-                $query->whereHas('promoter',function ($query) use($promoter_id) {
-                    $query->where('mobile',$promoter_id);
+            $query = $query->whereHas('distributions', function ($query) use ($promoter_id) {
+                $query->whereHas('promoter', function ($query) use ($promoter_id) {
+                    $query->where('mobile', $promoter_id);
                 });
             });
         }
+
         if(!empty($card_id)) {
             $query = $query->where('card_id',$en_card_id);
         }
+
         if(!empty($begin) && !empty($end)) {
             $query = $query->where('created_at','>=',$begin)->where('created_at','<=',$end);
         }
-        $list = $query->select()->get();
-        $data = compact('list','allocate_id','operator_id','card_id','promoter_id','date_time');
+
+        $count = $query->count();
+        $list = $query->paginate($this->limit);
+        $offset = ($request->page>1 ? $request->page-1 : 0 ) * $this->limit;
+        $data = compact('count','offset','list','allocate_id','operator_id','card_id','promoter_id','date_time');
         return Admin::content(function (Content $content) use ($data) {
             $content->header("拨卡记录");
             $content->body(view('admin.agent_card.card_record', $data));
@@ -261,11 +272,91 @@ class AgentCardDataController extends Controller
     //VIP卡查询
     public function cards(Request $request)
     {
-        $data = [];
+        $card_id = $request->card_id;
+        $agent_id = $request->agent_id;
+        $operator_id = $request->operator_id;
+        $promoter_id = $request->promoter_id;
+        $is_bound = $request->is_bound;
+        $is_frozen = $request->is_frozen;
+        $date_time = $request->date_time;
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $date_time);
+            $begin = $date_time_arr[0];
+            $end = $end = $date_time_arr[1] . ' 23:59:59';
+        }
+
+        $query = Card::query()->with(['owner_user', 'stock.operators', 'promoter']);
+        if (!empty($card_id)) {
+            $query = $query->where('id', (new Card())->recover_id($card_id));
+        }
+
+        if (!empty($agent_id)) {
+            $query = $query->whereHas('owner_user', function ($query) use ($agent_id) {
+                $query->where('mobile', $agent_id);
+            })->where('is_bound', Card::BOUND);
+        }
+
+        if (!empty($operator_id)) {
+            $query = $query->whereHas('stock.operators', function ($query) use ($operator_id) {
+                $query->where('username', $operator_id);
+            });
+        }
+
+        if (!empty($promoter_id)) {
+            $query = $query->whereHas('promoter', function ($query) use ($promoter_id) {
+                $query->where('mobile', $promoter_id);
+            });
+        }
+
+        if (!empty($is_bound)) {
+            $query = $query->where('is_bound', $is_bound);
+        }
+
+        if (!empty($is_frozen)) {
+            $query = $query->where('is_frozen', $is_frozen);
+        }
+
+        if (!empty($begin) && !empty($end)) {
+            $query = $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
+        }
+
+        $count = $query->count();
+        $list = $query->paginate($this->limit);
+        $offset = ($request->page > 1 ? $request->page - 1 : 0) * $this->limit;
+
+
+        $data = compact('list','count','offset','card_id','agent_id','operator_id','promoter_id','is_bound','is_frozen');
         return Admin::content(function (Content $content) use ($data) {
             $content->header("VIP卡查询");
             $content->body(view('admin.agent_card.card', $data));
         });
     }
+
+    //冻结vip卡
+    public function updates_card($card_id)
+    {
+        $card_id = (new Card)->recover_id($card_id);
+        $card = Card::find($card_id);
+        $redirect_url = '/admin/agent_card/cards';
+        if(empty($card)) {
+            return redirect($redirect_url)->with('status', '该VIP卡不存在！');
+        }
+        if($card->is_bound == Card::BOUND) {
+            return redirect($redirect_url)->with('status', '未出售的卡不能冻结！');
+        }
+        if($card->is_frozen == Card::FROZEN) {
+            return redirect($redirect_url)->with('status', '该卡已冻结！');
+        }
+        $card->is_frozen = Card::UNFROZEN;
+        if ($card->save()) {
+            return redirect($redirect_url)->with('status', '成功！');
+        } else {
+            return redirect($redirect_url)->with('status', '操作失败！');
+        }
+
+    }
+
+
+
 
 }

@@ -28,6 +28,7 @@ class NoticeController extends Controller
         $data = [
             'type' => $type,
             'content' => $content,
+            'param' => $param
         ];
         $notice_data = '';
         switch ($type) {
@@ -35,7 +36,6 @@ class NoticeController extends Controller
                 if(empty($param)) {
                     return false;
                 }
-                $data['param'] = $param;
                 $data['title'] = empty($title)?'分润通知':$title;
                 $notice_data = new ProfitApply($data);
                 break;

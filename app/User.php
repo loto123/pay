@@ -78,44 +78,6 @@ class User extends Authenticatable
     /*<!----------------代理VIP卡功能BEGIN-----------------*/
 
     /**
-     * 我的vip分润加成比例(百分比)
-     * @return float
-     */
-    public function myVipProfitShareRate()
-    {
-        $boundCard = $this->myVipCard();
-        if (!$boundCard) {
-            return 0;
-        } else {
-            if ($boundCard->is_frozen) {
-                //冻结
-                return 0;
-            }
-
-            if ($boundCard->expired_at !== null) {
-                //过期判断
-                return strtotime($boundCard->expired_at) > now() ? $boundCard->type->percent : 0;
-            } else {
-                return $boundCard->type->percent;
-            }
-        }
-    }
-
-    /**
-     * 我目前被绑定的vip卡
-     * @return Card|null
-     */
-    public function myVipCard()
-    {
-        $binding = $this->hasMany(CardUse::class, 'to')->where('type', CardUse::TYPE_BINDING)->orderByDesc('id')->with('card')->first();
-        if ($binding) {
-            return $binding->card;
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * 我的卡使用记录
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -130,7 +92,7 @@ class User extends Authenticatable
      */
     public function myCardsHold()
     {
-        return $this->hasMany(Card::class, 'owner')->where('is_bound', 0)->with('type');
+        return $this->hasMany(Card::class, 'promoter_id')->where('is_bound', 0)->with('type');
     }
 
     /**
@@ -156,44 +118,48 @@ class User extends Authenticatable
         return $this->hasRole(PromoterGrant::PROMOTER_ROLE_NAME);
     }
 
-    /*----------------代理VIP卡功能END----------------!>*/
-
-    //缴纳的茶水费
     public function tips()
     {
         return $this->hasMany('App\TipRecord', 'user_id', 'id');
     }
 
-    //获得利润
     public function proxy_profit()
     {
         return $this->hasMany('App\Profit', 'proxy', 'id');
     }
 
-    //产出利润
+    /*----------------代理VIP卡功能END----------------!>*/
+
+    //缴纳的茶水费
+
     public function output_profit()
     {
         return $this->hasMany('App\Profit', 'user_id', 'id');
     }
 
-    //参与的交易
+    //获得利润
+
     public function involved_transfer()
     {
         return $this->hasMany('App\TransferUserRelation', 'user_id', 'id');
     }
 
-    //代理
+    //产出利润
+
     public function parent()
     {
         return $this->hasOne('App\User', 'id', 'parent_id');
     }
 
-    //运营
+    //参与的交易
+
     public function operator()
     {
         return $this->hasOne('App\Admin', 'id', 'operator_id');
 
     }
+
+    //代理
 
     /**
      * 我管理的店铺
@@ -203,6 +169,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
+
+    //运营
 
     public function shop_tips()
     {
@@ -223,14 +191,10 @@ class User extends Authenticatable
         return $this->hasOne(OauthUser::class, 'user_id');
     }
 
-    //子代理
-
     public function paypwd_record()
     {
         return $this->hasMany('App\PaypwdValidateRecord', 'user_id');
     }
-
-    //子用户
 
     public function child_proxy()
     {
@@ -240,6 +204,8 @@ class User extends Authenticatable
 //        });
     }
 
+    //子代理
+
     public function child_user()
     {
         return $this->hasMany('App\User', 'parent_id', 'id');
@@ -247,6 +213,8 @@ class User extends Authenticatable
 //            $query->where('roles.name', 'user');
 //        });
     }
+
+    //子用户
 
     public function funds()
     {
@@ -309,21 +277,77 @@ class User extends Authenticatable
         }
     }
 
-    //分润提现记录
     public function proxy_withdraw()
     {
         return $this->hasMany(ProxyWithdraw::class, 'user_id');
     }
 
-    //代理分润百分比
     public function getPercentAttribute($value)
     {
         return $value + $this->myVipProfitShareRate();
     }
 
+    //分润提现记录
+
+    /**
+     * 我的vip分润加成比例(百分比)
+     * @return float
+     */
+    public function myVipProfitShareRate()
+    {
+        $boundCard = $this->myVipCard();
+        if (!$boundCard) {
+            return 0;
+        } else {
+            if ($boundCard->is_frozen) {
+                //冻结
+                return 0;
+            }
+
+            if ($boundCard->expired_at !== null) {
+                //过期判断
+                return strtotime($boundCard->expired_at->toDateTimeString()) > now() ? $boundCard->type->percent : 0;
+            } else {
+                return $boundCard->type->percent;
+            }
+        }
+    }
+
+    //代理分润百分比
+
+    /**
+     * 我目前被绑定的vip卡
+     * @return Card|null
+     */
+    public function myVipCard()
+    {
+        $binding = $this->hasMany(CardUse::class, 'to')->where('type', CardUse::TYPE_BINDING)->orderByDesc('id')->with('card')->first();
+        if ($binding) {
+            return $binding->card;
+        } else {
+            return null;
+        }
+    }
+
     //vip卡的分销记录
+
     public function distributions()
     {
-        return $this->hasMany('App\Agent\CardDistribution','to_promoter','id');
+        return $this->hasMany('App\Agent\CardDistribution', 'to_promoter', 'id');
     }
+
+    //持有的vip卡
+    public function owner_cards()
+    {
+        return $this->hasMany('App\Agent\Card', 'owner', 'id');
+    }
+
+    //推广员的vip卡
+    public function promoter_cards()
+    {
+        return $this->hasMany('App\Agent\Card', 'promoter_id', 'id');
+    }
+
+
+
 }
