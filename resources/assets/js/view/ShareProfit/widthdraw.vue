@@ -46,9 +46,10 @@
       }
     },
     created() {
-    //   this.init();
+      this.init();
     },
     components: { topBack, passWorld },
+
     methods: {
       goIndex() {
         this.$router.push('/index');
@@ -59,12 +60,14 @@
       init() {
         Loading.getInstance().open("加载中...");
           this.shopId = this.$route.query.shopId;
-          Promise.all([request.getInstance().getData("api/account"), request.getInstance().getData("api/shop/account/"+this.shopId)])
+
+          Promise.all([request.getInstance().getData("api/account"), request.getInstance().getData("api/profit/balance")])
           .then(res=>{
             this.has_pay_password = res[0].data.data.has_pay_password;
-            this.balance = res[1].data.data.balance;
+            this.balance = res[1].data.data.profit;
             Loading.getInstance().close();
           }).catch(err=>{
+            Loading.getInstance().close();
             Toast(err.data.msg);
           });
       },
@@ -93,14 +96,17 @@
       },
       //支付密码验证
       callBack(password) {
+
         var temp = {};
         temp.password = password;
         this.shopId = this.$route.query.shopId;
+
         var _data = {
           amount: this.amount,
           password: password
         }
-        Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/shop/transfer/'+this.shopId, _data)])
+
+        Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/profit/withdraw' , _data)])
           .then((res) => {
             Toast('提现成功');
             this.$router.push('/shop/shopAccount?id='+this.shopId);
@@ -108,14 +114,14 @@
           })
           .catch((err) => {
             Toast(err.data.msg);
-          })
+          });
+
       }
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../sass/oo_flex.scss";
   .withdraw-container {
     background: #eee;
     height: 100vh;

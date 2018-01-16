@@ -33,7 +33,7 @@
             <div class="withdraw-cash" @click="goWithdraw">
               <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
             </div>
-            <div class="transfer-accounts" @click="goGive">
+            <div class="transfer-accounts" >
               <!-- <mt-button type="primary" size="large" >转账给店铺会员</mt-button> -->
             </div>
 
@@ -182,10 +182,7 @@ export default{
       console.log("Go with draw");
       // this.$router.push();
     },
-    goGive(){
-      console.log("say go Give");
-    },
-
+   
     init(){
       
       Loading.getInstance().open();
