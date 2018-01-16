@@ -273,7 +273,7 @@ class NoticeController extends BaseController
         if(!empty($notice) && isset($notice['operators'])) {
             $operators = $notice['operators'];
             try{
-                $res = call_user_func($operators['callback_method'],serialize(compact($value,$operators['callback_params'])));
+                $res = call_user_func($operators['callback_method'],compact($value,$operators['callback_params']));
             } catch (\Exception $e) {
                 return $this->json([], '无法响应', 0);
             }
