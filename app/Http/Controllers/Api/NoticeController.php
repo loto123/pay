@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Notice;
+use App\Notifications\ConfirmExecuteResult;
 use App\Notifications\UserConfirmCallback;
 use App\Profit;
 use Illuminate\Http\Request;
@@ -138,7 +139,7 @@ class NoticeController extends BaseController
                 case '1'://分润
                 foreach ($notice as $item) {
                     $operator_state = 0;
-                    $operator_options = ['0'=>'忽略','1'=>'确认'];
+                    $operator_options = [];
                     $profit_table = (new Profit)->getTable();
                     $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
                         ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
@@ -147,8 +148,14 @@ class NoticeController extends BaseController
                     }
                     //是否需要操作
                     if(!empty($item->data['operators'])) {
-                        if(!empty($item->data['operators']['options']) && is_array($item->data['operators']['options'])) {
-                            $operator_options = $item->data['operators']['options'];
+                        $operators = unserialize($item->data['operators']);
+                        //判断操作是否过期
+                        if(!empty($operators['expire_time'])
+                            && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
+                            continue;
+                        }
+                        if(!empty($operators['options']) && is_array($operators['options'])) {
+                            $operator_options = $operators['options'];
                         }
                         $operator_state = 1;
                     }
@@ -168,9 +175,18 @@ class NoticeController extends BaseController
                 case '3'://系统消息
                     foreach ($notice as $item) {
                         $operator_state = 0;
-                        $operator_options = ['0'=>'忽略','1'=>'确认'];
+                        $operator_options = [];
                         //是否需要操作
                         if(!empty($item->data['operators'])) {
+                            $operators = $item->data['operators'];
+                            //判断操作是否过期
+                            if(!empty($operators['expire_time'])
+                                && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
+                                continue;
+                            }
+                            if(!empty($operators['options']) && is_array($operators['options'])) {
+                                $operator_options = $operators['options'];
+                            }
                             $operator_state = 1;
                         }
                         $list[] = [
@@ -196,7 +212,7 @@ class NoticeController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'notice_id' => 'bail|required',
-                'value' =>  'bail|required'
+                'selected_value' =>  'bail|required'
             ],
             [
                 'required' => trans('trans.required'),
@@ -206,7 +222,7 @@ class NoticeController extends BaseController
             return $this->json([], $validator->errors()->first(), 0);
         }
         $notice_id = $request->notice_id;
-        $value = $request->value;
+        $value = $request->selected_value;
         $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
         if(!empty($notice) && isset($notice['operators'])) {
             $operators = $notice['operators'];
@@ -215,7 +231,7 @@ class NoticeController extends BaseController
             } catch (\Exception $e) {
                 return $this->json([], '无法响应', 0);
             }
-            if($res) {
+            if($res == ConfirmExecuteResult::EXECUTE_SUCCESS) {
                 return $this->json();
             } else {
                 return $this->json([],'请求失败',0);
