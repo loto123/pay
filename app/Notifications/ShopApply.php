@@ -16,7 +16,7 @@ class ShopApply extends Notification implements ShouldQueue
 
     const TYPE_INVITE = 1;
 
-    private $data;
+    public $data;
     /**
      * Create a new notification instance.
      *
