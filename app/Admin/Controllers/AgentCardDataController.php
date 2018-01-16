@@ -347,7 +347,7 @@ class AgentCardDataController extends Controller
         if($card->is_frozen == Card::FROZEN) {
             return redirect($redirect_url)->with('status', '该卡已冻结！');
         }
-        $card->is_frozen = Card::UNFROZEN;
+        $card->is_frozen = Card::FROZEN;
         if ($card->save()) {
             return redirect($redirect_url)->with('status', '成功！');
         } else {
@@ -359,23 +359,40 @@ class AgentCardDataController extends Controller
     public function card_trace($card_id)
     {
         $card = Card::where('id',Card::recover_id($card_id))
-            ->with('stock.allocate_bys','stock.operators','card_use','promoter')
+            ->with('stock','card_use','stock.distributions','card_use.fromUser','card_use.toUser')
             ->first();
-        $admin = [];
-        $admin[] = $card->stock['allocate_bys'];
-        $admin[] = $card->stock['operators'];
-        $users[] = $card->card_use;
-        $users[] = $card->promoter;
+        $allocate_bys = AdminUser::find($card->stock['allocate_by']);
+        $operators = AdminUser::find($card->stock['operator']);
+        $card_use = $card->card_use;;
+        $promoter = User::find($card->stock['distributions']['to_promoter']);
 
-        if(!empty($admin)) {
-
+        $list[] = [
+            'from'=> $allocate_bys,
+            'to' => $operators,
+            'created_at' => $card->stock['created_at']
+        ];
+        Log::info([$card->stock['distributions']]);
+        if($operators && $promoter) {
+            $list[] = [
+                'from'=> $operators,
+                'to' => $promoter,
+                'created_at' => $card->stock['distributions']['created_at']
+            ];
         }
 
-        $list = $card;
+        if($card_use) {
+            foreach ($card_use as $item) {
+                $list[] =  [
+                    'from'=> $item->fromUser,
+                    'to' => $item->toUser,
+                    'created_at' => $card->created_at
+                ];
+            }
+        }
         $data = compact('list','card_id');
         return Admin::content(function (Content $content) use ($data) {
             $content->header("流转记录");
-//            $content->body(view('admin.agent_card.card_trace', $data));
+            $content->body(view('admin.agent_card.card_trace', $data));
         });
     }
 

@@ -25,7 +25,7 @@ class CardUse extends Model
      */
     public function fromUser()
     {
-        $this->belongsTo(User::class, 'from');
+        return $this->belongsTo(User::class, 'from');
     }
 
     /**
