@@ -249,7 +249,7 @@
                     user_id: this.searchMobile
                 }
                 Loading.getInstance().open();
-                request.getInstance().postData('api/promoter/query-agent', _data).then(res => {
+                request.getInstance().postData('api/promoter/query-promoter', _data).then(res => {
                     this.searchData = res.data.data;
                     Loading.getInstance().close();
                 }).catch(err => {
@@ -260,7 +260,7 @@
             //开通vip
             giveCard() {
                 var _data = {
-                    card_no: 12345678,
+                    card_no: this.card_no,
                     user_id: this.searchMobile
                 }
                 const htmls = `

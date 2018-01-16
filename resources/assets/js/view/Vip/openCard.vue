@@ -265,7 +265,7 @@
             //开通vip
             openVip() {
                 var _data = {
-                    card_no: 12345678,
+                    card_no: this.card_no,
                     user_id: this.searchMobile
                 }
                 const htmls = `
