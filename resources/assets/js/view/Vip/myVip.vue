@@ -1,5 +1,5 @@
 <template>
-  <div id="my-vip">
+  <div id="my-vip" >
       <div class="top flex flex-v flex-align-center">
           <topBack 
             style="color:#fff;background:#26a2ff;"
@@ -15,10 +15,8 @@
 
           
       </div>
-      <div class="infos flex flex-align-center">
+      <div class="infos flex flex-align-center" v-if="isShow">
           <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益将提高至5‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
-
-
       </div>
 
       <ul>
@@ -125,15 +123,37 @@
 
 <script>
 import topBack from '../../components/topBack'
+import request from '../../utils/userRequest'
+import Loading from '../../utils/loading'
 
 export default {
   components:{topBack},
   data(){
       return {
-          isBindVIP:false
+          isBindVIP:false,
+          isShow:false
       }
   },
+
+  created(){
+      this.init();
+  },
+
+  methods:{
+      init(){
+          Loading.getInstance().open();
+          request.getInstance().getData('api/agent/bound_vip').then(res=>{
+              this.isBindVIP =  res.data.data.if_bound;
+              
+              this.isShow = true;
+              console.log(res);
+              Loading.getInstance().close();
+              
+          }).catch(err=>{
+              Loading.getInstance().close();
+              console.error(err);
+          });
+      }
+  }
 }
 </script>
-
-
