@@ -35,7 +35,6 @@ class PromoterGrant extends Model implements UserConfirmCallback
 
         //添加授权
         static::created(function ($model) {
-            //TODO 向用户发送一条确认消息
             if (!Admin\Controllers\NoticeController::send(
                 [$model->grant_to],
                 3,
