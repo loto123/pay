@@ -371,7 +371,6 @@ class AgentCardDataController extends Controller
             'to' => $operators,
             'created_at' => $card->stock['created_at']
         ];
-        Log::info([$card->stock['distributions']]);
         if($operators && $promoter) {
             $list[] = [
                 'from'=> $operators,
@@ -382,12 +381,13 @@ class AgentCardDataController extends Controller
 
         if($card_use) {
             foreach ($card_use as $item) {
-                $list[] =  [
+                $list[strtotime((string)$card->created_at)] =  [
                     'from'=> $item->fromUser,
                     'to' => $item->toUser,
                     'created_at' => $card->created_at
                 ];
             }
+            krsort($list);
         }
         $data = compact('list','card_id');
         return Admin::content(function (Content $content) use ($data) {
