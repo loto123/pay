@@ -5,9 +5,9 @@
 
 namespace App\Agent;
 
+use App\Admin;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class CardDistribution extends Model
 {
@@ -29,7 +29,7 @@ class CardDistribution extends Model
      */
     public function getOperatorAttribute($by)
     {
-        return DB::table('admin_users')->find($by);
+        return Admin::find($by);
     }
 
     /**

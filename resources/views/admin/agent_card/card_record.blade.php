@@ -1,11 +1,6 @@
 <div class="container-fluid">
     <!--查询开始-->
 
-    @if(session('status'))
-        <div class="alert alert-info"> {{session('status')}}
-        </div>
-    @endif
-
     <div class="box box-primary">
         <div class="box-header">
             <form class="form-horizontal" method="post" action="/admin/agent_card/card_record">
@@ -69,7 +64,7 @@
                     <tbody>
                     @foreach ($list as $key => $item)
                         <tr>
-                            <td>{{$item->id}}</td>
+                            <td>{{$offset+$key+1}}</td>
                             <td>
                                 <div class="user-panel clearfix">
                                     <div class="pull-left">
@@ -117,8 +112,7 @@
                 <p class="no-data text-muted text-center" style="font-size:24px;margin-top:20px;">暂无数据</p>
             @endif
         </div>
-        {{--<div>{{ $list->appends(compact('manager_id', 'shop_id', 'shop_name', 'date_time'))->links() }}</div>--}}
-        <!--店铺统计表格结束-->
+        <div>{{ $list->appends(compact('allocate_id','operator_id','card_id','promoter_id','date_time'))->links() }}</div>
     </div>
 </div>
 

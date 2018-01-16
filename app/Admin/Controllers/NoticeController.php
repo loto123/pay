@@ -22,20 +22,30 @@ class NoticeController extends Controller
      * @param $content string 消息内容
      * @param $title string 消息标题
      * @param $param string 相关参数 当type=1时为必填，表示分润id
+     * @param $operators array 包含字段：
+     *        string callback_method 回调函数
+     *        array callback_params回调参数
+     *        datetime expire_time授权过期时间
+     *        array options操作选项
      * */
-    public static function send(array $user_id_arr, $type, $content, $title='',$param='')
+    public static function send(array $user_id_arr, $type, $content, $title='',$param='',array $operators=[])
     {
         $data = [
             'type' => $type,
             'content' => $content,
+            'param' => $param
         ];
         $notice_data = '';
+
+        if(!empty($operators)){
+            $data['operators'] = $operators;
+        }
+
         switch ($type) {
             case 1:
                 if(empty($param)) {
                     return false;
                 }
-                $data['param'] = $param;
                 $data['title'] = empty($title)?'分润通知':$title;
                 $notice_data = new ProfitApply($data);
                 break;
