@@ -292,6 +292,19 @@ class PromoterController extends BaseController
         if (!$toGrant) {
             return $this->json([], '用户不存在或已经是推广员', 0);
         }
+
+        //已经向用户发送授权申请且未确认且未过期,不能重复发送
+        if (PromoterGrant::where([
+                ['by_admin', 0],
+                ['grant_by', Auth::id()],
+                ['grant_to', $toGrant->getKey()],
+                ['grant_result', PromoterGrant::CONFIRM_PENDING],
+                ['created_at', '>', date('Y-m-d H:i:s', now() - PromoterGrant::CONFIRM_TIMEOUT)]
+            ])->count() > 0
+        ) {
+            return $this->json([], '已经授权过,等待用户确认', 0);
+        }
+
         if (Auth::user()->grantPromoterTo($toGrant)) {
             return $this->json([], '等待用户确认');
         } else {

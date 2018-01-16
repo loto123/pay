@@ -423,11 +423,11 @@
                 var _year = res.getFullYear();
                 var _month = res.getMonth()+1;
                 var _date = _year+'-'+_month;
-                this.choiseDate = _date;
+                this.dateChoise = _date;
                 var _data = {
                     limit:15,
                     offset:0,
-                    date:this.choiseDate
+                    date:this.dateChoise
                 }
 
                 request.getInstance().postData("api/profit/withdraw/data",_data)
