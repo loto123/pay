@@ -18,11 +18,11 @@
                         <div class="openCard">
                             <img :src="item.type == 'binding'? '/images/openCard.png':'/images/giveCard.png'"/>
                         </div>
-                        <div class="card-account">绑定账户<em>{{item.to_user}}</em></div>
+                        <div class="card-account">{{item.type == 'binding'?'绑定':'转让'}}账户<em>{{item.to_user}}</em></div>
                     </div>
                     <div class="bottom-content flex flex-justify-between">
                         <div class="card-number">NO.{{item.card_no}}</div>
-                        <div class="time">转卡时间:{{item.created_at}}</div>
+                        <div class="time">{{item.type == 'binding'?'开卡':'转卡'}}时间:{{item.created_at}}</div>
                     </div>
                 </div>
             </li>
