@@ -4,7 +4,8 @@ import Generalize from '../view/Vip/generalize.vue'
 import OpenCard from '../view/Vip/openCard.vue'
 import GiveCard from '../view/Vip/giveCard.vue'
 import GiveRecord from '../view/Vip/giveRecord.vue'
-import AuthRecord from '../view/Vip/authRecord.vue'
+import AuthRecord from '../view/Vip/authRecord.vue' 
+
 export default [
     {path:'/my_vip',name:'myVip',component:MyVip},
     {path:'/vipCard',name:'vipCard',component:VipCard},
