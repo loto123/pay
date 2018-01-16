@@ -25,12 +25,15 @@ class AgentController extends Controller
      *          response=200,
      *          description="成功返回",
      *          @SWG\Schema(
-     *              @SWG\Property(
+     *     @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
      *                  property="if_bound",
      *                  type="boolean",
      *                  example=true,
      *                  description="是否有绑定vip卡",
-     *              ),
+     *                  ),
      *              @SWG\Property(
      *                  property="card_name",
      *                  type="string",
@@ -55,6 +58,12 @@ class AgentController extends Controller
      *                  example="12345678",
      *                  description="卡号"
      *              )
+     *              ),
+     *     @SWG\Property(
+     *                  property="code",
+     *                  type="integer"
+     *              ),
+     *
      *          )
      *      )
      * )
@@ -77,6 +86,6 @@ class AgentController extends Controller
             $json['expired_at'] = $card->expired_at ? $card->expired_at->toDateTimeString() : null;//过期时间
             $json['card_no'] = $card->mix_id();//卡号
         }
-        return $json;
+        return ['code' => 1, 'data' => $json, 'msg' => ''];
     }
 }

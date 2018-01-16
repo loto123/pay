@@ -6,11 +6,11 @@
 
 namespace App\Agent;
 
+use App\Admin;
 use App\Role;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 
 class PromoterGrant extends Model
 {
@@ -42,7 +42,7 @@ class PromoterGrant extends Model
      */
     public function grantBy()
     {
-        return $this->by_admin ? DB::table('admin_users')->find($this->grant_by) : $this->belongsTo(User::class, 'grant_by');
+        return $this->by_admin ? $this->belongsTo(Admin::class, 'grant_by') : $this->belongsTo(User::class, 'grant_by');
     }
 
     /**
