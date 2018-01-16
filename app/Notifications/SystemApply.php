@@ -67,9 +67,4 @@ class SystemApply extends Notification implements ShouldQueue
     {
         return $this->data;
     }
-
-    public function toApp()
-    {
-        return $this->data;
-    }
 }

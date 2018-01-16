@@ -293,7 +293,7 @@ class PromoterController extends BaseController
             return $this->json([], '用户不存在或已经是推广员', 0);
         }
         if (Auth::user()->grantPromoterTo($toGrant)) {
-            return $this->json([], '授权成功');
+            return $this->json([], '等待用户确认');
         } else {
             return $this->json([], '授权失败', 0);
         }

@@ -65,7 +65,8 @@ class ShopApply extends Notification implements ShouldQueue
         return $this->data;
     }
 
-    public function toApp()
+    //设置在notifications表中的data字段对应格式
+    public function toDatabase($notifiable)
     {
         return $this->data;
     }
