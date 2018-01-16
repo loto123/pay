@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 class PromoterGrant extends Model implements UserConfirmCallback
 {
     const PROMOTER_ROLE_NAME = 'promoter';
-    const UPDATED_AT = 'confirmed_at';//确认时间
+    const UPDATED_AT = null;//确认时间
 
     const CONFIRM_PENDING = 0; //等待确认
     const CONFIRM_ACCEPT = 1; //同意授权
@@ -93,6 +93,7 @@ class PromoterGrant extends Model implements UserConfirmCallback
                 $this->grantTo->attachRole(Role::where('name', self::PROMOTER_ROLE_NAME)->first());
             }
             $this->grant_result = $selected_value;
+            $this->confirmed_at = date('Y-m-d H:i:s');
             $this->save();
         } catch (\Exception $e) {
             DB::rollback();
