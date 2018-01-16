@@ -205,8 +205,54 @@ class NoticeController extends BaseController
         return $this->json(compact('count','list'));
     }
 
+    /**
+     * @SWG\Post(
+     *   path="/notice/operator",
+     *   summary="消息操作",
+     *   tags={"消息"},
+     *   @SWG\Parameter(
+     *     name="notice_id",
+     *     in="formData",
+     *     description="消息id",
+     *     required=true,
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="selected_value",
+     *     in="formData",
+     *     description="选中按钮的值",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *  @SWG\Response(
+     *        response=200,
+     *        description="成功返回",
+     *        @SWG\Schema(
+     *            @SWG\Property(
+     *                property="code",
+     *                type="integer",
+     *                example=1
+     *            ),
+     *            @SWG\Property(
+     *                property="msg",
+     *                type="string"
+     *            ),
+     *            @SWG\Property(
+     *                property="data",
+     *                type="object"
+     *            )
+     *        )
+     *    ),
+     *   @SWG\Response(
+     *       response="default",
+     *       description="错误返回",
+     *       @SWG\Schema(ref="#/definitions/ErrorModel")
+     *    )
+     * )
+     * @return \Illuminate\Http\Response
+     */
     //消息操作
-    public function operators(Request $request)
+    public function operator(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
         $validator = Validator::make($request->all(),
@@ -316,7 +362,6 @@ class NoticeController extends BaseController
             'callback_params' => $request->callback_params??[],
             'expire_time' => $request->expire_time,
         ];
-        Log::info($request->all());
         if (\App\Admin\Controllers\NoticeController::send($user_id_arr,$type,$content,$title,$param,$operators)) {
             return $this->json();
         } else {
