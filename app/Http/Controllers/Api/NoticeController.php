@@ -64,7 +64,14 @@ class NoticeController extends BaseController
      *                      @SWG\Property(property="mobile", type="string", example="17673161856",description="分润来源者的账号"),
      *                      @SWG\Property(property="thumb", type="string", example="url",description="分润来源者的头像"),
      *                      @SWG\Property(property="amount", type="string", example="10",description="分润金额"),
-     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
+     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间"),
+     *                      @SWG\Property(property="operator_state", type="integer", example="1",description="是否可操作：1：是,0:不是"),
+     *                      @SWG\Property(property="operator_options", type="array",
+     *                           @SWG\Items(
+     *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
+     *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
+     *                           )
+     *                      )
      *                  )
      *              )
      *          )
@@ -91,7 +98,14 @@ class NoticeController extends BaseController
      *                      @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
      *                      @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
      *                      @SWG\Property(property="content", type="string", example="这是一条系统消息...",description="消息内容"),
-     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
+     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间"),
+     *                      @SWG\Property(property="operator_state", type="integer", example="1",description="是否可操作：1：是,0:不是"),
+     *                      @SWG\Property(property="operator_options", type="array",
+     *                           @SWG\Items(
+     *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
+     *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
+     *                           )
+     *                      )
      *                  )
      *              )
      *          )
@@ -148,13 +162,13 @@ class NoticeController extends BaseController
                     }
                     //是否需要操作
                     if(!empty($item->data['operators'])) {
-                        $operators = unserialize($item->data['operators']);
+                        $operators = $item->data['operators'];
                         //判断操作是否过期
                         if(!empty($operators['expire_time'])
                             && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
                             continue;
                         }
-                        if(!empty($operators['options']) && is_array($operators['options'])) {
+                        if(!empty($operators['options']) && isset($operators['options']['color']) && isset($operators['options']['text'])) {
                             $operator_options = $operators['options'];
                         }
                         $operator_state = 1;
