@@ -448,6 +448,7 @@ class PromoterController extends BaseController
         $where = [
             ['by_admin', 0],
             ['grant_by', Auth::id()],
+            ['grant_result', PromoterGrant::CONFIRM_ACCEPT]
         ];
         if ($offset > 0) {
             $where [] = ['id', '<', $offset];
