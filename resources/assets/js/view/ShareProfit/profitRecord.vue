@@ -15,7 +15,7 @@
 
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
             <div class="month">{{timeInfo}}</div>
-            <div class="amount">{{tabStatus[0]?'收益：':'提现：'}}100</div>
+            <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}100</div>
         </div>
         <div class="bill-box"  >
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
@@ -42,18 +42,18 @@
 
             <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80" >
 
-                <li  v-for="item in recordList" @click="details(item.id)" :class="{'time-tab':item.isTimePanel}">
-                    <a href="javascript:;" class="flex" v-if="item.isTimePanel == false">
+                <li  v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
+                    <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="details(item.id)">
                         <div class="bill-content">
-                            <h5>{{status(item.type)}}</h5>
+                            <h5>{{tabStatus[0]?"分润":"提现"}}(分润比例 {{Number(item.proxy_percent)*10}} ‰)</h5>
                             <div class="time">{{item.created_at}}</div>
                         </div>
-                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
+                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.proxy_amount}}</div>
                     </a>
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
                         <div class="month">{{item.time}}</div>
-                        <div class="amount">100</div>
+                        <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}100</div>
                     </div>
                 </li>
             </ul>
@@ -118,7 +118,6 @@
                     // 提现状态
                     this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=withDraw"});
                 }
-
             },
 
             init(){
@@ -206,6 +205,7 @@
             changeTab(tabindex){
                 this.tabStatus = [false,false];
                 this.tabStatus[tabindex] = true;
+                this.headList = [];
                 this.init();
             },
 
@@ -279,16 +279,26 @@
                          if(_head != getTheDate(this.recordList[i].created_at)){
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
-                            var data = {
-                                time:_head,
-                                index:i
+                            var _year = _head.split("年")[0];
+                            var _month = _head.split("年")[1].split("月")[0];
+
+                            var _timer = _year+"-"+_month;
+
+                            var _data = {
+                                date : _timer
                             }
+                            // 获取当月的总额度
+                            request.getInstance().postData("api/profit/count",_data)
+                                .then(res=>{
+                                    console.log(res.data.data.total);
+                                    var data = {
+                                        time:_head,
+                                        index:i,
+                                        total:res.data.data.total
+                                    }
+                                    this.headList.push(data);
+                                }).catch();
                           
-                            if(this.headList.length == 0){
-                                this.headList.push(data);
-                            }else {
-                                 this.headList.push(data);
-                            }
                         }
                     }catch(e){
                         console.log(e);
@@ -327,6 +337,7 @@
                 }
             },
 
+            // 上滑加载更多
             loadMore() {
                 this.loading =false;
                 if(this.recordList.length==0 || !this.canLoading){
@@ -353,21 +364,24 @@
                     }
 
                     request.getInstance().postData('api/profit/data',_data).then(res=>{
-                    if(res.data.data.length == 0){
-                        this.canLoading = false;
-                        this.loading = false;
-                        return;
-                    }
-    
-                    for(var i = 0; i< res.data.data.length; i ++){
-                        res.data.data[i].isTimePanel = false;
-                        this.recordList.push(res.data.data[i]);
-                    }
+                        if(res.data.data.length == 0){
+                            this.canLoading = false;
+                            this.loading = false;
+                            return;
+                        }
+        
+                        for(var i = 0; i< res.data.data.length; i ++){
+                            res.data.data[i].isTimePanel = false;
+                            this.recordList.push(res.data.data[i]);
+                        }
 
-                    this.canLoading = true;
-                    this.loading = false;
-                    this.buildTimePanel();
+                        this.canLoading = true;
+                        this.loading = false;
+                        this.buildTimePanel();
                     }).catch(err=>{
+
+                        Loading.getInstance().close;
+                        Toast(err.data.meg);
 
                     });
                 }, 1500);
@@ -393,7 +407,6 @@
         box-sizing:border-box;
         padding-left: 1em;
         padding-right:1em;
-        display: none;
 
         >div{
             color: #555;
