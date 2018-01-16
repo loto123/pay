@@ -40,6 +40,6 @@ class SystemMessage implements ShouldQueue
         //
         $user_ids = User::where("status", 0)->pluck('id')->toArray();
 
-        NoticeController::send($user_ids, 3, strip_tags($this->message->content), $this->message->title);
+        NoticeController::send($user_ids, 3, strip_tags($this->message->content), $this->message->title, ['message_id' => $this->message->id]);
     }
 }
