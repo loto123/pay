@@ -64,7 +64,14 @@ class NoticeController extends BaseController
      *                      @SWG\Property(property="mobile", type="string", example="17673161856",description="分润来源者的账号"),
      *                      @SWG\Property(property="thumb", type="string", example="url",description="分润来源者的头像"),
      *                      @SWG\Property(property="amount", type="string", example="10",description="分润金额"),
-     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
+     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间"),
+     *                      @SWG\Property(property="operator_state", type="integer", example="1",description="是否可操作：1：是,0:不是"),
+     *                      @SWG\Property(property="operator_options", type="array",
+     *                           @SWG\Items(
+     *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
+     *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
+     *                           )
+     *                      )
      *                  )
      *              )
      *          )
@@ -91,7 +98,14 @@ class NoticeController extends BaseController
      *                      @SWG\Property(property="notice_id", type="string", example="1",description="消息id"),
      *                      @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
      *                      @SWG\Property(property="content", type="string", example="这是一条系统消息...",description="消息内容"),
-     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间")
+     *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间"),
+     *                      @SWG\Property(property="operator_state", type="integer", example="1",description="是否可操作：1：是,0:不是"),
+     *                      @SWG\Property(property="operator_options", type="array",
+     *                           @SWG\Items(
+     *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
+     *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
+     *                           )
+     *                      )
      *                  )
      *              )
      *          )
@@ -148,13 +162,13 @@ class NoticeController extends BaseController
                     }
                     //是否需要操作
                     if(!empty($item->data['operators'])) {
-                        $operators = unserialize($item->data['operators']);
+                        $operators = $item->data['operators'];
                         //判断操作是否过期
                         if(!empty($operators['expire_time'])
                             && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
                             continue;
                         }
-                        if(!empty($operators['options']) && is_array($operators['options'])) {
+                        if(!empty($operators['options']) && isset($operators['options']['color']) && isset($operators['options']['text'])) {
                             $operator_options = $operators['options'];
                         }
                         $operator_state = 1;
@@ -205,8 +219,54 @@ class NoticeController extends BaseController
         return $this->json(compact('count','list'));
     }
 
+    /**
+     * @SWG\Post(
+     *   path="/notice/operator",
+     *   summary="消息操作",
+     *   tags={"消息"},
+     *   @SWG\Parameter(
+     *     name="notice_id",
+     *     in="formData",
+     *     description="消息id",
+     *     required=true,
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="selected_value",
+     *     in="formData",
+     *     description="选中按钮的值",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *  @SWG\Response(
+     *        response=200,
+     *        description="成功返回",
+     *        @SWG\Schema(
+     *            @SWG\Property(
+     *                property="code",
+     *                type="integer",
+     *                example=1
+     *            ),
+     *            @SWG\Property(
+     *                property="msg",
+     *                type="string"
+     *            ),
+     *            @SWG\Property(
+     *                property="data",
+     *                type="object"
+     *            )
+     *        )
+     *    ),
+     *   @SWG\Response(
+     *       response="default",
+     *       description="错误返回",
+     *       @SWG\Schema(ref="#/definitions/ErrorModel")
+     *    )
+     * )
+     * @return \Illuminate\Http\Response
+     */
     //消息操作
-    public function operators(Request $request)
+    public function operator(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
         $validator = Validator::make($request->all(),
@@ -227,7 +287,7 @@ class NoticeController extends BaseController
         if(!empty($notice) && isset($notice['operators'])) {
             $operators = $notice['operators'];
             try{
-                $res = call_user_func($operators['callback_method'],serialize(compact($value,$operators['callback_params'])));
+                $res = call_user_func($operators['callback_method'],compact($value,$operators['callback_params']));
             } catch (\Exception $e) {
                 return $this->json([], '无法响应', 0);
             }
@@ -316,7 +376,6 @@ class NoticeController extends BaseController
             'callback_params' => $request->callback_params??[],
             'expire_time' => $request->expire_time,
         ];
-        Log::info($request->all());
         if (\App\Admin\Controllers\NoticeController::send($user_id_arr,$type,$content,$title,$param,$operators)) {
             return $this->json();
         } else {

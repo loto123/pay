@@ -299,7 +299,7 @@ class PromoterController extends BaseController
                 ['grant_by', Auth::id()],
                 ['grant_to', $toGrant->getKey()],
                 ['grant_result', PromoterGrant::CONFIRM_PENDING],
-                ['created_at', '>', date('Y-m-d H:i:s', now() - PromoterGrant::CONFIRM_TIMEOUT)]
+                ['created_at', '>', date('Y-m-d H:i:s', time() - PromoterGrant::CONFIRM_TIMEOUT)]
             ])->count() > 0
         ) {
             return $this->json([], '已经授权过,等待用户确认', 0);
@@ -448,6 +448,7 @@ class PromoterController extends BaseController
         $where = [
             ['by_admin', 0],
             ['grant_by', Auth::id()],
+            ['grant_result', PromoterGrant::CONFIRM_ACCEPT]
         ];
         if ($offset > 0) {
             $where [] = ['id', '<', $offset];
