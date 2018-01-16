@@ -24,9 +24,9 @@ class NoticeController extends Controller
      * @param $param string 相关参数 当type=1时为必填，表示分润id
      * @param $operators array 包含字段：
      *        string callback_method 回调函数
-     *        array callback_params回调参数
-     *        datetime expire_time授权过期时间
-     *        array options操作选项
+     *        array callback_params 回调参数
+     *        string expire_time 授权过期时间 秒
+     *        array options 操作选项
      * */
     public static function send(array $user_id_arr, $type, $content, $title='',$param='',array $operators=[])
     {
@@ -38,7 +38,7 @@ class NoticeController extends Controller
         $notice_data = '';
 
         if(!empty($operators)){
-            $data['operators'] = $operators;
+            $data['operators'] = serialize($operators);
         }
 
         switch ($type) {

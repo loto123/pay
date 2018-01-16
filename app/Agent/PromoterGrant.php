@@ -13,6 +13,7 @@ use App\Role;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PromoterGrant extends Model implements UserConfirmCallback
 {
@@ -22,6 +23,8 @@ class PromoterGrant extends Model implements UserConfirmCallback
     const CONFIRM_PENDING = 0; //等待确认
     const CONFIRM_ACCEPT = 1; //同意授权
     const CONFIRM_DENY = 2; //拒绝授权
+
+    const CONFIRM_TIMEOUT = 60 * 60 * 24 * 3; //确认过期时间
 
     protected $table = 'agent_promoter_grant';
     protected $guarded = ['id'];
@@ -33,6 +36,29 @@ class PromoterGrant extends Model implements UserConfirmCallback
         //添加授权
         static::created(function ($model) {
             //TODO 向用户发送一条确认消息
+            if (!Admin\Controllers\NoticeController::send(
+                [$model->grant_to],
+                3,
+                "{$model->grantBy->name} 正在为您开通推广员资格,请确认",
+                '恭喜你获得晋升推广员的资格！',
+                '',
+                [
+                    //回调函数
+                    'callback_method' => [$model, 'confirm'],
+                    'callback_params' => [],
+                    //3天内确认
+                    'expire_time' => self::CONFIRM_TIMEOUT,
+                    //确认选项
+                    'options' => [
+                        self::CONFIRM_DENY => ['text' => '拒绝', 'color' => '#f00'],
+                        self::CONFIRM_ACCEPT => ['text' => '接受', 'color' => '#0f0'],
+                    ]
+                ]
+            )
+            ) {
+                Log::error('授权发送确认消息失败');
+
+            }
         });
     }
 
