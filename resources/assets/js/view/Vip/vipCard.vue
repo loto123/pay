@@ -25,7 +25,7 @@
         </div>
 
         <ul class="card-list">
-            <li class="list" v-for="item in cardList" @click="openCard(item.card_no)">
+            <li class="list" v-for="item in cardList" @click="openCard(item.id)">
                 <div class="card-content flex flex-v flex-justify-around">
                     <div class="top-content flex flex-justify-center flex-align-center">
                         <div class="flex-9 card-type">
