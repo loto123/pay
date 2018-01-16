@@ -38,7 +38,10 @@ class NoticeController extends Controller
         $notice_data = '';
 
         if(!empty($operators)){
-            $data['operators'] = serialize($operators);
+            if(isset($operators['callback_method'])) {
+                $operators['callback_method'] = serialize($operators['callback_method']);
+            }
+            $data['operators'] = $operators;
         }
 
         switch ($type) {
