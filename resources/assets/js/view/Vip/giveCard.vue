@@ -249,7 +249,7 @@
                     user_id: this.searchMobile
                 }
                 Loading.getInstance().open();
-                request.getInstance().postData('api/promoter/query-agent', _data).then(res => {
+                request.getInstance().postData('api/promoter/query-promoter', _data).then(res => {
                     this.searchData = res.data.data;
                     Loading.getInstance().close();
                 }).catch(err => {
