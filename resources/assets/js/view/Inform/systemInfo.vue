@@ -14,12 +14,18 @@
     </div>
     <div class="systemInfo-box">
       <ul>
-        <li  v-for="item in systemList" @click="goDetails(item.notice_id)">
-          <div class="info-header flex flex-align-end flex-justify-between">
+        <li v-for="item in systemList" @click="goDetails(item.notice_id)">
+          <div class="top-info flex flex-align-end flex-justify-between">
             <div class="title">{{item.title}}</div>
             <div class="date">{{item.created_at}}</div>
           </div>
-          <div class="content">{{item.content}}</div>
+          <div class="bottom-info flex flex-align-center flex-justify-between">
+            <div class="content flex-7">{{item.content}}</div>
+            <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around">
+              <span class="cancel">忽略</span>
+              <span class="agree">接受</span>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -30,18 +36,18 @@
 <script>
   import request from '../../utils/userRequest';
   import topBack from "../../components/topBack.vue";
-  import { MessageBox,Toast } from "mint-ui";
+  import { MessageBox, Toast } from "mint-ui";
   import Loading from '../../utils/loading'
 
   export default {
     data() {
       return {
-        systemList:[]
+        systemList: []
       };
     },
-    created(){
-			this.systemInfo();
-		},
+    created() {
+      this.systemInfo();
+    },
     components: { topBack },
     methods: {
       goShareBenefit() {
@@ -51,43 +57,43 @@
         this.$router.push("/userRegister");
       },
       goDetails(e) { //详情
-        this.$router.push("/systemInfo/system_Details"+"?notice_id="+e);
+        this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
       },
       systemInfo() { //列表
-        var self=this;
+        var self = this;
         Loading.getInstance().open("加载中...");
 
-				request.getInstance().getData('api/notice/index?type=3')
-					.then((res) => {
-            self.systemList=res.data.data.list;
+        request.getInstance().getData('api/notice/index?type=3')
+          .then((res) => {
+            self.systemList = res.data.data.list;
             Loading.getInstance().close();
-					})
-					.catch((err) => {
+          })
+          .catch((err) => {
             Toast(err.data.msg);
             Loading.getInstance().close();
-					})
+          })
       },
       //清空消息
-			del(type) {
-				MessageBox.confirm("是否确认清空全部消息?", "温馨提示").then(
-				() => {
-					request.getInstance().postData("api/notice/delete?type=" + type)
-					.then((res) => {
-					Toast({
-						message: "清空成功",
-						duration: 800
-					});
-					this.systemInfo();
-					})
-					.catch((err) => {
-					  Toast(err.data.msg);
-					})
-				},
-				() => {
-					//取消操作
-				}
-				);
-			}
+      del(type) {
+        MessageBox.confirm("是否确认清空全部消息?", "温馨提示").then(
+          () => {
+            request.getInstance().postData("api/notice/delete?type=" + type)
+              .then((res) => {
+                Toast({
+                  message: "清空成功",
+                  duration: 800
+                });
+                this.systemInfo();
+              })
+              .catch((err) => {
+                Toast(err.data.msg);
+              })
+          },
+          () => {
+            //取消操作
+          }
+        );
+      }
     }
   };
 </script>
@@ -128,7 +134,7 @@
     li {
       border: 1px solid #ddd;
       padding: 0.5em 1em;
-      .info-header {
+      .top-info{
         margin-bottom: 0.7em;
         .date {
           color: #999;
@@ -139,14 +145,36 @@
           font-size: 1em;
         }
       }
-      .content {
-        color: #999;
-        font-size: 0.8em;
-        width: 100%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
+      .bottom-info{
+        .content {
+          color: #999;
+          font-size: 0.8em;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
       }
+    }
+  }
+
+  .btn-wrap {
+    width: 40%;
+    height: 100%;
+    .cancel {
+      background: #ccc;
+      color: #fff;
+    }
+    .agree {
+      background: #00cc00;
+      color: #fff;
+    }
+    >span {
+      width: 40%;
+      height: 70%;
+      border-radius: 0.3em;
+      text-align: center;
+      line-height: 2em;
+      font-size: 0.7em;
     }
   }
 </style>
