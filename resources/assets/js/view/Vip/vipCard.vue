@@ -86,7 +86,6 @@
             }
         }
 
-
         .infos {
             height: 4em;
             padding: 0 1em;
@@ -102,9 +101,9 @@
                 background-size: 100% 100%;
                 width: 100%;
                 margin-bottom: 0.5em;
-                padding: 0 0.8em;
+                padding: 0 0.6em;
                 .bottom-content{
-                    height: 20% !important;
+                    height: 30% !important;
                 }
             }
         }
@@ -144,7 +143,6 @@
                 temp.password = password;
                 request.getInstance().postData('api/my/pay_password', temp)
                     .then((res) => {
-                        Toast('成功');
                         this.$router.push('/vipCard/openCard?card_id=' + this.curCard_id);
                     })
                     .catch((err) => {

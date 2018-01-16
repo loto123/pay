@@ -83,8 +83,7 @@
         .card-list {
             padding: 0 0.6em;
             li {
-                padding-left: 1em;
-                padding-right: 1em;
+                padding: 0 0.6em;
                 box-sizing: border-box;
                 background: url('/images/vipBack2.png') no-repeat;
                 background-size: 100% 100%;
