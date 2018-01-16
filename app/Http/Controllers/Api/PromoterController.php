@@ -539,7 +539,7 @@ class PromoterController extends BaseController
      */
     public function cardsUsedNum()
     {
-        return ['used_cards' => CardUse::where('from', Auth::id())->count()];
+        return $this->json(['used_cards' => CardUse::where('from', Auth::id())->count()]);
     }
 
 
