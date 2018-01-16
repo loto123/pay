@@ -4,10 +4,11 @@ namespace App\Notifications;
 
 use App\Channels\JPushChannel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ShopApply extends Notification
+class ShopApply extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -15,6 +16,7 @@ class ShopApply extends Notification
 
     const TYPE_INVITE = 1;
 
+    public $data;
     /**
      * Create a new notification instance.
      *
@@ -23,7 +25,8 @@ class ShopApply extends Notification
     public function __construct($data)
     {
         //
-        $this->data=$data;
+        $this->data = $data;
+        $this->queue = "messages";
     }
 
     /**
@@ -62,7 +65,8 @@ class ShopApply extends Notification
         return $this->data;
     }
 
-    public function toApp()
+    //设置在notifications表中的data字段对应格式
+    public function toDatabase($notifiable)
     {
         return $this->data;
     }

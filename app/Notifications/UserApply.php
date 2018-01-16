@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserApply extends Notification
+class UserApply extends Notification implements ShouldQueue
 {
     use Queueable;
     public $data;
@@ -20,6 +20,7 @@ class UserApply extends Notification
     public function __construct($data)
     {
         $this->data=$data;
+        $this->queue = "messages";
     }
 
     /**
@@ -62,11 +63,6 @@ class UserApply extends Notification
 
     //设置在notifications表中的data字段对应格式
     public function toDatabase($notifiable)
-    {
-        return $this->data;
-    }
-
-    public function toApp()
     {
         return $this->data;
     }
