@@ -18,6 +18,7 @@ class CreateSystemMessagesTable extends Migration
             $table->string("title");
             $table->timestamp("send_at")->nullable()->default(null);
             $table->string("link");
+            $table->text("content");
             $table->timestamps();
         });
     }

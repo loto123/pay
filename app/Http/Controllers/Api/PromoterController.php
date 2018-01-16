@@ -79,15 +79,15 @@ class PromoterController extends BaseController
         $cardId = Card::recover_id($request->card_no);
         $card = Card::where('promoter_id', Auth::id())->find($cardId);
         if (!$card) {
-            return $this->json([], '该卡不存在');
+            return $this->json([], '该卡不存在', 0);
         }
 
         if ($card->is_bound) {
-            return $this->json([], '该卡已被使用');
+            return $this->json([], '该卡已被使用', 0);
         }
 
         if ($card->is_frozen) {
-            return $this->json([], '该卡被冻结');
+            return $this->json([], '该卡被冻结', 0);
         }
 
         //验证推广员
@@ -96,7 +96,7 @@ class PromoterController extends BaseController
         })->first();
 
         if (!$transferTo) {
-            return $this->json([], '该推广员不存在');
+            return $this->json([], '该推广员不存在', 0);
         }
 
         DB::beginTransaction();
@@ -186,15 +186,15 @@ class PromoterController extends BaseController
         $cardId = Card::recover_id($request->card_no);
         $card = Card::where('promoter_id', Auth::id())->find($cardId);
         if (!$card) {
-            return $this->json([], '该卡不存在');
+            return $this->json([], '该卡不存在', 0);
         }
 
         if ($card->is_bound) {
-            return $this->json([], '该卡已被使用');
+            return $this->json([], '该卡已被使用', 0);
         }
 
         if ($card->is_frozen) {
-            return $this->json([], '该卡被冻结');
+            return $this->json([], '该卡被冻结', 0);
         }
 
         //验证代理身份
@@ -203,12 +203,12 @@ class PromoterController extends BaseController
         })->first();
 
         if (!$bindTo) {
-            return $this->json([], '该代理不存在');
+            return $this->json([], '该代理不存在', 0);
         }
 
         //只有更高分润比例卡可以绑定
         if ($bindTo->myVipProfitShareRate() >= $card->type->percent) {
-            return $this->json([], '有生效中的vip卡,只能绑定更高级卡片');
+            return $this->json([], '有生效中的vip卡,只能绑定更高级卡片', 0);
         }
 
         DB::beginTransaction();
@@ -292,8 +292,21 @@ class PromoterController extends BaseController
         if (!$toGrant) {
             return $this->json([], '用户不存在或已经是推广员', 0);
         }
+
+        //已经向用户发送授权申请且未确认且未过期,不能重复发送
+        if (PromoterGrant::where([
+                ['by_admin', 0],
+                ['grant_by', Auth::id()],
+                ['grant_to', $toGrant->getKey()],
+                ['grant_result', PromoterGrant::CONFIRM_PENDING],
+                ['created_at', '>', date('Y-m-d H:i:s', now() - PromoterGrant::CONFIRM_TIMEOUT)]
+            ])->count() > 0
+        ) {
+            return $this->json([], '已经授权过,等待用户确认', 0);
+        }
+
         if (Auth::user()->grantPromoterTo($toGrant)) {
-            return $this->json([], '授权成功');
+            return $this->json([], '等待用户确认');
         } else {
             return $this->json([], '授权失败', 0);
         }

@@ -94,6 +94,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>序号</th>
                         <th>卡号</th>
                         <th>运营</th>
                         <th>推广员</th>
@@ -106,6 +107,7 @@
                     <tbody>
                     @foreach ($list as $key => $item)
                         <tr>
+                            <td>{{$offset+$key+1}}</td>
                             <td>{{$item->mix_id()}}</td>
                             <td>
                                 @if($promoter = $item->stock['operators'])
@@ -157,8 +159,10 @@
                             <td>{{$item->is_bound?'已使用':'未使用'}}</td>
                             <td>{{$item->is_frozen?'已冻结':'未冻结'}}</td>
                             <td>
-                                <button><a href="{{admin_url()}}">流转记录</a></button>
-                                <button><a href="{{admin_url()}}">冻结</a></button>
+                                <button><a href="card_trace/{{$item->mix_id()}}">流转记录</a></button>
+                                @if($item->is_frozen==$item::UNFROZEN)
+                                <button><a href="updates_card/{{$item->mix_id()}}">冻结</a></button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -168,7 +172,8 @@
                 <p class="no-data text-muted text-center" style="font-size:24px;margin-top:20px;">暂无数据</p>
             @endif
         </div>
-        <div>{{ $list->links() }}</div>
+        <div>{{ $list->appends(compact('card_id','agent_id','operator_id','promoter_id',
+            'is_bound','is_frozen','date_time'))->links() }}</div>
     </div>
 </div>
 

@@ -5,6 +5,9 @@
         >
             <div class="flex flex-reverse flex-align-center header-right">
                 <!-- <a href="javascript:;" @click="show">筛选</a> -->
+                <i class="iconfont" style="font-size:1.4em;" @click="filterDate">
+                    &#xe704;
+                </i>
             </div>
         </topBack>
 
@@ -17,6 +20,7 @@
             <div class="month">{{timeInfo}}</div>
             <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{tabTotal}}</div>
         </div>
+
         <div class="bill-box"  >
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
                 <div class="left-content">
@@ -66,6 +70,18 @@
             </p>
         </div>
        
+        <mt-datetime-picker
+            v-model="dateModel"
+            class="profit-date"
+            type="date"
+            ref="picker"
+            year-format="{value} 年"
+            month-format="{value} 月"
+            :startDate="startDate"
+            :endDate="endDate"
+            @confirm="choiseDate">
+        </mt-datetime-picker>
+
     </div>
 </template>
 
@@ -74,13 +90,14 @@
     import topBack from "../../components/topBack.vue";
     import Loading from '../../utils/loading'
     import { Toast } from "mint-ui";
+    import moment from "moment"
 
     export default {
         data() {
             return {
                 showAlert: false,
-                type:null,		        //类型
-                created_at:null,		//结束时间
+                type:null,              //类型
+                created_at:null,        //结束时间
                 size:null,              //数目
                 recordList:[],
 
@@ -93,6 +110,11 @@
                 loading: false,
                 allLoaded: false,
                 canLoading:true,
+
+                dateModel:null,
+                dateChoise:null,    // 选择的日期
+                startDate:new Date("2017,1,1"),
+                endDate:new Date()
             };
         },
         created(){
@@ -124,9 +146,9 @@
             init(){
 
                 Loading.getInstance().open();
-
+                this.dateChoise = null;
                 var _data = {
-                    limit:10,
+                    limit:15,
                     offset:0
                 }
                 
@@ -153,14 +175,13 @@
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
-                        console.error(err);
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
                 } else if(this.tabStatus[1] == true){
                     
                     var _data = {
-                        limit:10,
+                        limit:15,
                         offset:0
                     }
 
@@ -210,22 +231,6 @@
                 this.init();
             },
 
-            status(type){
-                let result='';
-                switch(type){
-                    case 0: result='充值'; break;
-                    case 1: result='提现'; break;
-                    case 2: result='交易收入'; break;
-                    case 3: result='交易支出'; break;
-                    case 4: result='转账到店铺'; break;
-                    case 5: result='店铺转入'; break;
-                    case 6: result='交易手续费'; break;
-                    case 7: result='提现手续费'; break;
-                    default: result='打赏店家费'
-                }
-                return result;
-            },
-
             // 建立时间面板
             buildTimePanel(){
                 var _head=0;
@@ -260,7 +265,6 @@
                     // 获取当月的总额度
                     request.getInstance().postData("api/profit/count")
                         .then(res=>{
-                            console.log(res.data.data.total);
                             var _initialData = {
                                 time:_head,
                                 index:key,
@@ -284,7 +288,6 @@
                          var label = getTheDate(this.recordList[i].created_at);
                          
                         //  当头部与当前的创建时间不一致时
-
                          if(_head != getTheDate(this.recordList[i].created_at)){
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
@@ -327,7 +330,6 @@
                         // 获取当月的总额度
                         request.getInstance().postData("api/profit/count",_data)
                             .then(res=>{
-                                console.log(res.data.data.total);
                                 this.recordList[m].total = res.data.data.total;
                             }).catch();
                     }
@@ -346,7 +348,6 @@
                     if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
                         if(i>1){
                             this.timeInfo = this.headList[i-1].time;
-                            console.log(this.headList[i-1]);
                             this.tabTotal = this.headList[i-1].total;
                         }
                     }
@@ -382,6 +383,10 @@
                         limit:5,
                         offset :[].concat(this.recordList).pop().id,
                     }
+                    
+                    if (this.dateChoise!=null){
+                        _data.date = this.dateChoise;
+                    }
 
                     request.getInstance().postData('api/profit/data',_data).then(res=>{
                         if(res.data.data.length == 0){
@@ -407,6 +412,48 @@
                 }, 1500);
             },
 
+            filterDate(){
+                this.$refs.picker.open();
+                // console.log(this.$refs.picker);
+                // console.log(this.$refs.picker.$children[0].$children[0].$children[2]);
+                this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
+            },
+
+            choiseDate(res){
+                var _year = res.getFullYear();
+                var _month = res.getMonth()+1;
+                var _date = _year+'-'+_month;
+                this.dateChoise = _date;
+                var _data = {
+                    limit:15,
+                    offset:0,
+                    date:this.dateChoise
+                }
+
+                request.getInstance().postData("api/profit/withdraw/data",_data)
+                    .then((res) => {
+
+                        var _dataList = res.data.data;
+
+                        if(_dataList.length == 0){
+                            Loading.getInstance().close();
+                            this.recordList = [];
+                            return;
+                        }
+                        for(var i = 0; i <_dataList.length;i++){
+                            _dataList[i].isTimePanel = false;
+                        }
+                        
+                        this.recordList = _dataList;
+                        this.buildTimePanel();
+                        Loading.getInstance().close();
+                    })
+                    .catch((err) => {
+                        Toast(err.data.msg);
+                        Loading.getInstance().close();
+                    })
+            }
+
         },
 
         components: {
@@ -416,6 +463,7 @@
 </script>
 
 <style lang="scss" scoped>
+
     .tab-fixed{
         position: fixed;
         top:5em;

@@ -94,7 +94,7 @@ class IdConfuse
         for ($i = 0; $i < $len; $i++) {
             $tmp = $number_only ? $numericMapFlip[$padded[$i]] : $numAlphaMapFlip[$i % 2 == 0 ? 'even' : 'odd'][$padded[$i]];
             $tmp -= $i;
-            $padded[$i] = $tmp >= 0 ? $tmp % 10 : 10 + $tmp % 10;
+            $padded[$i] = $tmp >= 0 ? $tmp % 10 : (10 + $tmp % 10) % 10;
         }
 
         return (int)$padded;
