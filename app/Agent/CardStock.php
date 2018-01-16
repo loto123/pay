@@ -7,16 +7,14 @@
 namespace App\Agent;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class CardStock extends Model
 {
-    protected $table = 'agent_card_stock';
+    const SALE = 0;
+    const SOLD = 1;
     public $timestamps = false;
-    protected $guarded = ['id'];
-
-    const SALE = 0; //待售
-    const SOLD = 1; //已售
+    protected $table = 'agent_card_stock'; //待售
+    protected $guarded = ['id']; //已售
 //    /**
 //     * 配卡人
 //     * @param $id
@@ -36,7 +34,6 @@ class CardStock extends Model
 //    {
 //        return DB::table('admin_users')->find($id);
 //    }
-
 
     /**
      * 卡信息
@@ -59,14 +56,9 @@ class CardStock extends Model
         return $this->belongsTo('App\Admin','operator','id');
     }
 
-    //推广员
-    public function promoters()
-    {
-        return $this->belongsToMany('App\User',(new CardDistribution())->getTable(),'stock_id','to_promoter');
-    }
-
+    //分销
     public function distributions()
     {
-        return $this->hasOne('App\Agent\CardDistribution','stock_id','id');
+        return $this->hasOne('App\Agent\CardDistribution', 'stock_id', 'id');
     }
 }

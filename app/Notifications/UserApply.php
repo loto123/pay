@@ -4,14 +4,14 @@ namespace App\Notifications;
 
 use App\Channels\JPushChannel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class UserApply extends Notification
 {
     use Queueable;
     public $data;
+
     /**
      * Create a new notification instance.
      *
@@ -30,7 +30,7 @@ class UserApply extends Notification
      */
     public function via($notifiable)
     {
-        return [JPushChannel::class, 'database'];
+        return ['database', JPushChannel::class];
     }
 
     /**
