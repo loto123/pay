@@ -2,9 +2,6 @@
     <div id="my-vip">
         <div class="top flex flex-v flex-align-center">
             <topBack style="background:#fff;" :title="'VIP开卡'">
-                <div class="flex flex-reverse flex-align-center header-right">
-                    <a href="#" class="option-record">操作记录</a>
-                </div>
             </topBack>
         </div>
         <div class="tab-menu flex flex-align-center flex-justify-center">
@@ -12,17 +9,20 @@
             <div class="flex flex-align-center flex-justify-center active">转卡给推广员</div>
         </div>
         <ul class="card-list">
-            <li class="flex flex-align-center">
-                <div class="flex-3 card-number">NO.123456</div>
-                <div class="flex-5 card-type">
-                    <div class="type">
-                        <em>VIP</em>
-                        <span>金卡</span>
+            <li class="list">
+                <div class="card-content flex flex-v flex-justify-around">
+                    <div class="top-content flex flex-align-baseline flex-justify-center">
+                        <div class="card-type">
+                            <div class="type">
+                                <em>{{card_name}}</em>
+                            </div>
+                            <div class="share-profit">尊享分润比例：{{percent}}‰</div>
+                        </div>
+                        <div class="openCard">
+                            <img src="/images/giveCard.png">
+                        </div>
                     </div>
-                    <div class="share-profit">尊享分润比例：5‰</div>
-                </div>
-                <div class="flex-2">
-                    转卡
+                    <div class="bottom-content card-number">NO.{{card_no}}</div>
                 </div>
             </li>
         </ul>
@@ -61,7 +61,7 @@
 <style lang="scss" scoped>
     #my-vip {
         padding-top: 2em;
-        background: #fff;
+        background: #F0F1F5;
         min-height: 100vh;
         box-sizing: border-box;
         .top {
@@ -77,7 +77,7 @@
             width: 100%;
             height: 3em;
             margin-bottom: 1em;
-            border-top: 1px solid #ccc;
+            background: #fff;
             >div {
                 width: 50%;
                 height: 100%;
@@ -95,37 +95,44 @@
                 padding-left: 1em;
                 padding-right: 1em;
                 box-sizing: border-box;
-                height: 10em;
-                background: #E2CD8F;
+                background: url('/images/vipBack2.png') no-repeat;
+                background-size: 100% 100%;
                 width: 100%;
-                margin-bottom: 0.5em;
-                color: #fff;
                 border-radius: 5px;
-                .card-number {
-                    height: 8em;
-                    line-height: 14em;
-                    font-weight: 700;
-                    font-size: 1em;
+                .card-content {
+                    height: 10em;
                 }
-                .card-type {
-                    text-align: center;
-                    margin: auto;
-                    .type {
-                        em,
-                        span {
-                            font-weight: 700;
-                            display: inline-block;
+                .top-content {
+                    padding-top: 2em;
+                    .card-type {
+                        text-align: center;
+                        margin: auto;
+                        .type {
+                            color: #fff;
+                            em {
+                                font-weight: 700;
+                                display: inline-block;
+                                font-size: 2em;
+                                margin-bottom: 0.2em;
+                            }
                         }
-                        em {
-                            font-size: 2em;
-                            margin-bottom: 0.2em;
+                        .share-profit{
+                            color: #826c69;
                         }
-                        span {
-                            font-size: 1em;
+
+                    }
+                    .openCard {
+                        margin-top: -2em;
+                        img {
+                            width: 40px;
                         }
                     }
-
                 }
+                .card-number {
+                    margin-top:1em;
+                    font-size: 0.9em;
+                }
+
             }
         }
 
@@ -135,6 +142,7 @@
             box-sizing: border-box;
             border: 1px solid #bbb;
             margin: auto;
+            background: #fff;
             .input-wrap {
                 width: 100%;
                 height: 3em;
@@ -152,8 +160,10 @@
             .search-btn {
                 width: 100%;
                 height: 100%;
-                border: 1px solid #bbb;
+                border: 1px solid #26a2ff;
                 border-right: none;
+                background: #26a2ff;
+                color:#fff;
             }
         }
         .user-info {
@@ -198,12 +208,35 @@
                     avatar: null,
                     user_id: null,
                     name: null
-                }
+                },
+                card_name:null,     //卡的名字
+                card_no:null,       //卡号
+                percent:null,        //分润比例
+                card_id:null
             }
         },
+        created(){
+            this.init();
+        },
         methods: {
+            init(){
+                var data={
+                    card_id:this.$route.query.card_id
+                }
+                Loading.getInstance().open();
+                request.getInstance().postData('api/promoter/card-detail',data).then(res => {
+                    this.card_name = res.data.data.card_name;
+                    this.card_no = res.data.data.card_no;
+                    this.percent = res.data.data.percent;
+                    Loading.getInstance().close();
+                }).catch(err => {
+                    Toast(err.data.msg);
+                    Loading.getInstance().close();
+                });
+            },
             openCard() {
-                this.$router.push('/vipCard/openCard')
+                this.card_id=this.$route.query.card_id;
+                this.$router.push('/vipCard/openCard?card_id='+this.card_id);
             },
             // 搜索用户
             searchUser() {
@@ -227,7 +260,7 @@
             //开通vip
             giveCard() {
                 var _data = {
-                    card_no: 12345678,
+                    card_no: this.card_no,
                     user_id: this.searchMobile
                 }
                 const htmls = `
