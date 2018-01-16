@@ -15,7 +15,7 @@
 
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
             <div class="month">{{timeInfo}}</div>
-            <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}100</div>
+            <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{tabTotal}}</div>
         </div>
         <div class="bill-box"  >
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
@@ -45,7 +45,7 @@
                 <li  v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="details(item.id)">
                         <div class="bill-content">
-                            <h5>{{tabStatus[0]?"分润":"提现"}}(分润比例 {{Number(item.proxy_percent)*10}} ‰)</h5>
+                            <h5>{{tabStatus[0]?"分润":"提现"}}(分润比例 {{item.proxy_percent}})</h5>
                             <div class="time">{{item.created_at}}</div>
                         </div>
                         <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.proxy_amount}}</div>
@@ -53,7 +53,7 @@
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
                         <div class="month">{{item.time}}</div>
-                        <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}100</div>
+                        <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{item.total}}</div>
                     </div>
                 </li>
             </ul>
@@ -86,6 +86,7 @@
 
                 headList:[],            // timeTab数组
                 timeInfo:"",
+                tabTotal:"",
                 tabStatus:[true,false],
 
                 wrapperHeight:null,
@@ -256,13 +257,21 @@
                 }
                 
                 if(this.headList.length == 0){
+                    // 获取当月的总额度
+                    request.getInstance().postData("api/profit/count")
+                        .then(res=>{
+                            console.log(res.data.data.total);
+                            var _initialData = {
+                                time:_head,
+                                index:key,
+                                total:res.data.data.total
+                            }
+                            this.headList.push(_initialData);
+                            this.timeInfo = this.headList[0].time;
+                            this.tabTotal = this.headList[0].total;
 
-                    var _initialData = {
-                        time:_head,
-                        index:key
-                    }
+                        }).catch();
 
-                    this.headList.push(_initialData);
                 }
 
                 for(var i = 0; i <this.recordList.length; i++){
@@ -279,25 +288,13 @@
                          if(_head != getTheDate(this.recordList[i].created_at)){
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
-                            var _year = _head.split("年")[0];
-                            var _month = _head.split("年")[1].split("月")[0];
-
-                            var _timer = _year+"-"+_month;
-
-                            var _data = {
-                                date : _timer
+                            
+                            var data = {
+                                time:_head,
+                                index:i,
+                                total:"加载中..."
                             }
-                            // 获取当月的总额度
-                            request.getInstance().postData("api/profit/count",_data)
-                                .then(res=>{
-                                    console.log(res.data.data.total);
-                                    var data = {
-                                        time:_head,
-                                        index:i,
-                                        total:res.data.data.total
-                                    }
-                                    this.headList.push(data);
-                                }).catch();
+                            this.headList.push(data);
                           
                         }
                     }catch(e){
@@ -307,27 +304,50 @@
                 }
 
                 var count=  0;
-                this.timeInfo = this.headList[0].time;
-
-                // 插入数值
+                // recordList 插值
                 for(let k=0 ;k<this.headList.length;k++){
                     var _index = this.headList[k].index+count;
 
                     if(this.recordList[_index].isTimePanel == true){
                         continue;
                     }
-                    this.recordList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time});
+                    this.recordList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time,total:this.headList[k].total});
                     count++;
                 }
+
+                for(let m = 0; m < this.recordList.length; m++){
+                    if(this.recordList[m].isTimePanel == true && this.recordList[m].total == "加载中..."){
+
+                        var _year = this.recordList[m].time.split("年")[0];
+                        var _month = this.recordList[m].time.split("年")[1].split("月")[0];
+                        var _timer = _year+"-"+_month;
+                        var _data = {
+                            date :_timer
+                        }
+                        // 获取当月的总额度
+                        request.getInstance().postData("api/profit/count",_data)
+                            .then(res=>{
+                                console.log(res.data.data.total);
+                                this.recordList[m].total = res.data.data.total;
+                            }).catch();
+                    }
+                }
+
                 count = 0;
             },
             handleScroll(){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                
+                if(!this.$refs.timeTab){
+                    return;
+                }
 
                 for(var i = 0; i< this.$refs.timeTab.length; i++){
                     if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
                         if(i>1){
                             this.timeInfo = this.headList[i-1].time;
+                            console.log(this.headList[i-1]);
+                            this.tabTotal = this.headList[i-1].total;
                         }
                     }
                     
