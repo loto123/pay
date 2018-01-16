@@ -16,6 +16,7 @@ class ShopApply extends Notification implements ShouldQueue
 
     const TYPE_INVITE = 1;
 
+    private $data;
     /**
      * Create a new notification instance.
      *
@@ -24,7 +25,7 @@ class ShopApply extends Notification implements ShouldQueue
     public function __construct($data)
     {
         //
-        $this->data=$data;
+        $this->data = $data;
         $this->queue = "messages";
     }
 
