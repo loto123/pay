@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Notice;
+use App\Notifications\UserConfirmCallback;
 use App\Profit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,11 +14,6 @@ use Validator;
 
 class NoticeController extends BaseController
 {
-//    public function __construct()
-//    {
-//        $this->middleware("jwt.auth");
-//    }
-
     //消息列表
     /**
      * @SWG\Get(
@@ -141,11 +137,20 @@ class NoticeController extends BaseController
             switch ($type){
                 case '1'://分润
                 foreach ($notice as $item) {
+                    $operator_state = 0;
+                    $operator_options = ['0'=>'忽略','1'=>'确认'];
                     $profit_table = (new Profit)->getTable();
                     $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
                         ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
                     if (empty($profit)) {
                         continue;
+                    }
+                    //是否需要操作
+                    if(!empty($item->data['operators'])) {
+                        if(!empty($item->data['operators']['options']) && is_array($item->data['operators']['options'])) {
+                            $operator_options = $item->data['operators']['options'];
+                        }
+                        $operator_state = 1;
                     }
                     $list[] = [
                         'type' => $type,
@@ -154,18 +159,28 @@ class NoticeController extends BaseController
                         'thumb' => $profit->avatar??'',
                         'amount' => $profit->proxy_amount,
                         'created_at' => (string)$item->created_at,
+                        'operator_state' => $operator_state,
+                        'operator_options' => $operator_options
                     ];
                 }
                 break;
                 case '2'://用户注册
                 case '3'://系统消息
                     foreach ($notice as $item) {
+                        $operator_state = 0;
+                        $operator_options = ['0'=>'忽略','1'=>'确认'];
+                        //是否需要操作
+                        if(!empty($item->data['operators'])) {
+                            $operator_state = 1;
+                        }
                         $list[] = [
                             'type' => $type,
                             'notice_id' => $item->id,
                             'title' => $item->data['title'],
                             'content' => $item->data['content'],
                             'created_at' => (string)$item->created_at,
+                            'operator_state' => $operator_state,
+                            'operator_options' => $operator_options
                         ];
                     }
                 break;
@@ -173,6 +188,42 @@ class NoticeController extends BaseController
         }
         return $this->json(compact('count','list'));
     }
+
+    //消息操作
+    public function operators(Request $request)
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        $validator = Validator::make($request->all(),
+            [
+                'notice_id' => 'bail|required',
+                'value' =>  'bail|required'
+            ],
+            [
+                'required' => trans('trans.required'),
+            ]
+        );
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $notice_id = $request->notice_id;
+        $value = $request->value;
+        $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
+        if(!empty($notice) && isset($notice['operators'])) {
+            $operators = $notice['operators'];
+            try{
+                $res = call_user_func($operators['callback_method'],serialize(compact($value,$operators['callback_params'])));
+            } catch (\Exception $e) {
+                return $this->json([], '无法响应', 0);
+            }
+            if($res) {
+                return $this->json();
+            } else {
+                return $this->json([],'请求失败',0);
+            }
+
+        }
+    }
+
 
     /**
      * @SWG\Post(
@@ -244,7 +295,13 @@ class NoticeController extends BaseController
         $content = $request->input('content');
         $title = $request->input('title');
         $param = $request->input('param');
-        if (\App\Admin\Controllers\NoticeController::send($user_id_arr,$type,$content,$title,$param)) {
+        $operators = [
+            'callback_method' => $request->callback_method,
+            'callback_params' => $request->callback_params??[],
+            'expire_time' => $request->expire_time,
+        ];
+        Log::info($request->all());
+        if (\App\Admin\Controllers\NoticeController::send($user_id_arr,$type,$content,$title,$param,$operators)) {
             return $this->json();
         } else {
             return $this->json([],'操作失败',0);
