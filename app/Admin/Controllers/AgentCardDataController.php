@@ -356,7 +356,28 @@ class AgentCardDataController extends Controller
 
     }
 
+    public function card_trace($card_id)
+    {
+        $card = Card::where('id',Card::recover_id($card_id))
+            ->with('stock.allocate_bys','stock.operators','card_use','promoter')
+            ->first();
+        $admin = [];
+        $admin[] = $card->stock['allocate_bys'];
+        $admin[] = $card->stock['operators'];
+        $users[] = $card->card_use;
+        $users[] = $card->promoter;
 
+        if(!empty($admin)) {
+
+        }
+
+        $list = $card;
+        $data = compact('list','card_id');
+        return Admin::content(function (Content $content) use ($data) {
+            $content->header("流转记录");
+//            $content->body(view('admin.agent_card.card_trace', $data));
+        });
+    }
 
 
 }

@@ -23,7 +23,7 @@ class CardUse extends Model
      * 发出人
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function from()
+    public function fromUser()
     {
         $this->belongsTo(User::class, 'from');
     }
