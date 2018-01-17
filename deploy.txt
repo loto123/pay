@@ -59,3 +59,6 @@ php artisan queue:work --queue=withdraw
 
 店铺后台任务
 php artisan queue:work --queue=shop_logo
+
+消息
+php artisan queue:work --queue=messages
