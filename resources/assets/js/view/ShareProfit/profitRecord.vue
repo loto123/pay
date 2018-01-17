@@ -158,7 +158,7 @@
                     request.getInstance().postData("api/profit/data",_data)
                     .then((res) => {
 
-                        var _dataList = res.data.data;
+                        var _dataList = res.data.data.data;
 
                         if(_dataList.length == 0){
                             this.recordList = [];
@@ -187,7 +187,7 @@
                     request.getInstance().postData("api/profit/withdraw/data",_data)
                     .then((res) => {
 
-                        var _dataList = res.data.data;
+                        var _dataList = res.data.data.data;
 
                         if(_dataList.length == 0){
                             Loading.getInstance().close();
@@ -482,15 +482,15 @@
                     }
 
                     request.getInstance().postData('api/profit/data',_data).then(res=>{
-                        if(res.data.data.length == 0){
+                        if(res.data.data.data.length == 0){
                             this.canLoading = false;
                             this.loading = false;
                             return;
                         }
         
-                        for(var i = 0; i< res.data.data.length; i ++){
-                            res.data.data[i].isTimePanel = false;
-                            this.recordList.push(res.data.data[i]);
+                        for(var i = 0; i< res.data.data.data.length; i ++){
+                            res.data.data.data[i].isTimePanel = false;
+                            this.recordList.push(res.data.data.data[i]);
                         }
 
                         this.canLoading = true;
@@ -532,7 +532,7 @@
                     request.getInstance().postData("api/profit/data",_data)
                         .then((res) => {
 
-                            var _dataList = res.data.data;
+                            var _dataList = res.data.data.data;
 
                             if(_dataList.length == 0){
                                 Loading.getInstance().close();
@@ -555,7 +555,7 @@
                     request.getInstance().postData("api/profit/withdraw/data",_data)
                         .then((res) => {
 
-                            var _dataList = res.data.data;
+                            var _dataList = res.data.data.data;
 
                             if(_dataList.length == 0){
                                 Loading.getInstance().close();

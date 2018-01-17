@@ -17,7 +17,7 @@
 						<div class="personal-info flex">
 							<div class="flex-1 flex">
 								<div class="personal-img">从
-									<img :src="thumb">
+									<img :src="item.thumb">
 									<span>{{item.mobile}}</span>获得</div>
 							</div>
 						</div>
