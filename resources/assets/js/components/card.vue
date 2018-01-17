@@ -21,6 +21,7 @@
   }
   .top-content {
     height: 80%;
+   
     .card-type {
       text-align: center;
       margin: auto;
