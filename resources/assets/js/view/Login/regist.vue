@@ -258,7 +258,7 @@
       init() {
         this.mobile = this.$route.query.mobile;
         if (!this.mobile) {
-          this.isdisabled = fasle;
+          this.isdisabled = false;
           return
         } else {
           this.inviteMobile = this.mobile;

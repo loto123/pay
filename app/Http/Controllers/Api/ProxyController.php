@@ -121,8 +121,28 @@ class ProxyController extends BaseController {
      *   path="/proxy/members/count",
      *   summary="代理成员数",
      *   tags={"代理"},
-     *   @SWG\Response(response=200, description="successful operation"),
-     * )
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="total", type="integer", example=123,description="成员总数"),
+     *                  @SWG\Property(property="manager_total", type="integer", example=123,description="店主成员总数"),
+     *                  @SWG\Property(property="member_total", type="integer", example=123,description="普通成员总数"),
+     *              )
+     *          )
+     *      ),     * )
      * @return \Illuminate\Http\Response
      */
     public function members_count() {

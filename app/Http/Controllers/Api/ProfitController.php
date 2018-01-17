@@ -256,7 +256,7 @@ class ProfitController extends BaseController
         if ($request->offset) {
             $query->where('id', '<', $request->offset);
         }
-        $list = $query->select('id', 'proxy_percent', 'proxy_amount', 'created_at')->orderBy('created_at', 'DESC')->get();
+        $list = $query->select('id', 'proxy_percent', 'proxy_amount', 'created_at')->orderBy('created_at', 'DESC')->orderby('id','desc')->get();
         foreach ($list as $key => $value) {
             $list[$key]->proxy_percent = $value->proxy_percent * 10 . '‰';
         }
@@ -555,7 +555,7 @@ class ProfitController extends BaseController
         if ($request->offset) {
             $query->where('id', '<', ProxyWithdraw::decrypt($request->offset));
         }
-        $list = $query->select('id', 'amount', 'created_at')->orderBy('created_at', 'DESC')->get();
+        $list = $query->select('id', 'amount', 'created_at')->orderBy('created_at', 'DESC')->orderby('id','desc')->get();
         foreach ($list as $key => $value) {
             $list[$key]['id'] = $value->en_id();
         }
