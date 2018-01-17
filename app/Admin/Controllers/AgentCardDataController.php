@@ -31,7 +31,7 @@ class AgentCardDataController extends Controller
 
         if(!empty($operator_username)) {
             $operators = AdminUser::where('username',$operator_username)->withCount('card_stock')->first();
-            if(empty($operators) || !$operators->isRole('operator')) {
+            if(empty($operators) || !$operators->can('operate_agent_card')) {
                 $_error = '运营不存在';
             }
             $card_type = CardType::query()->select('id','name')->get();
@@ -121,7 +121,7 @@ class AgentCardDataController extends Controller
 
     public function promoter(Request $request)
     {
-        if(!Admin::user()->isRole('operator')) {
+        if(!Admin::user()->can('add_agent_card_to_promoter')) {
             $_error = '没有操作权限';
         }
 
@@ -150,7 +150,7 @@ class AgentCardDataController extends Controller
         $request_promoter = $request->promoter;
         $num = $request->num;
         //操作权限
-        if(!Admin::user()->isRole('operator')) {
+        if(!Admin::user()->can('add_agent_card_to_promoter')) {
             return response()->json(['code' => -1,'msg' => '没有操作权限','data' => []]);
         }
 
@@ -227,7 +227,7 @@ class AgentCardDataController extends Controller
 
         $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card']);
         //运营只能看到自己的
-        if(!Admin::user()->can('create_agent_card') && Admin::user()->isRole('operator')) {
+        if(!Admin::user()->can('create_agent_card') && Admin::user()->can('operate_agent_card')) {
             $query = $query->where('operator',Admin::user()->id);
         }
 
