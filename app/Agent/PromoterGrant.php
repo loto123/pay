@@ -38,8 +38,8 @@ class PromoterGrant extends Model implements UserConfirmCallback
             if (!Admin\Controllers\NoticeController::send(
                 [$model->grant_to],
                 3,
-                "{$model->grantBy->name} 正在为您开通推广员资格,请确认",
-                '恭喜你获得晋升推广员的资格！',
+                "用户 {$model->grantBy->name} 授权你为推广员",
+                '授权消息',
                 '',
                 [
                     //回调函数
