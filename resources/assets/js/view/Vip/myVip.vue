@@ -201,8 +201,6 @@ export default {
           Loading.getInstance().open();
 
           Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData('api/agent/bound_vip')]).then(res=>{
-              console.log(res[0]);
-              console.log(res[1]);
               this.userName = res[0].data.data.name;
               this.avatar = res[0].data.data.thumb;
               
@@ -219,7 +217,6 @@ export default {
               Loading.getInstance().close();
           }).catch(err=>{
               console.error(err);
-            //   console.log(err);
           });
        
       }
