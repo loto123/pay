@@ -6,7 +6,7 @@
     <div class="details-content">
       <h2>{{title}}</h2>
       <div class="details-date">{{time}}</div>
-      <div class="content">{{content}}</div>
+      <div class="content" v-html="content"></div>
     </div>
   </div>
 </template>
