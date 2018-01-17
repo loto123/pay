@@ -262,19 +262,46 @@
                 }
                 
                 if(this.headList.length == 0){
-                    // 获取当月的总额度
-                    request.getInstance().postData("api/profit/count")
-                        .then(res=>{
-                            var _initialData = {
-                                time:_head,
-                                index:key,
-                                total:res.data.data.total
-                            }
-                            this.headList.push(_initialData);
-                            this.timeInfo = this.headList[0].time;
-                            this.tabTotal = this.headList[0].total;
 
-                        }).catch();
+                    // 日期筛选 
+                    if(this.dateChoise != null){
+                        console.log(this.dateChoise);
+                        var _data = {
+                            date:this.dateChoise
+                        }
+
+                        // 获取当月的总额度
+                        request.getInstance().postData("api/profit/count",_data)
+                            .then(res=>{
+                                var _initialData = {
+                                    time:_head,
+                                    index:key,
+                                    total:res.data.data.total
+                                }
+                                this.headList.push(_initialData);
+                                this.timeInfo = this.headList[0].time;
+                                this.tabTotal = this.headList[0].total;
+
+                            }).catch();
+
+                    }else {
+
+                         // 获取当月的总额度
+                        request.getInstance().postData("api/profit/count")
+                            .then(res=>{
+                                var _initialData = {
+                                    time:_head,
+                                    index:key,
+                                    total:res.data.data.total
+                                }
+                                this.headList.push(_initialData);
+                                this.timeInfo = this.headList[0].time;
+                                this.tabTotal = this.headList[0].total;
+
+                            }).catch();
+                    }
+
+                   
 
                 }
 
@@ -307,6 +334,9 @@
                 }
 
                 var count=  0;
+
+                console.log(this.headList);
+
                 // recordList 插值
                 for(let k=0 ;k<this.headList.length;k++){
                     var _index = this.headList[k].index+count;
@@ -420,8 +450,13 @@
             },
 
             choiseDate(res){
+                // this.dateChoise = null;
+                this.headList = [];
                 var _year = res.getFullYear();
                 var _month = res.getMonth()+1;
+                if(_month<10){
+                    _month  = "0" + _month.toString();
+                }
                 var _date = _year+'-'+_month;
                 this.dateChoise = _date;
                 var _data = {
@@ -430,7 +465,7 @@
                     date:this.dateChoise
                 }
 
-                request.getInstance().postData("api/profit/withdraw/data",_data)
+                request.getInstance().postData("api/profit/data",_data)
                     .then((res) => {
 
                         var _dataList = res.data.data;
