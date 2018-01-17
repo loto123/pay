@@ -14,16 +14,15 @@
     </div>
     <div class="systemInfo-box">
       <ul>
-        <li v-for="item in systemList" @click="goDetails(item.notice_id)">
+        <li v-for="item in systemList" @click="goDetails(item.operator_state,item.notice_id)">
           <div class="top-info flex flex-align-end flex-justify-between">
             <div class="title">{{item.title}}</div>
             <div class="date">{{item.created_at}}</div>
           </div>
           <div class="bottom-info flex flex-align-center flex-justify-between">
-            <div class="content flex-7">{{item.content}}</div>
-            <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around">
-              <span class="cancel">忽略</span>
-              <span class="agree">接受</span>
+            <div class="content flex-7" v-html="item.content"></div>
+            <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
+              <span class="cancel" v-for="(option,index) in item.operator_options" v-bind:style="{color: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
             </div>
           </div>
         </li>
@@ -56,7 +55,10 @@
       goUser() {
         this.$router.push("/userRegister");
       },
-      goDetails(e) { //详情
+      goDetails(status,e) { //详情
+        if(status == 1){
+          return
+        }
         this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
       },
       systemInfo() { //列表
@@ -93,6 +95,23 @@
             //取消操作
           }
         );
+      },
+      optionBtn(noticeId,selectedValue){
+        Loading.getInstance().open("加载中...");
+        var data={
+          selected_value :selectedValue,
+          notice_id :noticeId 
+        }
+        request.getInstance().postData('api/notice/operator',data)
+          .then((res) => {
+            console.log(res);
+            this.systemInfo();
+            Loading.getInstance().close();
+          })
+          .catch((err) => {
+            Toast(err.data.msg);
+            Loading.getInstance().close();
+          })
       }
     }
   };
