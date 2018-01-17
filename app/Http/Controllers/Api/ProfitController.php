@@ -206,14 +206,19 @@ class ProfitController extends BaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  type="array",
-     *                  description="收益明细",
-     *                  @SWG\Items(
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                      description="收益明细",
+     *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="收益记录ID"),
      *                          @SWG\Property(property="proxy_percent", type="string", example="999‰", description="分成比例"),
      *                          @SWG\Property(property="proxy_amount", type="double", example=9.9, description="收益"),
      *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="创建时间"),
      *                      )
+     *                  )
      *              )
      *          )
      *      ),
@@ -244,6 +249,7 @@ class ProfitController extends BaseController
             $end = date("Y-m-d", strtotime("$begin +1 month"));
             $query->where('created_at', '>=', $begin)->where('created_at', '<', $end);
         }
+        $count = $query->count();
         if ($request->limit) {
             $query->limit($request->limit);
         }
@@ -254,7 +260,7 @@ class ProfitController extends BaseController
         foreach($list as $key => $value) {
             $list[$key]->proxy_percent = $value->proxy_percent * 10 . '‰';
         }
-        return $this->json($list, 'ok', 1);
+        return $this->json(['count' => $count,'data' => $list], 'ok', 1);
     }
 
     /**
@@ -500,13 +506,18 @@ class ProfitController extends BaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  type="array",
-     *                  description="收益明细",
-     *                  @SWG\Items(
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                      description="收益明细",
+     *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="提现记录ID"),
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="提现金额"),
      *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="创建时间"),
      *                      )
+     *                  )
      *              )
      *          )
      *      ),
@@ -537,6 +548,7 @@ class ProfitController extends BaseController
             $end = date("Y-m-d", strtotime("$begin +1 month"));
             $query->where('created_at', '>=', $begin)->where('created_at', '<', $end);
         }
+        $count = $query->count();
         if ($request->limit) {
             $query->limit($request->limit);
         }
@@ -547,7 +559,7 @@ class ProfitController extends BaseController
         foreach ($list as $key => $value) {
             $list[$key]['id'] = $value->en_id();
         }
-        return $this->json($list, 'ok', 1);
+        return $this->json(['count' => $count, 'data' => $list], 'ok', 1);
     }
 
     /**
