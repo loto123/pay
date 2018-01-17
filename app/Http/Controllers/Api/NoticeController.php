@@ -7,6 +7,7 @@ use App\Notifications\ConfirmExecuteResult;
 use App\Profit;
 use App\SystemMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
 
@@ -289,19 +290,21 @@ class NoticeController extends BaseController
         $notice_id = $request->notice_id;
         $value = $request->selected_value;
         $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
-        if(!empty($notice) && isset($notice['operators'])) {
-            $operators = $notice['operators'];
+        if(!empty($notice) && isset($notice['data']['operators'])) {
+            $operators = $notice['data']['operators'];
             try{
-                $res = call_user_func($operators['callback_method'],compact($value,$operators['callback_params']));
+                $params = [$value,$operators['callback_params']];
+                $res = call_user_func(unserialize($operators['callback_method']),$params);
             } catch (\Exception $e) {
                 return $this->json([], '无法响应', 0);
             }
-            if($res == ConfirmExecuteResult::EXECUTE_SUCCESS) {
+            if(is_object($res) && $res->result == ConfirmExecuteResult::EXECUTE_SUCCESS) {
                 return $this->json();
             } else {
-                return $this->json([],'请求失败',0);
+                return $this->json([],'请求失败,'.$res->message,0);
             }
-
+        } else {
+            return $this->json([],'该消息无法操作',0);
         }
     }
 
