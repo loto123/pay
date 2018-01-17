@@ -46,7 +46,8 @@
 </style>
 
 <script>
-  import topBack from "../../components/topBack";
+  import topBack from "../../components/topBack"
+
   export default {
     data() {
       return {
