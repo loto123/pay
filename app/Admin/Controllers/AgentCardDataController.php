@@ -88,7 +88,6 @@ class AgentCardDataController extends Controller
             $card_id = DB::table((new Card())->getTable())->insertGetId([
                 'card_type' => $card_type,
                 'created_at' => $time,
-                'expired_at' => $card_expired,
             ]);
             //记录card_id
             $card_id_arr[] = $card_id;
