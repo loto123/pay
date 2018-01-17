@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Role;
 use App\User;
+use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use EasyWeChat;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
@@ -52,7 +52,10 @@ class ProxyController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $app = EasyWeChat::officialAccount();
+        $app = Factory::officialAccount([
+            'app_id' => config("wechat.official_account.app_id"),
+            'secret' => config("wechat.official_account.secret"),
+        ]);
         $app->jssdk->setUrl($request->share_url);
         $config = $app->jssdk->buildConfig($request->list);
         return $this->json([
