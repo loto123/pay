@@ -518,7 +518,10 @@ class AccountController extends BaseController {
      *     in="query",
      *     description="类型",
      *     required=false,
-     *     type="integer"
+     *     type="array",
+     *     @SWG\Items(
+     *      type="integer"
+     *     )
      *   ),
      *   @SWG\Parameter(
      *     name="start",
@@ -596,7 +599,7 @@ class AccountController extends BaseController {
             })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
         });
         if ($request->type !== null) {
-            $query->where("type", $request->type);
+            $query->whereIn("type", $request->type);
         }
         if ($request->start) {
             $query->where("created_at", '<=', $request->start);
