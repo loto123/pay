@@ -73,7 +73,7 @@ class AgentCardDataController extends Controller
         }
 
         if(CardStock::where('operator',$operators->id)->count() + $num
-            > config('admin.max_agent_card','50')) {
+            > config('max_agent_card','50')) {
             return response()->json(['code' => -1,'msg' => '开卡数目超出上限','data' => []]);
         }
 
