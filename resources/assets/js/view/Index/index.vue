@@ -248,7 +248,7 @@ export default {
             confirmButtonText:'开通',
             showCancelButton: true
         }).then(res=>{
-          if(res!="confirm"){
+          if(res!="confirm"){ 
             return;
           }
 
