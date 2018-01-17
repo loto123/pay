@@ -22,8 +22,9 @@
           <div class="bottom-info flex flex-align-center flex-justify-between">
             <div class="content flex-7" v-html="item.content"></div>
             <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
-              <span class="cancel" v-for="(option,index) in item.operator_options" v-bind:style="{background: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
+              <span v-for="(option,index) in item.operator_options" :style="{background: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
             </div>
+            <div v-if="item.operators_res.length != 0" class="status">{{item.operators_res.message}}</div>
           </div>
         </li>
       </ul>
@@ -106,6 +107,7 @@
           .then((res) => {
             console.log(res);
             this.systemInfo();
+
             Loading.getInstance().close();
           })
           .catch((err) => {
@@ -163,6 +165,10 @@
           color: #333;
           font-size: 0.8em;
         }
+      }
+      .status{
+        color:rgb(165, 59, 59);
+        font-size: 0.7em;
       }
       .bottom-info{
         .content {

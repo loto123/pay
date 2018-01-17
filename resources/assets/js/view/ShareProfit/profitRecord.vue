@@ -179,7 +179,6 @@
                         Loading.getInstance().close();
                     })
                 } else if(this.tabStatus[1] == true){
-                    
                     var _data = {
                         limit:15,
                         offset:0
@@ -200,6 +199,7 @@
                         }
                         
                         this.recordList = _dataList;
+
                         this.buildTimePanel();
                         Loading.getInstance().close();
                     })
@@ -260,51 +260,105 @@
                         var _head = getTheDate(this.recordList[key].created_at);
                     }
                 }
-                
-                if(this.headList.length == 0){
 
-                    // 日期筛选 
-                    if(this.dateChoise != null){
-                        console.log(this.dateChoise);
-                        var _data = {
-                            date:this.dateChoise
+                // console.log("--------初始head----------");
+                // console.log(_head);
+                // console.log(this.headList);
+
+                if(this.headList.length == 0){
+                    // 分润列表
+                    if(this.tabStatus[0] == true){
+                        // 日期筛选 
+                        if(this.dateChoise != null){
+                            var _data = {
+                                date:this.dateChoise
+                            }
+
+                            // 获取当月的总额度
+                            request.getInstance().postData("api/profit/count",_data)
+                                .then(res=>{
+                                    var _initialData = {
+                                        time:_head,
+                                        index:key,
+                                        total:res.data.data.total
+                                    }
+                                    
+                                    // this.headList.push(_initialData);
+                                    // this.timeInfo = this.headList[0].time;
+                                    // this.tabTotal = this.headList[0].total;
+
+                                }).catch();
+                        }else {
+
+                            // 获取当月的总额度
+                            request.getInstance().postData("api/profit/count")
+                                .then(res=>{
+                                    var _initialData = {
+                                        time:_head,
+                                        index:key,
+                                        total:res.data.data.total
+                                    }
+                                    // this.headList.push(_initialData);
+                                    // this.timeInfo = this.headList[0].time;
+                                    // this.tabTotal = this.headList[0].total;
+
+                                }).catch();
                         }
 
-                        // 获取当月的总额度
-                        request.getInstance().postData("api/profit/count",_data)
-                            .then(res=>{
-                                var _initialData = {
-                                    time:_head,
-                                    index:key,
-                                    total:res.data.data.total
-                                }
-                                this.headList.push(_initialData);
-                                this.timeInfo = this.headList[0].time;
-                                this.tabTotal = this.headList[0].total;
+                    }else if(this.tabStatus[1] == true){
+                        // 提现列表
+                        // 日期筛选 
+                        if(this.dateChoise != null){
+                            var _data = {
+                                date:this.dateChoise
+                            }
 
-                            }).catch();
+                            // 获取当月的总额度
+                            request.getInstance().postData("api/profit/withdraw/count",_data)
+                                .then(res=>{
+                                    var _initialData = {
+                                        time:_head,
+                                        index:key,
+                                        total:res.data.data.total
+                                    }
 
-                    }else {
+                                    // this.headList.push(_initialData);
+                                    // this.timeInfo = this.headList[0].time;
+                                    // this.tabTotal = this.headList[0].total;
 
-                         // 获取当月的总额度
-                        request.getInstance().postData("api/profit/count")
-                            .then(res=>{
-                                var _initialData = {
-                                    time:_head,
-                                    index:key,
-                                    total:res.data.data.total
-                                }
-                                this.headList.push(_initialData);
-                                this.timeInfo = this.headList[0].time;
-                                this.tabTotal = this.headList[0].total;
+                                }).catch();
+                        }else {
+                            // 获取当月的总额度
+                            request.getInstance().postData("api/profit/withdraw/count")
+                                .then(res=>{
 
-                            }).catch();
+                                    // var _initialData = {
+                                    //     time:_head,
+                                    //     index:key,
+                                    //     total:res.data.data.total
+                                    // }
+                                    // console.log(3333);
+                                    // console.log(_initialData);
+                                    
+                                    // this.headList.push(_initialData);
+                                    // this.timeInfo = this.headList[0].time;
+                                    // this.tabTotal = this.headList[0].total;
+                                }).catch();
+                        }
+                        
                     }
-
-                   
-
+                }
+                
+                 var _initialData = {
+                    time:_head,
+                    index:key,
+                    total:"加载中..."
+                }
+                if(this.headList.length == 0){
+                    this.headList.push(_initialData);
                 }
 
+                // 插入时间标签
                 for(var i = 0; i <this.recordList.length; i++){
                     if(this.recordList[i].isTimePanel == true){
                         _head =getTheDate(this.recordList[i+1].created_at);
@@ -315,6 +369,7 @@
                          var label = getTheDate(this.recordList[i].created_at);
                          
                         //  当头部与当前的创建时间不一致时
+                       
                          if(_head != getTheDate(this.recordList[i].created_at)){
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
@@ -324,6 +379,7 @@
                                 index:i,
                                 total:"加载中..."
                             }
+                         
                             this.headList.push(data);
                           
                         }
@@ -335,15 +391,18 @@
 
                 var count=  0;
 
-                console.log(this.headList);
-
                 // recordList 插值
                 for(let k=0 ;k<this.headList.length;k++){
                     var _index = this.headList[k].index+count;
 
                     if(this.recordList[_index].isTimePanel == true){
+                        // console.log("跳过添加的这玩意是");
+                        // console.log(this.recordList[_index]);
+                        // console.log(this.headList[k]);
                         continue;
                     }
+                    // console.log("要添加的是");
+                    // console.log(this.headList[k]);
                     this.recordList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time,total:this.headList[k].total});
                     count++;
                 }
@@ -357,16 +416,31 @@
                         var _data = {
                             date :_timer
                         }
-                        // 获取当月的总额度
-                        request.getInstance().postData("api/profit/count",_data)
-                            .then(res=>{
-                                this.recordList[m].total = res.data.data.total;
-                            }).catch();
+
+                        if(this.tabStatus[0] == true){
+                            // 获取当月的总额度(分润)
+                            request.getInstance().postData("api/profit/count",_data)
+                                .then(res=>{
+                                    this.recordList[m].total = res.data.data.total;
+                                    this.timeInfo = this.recordList[0].time;
+                                    this.tabTotal = this.recordList[0].total;
+                                }).catch();
+                        }else {
+                            // 获取当月的总额度(分润)
+                            request.getInstance().postData("api/profit/withdraw/count",_data)
+                                .then(res=>{
+                                    this.recordList[m].total = res.data.data.total;
+                                    this.timeInfo = this.recordList[0].time;
+                                    this.tabTotal = this.recordList[0].total;
+                                }).catch();
+                        }
+                        
                     }
                 }
-
                 count = 0;
             },
+
+            // 滚动
             handleScroll(){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
                 
@@ -381,10 +455,7 @@
                             this.tabTotal = this.headList[i-1].total;
                         }
                     }
-                    
-                    // if(this.$refs.timeTab[i].getBoundingClientRect().top > "30") {
-                    //     // this.$refs.timeTab[i].className ="";
-                    // }
+                  
                 }
             },
 
@@ -396,14 +467,6 @@
                 }
 
                 this.loading = true;
-
-                var _status = 0;
-
-                for(var i = 0; i<this.tabStatus.length; i++){
-                    if(this.tabStatus[i] == true){
-                    _status = i+1;
-                    }
-                }
 
                 this.canLoading = false;
 
@@ -465,28 +528,55 @@
                     date:this.dateChoise
                 }
 
-                request.getInstance().postData("api/profit/data",_data)
-                    .then((res) => {
+                if(this.tabStatus[0] == true){
+                    request.getInstance().postData("api/profit/data",_data)
+                        .then((res) => {
 
-                        var _dataList = res.data.data;
+                            var _dataList = res.data.data;
 
-                        if(_dataList.length == 0){
+                            if(_dataList.length == 0){
+                                Loading.getInstance().close();
+                                this.recordList = [];
+                                return;
+                            }
+                            for(var i = 0; i <_dataList.length;i++){
+                                _dataList[i].isTimePanel = false;
+                            }
+                            
+                            this.recordList = _dataList;
+                            this.buildTimePanel();
                             Loading.getInstance().close();
-                            this.recordList = [];
-                            return;
-                        }
-                        for(var i = 0; i <_dataList.length;i++){
-                            _dataList[i].isTimePanel = false;
-                        }
-                        
-                        this.recordList = _dataList;
-                        this.buildTimePanel();
-                        Loading.getInstance().close();
-                    })
-                    .catch((err) => {
-                        Toast(err.data.msg);
-                        Loading.getInstance().close();
-                    })
+                        })
+                        .catch((err) => {
+                            Toast(err.data.msg);
+                            Loading.getInstance().close();
+                        })
+                }else if(this.tabStatus[1] == true){
+                    request.getInstance().postData("api/profit/withdraw/data",_data)
+                        .then((res) => {
+
+                            var _dataList = res.data.data;
+
+                            if(_dataList.length == 0){
+                                Loading.getInstance().close();
+                                this.recordList = [];
+                                return;
+                            }
+                            for(var i = 0; i <_dataList.length;i++){
+                                _dataList[i].isTimePanel = false;
+                            }
+                            
+                            this.recordList = _dataList;
+                            this.buildTimePanel();
+                            Loading.getInstance().close();
+                        })
+                        .catch((err) => {
+                            Toast(err.data.msg);
+                            Loading.getInstance().close();
+                        })
+                }
+
+                
             }
 
         },
