@@ -9,7 +9,6 @@ use App\SystemMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use JWTAuth;
-use Mockery\Exception;
 use Validator;
 
 class NoticeController extends BaseController
@@ -221,8 +220,7 @@ class NoticeController extends BaseController
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
                                 $operators_res = $operators['result'];
-                            } else if( !empty($operators['options']) && isset($operators['options']['color'])
-                                && isset($operators['options']['text']) ) {
+                            } else if( !empty($operators['options'])) {
                                 $operator_options = $operators['options'];
                                 $operator_state = 1;
                             }
@@ -331,7 +329,7 @@ class NoticeController extends BaseController
         if($flag) {
             try{
                 $data = $notice['data'];
-                $data['data']['operators']['result'] = ['code'=>$res->result,'message'=>$res->message];
+                $data['operators']['result'] = ['code'=>$res->result,'message'=>$res->message];
                 $notice->update(['data' => $data]);
             } catch (\Exception $e) {
                 return $this->json([],'请求失败，请稍后重试',0);
