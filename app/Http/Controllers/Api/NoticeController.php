@@ -9,6 +9,7 @@ use App\SystemMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use JWTAuth;
+use Mockery\Exception;
 use Validator;
 
 class NoticeController extends BaseController
@@ -103,6 +104,12 @@ class NoticeController extends BaseController
      *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
      *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
      *                           )
+     *                      ),
+     *                     @SWG\Property(property="operator_result", type="array",description="处理结果，[]表示未处理",
+     *                           @SWG\Items(
+     *                                @SWG\Property(property="code", type="string", example="1",description="处理结果,1：成功，0：失败"),
+     *                                @SWG\Property(property="message", type="string", example="已确认",description="显示结果")
+     *                           )
      *                      )
      *                  )
      *              )
@@ -152,6 +159,7 @@ class NoticeController extends BaseController
                     foreach ($notice as $item) {
                         $operator_state = 0;
                         $operator_options = [];
+                        $operators_res = [];
                         $profit_table = (new Profit)->getTable();
                         $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
                             ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
@@ -164,12 +172,19 @@ class NoticeController extends BaseController
                             //判断操作是否过期
                             if(!empty($operators['expire_time'])
                                 && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
+                                //标志为已读
+                                $item->markAsRead();
                                 continue;
                             }
-                            if(!empty($operators['options']) && isset($operators['options']['color']) && isset($operators['options']['text'])) {
+                            //判断是否已经操作过了
+                            if(isset($operators['result']) && isset($operators['result']['code'])
+                                && isset($operators['result']['message'])) {
+                                $operators_res = $operators['result'];
+                            } else if( !empty($operators['options']) && isset($operators['options']['color'])
+                                && isset($operators['options']['text']) ) {
                                 $operator_options = $operators['options'];
+                                $operator_state = 1;
                             }
-                            $operator_state = 1;
                         }
                         $list[] = [
                             'type' => $type,
@@ -179,7 +194,8 @@ class NoticeController extends BaseController
                             'amount' => $profit->proxy_amount,
                             'created_at' => (string)$item->created_at,
                             'operator_state' => $operator_state,
-                            'operator_options' => $operator_options
+                            'operator_options' => $operator_options,
+                            'operators_res' => $operators_res
                         ];
                     }
                     break;
@@ -190,24 +206,26 @@ class NoticeController extends BaseController
                         $content = $item->data['content'];
                         $operator_state = 0;
                         $operator_options = [];
+                        $operators_res = [];
                         //是否需要操作
                         if(!empty($item->data['operators'])) {
                             $operators = $item->data['operators'];
                             //判断操作是否过期
                             if(!empty($operators['expire_time'])
                                 && strtotime((string)$item->created_at)+ $operators['expire_time'] < time()) {
+                                //标志为已读
+                                $item->markAsRead();
                                 continue;
                             }
-                            if(!empty($operators['options']) && is_array($operators['options'])) {
+                            //判断是否已经操作过了
+                            if(isset($operators['result']) && isset($operators['result']['code'])
+                                && isset($operators['result']['message'])) {
+                                $operators_res = $operators['result'];
+                            } else if( !empty($operators['options']) && isset($operators['options']['color'])
+                                && isset($operators['options']['text']) ) {
                                 $operator_options = $operators['options'];
+                                $operator_state = 1;
                             }
-                            $operator_state = 1;
-                        }
-                        //后台消息
-                        if(isset($item->data['param']) && isset($item->data['param']['message_id'])) {
-                            $system = SystemMessage::find($item->data['param']['message_id']);
-                            $content = $system['content'];
-                            $title = $system['title'];
                         }
                         $list[] = [
                             'type' => $type,
@@ -216,7 +234,8 @@ class NoticeController extends BaseController
                             'content' => $content,
                             'created_at' => (string)$item->created_at,
                             'operator_state' => $operator_state,
-                            'operator_options' => $operator_options
+                            'operator_options' => $operator_options,
+                            'operators_res' => $operators_res
                         ];
                     }
                     break;
@@ -290,21 +309,36 @@ class NoticeController extends BaseController
         $notice_id = $request->notice_id;
         $value = $request->selected_value;
         $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
+        $flag = false;
+        $res = '';
+        $message = '失败';
         if(!empty($notice) && isset($notice['data']['operators'])) {
             $operators = $notice['data']['operators'];
             try{
-                $params = [$value,$operators['callback_params']];
-                $res = call_user_func(unserialize($operators['callback_method']),$params);
+                $res = call_user_func(unserialize($operators['callback_method']),$value,$operators['callback_params']);
             } catch (\Exception $e) {
-                return $this->json([], '无法响应', 0);
+                $message = '无法响应';
             }
             if(is_object($res) && $res->result == ConfirmExecuteResult::EXECUTE_SUCCESS) {
-                return $this->json();
+                $flag = true;
             } else {
-                return $this->json([],'请求失败,'.$res->message,0);
+//                Log::info($res->exception);
+                $message ='请求失败,'.$res->message;
             }
         } else {
-            return $this->json([],'该消息无法操作',0);
+            return  $this->json([],'该消息无法操作',0);
+        }
+        if($flag) {
+            try{
+                $data = $notice['data'];
+                $data['data']['operators']['result'] = ['code'=>$res->result,'message'=>$res->message];
+                $notice->update(['data' => $data]);
+            } catch (\Exception $e) {
+                return $this->json([],'请求失败，请稍后重试',0);
+            }
+            return $this->json([],$message,0);
+        } else {
+            return $this->json();
         }
     }
 
@@ -496,10 +530,18 @@ class NoticeController extends BaseController
                 'thumb' => $profit->avatar??'',
             ];
         } else {
+            //后台消息
+            $content = $notice->data['content'];
+            $title = $notice->data['title'];
+            if(isset($notice->data['param']) && isset($notice->data['param']['message_id'])) {
+                $system = SystemMessage::find($notice->data['param']['message_id']);
+                $content = $system['content'];
+                $title = $system['title'];
+            }
             $data = [
                 'time' => (string)$notice->created_at,
-                'content'=> $notice->data['content'],
-                'title' => $notice->data['title']
+                'content'=> $content,
+                'title' => $title
             ];
         }
 
