@@ -49,8 +49,8 @@ class PromoterGrant extends Model implements UserConfirmCallback
                     'expire_time' => self::CONFIRM_TIMEOUT,
                     //确认选项
                     'options' => [
-                        self::CONFIRM_DENY => ['text' => '拒绝', 'color' => '#f00'],
-                        self::CONFIRM_ACCEPT => ['text' => '接受', 'color' => '#0f0'],
+                        self::CONFIRM_DENY => ['text' => '忽略', 'color' => 'rgba(188, 188, 188, 1)'],
+                        self::CONFIRM_ACCEPT => ['text' => '接受', 'color' => 'rgba(0, 204, 0, 1)'],
                     ]
                 ]
             )
@@ -99,7 +99,7 @@ class PromoterGrant extends Model implements UserConfirmCallback
             return ConfirmExecuteResult::fail('系统异常', $e);
         }
         DB::commit();
-        return ConfirmExecuteResult::success($selected_value == self::CONFIRM_ACCEPT ? '已接受' : '已拒绝');
+        return ConfirmExecuteResult::success($selected_value == self::CONFIRM_ACCEPT ? '已接受' : '已忽略');
 
     }
 }
