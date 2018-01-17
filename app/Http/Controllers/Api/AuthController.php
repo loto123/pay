@@ -296,6 +296,7 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
+        Log::info(var_export(config("wechat"), true));
         $app = EasyWeChat::officialAccount();
         $response = $app->oauth->scopes(['snsapi_userinfo'])
             ->redirect($request->redirect_url);
