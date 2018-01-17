@@ -201,15 +201,26 @@ export default {
           Loading.getInstance().open();
 
           Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData('api/agent/bound_vip')]).then(res=>{
+              console.log(res[0]);
+              console.log(res[1]);
               this.userName = res[0].data.data.name;
               this.avatar = res[0].data.data.thumb;
-              this.isBindVIP =  res[1].data.data.if_bound;
-              this.cardName = res[1].data.data.card_name;
-              this.cardNumber = res[1].data.data.card_no;
-              this.percent = res[1].data.data.percent;
+              
+                  try{
+                    this.isBindVIP =  res[1].data.data.if_bound;
+                    this.cardName = res[1].data.data.card_name;
+                    this.cardNumber = res[1].data.data.card_no;
+                    this.percent = res[1].data.data.percent;
+                    }catch(e){
+                        console.error(e);
+                    }
+              
               this.isShow = true;
               Loading.getInstance().close();
-          }).catch();
+          }).catch(err=>{
+              console.error(err);
+            //   console.log(err);
+          });
        
       }
   }

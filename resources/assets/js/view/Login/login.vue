@@ -185,8 +185,7 @@ export default {
           self.userId = res.data.data.id;
 
           // 微信登录控制，生产环境开启
-
-           if(res.data.data.wechat == 0){
+           if(res.data.data.wechat == 0 && process.env.NODE_ENV!="development"){
              Toast("登录成功，正在跳转绑定微信...");
              setTimeout(()=>{
                  Loading.getInstance().open();
