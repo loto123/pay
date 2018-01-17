@@ -472,8 +472,8 @@ class ExcelController extends Controller
                 ];
             }
         }
-        Excel::create('拨卡记录', function ($excel) use ($cellData) {
-            $excel->sheet('拨卡记录', function ($sheet) use ($cellData) {
+        Excel::create('VIP卡查询', function ($excel) use ($cellData) {
+            $excel->sheet('VIP卡查询', function ($sheet) use ($cellData) {
                 $sheet->rows($cellData);
             });
         })->export('xls');
