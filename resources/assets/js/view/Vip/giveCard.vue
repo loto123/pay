@@ -229,7 +229,7 @@
                 const htmls = `
                     <div class="pop-content">
                         <div class="isunbind">确认转让卡给用户：`+this.searchMobile+`？</div>
-                        <div class="notice">(开卡成功后不可撤回)</div>
+                        <div class="notice">(转卡成功后不可撤回)</div>
                     </div>
                     `;
                 MessageBox.confirm('', {
@@ -240,7 +240,7 @@
                         request.getInstance().postData("api/promoter/transfer-card", _data)
                             .then((res) => {
                                 Toast('转卡成功');
-                                // this.$router.push('/vipCard');
+                                this.$router.push('/vipCard');
                             })
                             .catch((err) => {
                                 Toast(err.data.msg);

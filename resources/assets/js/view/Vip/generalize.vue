@@ -224,6 +224,7 @@
                         request.getInstance().postData("api/promoter/grant", _data)
                             .then((res) => {
                                 Toast('授权成功,等待对方接受');
+                                this.init();
                             })
                             .catch((err) => {
                                 Toast(err.data.msg);

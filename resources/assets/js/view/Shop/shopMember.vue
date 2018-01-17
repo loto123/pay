@@ -7,8 +7,8 @@
 
       <div id="search-wrap" class="flex flex-align-center">
           <div class="flex flex-align-center flex-justify-around">
-              <input type="text" placeholder="搜索" id="search-input" class="flex-7" @keyup="openSearchSwitch">
-              <button type="button" class="flex-3" v-if="searchSwitch"> 取消 </button>
+              <input type="text" placeholder="搜索" id="search-input" class="flex-7" @keyup="openSearchSwitch" v-model="searchData">
+              <button type="button" class="flex-3" v-if="searchSwitch" @click="cancerSearch"> 取消 </button>
           </div>
       </div>
       <ul class="flex flex-wrap-on">
@@ -163,6 +163,7 @@ export default {
       shopId:null,
       membersCount:0,
       dataList:[],
+      searchData:null,  // 玩家搜索的数据
       controlSwitch:false
     };
   },
@@ -183,8 +184,10 @@ export default {
       });
     },
 
+    // 每次用户输入都执行搜索
     openSearchSwitch() {
       this.searchSwitch = true;
+      console.log(this.searchData);
     },
 
     openControlSwitch(){
@@ -206,6 +209,11 @@ export default {
 
     SetString(str,len){
       return utils.SetString(str,len);
+    },
+
+    cancerSearch(){
+      this.searchSwitch = false;
+      this.searchData = null;
     }
   }
 };
