@@ -105,6 +105,7 @@
         request.getInstance().postData('api/notice/operator',data)
           .then((res) => {
             console.log(res);
+            this.systemInfo();
             Loading.getInstance().close();
           })
           .catch((err) => {
