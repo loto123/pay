@@ -50,7 +50,7 @@ class PromoterGrantController extends Controller
                 $actions->disableDelete();
                 $actions->disableEdit();
             });
-            $grid->grantBy('授权人')->display(function () {
+            $grid->column('grant_by', '授权人')->display(function () {
                 $c = $this->by_admin ? 'success' : 'info';
                 $role = $this->by_admin ? '后台' : '推广员';
                 $display = $this->by_admin ? $this->grantBy->name : $this->grantBy->mobile;

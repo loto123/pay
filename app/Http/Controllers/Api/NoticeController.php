@@ -183,6 +183,18 @@ class NoticeController extends BaseController
                                 && isset($operators['options']['text']) ) {
                                 $operator_options = $operators['options'];
                                 $operator_state = 1;
+                                array_unshift($list,[
+                                    'type' => $type,
+                                    'notice_id' => $item->id,
+                                    'mobile' => $profit->mobile,
+                                    'thumb' => $profit->avatar??'',
+                                    'amount' => $profit->proxy_amount,
+                                    'created_at' => (string)$item->created_at,
+                                    'operator_state' => $operator_state,
+                                    'operator_options' => $operator_options,
+                                    'operators_res' => $operators_res
+                                ]);
+                                continue;
                             }
                         }
                         $list[] = [
@@ -223,6 +235,17 @@ class NoticeController extends BaseController
                             } else if( !empty($operators['options'])) {
                                 $operator_options = $operators['options'];
                                 $operator_state = 1;
+                                array_unshift($list,[
+                                    'type' => $type,
+                                    'notice_id' => $item->id,
+                                    'title' => $title,
+                                    'content' => $content,
+                                    'created_at' => (string)$item->created_at,
+                                    'operator_state' => $operator_state,
+                                    'operator_options' => $operator_options,
+                                    'operators_res' => $operators_res
+                                ]);
+                                continue;
                             }
                         }
                         $list[] = [
@@ -331,12 +354,12 @@ class NoticeController extends BaseController
                 $data = $notice['data'];
                 $data['operators']['result'] = ['code'=>$res->result,'message'=>$res->message];
                 $notice->update(['data' => $data]);
+                return $this->json();
             } catch (\Exception $e) {
                 return $this->json([],'请求失败，请稍后重试',0);
             }
-            return $this->json([],$message,0);
         } else {
-            return $this->json();
+            return $this->json([],$message,0);
         }
     }
 

@@ -204,6 +204,8 @@ export default {
   },
   created(){
     this.init();
+    // console.log(process.env.NODE_ENV);
+
   },
   methods:{
     goInform(){
@@ -246,7 +248,7 @@ export default {
             confirmButtonText:'开通',
             showCancelButton: true
         }).then(res=>{
-          if(res!=confirm){
+          if(res!="confirm"){
             return;
           }
 
