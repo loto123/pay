@@ -8,17 +8,17 @@
           </topBack>
 
           <div class="imgwrap">
-            <img src="/images/avatar.jpg" alt="">
+            <img :src="avatar" alt="">
           </div>
 
-          <h3>Leaf ({{isBindVIP?'已开通':'未开通'}})</h3>
+          <h3>{{userName}} ({{isBindVIP?'已开通':'未开通'}})</h3>
           
       </div>
       <div class="infos flex flex-align-center" v-if="isShow">
           <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益将提高至5‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
       </div>
       
-      <div class="card-wrap" >
+      <div class="card-wrap" v-if="isBindVIP">
           <Card
             style="height:10em;"
             :cardName="cardName"
@@ -186,7 +186,10 @@ export default {
           isShow:false,
           cardName:null,
           cardNumber:null,
-          percent:null
+          percent:null,
+
+          userName:null,
+          avatar:null
       }
   },
 
@@ -196,19 +199,18 @@ export default {
   methods:{
       init(){
           Loading.getInstance().open();
-          request.getInstance().getData('api/agent/bound_vip').then(res=>{
-              this.isBindVIP =  res.data.data.if_bound;
-              this.cardName = res.data.data.card_name;
-              this.cardNumber = res.data.data.card_no;
-              this.percent = res.data.data.percent;
+
+          Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData('api/agent/bound_vip')]).then(res=>{
+              this.userName = res[0].data.data.name;
+              this.avatar = res[0].data.data.thumb;
+              this.isBindVIP =  res[1].data.data.if_bound;
+              this.cardName = res[1].data.data.card_name;
+              this.cardNumber = res[1].data.data.card_no;
+              this.percent = res[1].data.data.percent;
               this.isShow = true;
-              console.log(res);
               Loading.getInstance().close();
-              
-          }).catch(err=>{
-              Loading.getInstance().close();
-              console.error(err);
-          });
+          }).catch();
+       
       }
   }
 }
