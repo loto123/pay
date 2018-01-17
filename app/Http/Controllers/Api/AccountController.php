@@ -607,7 +607,8 @@ class AccountController extends BaseController {
             }
         }
         if ($request->start) {
-            $query->where("created_at", '<=', $request->start);
+            $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
+            $query->where("created_at", '<', $start);
         }
         $count = $query->count();
         $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
