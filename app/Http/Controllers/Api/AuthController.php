@@ -8,6 +8,7 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
 use App\Role;
+use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -296,8 +297,10 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        Log::info(var_export(config("wechat"), true));
-        $app = EasyWeChat::officialAccount();
+        $app = Factory::officialAccount([
+            'app_id' => config("wechat.official_account.app_id"),
+            'secret' => config("wechat.official_account.secret"),
+        ]);
         $response = $app->oauth->scopes(['snsapi_userinfo'])
             ->redirect($request->redirect_url);
 //        var_dump( $app->access_token->getToken());
@@ -355,7 +358,11 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $app = EasyWeChat::officialAccount();
+        $app = Factory::officialAccount([
+            'app_id' => config("wechat.official_account.app_id"),
+            'secret' => config("wechat.official_account.secret"),
+        ]);
+//        $app = app('wechat.official_account');
         $access_token = $app->oauth->getAccessToken($request->code);
         $user = $app->user->get($access_token->openid);
         $oauth_user = OauthUser::where("openid", $access_token->openid)->first();

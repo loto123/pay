@@ -7,9 +7,7 @@ use App\Agent\Card;
 use App\Agent\CardDistribution;
 use App\Agent\CardStock;
 use App\Agent\CardType;
-use App\Agent\CardUse;
 use App\Http\Controllers\Controller;
-use App\Pay\IdConfuse;
 use App\User;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
@@ -32,7 +30,7 @@ class AgentCardDataController extends Controller
         if(!empty($operator_username)) {
             $operators = AdminUser::where('username',$operator_username)->withCount('card_stock')->first();
             if(empty($operators) || !$operators->can('operate_agent_card')) {
-                $_error = '运营不存在';
+                $_error = '该用户没有操作权限';
             }
             $card_type = CardType::query()->select('id','name')->get();
             if(empty($card_type)) {
@@ -71,7 +69,7 @@ class AgentCardDataController extends Controller
             $query->where('slug','operator');
         })->first();
         if(empty($operators)) {
-            return response()->json(['code' => -1,'msg' => '该用户不是运营','data' => []]);
+            return response()->json(['code' => -1,'msg' => '该用户不存在','data' => []]);
         }
 
         if(CardStock::where('operator',$operators->id)->count() + $num
