@@ -10,6 +10,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
+use Illuminate\Support\Facades\Log;
 use Mockery\Exception;
 
 class PromoterGrantController extends Controller
@@ -53,6 +54,7 @@ class PromoterGrantController extends Controller
             $grid->grantBy('授权人')->display(function () {
                 $c = $this->by_admin ? 'success' : 'info';
                 $role = $this->by_admin ? '后台' : '推广员';
+                Log::debug('推广员授权记录', ['model' => $this, 'grantBy' => $this->grantBy]);
                 $display = $this->by_admin ? $this->grantBy->name : $this->grantBy->mobile;
                 return "<span class=\"label label-$c\">$role</span>&nbsp;" . $display;
             });
