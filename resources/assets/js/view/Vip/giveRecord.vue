@@ -1,7 +1,7 @@
 <template>
     <div id="my-vip">
         <div class="top flex flex-v flex-align-center">
-            <topBack style="background:#fff;" :title="'操作记录'">
+            <topBack style="background:#fff;" :title="'操作记录'" :backUrl="'\/index\/'">
             </topBack>
         </div>
         <div class="tab-menu flex flex-align-center flex-justify-center">

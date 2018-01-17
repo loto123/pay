@@ -46,11 +46,7 @@
 </style>
 
 <script>
-  import topBack from "../../components/topBack";
-  import request from "../../utils/userRequest"
-  import Loading from "../../utils/loading"
-  import moment from 'moment'
-  import { Toast } from 'mint-ui'
+  import topBack from "../../components/topBack"
 
   export default {
     data() {
@@ -58,15 +54,12 @@
         mobile:null
       }
     },
-    created(){
-      this.init();
-    },
     methods: {
       regist() {
         this.mobile=this.$route.query.mobile;
         this.$router.push("/login/regist?mobile="+this.mobile);
       }
     },
-    components: { topBack },
+    components: { topBack }
   }
 </script>

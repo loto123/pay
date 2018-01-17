@@ -97,6 +97,6 @@
         });
       }
     },
-    components: { topBack },
+    components: { topBack }
   }
 </script>

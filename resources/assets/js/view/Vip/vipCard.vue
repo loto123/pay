@@ -1,7 +1,7 @@
 <template>
     <div id="my-vip">
         <div class="top flex flex-v flex-align-center">
-            <topBack style="color:#fff;background:#26a2ff;" :title="'VIP开卡'">
+            <topBack style="color:#fff;background:#26a2ff;" :title="'VIP开卡'" :backUrl="'\/index\/'">
                 <div class="flex flex-reverse flex-align-center header-right" @click="checkRecord">
                     <a href="javascript:;" class="option-record">操作记录</a>
                 </div>
