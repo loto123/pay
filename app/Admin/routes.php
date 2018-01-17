@@ -60,6 +60,10 @@ Route::group([
 
     $router->post('/excel/data/user', 'ExcelController@dataUser');
     $router->post('/excel/data/profit', 'ExcelController@dataProfit');
+
+    //VIP卡 excel导出
+    $router->post('/excel/agent_card/card_record', 'ExcelController@card_record');
+    $router->post('/excel/agent_card/cards', 'ExcelController@cards');
 });
 
 Route::group([

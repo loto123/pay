@@ -2,6 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use Encore\Admin\Facades\Admin;
+use App\Agent\Card;
+use App\Agent\CardStock;
 use App\Http\Controllers\Controller;
 use App\Shop;
 use App\User;
@@ -322,6 +325,155 @@ class ExcelController extends Controller
         }
         Excel::create('收益统计', function ($excel) use ($cellData) {
             $excel->sheet('收益统计', function ($sheet) use ($cellData) {
+                $sheet->rows($cellData);
+            });
+        })->export('xls');
+    }
+
+    //VIP卡-拨卡记录
+    public function card_record(Request $request)
+    {
+        $cellData = [['序号','制卡人','制卡人ID','拨卡人','拨卡人ID','卡号','收卡人','收卡人ID','拨卡时间']];
+        $allocate_id = $request->allocate_id;
+        $operator_id = $request->operator_id;
+        $card_id = $request->card_id;
+        $en_card_id = (new Card())->recover_id($card_id);
+        $promoter_id = $request->promoter_id;
+        $date_time = $request->date_time;
+        $begin = '';
+        $end = '';
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $date_time);
+            $begin = $date_time_arr[0];
+            $end = $end = $date_time_arr[1] . ' 23:59:59';
+        }
+
+        $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card']);
+        //运营只能看到自己的
+        if(!Admin::user()->can('create_agent_card') && Admin::user()->can('operate_agent_card')) {
+            $query = $query->where('operator',Admin::user()->id);
+        }
+        if(!empty($allocate_id)) {
+            $query = $query->whereHas('allocate_bys',function($query) use($allocate_id) {
+                $query->where('username',$allocate_id);
+            });
+        }
+        if(!empty($operator_id)) {
+            $query = $query->whereHas('operators',function($query) use($operator_id) {
+                $query->where('username',$operator_id);
+            });
+        }
+        if(!empty($promoter_id)) {
+            $query = $query->whereHas('distributions', function ($query) use ($promoter_id) {
+                $query->whereHas('promoter', function ($query) use ($promoter_id) {
+                    $query->where('mobile', $promoter_id);
+                });
+            });
+        }
+        if(!empty($card_id)) {
+            $query = $query->where('card_id',$en_card_id);
+        }
+        if(!empty($begin) && !empty($end)) {
+            $query = $query->where('created_at','>=',$begin)->where('created_at','<=',$end);
+        }
+        $list = $query->get();
+        if(!empty($list)) {
+            foreach ($list as $key=>$item) {
+                $cellData[] = [
+                    $key+1,
+                    $item->allocate_bys ? $item->allocate_bys['name'] : '无',
+                    $item->allocate_bys ? $item->allocate_bys['username'] : '无',
+                    $item->operators ? $item->operators['name'] : '无',
+                    $item->operators ? $item->operators['username'] : '无',
+                    $item->card->mix_id(),
+                    $item->distributions ? $item->distributions['promoter']['name'] : '无',
+                    $item->distributions ? $item->distributions['promoter']['mobile'] : '无',
+                    $item->created_at
+                ];
+            }
+        }
+        Excel::create('拨卡记录', function ($excel) use ($cellData) {
+            $excel->sheet('拨卡记录', function ($sheet) use ($cellData) {
+                $sheet->rows($cellData);
+            });
+        })->export('xls');
+    }
+
+    //VIP卡-查询
+    public function cards(Request $request)
+    {
+        $cellData = [['序号','卡号','运营','运营ID','推广员','推广员ID','用卡人','用卡人ID','状态','是否冻结']];
+        $card_id = $request->card_id;
+        $agent_id = $request->agent_id;
+        $operator_id = $request->operator_id;
+        $promoter_id = $request->promoter_id;
+        $is_bound = $request->is_bound;
+        $is_frozen = $request->is_frozen;
+        $date_time = $request->date_time;
+        if (!empty($date_time)) {
+            $date_time_arr = explode(' - ', $date_time);
+            $begin = $date_time_arr[0];
+            $end = $end = $date_time_arr[1] . ' 23:59:59';
+        }
+        $query = Card::query()->with(['owner_user', 'stock.operators', 'promoter']);
+        if (!empty($card_id)) {
+            $query = $query->where('id', (new Card())->recover_id($card_id));
+        }
+        if (!empty($agent_id)) {
+            $query = $query->whereHas('owner_user', function ($query) use ($agent_id) {
+                $query->where('mobile', $agent_id);
+            })->where('is_bound', Card::BOUND);
+        }
+        if (!empty($operator_id)) {
+            $query = $query->whereHas('stock.operators', function ($query) use ($operator_id) {
+                $query->where('username', $operator_id);
+            });
+        }
+        if (!empty($promoter_id)) {
+            $query = $query->whereHas('promoter', function ($query) use ($promoter_id) {
+                $query->where('mobile', $promoter_id);
+            });
+        }
+        if (!empty($is_bound)) {
+            $query = $query->where('is_bound', $is_bound);
+        }
+        if (!empty($is_frozen)) {
+            $query = $query->where('is_frozen', $is_frozen);
+        }
+        if (!empty($begin) && !empty($end)) {
+            $query = $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
+        }
+        $list = $query->get();
+        if(!empty($list)) {
+            foreach ($list as $key=>$item) {
+                $item_owner_name = '无';
+                $item_owner_id = '无';
+                $item_operator_name = '无';
+                $item_operator_id = '无';
+                if($item->is_bound == $item::BOUND  && $owner = $item->owner_user) {
+                    $item_owner_name = $owner['name'];
+                    $item_owner_id = $owner['mobile'];
+                }
+                if(!empty($item->stock) && isset($item->stock['operators'])){
+                    $item_operator_name = $item->stock['operators']['name'];
+                    $item_operator_id = $item->stock['operators']['username'];
+                }
+                $cellData[] = [
+                    $key+1,
+                    $item->mix_id(),
+                    $item_operator_name,
+                    $item_operator_id,
+                    $item->promoter ? $item->promoter['name']  : '无',
+                    $item->promoter ? $item->promoter['mobile']  : '无',
+                    $item_owner_name,
+                    $item_owner_id,
+                    $item->is_bound?'已使用':'未使用',
+                    $item->is_frozen?'已冻结':'未冻结'
+                ];
+            }
+        }
+        Excel::create('拨卡记录', function ($excel) use ($cellData) {
+            $excel->sheet('拨卡记录', function ($sheet) use ($cellData) {
                 $sheet->rows($cellData);
             });
         })->export('xls');
