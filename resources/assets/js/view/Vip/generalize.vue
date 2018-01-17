@@ -2,8 +2,8 @@
     <div id="my-vip">
         <div class="top flex flex-v flex-align-center">
             <topBack style="color:#fff;background:#26a2ff;" :title="'VIP开卡'">
-                <div class="flex flex-reverse flex-align-center header-right">
-                    <a href="#" class="option-record">操作记录</a>
+                <div class="flex flex-reverse flex-align-center header-right" @click="checkRecord">
+                    <a href="javascript:;" class="option-record">操作记录</a>
                 </div>
             </topBack>
             <div class="card-amount">
@@ -46,7 +46,7 @@
 <style lang="scss" scoped>
     #my-vip {
         padding-top: 2em;
-        background: #fff;
+        background: #F0F1F5;
         min-height: 100vh;
         box-sizing: border-box;
         .top {
@@ -79,6 +79,7 @@
             height: 3em;
             margin-bottom: 1em;
             border-top: 1px solid #ccc;
+            background: #fff;
             >div {
                 width: 50%;
                 height: 100%;
@@ -96,6 +97,7 @@
             box-sizing: border-box;
             border: 1px solid #bbb;
             margin: auto;
+            background: #fff;
             .input-wrap {
                 width: 100%;
                 height: 3em;
@@ -113,8 +115,10 @@
             .search-btn {
                 width: 100%;
                 height: 100%;
-                border: 1px solid #bbb;
+                border: 1px solid #26a2ff;
                 border-right: none;
+                background: #26a2ff;
+                color:#fff;
             }
         }
         .user-info {
@@ -209,7 +213,7 @@
                 }
                 const htmls = `
                     <div class="pop-content">
-                        <div class="isunbind">确认给用户：17673181869为推广员？</div>
+                        <div class="isunbind">确认给用户：`+this.searchMobile+`为推广员？</div>
                     </div>
                     `;
                 MessageBox.confirm('',{
@@ -220,6 +224,7 @@
                         request.getInstance().postData("api/promoter/grant", _data)
                             .then((res) => {
                                 Toast('授权成功,等待对方接受');
+                                this.init();
                             })
                             .catch((err) => {
                                 Toast(err.data.msg);
@@ -229,6 +234,10 @@
                         console.log("已经取消");
                     }
                 );
+            },
+            //查看记录
+            checkRecord(){
+                this.$router.push('/vipCard/giveRecord')
             }
         }
     }

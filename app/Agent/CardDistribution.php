@@ -5,13 +5,13 @@
 
 namespace App\Agent;
 
+use App\Admin;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class CardDistribution extends Model
 {
-    const UPDATED_AT = false;
+    const UPDATED_AT = null;
     protected $guarded = ['id'];
     protected $table = 'agent_card_distribution';
 
@@ -29,7 +29,7 @@ class CardDistribution extends Model
      */
     public function getOperatorAttribute($by)
     {
-        return DB::table('admin_users')->find($by);
+        return Admin::find($by);
     }
 
     /**

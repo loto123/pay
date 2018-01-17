@@ -249,6 +249,7 @@ Route::group([
     $router->post('create', 'NoticeController@create');
     $router->post('delete', 'NoticeController@delete');
     $router->get('detail', 'NoticeController@detail');
+    $router->post('operator', 'NoticeController@operator');
 });
 
 Route::group([

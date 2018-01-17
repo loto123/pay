@@ -1,5 +1,5 @@
 <template>
-  <div id="my-vip">
+  <div id="my-vip" >
       <div class="top flex flex-v flex-align-center">
           <topBack 
             style="color:#fff;background:#26a2ff;"
@@ -11,14 +11,27 @@
             <img src="/images/avatar.jpg" alt="">
           </div>
 
-          <h3>Leaf (未开通)</h3>
-
+          <h3>Leaf ({{isBindVIP?'已开通':'未开通'}})</h3>
           
       </div>
-      <div class="infos flex flex-align-center">
+      <div class="infos flex flex-align-center" v-if="isShow">
           <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益将提高至5‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
-
-
+      </div>
+      
+      <div class="card-wrap" >
+          <Card
+            style="height:10em;"
+            :cardName="cardName"
+            :cardNumber="cardNumber"
+            :percent="percent"
+          >
+            <div class="card-tag flex flex-v flex-align-center">
+                <h3>(已绑定)</h3>
+                <div class="tag flex flex-justify-center flex-align-center">
+                    <span>终身有效</span>
+                </div>
+            </div>
+          </Card>
       </div>
 
       <ul>
@@ -109,6 +122,42 @@
         }
     }
 
+    .card-wrap{
+        background: url("/images/vipBack2.png") no-repeat;
+        background-size: 100% 100%; 
+        box-sizing:border-box;
+        width: 95%;
+        margin: 0 auto;
+        margin-top:1em;
+        margin-bottom: 0.5em;
+
+        .card-tag{
+            width:100%;
+            height: 7em;
+            padding-right:1em;
+            box-sizing:border-box;
+
+            h3{
+                margin-top:1em;
+                color:#fff;
+            }
+            .tag{
+                width:4em;
+                height: 4em;
+                background:#fff;
+                border-radius:50%;
+                margin-top:0.6em;
+                
+                span{
+                    width:50%;
+                    height: 50%;
+                    display: block;
+                    color:#F5CB34;
+                }
+            }
+        }
+    }
+
     ul{
         li{
             padding-left: 1em;
@@ -125,15 +174,42 @@
 
 <script>
 import topBack from '../../components/topBack'
+import request from '../../utils/userRequest'
+import Loading from '../../utils/loading'
+import Card from '../../components/card'
 
 export default {
-  components:{topBack},
+  components:{topBack,Card},
   data(){
       return {
-          isBindVIP:false
+          isBindVIP:false,
+          isShow:false,
+          cardName:null,
+          cardNumber:null,
+          percent:null
       }
   },
+
+  mounted(){
+    this.init();
+  },
+  methods:{
+      init(){
+          Loading.getInstance().open();
+          request.getInstance().getData('api/agent/bound_vip').then(res=>{
+              this.isBindVIP =  res.data.data.if_bound;
+              this.cardName = res.data.data.card_name;
+              this.cardNumber = res.data.data.card_no;
+              this.percent = res.data.data.percent;
+              this.isShow = true;
+              console.log(res);
+              Loading.getInstance().close();
+              
+          }).catch(err=>{
+              Loading.getInstance().close();
+              console.error(err);
+          });
+      }
+  }
 }
 </script>
-
-

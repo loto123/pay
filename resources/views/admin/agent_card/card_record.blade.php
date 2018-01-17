@@ -1,11 +1,6 @@
 <div class="container-fluid">
     <!--查询开始-->
 
-    @if(session('status'))
-        <div class="alert alert-info"> {{session('status')}}
-        </div>
-    @endif
-
     <div class="box box-primary">
         <div class="box-header">
             <form class="form-horizontal" method="post" action="/admin/agent_card/card_record">
@@ -69,7 +64,7 @@
                     <tbody>
                     @foreach ($list as $key => $item)
                         <tr>
-                            <td>{{$item->id}}</td>
+                            <td>{{$offset+$key+1}}</td>
                             <td>
                                 <div class="user-panel clearfix">
                                     <div class="pull-left">
@@ -117,48 +112,52 @@
                 <p class="no-data text-muted text-center" style="font-size:24px;margin-top:20px;">暂无数据</p>
             @endif
         </div>
-        {{--<div>{{ $list->appends(compact('manager_id', 'shop_id', 'shop_name', 'date_time'))->links() }}</div>--}}
-        <!--店铺统计表格结束-->
+        <div>{{ $list->appends(compact('allocate_id','operator_id','card_id','promoter_id','date_time'))->links() }}</div>
     </div>
 </div>
 
 <script language="JavaScript">
     function data_export() {
-        var aid = $("#aid").val();
-        var shop_id = $("#shop_id").val();
-        var shop_name = $("#shop_name").val();
-        var date_time = $("#reservation").val();
-        var manager_id = $("#manager_id").val();
+        var allocate_id = $("#allocate_id").val();
+        var operator_id = $("#operator_id").val();
+        var promoter_id = $("#promoter_id").val();
+        var card_id = $("#card_id").val();
+        var date_time = $("#date_time").val();
         var form = $("<form></form>");
         form.attr('style', 'display:none');
         form.attr('method', 'post');
-        form.attr('action', '/admin/excel/shop');
+        form.attr('action', '/admin/excel/card_record');
         var input1 = $('<input />');
         input1.attr('type', 'hidden');
-        input1.attr('name', 'manager_id');
-        input1.val(manager_id);
+        input1.attr('name', 'allocate_id');
+        input1.val(allocate_id);
         var input2 = $('<input />');
         input2.attr('type', 'hidden');
-        input2.attr('name', 'date_time');
-        input2.val(date_time);
+        input2.attr('name', 'operator_id');
+        input2.val(operator_id);
         var input3 = $('<input />');
         input3.attr('type', 'hidden');
         input3.attr('name', '_token');
         input3.val(LA.token);
         var input4 = $('<input />');
         input4.attr('type', 'hidden');
-        input4.attr('name', 'shop_id');
-        input4.val(shop_id);
+        input4.attr('name', 'promoter_id');
+        input4.val(promoter_id);
         var input5 = $('<input />');
         input5.attr('type', 'hidden');
-        input5.attr('name', 'shop_name');
-        input5.val(shop_name);
+        input5.attr('name', 'card_id');
+        input5.val(card_id);
+        var input6 = $('<input />');
+        input6.attr('type', 'hidden');
+        input6.attr('name', 'date_time');
+        input6.val(date_time);
         $('body').append(form);
         form.append(input3);
         form.append(input1);
         form.append(input2);
         form.append(input4);
         form.append(input5);
+        form.append(input6);
         form.submit();
         form.remove();
     }

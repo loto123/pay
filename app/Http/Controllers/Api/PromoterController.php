@@ -9,6 +9,15 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Agent\Card;
+use App\Agent\CardUse;
+use App\Agent\PromoterGrant;
+use App\User;
+use Dingo\Api\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
 class PromoterController extends BaseController
 {
     /**
@@ -51,10 +60,74 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function transferCard()
+    public function transferCard(Request $request)
     {
         //卡片从推广员->推广员
-        return $this->json();
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'digits:11',
+            'card_no' => 'digits:' . Card::CARD_NO_LENGTH
+        ], [
+            'user_id.digits' => '无效的手机号',
+            'card_no.digits' => '无效卡号',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+
+        $cardId = Card::recover_id($request->card_no);
+        $card = Card::where('promoter_id', Auth::id())->find($cardId);
+        if (!$card) {
+            return $this->json([], '该卡不存在', 0);
+        }
+
+        if ($card->is_bound) {
+            return $this->json([], '该卡已被使用', 0);
+        }
+
+        if ($card->is_frozen) {
+            return $this->json([], '该卡被冻结', 0);
+        }
+
+        //验证推广员
+        $transferTo = User::where('mobile', $request->user_id)->whereHas('roles', function ($query) {
+            $query->where('name', '=', PromoterGrant::PROMOTER_ROLE_NAME);
+        })->first();
+
+        if (!$transferTo) {
+            return $this->json([], '该推广员不存在', 0);
+        }
+
+        DB::beginTransaction();
+        $commit = false;
+
+        do {
+            $updateColumns = ['owner' => $transferTo->getKey(), 'promoter_id' => $transferTo->getKey()];
+
+            if (!Card::where([
+                ['promoter_id', Auth::id()],
+                ['is_bound', 0],
+                ['is_frozen', 0],
+                ['id', $cardId]
+            ])->update($updateColumns)
+            ) {
+                break;
+            }
+
+            if (!CardUse::insert([
+                ['from' => Auth::id(), 'to' => $transferTo->getKey(), 'type' => CardUse::TYPE_TRANSFER, 'card_id' => $cardId]
+            ])
+            ) {
+                break;
+            }
+
+            $commit = true;
+        } while (false);
+
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $this->json([], $commit ? '转卡成功' : '转卡失败,请稍后重试', (int)$commit);
     }
 
     /**
@@ -96,9 +169,79 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function bindCard()
+    public function bindCard(Request $request)
     {
-        return $this->json();
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'digits:11',
+            'card_no' => 'digits:' . Card::CARD_NO_LENGTH
+        ], [
+            'user_id.digits' => '无效的手机号',
+            'card_no.digits' => '无效卡号',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+
+        $cardId = Card::recover_id($request->card_no);
+        $card = Card::where('promoter_id', Auth::id())->find($cardId);
+        if (!$card) {
+            return $this->json([], '该卡不存在', 0);
+        }
+
+        if ($card->is_bound) {
+            return $this->json([], '该卡已被使用', 0);
+        }
+
+        if ($card->is_frozen) {
+            return $this->json([], '该卡被冻结', 0);
+        }
+
+        //验证代理身份
+        $bindTo = User::where('mobile', $request->user_id)->whereHas('roles', function ($query) {
+            $query->where('name', '=', 'agent');
+        })->first();
+
+        if (!$bindTo) {
+            return $this->json([], '该代理不存在', 0);
+        }
+
+        //只有更高分润比例卡可以绑定
+        if ($bindTo->myVipProfitShareRate() >= $card->type->percent) {
+            return $this->json([], '有生效中的vip卡,只能绑定更高级卡片', 0);
+        }
+
+        DB::beginTransaction();
+        $commit = false;
+
+        do {
+            $updateColumns = ['is_bound' => 1, 'owner' => $bindTo->getKey()];
+            if ($card->type->valid_days > 0) {
+                $updateColumns['expired_at'] = date('Y-m-d H:i:s', time() + $card->type->valid_days * 60 * 60 * 24);
+            }
+
+            if (!Card::where([
+                ['owner', Auth::id()],
+                ['is_bound', 0],
+                ['is_frozen', 0],
+                ['id', $cardId]
+            ])->update($updateColumns)
+            ) {
+                break;
+            }
+
+            if (!CardUse::insert([
+                ['from' => Auth::id(), 'to' => $bindTo->getKey(), 'type' => CardUse::TYPE_BINDING, 'card_id' => $cardId]
+            ])
+            ) {
+                break;
+            }
+
+            $commit = true;
+        } while (false);
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $this->json([], $commit ? '绑定成功' : '绑定失败,请稍后重试', (int)$commit);
     }
 
     /**
@@ -133,9 +276,40 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function grant()
+    public function grant(Request $request)
     {
-        return $this->json();
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'digits:11',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], '无效的手机号', 0);
+        }
+        $toGrant = User::where('mobile', $request->user_id)->whereDoesntHave('roles', function ($query) {
+            $query->where('name', '=', PromoterGrant::PROMOTER_ROLE_NAME);
+        })->first();
+
+        if (!$toGrant) {
+            return $this->json([], '用户不存在或已经是推广员', 0);
+        }
+
+        //已经向用户发送授权申请且未确认且未过期,不能重复发送
+        if (PromoterGrant::where([
+                ['by_admin', 0],
+                ['grant_by', Auth::id()],
+                ['grant_to', $toGrant->getKey()],
+                ['grant_result', PromoterGrant::CONFIRM_PENDING],
+                ['created_at', '>', date('Y-m-d H:i:s', time() - PromoterGrant::CONFIRM_TIMEOUT)]
+            ])->count() > 0
+        ) {
+            return $this->json([], '已经授权过,等待用户确认', 0);
+        }
+
+        if (Auth::user()->grantPromoterTo($toGrant)) {
+            return $this->json([], '等待用户确认');
+        } else {
+            return $this->json([], '授权失败', 0);
+        }
     }
 
     /**
@@ -175,15 +349,35 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function cardsUseRecords()
+    public function cardsUseRecords(Request $request)
     {
-        return $this->json([
-            ['id' => 12, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-            ['id' => 13, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-            ['id' => 14, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-            ['id' => 15, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-            ['id' => 16, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-        ]);
+//        return $this->json([
+//            ['id' => 12, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
+//            ['id' => 13, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
+//            ['id' => 14, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
+//            ['id' => 15, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
+//            ['id' => 16, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
+//        ]);
+
+        $offset = (int)$request->get('offset', 0);
+        $limit = (int)$request->get('limit', 10);
+
+        $where = [
+            ['from', Auth::id()],
+        ];
+        if ($offset > 0) {
+            $where [] = ['id', '<', $offset];
+        }
+        return $this->json(CardUse::where($where)->limit($limit)->with(['card.type', 'toUser'])->orderByDesc('id')->get()->map(function ($item) {
+            return [
+                'id' => $item->getKey(),
+                'type' => [CardUse::TYPE_BINDING => 'binding', CardUse::TYPE_TRANSFER => 'transfer'][$item->type],
+                'card_name' => $item->card->type->name,
+                'card_no' => $item->card->mix_id(),
+                'to_user' => $item->toUser->mobile,
+                'created_at' => $item->created_at->toDateTimeString()
+            ];
+        }));
     }
 
     /**
@@ -222,31 +416,46 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function grantRecords()
+    public function grantRecords(Request $request)
     {
-        return $this->json([
-            [
-                "id" => "12",
-                "name" => "张三",
-                "user_id" => "13111111111",
-                "avatar" => "http://x.com/img/a.gif",
-                "created_at" => "2017-01-01 0:0:0"
-            ],
-            [
-                "id" => "13",
-                "name" => "张三",
-                "user_id" => "13111111111",
-                "avatar" => "http://x.com/img/a.gif",
-                "created_at" => "2017-01-01 0:0:0"
-            ],
-            [
-                "id" => "14",
-                "name" => "张三",
-                "user_id" => "13111111111",
-                "avatar" => "http://x.com/img/a.gif",
-                "created_at" => "2017-01-01 0:0:0"
-            ]
-        ]);
+//        return $this->json([
+//            [
+//                "id" => "12",
+//                "name" => "张三",
+//                "user_id" => "13111111111",
+//                "avatar" => "http://x.com/img/a.gif",
+//                "created_at" => "2017-01-01 0:0:0"
+//            ],
+//            [
+//                "id" => "13",
+//                "name" => "张三",
+//                "user_id" => "13111111111",
+//                "avatar" => "http://x.com/img/a.gif",
+//                "created_at" => "2017-01-01 0:0:0"
+//            ],
+//            [
+//                "id" => "14",
+//                "name" => "张三",
+//                "user_id" => "13111111111",
+//                "avatar" => "http://x.com/img/a.gif",
+//                "created_at" => "2017-01-01 0:0:0"
+//            ]
+//        ]);
+
+        $offset = (int)$request->get('offset', 0);
+        $limit = (int)$request->get('limit', 10);
+
+        $where = [
+            ['by_admin', 0],
+            ['grant_by', Auth::id()],
+            ['grant_result', PromoterGrant::CONFIRM_ACCEPT]
+        ];
+        if ($offset > 0) {
+            $where [] = ['id', '<', $offset];
+        }
+        return $this->json(PromoterGrant::where($where)->limit($limit)->with('grantTo')->orderByDesc('id')->get()->map(function ($item) {
+            return ['id' => $item->getKey(), 'name' => $item->grantTo->name, 'user_id' => $item->grantTo->mobile, 'avatar' => $item->grantTo->avatar, 'created_at' => $item->created_at->toDateTimeString()];
+        }));
     }
 
     /**
@@ -284,32 +493,42 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function cardsReserve()
+    public function cardsReserve(Request $request)
     {
-        return $this->json([[
-            "id" => "12",
-            "card_no" => "12345678",
-            "card_name" => "vip金卡",
-            "percent" => "5"
-        ],
-            [
-                "id" => "13",
-                "card_no" => "12345678",
-                "card_name" => "vip金卡",
-                "percent" => "5"
-            ],
-            [
-                "id" => "14",
-                "card_no" => "12345678",
-                "card_name" => "vip金卡",
-                "percent" => "5"
-            ],
-            [
-                "id" => "15",
-                "card_no" => "12345678",
-                "card_name" => "vip金卡",
-                "percent" => "5"
-            ]]);
+//        return $this->json([[
+//            "id" => "12",
+//            "card_no" => "12345678",
+//            "card_name" => "vip金卡",
+//            "percent" => "5"
+//        ],
+//            [
+//                "id" => "13",
+//                "card_no" => "12345678",
+//                "card_name" => "vip金卡",
+//                "percent" => "5"
+//            ],
+//            [
+//                "id" => "14",
+//                "card_no" => "12345678",
+//                "card_name" => "vip金卡",
+//                "percent" => "5"
+//            ],
+//            [
+//                "id" => "15",
+//                "card_no" => "12345678",
+//                "card_name" => "vip金卡",
+//                "percent" => "5"
+//            ]]);
+        $offset = (int)$request->get('offset', 0);
+        $limit = (int)$request->get('limit', 10);
+        return $this->json(Card::where([
+                ['promoter_id', Auth::id()],
+                ['is_bound', 0],
+                ['is_frozen', 0],
+                ['id', '>', $offset]]
+        )->with('type')->limit($limit)->get()->map(function ($item) {
+            return ['id' => $item->getKey(), 'card_no' => $item->mix_id(), 'card_name' => $item->type->name, 'percent' => $item->type->percent * 10];
+        }));
     }
 
     /**
@@ -334,7 +553,7 @@ class PromoterController extends BaseController
      */
     public function cardsUsedNum()
     {
-        return $this->json(['used_cards' => 6]);
+        return $this->json(['used_cards' => CardUse::where('from', Auth::id())->count()]);
     }
 
 
@@ -377,14 +596,29 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function queryAgent()
+    public function queryAgent(Request $request)
     {
-        return $this->json([
-            'avatar' => 'http://a.com/c.gif',
-            'user_id' => '13111111111',
-            'name' => '张三'
-
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'digits:11',
         ]);
+
+        if ($validator->fails()) {
+            return $this->json([], '无效的手机号', 0);
+        }
+
+        $user = User::where('mobile', $request->user_id)->whereHas('roles', function ($query) {
+            $query->where('name', '=', 'agent');
+        })->first();
+        if ($user) {
+            return $this->json([
+                'avatar' => $user->avatar,
+                'user_id' => $user->mobile,
+                'name' => $user->name,
+
+            ]);
+        } else {
+            return $this->json([], '该代理不存在', 0);
+        }
     }
 
     /**
@@ -426,14 +660,29 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function queryPromoter()
+    public function queryPromoter(Request $request)
     {
-        return $this->json([
-            'avatar' => 'http://a.com/c.gif',
-            'user_id' => '13111111111',
-            'name' => '张三'
-
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'digits:11',
         ]);
+
+        if ($validator->fails()) {
+            return $this->json([], '无效的手机号', 0);
+        }
+
+        $user = User::where('mobile', $request->user_id)->whereHas('roles', function ($query) {
+            $query->where('name', '=', PromoterGrant::PROMOTER_ROLE_NAME);
+        })->first();
+        if ($user) {
+            return $this->json([
+                'avatar' => $user->avatar,
+                'user_id' => $user->mobile,
+                'name' => $user->name,
+
+            ]);
+        } else {
+            return $this->json([], '该推广员不存在', 0);
+        }
     }
 
     /**
@@ -475,14 +724,29 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function queryNonePromoter()
+    public function queryNonePromoter(Request $request)
     {
-        return $this->json([
-            'avatar' => 'http://a.com/c.gif',
-            'user_id' => '13111111111',
-            'name' => '张三'
-
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'digits:11',
         ]);
+
+        if ($validator->fails()) {
+            return $this->json([], '无效的手机号', 0);
+        }
+
+        $user = User::where('mobile', $request->user_id)->whereDoesntHave('roles', function ($query) {
+            $query->where('name', '=', PromoterGrant::PROMOTER_ROLE_NAME);
+        })->first();
+        if ($user) {
+            return $this->json([
+                'avatar' => $user->avatar,
+                'user_id' => $user->mobile,
+                'name' => $user->name,
+
+            ]);
+        } else {
+            return $this->json([], '用户不存在或已经是推广员', 0);
+        }
     }
 
     /**
@@ -523,14 +787,17 @@ class PromoterController extends BaseController
      *      )
      * )
      */
-    public function cardDetail()
+    public function cardDetail(Request $request)
     {
-        return $this->json([
-            "id" => "15",
-            "card_no" => "12345678",
-            "card_name" => "vip金卡",
-            "percent" => "5"
-        ]);
+        $card = Card::where([
+                ['promoter_id', Auth::id()],
+                ['is_bound', 0],
+                ['is_frozen', 0],
+            ]
+        )->with('type')->find($request->post('card_id'));
+        if ($card) {
+            return $this->json(['id' => $card->getKey(), 'card_no' => $card->mix_id(), 'card_name' => $card->type->name, 'percent' => $card->type->percent * 10]);
+        }
     }
 
 

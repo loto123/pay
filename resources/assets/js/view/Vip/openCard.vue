@@ -2,9 +2,6 @@
     <div id="my-vip">
         <div class="top flex flex-v flex-align-center">
             <topBack style="background:#fff;" :title="'VIP开卡'">
-                <div class="flex flex-reverse flex-align-center header-right">
-                    <a href="#" class="option-record">操作记录</a>
-                </div>
             </topBack>
         </div>
         <div class="tab-menu flex flex-align-center flex-justify-center">
@@ -12,18 +9,12 @@
             <div class="auth flex flex-align-center flex-justify-center" @click="giveCard">转卡给推广员</div>
         </div>
         <ul class="card-list">
-            <li class="flex flex-align-center">
-                <div class="flex-3 card-number">NO.123456</div>
-                <div class="flex-5 card-type">
-                    <div class="type">
-                        <em>VIP</em>
-                        <span>金卡</span>
+            <li class="list">
+                <card :cardName="card_name" :percent="percent" :cardNumber="card_no" style="height:10em;">
+                    <div class="openCard">
+                        <img src="/images/openCard.png">
                     </div>
-                    <div class="share-profit">尊享分润比例：5‰</div>
-                </div>
-                <div class="flex-2">
-                    开卡
-                </div>
+                </card>
             </li>
         </ul>
         <div class="flex flex-justify-center" style="margin:0.7em 0;">
@@ -62,7 +53,7 @@
 <style lang="scss" scoped>
     #my-vip {
         padding-top: 2em;
-        background: #fff;
+        background: #F0F1F5;
         min-height: 100vh;
         box-sizing: border-box;
         .top {
@@ -77,7 +68,7 @@
             width: 100%;
             height: 3em;
             margin-bottom: 1em;
-            border-top: 1px solid #ccc;
+            background: #fff;
             >div {
                 width: 50%;
                 height: 100%;
@@ -92,39 +83,17 @@
         .card-list {
             padding: 0 0.6em;
             li {
-                padding-left: 1em;
-                padding-right: 1em;
+                padding: 0 0.6em;
                 box-sizing: border-box;
-                height: 10em;
-                background: #E2CD8F;
+                background: url('/images/vipBack2.png') no-repeat;
+                background-size: 100% 100%;
                 width: 100%;
-                margin-bottom: 0.5em;
-                color: #fff;
                 border-radius: 5px;
-                .card-number {
-                    height: 8em;
-                    line-height: 14em;
-                    font-weight: 700;
-                    font-size: 1em;
-                }
-                .card-type {
-                    text-align: center;
-                    margin: auto;
-                    .type {
-                        em,
-                        span {
-                            font-weight: 700;
-                            display: inline-block;
-                        }
-                        em {
-                            font-size: 2em;
-                            margin-bottom: 0.2em;
-                        }
-                        span {
-                            font-size: 1em;
-                        }
+                .openCard {
+                    margin-top: -2em;
+                    img {
+                        width: 40px;
                     }
-
                 }
             }
         }
@@ -135,6 +104,7 @@
             box-sizing: border-box;
             border: 1px solid #bbb;
             margin: auto;
+            background: #fff;
             .input-wrap {
                 width: 100%;
                 height: 3em;
@@ -153,8 +123,10 @@
             .search-btn {
                 width: 100%;
                 height: 100%;
-                border: 1px solid #bbb;
+                border: 1px solid #26a2ff;
                 border-right: none;
+                background: #26a2ff;
+                color: #fff;
             }
         }
         .user-info {
@@ -180,7 +152,7 @@
                 }
             }
         }
-        .pop-content{
+        .pop-content {
             text-align: center;
         }
     }
@@ -188,12 +160,13 @@
 
 <script>
     import topBack from '../../components/topBack'
+    import card from '../../components/card'
     import Loading from "../../utils/loading"
     import request from "../../utils/userRequest"
     import { MessageBox, Toast } from 'mint-ui'
 
     export default {
-        components: { topBack },
+        components: { topBack,card },
         data() {
             return {
                 isBindVIP: false,
@@ -202,13 +175,36 @@
                     avatar: null,
                     user_id: null,
                     name: null
-                }
+                },
+                card_name: null,     //卡的名字
+                card_no: null,       //卡号
+                percent: null,        //分润比例
+                card_id: null
             }
         },
+        created() {
+            this.init();
+        },
         methods: {
+            init() {
+                var data = {
+                    card_id: this.$route.query.card_id
+                }
+                Loading.getInstance().open();
+                request.getInstance().postData('api/promoter/card-detail', data).then(res => {
+                    this.card_name = res.data.data.card_name;
+                    this.card_no = res.data.data.card_no;
+                    this.percent = res.data.data.percent;
+                    Loading.getInstance().close();
+                }).catch(err => {
+                    Toast(err.data.msg);
+                    Loading.getInstance().close();
+                });
+            },
             //转卡给推广员
             giveCard() {
-                this.$router.push('/vipCard/giveCard');
+                this.card_id = this.$route.query.card_id;
+                this.$router.push('/vipCard/giveCard?card_id=' + this.card_id);
             },
             // 搜索用户
             searchUser() {
@@ -232,20 +228,20 @@
             //开通vip
             openVip() {
                 var _data = {
-                    card_no: 12345678,
+                    card_no: this.card_no,
                     user_id: this.searchMobile
                 }
                 const htmls = `
                     <div class="pop-content">
-                        <div class="isunbind">确认给用户：`+this.searchMobile+` 开通VIP卡？</div>
+                        <div class="isunbind">确认给用户：`+ this.searchMobile + ` 开通VIP卡？</div>
                         <div class="notice">(开卡成功后不可撤回)</div>
                     </div>
                     `;
-                MessageBox.confirm('',{
+                MessageBox.confirm('', {
                     message: htmls,
                     title: '确认信息',
                 })
-                .then(
+                    .then(
                     () => {
                         request.getInstance().postData("api/promoter/bind-card", _data)
                             .then((res) => {
@@ -260,7 +256,7 @@
                         //取消操作
                         console.log("已经取消");
                     }
-                );
+                    );
             }
         }
     }

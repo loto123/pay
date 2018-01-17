@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProxyWithdraw extends Model
 {
-    protected $table = 'proxy_withdraw';
-
     protected static $skip32_id = '0123456789abcdef0123';
+    protected $table = 'proxy_withdraw';
 
     use Skip32Trait;
 
