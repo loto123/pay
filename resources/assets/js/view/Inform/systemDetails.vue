@@ -74,6 +74,7 @@
       width: 100%;
       text-indent: 2em;
       line-height: 1.7em;
+      word-break: break-word;
     }
   }
 </style>

@@ -22,7 +22,7 @@
           <div class="bottom-info flex flex-align-center flex-justify-between">
             <div class="content flex-7" v-html="item.content"></div>
             <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
-              <span class="cancel" v-for="(option,index) in item.operator_options" v-bind:style="{color: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
+              <span class="cancel" v-for="(option,index) in item.operator_options" v-bind:style="{background: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
             </div>
           </div>
         </li>
@@ -161,7 +161,7 @@
         }
         .title {
           color: #333;
-          font-size: 1em;
+          font-size: 0.8em;
         }
       }
       .bottom-info{
@@ -179,14 +179,6 @@
   .btn-wrap {
     width: 40%;
     height: 100%;
-    .cancel {
-      background: #ccc;
-      color: #fff;
-    }
-    .agree {
-      background: #00cc00;
-      color: #fff;
-    }
     >span {
       width: 40%;
       height: 70%;
@@ -194,6 +186,7 @@
       text-align: center;
       line-height: 2em;
       font-size: 0.7em;
+      color:#fff;
     }
   }
 </style>
