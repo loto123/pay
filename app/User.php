@@ -229,7 +229,9 @@ class User extends Authenticatable
 
     public function proxy_container()
     {
-        return $this->hasOne(MasterContainer::class, 'id', 'proxy_container_id');
+        return $this->hasOne(MasterContainer::class, 'id', 'proxy_container_id')->withDefault([
+            'balance' => 0,
+        ]);
     }
 
     public function channel()
