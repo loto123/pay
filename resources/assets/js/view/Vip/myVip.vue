@@ -15,7 +15,7 @@
           
       </div>
       <div class="infos flex flex-align-center" v-if="isShow">
-          <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益将提高至5‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
+          <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益将提高至'+percent+'‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
       </div>
       
       <div class="card-wrap" v-if="isBindVIP">
@@ -235,16 +235,16 @@ export default {
           }).catch(err=>{
               console.error(err);
           });
-       
       },
+      
       changeInfoStatus(index){
+          console.log(this.infoStatus);
           if(this.infoStatus[index] == true){
+              this.infoStatus = [this.infoStatus[0] ,this.infoStatus[1] ,this.infoStatus[2]];
               this.infoStatus[index] = false;
-              console.log(111);
               return ; 
           }
-        //   this.infoStatus = [false ,false ,false];
-          console.log(index);
+          this.infoStatus = [this.infoStatus[0] ,this.infoStatus[1] ,this.infoStatus[2]];
           this.infoStatus[index] = true;
           console.log(this.infoStatus);
       }
