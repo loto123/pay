@@ -65,15 +65,13 @@ class AgentCardDataController extends Controller
         $card_expired = $agent_card_type->valid_days>0 ? date('Y-m-d H:i:s',strtotime("+{$agent_card_type->valid_days} days")) : NULL;
 
         //运营是否存在，可开卡数是否足够
-        $operators = AdminUser::where('username',$operator_username)->whereHas('roles',function($query) {
-            $query->where('slug','operator');
-        })->first();
+        $operators = AdminUser::where('username',$operator_username)->first();
         if(empty($operators)) {
             return response()->json(['code' => -1,'msg' => '该用户不存在','data' => []]);
         }
 
         if(CardStock::where('operator',$operators->id)->count() + $num
-            > config('admin.max_agent_card','50')) {
+            > config('max_agent_card','50')) {
             return response()->json(['code' => -1,'msg' => '开卡数目超出上限','data' => []]);
         }
 
