@@ -12,7 +12,7 @@
         </div>
         <div class="systemInfo-box" ref='wrapper'>
             <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
-                <li v-for="item in systemList" @click="goDetails(item.operator_state,item.notice_id)">
+                <li v-for="item in systemList" @click="goDetails(item.operator_state,item.notice_id,item.link)">
                     <div class="top-info flex flex-align-end flex-justify-between">
                         <div class="title flex-6">{{item.title}}</div>
                         <div class="date flex-4">{{item.created_at}}</div>
@@ -66,11 +66,18 @@
             goUser() {
                 this.$router.push("/userRegister");
             },
-            goDetails(status, e) { //详情
+            goDetails(status, e,links) { //详情
                 if (status == 1) {
                     return
                 }
+                if (links != '') {
+                    console.log(links);
+                    location.href=links
+                    return
+                }
                 this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
+                
+                
             },
             systemInfo() { //列表
                 var self = this;
@@ -120,7 +127,11 @@
                 }
                 request.getInstance().postData('api/notice/operator', data)
                     .then((res) => {
-                        console.log(res);
+                        if(res.data.msg !=''){
+                            Toast(res.data.msg);
+                        }else{
+                            Toast('成功');
+                        }
                         this.systemInfo();
 
                         Loading.getInstance().close();
