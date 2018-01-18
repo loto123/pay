@@ -699,6 +699,69 @@ class UserController extends BaseController
     }
 
     /**
+     * @SWG\Post(
+     *   path="/my/resetPayPassword",
+     *   summary="忘记支付密码",
+     *     tags={"我的"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="用户手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="pay_password",
+     *         in="formData",
+     *         description="新密码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="code",
+     *         in="formData",
+     *         description="验证码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="ok",
+     *     examples={
+     *      "code":0,
+     *      "msg":"",
+     *      "data": {}
+     *     }
+     *   ),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPayPassword(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable(),
+            'pay_password' => 'required|digits:6',
+            'code' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+            return $this->json([], trans("error code"), 0);
+        }
+        Cache::forget($cache_key);
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json([], trans("error user"), 0);
+        }
+        $user->pay_password = Hash::make($request->pay_password);
+        $user->save();
+        return $this->json();
+    }
+
+    /**
      * @SWG\GET(
      *   path="/my/parent",
      *   summary="推荐人信息",
