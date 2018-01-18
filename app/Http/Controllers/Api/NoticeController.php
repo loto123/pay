@@ -215,6 +215,7 @@ class NoticeController extends BaseController
                     foreach ($notice as $item) {
                         $title = $item->data['title'];
                         $content = $item->data['content'];
+                        $link = isset($item->data['param']['link']) ? $item->data['param']['link'] : "";
                         $operator_state = 0;
                         $operator_options = [];
                         $operators_res = [];
@@ -253,6 +254,7 @@ class NoticeController extends BaseController
                             'notice_id' => $item->id,
                             'title' => $title,
                             'content' => $content,
+                            'link' => $link,
                             'created_at' => (string)$item->created_at,
                             'operator_state' => $operator_state,
                             'operator_options' => $operator_options,
@@ -562,6 +564,7 @@ class NoticeController extends BaseController
             $data = [
                 'time' => (string)$notice->created_at,
                 'content'=> $content,
+
                 'title' => $title
             ];
         }

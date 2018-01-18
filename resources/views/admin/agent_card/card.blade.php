@@ -189,7 +189,7 @@
         var form = $("<form></form>");
         form.attr('style', 'display:none');
         form.attr('method', 'post');
-        form.attr('action', '/admin/excel/cards');
+        form.attr('action', '/admin/excel/agent_card/cards');
         var input1 = $('<input />');
         input1.attr('type', 'hidden');
         input1.attr('name', 'card_id');

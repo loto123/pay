@@ -85,8 +85,9 @@
               <h3>展业</h3>
             </a>
           </li>
+
           <li class="flex flex-v flex-align-center">
-            <a href="/#/vipCard" class="flex flex-v flex-align-center">
+            <a class="flex flex-v flex-align-center" @click="goVipOpenCard">
               <i class="iconfont transaction-icon common-icon">
                   &#xe639;
               </i>
@@ -222,7 +223,7 @@ export default {
             showCancelButton: true
         }).then(res=>{
 
-           if(res!=confirm){
+           if(res!="confirm"){
             return;
           }
 
@@ -238,7 +239,32 @@ export default {
         this.$router.push("/share_profit");
       }
     },
+    goVipOpenCard(){
+      if(this.isAgent == 0){
 
+        MessageBox({
+            title: '温馨提示',
+            message: '此功能只对代理开放，是否开通代理？?',
+            confirmButtonText:'开通',
+            showCancelButton: true
+        }).then(res=>{
+
+           if(res!="confirm"){
+            return;
+          }
+
+          request.getInstance().postData("api/proxy/create").then(res=>{
+            Toast("成功开通代理...");
+            this.init();
+          }).catch(err=>{
+            Toast(err.data.msg)
+          })
+        });
+
+      }else if(this.isAgent == 1){
+        this.$router.push("/vipCard");
+      }
+    },
     goMyUsers(){
       if(this.isAgent == 0){
        
@@ -248,7 +274,7 @@ export default {
             confirmButtonText:'开通',
             showCancelButton: true
         }).then(res=>{
-          if(res!=confirm){
+          if(res!="confirm"){ 
             return;
           }
 

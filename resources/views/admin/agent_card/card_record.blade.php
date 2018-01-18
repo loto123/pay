@@ -126,7 +126,7 @@
         var form = $("<form></form>");
         form.attr('style', 'display:none');
         form.attr('method', 'post');
-        form.attr('action', '/admin/excel/card_record');
+        form.attr('action', '/admin/excel/agent_card/card_record');
         var input1 = $('<input />');
         input1.attr('type', 'hidden');
         input1.attr('name', 'allocate_id');

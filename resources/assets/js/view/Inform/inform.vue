@@ -1,25 +1,23 @@
 <template>
-	<div id="Inform">
-		<div id="top" :backUrl="'\/index\/'">
-			<topBack title="消息中心">
-				<div class="clear-inform flex flex-reverse flex-align-center" @click="del(1)">
-					清空消息
-				</div>
-			</topBack>
-		</div>
+	<div id="inform">
+		<topBack title="消息中心" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'">
+			<div class="clear-inform flex flex-reverse flex-align-center" @click="del(1)">
+				清空消息
+			</div>
+		</topBack>
 		<div class="tab-menu flex flex-align-center flex-justify-center">
 			<div class="flex flex-align-center flex-justify-center active">分润通知</div>
 			<div class="flex flex-align-center flex-justify-center" @click="goUser">用户注册</div>
 			<div class="flex flex-align-center flex-justify-center" @click="goSystemInfo">系统通知</div>
 		</div>
-		<div class="shareBenefit-box">
-			<ul>
+		<div class="shareBenefit-box" ref='wrapper'>
+			<ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
 				<li class="flex flex-align-center flex-justify-between"  v-for="item in moneyList" @click="goDetails(item.notice_id)">
 					<div class="left-content">
 						<div class="personal-info flex">
 							<div class="flex-1 flex">
 								<div class="personal-img">从
-									<img :src="thumb">
+									<img :src="item.thumb">
 									<span>{{item.mobile}}</span>获得</div>
 							</div>
 						</div>
@@ -28,6 +26,10 @@
 					<div class="shareBenefit-money active">{{item.amount}}</div>
 				</li>
 			</ul>
+			<p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+				<mt-spinner type="fading-circle"></mt-spinner>
+				<span style="margin-left: 0.5em;color:#999;">加载中...</span>
+			</p>
 		</div>
 	</div>
 </template>
@@ -41,13 +43,21 @@
 	export default {
 		data() {
 			return {
-				moneyList:[]
+				moneyList:[],
+
+				wrapperHeight: null,
+                loading: false,
+                allLoaded: false,
+                canLoading: true,
 			};
 		},
 		created(){
 			this.moneyInfo();
 		},
 		components: { topBack },
+		mounted(){
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        },
 		methods: {
 			goUser() {
 				this.$router.push("/userRegister")
@@ -60,9 +70,14 @@
 			},
 			moneyInfo() {
 				var self=this;
+				var _data = {
+						type: 1,
+						limit: 20,
+						offset: 0
+					}
 				Loading.getInstance().open("加载中...");
 
-				request.getInstance().getData('api/notice/index?type=1')
+				request.getInstance().getData('api/notice/index',_data)
 					.then((res) => {
 						self.moneyList=res.data.data.list;
 						Loading.getInstance().close();
@@ -93,6 +108,41 @@
 					console.log("已经取消");
 				}
 				);
+			},
+			loadMore() {
+				this.loading = false;
+				if (this.moneyList.length == 0 || !this.canLoading) {
+					return;
+				}
+				this.loading = true;
+				this.canLoading = false;
+				setTimeout(() => {
+
+					var _data = {
+						type: 1,
+						limit: 20,
+						offset: [].concat(this.moneyList).pop().notice_id
+					}
+
+					request.getInstance().getData('api/notice/index', _data).then(res => {
+
+						if (res.data.data.list.length == 0) {
+							this.canLoading = false;
+							this.loading = false;
+							return;
+						}
+
+						for (var i = 0; i < res.data.data.list.length; i++) {
+							this.moneyList.push(res.data.data.list[i]);
+						}
+
+						this.canLoading = true;
+						this.loading = false;
+					}).catch(err => {
+
+					});
+				}, 1500);
+
 			}
 		}
 	};
@@ -100,12 +150,12 @@
 
 <style lang="scss" scoped>
 	@import "../../../sass/oo_flex.scss";
-	#top {
+	#inform {
 		width: 100%;
-		background: #26a2ff;
-		color: #fff;
 		padding-top: 2em;
 		box-sizing: border-box;
+		background: #f4f4f4;
+		height: 100vh;
 		.clear-inform {
 			box-sizing: border-box;
 			width: 100%;
@@ -117,9 +167,9 @@
 	.tab-menu {
 		width: 100%;
 		height: 3em;
-
+		background: #fff;
 		>div {
-			width: 50%;
+			width: 33.3%;
 			height: 100%;
 			box-sizing: border-box;
 		}
@@ -130,9 +180,8 @@
 	}
 
 	.shareBenefit-box {
-		margin-top: 1em;
 		li {
-			border: 1px solid #ddd; // line-height:2em;
+			border-bottom: 1px solid #ddd; 
 			padding: 0.5em 1em;
 			.left-content {
 				.date {
@@ -146,6 +195,9 @@
 			}
 			.active {
 				color: green;
+			}
+			&:first-child{
+				border-top: 1px solid #ddd; 
 			}
 		}
 	}
