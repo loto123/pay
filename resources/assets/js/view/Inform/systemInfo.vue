@@ -127,9 +127,10 @@
                 }
                 request.getInstance().postData('api/notice/operator', data)
                     .then((res) => {
-                        console.log(res);
+                        if(res.data.msg !=''){
+                            Toast(res.data.msg);
+                        }
                         this.systemInfo();
-
                         Loading.getInstance().close();
                     })
                     .catch((err) => {

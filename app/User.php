@@ -306,7 +306,7 @@ class User extends Authenticatable
 
             if ($boundCard->expired_at !== null) {
                 //过期判断
-                return strtotime($boundCard->expired_at->toDateTimeString()) > now() ? $boundCard->type->percent : 0;
+                return strtotime($boundCard->expired_at) > time() ? $boundCard->type->percent : 0;
             } else {
                 return $boundCard->type->percent;
             }
