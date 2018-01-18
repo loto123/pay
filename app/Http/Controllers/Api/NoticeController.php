@@ -97,6 +97,8 @@ class NoticeController extends BaseController
      *                      @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
      *                      @SWG\Property(property="content", type="string", example="这是一条系统消息...",description="消息内容"),
      *                      @SWG\Property(property="created_at", type="string", example="2018-01-01 12:00:00",description="发布时间"),
+     *                      @SWG\Property(property="has_detail", type="integer", example="1",description="是否可以点击详情，1：是，0：否"),
+     *                      @SWG\Property(property="read_state", type="integer", example="1",description="消息读取状态，1：已读，0：未读"),
      *                      @SWG\Property(property="operator_state", type="integer", example="1",description="是否可操作：1：是,0:不是"),
      *                      @SWG\Property(property="operator_options", type="array",
      *                           @SWG\Items(
@@ -142,7 +144,7 @@ class NoticeController extends BaseController
             return $this->json([], '请求的消息类型不存在', 0);
         }
         $notice_type = Notice::typeConfig()[$type];
-        $notice_query = $this->user->unreadNotifications()->where('type', $notice_type);
+        $notice_query = $this->user->notifications()->where('type', $notice_type);
         $count = $notice_query->count();
         if ($request->offset) {
             $last_notification = Notice::where("id", $request->offset)->first();
@@ -156,6 +158,8 @@ class NoticeController extends BaseController
             switch ($type){
                 case '1'://分润
                     foreach ($notice as $item) {
+                        $read_state = $item->read_at ? 1 : 0;
+                        $has_detail = 0;
                         $operator_state = 0;
                         $operator_options = [];
                         $operators_res = [];
@@ -166,6 +170,19 @@ class NoticeController extends BaseController
                             continue;
                         }
                         //是否需要操作
+                        $list_data = [
+                            'type' => $type,
+                            'notice_id' => $item->id,
+                            'mobile' => $profit->mobile,
+                            'thumb' => $profit->avatar??'',
+                            'amount' => $profit->proxy_amount,
+                            'created_at' => (string)$item->created_at,
+                            'operator_state' => $operator_state,
+                            'operator_options' => $operator_options,
+                            'operators_res' => $operators_res,
+                            'read_state' => $read_state,
+                            'has_detail' => $has_detail,
+                        ];
                         if(!empty($item->data['operators'])) {
                             $operators = $item->data['operators'];
                             //判断操作是否过期
@@ -178,48 +195,45 @@ class NoticeController extends BaseController
                             //判断是否已经操作过了
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
-                                $operators_res = $operators['result'];
+                                $list_data['operators_res'] = $operators['result'];
                             } else if( !empty($operators['options']) && isset($operators['options']['color'])
                                 && isset($operators['options']['text']) ) {
-                                $operator_options = $operators['options'];
-                                $operator_state = 1;
+                                $list_data['operator_options'] = $operators['options'];
+                                $list_data['operator_state'] = 1;
                                 //置顶
-                                array_unshift($list,[
-                                    'type' => $type,
-                                    'notice_id' => $item->id,
-                                    'mobile' => $profit->mobile,
-                                    'thumb' => $profit->avatar??'',
-                                    'amount' => $profit->proxy_amount,
-                                    'created_at' => (string)$item->created_at,
-                                    'operator_state' => $operator_state,
-                                    'operator_options' => $operator_options,
-                                    'operators_res' => $operators_res
-                                ]);
+                                array_unshift($list,$list_data);
                                 continue;
+                            } else {
+                                $list_data['has_detail'] = 1;
                             }
                         }
-                        $list[] = [
-                            'type' => $type,
-                            'notice_id' => $item->id,
-                            'mobile' => $profit->mobile,
-                            'thumb' => $profit->avatar??'',
-                            'amount' => $profit->proxy_amount,
-                            'created_at' => (string)$item->created_at,
-                            'operator_state' => $operator_state,
-                            'operator_options' => $operator_options,
-                            'operators_res' => $operators_res
-                        ];
+                        $list[] = $list_data;
                     }
                     break;
                 case '2'://用户注册
                 case '3'://系统消息
                     foreach ($notice as $item) {
+                        $read_state = $item->read_at ? 1 : 0;
+                        $has_detail = 0;
                         $title = $item->data['title'];
                         $content = $item->data['content'];
                         $link = isset($item->data['param']['link']) ? $item->data['param']['link'] : "";
                         $operator_state = 0;
                         $operator_options = [];
                         $operators_res = [];
+                        $list_data = [
+                            'type' => $type,
+                            'notice_id' => $item->id,
+                            'title' => $title,
+                            'content' => $content,
+                            'created_at' => (string)$item->created_at,
+                            'link' => $link,
+                            'operator_state' => $operator_state,
+                            'operator_options' => $operator_options,
+                            'operators_res' => $operators_res,
+                            'read_state' => $read_state,
+                            'has_detail' => $has_detail,
+                        ];
                         //是否需要操作
                         if(!empty($item->data['operators'])) {
                             $operators = $item->data['operators'];
@@ -233,34 +247,17 @@ class NoticeController extends BaseController
                             //判断是否已经操作过了
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
-                                $operators_res = $operators['result'];
+                                $list_data['operators_res'] = $operators['result'];
                             } else if( !empty($operators['options'])) {
-                                $operator_options = $operators['options'];
-                                $operator_state = 1;
-                                array_unshift($list,[
-                                    'type' => $type,
-                                    'notice_id' => $item->id,
-                                    'title' => $title,
-                                    'content' => $content,
-                                    'created_at' => (string)$item->created_at,
-                                    'operator_state' => $operator_state,
-                                    'operator_options' => $operator_options,
-                                    'operators_res' => $operators_res
-                                ]);
+                                $list_data['operator_options'] = $operators['options'];
+                                $list_data['operator_state'] = 1;
+                                array_unshift($list,$list_data);
                                 continue;
                             }
+                        } else {
+                            $list_data['has_detail'] = 1;
                         }
-                        $list[] = [
-                            'type' => $type,
-                            'notice_id' => $item->id,
-                            'title' => $title,
-                            'content' => $content,
-                            'link' => $link,
-                            'created_at' => (string)$item->created_at,
-                            'operator_state' => $operator_state,
-                            'operator_options' => $operator_options,
-                            'operators_res' => $operators_res
-                        ];
+                        $list[] = $list_data;
                     }
                     break;
             }
@@ -333,6 +330,7 @@ class NoticeController extends BaseController
         $notice_id = $request->notice_id;
         $value = $request->selected_value;
         $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
+        $notice->markAsRead();
         $flag = false;
         $res = '';
         $message = '失败';
@@ -565,11 +563,10 @@ class NoticeController extends BaseController
             $data = [
                 'time' => (string)$notice->created_at,
                 'content'=> $content,
-
                 'title' => $title
             ];
         }
-
+        $notice->markAsRead();
         return $this->json($data);
     }
 
