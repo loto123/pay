@@ -10,7 +10,6 @@
         "dingo/api": "2.0.0-alpha1",
         "encore/laravel-admin": "1.5.*",
         "fideloper/proxy": "~3.3",
-        "itsgoingd/clockwork": "^2.0",
         "jpush/jpush": "^3.5",
         "laravel-admin-ext/api-tester": "^1.0",
         "laravel-admin-ext/config": "^1.0",
