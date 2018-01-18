@@ -356,7 +356,7 @@ class NoticeController extends BaseController
             try{
                 $data = $notice['data'];
                 $data['operators']['result'] = ['code'=>$res->result,'message'=>$res->message,'prompt'=>$res->prompt];
-                Log::info(['operator_data'=>$data]);
+                Log::info(['operator_data'=>$res]);
                 $notice->update(['data' => $data]);
                 return $this->json([],$res->prompt);
             } catch (\Exception $e) {
