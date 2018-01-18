@@ -43,12 +43,27 @@
 		},
     components: { topBack },
     methods: {
+
       nextBtn() {
         if(!this.code){
-          Toast('请填写验证码')
+          Toast('请填写验证码');
           return
         }else{
-          this.$router.push('/my/pay_password');
+           var _data = {
+            mobile:this.mobile,
+            code:this.code,
+            exist:1
+          };
+
+          request.getInstance().postData('api/auth/valid',_data).then(res=>{
+            console.log(res);
+            console.log("拉起页面");
+          }).catch(err=>{
+            Toast(err.data.msg);
+            console.error(err);
+          });
+
+          this.$router.push('/my/setting_password?status='+"resetPassword");
         }
       },
       
@@ -56,6 +71,7 @@
         this.mobile=this.$route.query.mobile;
       },
 
+      // 发送验证码
       sendYZM(){
         if(this.computedTime !=null){
           return;
