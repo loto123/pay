@@ -186,16 +186,20 @@ class UserController extends Controller
                 $form->display('container.balance', '余额');
             }
             //角色不允许直接编辑
-//            $form->multipleSelect('roles', '角色')->options(Role::all()->pluck('display_name', 'id'));
-            $form->display('roles','角色')->with(function ($roles){
-                $role = '';
-                if (!empty($roles)) {
-                    foreach ($roles as $_role) {
-                        $role .= $_role['display_name'] . ' ';
+            if(!$id) {
+                $form->multipleSelect('roles', '角色')->options(Role::all()->pluck('display_name', 'id'));
+            } else {
+                $form->display('roles','角色')->with(function ($roles){
+                    $role = '';
+                    if (!empty($roles)) {
+                        foreach ($roles as $_role) {
+                            $role .= $_role['display_name'] . ' ';
+                        }
                     }
-                }
-                return $role;
-            });
+                    return $role;
+                });
+            }
+
             $form->select('operator_id','上级运营')->options(\App\Admin::whereHas("roles", function($query){
                 $query->where("slug", 'operator');
             })->pluck("username", 'id'));

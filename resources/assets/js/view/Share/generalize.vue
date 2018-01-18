@@ -69,7 +69,6 @@
   import topBack from "../../components/topBack";
   import request from "../../utils/userRequest"
   import Loading from "../../utils/loading"
-  import moment from 'moment'
   import { Toast } from 'mint-ui'
 
   export default {
