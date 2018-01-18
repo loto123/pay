@@ -89,9 +89,18 @@ class PromoterGrant extends Model implements UserConfirmCallback
         try {
             DB::beginTransaction();
             if ($selected_value == self::CONFIRM_ACCEPT) {
-                $this->grantTo->attachRole(Role::where('name', self::PROMOTER_ROLE_NAME)->first());
+                if ($this->grantTo->isPromoter()) {
+                    $this->grant_result = self::CONFIRM_DENY;
+                    $this->confirmed_at = date('Y-m-d H:i:s');
+                    $this->save();
+                    $result = ConfirmExecuteResult::success('已忽略');
+                    $result->prompt = '你已接受过邀请,已自动忽略';
+                    return $result;
+                } else {
+                    $this->grantTo->attachRole(Role::where('name', self::PROMOTER_ROLE_NAME)->first());
+                    $this->grant_result = $selected_value;
+                }
             }
-            $this->grant_result = $selected_value;
             $this->confirmed_at = date('Y-m-d H:i:s');
             $this->save();
         } catch (\Exception $e) {

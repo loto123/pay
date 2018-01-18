@@ -15,7 +15,7 @@
           
       </div>
       <div class="infos flex flex-align-center" v-if="isShow">
-          <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益将提高至5‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
+          <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益将提高至'+percent+'‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
       </div>
       
       <div class="card-wrap" v-if="isBindVIP">
@@ -35,7 +35,7 @@
       </div>
 
       <ul>
-          <li class="flex flex-align-center">
+          <li class="flex flex-align-center" @click="changeInfoStatus(0)">
               <span class="flex-9">
                 什么是VIP卡？
               </span>
@@ -46,7 +46,11 @@
               </span>
           </li>
 
-          <li class="flex flex-align-center">
+          <li class="info" v-if="infoStatus[0] == true">
+              <p>VIP卡是尊贵身份的象征，同时，绑定VIP卡的代理将享受更高的分润收益。</p>
+          </li>
+
+          <li class="flex flex-align-center" @click="changeInfoStatus(1)">
               <span class="flex-9">
                 绑定VIP卡的好处？
               </span>
@@ -56,8 +60,12 @@
                   </i>
               </span>
           </li>
+          
+          <li class="info" v-if="infoStatus[1]">
+              <p> 绑定黄金VIP卡的代理将享受额外xx‰的分润收益，且终身有效。</p>
+          </li>
 
-          <li class="flex flex-align-center">
+          <li class="flex flex-align-center" @click="changeInfoStatus(2)">
               <span class="flex-9">
                 如何获得VIP卡？
               </span>
@@ -66,6 +74,9 @@
                       &#xe62e;
                   </i>
               </span>
+          </li>
+          <li class="info" v-if="infoStatus[2]">
+              <p> 可联系相应的推广员开通绑定VIP卡。</p>
           </li>
           
       </ul>
@@ -168,6 +179,10 @@
             width:100%;
             margin-top:0.5em;
         }
+
+        .info{
+            background: #eee;
+        }
     }
 }
 </style>
@@ -189,7 +204,9 @@ export default {
           percent:null,
 
           userName:null,
-          avatar:null
+          avatar:null,
+
+          infoStatus:[false,false,false]
       }
   },
 
@@ -218,7 +235,18 @@ export default {
           }).catch(err=>{
               console.error(err);
           });
-       
+      },
+      
+      changeInfoStatus(index){
+          console.log(this.infoStatus);
+          if(this.infoStatus[index] == true){
+              this.infoStatus = [this.infoStatus[0] ,this.infoStatus[1] ,this.infoStatus[2]];
+              this.infoStatus[index] = false;
+              return ; 
+          }
+          this.infoStatus = [this.infoStatus[0] ,this.infoStatus[1] ,this.infoStatus[2]];
+          this.infoStatus[index] = true;
+          console.log(this.infoStatus);
       }
   }
 }

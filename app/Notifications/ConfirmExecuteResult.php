@@ -23,7 +23,7 @@ class ConfirmExecuteResult
     const EXECUTE_SUCCESS = 1;//执行成功
 
     /**
-     * 执行结果可读消息
+     * 执行状态提示,显示在消息列表
      * @var string
      */
     public $message;
@@ -41,10 +41,10 @@ class ConfirmExecuteResult
     public $exception;
 
     /**
-     * 业务执行结果代码
+     * 业务执行结果提示弹框
      * @var int
      */
-    private $code;
+    public $prompt = '';
 
     private function __construct($message, $result, Exception $e = null)
     {
@@ -70,23 +70,5 @@ class ConfirmExecuteResult
     public static function success($message)
     {
         return new self($message, self::EXECUTE_SUCCESS, null);
-    }
-
-    /**
-     * get code
-     * @return int
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * set code
-     * @param int $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
     }
 }
