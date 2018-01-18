@@ -35,7 +35,7 @@
       </div>
 
       <ul>
-          <li class="flex flex-align-center">
+          <li class="flex flex-align-center" @click="changeInfoStatus(0)">
               <span class="flex-9">
                 什么是VIP卡？
               </span>
@@ -46,7 +46,11 @@
               </span>
           </li>
 
-          <li class="flex flex-align-center">
+          <li class="info" v-if="infoStatus[0] == true">
+              <p>VIP卡是尊贵身份的象征，同时，绑定VIP卡的代理将享受更高的分润收益。</p>
+          </li>
+
+          <li class="flex flex-align-center" @click="changeInfoStatus(1)">
               <span class="flex-9">
                 绑定VIP卡的好处？
               </span>
@@ -56,8 +60,12 @@
                   </i>
               </span>
           </li>
+          
+          <li class="info" v-if="infoStatus[1]">
+              <p> 绑定黄金VIP卡的代理将享受额外xx‰的分润收益，且终身有效。</p>
+          </li>
 
-          <li class="flex flex-align-center">
+          <li class="flex flex-align-center" @click="changeInfoStatus(2)">
               <span class="flex-9">
                 如何获得VIP卡？
               </span>
@@ -66,6 +74,9 @@
                       &#xe62e;
                   </i>
               </span>
+          </li>
+          <li class="info" v-if="infoStatus[2]">
+              <p> 可联系相应的推广员开通绑定VIP卡。</p>
           </li>
           
       </ul>
@@ -168,6 +179,10 @@
             width:100%;
             margin-top:0.5em;
         }
+
+        .info{
+            background: #eee;
+        }
     }
 }
 </style>
@@ -189,7 +204,9 @@ export default {
           percent:null,
 
           userName:null,
-          avatar:null
+          avatar:null,
+
+          infoStatus:[false,false,false]
       }
   },
 
@@ -219,6 +236,17 @@ export default {
               console.error(err);
           });
        
+      },
+      changeInfoStatus(index){
+          if(this.infoStatus[index] == true){
+              this.infoStatus[index] = false;
+              console.log(111);
+              return ; 
+          }
+        //   this.infoStatus = [false ,false ,false];
+          console.log(index);
+          this.infoStatus[index] = true;
+          console.log(this.infoStatus);
       }
   }
 }
