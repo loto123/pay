@@ -89,6 +89,10 @@
 			},
 			//清空消息
 			del(type) {
+				if (this.moneyList.length==0) {
+                    Toast('当前没有消息')
+                    return
+                }
 				MessageBox.confirm("是否确认清空全部消息?", "温馨提示").then(
 				() => {
 					request.getInstance().postData("api/notice/delete?type=" + type)
