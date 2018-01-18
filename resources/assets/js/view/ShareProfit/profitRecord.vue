@@ -17,7 +17,7 @@
         </div>
 
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
-            <div class="month">{{timeInfo}}</div>
+            <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
             <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{tabTotal}}</div>
         </div>
 
@@ -102,7 +102,7 @@
                 recordList:[],
 
                 headList:[],            // timeTab数组
-                timeInfo:"",
+                timeInfo:null,
                 tabTotal:"",
                 tabStatus:[true,false],
 
