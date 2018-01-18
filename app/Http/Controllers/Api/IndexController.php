@@ -44,6 +44,7 @@ class IndexController extends BaseController {
      *                  @SWG\Property(property="balance", type="double", example=123.4,description="用户余额"),
      *                  @SWG\Property(property="new_message", type="boolean", example=0,description="是否有新消息"),
      *                  @SWG\Property(property="is_agent", type="boolean", example=0,description="是否为代理"),
+     *                  @SWG\Property(property="is_promoter", type="boolean", example=0,description="是否为推广员"),
      *              )
      *          )
      *      ),
@@ -62,7 +63,8 @@ class IndexController extends BaseController {
             'avatar' => $user->avatar,
             'balance' => $user->container->balance,
             'new_message' => 0,
-            'is_agent' => $user->hasRole("agent") ? 1 : 0
+            'is_agent' => $user->hasRole("agent") ? 1 : 0,
+            'is_promoter' => $user->hasRole("promoter") ? 1 : 0,
         ]);
     }
 
