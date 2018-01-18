@@ -7,6 +7,10 @@ Mbstring PHP Extension
 Tokenizer PHP Extension
 XML PHP Extension
 
+php.ini配置
+post_max_size = 50M
+upload_max_filesize = 50M
+
 redis服务
 
 程序主目录：public
