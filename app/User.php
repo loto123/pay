@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -228,7 +229,9 @@ class User extends Authenticatable
 
     public function proxy_container()
     {
-        return $this->hasOne(MasterContainer::class, 'id', 'proxy_container');
+        return $this->hasOne(MasterContainer::class, 'id', 'proxy_container_id')->withDefault([
+            'balance' => 0,
+        ]);
     }
 
     public function channel()
@@ -247,7 +250,12 @@ class User extends Authenticatable
     public function getProfitAttribute()
     {
         if($this->proxy_container) {
-            return $this->proxy_container->balance;
+            try {
+                Log::info(['proxy_container' => $this->proxy_container]);
+                return $this->proxy_container->balance;
+            } catch (\Exception $e) {
+                return 0;
+            }
         }
         return 0;
     }

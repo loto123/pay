@@ -159,7 +159,7 @@ class NoticeController extends BaseController
                 case '1'://分润
                     foreach ($notice as $item) {
                         $read_state = $item->read_at ? 1 : 0;
-                        $has_detail = 0;
+                        $has_detail = 1;
                         $operator_state = 0;
                         $operator_options = [];
                         $operators_res = [];
@@ -192,6 +192,7 @@ class NoticeController extends BaseController
                                 $item->markAsRead();
                                 continue;
                             }
+                            $list_data['has_detail'] = 0;
                             //判断是否已经操作过了
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
@@ -203,8 +204,6 @@ class NoticeController extends BaseController
                                 //置顶
                                 array_unshift($list,$list_data);
                                 continue;
-                            } else {
-                                $list_data['has_detail'] = 1;
                             }
                         }
                         $list[] = $list_data;
@@ -214,7 +213,7 @@ class NoticeController extends BaseController
                 case '3'://系统消息
                     foreach ($notice as $item) {
                         $read_state = $item->read_at ? 1 : 0;
-                        $has_detail = 0;
+                        $has_detail = 1;
                         $title = $item->data['title'];
                         $content = $item->data['content'];
                         $link = isset($item->data['param']['link']) ? $item->data['param']['link'] : "";
@@ -236,6 +235,7 @@ class NoticeController extends BaseController
                         ];
                         //是否需要操作
                         if(!empty($item->data['operators'])) {
+                            $list_data['has_detail'] = 0;
                             $operators = $item->data['operators'];
                             //判断操作是否过期
                             if(!empty($operators['expire_time'])
@@ -244,6 +244,7 @@ class NoticeController extends BaseController
                                 $item->markAsRead();
                                 continue;
                             }
+                            $list_data['has_detail'] = 0;
                             //判断是否已经操作过了
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
@@ -254,8 +255,6 @@ class NoticeController extends BaseController
                                 array_unshift($list,$list_data);
                                 continue;
                             }
-                        } else {
-                            $list_data['has_detail'] = 1;
                         }
                         $list[] = $list_data;
                     }
@@ -435,11 +434,14 @@ class NoticeController extends BaseController
         $content = $request->input('content');
         $title = $request->input('title');
         $param = $request->input('param');
-        $operators = [
-            'callback_method' => $request->callback_method,
-            'callback_params' => $request->callback_params??[],
-            'expire_time' => $request->expire_time,
-        ];
+        $operators = [];
+        if($request->callback_method && $request->callback_params && $request->expire_time){
+            $operators = [
+                'callback_method' => $request->callback_method,
+                'callback_params' => $request->callback_params??[],
+                'expire_time' => $request->expire_time,
+            ];
+        }
         if (\App\Admin\Controllers\NoticeController::send($user_id_arr,$type,$content,$title,$param,$operators)) {
             return $this->json();
         } else {
@@ -530,7 +532,7 @@ class NoticeController extends BaseController
             return $this->json([],$validator->errors()->first(),0);
         }
         $notice_id = $request->input('notice_id');
-        $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
+        $notice = $this->user->notifications()->where("id", $notice_id)->first();
         if (empty($notice)) {
             return $this->json([],'消息不存在',0);
         }
@@ -630,7 +632,7 @@ class NoticeController extends BaseController
         }
 
         try{
-            $this->user->unreadNotifications->where('type',$notice_type[$request->type])->markAsRead();
+            $this->user->notifications()->where('type',$notice_type[$request->type])->delete();
             return $this->json();
         } catch (\Exception $e) {
             return $this->json([],'操作失败',0);
