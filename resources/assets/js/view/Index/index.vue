@@ -200,7 +200,10 @@ export default {
       amount:null,
       avatar:null,
       newMessage:0,
-      isAgent:0
+      
+      isAgent:0,    // 是否是代理
+      isPromoters:0  // 是否是推广员
+
     }
   },
   created(){
@@ -268,7 +271,6 @@ export default {
     },
     goMyUsers(){
       if(this.isAgent == 0){
-       
         MessageBox({
             title: '温馨提示',
             message: '此功能只对代理开放，是否开通代理？?',
