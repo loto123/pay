@@ -205,9 +205,6 @@ export default {
 
           Loading.getInstance().close();
           Toast("申请加入店铺成功");
-          setTimeout(()=>{
-            this.clickEnable = false;
-          },1500);
 
         }).catch(error=>{
 

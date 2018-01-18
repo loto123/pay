@@ -205,6 +205,7 @@ export default {
   },
   created(){
     this.init();
+    console.log(debug);
     // console.log(process.env.NODE_ENV);
 
   },
