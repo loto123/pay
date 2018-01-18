@@ -40,6 +40,7 @@ Route::group([
     $router->get('info','UserController@info');
     $router->get('parent','UserController@parent');
     $router->post('pay_password','UserController@pay_password');
+    $router->post('resetPayPassword','UserController@resetPayPassword');
 });
 
 Route::group([

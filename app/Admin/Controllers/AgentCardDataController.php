@@ -121,7 +121,7 @@ class AgentCardDataController extends Controller
 
         $request_promoter = $request->promoter;
         if(!empty($request_promoter)) {
-            $promoter = User::where('mobile',$request_promoter)->first();
+            $promoter = User::where('mobile',$request_promoter)->withCount('promoter_cards')->first();
             $sale_card_cnt = CardStock::where('operator',Admin::user()->id)->where('state',CardStock::SALE)->count();
             if(empty($promoter) || !$promoter->isPromoter()) {
                 $_error = '该推广员不存在';
