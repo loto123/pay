@@ -283,6 +283,8 @@ class ProxyController extends BaseController {
         }
         $role = Role::where("name", 'agent')->first();
         $user->attachRole($role);
+        $user->percent = config("default_agent_ratio", 0);
+        $user->save();
         return $this->json();
     }
 }
