@@ -71,7 +71,6 @@
                     return
                 }
                 if (links != '') {
-                    console.log(links);
                     location.href=links
                     return
                 }
