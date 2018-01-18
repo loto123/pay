@@ -223,7 +223,7 @@ export default {
             showCancelButton: true
         }).then(res=>{
 
-           if(res!=confirm){
+           if(res!="confirm"){
             return;
           }
 
@@ -249,7 +249,7 @@ export default {
             showCancelButton: true
         }).then(res=>{
 
-           if(res!=confirm){
+           if(res!="confirm"){
             return;
           }
 
