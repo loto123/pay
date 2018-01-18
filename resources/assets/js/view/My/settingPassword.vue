@@ -40,6 +40,8 @@ export default {
             this.valideTimes = true;
         }else {
             this.secondPassword = value;
+
+            // 两次的密码相同
             if(this.firstPassword == this.secondPassword){
                 Loading.getInstance().open();
                 var _data = {
@@ -57,6 +59,8 @@ export default {
                 }).catch(err=>{
                     Toast(err.data.msg);
                 });
+            }else {
+                Toast("两次密码输入不一致");
             }
         }
     },
