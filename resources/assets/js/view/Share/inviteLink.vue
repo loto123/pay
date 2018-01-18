@@ -61,9 +61,11 @@
   
   export default {
     created() {
-      this.getMobile();
-      this.init();
-      this.shareContent();
+      this.init().then(res=>{
+        if (res) {
+          this.shareContent()
+        }
+      });
     },
 
     data() {
@@ -72,29 +74,18 @@
       }
     },
     methods: {
-      getMobile(){
-        Loading.getInstance().open("加载中...");
-
-        request.getInstance().getData("api/my/info")
-          .then((res) => {
-            this.mobile=res.data.data.mobile;
-            Loading.getInstance().close();
-          })
-          .catch((err) => {
-            Toast(err.data.msg);
-            Loading.getInstance().close();
-          })
-      },
       init() {
         var data = {
           share_url: window.location.href.split('#')[0],
           list: ['onMenuShareTimeline', 'onMenuShareAppMessage']
         }
-        request.getInstance().getData("api/proxy/share", data)
+        return Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData("api/proxy/share", data)])
           .then((res) => {
-            var Data = res.data.data;
+            this.mobile=res[0].data.data.mobile;
+            var Data = res[1].data.data;
             var content=JSON.parse(Data.config);
             wx.config(content);
+            return Promise.resolve(true);
           })
           .catch((err) => {
             Toast(err.data.msg);
