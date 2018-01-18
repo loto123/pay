@@ -64,6 +64,8 @@ Route::group([
     //VIP卡 excel导出
     $router->post('/excel/agent_card/card_record', 'ExcelController@card_record');
     $router->post('/excel/agent_card/cards', 'ExcelController@cards');
+
+    $router->get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 });
 
 Route::group([

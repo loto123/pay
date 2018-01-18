@@ -40,13 +40,15 @@ export default {
             this.valideTimes = true;
         }else {
             this.secondPassword = value;
+
+            // 两次的密码相同
             if(this.firstPassword == this.secondPassword){
                 Loading.getInstance().open();
                 var _data = {
                     pay_password :this.firstPassword
                 };
+                // TODO:修改支付密码
                 request.getInstance().postData("api/my/setPayPassword",_data).then(res=>{
-                    console.log(res);
                     Toast("支付密码设置成功，正在跳转...");
                     Loading.getInstance().close();
                     
@@ -57,9 +59,14 @@ export default {
                 }).catch(err=>{
                     Toast(err.data.msg);
                 });
+            }else {
+
+                Toast("两次密码输入不一致,请重新输入");
+                this.valideTimes = false;
             }
         }
     },
+
     backToLastPage(){
         this.$router.go(-1);
     }

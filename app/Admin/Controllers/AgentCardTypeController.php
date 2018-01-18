@@ -77,7 +77,7 @@ class AgentCardTypeController extends Controller
         return Admin::form(CardType::class, function (Form $form) {
             $form->text('name', '卡名')->rules('min:2', ['min' => '最少2个字符']);
             $form->decimal('percent', '分润比例(百分比)')->placeholder('%')->rules('required');
-            $form->number('valid_days', '有效期(填写天数,从开通vip开始算)')->placeholder('永久填0')->rules('min:0|required');
+            $form->number('valid_days', '有效期(填写天数,从开通vip开始算,0永久)')->placeholder('永久填0')->rules('between:0,2000|required');
         });
     }
 

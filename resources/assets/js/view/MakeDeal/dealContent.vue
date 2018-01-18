@@ -3,6 +3,7 @@
         <section class="content flex flex-v flex-align-center">
             <img :src="renderData.user.avatar" alt="" class="avatar">
             <h3 class="user-name">{{renderData.user.name}}</h3>
+            <p class="transfer-id">交易ID:{{renderData.id}}</p>
             <p class="message">{{(renderData.comment==0)?'无消息':renderData.comment}}</p>
         </section>
 
@@ -36,6 +37,12 @@
   .message {
     margin-top: 0.5em;
     color: #666;
+  }
+
+  .transfer-id{
+    margin-top:0.5em;
+    color: #666;
+    font-size: 0.9em;
   }
 }
 

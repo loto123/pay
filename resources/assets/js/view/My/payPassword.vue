@@ -12,7 +12,7 @@
     <div class="forget-password-box">
       <div class="notice">支付密码必须为6位纯数字</div>
       <div class="forget-password">
-        <a href="javascript:;">
+        <a @click="goVerfyCode">
           忘记原支付密码？
         </a>
       </div>
@@ -30,6 +30,7 @@
     components: { topBack },
     data() {
       return {
+        mobile:null,
         old_pay_password : null,   //旧密码
         new_pay_password : null,   //新密码
         confirm_pay_password: null    //确认密码
@@ -66,6 +67,11 @@
           .catch((err) => {
             Toast(err.data.msg);
           })
+      },
+
+      goVerfyCode(){
+        this.mobile=this.$route.query.mobile
+        this.$router.push("/my/verfy_code?mobile="+this.mobile);
       }
     }
 

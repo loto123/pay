@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\PayFactory;
 use App\Role;
 use App\User;
 use EasyWeChat\Factory;
@@ -90,7 +91,41 @@ class ProxyController extends BaseController {
      *     required=false,
      *     type="number"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="total", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="list",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="id", type="string", example="12345676789",description="用户id"),
+     *                  @SWG\Property(property="avatar", type="string", example="url:",description="头像"),
+     *                  @SWG\Property(property="name", type="string", example="name",description="用户名"),
+     *                  @SWG\Property(property="mobile", type="string", example="123",description="手机号"),
+     *                  )
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -249,6 +284,11 @@ class ProxyController extends BaseController {
         }
         $role = Role::where("name", 'agent')->first();
         $user->attachRole($role);
+        $user->percent = config("default_agent_ratio", 0);
+        $wallet = PayFactory::MasterContainer();
+        $wallet->save();
+        $user->proxy_container_id = $wallet->id;
+        $user->save();
         return $this->json();
     }
 }

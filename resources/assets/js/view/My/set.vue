@@ -41,7 +41,8 @@
 		components: { topBack },
 		methods: {
 			verfyCode() {
-				this.$router.push('/my/pay_password');
+				this.mobile = this.$route.query.mobile;
+				this.$router.push('/my/pay_password?mobile='+ this.mobile);
 			},
 			exit(){
 				request.getInstance().removeToken();
