@@ -498,6 +498,7 @@ class TransferController extends BaseController
      */
     public function trade(Request $request)
     {
+        Log::info('开始交易');
         $user = JWTAuth::parseToken()->authenticate();
 
         $validator = Validator::make($request->all(),
