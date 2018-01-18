@@ -62,8 +62,6 @@ class AgentCardDataController extends Controller
         if(empty($agent_card_type)) {
             return response()->json(['code' => -1,'msg' => '不存在此类型的卡','data' => []]);
         };
-        $card_expired = $agent_card_type->valid_days>0 ? date('Y-m-d H:i:s',strtotime("+{$agent_card_type->valid_days} days")) : NULL;
-
         //运营是否存在，可开卡数是否足够
         $operators = AdminUser::where('username',$operator_username)->first();
         if(empty($operators)) {

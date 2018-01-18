@@ -183,6 +183,7 @@ class NoticeController extends BaseController
                                 && isset($operators['options']['text']) ) {
                                 $operator_options = $operators['options'];
                                 $operator_state = 1;
+                                //置顶
                                 array_unshift($list,[
                                     'type' => $type,
                                     'notice_id' => $item->id,
@@ -354,9 +355,10 @@ class NoticeController extends BaseController
         if($flag) {
             try{
                 $data = $notice['data'];
-                $data['operators']['result'] = ['code'=>$res->result,'message'=>$res->message];
+                $data['operators']['result'] = ['code'=>$res->result,'message'=>$res->message,'prompt'=>$res->prompt];
+                Log::info(['operator_data'=>$res]);
                 $notice->update(['data' => $data]);
-                return $this->json();
+                return $this->json([],$res->prompt);
             } catch (\Exception $e) {
                 return $this->json([],'请求失败，请稍后重试',0);
             }
