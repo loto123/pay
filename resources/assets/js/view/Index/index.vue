@@ -86,7 +86,7 @@
             </a>
           </li>
 
-          <li class="flex flex-v flex-align-center">
+          <li class="flex flex-v flex-align-center" v-if="isPromoters==1">
             <a class="flex flex-v flex-align-center" @click="goVipOpenCard">
               <i class="iconfont transaction-icon common-icon">
                   &#xe639;
@@ -208,9 +208,6 @@ export default {
   },
   created(){
     this.init();
-    console.log(debug);
-    // console.log(process.env.NODE_ENV);
-
   },
   methods:{
     goInform(){
@@ -300,7 +297,9 @@ export default {
         this.amount = res.data.data.balance;
         this.avatar = res.data.data.avatar;
         this.newMessage = res.data.data.new_message;
+
         this.isAgent = res.data.data.is_agent;
+        this.isPromoters = res.data.data.is_promoter;
         Loading.getInstance().close();
         
       }).catch(err=>{
