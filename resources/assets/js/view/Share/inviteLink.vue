@@ -101,7 +101,8 @@
           })
       },
       shareContent() {
-        let links = 'https://qp-jubaopen-test.supernano.com/#/shareUser/inviteLink/download?mobile='+this.mobile;
+        let url=window.location.href.split('#')[0];
+        let links = url+'/#/shareUser/inviteLink/download?mobile='+this.mobile;
         let title = '聚宝朋';
         let desc = '这是一段文字';
         let imgUrl = '';
