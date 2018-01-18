@@ -129,11 +129,8 @@
                     .then((res) => {
                         if(res.data.msg !=''){
                             Toast(res.data.msg);
-                        }else{
-                            Toast('成功');
                         }
                         this.systemInfo();
-
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
