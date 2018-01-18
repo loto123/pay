@@ -12,7 +12,7 @@
     <div class="forget-password-box">
       <div class="notice">支付密码必须为6位纯数字</div>
       <div class="forget-password">
-        <a href="javascript:;">
+        <a @click="goVerfyCode">
           忘记原支付密码？
         </a>
       </div>
@@ -66,6 +66,10 @@
           .catch((err) => {
             Toast(err.data.msg);
           })
+      },
+
+      goVerfyCode(){
+        this.$router.push("/my/verfy_code");
       }
     }
 

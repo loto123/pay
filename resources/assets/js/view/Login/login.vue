@@ -10,7 +10,7 @@
       <div class="circle-wrap flex flex-align-center">
         <img src="/images/logo.png" alt="logo">
       </div> 
-      <h3>游戏宝</h3>
+      <h3>聚宝朋</h3>
     </div>
 
     <div class="text-area flex flex-v flex-justify-center">
