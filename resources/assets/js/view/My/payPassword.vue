@@ -30,6 +30,7 @@
     components: { topBack },
     data() {
       return {
+        mobile:null,
         old_pay_password : null,   //旧密码
         new_pay_password : null,   //新密码
         confirm_pay_password: null    //确认密码
@@ -69,7 +70,8 @@
       },
 
       goVerfyCode(){
-        this.$router.push("/my/verfy_code");
+        this.mobile=this.$route.query.mobile
+        this.$router.push("/my/verfy_code?mobile="+this.mobile);
       }
     }
 
