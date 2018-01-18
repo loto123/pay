@@ -1253,8 +1253,8 @@ class ShopController extends BaseController {
         $data = [];
         $query = $user->unreadNotifications()->where("type", "App\Notifications\ShopApply");
         $count = (int)$query->count();
-        if ($query->offset) {
-            $last = Notice::find($query->offset);
+        if ($request->offset) {
+            $last = Notice::find($request->offset);
             if ($last) {
                 $query->where("uid", "<", $last->uid);
             }
