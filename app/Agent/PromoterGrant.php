@@ -104,6 +104,7 @@ class PromoterGrant extends Model implements UserConfirmCallback
                 $result = ConfirmExecuteResult::success('已接受');
             } else {
                 $this->grant_result = self::CONFIRM_DENY;
+                $result = ConfirmExecuteResult::success('已忽略');
             }
             $this->confirmed_at = date('Y-m-d H:i:s');
             $this->save();
