@@ -47,6 +47,10 @@
                                             @endif
                                         </div>
                                     </li>
+                                    <li class="clearfix">
+                                        <div>现有VIP卡:</div>
+                                        <div>{{ $promoter->promoter_cards_count ?? 0}} 张</div>
+                                    </li>
                                 </ul>
                                 <div class="divide-prop-box"><label for="divideProp">添加VIP卡数量</label><input
                                             value="" type="text"
