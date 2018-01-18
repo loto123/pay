@@ -37,7 +37,7 @@
 						<img slot="icon" src="/images/bankCardManage.png" width="30" height="30">
 					</mt-cell>
 				</li>
-				<li @click="set(mobile)">
+				<li @click="set">
 					<mt-cell title="更多设置" is-link>
 						<img slot="icon" src="/images/moreSet.png" width="30" height="30">
 					</mt-cell>
@@ -172,8 +172,8 @@
 					Toast('请添加银行卡');
 				}
 			},
-			set(e){
-				this.$router.push("/my/set"+"?mobile="+e);
+			set(){
+				this.$router.push("/my/set");
 			},
 			referrer(){
 				this.$router.push('/my/referrer');
