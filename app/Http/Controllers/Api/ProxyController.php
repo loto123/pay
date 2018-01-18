@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\PayFactory;
 use App\Role;
 use App\User;
 use EasyWeChat\Factory;
@@ -284,6 +285,9 @@ class ProxyController extends BaseController {
         $role = Role::where("name", 'agent')->first();
         $user->attachRole($role);
         $user->percent = config("default_agent_ratio", 0);
+        $wallet = PayFactory::MasterContainer();
+        $wallet->save();
+        $user->proxy_container_id = $wallet->id;
         $user->save();
         return $this->json();
     }
