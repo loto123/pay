@@ -13,7 +13,8 @@
 <body>
 <div id="app"></div>
 <script>
-    var user_feedback=null
+    var debug = {{config('app.debug')}};
+    var user_feedback = null;
     @if (config("user_feedback"))
     user_feedback = "{{ config("user_feedback") }}"
     @endif
