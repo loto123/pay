@@ -12,17 +12,18 @@
         </div>
         <div class="systemInfo-box" ref='wrapper'>
             <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
-                <li v-for="item in systemList" @click="goDetails(item.operator_state,item.notice_id,item.link)">
+                <li v-for="item in systemList" @click="goDetails(item.operator_state,item.notice_id,item.link,item.has_detail)">
                     <div class="top-info flex flex-align-end flex-justify-between">
                         <div class="title flex-6">{{item.title}}</div>
                         <div class="date flex-4">{{item.created_at}}</div>
                     </div>
                     <div class="bottom-info flex flex-align-center flex-justify-between">
-                        <div class="content flex-7" v-html="item.content"></div>
-                        <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
+                        <div class="content flex-6" v-html="item.content"></div>
+                        <div class="isRead flex-1">{{item.read_state==1?'已读':''}}</div>
+                        <div class="btn-wrap flex-2 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
                             <span v-for="(option,index) in item.operator_options" :style="{background: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
                         </div>
-                        <div v-if="item.operators_res.length != 0" class="status">{{item.operators_res.message}}</div>
+                        <div v-if="item.operators_res.length != 0" class="status flex-1">{{item.operators_res.message}}</div>
                     </div>
                 </li>
             </ul>
@@ -66,7 +67,7 @@
             goUser() {
                 this.$router.push("/userRegister");
             },
-            goDetails(status, e,links) { //详情
+            goDetails(status, e,links,isDetails) { //详情
                 if (status == 1) {
                     return
                 }
@@ -74,9 +75,9 @@
                     location.href=links
                     return
                 }
-                this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
-                
-                
+                if(isDetails == 1){
+                  this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
+                }
             },
             systemInfo() { //列表
                 var self = this;
@@ -231,6 +232,11 @@
             .status {
                 color: rgb(165, 59, 59);
                 font-size: 0.7em;
+            }
+            .isRead{
+                margin-right: 0.2em;
+                font-size: 0.7em;
+                color: #aaa;
             }
             .bottom-info {
                 .content {
