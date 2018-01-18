@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Notice;
 use App\Notifications\ShopApply;
 use App\Pay\Model\PayFactory;
 use App\Shop;
@@ -1193,14 +1194,14 @@ class ShopController extends BaseController {
      *   summary="店铺消息",
      *   tags={"店铺"},
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="path",
-     *     description="页码",
+     *     description="最后记录id",
      *     required=false,
-     *     type="integer"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limie",
      *     in="path",
      *     description="数目",
      *     required=false,
@@ -1250,7 +1251,16 @@ class ShopController extends BaseController {
         $user = $this->auth->user();
 
         $data = [];
-        foreach ($user->unreadNotifications()->where("type", "App\Notifications\ShopApply")->paginate($request->input('size', 20)) as $notification) {
+        $query = $user->unreadNotifications()->where("type", "App\Notifications\ShopApply");
+        $count = (int)$query->count();
+        if ($query->offset) {
+            $last = Notice::find($query->offset);
+            if ($last) {
+                $query->where("uid", "<", $last->uid);
+            }
+        }
+        $query->limit($request->input("limit", 20))->orderBy("uid","DESC");
+        foreach ($query->get() as $notification) {
             try {
                 $user = User::find($notification->data['user_id']);
                 $shop = Shop::find($notification->data['shop_id']);
@@ -1264,7 +1274,7 @@ class ShopController extends BaseController {
                 ];
             } catch (\Exception $e){}
         }
-        return $this->json(['count' => (int)$user->unreadNotifications()->where("type", "App\Notifications\ShopApply")->count(), 'data' => $data]);
+        return $this->json(['count' => $count, 'data' => $data]);
     }
 
     /**
