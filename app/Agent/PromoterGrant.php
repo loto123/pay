@@ -91,6 +91,8 @@ class PromoterGrant extends Model implements UserConfirmCallback
             if ($selected_value == self::CONFIRM_ACCEPT) {
                 if ($this->grantTo->isPromoter()) {
                     $this->grant_result = self::CONFIRM_DENY;
+                    $this->confirmed_at = date('Y-m-d H:i:s');
+                    $this->save();
                     $result = ConfirmExecuteResult::success('已忽略');
                     $result->prompt = '你已接受过邀请,已自动忽略';
                     return $result;
