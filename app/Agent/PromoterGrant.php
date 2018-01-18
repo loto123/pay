@@ -86,29 +86,32 @@ class PromoterGrant extends Model implements UserConfirmCallback
      */
     public function confirm($selected_value, $user_data = [])
     {
+        //已经是推广员直接忽略
+        if ($this->grantTo->isPromoter()) {
+            $this->grant_result = self::CONFIRM_DENY;
+            $this->confirmed_at = date('Y-m-d H:i:s');
+            $this->save();
+            $result = ConfirmExecuteResult::success('已忽略');
+            $result->prompt = '你已接受过邀请,已自动忽略';
+            return $result;
+        }
+
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             if ($selected_value == self::CONFIRM_ACCEPT) {
-                if ($this->grantTo->isPromoter()) {
-                    $this->grant_result = self::CONFIRM_DENY;
-                    $this->confirmed_at = date('Y-m-d H:i:s');
-                    $this->save();
-                    $result = ConfirmExecuteResult::success('已忽略');
-                    $result->prompt = '你已接受过邀请,已自动忽略';
-                    return $result;
-                } else {
-                    $this->grantTo->attachRole(Role::where('name', self::PROMOTER_ROLE_NAME)->first());
-                    $this->grant_result = $selected_value;
-                }
+                $this->grantTo->attachRole(Role::where('name', self::PROMOTER_ROLE_NAME)->first());
+                $this->grant_result = self::CONFIRM_ACCEPT;
+                $result = ConfirmExecuteResult::success('已接受');
+            } else {
+                $this->grant_result = self::CONFIRM_DENY;
             }
             $this->confirmed_at = date('Y-m-d H:i:s');
             $this->save();
-        } catch (\Exception $e) {
+        } catch (\Exception$e) {
             DB::rollback();
             return ConfirmExecuteResult::fail('系统异常', $e);
         }
         DB::commit();
-        return ConfirmExecuteResult::success($selected_value == self::CONFIRM_ACCEPT ? '已接受' : '已忽略');
-
+        return $result;
     }
 }
