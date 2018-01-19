@@ -18,7 +18,7 @@ use App\Pay\PayLogger;
 class WechatH5 implements DepositInterface
 {
 
-    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
         $params = [
             'version' => 1,
@@ -40,6 +40,15 @@ class WechatH5 implements DepositInterface
         array_walk($params, function (&$val) {
             $val = strtolower($val);
         });
+
+        //超时加到key后面一起计算
+        if ($timeout) {
+            $timeout = (time() + $timeout) * 1000;
+            dump($timeout);
+            return;
+            $params['timestamp'] = $timeout;
+            $config['key_v1'] = "{$config['key_v1']}&timestamp=$timeout";
+        }
 
         //坑爹,汇付宝说参数全部转换为小写,这个参数不要
         $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding('{"s":"WAP","n":"' . $config['website_name'] . '","id":"' . route('home') . '"}', "GB2312", "UTF-8")));

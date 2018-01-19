@@ -47,14 +47,15 @@ class DepositMethod extends Model
     /**
      * 发起充值
      */
-    public function deposit(Deposit $order)
+    public function deposit(Deposit $order, $timeout)
     {
         return (new $this->impl)->deposit(
             $order->getKey(),
             $order->amount,
             array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($order->channel->config)),
             $this->getNotifyUrl($order->channel),
-            $this->getReturnUrl()
+            $this->getReturnUrl(),
+            $timeout
         );
     }
 

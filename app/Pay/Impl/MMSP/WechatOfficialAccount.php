@@ -15,7 +15,7 @@ use App\Pay\Impl\MMSP\SDK\wxscan;
 class WechatOfficialAccount extends WechatH5
 {
 
-    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
         //Log::info($config);
         $amount *= 100; //单位:分

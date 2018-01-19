@@ -22,7 +22,7 @@ class WechatH5 implements DepositInterface
 {
 
 
-    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
         $outID = $this->mixUpDepositId($deposit_id);
         $amount *= 100; //单位:分

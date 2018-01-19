@@ -25,8 +25,9 @@ interface DepositInterface
      * @param $notify_url string 通知地址
      * @param $return_url
      * @return mixed 返回储值信息,失败返回null
+     * @param $timeout int 订单超时秒数,null不设
      */
-    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url);
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout);
 
     /**
      * 接收支付平台的通知并解析结果
