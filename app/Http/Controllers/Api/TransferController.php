@@ -734,6 +734,8 @@ class TransferController extends BaseController
 //                $shop->save();
                 //删除茶水费记录
                 TipRecord::where('id', $tip->id)->delete();
+                //红包茶水费减少
+                $transfer->tip_amount = $transfer->tip_amount - $tip->amount;
             }
             //用户余额增加
 //                $user->balance = $user->balance + $record->amount;
