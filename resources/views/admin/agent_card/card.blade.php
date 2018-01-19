@@ -29,7 +29,9 @@
                                placeholder="请输入运营ID"
                                value="{{$operator_id??''}}">
                     </div>
-
+                </div>
+                
+                <div class="form-group">
                     <label class="col-sm-1 control-label">推广员ID：</label>
                     <div class="col-sm-2">
                         <input type="text" name="promoter_id" id="promoter_id" class="form-control"
@@ -38,7 +40,7 @@
                     </div>
                     <label class="col-sm-1 control-label">使用状态：</label>
                     <div class="col-sm-2">
-                        <select name="is_bound" id="is_bound">
+                        <select class="form-control" name="is_bound" id="is_bound">
                                 <option value="">所有</option>
                             <option value="{{\App\Agent\Card::BOUND}}"
                                     @if (isset($is_bound) && $is_bound == \App\Agent\Card::BOUND)
@@ -56,7 +58,7 @@
                     </div>
                     <label class="col-sm-1 control-label">是否冻结：</label>
                     <div class="col-sm-2">
-                        <select name="is_frozen" id="is_frozen">
+                        <select class="form-control" name="is_frozen" id="is_frozen">
                             <option value="">所有</option>
                             <option value="{{\App\Agent\Card::FROZEN}}"
                                     @if (isset($is_frozen) && $is_frozen == \App\Agent\Card::FROZEN)
