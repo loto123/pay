@@ -84,7 +84,7 @@ class UserController extends Controller
                 ->with(['roles', 'operator'])
                 ->select($user_table.'.*',
                     DB::raw('abs(SUM( CASE WHEN stat=1 THEN amount ELSE 0 END)) AS payment'),
-                    DB::raw('abs(SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END)) AS profit'),
+                    DB::raw('abs(SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END)) AS profits'),
                     DB::raw('COUNT(tfr.id) AS transfer_count'));
             if ($user_mobile) {
                 $grid->model()->where($user_table.'.mobile', $user_mobile);
@@ -118,10 +118,10 @@ class UserController extends Controller
             $grid->transfer_count('交易笔数');
             $grid->column('container.balance','余额');
             $grid->column('pure_profit', '收益')->display(function(){
-                return number_format($this->profit - $this->payment,2);
+                return number_format($this->profits - $this->payment,2);
             });
-            $grid->profit('收款')->display(function () {
-                return number_format($this->profit,2);
+            $grid->profits('收款')->display(function () {
+                return number_format($this->profits,2);
             });
             $grid->payment('付款')->display(function () {
                 return number_format($this->payment,2);
@@ -297,7 +297,7 @@ class UserController extends Controller
             $list->parent_id = $list->parent_id==0?$list->parent_id:$list->parent->en_id($list->parent_id);
             $transfer_record = TransferRecord::where('user_id', $id)
                 ->select(DB::raw('abs(SUM( CASE WHEN  stat=1 THEN amount ELSE 0 END)) AS payment'),
-                    DB::raw('abs(SUM( CASE WHEN  stat=2 THEN real_amount ELSE 0 END)) AS profit'),
+                    DB::raw('abs(SUM( CASE WHEN  stat=2 THEN real_amount ELSE 0 END)) AS profits'),
                     DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(fee_amount) AS fee_amount_count'))
                 ->first();
             $data = compact('list', 'transfer_record');
