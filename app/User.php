@@ -251,9 +251,11 @@ class User extends Authenticatable
     {
         if($this->proxy_container) {
             try {
-                Log::info(['proxy_container' => $this->proxy_container]);
+                Log::info('proxy_container');
+                Log::info($this->proxy_container);
                 return $this->proxy_container->balance;
             } catch (\Exception $e) {
+                Log::info('catch');
                 return 0;
             }
         }
