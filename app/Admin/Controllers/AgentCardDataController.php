@@ -265,6 +265,13 @@ class AgentCardDataController extends Controller
         }
 
         $query = Card::query()->with(['owner_user', 'stock.operators', 'promoter']);
+        //运营只能看到自己的
+        if(!Admin::user()->can('create_agent_card')) {
+            $query = $query->whereHas('stock.operators', function ($query) {
+                $query->where('id', Admin::user()->id);
+            });
+        }
+
         if (!empty($card_id)) {
             $query = $query->where('id', (new Card())->recover_id($card_id));
         }
