@@ -26,20 +26,22 @@ class AgentCardDataController extends Controller
     {
         $operators = [];
         $operator_username = $request->operator_username;
-
+        if(!Admin::user()->can('create_agent_card')) {
+            $_error = '没有操作权限';
+        }
         if(!empty($operator_username)) {
             $operators = AdminUser::where('username',$operator_username)->withCount('card_stock')->first();
-            if(empty($operators) || !$operators->can('operate_agent_card')) {
+            if(empty($operators) || !$operators->can('add_agent_card_to_promoter')) {
                 $_error = '该用户没有操作权限';
             }
             $card_type = CardType::query()->select('id','name')->get();
             if(empty($card_type)) {
                 $_error = '没有可选的卡片，请先添加卡片类型';
             }
-
         }
 
-        $data = isset($_error)?compact('_error','operator_username'):compact('operators','operator_username','card_type');
+        $data = isset($_error)?compact('_error','operator_username')
+            :compact('operators','operator_username','card_type');
         return Admin::content(function (Content $content) use ($data) {
             $content->header("添加VIP卡");
             $content->body(view('admin.agent_card.operator', $data));
@@ -221,7 +223,7 @@ class AgentCardDataController extends Controller
 
         $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card']);
         //运营只能看到自己的
-        if(!Admin::user()->can('create_agent_card') && Admin::user()->can('operate_agent_card')) {
+        if(!Admin::user()->can('create_agent_card') && Admin::user()->can('add_agent_card_to_promoter')) {
             $query = $query->where('operator',Admin::user()->id);
         }
 
