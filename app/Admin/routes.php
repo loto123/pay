@@ -12,6 +12,10 @@ Route::group([
     $router->get('/', 'HomeController@index');
     $router->resource('users',UserController::class);
     $router->resource('versions',VersionController::class);
+    $router->resource('pets',PetController::class);
+    $router->get('pets/{id}/preview',"PetController@preview");
+    $router->resource('pets_part',PetPartController::class);
+    $router->resource('pets_part_item',PetPartItemController::class);
     $router->resource('/roles', RoleController::class);
     $router->resource('/permissions', PermissionController::class);
     $router->resource('/system_message', SystemMessageController::class);
