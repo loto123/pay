@@ -33,6 +33,7 @@ return [
     'trans_closed_error' => '交易非平账状态不能关闭',
     'trans_closed_success' => '关闭交易成功',
     'trans_closed_failed' => '关闭交易失败',
+    'trans_closed_part_success' => '部分交易关闭成功',
     'mark_success' => '标记交易成功',
     'trans_not_belong_user' => '您不是交易发起人，不允许此操作',
     'trans_cancel_success' => '撤销交易成功',
