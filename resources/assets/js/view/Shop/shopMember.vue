@@ -24,7 +24,7 @@
               </span>
           </li> -->
 
-          <li class="minus-member flex flex-v flex-align-center flex-justify-center" @click="openControlSwitch">
+          <li class="minus-member flex flex-v flex-align-center flex-justify-center" @click="openControlSwitch" v-if="isGroupMaster == 1">
               <div class="img-wrap flex flex-align-center flex-justify-center">
                   <i class="iconfont" style="margin-top:-0.2em;">
                     &#xe620;
@@ -165,7 +165,9 @@ export default {
       dataList:[],
       searchDataList:[],
       searchData:null,  // 玩家搜索的数据
-      controlSwitch:false
+      controlSwitch:false,
+
+      isGroupMaster:0
     };
   },
   components: { topBack },
@@ -210,6 +212,8 @@ export default {
     init(){
       Loading.getInstance().open();
       this.shopId = this.$route.query.shopId;
+      this.isGroupMaster = this.$route.query.isGroupMaster;
+      console.log(this.isGroupMaster);
 
       request.getInstance().getData("api/shop/members/"+this.shopId).then(res=>{
         this.dataList = res.data.data.members;

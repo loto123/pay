@@ -364,7 +364,7 @@ export default {
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
-            Toast("关闭成功");
+            Toast(res.data.msg);
             setTimeout(()=>{
                 this.init();
             },1500);
@@ -384,7 +384,7 @@ export default {
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
-            Toast("成功关闭所有已平账交易");
+            Toast(res.data.msg);
             this.init();
 
         }).catch(err=>{

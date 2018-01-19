@@ -70,7 +70,7 @@
                 <img :src="item.avatar" alt="">
             </div>
             
-            <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember">
+            <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember" v-if="isGroupMaster">
                 <i class="iconfont">
                     &#xe600;
                 </i>
@@ -557,7 +557,7 @@ export default {
         Toast("当前店铺无成员,");
         return ;
       }
-      this.$router.push("/shop/shop_member?shopId="+this.shopId);
+      this.$router.push("/shop/shop_member?shopId="+this.shopId+"&isGroupMaster="+this.isGroupMaster);
     },
     goDealManagement() {
       this.$router.push("/shop/deal_management?shopId="+this.shopId);
