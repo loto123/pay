@@ -586,7 +586,8 @@ class TransferController extends BaseController
 //                    $shop->save();
                     //分润
                     if ($transfer->shop && $transfer->shop->container) {
-                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
+//                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
+                        $receiver = $transfer->shop->container;
                         $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
                     }
                 }
@@ -601,7 +602,7 @@ class TransferController extends BaseController
                     if ($user->parent && $user->parent->percent) {
 //                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         //分润至代理分润账户
-                        $user_receiver = PayFactory::MasterContainer($user->parent->proxy_container->id);
+                        $user_receiver = $user->parent->proxy_container;
                         $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
                         if ($proxy_fee) {
                             $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
@@ -1422,9 +1423,11 @@ class TransferController extends BaseController
                 $transfer->status = 3;
                 if ($transfer->save()) {
                     //解冻店铺茶水费资金
-                    $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
+//                    $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
+                    $shop_container = $transfer->shop->container;
                     if ($transfer->tip_amount > 0) {
                         if (!$shop_container->unfreeze($transfer->tip_amount)) {
+                            Log::error('关闭交易，解冻店铺资金失败:'.'     shop frozen_balance:'.$shop_container->frozen_balance.'     unfreeze_amount:'.$transfer->tip_amount);
                             return $this->json([], trans('trans.trans_closed_failed'), 0);
                         }
                     }
@@ -1453,7 +1456,7 @@ class TransferController extends BaseController
                             if ($profit->proxy_amount > 0) {
 //                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
                                 //解冻代理分润账户资金
-                                $proxy_container = PayFactory::MasterContainer($value->user->parent->proxy_container->id);
+                                $proxy_container = $value->user->parent->proxy_container;
                                 $proxy_container->unfreeze($profit->proxy_amount);
                             }
                         }

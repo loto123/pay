@@ -768,7 +768,6 @@ export default {
             return;
           }
 
-          console.log(Number(value));
           console.log(this.platform_fee);
           if(Number(value)>= Number(this.platform_fee)){
               Toast("手续费率必须小于平台交易费率"+this.platform_fee+"%");

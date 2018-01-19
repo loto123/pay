@@ -163,6 +163,7 @@ export default {
       shopId:null,
       membersCount:0,
       dataList:[],
+      searchDataList:[],
       searchData:null,  // 玩家搜索的数据
       controlSwitch:false
     };
@@ -187,7 +188,19 @@ export default {
     // 每次用户输入都执行搜索
     openSearchSwitch() {
       this.searchSwitch = true;
-      console.log(this.searchData);
+
+      if(this.dataList.length >0){
+        this.searchDataList = [].concat(this.dataList);
+      }
+
+      for(var i =0; i<this.searchDataList.length; i++){
+        if(this.searchData == this.searchDataList[i].name){
+          this.dataList = [];
+          this.dataList.push(this.searchDataList[i]);
+        }else {
+          this.dataList = [];
+        }
+      }
     },
 
     openControlSwitch(){
@@ -214,6 +227,7 @@ export default {
     cancerSearch(){
       this.searchSwitch = false;
       this.searchData = null;
+      this.init();
     }
   }
 };

@@ -17,7 +17,7 @@
         </div>
 
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
-            <div class="month">{{timeInfo}}</div>
+            <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
             <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{tabTotal}}</div>
         </div>
 
@@ -102,7 +102,7 @@
                 recordList:[],
 
                 headList:[],            // timeTab数组
-                timeInfo:"",
+                timeInfo:null,
                 tabTotal:"",
                 tabStatus:[true,false],
 
@@ -261,10 +261,6 @@
                     }
                 }
 
-                // console.log("--------初始head----------");
-                // console.log(_head);
-                // console.log(this.headList);
-
                 if(this.headList.length == 0){
                     // 分润列表
                     if(this.tabStatus[0] == true){
@@ -337,8 +333,6 @@
                                     //     index:key,
                                     //     total:res.data.data.total
                                     // }
-                                    // console.log(3333);
-                                    // console.log(_initialData);
                                     
                                     // this.headList.push(_initialData);
                                     // this.timeInfo = this.headList[0].time;
@@ -396,13 +390,8 @@
                     var _index = this.headList[k].index+count;
 
                     if(this.recordList[_index].isTimePanel == true){
-                        // console.log("跳过添加的这玩意是");
-                        // console.log(this.recordList[_index]);
-                        // console.log(this.headList[k]);
                         continue;
                     }
-                    // console.log("要添加的是");
-                    // console.log(this.headList[k]);
                     this.recordList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time,total:this.headList[k].total});
                     count++;
                 }
@@ -507,8 +496,6 @@
 
             filterDate(){
                 this.$refs.picker.open();
-                // console.log(this.$refs.picker);
-                // console.log(this.$refs.picker.$children[0].$children[0].$children[2]);
                 this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
             },
 
