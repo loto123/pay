@@ -43,7 +43,7 @@
 		},
     components: { topBack },
     methods: {
-
+      // 下一步
       nextBtn() {
         if(!this.code){
           Toast('请填写验证码');
@@ -56,14 +56,12 @@
           };
 
           request.getInstance().postData('api/auth/valid',_data).then(res=>{
-            console.log(res);
-            console.log("拉起页面");
+            this.$router.push('/my/setting_password?status='+"resetPassword"+"&mobile="+this.mobile+"&code="+this.code);
           }).catch(err=>{
             Toast(err.data.msg);
             console.error(err);
           });
 
-          this.$router.push('/my/setting_password?status='+"resetPassword");
         }
       },
       

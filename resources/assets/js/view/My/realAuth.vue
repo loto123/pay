@@ -86,11 +86,9 @@
         _temp.mobile = this.$route.query.mobile;
 
         request.getInstance().postData("api/auth/sms",_temp).then((res) => {
-          console.log(res);
           this.computedTime = 60;
           this.timer = setInterval(() => {
               this.computedTime --;
-              console.log(this.computedTime); 
               if (this.computedTime == 0) {
                 clearInterval(this.timer)
               }

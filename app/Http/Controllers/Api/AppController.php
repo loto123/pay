@@ -84,8 +84,8 @@ class AppController extends BaseController {
             $result['download_url'] = $last_version->url;
             $result['sign'] = $last_version->md5;
             if ($client_version) {
-                list($major,) = explode('.', $client_version->ver_code);
-                list($last_version_major,) = explode('.', $last_version->ver_code);
+                list($major,) = explode('.', $client_version->ver_name);
+                list($last_version_major,) = explode('.', $last_version->ver_name);
                 if ($last_version_major > $major) {
                     $result['type'] = Version::TYPE_FORCE_UPGRADE;
                 }

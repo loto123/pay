@@ -238,7 +238,6 @@ export default {
       },
       
       changeInfoStatus(index){
-          console.log(this.infoStatus);
           if(this.infoStatus[index] == true){
               this.infoStatus = [this.infoStatus[0] ,this.infoStatus[1] ,this.infoStatus[2]];
               this.infoStatus[index] = false;
@@ -246,7 +245,6 @@ export default {
           }
           this.infoStatus = [this.infoStatus[0] ,this.infoStatus[1] ,this.infoStatus[2]];
           this.infoStatus[index] = true;
-          console.log(this.infoStatus);
       }
   }
 }

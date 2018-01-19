@@ -194,10 +194,8 @@ export default {
       }
 
       for(var i =0; i<this.searchDataList.length; i++){
-        console.log(22);
         if(this.searchData == this.searchDataList[i].name){
           this.dataList = [];
-          console.log(111);
           this.dataList.push(this.searchDataList[i]);
         }else {
           this.dataList = [];
