@@ -16,9 +16,9 @@
                         </span></h4>
                     <h4 class="widget-user-desc">绑定微信：<span>{{$list->wechat_user->nickname??'无'}}</span></h4>
                     <h4 class="widget-user-desc">余额：<span>{{$list->container->balance??0}}元</span></h4>
-                    <h4 class="widget-user-desc">收益：<span>{{($transfer_record->profit - $transfer_record->payment)??0}}元</span></h4>
+                    <h4 class="widget-user-desc">收益：<span>{{($transfer_record->profits - $transfer_record->payment)??0}}元</span></h4>
                     <h4 class="widget-user-desc">付款：<span>{{$transfer_record->payment??0}}元</span></h4>
-                    <h4 class="widget-user-desc">收款：<span>{{$transfer_record->profit??0}}元</span></h4>
+                    <h4 class="widget-user-desc">收款：<span>{{$transfer_record->profits??0}}元</span></h4>
                     <h4 class="widget-user-desc">交易笔数：<span>{{$transfer_record->transfer_count??0}}笔</span></h4>
                     <h4 class="widget-user-desc">上级代理ID：<span>{{$list->parent_id>0?$list->parent_id:'无'}}</span></h4>
                     <h4 class="widget-user-desc">上级运营ID：<span>{{$list->operator_id>0?$list->operator_id:'无'}}</span></h4>
