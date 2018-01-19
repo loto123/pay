@@ -395,6 +395,7 @@ export default {
 
     init(){
         Loading.getInstance().open();
+        this.isListRadioShow = false;
         this.shop_id = this.$route.query.shopId;
         
         var _status = 0;

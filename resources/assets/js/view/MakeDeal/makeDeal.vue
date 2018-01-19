@@ -41,7 +41,9 @@
     <inputList 
       :showSwitch = "dropListSwitch" 
       v-on:hideDropList="hideDropList" 
-      :optionsList = "shopList">
+      :optionsList = "shopList"
+      v-if="isShow"
+    >
     </inputList>
 
     <choiseMember 
@@ -208,7 +210,8 @@ export default {
       price: 10,
       commentMessage: null,
 
-      memberList:[]              //成员数组
+      memberList:[],              //成员数组
+      isShow:false
     };
   },
 
@@ -220,6 +223,7 @@ export default {
         .getData("api/shop/lists/all")
         .then(res => {
           this.setShopList(res);
+          this.isShow = true;
           Loading.getInstance().close();
         })
         .catch(err => {

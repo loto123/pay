@@ -93,16 +93,27 @@ export default {
   computed :{
     
   },
+  
+  created(){
+     this.init(); 
+  },
+
   data(){
       return {
         "choiseValue":null,
-        "shopList":null
       }
   },
   methods:{
       hideTab(){
           this.$emit("hideDropList",this.choiseValue);
       },
+
+      init(){
+          if(this.choiseValue == null && this.optionsList!=null){
+              this.choiseValue = this.optionsList[0].value;
+              this.hideTab();
+          }
+      }
   },
   watch:{
       "choiseValue":'hideTab'
