@@ -99,6 +99,11 @@ class PromoterController extends BaseController
             return $this->json([], '该推广员不存在', 0);
         }
 
+        //不允许自己给自己转卡
+        if ($transferTo->getKey() == Auth::id()) {
+            return $this->json([], '不允许转卡给自己', 0);
+        }
+
         DB::beginTransaction();
         $commit = false;
 
