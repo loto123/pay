@@ -249,7 +249,8 @@ class User extends Authenticatable
 
     public function getProfitAttribute()
     {
-        Log::info('User proxy_container:'.$this->proxy_container);
+        Log::info('User proxy_container:');
+        Log::info($this->proxy_container);
         if($this->proxy_container) {
             return $this->proxy_container->balance;
         }
