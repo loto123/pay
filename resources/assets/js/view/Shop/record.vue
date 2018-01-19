@@ -122,7 +122,6 @@
                 }
                 Loading.getInstance().open("加载中...");
                 this.shopId = this.$route.query.id;
-                console.log(this.shopId);
                 request.getInstance().getData("api/shop/transfer/records/"+this.shopId)
                     .then((res) => {
                         this.recordList=res.data.data.data;

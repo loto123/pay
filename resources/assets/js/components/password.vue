@@ -169,7 +169,7 @@ export default {
       this.setPassword();
 
       if (this.password.length >= 6) {
-        console.log(this.password);
+        console.info(this.password);
         this.doCallback();
       }
     },

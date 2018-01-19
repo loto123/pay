@@ -179,8 +179,6 @@ export default{
   methods:{
     goWithdraw(){
       this.$router.push('/profit_record/withdraw/');
-      console.log("Go with draw");
-      // this.$router.push();
     },
    
     init(){
