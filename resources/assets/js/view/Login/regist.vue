@@ -277,7 +277,7 @@
             this.goNextStep();
           }).catch(err => {
             Loading.getInstance().close();
-            Toast("推荐人手机号有误");
+            Toast(err.data.msg);
 
           });
         } else if (this.$store.state.regist.step == 1) {
@@ -293,7 +293,7 @@
               this.goNextStep();
             }).catch(err => {
               Loading.getInstance().close();
-              Toast("手机号输入有误");
+              Toast(err.data.msg);
               console.error(err);
             });
 
@@ -305,7 +305,7 @@
               this.goNextStep();
             }).catch(err => {
               Loading.getInstance().close();
-              Toast("注册手机号输入有误");
+              Toast(err.data.msg);
               console.error(err);
             });
           }
@@ -329,7 +329,7 @@
           }).catch(err => {
             console.error(err);
             Loading.getInstance().close();
-            Toast("验证码输入有误");
+            Toast(err.data.msg);
           });
         }
       },
