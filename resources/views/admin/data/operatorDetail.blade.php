@@ -7,7 +7,7 @@
                 {{csrf_field()}}
                 <div class="form-group">
                     <label class="col-sm-1 control-label">代理ID：</label>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <input type="text" name="aid" class="form-control" placeholder="请输入代理ID" value="{{$aid}}">
                     </div>
                     <label class="col-sm-1 control-label">身份：</label>
