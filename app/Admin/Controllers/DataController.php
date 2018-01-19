@@ -209,7 +209,7 @@ class DataController extends Controller
                     if ($profit->save()) {
                         //发送通知
                         if ($profit->proxy_amount > 0) {
-                            \App\Admin\Controllers\NoticeController::send($profit->user_id, 1, '', '', $profit->id);
+                            \App\Admin\Controllers\NoticeController::send([$profit->user_id], 1, '', '', $profit->id);
                         }
                     }
                 }

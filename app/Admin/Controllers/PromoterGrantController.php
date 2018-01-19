@@ -40,6 +40,20 @@ class PromoterGrantController extends Controller
     protected function grid()
     {
         return Admin::grid(PromoterGrant::class, function (Grid $grid) {
+            $grid->model()->orderBy('id', 'desc');
+            $grid->filter(function ($filter) {
+
+                // 去掉默认的id过滤器
+                $filter->disableIdFilter();
+
+                // 在这里添加字段过滤器
+                $filter->where(function ($query) {
+                    $query->where('by_admin', 0)->whereHas('grantBy', function ($query) {
+                        $query->where('mobile', $this->input);
+                    });
+                }, '推广员');
+                $filter->equal('grantTo.mobile', '被授权人');
+            });
             $grid->tools(function ($tools) {
                 $tools->batch(function ($batch) {
                     $batch->disableDelete();

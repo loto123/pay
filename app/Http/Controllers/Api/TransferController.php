@@ -734,6 +734,8 @@ class TransferController extends BaseController
 //                $shop->save();
                 //删除茶水费记录
                 TipRecord::where('id', $tip->id)->delete();
+                //红包茶水费减少
+                $transfer->tip_amount = $transfer->tip_amount - $tip->amount;
             }
             //用户余额增加
 //                $user->balance = $user->balance + $record->amount;
@@ -1417,9 +1419,10 @@ class TransferController extends BaseController
         if (!$list || $list->isEmpty()) {
             return $this->json([], trans('trans.not_need_trans_closed'), 0);
         }
-        DB::beginTransaction();
-        try {
-            foreach ($list as $transfer) {
+        $success = 0;
+        foreach ($list as $transfer) {
+            DB::beginTransaction();
+            try {
                 $transfer->status = 3;
                 if ($transfer->save()) {
                     //解冻店铺茶水费资金
@@ -1427,8 +1430,9 @@ class TransferController extends BaseController
                     $shop_container = $transfer->shop->container;
                     if ($transfer->tip_amount > 0) {
                         if (!$shop_container->unfreeze($transfer->tip_amount)) {
-                            Log::error('关闭交易，解冻店铺资金失败:'.'     shop frozen_balance:'.$shop_container->frozen_balance.'     unfreeze_amount:'.$transfer->tip_amount);
-                            return $this->json([], trans('trans.trans_closed_failed'), 0);
+                            Log::error('关闭交易，解冻店铺资金失败:' . '     shop frozen_balance:' . $shop_container->frozen_balance . '     unfreeze_amount:' . $transfer->tip_amount);
+                            DB::rollBack();
+                            continue;
                         }
                     }
 //                $shop = $transfer->shop;
@@ -1452,14 +1456,15 @@ class TransferController extends BaseController
                             $profit->proxy = $value->user->parent->id;
                             $profit->proxy_percent = $value->user->parent->percent;
                             $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
-                            //解冻代理资金
-                            if ($profit->proxy_amount > 0) {
-//                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
-                                //解冻代理分润账户资金
-                                $proxy_container = $value->user->parent->proxy_container;
-                                $proxy_container->unfreeze($profit->proxy_amount);
-                            }
                         }
+                        if ($profit->proxy_amount <= 0) {
+                            continue;
+                        }
+                        //解冻代理资金
+//                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
+                        //解冻代理分润账户资金
+                        $proxy_container = $value->user->parent->proxy_container;
+                        $proxy_container->unfreeze($profit->proxy_amount);
                         $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
                         if ($value->user->operator) {
                             $profit->operator = $value->user->operator->id;
@@ -1469,20 +1474,26 @@ class TransferController extends BaseController
                         if ($profit->save()) {
                             //发送通知
                             if ($profit->proxy_amount > 0) {
-                                \App\Admin\Controllers\NoticeController::send($profit->user_id, 1, '', '', $profit->id);
+                                \App\Admin\Controllers\NoticeController::send([$profit->user_id], 1, '', '', $profit->id);
                             }
                         }
                     }
                 }
+                DB::commit();
+                $success++;
+            } catch (\Exception $e) {
+                Log::info('$profit：' . $profit);
+                Log::error('关闭交易失败：' . $e->getMessage());
+                DB::rollBack();
             }
-            DB::commit();
-            return $this->json([], trans('trans.trans_closed_success'), 1);
-        } catch (\Exception $e) {
-            Log::info('$profit：' . $profit);
-            Log::error('关闭交易失败：' . $e->getMessage());
-            DB::rollBack();
         }
-        return $this->json([], trans('trans.trans_closed_failed'), 0);
+        if($list->count() == $success) {
+            return $this->json([], trans('trans.trans_closed_success'), 1);
+        }else if($success <= 0) {
+            return $this->json([], trans('trans.trans_closed_failed'), 0);
+        }else {
+            return $this->json([], trans('trans.trans_closed_part_success'), 1);
+        }
     }
 
     /**
