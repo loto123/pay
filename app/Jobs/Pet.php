@@ -43,9 +43,11 @@ class Pet implements ShouldQueue
         if ($extension == 'jpg') {
             $template = imagecreatefromjpeg($prefix.$pet_type->image);
             $method = "imagejpeg";
+            $quality = 100;
         } else if ($extension == 'png') {
             $template = imagecreatefrompng($prefix.$pet_type->image);
             $method = "imagepng";
+            $quality = 0;
         } else {
             return;
         }
@@ -82,7 +84,7 @@ class Pet implements ShouldQueue
 //        var_dump($template);
 
         ob_start();
-        $method($template, null, 100);
+        $method($template, null, $quality);
         $content = ob_get_clean();
         $path = 'pet/'.md5($hash_str).'.'.$extension;
         Storage::disk('public')->put($path, $content);

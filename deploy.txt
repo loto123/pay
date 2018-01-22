@@ -65,4 +65,7 @@ php artisan queue:work --queue=withdraw
 php artisan queue:work --queue=shop_logo
 
 消息
-php artisan queue:work --queue=messages --tries=1
+php artisan queue:work --queue=messages --tries=3
+
+宠物
+php artisan queue:work --queue=pets --tries=3
