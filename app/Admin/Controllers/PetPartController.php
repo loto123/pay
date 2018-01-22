@@ -2,8 +2,8 @@
 
 namespace App\Admin\Controllers;
 
-use App\Pet;
 use App\PetPart;
+use App\PetType;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -88,7 +88,7 @@ class PetPartController extends Controller
 
             $form->display('id', 'ID');
             $form->text("name", '部位名');
-            $form->select("pet_id", '宠物')->options(Pet::all()->pluck("name", "id"));
+            $form->select("pet_id", '宠物')->options(PetType::all()->pluck("name", "id"));
             $form->number("x_index", '部位X坐标');
             $form->number("y_index", '部位Y坐标');
             $form->number("z_index", '部位Z坐标');
