@@ -208,6 +208,23 @@ $api->version('v1', ['middleware' => ['api.auth', 'block', 'role:promoter']], fu
 
 });
 
+//宠物交易接口
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
+    $api->group([
+        'prefix' => 'pet',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/sellable', 'PetTradeController@sellable');
+        $api->get('/egg_acquire_times', 'PetTradeController@eggCanDrawTimes');
+
+        $api->post('/acquire_egg', 'PetTradeController@freeEgg');
+        $api->post('/brood', 'PetTradeController@broodTheEgg');
+        $api->post('/on_sale', 'PetTradeController@findSellBill');
+    });
+
+});
+
+
 $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'proxy',

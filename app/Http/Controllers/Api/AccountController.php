@@ -85,9 +85,9 @@ class AccountController extends BaseController {
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="amount",
+     *     name="bill_id",
      *     in="formData",
-     *     description="转账金额",
+     *     description="卖单id",
      *     required=true,
      *     type="number"
      *   ),
@@ -124,10 +124,10 @@ class AccountController extends BaseController {
 //        $stdClass->pay_info = 'http://www.alipay.com';
 //        return $this->json($stdClass);
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|min:0',
+            'bill_id' => 'numeric|min:1',
             'way' => 'required'
         ]);
-
+        return $this->json();
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
@@ -188,7 +188,7 @@ class AccountController extends BaseController {
      *   @SWG\Parameter(
      *     name="amount",
      *     in="formData",
-     *     description="转账金额",
+     *     description="出售价格",
      *     required=true,
      *     type="number"
      *   ),
@@ -198,6 +198,13 @@ class AccountController extends BaseController {
      *     description="支付密码",
      *     required=true,
      *     type="string"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="pet_id",
+     *     in="formData",
+     *     description="宠物id",
+     *     required=true,
+     *     type="integer"
      *   ),
      *     @SWG\Response(
      *          response=200,
@@ -234,12 +241,14 @@ class AccountController extends BaseController {
         $validator = Validator::make($request->all(), [
             'amount' => 'required|min:0',
             'way' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'pet_id' => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
+        return $this->json();
         $user = $this->auth->user();
         try {
             if (!$user->check_pay_password($request->password)) {
@@ -274,6 +283,11 @@ class AccountController extends BaseController {
 
         if (!$method) {
             return $this->json([], '状态异常,请刷新页面重试', 0);
+        }
+
+        //判断限额
+        if ($method->max_quota > 0 && $method->max_quota < $request->amount) {
+            return $this->json([], '出售价格最高为' . $method->max_quota . '元', 0);
         }
 
         try {
