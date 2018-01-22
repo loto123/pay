@@ -517,14 +517,21 @@ class AccountController extends BaseController {
             }
             $quotas = [];
             $methods->each(function (&$item) use($quota_list,$quotas){
-            foreach ($quota_list as $key =>$_quota) {
-                if($item['max_quota'] < $_quota) {
-                    break;
+                if(floor($item['max_quota']) > 0) {
+                    foreach ($quota_list as $key =>$_quota) {
+                        if($item['max_quota'] < $_quota) {
+                            break;
+                        } else {
+                            $quotas[] = $_quota;
+                        }
+                    }
+                    $item['quota_list'] = $quotas;
                 } else {
-                    $quotas[] = $_quota;
+                    $item['quota_list'] = $quota_list;
                 }
-            }
-            $item['quota_list'] = $quotas;
+                $item['my_max_quota'] = max($item['quota_list']) > (float)$this->user->container->balance
+                    ? (float)$this->user->container->balance : max($item['quota_list']);
+                unset($item['max_quota']);
             });
         }
 
@@ -838,7 +845,6 @@ class AccountController extends BaseController {
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="quota_list", type="array", example=[100,200],description="提现额度列表"),
-     *                  @SWG\Property(property="max_quota", type="double", example=200.20,description="最高价")
      *              )
      *          )
      *      ),
@@ -852,7 +858,6 @@ class AccountController extends BaseController {
      */
     public function depositQuotaList()
     {
-        $user = $this->auth->user();
         try{
             $quota_list = json_decode(config('pay_quota_list'),true);
             sort($quota_list);
@@ -860,10 +865,6 @@ class AccountController extends BaseController {
         catch (\Exception $e){
             $quota_list = ['100','200','500','1000','5000'];
         }
-        $max_quota = max($quota_list) > $user->container->balance ? (float)$user->container->balance : max($quota_list);
-        return $this->json([
-            'max_quota' => $max_quota,
-            'quota_list' => $quota_list
-        ]);
+        return $this->json(['quota_list'=>$quota_list]);
     }
 }
