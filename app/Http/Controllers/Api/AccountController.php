@@ -777,51 +777,6 @@ class AccountController extends BaseController {
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 
-    /**
-     * @SWG\Get(
-     *   path="/account/withdraw_quotas",
-     *   summary="提现金额列表",
-     *   tags={"账户"},
-     *     @SWG\Response(
-     *          response=200,
-     *          description="成功返回",
-     *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="code",
-     *                  type="integer",
-     *                  example=1
-     *              ),
-     *              @SWG\Property(
-     *                  property="msg",
-     *                  type="string"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="object",
-     *                  @SWG\Property(property="quota_list", type="array", example=[100,200],description="提现额度列表")
-     *              )
-     *          )
-     *      ),
-     *      @SWG\Response(
-     *         response="default",
-     *         description="错误返回",
-     *         @SWG\Schema(ref="#/definitions/ErrorModel")
-     *      )
-     * )
-     * @return \Illuminate\Http\Response
-     */
-    public function withdrawQuotaList()
-    {
-        $quotas = [100,200,300,500,1000,5000];
-        try{
-            $quota_list = json_encode(config('pay_quota_list'));
-            Log::info($quota_list);
-        }
-        catch (\Exception $e) {
-            $quota_list = $quotas;
-        }
-        return $this->json(['quota_list'=>$quota_list]);
-    }
 
     /**
      * @SWG\Get(
