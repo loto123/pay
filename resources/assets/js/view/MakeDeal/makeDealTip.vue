@@ -6,11 +6,11 @@
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
             <label for="" class="flex-4" style="padding-left:1em;">打赏店家</label>
             <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
-            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击打赏店家"  maxlength="6" v-model="renderData.moneyData"></span>
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >钻<input type="text" class="tipMoney" placeholder="点击打赏店家"  maxlength="6" v-model="renderData.moneyData"></span>
         </div>
 
         <div class="button-wrap">
-            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">确认打赏</mt-button>
+            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">加速</mt-button>
         </div>
 
         <div class="tip-record">
@@ -21,7 +21,7 @@
                     <span>{{item.user.name}}</span>
                     <div class="flex flex-v flex-align-center">
                         <div style="font-size: 1.4em;">{{item.amount}}</div>
-                        <div style="font-size: 0.8em;color:#999;">已打赏</div>
+                        <div style="font-size: 0.8em;color:#999;">已加速</div>
                     </div>
                 </li>
             </ul>
@@ -195,7 +195,6 @@ export default {
         .catch(err => {
           Loading.getInstance().close();
           Toast(err.data.msg);
-//          console.error(err);
         });
     },
 

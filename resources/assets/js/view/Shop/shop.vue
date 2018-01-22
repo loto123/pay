@@ -17,12 +17,12 @@
           </div>
           
           <h3 class="money-text">{{total_profit}}元</h3>
-          <h3>店铺总收益(元)</h3>
+          <h3>公会总收益(元)</h3>
 
       </div>
       
       <div class="tab-menu flex flex-align-center flex-justify-center" >
-        <div class="my-shop flex flex-align-center flex-justify-center active">我的店铺</div>
+        <div class="my-shop flex flex-align-center flex-justify-center active">我的公会</div>
         <div class="my-star flex flex-align-center flex-justify-center" @click="goMyCollection">我的收藏</div>
       </div>
 
@@ -55,12 +55,12 @@
 
     <transition name="slide">
 
-      <!-- 创建店铺拉起 -->
+      <!-- 创建公会拉起 -->
        <section class="add-shop-tab" v-if="addShopTabStatus" >
-          <top-back :title= "'填写店铺信息'" :userAction = "'hide'"  v-on:hide="hide"></top-back>
+          <top-back :title= "'填写公会信息'" :userAction = "'hide'"  v-on:hide="hide"></top-back>
 
           <div class= "item">
-            <mt-field label="店铺名称" placeholder="请设置店铺名称"  v-model="openNewShop.name"></mt-field>
+            <mt-field label="公会名称" placeholder="请设置公会名称"  v-model="openNewShop.name"></mt-field>
           </div>
 
           <div class= "item">
@@ -175,7 +175,7 @@
 }
 
 .shop-list {
-  // 店铺列表
+  // 公会列表
   .shop-item {
     width: 8em;
     min-height: 7em;
@@ -346,8 +346,8 @@ export default {
 
   data() {
     return {
-      addShopTabStatus: false,      // 创建店铺拉起状态
-      dealStatus: true,             // 是否开启交易(创建店铺tab)
+      addShopTabStatus: false,      // 创建公会拉起状态
+      dealStatus: true,             // 是否开启交易(创建公会tab)
       createShopSwitch: true,     // 防看止按钮多次点击的
 
       openNewShop:{
@@ -390,7 +390,7 @@ export default {
 
     },
 
-    // 创建店铺
+    // 创建公会
     createShop(){
       
       var data = this.openNewShop;

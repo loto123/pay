@@ -15,8 +15,8 @@
         </topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage" v-if="allow_reward">
-            <p>打赏</p>
-            <p>店家</p>
+            <p>任务</p>
+            <p>加速</p>
         </section>
         
         <deal-content :renderData = "renderData"></deal-content>
@@ -24,14 +24,14 @@
         <section class="pay-wrap flex flex-v flex-align-center">
 
             <div class="pay-money flex flex-align-center flex-justify-around">
-                <label for="">我要付钱</label>
+                <label for="">交钻</label>
                 <div class="input-wrap">
                     <input type="text" placeholder="请输入您的分数" v-model="moneyData.payMoney">
                 </div>
             </div>
 
             <div class="get-money flex flex-align-center flex-justify-around">
-                <label for="">我要拿钱</label>
+                <label for="">拿钻</label>
                 <div class="input-wrap">
                     <input type="text" placeholder="请输入您的分数" v-model="moneyData.getMoney">
                 </div>
@@ -68,7 +68,7 @@
                             <span class="flex-8">{{item.user.name}}</span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center flex-4">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
-                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
+                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钻":"拿钻"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
                             </div>
@@ -80,7 +80,7 @@
         </section>
 
         <section id="qrcode" class="flex flex-justify-center"></section>
-        <h3 class="notice">扫描二维码快速交易</h3>
+        <h3 class="notice">扫描二维码快速加入任务</h3>
 
         <passwordPanel 
           :setSwitch="passWordSwitch" 
@@ -479,7 +479,7 @@ export default {
 
         request.getInstance().postData("api/transfer/trade",_data).then(res=>{
           Loading.getInstance().close();
-          Toast("放钱进店铺成功");
+          Toast("放钻成功");
           this.moneyData.payMoney = null;
           setTimeout(()=>{
             this.init();
@@ -510,7 +510,7 @@ export default {
             return Promise.resolve(_data);
           })
           .then(realData=>{
-            MessageBox.confirm("实际拿钱"+ realData.real_amount+ "元,手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "元").then(action => {
+            MessageBox.confirm("实际拿钻"+ realData.real_amount+ ",手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "钻石").then(action => {
 
               var _data = {
                 transfer_id :this.transfer_id,
@@ -521,7 +521,7 @@ export default {
               request.getInstance().postData("api/transfer/trade",_data)
                 .then(res=>{
                   Loading.getInstance().close();
-                  Toast("从店铺中拿钱成功");
+                  Toast("从公会中拿钱成功");
                   this.moneyData.getMoney = null;
                   setTimeout(()=>{
                     this.init();
@@ -603,7 +603,7 @@ export default {
         Loading.getInstance().close();
 
         if(res.data.data.members.length == 0){
-          Toast("当前店铺无成员");
+          Toast("当前公会无成员");
           return;
         }
 

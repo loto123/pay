@@ -1,7 +1,7 @@
 <template>
   <div id="shop-member">
       <div class="top">
-          <top-back :title="'店铺成员('+membersCount+')'">
+          <top-back :title="'公会成员('+membersCount+')'">
           </top-back>
       </div>
 

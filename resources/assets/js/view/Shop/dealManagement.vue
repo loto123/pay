@@ -1,6 +1,6 @@
 <template>
   <div id="dealManagement">
-      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
+      <top-back style="background:#26a2ff;color:#fff;" :title="'我的任务'">
           <div class="list-controller flex flex-reverse" 
             style="width:100%;padding-right:1em;box-sizing:border-box;"
             v-if="tabItem[1]"

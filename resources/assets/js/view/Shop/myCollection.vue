@@ -10,11 +10,11 @@
               &#xe61c;
             </i>
           </div>
-          <h3>店铺</h3>
+          <h3>公会</h3>
       </div>
 
       <div class="tab-menu flex flex-align-center flex-justify-center" >
-        <div class="my-shop flex flex-align-center flex-justify-center " @click="goMyShop">我的店铺</div>
+        <div class="my-shop flex flex-align-center flex-justify-center " @click="goMyShop">我的公会</div>
         <div class="my-star flex flex-align-center flex-justify-center active" >我的收藏</div>
       </div>
 
