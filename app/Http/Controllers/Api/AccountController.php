@@ -812,13 +812,13 @@ class AccountController extends BaseController {
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  type="array",
+     *                  type="object",
      *                  @SWG\Property(property="quota_list", type="array", description="用户当月收入总数",
      *                  @SWG\Items(
      *                  @SWG\Property(property="1", type="integer", example="100"),
      *                  @SWG\Property(property="2", type="integer", example="200"),
      *                  ),
-     *                ),
+     *                )
      *              )
      *          )
      *      ),
