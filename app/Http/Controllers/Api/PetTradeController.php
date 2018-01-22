@@ -231,9 +231,8 @@ class PetTradeController extends Controller
      *     name="price",
      *     in="formData",
      *     description="价格",
-     *     example=100.00,
      *     required=true,
-     *     type="double"
+     *     type="number"
      *   ),
      *     @SWG\Response(
      *          response=200,
