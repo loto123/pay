@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Pet;
+use App\PetType;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -10,7 +10,7 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 
-class PetController extends Controller
+class PetTypeController extends Controller
 {
     use ModelForm;
 
@@ -23,7 +23,7 @@ class PetController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('宠物');
+            $content->header('宠物种类');
 
             $content->body($this->grid());
         });
@@ -39,7 +39,7 @@ class PetController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('宠物');
+            $content->header('宠物种类');
 
             $content->body($this->form()->edit($id)->render());
         });
@@ -54,7 +54,7 @@ class PetController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('宠物');
+            $content->header('宠物种类');
 
             $content->body($this->form()->render());
         });
@@ -67,16 +67,16 @@ class PetController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Pet::class, function (Grid $grid) {
+        return Admin::grid(PetType::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-            $grid->name("宠物名");
+            $grid->name("宠物种类名");
 
             $grid->created_at("创建时间");
             $grid->actions(function ($actions) {
 
                 // 添加操作
-                $actions->prepend('<a href="'.admin_url("pets/".$actions->getKey()."/preview").'"><i class="fa fa-image"></i></a>');
+                $actions->prepend('<a href="'.admin_url("pets_type/".$actions->getKey()."/preview").'"><i class="fa fa-image"></i></a>');
             });
         });
     }
@@ -88,14 +88,23 @@ class PetController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Pet::class, function (Form $form) {
+        return Admin::form(PetType::class, function (Form $form) {
 
             $form->display('id', 'ID');
-            $form->text("name", '宠物名');
-            $form->image("image", '宠物模版')->uniqueName();
+            $form->text("name", '宠物种类名');
+            $form->image("image", '宠物种类模版')->uniqueName();
 
             $form->display('created_at', '创建时间');
             $form->display('updated_at', '更新时间');
+        });
+    }
+
+    public function preview($id) {
+        return Admin::content(function (Content $content) {
+
+            $content->header('宠物种类');
+
+            $content->body(view("admin.pet.preview"));
         });
     }
 }
