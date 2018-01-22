@@ -155,184 +155,33 @@ input[type="text"]{
 
   <div class="left">
       <ul>
+          @foreach ($pet_type->parts as $part)
           <li>
-            <div>耳朵:</div>
+            <div>{{ $part->name }}:</div>
             <select name="" id="earChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
+                @foreach ($part->items as $item)
+                <option value="{{ Storage::disk(config('admin.upload.disk'))->url($item->image) }}">{{ $item->name }}</option>
+                @endforeach
             </select>
 
-            <div>深度:</div>
-            <input type="text">
+            <div>z轴:</div>
+            <input type="text" value="{{ $part->z_index }}">
             
             <div>x轴:</div>
-            <input type="text">
+            <input type="text" value="{{ $part->x_index }}">
             
             <div>y轴:</div>
-            <input type="text">
+            <input type="text" value="{{ $part->y_index }}">
 
           </li>
-          
-          <li>
-            <div>胡子:</div>
-            <select name="" id="beardChoise">
-            <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-            <div>深度:</div>
-            <input type="text">
-
-             <div>x轴:</div>
-            <input type="text">
-            
-            <div>y轴:</div>
-            <input type="text">
-          </li>
-
-          <li>
-            <div>花纹:</div>
-            <select name="" id="figureChoise">
-            <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-            <div>深度:</div>
-            <input type="text">
-
-             <div>x轴:</div>
-            <input type="text">
-            
-            <div>y轴:</div>
-            <input type="text">
-          </li>
-
-          <li>
-            <div>前爪:</div>
-            <select name="" id="pawChoise">
-            <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-            <div>深度:</div>
-            <input type="text">
-
-             <div>x轴:</div>
-            <input type="text">
-            
-            <div>y轴:</div>
-            <input type="text">
-          </li>
-
-          <li>
-            <div>身子:</div>
-            <select name="" id="bodyChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-            <div>深度:</div>
-            <input type="text">
-
-             <div>x轴:</div>
-            <input type="text">
-            
-            <div>y轴:</div>
-            <input type="text">
-          </li>
-
-          <li>
-            <div>眼睛:</div>
-            <select name="" id="eyeChoise">
-               <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-            <div>深度:</div>
-            <input type="text">
-
-             <div>x轴:</div>
-            <input type="text">
-            
-            <div>y轴:</div>
-            <input type="text">
-          </li>
-
-          <li>
-            <div>嘴巴:</div>
-            <select name="" id="mouseChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-            <div>深度:</div>
-            <input type="text">
-
-             <div>x轴:</div>
-            <input type="text">
-            
-            <div>y轴:</div>
-            <input type="text">
-          </li>
-
-          <li>
-            <div>尾巴:</div>
-            <select name="" id="tailChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-            <div>深度:</div>
-            <input type="text">
-
-             <div>x轴:</div>
-            <input type="text">
-            
-            <div>y轴:</div>
-            <input type="text">
-          </li>
+          @endforeach
       </ul>
       
       <button type="button" id="buildDog">生成狗狗</button>
-      <button type="button" id="buildDog">随机生成狗狗</button>
 
   </div>
 
-  <div class="right">
-
+  <div class="right" style="background-image: {{ Storage::disk(config('admin.upload.disk'))->url($pet_type->image) }};">
     <!-- 拼狗狗组件 -->
     <div id="ear">
         <img src="/images/dog/ear/1.png" alt="">

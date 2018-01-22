@@ -100,11 +100,15 @@ class PetTypeController extends Controller
     }
 
     public function preview($id) {
-        return Admin::content(function (Content $content) {
+        $pet_type = PetType::find($id);
+        if (!$pet_type) {
+            abort(404);
+        }
+        return Admin::content(function (Content $content) use ($pet_type) {
 
             $content->header('宠物种类');
 
-            $content->body(view("admin.pet.preview"));
+            $content->body(view("admin.pet.preview", compact("pet_type")));
         });
     }
 }
