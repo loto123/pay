@@ -76,7 +76,7 @@ class PetTypeController extends Controller
             $grid->actions(function ($actions) {
 
                 // 添加操作
-                $actions->prepend('<a href="'.admin_url("pets/".$actions->getKey()."/preview").'"><i class="fa fa-image"></i></a>');
+                $actions->prepend('<a href="'.admin_url("pets_type/".$actions->getKey()."/preview").'"><i class="fa fa-image"></i></a>');
             });
         });
     }

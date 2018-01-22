@@ -98,13 +98,4 @@ class PetController extends Controller
             $form->display('updated_at', '更新时间');
         });
     }
-
-    public function preview($id) {
-        return Admin::content(function (Content $content) {
-
-            $content->header('宠物');
-
-            $content->body(view("admin.pet.preview"));
-        });
-    }
 }
