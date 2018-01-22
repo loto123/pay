@@ -8,7 +8,7 @@ class PetPart extends Model
 {
     //
     public function pet() {
-        return $this->belongsTo(Pet::class, "id", "pet_id");
+        return $this->belongsTo(PetType::class, "id", "pet_id");
     }
 
     public function items() {
