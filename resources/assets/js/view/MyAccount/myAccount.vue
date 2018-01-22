@@ -8,17 +8,17 @@
         <div class="myAccount-box">
             <div class="withDraw-money">
                 <div class="money">{{balance}}</div>
-                <div class="title">当前可提现余额</div>
+                <div class="title">当前可用钻石</div>
             </div>
             <div class="submit-btn">
                 <a href="/#/myAccount/recharge" class="mb15">
-                    <button type="button" class="recharge-btn">充值</button>
+                    <button type="button" class="recharge-btn">购买(充值)</button>
                 </a>
                 <a href="javascript:;"  @click="withdraw" class="mb15">
-                    <button type="button" class="withdraw-btn">提现</button>
+                    <button type="button" class="withdraw-btn">出售(提现)</button>
                 </a>  
                 <a href="javascript:;" @click="give">
-                    <button type="button" class="give-btn">转账到店铺</button>    
+                    <button type="button" class="give-btn">转钻到公会</button>    
                 </a>  
             </div>
         </div>

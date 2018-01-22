@@ -37,7 +37,7 @@
               <i class="iconfont myShop-icon common-icon">
                 &#xe61c;
               </i>
-              <h3>我的店铺</h3>
+              <h3>我的公会</h3>
             </a>
           </li>
 
