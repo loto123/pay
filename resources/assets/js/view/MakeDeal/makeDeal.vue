@@ -1,7 +1,7 @@
 <template>
   <!-- 发起交易 -->
   <div id = "makeDeal">
-    <topBack title="发起交易" style="background:#eee;"></topBack>
+    <topBack title="发布寻找宠物任务" style="background:#eee;"></topBack>
 
     <div class="select-wrap flex flex-align-center" @click="showDropList">
         {{dealShop?dealShop:'请选择您要发起交易的店铺'}}

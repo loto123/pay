@@ -1,27 +1,27 @@
 <template>
 	<div id="give" class="give-container">
-		<topBack title="转账到店铺">
+		<topBack title="转钻到公会">
 			<div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
 				<i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
 			</div>
 		</topBack>
 		<div class="give-box">
-			<div class="title">转账金额</div>
+			<div class="title">转移钻石</div>
 			<div class="give-money flex flex-justify-center">
 				<label>￥</label>
 				<input type="text" placeholder="请输入金额" v-model="amount">
 			</div>
 			<div class="all-money flex">
-				<div class="money">可转账余额 ¥<span>{{balance}}</span>,</div>
-				<a href="javascript:;" class="all-giveAcc" @click="allGive">全部转账</a>
+				<div class="money">可转钻石 ¥<span>{{balance}}</span>,</div>
+				<a href="javascript:;" class="all-giveAcc" @click="allGive">全部转移</a>
 			</div>
 			<div class="select-wrap flex flex-align-center" @click="showDropList">
 
-				{{dealShop?dealShop:'请选择您要发起交易的店铺'}}
+				{{dealShop?dealShop:'请选择您要转移的公会'}}
 
 			</div>
 			<a href="javascript:;" class="transAcc-btn" @click="giveBtn">
-				<mt-button type="primary" size="large">转账</mt-button>
+				<mt-button type="primary" size="large">转移</mt-button>
 			</a>
 		</div>
 		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList"></inputList>

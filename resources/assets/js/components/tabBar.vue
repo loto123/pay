@@ -12,7 +12,7 @@
            <div class="make-deal flex flex-v flex-align-center">
               <a href="/#/makeDeal">
                 <i class="iconfont message-icon comonIcon normal flex flex-align-center flex-justify-center">&#xe600;</i>
-                <p class="normal">发起交易</p>
+                <p class="normal">发布任务</p>
               </a>
            </div>
           </li>
