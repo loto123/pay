@@ -794,7 +794,7 @@ class AccountController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/account/deposit_quotas",
+     *   path="/account/deposit_quota",
      *   summary="充值金额列表",
      *   tags={"账户"},
      *     @SWG\Response(
@@ -812,8 +812,13 @@ class AccountController extends BaseController {
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  type="object",
-     *                  @SWG\Property(property="quota_list", type="array", example=[100,200],description="提现额度列表"),
+     *                  type="array",
+     *                  @SWG\Property(property="quota_list", type="array", description="用户当月收入总数",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="1", type="integer", example="100"),
+     *                  @SWG\Property(property="2", type="integer", example="200"),
+     *                  ),
+     *                ),
      *              )
      *          )
      *      ),
