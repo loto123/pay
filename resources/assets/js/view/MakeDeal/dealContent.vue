@@ -9,12 +9,12 @@
 
         <section class="balance-wrap flex ">
             <div class="flex flex-v flex-align-center flex-justify-around">
-                <h3>当前倍率</h3>
+                <h3>任务收益倍率</h3>
                 <span>{{renderData.price}}</span>
             </div>
             <div class="flex flex-v flex-align-center flex-justify-around">
-                <h3>当前钱包中的余额</h3>
-                <span>{{renderData.amount}}元</span>
+                <h3>当前任务池钻石</h3>
+                <span>{{renderData.amount}}钻石</span>
             </div>
         </section>
     </div>

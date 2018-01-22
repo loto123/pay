@@ -151,7 +151,7 @@ export default {
           Toast(err.data.msg);
       });
     },
-    // 同意加入店铺的请求
+    // 同意加入公会的请求
     agreeItem(id){
       Loading.getInstance().open();
       if(id==null){

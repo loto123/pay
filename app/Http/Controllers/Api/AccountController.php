@@ -86,9 +86,9 @@ class AccountController extends BaseController {
      *     type="integer"
      *   ),
      *   @SWG\Parameter(
-     *     name="amount",
+     *     name="bill_id",
      *     in="formData",
-     *     description="转账金额",
+     *     description="卖单id",
      *     required=true,
      *     type="number"
      *   ),
@@ -125,10 +125,10 @@ class AccountController extends BaseController {
 //        $stdClass->pay_info = 'http://www.alipay.com';
 //        return $this->json($stdClass);
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|min:0',
+            'bill_id' => 'numeric|min:1',
             'way' => 'required'
         ]);
-
+        return $this->json();
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
@@ -189,7 +189,7 @@ class AccountController extends BaseController {
      *   @SWG\Parameter(
      *     name="amount",
      *     in="formData",
-     *     description="转账金额",
+     *     description="出售价格",
      *     required=true,
      *     type="number"
      *   ),
@@ -199,6 +199,13 @@ class AccountController extends BaseController {
      *     description="支付密码",
      *     required=true,
      *     type="string"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="pet_id",
+     *     in="formData",
+     *     description="宠物id",
+     *     required=true,
+     *     type="integer"
      *   ),
      *     @SWG\Response(
      *          response=200,
@@ -235,12 +242,14 @@ class AccountController extends BaseController {
         $validator = Validator::make($request->all(), [
             'amount' => 'required|min:0',
             'way' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'pet_id' => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
+        return $this->json();
         $user = $this->auth->user();
         try {
             if (!$user->check_pay_password($request->password)) {
@@ -275,6 +284,11 @@ class AccountController extends BaseController {
 
         if (!$method) {
             return $this->json([], '状态异常,请刷新页面重试', 0);
+        }
+
+        //判断限额
+        if ($method->max_quota > 0 && $method->max_quota < $request->amount) {
+            return $this->json([], '出售价格最高为' . $method->max_quota . '元', 0);
         }
 
         try {
@@ -517,14 +531,21 @@ class AccountController extends BaseController {
             }
             $quotas = [];
             $methods->each(function (&$item) use($quota_list,$quotas){
-            foreach ($quota_list as $key =>$_quota) {
-                if($item['max_quota'] < $_quota) {
-                    break;
+                if(floor($item['max_quota']) > 0) {
+                    foreach ($quota_list as $key =>$_quota) {
+                        if($item['max_quota'] < $_quota) {
+                            break;
+                        } else {
+                            $quotas[] = $_quota;
+                        }
+                    }
+                    $item['quota_list'] = $quotas;
                 } else {
-                    $quotas[] = $_quota;
+                    $item['quota_list'] = $quota_list;
                 }
-            }
-            $item['quota_list'] = $quotas;
+                $item['my_max_quota'] = max($item['quota_list']) > (float)$this->user->container->balance
+                    ? (float)$this->user->container->balance : max($item['quota_list']);
+                unset($item['max_quota']);
             });
         }
 
@@ -770,55 +791,10 @@ class AccountController extends BaseController {
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 
-    /**
-     * @SWG\Get(
-     *   path="/account/withdraw_quotas",
-     *   summary="提现金额列表",
-     *   tags={"账户"},
-     *     @SWG\Response(
-     *          response=200,
-     *          description="成功返回",
-     *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="code",
-     *                  type="integer",
-     *                  example=1
-     *              ),
-     *              @SWG\Property(
-     *                  property="msg",
-     *                  type="string"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="object",
-     *                  @SWG\Property(property="quota_list", type="array", example=[100,200],description="提现额度列表")
-     *              )
-     *          )
-     *      ),
-     *      @SWG\Response(
-     *         response="default",
-     *         description="错误返回",
-     *         @SWG\Schema(ref="#/definitions/ErrorModel")
-     *      )
-     * )
-     * @return \Illuminate\Http\Response
-     */
-    public function withdrawQuotaList()
-    {
-        $quotas = [100,200,300,500,1000,5000];
-        try{
-            $quota_list = json_encode(config('pay_quota_list'));
-            Log::info($quota_list);
-        }
-        catch (\Exception $e) {
-            $quota_list = $quotas;
-        }
-        return $this->json(['quota_list'=>$quota_list]);
-    }
 
     /**
      * @SWG\Get(
-     *   path="/account/deposit_quotas",
+     *   path="/account/deposit_quota",
      *   summary="充值金额列表",
      *   tags={"账户"},
      *     @SWG\Response(
@@ -837,8 +813,12 @@ class AccountController extends BaseController {
      *              @SWG\Property(
      *                  property="data",
      *                  type="object",
-     *                  @SWG\Property(property="quota_list", type="array", example=[100,200],description="提现额度列表"),
-     *                  @SWG\Property(property="max_quota", type="double", example=200.20,description="最高价")
+     *                  @SWG\Property(property="quota_list", type="array", description="用户当月收入总数",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="1", type="integer", example="100"),
+     *                  @SWG\Property(property="2", type="integer", example="200"),
+     *                  ),
+     *                )
      *              )
      *          )
      *      ),
@@ -852,7 +832,6 @@ class AccountController extends BaseController {
      */
     public function depositQuotaList()
     {
-        $user = $this->auth->user();
         try{
             $quota_list = json_decode(config('pay_quota_list'),true);
             sort($quota_list);
@@ -860,10 +839,6 @@ class AccountController extends BaseController {
         catch (\Exception $e){
             $quota_list = ['100','200','500','1000','5000'];
         }
-        $max_quota = max($quota_list) > $user->container->balance ? (float)$user->container->balance : max($quota_list);
-        return $this->json([
-            'max_quota' => $max_quota,
-            'quota_list' => $quota_list
-        ]);
+        return $this->json(['quota_list'=>$quota_list]);
     }
 }

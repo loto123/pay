@@ -20,6 +20,7 @@ class Deposit extends Model
     const STATE_PART_PAID = 3;//部分支付
     const STATE_API_ERR = 4;//接口不通
     const STATE_CHARGE_FAIL = 5;//到账失败
+    const STATE_PAY_TIMEOUT = 6;//超时支付(已支付,但超过订单有效期)
     protected $table = 'pay_deposit';
 
     protected $casts = [

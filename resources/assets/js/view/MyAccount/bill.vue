@@ -80,8 +80,8 @@
                     {type:1,title:'提现'},
                     {type:2,title:'交易收入'},
                     {type:3,title:'交易支出'},
-                    {type:4,title:'转账到店铺'},
-                    {type:5,title:'店铺转入'},
+                    {type:4,title:'转账到公会'},
+                    {type:5,title:'公会转入'},
                     {type:8,title:'打赏店家费'},
                 ],
                 selected: null
@@ -138,8 +138,8 @@
                     case 1: result='提现'; break;
                     case 2: result='交易收入'; break;
                     case 3: result='交易支出'; break;
-                    case 4: result='转账到店铺'; break;
-                    case 5: result='店铺转入'; break;
+                    case 4: result='转账到公会'; break;
+                    case 5: result='公会转入'; break;
                     case 6: result='交易手续费'; break;
                     case 7: result='提现手续费'; break;
                     case 8: result='打赏店家费'; break;
