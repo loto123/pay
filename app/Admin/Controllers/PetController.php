@@ -73,7 +73,6 @@ class PetController extends Controller
             $grid->model()->with(["user",'pet_type']);
             $grid->id('ID')->sortable();
             $grid->column("user.name", '用户');
-            $grid->column("pet_type.name", '种类');
 
             $grid->created_at("创建时间");
         });
@@ -90,7 +89,6 @@ class PetController extends Controller
 
             $form->display('id', 'ID');
             $form->select("user_id", '用户')->options(User::all()->pluck("name", 'id'));
-            $form->select("type_id", '种类')->options(PetType::all()->pluck("name", 'id'));
 //            $form->image("image", '宠物模版')->uniqueName();
 
             $form->display('created_at', '创建时间');
