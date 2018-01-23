@@ -38,6 +38,9 @@ class Pet implements ShouldQueue
         $pet_type = PetType::inRandomOrder()->first();
         /* @var $pet_type \App\PetType */
         $prefix = Storage::disk(config('admin.upload.disk'))->getAdapter()->getPathPrefix();
+        if (!file_exists(!$prefix.$pet_type->image)) {
+            return;
+        }
         $pathinfo = pathinfo($prefix.$pet_type->image);
         $extension = strtolower($pathinfo['extension']);
         if ($extension == 'jpg') {
@@ -58,6 +61,9 @@ class Pet implements ShouldQueue
             /* @var $_item \App\PetPartItem */
 
             if ($_item) {
+                if (!file_exists($prefix.$_item->image)) {
+                    continue;
+                }
                 $_pathinfo = pathinfo($prefix.$_item->image);
                 $_extension = strtolower($_pathinfo['extension']);
                 if ($_extension == 'jpg') {
