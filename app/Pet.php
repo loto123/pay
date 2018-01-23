@@ -24,4 +24,8 @@ class Pet extends Model
     public function pet_type() {
         return $this->belongsTo(PetType::class, "type_id", "id");
     }
+
+    public function transfer($user_id) {
+        
+    }
 }
