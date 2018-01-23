@@ -65,9 +65,9 @@ class PetTradeController extends BaseController
             'msg' => '',
             'data' => [
                 'list' => [
-                    ['id' => '1', 'pic' => 'a.jpg', 'is_egg' => false],
+                    ['id' => '1', 'pic' => '/images/personal.jpg', 'is_egg' => false],
                     ['id' => '2', 'is_egg' => true],
-                    ['id' => '1', 'pic' => 'c.jpg', 'is_egg' => false],
+                    ['id' => '1', 'pic' => '/images/personal.jpg', 'is_egg' => false],
                 ]
             ]
         ];
@@ -219,7 +219,7 @@ class PetTradeController extends BaseController
             'code' => 1,
             'msg' => '孵化成功',
             'data' => [
-                'id' => '1', 'pic' => 'a.jpg',
+                'id' => '1', 'pic' => '/images/personal.jpg',
             ]
         ];
     }
