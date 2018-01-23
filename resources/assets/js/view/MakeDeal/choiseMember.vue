@@ -32,7 +32,7 @@
                     </span>
                 </li>
                 
-                <li class="flex flex-align-center flex-justify-center" v-if="!dataList.length">当前店铺无成员</li>
+                <li class="flex flex-align-center flex-justify-center" v-if="!dataList.length">当公会无成员</li>
                 <!-- <h3 v-if="dataList.length == 0">无数据</h3> -->
             </ul>
 

@@ -5,6 +5,12 @@ body{
     font-family:"Microsoft Yahei" !important;
 }
 
+input[type="text"]{
+    height: 25px;
+    width: 40px;
+    float: left;
+}
+
 #pet{
     width:100%;
     min-height:600px;
@@ -32,6 +38,8 @@ body{
     background:#eee;
     float:left;
     margin-left:20px;
+    padding-top:12px;
+    box-sizing: border-box;
 }
 
 #pet .left ul{}
@@ -48,6 +56,7 @@ body{
 #pet .left ul li >div{
     width:40px;
     float:left;
+    margin-left: 10px;
 }
 
 #pet .left ul li >select{
@@ -56,6 +65,13 @@ body{
     display:block;
     margin-top:3px;
 }
+
+#buildDog{
+    display: block;
+    margin-left: 20px;
+    margin-top:10px;
+}
+
 /*********** 左边部分end ************/
 
 
@@ -68,6 +84,7 @@ body{
     float:left;
     margin-left:20px;
     position:relative;
+
 }   
 
 /****** 身体组成部分 *******/
@@ -80,15 +97,15 @@ body{
 
 #pet .right #eye{
     position:absolute;
-    top:3%;
-    left:14%;
+    top:17%;
+    left:20%;
     z-index:1000;
 }
 
 #pet .right #beard{
     position:absolute;
-    top:23%;
-    left:-3%;
+    top:32%;
+    left:7%;
      z-index:1000;
 }
 
@@ -101,22 +118,22 @@ body{
 
 #pet .right #figure{
     position: absolute;
-    top: -16.5%;
-    left: 12%;
-     z-index:1000;
+    top: 3%;
+    left: 18%;
+    z-index:1000;
 }
 
 #pet .right #mouse{
     position: absolute;
-    top: 26%;
+    top: 33%;
     left: 30.6%;
      z-index:1000;
 }
 
 #pet .right #paw{
     position: absolute;
-    top: 81.5%;
-    left: 14%;
+    top: 75.5%;
+    left: 20%;
     z-index:1000;
 }
 
@@ -138,138 +155,56 @@ body{
 
   <div class="left">
       <ul>
+          @foreach ($pet_type->parts as $part)
           <li>
-            <div>耳朵:</div>
+            <div>{{ $part->name }}:</div>
             <select name="" id="earChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
+                @foreach ($part->items as $item)
+                <option value="{{ Storage::disk(config('admin.upload.disk'))->url($item->image) }}">{{ $item->name }}</option>
+                @endforeach
             </select>
-          </li>
-          
-          <li>
-            <div>胡子:</div>
-            <select name="" id="beardChoise">
-            <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-          </li>
 
-          <li>
-            <div>花纹:</div>
-            <select name="" id="figureChoise">
-            <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-          </li>
+            <div>z轴:</div>
+            <input type="text" value="{{ $part->z_index }}">
+            
+            <div>x轴:</div>
+            <input type="text" value="{{ $part->x_index }}">
+            
+            <div>y轴:</div>
+            <input type="text" value="{{ $part->y_index }}">
 
-          <li>
-            <div>前爪:</div>
-            <select name="" id="pawChoise">
-            <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
           </li>
-
-          <li>
-            <div>身子:</div>
-            <select name="" id="bodyChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-          </li>
-
-          <li>
-            <div>眼睛:</div>
-            <select name="" id="eyeChoise">
-               <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-          </li>
-
-          <li>
-            <div>嘴巴:</div>
-            <select name="" id="mouseChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-          </li>
-
-          <li>
-            <div>尾巴:</div>
-            <select name="" id="tailChoise">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
-          </li>
+          @endforeach
       </ul>
       
       <button type="button" id="buildDog">生成狗狗</button>
 
   </div>
-  <div class="right">
+
+  <div class="right" style="background-image: {{ Storage::disk(config('admin.upload.disk'))->url($pet_type->image) }};">
+    <!-- 拼狗狗组件 -->
     <div id="ear">
         <img src="/images/dog/ear/1.png" alt="">
     </div>
-   <div id="body">
-        <img src="/images/dog/body/7.png" alt="">
 
-        <div id="figure">
-            <img src="/images/dog/figure/2.png" alt="">
-        </div>
-        <div id="eye">
-            <img src="/images/dog/eye/1.png" alt="">
-        </div>
-        <div id="beard">
-            <img src="/images/dog/beard/1.png" alt="">
-        </div>
-        <div id="mouse">
-            <img src="/images/dog/mouse/1.png" alt="">
-        </div>
-       
-        <div id="paw">
-            <img src="/images/dog/paw/3.png" alt="">
-        </div>
-   </div>
+    <div id="body">
+        <img src="/images/dog/body/7.png" alt="">
+    </div>
+    <div id="figure">
+        <img src="/images/dog/figure/2.png" alt="">
+    </div>
+    <div id="eye">
+        <img src="/images/dog/eye/1.png" alt="">
+    </div>
+    <div id="beard">
+        <img src="/images/dog/beard/1.png" alt="">
+    </div>
+    <div id="mouse">
+        <img src="/images/dog/mouse/1.png" alt="">
+    </div>
+    <div id="paw">
+        <img src="/images/dog/paw/3.png" alt="">
+    </div>
    <div id="tail">
         <img src="/images/dog/tail/1.png" alt="">
     </div>
@@ -277,12 +212,12 @@ body{
   </div>
 </div>
 
-
 <!-- <script src="/js/"></script> -->
 <script>
 
 $(function(){
-    var commonUrl = "/images/dog/"
+    var commonUrl = "/images/dog/";
+
     $("#buildDog").click(function(){
         var earChoiseValue = $("#earChoise").val();
         var beardChoiseValue = $("#beardChoise").val();
@@ -312,7 +247,6 @@ $(function(){
 
         console.log(earChoiseValue);
     });
-    
     
 });
 

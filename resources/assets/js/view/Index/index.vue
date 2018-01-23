@@ -23,14 +23,14 @@
       <section class="content">
         <ul class="flex flex-wrap-on">
 
-          <li class="flex flex-v flex-align-center">
+          <!-- <li class="flex flex-v flex-align-center">
             <a href="/#/myAccount" class="flex flex-v flex-align-center">
                <i class="iconfont account-icon common-icon">
                 &#xe61e;
               </i>
               <h3>我的账户</h3>
             </a>
-          </li>
+          </li> -->
 
           <li class="flex flex-v flex-align-center">
             <a href="/#/shop" class="flex flex-v flex-align-center">
@@ -41,21 +41,21 @@
             </a>
           </li>
 
+           <li class="flex flex-v flex-align-center">
+            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe63b;
+              </i>
+              <h3>我的任务</h3>
+            </a>
+          </li>
+
           <li class="flex flex-v flex-align-center">
             <a class="flex flex-v flex-align-center" @click="goShareProfit">
               <i class="iconfont transaction-icon common-icon">
                 &#xe63b;
               </i>
               <h3>我的分润</h3>
-            </a>
-          </li>
-
-          <li class="flex flex-v flex-align-center">
-            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
-              <i class="iconfont transaction-icon common-icon">
-                &#xe63b;
-              </i>
-              <h3>我的交易</h3>
             </a>
           </li>
 

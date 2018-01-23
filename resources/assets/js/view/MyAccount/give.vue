@@ -49,7 +49,7 @@
 				shopList: null,
 				balance:null,  	            //可转账金额
 
-				shopId: null,	            //店铺ID
+				shopId: null,	            //公会ID
 				amount:null, 	            //提现money
 				has_pay_password:null,	    //是否设置支付密码
 				shop_id:null
@@ -96,7 +96,7 @@
 						return this.shopList[i].label;
 					}
 				}
-				return "没有这个店铺";
+				return "没有这个公会";
 			},
 
 			showDropList() {
@@ -124,7 +124,7 @@
 					Toast('余额不足');
 					return
 				}else if (!this.shopId) {
-					Toast('请选择店铺');
+					Toast('请选择公会');
 					return
 				}
 				

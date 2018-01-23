@@ -2,7 +2,7 @@
 
     <div id="shop-account">
         <div class="top">
-            <top-back :title="'店铺账户'" style="background: #26a2ff; color:#fff;">
+            <top-back :title="'公会账户'" style="background: #26a2ff; color:#fff;">
               <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="record">
                 提转记录
               </div>
@@ -24,7 +24,7 @@
                 <div class="money-text">
                     {{balance}}
                 </div>
-                <h3>当前店铺余额</h3>
+                <h3>当前公会余额</h3>
                 <h4>单位(元)</h4>
             </div>
 
@@ -32,7 +32,7 @@
               <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
             </div>
             <div class="transfer-accounts" @click="goGive">
-              <mt-button type="primary" size="large" >转账给店铺会员</mt-button>
+              <mt-button type="primary" size="large" >转账给公会会员</mt-button>
             </div>
 
             <div class="foot flex flex-v flex-align-center">

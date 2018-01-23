@@ -6,7 +6,7 @@
         </div>
         <div class="content">
             <h3 class="flex flex-align-center flex-justify-center">
-                请选择您要发起交易的店铺
+                请选择您要发起交易公会
             </h3>
             <div class="list-wrap">
                  <mt-radio

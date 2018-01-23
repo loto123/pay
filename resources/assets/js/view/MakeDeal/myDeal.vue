@@ -1,6 +1,6 @@
 <template>
   <div id="my-deal">
-      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
+      <top-back style="background:#26a2ff;color:#fff;" :title="'我的任务'">
         <div class="mark-wrap flex flex-reverse" @click = "mark">
           {{isStar?"关闭编辑":"标记"}}
         </div>
