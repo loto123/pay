@@ -91,7 +91,7 @@ class PetPartController extends Controller
             $form->select("pet_id", '宠物')->options(PetType::all()->pluck("name", "id"));
             $form->number("x_index", '部位X坐标');
             $form->number("y_index", '部位Y坐标');
-            $form->number("z_index", '部位Z坐标');
+            $form->number("z_index", '部位Z坐标')->value(1);
 
             $form->display('created_at', '创建时间');
             $form->display('updated_at', '更新时间');
