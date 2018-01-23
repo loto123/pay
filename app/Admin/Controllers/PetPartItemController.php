@@ -72,6 +72,7 @@ class PetPartItemController extends Controller
 
             $grid->id('ID')->sortable();
             $grid->name("素材名");
+            $grid->column("image", '图片')->image();
 
             $grid->created_at("创建时间");
         });
