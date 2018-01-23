@@ -6,6 +6,7 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\MasterContainer;
+use App\Pay\Model\PayQuota;
 use App\Pay\Model\Scene;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawMethod;
@@ -513,7 +514,7 @@ class AccountController extends BaseController {
             return $this->json(null, '没有可用支付通道', 0);
         }
 
-        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode','max_quota')->get();
+        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode')->get();
         if (config('app.debug')) {
             $methods->each(function (&$item) {
                 $item['required-params'] = WithdrawMethod::find($item['id'])->getReceiverDescription();
@@ -522,30 +523,15 @@ class AccountController extends BaseController {
 
         //提现额度
         if(!empty($methods) && count($methods)>0) {
-            try{
-                $quota_list = json_decode(config('pay_quota_list'),true);
-                sort($quota_list);
-            }
-            catch (\Exception $e){
-                $quota_list = ['100','200','500','1000','5000'];
-            }
-            $quotas = [];
-            $methods->each(function (&$item) use($quota_list,$quotas){
-                if(floor($item['max_quota']) > 0) {
-                    foreach ($quota_list as $key =>$_quota) {
-                        if($item['max_quota'] < $_quota) {
-                            break;
-                        } else {
-                            $quotas[] = $_quota;
-                        }
-                    }
-                    $item['quota_list'] = $quotas;
+            $methods->each(function (&$item) {
+                $method_quota_list = PayQuota::getPayQuotas(1,$item->id);
+                if($method_quota_list) {
+                    $item['quota_list'] = $method_quota_list;
                 } else {
-                    $item['quota_list'] = $quota_list;
+                    $item['quota_list'] = [];
                 }
                 $item['my_max_quota'] = max($item['quota_list']) > (float)$this->user->container->balance
                     ? (float)$this->user->container->balance : max($item['quota_list']);
-                unset($item['max_quota']);
             });
         }
 
@@ -832,13 +818,14 @@ class AccountController extends BaseController {
      */
     public function depositQuotaList()
     {
-        try{
-            $quota_list = json_decode(config('pay_quota_list'),true);
-            sort($quota_list);
-        }
-        catch (\Exception $e){
-            $quota_list = ['100','200','500','1000','5000'];
-        }
+//        try{
+//            $quota_list = json_decode(config('pay_quota_list'),true);
+//            sort($quota_list);
+//        }
+//        catch (\Exception $e){
+//            $quota_list = ['100','200','500','1000','5000'];
+//        }
+        $quota_list = PayQuota::getPayQuotas(2);
         return $this->json(['quota_list'=>$quota_list]);
     }
 }
