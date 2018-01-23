@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Storage;
 
 class Pet extends Model
 {
+    use Skip32Trait;
+
+    protected static $skip32_id = '070bd01ce7d3161920f6';
+
     const DEALER_ROLE_NAME = 'pet_dealer';//宠物交易商角色名
 
     const STATUS_UNHATCHED = 0;
