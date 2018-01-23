@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pet extends Model
 {
+    const DEALER_ROLE_NAME = 'pet_dealer';//宠物交易商角色名
+
     const STATUS_UNHATCHED = 0;
 
     const STATUS_HATCHING = 1;

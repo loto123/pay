@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Pay\Model\PayQuota;
+use App\Pay\Model\SellBill;
+use App\Pet;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * 宠物交易控制器
  * Class PetTrade
  * @package App\Http\Controllers\Api
  */
-class PetTradeController extends Controller
+class PetTradeController extends BaseController
 {
     /**
      * 获取用户当前可售宠物和宠物蛋
@@ -267,18 +271,47 @@ class PetTradeController extends Controller
      * )
      * @return array
      */
-    public function findSellBill()
+    public function findSellBill(Request $request)
     {
-        return [
-            'code' => 1,
-            'msg' => '',
-            'data' => [
-                [
-                    'id' => '1', //卖单id
-                    'pic' => 'a.jpg'//宠物图片
-                ],
-            ]
-        ];
+
+        $price = (float)$request->price;
+
+        //检查宠物购买价格
+        $prices = PayQuota::getPayQuotas(2);
+        if (!$price || !$prices || !in_array($price, $prices)) {
+            return $this->json([], '价格无效', 0);
+        }
+
+        //查找卖单
+        $sellBill = SellBill::onSale()->where('price', $price)->inRandomOrder()->first();
+
+        //没有符合条件的卖单由交易商随机生成一个
+        if (!$sellBill) {
+            $dealer = User::withRole(Pet::DEALER_ROLE_NAME)->inRandomOrder()->first();
+            if (!$dealer) {
+                return $this->json([], '当前没有宠物在售', 0);
+            }
+
+            $sellBill = new SellBill([
+                'price' => $price,
+                'by_dealer' => 1,
+            ]);
+
+
+            $sellBill->belongToUser()->associate(Auth::user());//该卖单专属于当前用户
+            $sellBill->placeBy()->associate($dealer);
+
+            //TODO 挂售交易商拥有的一只随机宠物,没有则生成
+            $pet = new Pet();
+            $sellBill->pet()->associate($pet);
+
+
+            if (!$sellBill->save()) {
+                return $this->json([], '系统异常,请稍后再试', 0);
+            }
+        }
+        return $this->json(['id' => $sellBill->getKey(), 'pic' => $sellBill->pet->image]);
+
     }
 
 

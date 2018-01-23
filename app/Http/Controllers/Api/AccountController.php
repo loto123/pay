@@ -8,6 +8,7 @@ use App\Pay\Model\DepositMethod;
 use App\Pay\Model\MasterContainer;
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\Scene;
+use App\Pay\Model\SellBill;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawMethod;
 use App\Pay\PayLogger;
@@ -15,7 +16,6 @@ use App\Shop;
 use App\ShopFund;
 use App\User;
 use App\UserFund;
-use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -77,7 +77,7 @@ class AccountController extends BaseController {
     /**
      * @SWG\Post(
      *   path="/account/charge",
-     *   summary="账户充值",
+     *   summary="购买宠物",
      *   tags={"账户"},
      *   @SWG\Parameter(
      *     name="way",
@@ -129,18 +129,26 @@ class AccountController extends BaseController {
             'bill_id' => 'numeric|min:1',
             'way' => 'required'
         ]);
-        return $this->json();
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
+
+        //取得卖单
+        $bill = SellBill::onSale()->lockForUpdate()->find($request->bill_id);
+        if (!$bill) {
+            return $this->json([], '该宠物不再出售', 0);
+        }
+
+        $price = $bill->price;
+
         $user = $this->auth->user();
         $record = new UserFund();
         $record->user_id = $user->id;
         $record->type = UserFund::TYPE_CHARGE;
         $record->mode = UserFund::MODE_IN;
-        $record->amount = $request->amount;
-        $record->balance = $user->container->balance + $request->amount;
+        $record->amount = $price;
+        $record->balance = $user->container->balance + $price;
         $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
 
