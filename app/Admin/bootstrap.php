@@ -27,9 +27,7 @@ Encore\Admin\Form::forget(['map', 'editor']);
 Admin::css('/css/daterangepicker-bs3.css');
 Admin::css('/css/common.css');
 Admin::css('/css/admin.css');
-Admin::css('/css/buildPet.css');
 
-Admin::js('/js/buildPet.js');
 Admin::js('/js/moment.js');
 Admin::js('/js/daterangepicker.js');
 Admin::js('/js/layer/layer.js');
