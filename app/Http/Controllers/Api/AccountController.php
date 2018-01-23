@@ -522,7 +522,7 @@ class AccountController extends BaseController {
             return $this->json(null, '没有可用支付通道', 0);
         }
 
-        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode')->get();
+        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode','max_quota')->get();
         if (config('app.debug')) {
             $methods->each(function (&$item) {
                 $item['required-params'] = WithdrawMethod::find($item['id'])->getReceiverDescription();
@@ -538,8 +538,9 @@ class AccountController extends BaseController {
                 } else {
                     $item['quota_list'] = [];
                 }
-                $item['my_max_quota'] = max($item['quota_list']) > (float)$this->user->container->balance
-                    ? (float)$this->user->container->balance : max($item['quota_list']);
+                $item['my_max_quota'] = $item['max_quota'] > (float)$this->user->container->balance
+                    ? (float)$this->user->container->balance : $item['max_quota'];
+                unset($item['max_quota']);
             });
         }
 
