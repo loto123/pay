@@ -11,6 +11,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Illuminate\Support\Facades\Storage;
 
 class PetController extends Controller
 {
@@ -73,7 +74,9 @@ class PetController extends Controller
             $grid->model()->with(["user",'pet_type']);
             $grid->id('ID')->sortable();
             $grid->column("user.name", '用户');
-
+            $grid->column('image', '图片')->display(function ($image) {
+                return Storage::disk('public')->url($image);
+            })->image();
             $grid->created_at("创建时间");
         });
     }
@@ -89,10 +92,22 @@ class PetController extends Controller
 
             $form->display('id', 'ID');
             $form->select("user_id", '用户')->options(User::all()->pluck("name", 'id'));
+            $form->select("status", "状态")->options([
+                Pet::STATUS_UNHATCHED => '未孵化',
+                Pet::STATUS_HATCHING => '待孵化',
+                Pet::STATUS_HATCHED => '已孵化',
+                Pet::STATUS_LOCKED => '锁定',
+                Pet::STATUS_DELETED => '删除',
+            ]);
 //            $form->image("image", '宠物模版')->uniqueName();
 
             $form->display('created_at', '创建时间');
             $form->display('updated_at', '更新时间');
+            $form->saved(function(Form $form){
+                if ($form->model()->status == Pet::STATUS_HATCHING) {
+                    \App\Jobs\Pet::dispatch($form->model());
+                }
+            });
         });
     }
 }
