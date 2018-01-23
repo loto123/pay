@@ -12,7 +12,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -352,5 +351,25 @@ class User extends Authenticatable
 
     public function pets() {
         return $this->hasMany(Pet::class, "user_id", "id");
+    }
+
+    /**
+     *  用户可售宠物
+     */
+    public function pets_for_sale() {
+        return $this->hasMany(Pet::class, "user_id", "id");
+    }
+
+    /**
+     * 生成宠物
+     * @return Pet
+     */
+    public function create_pet() {
+        $pet = new Pet();
+        $pet->user_id = $this->id;
+        $pet->status = Pet::STATUS_HATCHING;
+        $pet->save();
+        \App\Jobs\Pet::dispatch($pet);
+        return $pet;
     }
 }

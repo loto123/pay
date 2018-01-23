@@ -18,7 +18,7 @@ class CreatePetsTable extends Migration
             $table->unsignedInteger("user_id");
             $table->string("name")->nullable()->default("");
 //            $table->unsignedInteger("type_id")->nullable()->default(0);
-            $table->string("hash")->nullable()->default("");
+            $table->string("hash")->nullable()->default("")->index();
             $table->string("image")->comment("图片")->nullable()->default("");
             $table->unsignedSmallInteger("status")->nullable()->default(0)->comment("状态 ,0=未孵化 1=孵化中 2=已孵化 3=已锁定 4=已删除");
             $table->index(['user_id', 'status']);
@@ -33,28 +33,28 @@ class CreatePetsTable extends Migration
             $table->string("order")->nullable()->default("");
             $table->timestamps();
         });
-//        Schema::create('pet_types', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string("name");
-//            $table->string("image")->comment("模版文件");
-//            $table->timestamps();
-//        });
-//        Schema::create('pet_parts', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string("name");
-//            $table->unsignedInteger("pet_id")->index();
-//            $table->unsignedSmallInteger("x_index");
-//            $table->unsignedSmallInteger("y_index");
-//            $table->unsignedSmallInteger("z_index");
-//            $table->timestamps();
-//        });
-//        Schema::create('pet_part_items', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string("name");
-//            $table->unsignedInteger("pet_part_id")->index();
-//            $table->string("image")->comment("素材图片");
-//            $table->timestamps();
-//        });
+        Schema::create('pet_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string("name");
+            $table->string("image")->comment("模版文件");
+            $table->timestamps();
+        });
+        Schema::create('pet_parts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string("name");
+            $table->unsignedInteger("pet_id")->index();
+            $table->unsignedSmallInteger("x_index")->default(0);
+            $table->unsignedSmallInteger("y_index")->default(0);
+            $table->smallInteger("z_index")->default(0);
+            $table->timestamps();
+        });
+        Schema::create('pet_part_items', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string("name");
+            $table->unsignedInteger("pet_part_id")->index();
+            $table->string("image")->comment("素材图片");
+            $table->timestamps();
+        });
     }
 
     /**

@@ -74,9 +74,7 @@ class PetController extends Controller
             $grid->model()->with(["user",'pet_type']);
             $grid->id('ID')->sortable();
             $grid->column("user.name", '用户');
-            $grid->column('image', '图片')->display(function ($image) {
-                return Storage::disk('public')->url($image);
-            })->image();
+            $grid->column('image', '图片')->image();
             $grid->created_at("创建时间");
         });
     }
