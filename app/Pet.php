@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Pet extends Model
 {
+    const DEALER_ROLE_NAME = 'pet_dealer';//宠物交易商角色名
+
     const STATUS_UNHATCHED = 0;
 
     const STATUS_HATCHING = 1;
@@ -23,6 +26,13 @@ class Pet extends Model
 
     public function pet_type() {
         return $this->belongsTo(PetType::class, "type_id", "id");
+    }
+
+    public function getImageAttribute($value) {
+        if (filter_var($value, FILTER_VALIDATE_URL) === TRUE) {
+            return $value;
+        }
+        return $value ? Storage::disk('public')->url($value) : asset("images/personal.jpg");
     }
 
     /**
