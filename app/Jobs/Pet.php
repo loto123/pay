@@ -81,6 +81,7 @@ class Pet implements ShouldQueue
         }
         $hash[$pet_type->id] = $parts;
         $hash_str = serialize($hash);
+        var_dump($hash_str);
         $exist = \App\Pet::where("hash", $hash_str)->first();
         if ($exist) {
             throw new \Exception();
