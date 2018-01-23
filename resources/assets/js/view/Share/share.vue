@@ -1,7 +1,7 @@
 <template>
   <div id="share" class="flex flex-justify-center flex-align-center">
       <div class="top flex flex-align-center">
-          <h3>加入店铺</h3>
+          <h3>加入公会</h3>
       </div>
 
       <div class="content-wrap-shop flex flex-v flex-align-center" v-if="!isUser">

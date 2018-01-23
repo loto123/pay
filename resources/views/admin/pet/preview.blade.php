@@ -1,5 +1,4 @@
 
-
 <style>
 body{
     font-family:"Microsoft Yahei" !important;
@@ -13,7 +12,7 @@ input[type="text"]{
 
 #pet{
     width:100%;
-    min-height:600px;
+    min-height:800px;
     background:#fff;
 }
 
@@ -72,6 +71,12 @@ input[type="text"]{
     margin-top:10px;
 }
 
+#random-buildDog{
+    display: block;
+    margin-left: 20px;
+    margin-top:10px;
+}
+
 /*********** 左边部分end ************/
 
 
@@ -87,63 +92,19 @@ input[type="text"]{
 
 }   
 
-/****** 身体组成部分 *******/
-#pet .right #body{
-    position:absolute;
-    top:15%;
-    left:10%;
-    z-index:1000;
-}
-
-#pet .right #eye{
-    position:absolute;
-    top:17%;
-    left:20%;
-    z-index:1000;
-}
-
-#pet .right #beard{
-    position:absolute;
-    top:32%;
-    left:7%;
-     z-index:1000;
-}
-
-#pet .right #ear{
+#pet .right .background{
     position: absolute;
-    top: 3.7%;
-    left: 20.5%;
-     z-index:999;
+    top:0px;
+    left:0px;
+    z-index: 900;
+    border: 1px solid #eee;
 }
 
-#pet .right #figure{
-    position: absolute;
-    top: 3%;
-    left: 18%;
-    z-index:1000;
-}
 
-#pet .right #mouse{
+#pet .right .components{
     position: absolute;
-    top: 33%;
-    left: 30.6%;
-     z-index:1000;
+    z-index: 1000;
 }
-
-#pet .right #paw{
-    position: absolute;
-    top: 75.5%;
-    left: 20%;
-    z-index:1000;
-}
-
-#pet .right #tail{
-    position: absolute;
-    top: 38%;
-    left: 70.5%;
-     z-index:999;
-}
-/****** 身体组成部分end *******/
 
 /*********** 右边部分end ************/
 </style>
@@ -154,99 +115,112 @@ input[type="text"]{
   </div>
 
   <div class="left">
-      <ul>
+      <ul id="options">
           @foreach ($pet_type->parts as $part)
           <li>
             <div>{{ $part->name }}:</div>
-            <select name="" id="earChoise">
+            <select name="" >
                 @foreach ($part->items as $item)
                 <option value="{{ Storage::disk(config('admin.upload.disk'))->url($item->image) }}">{{ $item->name }}</option>
                 @endforeach
             </select>
 
             <div>z轴:</div>
-            <input type="text" value="{{ $part->z_index }}">
+            <input type="text" value="{{ $part->z_index }}" class="z_axis">
             
             <div>x轴:</div>
-            <input type="text" value="{{ $part->x_index }}">
+            <input type="text" value="{{ $part->x_index }}" class="x_axis">
             
             <div>y轴:</div>
-            <input type="text" value="{{ $part->y_index }}">
+            <input type="text" value="{{ $part->y_index }}" class="y_axis">
 
           </li>
           @endforeach
       </ul>
       
       <button type="button" id="buildDog">生成狗狗</button>
-
+      <button type="button" id="random-buildDog">随机生成</button>
   </div>
 
-  <div class="right" style="background-image: {{ Storage::disk(config('admin.upload.disk'))->url($pet_type->image) }};">
-    <!-- 拼狗狗组件 -->
-    <div id="ear">
-        <img src="/images/dog/ear/1.png" alt="">
+  <div class="right">
+    <div class="background">
+        <img src="{{ Storage::disk(config('admin.upload.disk'))->url($pet_type->image) }}" alt="">
     </div>
 
-    <div id="body">
-        <img src="/images/dog/body/7.png" alt="">
+    <!-- 拼狗狗组件 -->
+
+    @foreach ($pet_type->parts as $part)
+    <div class="components">
+        <img src="" alt="">
     </div>
-    <div id="figure">
-        <img src="/images/dog/figure/2.png" alt="">
-    </div>
-    <div id="eye">
-        <img src="/images/dog/eye/1.png" alt="">
-    </div>
-    <div id="beard">
-        <img src="/images/dog/beard/1.png" alt="">
-    </div>
-    <div id="mouse">
-        <img src="/images/dog/mouse/1.png" alt="">
-    </div>
-    <div id="paw">
-        <img src="/images/dog/paw/3.png" alt="">
-    </div>
-   <div id="tail">
-        <img src="/images/dog/tail/1.png" alt="">
-    </div>
-  
+    @endforeach
+   
+
+
   </div>
 </div>
 
-<!-- <script src="/js/"></script> -->
 <script>
 
 $(function(){
     var commonUrl = "/images/dog/";
+    var optionList = [];
+    var options = $("#options");
+
+    // 获取基本数据
+    function getLocalConfig(){
+        optionList = [];
+
+        for(var i=0; i  < options.find("li").length; i++ ){
+            var _obj = {};
+            _obj.x = options.find("li").eq(i).find(".x_axis").val();
+            _obj.y = options.find("li").eq(i).find(".y_axis").val();
+            _obj.z = options.find("li").eq(i).find(".z_axis").val();
+            _obj.img = options.find("li").eq(i).find("select").val();
+            optionList.push(_obj);
+        }
+    }
+
+    function buildDog(isRandom){
+        if(isRandom == true){
+            getRandomValue();
+        }
+
+        getLocalConfig();
+        for(var i = 0; i<optionList.length; i++ ){
+            var components = $(".components").eq(i);
+            components.find("img").attr("src",optionList[i].img);
+            components.css({left:optionList[i].x+"px",top:optionList[i].y+"px",zIndex:(1000+parseInt(optionList[i].z))});
+        }
+    }
+
+    function getRandomValue(){
+        var selectAll = $("select");
+        for(var i = 0; i<selectAll.length; i++){
+            var _index = getRandom(selectAll.eq(i).find("option").length);
+            selectAll.get(i).selectedIndex = _index;
+        }
+    }
+
+    function getRandom(value){
+        return Math.floor(Math.random()*value);
+    }
 
     $("#buildDog").click(function(){
-        var earChoiseValue = $("#earChoise").val();
-        var beardChoiseValue = $("#beardChoise").val();
-        var mouseChoiseValue = $("#mouseChoise").val();
-        var figureChoiseValue = $("#figureChoise").val();
-        var pawChoiseValue = $("#pawChoise").val();
-        var bodyChoise = $("#bodyChoise").val();
-        var eyeChoiseValue = $("#eyeChoise").val();
-        var tailChoiseValue = $("#tailChoise").val();
-
-        // 生成各部分结构
-        $("#ear >img").attr("src",commonUrl+"ear/"+earChoiseValue+".png");
-
-        $("#beard >img").attr("src",commonUrl+"beard/"+beardChoiseValue+".png");
-        
-        $("#mouse >img").attr("src",commonUrl+"mouse/"+mouseChoiseValue+".png");
-
-        $("#figure >img").attr("src",commonUrl+"figure/"+figureChoiseValue+".png");
-
-        $("#paw >img").attr("src",commonUrl+"paw/"+pawChoiseValue+".png");
-
-        $("#eye >img").attr("src",commonUrl+"eye/"+eyeChoiseValue+".png");
-
-        $("#body >img").attr("src",commonUrl+"body/"+bodyChoise+".png");
-
-        $("#tail >img").attr("src",commonUrl+"tail/"+tailChoiseValue+".png");
-
-        console.log(earChoiseValue);
+        buildDog();
     });
+
+    $("#random-buildDog").click(function(){
+        buildDog(true);
+    });
+
+    $(document).keydown(function(event){
+        if(event.keyCode == 13){
+            buildDog();
+        }
+　　});
+
+    buildDog();
     
 });
 
