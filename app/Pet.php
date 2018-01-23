@@ -25,7 +25,20 @@ class Pet extends Model
         return $this->belongsTo(PetType::class, "type_id", "id");
     }
 
+    /**
+     *  宠物转移
+     * @param $user_id
+     * @return bool
+     */
     public function transfer($user_id) {
-        
+        return true;
+    }
+
+    /**
+     * 宠物可售状态
+     * @return bool
+     */
+    public function for_sale() {
+        return true;
     }
 }
