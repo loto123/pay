@@ -8,8 +8,7 @@
 		<div class="give-box">
 			<div class="title">转移钻石</div>
 			<div class="give-money flex flex-justify-center">
-				<label>￥</label>
-				<input type="text" placeholder="请输入金额" v-model="amount">
+				<input type="text" placeholder="请输入钻石" v-model="amount">
 			</div>
 			<div class="all-money flex">
 				<div class="money">可转钻石 ¥<span>{{balance}}</span>,</div>
