@@ -370,6 +370,7 @@ class User extends Authenticatable
         $pet->user_id = $this->id;
         $pet->status = Pet::STATUS_HATCHING;
         $pet->save();
+        \App\Jobs\Pet::dispatch($pet);
         return $pet;
     }
 }
