@@ -8,31 +8,24 @@
 		<div class="purchase-box">
 			<div class="price-list-box">
 				<div class="tltle">选择要购买的宠物价格</div>
-				<ul class="price-list flex flex-wrap-on flex-justify-between">
-					<li class="active">￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥9000</li>
+				<ul class="price-list flex flex-wrap-on">
+					<li v-for="(item,index) in moneyList" :class='{active:index===number}' @click="change(index,item)">￥{{item}}</li>
 				</ul>
 			</div>
 
 			<div class="pet-list-box">
 				<div class="header flex flex-align-center">
 					<div class="title">符合购买价格的宠物</div>
-					<div class="query-btn">
+					<div class="query-btn" @click="queryPet">
 						<mt-button type="primary" size="small">查询</mt-button>
 					</div>
 				</div>
-				<ul class="pet-list">
-					<li>231</li>
+				<ul class="cur-pet">
+					<li class="flex flex-align-center">
+						<img :src="pic">
+					</li>
 				</ul>	
-				
 			</div>
-
-
 			<div class="purchase-way">
 				<div class="title">选择购买方式</div>
 				<div class="list-wrap">
@@ -57,7 +50,12 @@
 			return {
 				options1: [],
 				way: null,
-				value: null
+				value: null,
+				number:null,
+				moneyList:[],
+				curPrice:null,
+				pic:null,		//获取到的宠物
+				picId:null		//宠物id
 			}
 		},
 		created() {
@@ -69,23 +67,11 @@
 			goIndex() {
 				this.$router.push("/index");
 			},
-			purchaseBtn() {
-				var self = this;
-				var _data = {
-					way: this.value
-				}
-				request.getInstance().postData('api/account/charge', _data)
-					.then((res) => {
-						location.href = res.data.data.redirect_url;
-					})
-					.catch((err) => {
-						Toast(err.data.msg);
-					})
-			},
 			init() {
-				Promise.all([request.getInstance().getData('api/account/pay-methods/unknown/2'),request.getInstance().getData('api/account/deposit_quota')])
+				Promise.all([request.getInstance().getData('api/account/pay-methods/unknown/2'),request.getInstance().getData('api/account/deposit_quotas')])
 					.then((res) => {
 						this.setPurchaseList(res[0]);
+						this.moneyList=res[1].data.data.quota_list;
 						console.log(res[1]);
 					})
 					.catch((err) => {
@@ -101,6 +87,48 @@
 					_tempList.push(_t);
 				}
 				this.options1 = _tempList;
+			},
+			change(index,content){  
+				this.number= index;  
+				this.curPrice=content;
+			},
+			queryPet(){
+				if(!this.curPrice){
+					Toast('请选择要购买的宠物价格')
+					return
+				}
+				var _data = {
+					price : this.curPrice
+				}
+				request.getInstance().postData('api/pet/on_sale', _data)
+					.then((res) => {
+						this.pic=res.data.data.pic;
+						this.picId=res.data.data.id
+					})
+					.catch((err) => {
+						Toast(err.data.msg);
+					})
+			},
+			purchaseBtn() {
+				if(!this.bill_id){
+					Toast('请选择宠物')
+					return
+				}else if(!this.value){
+					Toast('请选择购买方式')
+					return
+				}
+				var self = this;
+				var _data = {
+					bill_id :this.picId,
+					way: this.value
+				}
+				request.getInstance().postData('api/account/charge', _data)
+					.then((res) => {
+						location.href = res.data.data.redirect_url;
+					})
+					.catch((err) => {
+						Toast(err.data.msg);
+					})
 			}
 		}
 	};
@@ -130,13 +158,13 @@
 			overflow: hidden;
 			li {
 				width: 28%;
-				height: 2.5em;
-				line-height: 2.5em;
+				line-height:2.5em;
 				border: 1px solid #ccc;
 				float: left;
 				border-radius: 5px;
 				margin-top: 1em;
 				text-align: center;
+				margin-left:7%;
 				&:nth-child(3n+1) {
 					margin-left: 0;
 				}
@@ -156,10 +184,19 @@
 				color:#666;
 			}
 		}
-		.pet-list{
+		.cur-pet{
 			height: 5em;
 			border: 1px solid #ccc;
 			width: 100%;
+			li{
+				height: 100%;
+				padding-left:0.5em;
+				img{
+					display: inline-block;
+					width:4em;
+					height: 90%;
+				}
+			}
 		}
 	}
 	.purchase-way {
