@@ -12,7 +12,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -363,7 +362,7 @@ class User extends Authenticatable
 
     /**
      * 生成宠物
-     * @return bool
+     * @return Pet
      */
     public function create_pet() {
         $pet = new Pet();

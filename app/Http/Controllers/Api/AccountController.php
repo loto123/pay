@@ -258,7 +258,7 @@ class AccountController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        return $this->json();
+
         $user = $this->auth->user();
         try {
             if (!$user->check_pay_password($request->password)) {

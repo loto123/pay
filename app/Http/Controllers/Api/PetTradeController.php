@@ -264,7 +264,12 @@ class PetTradeController extends BaseController
      *                      property="pic",
      *                      type="string",
      *                      description="宠物图片"
-     *                  )
+     *                  ),
+     *                   @SWG\Property(
+     *                      property="hatching",
+     *                      type="boolean",
+     *                      description="是否孵化中,未孵化要等待孵化"
+     *                  ),
      *              )
      *          )
      *      )
@@ -273,9 +278,8 @@ class PetTradeController extends BaseController
      */
     public function findSellBill(Request $request)
     {
-
+        //DB::connection()->enableQueryLog();
         $price = (float)$request->price;
-
         //检查宠物购买价格
         $prices = PayQuota::getPayQuotas(2);
         if (!$price || !$prices || !in_array($price, $prices)) {
@@ -287,8 +291,14 @@ class PetTradeController extends BaseController
 
         //没有符合条件的卖单由交易商随机生成一个
         if (!$sellBill) {
-            $dealer = User::withRole(Pet::DEALER_ROLE_NAME)->inRandomOrder()->first();
+            /**
+             * @var $dealer User
+             */
+            $dealer = User::whereHas('roles', function ($query) {
+                $query->where('name', '=', Pet::DEALER_ROLE_NAME);
+            })->inRandomOrder()->first();
             if (!$dealer) {
+                //dump( DB::getQueryLog());
                 return $this->json([], '当前没有宠物在售', 0);
             }
 
@@ -300,18 +310,80 @@ class PetTradeController extends BaseController
 
             $sellBill->belongToUser()->associate(Auth::user());//该卖单专属于当前用户
             $sellBill->placeBy()->associate($dealer);
-
-            //TODO 挂售交易商拥有的一只随机宠物,没有则生成
-            $pet = new Pet();
+            $pet = $dealer->create_pet();
+            if (!$pet) {
+                return $this->json([], '系统异常E1,请稍后再试', 0);
+            }
             $sellBill->pet()->associate($pet);
 
-
             if (!$sellBill->save()) {
-                return $this->json([], '系统异常,请稍后再试', 0);
+                return $this->json([], '系统异常E2,请稍后再试', 0);
             }
         }
-        return $this->json(['id' => $sellBill->getKey(), 'pic' => $sellBill->pet->image]);
 
+        return $this->json(['id' => $sellBill->getKey(), 'hatching' => $sellBill->pet->status == Pet::STATUS_HATCHING, 'pic' => $sellBill->pet->image]);
+    }
+
+    /**
+     * 查询订单宠物
+     * @SWG\Post(
+     *   path="/pet/bill_pet_refresh",
+     *   summary="订单宠物刷新",
+     *   tags={"宠物交易"},
+     *     @SWG\Parameter(
+     *     name="bill_id",
+     *     in="formData",
+     *     description="卖单id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1,
+     *                  description="成功返回1"
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
+     *                      property="id",
+     *                      type="integer",
+     *                      description="卖单id"
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="pic",
+     *                      type="string",
+     *                      description="宠物图片"
+     *                  ),
+     *                   @SWG\Property(
+     *                      property="hatching",
+     *                      type="boolean",
+     *                      description="是否孵化中,未孵化继续轮询"
+     *                  ),
+     *              )
+     *          )
+     *      )
+     * )
+     * @param Request $request
+     */
+    public function queryBillPet(Request $request)
+    {
+
+        $bill = SellBill::onSale()->find($request->bill_id);
+        if ($bill) {
+            return $this->json(['id' => $bill->getKey(), 'hatching' => $bill->pet->status == Pet::STATUS_HATCHING, 'pic' => $bill->pet->image]);
+        } else {
+            return $this->json([], '卖单不存在', 0);
+        }
     }
 
 

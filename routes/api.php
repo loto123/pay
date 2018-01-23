@@ -221,6 +221,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->post('/acquire_egg', 'PetTradeController@freeEgg');
         $api->post('/brood', 'PetTradeController@broodTheEgg');
         $api->post('/on_sale', 'PetTradeController@findSellBill');
+        $api->post('/bill_pet_refresh', 'PetTradeController@queryBillPet');
     });
 
 });

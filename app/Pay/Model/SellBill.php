@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class SellBill extends Model
 {
-    const UPDATED_AT = false;
+    const UPDATED_AT = null;
     protected $table = 'pay_sell_bill';
     protected $guarded = ['id'];
 
@@ -43,7 +43,7 @@ class SellBill extends Model
      */
     public function placeBy()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'place_by');
     }
 
     /**
