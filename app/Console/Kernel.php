@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\Temp;
 use App\Console\Commands\ShopLogo;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -16,8 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-        ShopLogo::class,
-        Temp::class
+        ShopLogo::class
     ];
 
     /**
