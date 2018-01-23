@@ -780,7 +780,7 @@ class AccountController extends BaseController {
 
     /**
      * @SWG\Get(
-     *   path="/account/deposit_quota",
+     *   path="/account/deposit_quotas",
      *   summary="充值金额列表",
      *   tags={"账户"},
      *     @SWG\Response(
@@ -799,7 +799,7 @@ class AccountController extends BaseController {
      *              @SWG\Property(
      *                  property="data",
      *                  type="object",
-     *                  @SWG\Property(property="quota_list", type="array", description="用户当月收入总数",
+     *                  @SWG\Property(property="quota_list", type="array", description="充值金额",
      *                  @SWG\Items(
      *                  @SWG\Property(property="1", type="integer", example="100"),
      *                  @SWG\Property(property="2", type="integer", example="200"),
@@ -818,14 +818,11 @@ class AccountController extends BaseController {
      */
     public function depositQuotaList()
     {
-//        try{
-//            $quota_list = json_decode(config('pay_quota_list'),true);
-//            sort($quota_list);
-//        }
-//        catch (\Exception $e){
-//            $quota_list = ['100','200','500','1000','5000'];
-//        }
         $quota_list = PayQuota::getPayQuotas(2);
-        return $this->json(['quota_list'=>$quota_list]);
+        if($quota_list) {
+            return $this->json(['quota_list'=>$quota_list]);
+        } else {
+            return $this->json([],'请求失败',0);
+        }
     }
 }
