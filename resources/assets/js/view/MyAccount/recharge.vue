@@ -61,7 +61,7 @@
 			}
 		},
 		created() {
-			this.selWay();
+			this.init();
 		},
 		components: { topBack },
 		props: ["showSwitch", "optionsList"],
@@ -82,10 +82,11 @@
 						Toast(err.data.msg);
 					})
 			},
-			selWay() {
-				request.getInstance().getData('api/account/pay-methods/unknown/2')
+			init() {
+				Promise.all([request.getInstance().getData('api/account/pay-methods/unknown/2'),request.getInstance().getData('api/account/deposit_quota')])
 					.then((res) => {
-						this.setPurchaseList(res);
+						this.setPurchaseList(res[0]);
+						console.log(res[1]);
 					})
 					.catch((err) => {
 						Toast(err.data.msg);
