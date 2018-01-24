@@ -603,7 +603,7 @@ class TransferController extends BaseController
 //                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         //分润至代理分润账户
                         $user_receiver = $user->parent->proxy_container;
-                        $proxy_fee = floor($record->fee_amount * $user->parent->percent) / 100;
+                        $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
                         if ($proxy_fee) {
                             $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
                         }
@@ -1455,7 +1455,7 @@ class TransferController extends BaseController
                         if ($value->user->parent && $value->user->parent->percent) {
                             $profit->proxy = $value->user->parent->id;
                             $profit->proxy_percent = $value->user->parent->percent;
-                            $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
+                            $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
                         }
                         if ($profit->proxy_amount <= 0) {
                             continue;
@@ -1487,11 +1487,11 @@ class TransferController extends BaseController
                 DB::rollBack();
             }
         }
-        if($list->count() == $success) {
+        if ($list->count() == $success) {
             return $this->json([], trans('trans.trans_closed_success'), 1);
-        }else if($success <= 0) {
+        } else if ($success <= 0) {
             return $this->json([], trans('trans.trans_closed_failed'), 0);
-        }else {
+        } else {
             return $this->json([], trans('trans.trans_closed_part_success'), 1);
         }
     }

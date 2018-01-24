@@ -12,30 +12,30 @@
                         <input type="text" id="aid" name="aid" class="form-control" placeholder="请输入用户ID"
                                value="{{$aid}}">
                     </div>
-                    <label class="col-sm-1 control-label">店铺ID：</label>
+                    <label class="col-sm-1 control-label">公会ID：</label>
 
                     <div class="col-sm-2">
-                        <input type="text" id="shop_id" name="shop_id" class="form-control" placeholder="请输入店铺ID"
+                        <input type="text" id="shop_id" name="shop_id" class="form-control" placeholder="请输入公会ID"
                                value="{{$shop_id}}">
                     </div>
-                    <label class="col-sm-1 control-label">店主ID：</label>
+                    <label class="col-sm-1 control-label">会长ID：</label>
 
                     <div class="col-sm-2">
-                        <input type="text" id="owner_id" name="owner_id" class="form-control" placeholder="请输入店主ID"
+                        <input type="text" id="owner_id" name="owner_id" class="form-control" placeholder="请输入会长ID"
                                value="{{$owner_id}}">
                     </div>
-                    <label class="col-sm-1 control-label">交易ID：</label>
+                    <label class="col-sm-1 control-label">任务ID：</label>
 
                     <div class="col-sm-2">
-                        <input type="text" id="id" name="id" class="form-control" placeholder="请输入交易ID" value="{{$id}}">
+                        <input type="text" id="id" name="id" class="form-control" placeholder="请输入任务ID" value="{{$id}}">
                     </div>
                     <label class="col-sm-1 control-label">支付状态：</label>
 
                     <div class="col-sm-2">
                         <select class="form-control" id="stat" name="stat">
                             <option value="">全部</option>
-                            <option value="1" {{isset($stat) && $stat == 1 ? 'selected="selected"' : ''}}>付款</option>
-                            <option value="2" {{isset($stat) && $stat == 2 ? 'selected="selected"' : ''}}>收款</option>
+                            <option value="1" {{isset($stat) && $stat == 1 ? 'selected="selected"' : ''}}>交钻</option>
+                            <option value="2" {{isset($stat) && $stat == 2 ? 'selected="selected"' : ''}}>拿钻</option>
                             <option value="3" {{isset($stat) && $stat == 3 ? 'selected="selected"' : ''}}>撤销</option>
                         </select>
                     </div>
@@ -58,8 +58,8 @@
     <div class="row">
         <div class="col-md-6">
             <div class="box-body box">
-                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 条支付记录 ，累计收款 <span
-                            class="text-yellow">{{$get_amount}}</span> 元， 累计付款 <span
+                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 条支付记录 ，累计拿钻 <span
+                            class="text-yellow">{{$get_amount}}</span> 元， 累计交钻 <span
                             class="text-yellow">{{abs($put_amount)}}</span> 元
                 </div>
             </div>
@@ -74,15 +74,15 @@
                     <tr>
                         <th>支付流水号</th>
                         <th>用户</th>
-                        <th>交易ID</th>
-                        <th>店主</th>
-                        <th>店铺</th>
-                        <th>平台交易费</th>
-                        <th>店铺分成</th>
+                        <th>任务ID</th>
+                        <th>会长</th>
+                        <th>公会</th>
+                        <th>平台手续费</th>
+                        <th>公会分成</th>
                         <th>类型</th>
                         <th>金额</th>
-                        <th>实收款</th>
-                        <th>实付款</th>
+                        <th>实拿钻</th>
+                        <th>实交钻</th>
                         <th>状态</th>
                         <th>创建时间</th>
                     </tr>
@@ -140,10 +140,10 @@
                             <td>{{$item->tip ? $item->tip->amount : 0}}</td>
                             @switch($item->status)
                             @case(1)
-                            <td>付款</td>
+                            <td>交钻</td>
                             @break
                             @case(2)
-                            <td>收款</td>
+                            <td>拿钻</td>
                             @break
                             @default
                             <td>未知</td>
