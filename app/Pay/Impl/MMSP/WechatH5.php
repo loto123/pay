@@ -88,7 +88,7 @@ class WechatH5 implements DepositInterface
     public function parseReturn(DepositMethod $method)
     {
         $outID = request()->query('batch');
-        $id = IdConfuse::recoveryId($outID);
+        $id = null;//IdConfuse::recoveryId($outID);
         $deposit = $method->deposits()->where('id', $id)->first();
         if (!$deposit) {
             throw new Exception('无效订单');

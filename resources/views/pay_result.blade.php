@@ -14,8 +14,8 @@
 <body>
 <p>您的订单{{$status_text}}</p>
 @if ($result->state === Deposit::STATE_COMPLETE)
-    <p>外部交易号:{{$result->out_batch_no}}</p>
-    <p>充值金额:{{$result->amount}}</p>
+    <p>获得钻石:{{$diamonds}}</p>
+    <p>获得宠物:<img src="{{$pet}}"/></p>
 @endif
 <p><a href="/#/myAccount">返回</a></p>
 </body>

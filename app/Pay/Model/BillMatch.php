@@ -43,9 +43,11 @@ class BillMatch extends Model
             $affected = DB::table('pay_bill_match')->join('pay_sell_bill', function ($join) {
                 $join->on('pay_bill_match.sell_bill_id', '=', 'pay_sell_bill.id')->where([
                     ['pay_bill_match.state', '=', self::STATE_WAIT],
-                    ['expired_at', '<', date('Y-m-d H:i:s')]
+                    ['pay_bill_match.expired_at', '<', date('Y-m-d H:i:s')]
                 ]);
             })->update(['pay_bill_match.state' => self::STATE_EXPIRED, 'pay_sell_bill.locked' => 0]);
+
+            //dump(DB::getQueryLog());
         } catch (\Exception $e) {
             $exception = $e;
         }

@@ -43,7 +43,7 @@ class Deposit extends Model
             case self::STATE_UNPAID:
                 return '未支付';
             case self::STATE_COMPLETE:
-                return '充值成功';
+                return '购买成功';
             case self::STATE_PAY_FAIL:
                 return '支付失败';
             case self::STATE_PART_PAID:

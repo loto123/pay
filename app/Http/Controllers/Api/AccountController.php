@@ -162,6 +162,7 @@ class AccountController extends BaseController
             $bill = SellBill::onSale()->lockForUpdate()->find($request->bill_id);
             if (!$bill) {
                 $message = '该宠物不再出售';
+                //dump(DB::getQueryLog());
                 break;
             }
             $price = $bill->price;

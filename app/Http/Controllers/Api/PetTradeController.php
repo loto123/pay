@@ -62,7 +62,7 @@ class PetTradeController extends BaseController
     public function sellable()
     {
         return $this->json(['list' => Auth::user()->pets_for_sale()->map(function ($item) {
-            return ['id' => $item->getKey(), 'pic' => $item->image, 'is_egg' => $item->status == Pet::STATUS_UNHATCHED];
+            return ['id' => $item->getKey(), 'pic' => $item->status == Pet::STATUS_UNHATCHED ? '' : $item->image, 'is_egg' => $item->status == Pet::STATUS_UNHATCHED];
         })]);
     }
 
