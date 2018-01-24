@@ -115,15 +115,15 @@ class UserController extends Controller
                 return "<span style='color:black'>$this->name</span><br/><span style='color:gray'>$this->mobile</span>";
             });
             $grid->roles('身份')->pluck('display_name')->label();
-            $grid->transfer_count('交易笔数');
-            $grid->column('container.balance','余额');
+            $grid->transfer_count('任务笔数');
+            $grid->column('container.balance','剩余钻石');
             $grid->column('pure_profit', '收益')->display(function(){
                 return number_format($this->profits - $this->payment,2);
             });
-            $grid->profits('收款')->display(function () {
+            $grid->profits('拿钻')->display(function () {
                 return number_format($this->profits,2);
             });
-            $grid->payment('付款')->display(function () {
+            $grid->payment('交钻')->display(function () {
                 return number_format($this->payment,2);
             });
             $grid->column('operators','上级运营')->display(function ($value) {
@@ -183,7 +183,7 @@ class UserController extends Controller
             $form->password('password', '密码');
             $form->text('mobile', '手机号码');
             if ($id) {
-                $form->display('container.balance', '余额');
+                $form->display('container.balance', '剩余钻石');
             }
             //角色不允许直接编辑
             if(!$id) {

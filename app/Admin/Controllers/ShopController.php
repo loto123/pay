@@ -20,7 +20,7 @@ class ShopController extends Controller
 
     private $limit = 20;
 
-    //店铺管理
+    //公会管理
     public function index(Request $request)
     {
         $manager_id = $request->input('manager_id');
@@ -70,7 +70,7 @@ class ShopController extends Controller
         $count = $countQuery->count();
         $list = $listQuery->paginate($this->limit);
 
-        //未关闭交易
+        //未关闭任务
         $unclose_transfer = Shop::query()->withCount(['transfer' => function ($query) {
             $query->where('status','<>','3');
         }])->get();
@@ -87,12 +87,12 @@ class ShopController extends Controller
         $data = compact('list','count','date_time','manager_id','shop_id','shop_name','offset','unclose_cnt_list');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shop',$data));
-            $content->header("店铺管理");
+            $content->header("公会管理");
         });
     }
 
-    //店铺详情
-    public function details($shop_id)//店铺id
+    //公会详情
+    public function details($shop_id)//公会id
     {
         $table_name = (new Shop)->getTable();
         $listQuery = Shop::leftJoin('transfer as t',function ($join) use($table_name) {
@@ -110,13 +110,13 @@ class ShopController extends Controller
         $data = compact('list');
         return Admin::content(function (Content $content) use($data) {
             $content->body(view('admin/shopDetail', $data));
-            $content->header('店铺详情');
+            $content->header('公会详情');
         });
     }
 
     /*
-     * 更新店铺状态
-     * 返回店铺详情页面
+     * 更新公会状态
+     * 返回公会详情页面
      * */
     public function updates(Request $request)
     {
@@ -143,7 +143,7 @@ class ShopController extends Controller
             $query->where('status','<>','3');
         }])->first();
         if($shop && $shop->transfer_count > 0) {
-            abort(404,'该店铺有交易未关闭，不能删除！');
+            abort(404,'该公会有任务未关闭，不能删除！');
         }
         if($shop->delete()) {
             return redirect('/admin/shop')->with('status', '删除成功！');
