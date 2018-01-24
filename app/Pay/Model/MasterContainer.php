@@ -11,7 +11,6 @@
 namespace App\Pay\Model;
 
 
-use App\Jobs\SubmitWithdrawRequest;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
@@ -168,16 +167,14 @@ class MasterContainer extends Container
             $withdraw->masterContainer()->associate($this);
             //加入提现队列
             if ($withdraw->save()) {
-                DB::commit();
-                SubmitWithdrawRequest::dispatch($withdraw)->onQueue('withdraw');
+                //DB::commit();
+                //SubmitWithdrawRequest::dispatch($withdraw)->onQueue('withdraw');
                 $commit = true;
             }
         } while (false);
 
         //结束事务
-        if (!$commit) {
-            DB::rollBack();
-        }
+        $commit ? DB::commit() : DB::rollBack();
         return ['success' => $commit, 'withdraw_id' => $commit ? $withdraw->getKey() : 0];
     }
 

@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call([BillMatch::class, 'expire'])->withoutOverlapping()->everyMinute(); //宠物交易订单超时任务
+        $schedule->call([BillMatch::class, 'expire'])->name('pet_buy_timeout')->withoutOverlapping()->everyMinute(); //宠物交易订单超时任务
     }
 
     /**

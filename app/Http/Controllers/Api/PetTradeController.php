@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
+use App\Pay\PayLogger;
 use App\Pet;
 use App\User;
 use Illuminate\Http\Request;
@@ -298,7 +299,7 @@ class PetTradeController extends BaseController
                 $query->where('name', '=', Pet::DEALER_ROLE_NAME);
             })->inRandomOrder()->first();
             if (!$dealer) {
-                //dump( DB::getQueryLog());
+                PayLogger::deposit()->emergency('没有交易商,系统无法挂售宠物');
                 return $this->json([], '当前没有宠物在售', 0);
             }
 

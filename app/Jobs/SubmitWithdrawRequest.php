@@ -43,17 +43,20 @@ class SubmitWithdrawRequest implements ShouldQueue
      */
     public function handle()
     {
+        /**
+         * @var $result WithdrawResult
+         */
+        $result = new WithdrawResult();
+
         if ($this->job) {
-            $this->job->delete();//失败禁止重试
+            //包装为宠物交易后提现不再由队列处理
+            return $result;
+            //$this->job->delete();//失败禁止重试
         }
 
         $withdraw = $this->withdraw;
         $prev_except = null;
 
-        /**
-         * @var $result WithdrawResult
-         */
-        $result = new WithdrawResult();
 
         try {
             if ($withdraw->method->targetPlatform->getKey() == 0) {
