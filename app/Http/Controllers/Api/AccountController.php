@@ -218,7 +218,7 @@ class AccountController extends BaseController
     /**
      * @SWG\Post(
      *   path="/account/withdraw",
-     *   summary="账户提现",
+     *   summary="出售宠物",
      *   tags={"账户"},
      *   @SWG\Parameter(
      *     name="way",
@@ -542,7 +542,40 @@ class AccountController extends BaseController
      *   path="/account/pay-methods/{os}/{scene}",
      *   summary="充值方式列表:占位符{os}表示操作系统:andriod,ios,unknown(未知), {scene}表示支付场景id，见后台 支付管理-支付场景",
      *   tags={"账户"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
+     *                      property="channel",
+     *                      type="integer",
+     *                      example=1,
+     *                      description="当前支付通道"
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="methods",
+     *                      type="array",
+     *                      description="购买方式列表",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="id", type="integer", description="购买方式id"),
+     *                          @SWG\Property(property="label", type="string", description="展示文本"),
+     *                      ),
+     *                  ),
+     *              )
+     *          )
+     *      ),
      * )
      * @return \Illuminate\Http\Response
      */
@@ -587,7 +620,38 @@ class AccountController extends BaseController
      *   path="/account/withdraw-methods",
      *   summary="提现方式列表",
      *   tags={"账户"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  description="余额信息",
+     *                  @SWG\Property(property="channel", type="integer", example=1,description="用户当前使用的支付通道"),
+     *                  @SWG\Property(property="methods", type="array", description="提现方式列表",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="id", type="integer", description="收款方式id"),
+     *                  @SWG\Property(property="label", type="string", description="展示文本"),
+     *                  @SWG\Property(property="fee_value", type="float", example="0.3",description="手续费"),
+     *                  @SWG\Property(property="fee_mode", type="integer", example="0",description="手续费模式:0百分比,1单笔固定"),
+     *                  @SWG\Property(property="my_max_quota", type="float", example="100.00",description="我的最大价格"),
+     *                  @SWG\Property(property="quota_list", type="array", example="100,200,300",description="价格列表",@SWG\Items()),
+     *                  @SWG\Property(property="required-params", type="object", description="该方式需要的必要参数说明。每种方式不同,key/描述。仅调试模式返回"),
+     *                  ),
+     *                  )
+     *              )
+     *          )
+     *      ),
      * )
      * @return \Illuminate\Http\Response
      */

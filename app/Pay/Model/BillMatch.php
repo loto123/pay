@@ -46,12 +46,15 @@ class BillMatch extends Model
                     ['pay_bill_match.expired_at', '<', date('Y-m-d H:i:s')]
                 ]);
             })->update(['pay_bill_match.state' => self::STATE_EXPIRED, 'pay_sell_bill.locked' => 0]);
+            $affected /= 2;
 
             //dump(DB::getQueryLog());
         } catch (\Exception $e) {
             $exception = $e;
         }
-        PayLogger::common()->info('宠物订单过期任务', ['过期订单数' => $affected, '异常' => $exception]);
+        if ($exception || $affected) {
+            PayLogger::common()->info('宠物订单过期任务', ['过期订单数' => $affected, '异常' => $exception]);
+        }
     }
 
     /**
