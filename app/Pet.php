@@ -3,8 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class Pet
+ * @property integer $user_id
+ * @package App
+ */
 class Pet extends Model
 {
     use Skip32Trait;
@@ -45,7 +51,26 @@ class Pet extends Model
      * @return bool
      */
     public function transfer($user_id) {
+        if ($user_id == $this->user_id) {
+            return false;
+        }
+        $from_user_id = $this->user_id;
+        $this->user_id = $user_id;
         $record = new PetRecord();
+        $record->pet_id = $this->id;
+        $record->from_user_id = $from_user_id;
+        $record->to_user_id = $user_id;
+        $record->type = PetRecord::TYPE_TRANSFER;
+
+        DB::beginTransaction();
+        try {
+            $this->save();
+            $record->save();
+        } catch (\Exception $e){
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
         return true;
     }
 

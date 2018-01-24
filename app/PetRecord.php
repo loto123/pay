@@ -15,4 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class PetRecord extends Model
 {
     //
+    const TYPE_NEW = 0;//系统初始
+
+    const TYPE_TRANSFER = 1;//交易转移
+
+    const TYPE_CANCEL = 2;//订单取消补偿
 }
