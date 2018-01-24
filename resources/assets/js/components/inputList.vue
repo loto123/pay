@@ -6,7 +6,7 @@
         </div>
         <div class="content">
             <h3 class="flex flex-align-center flex-justify-center">
-                请选择您要发起交易的店铺
+                请选择您要发起交易公会
             </h3>
             <div class="list-wrap">
                  <mt-radio
@@ -93,16 +93,27 @@ export default {
   computed :{
     
   },
+  
+  created(){
+     this.init(); 
+  },
+
   data(){
       return {
         "choiseValue":null,
-        "shopList":null
       }
   },
   methods:{
       hideTab(){
           this.$emit("hideDropList",this.choiseValue);
       },
+
+      init(){
+          if(this.choiseValue == null && this.optionsList!=null){
+              this.choiseValue = this.optionsList[0].value;
+              this.hideTab();
+          }
+      }
   },
   watch:{
       "choiseValue":'hideTab'

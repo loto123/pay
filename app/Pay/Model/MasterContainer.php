@@ -80,9 +80,10 @@ class MasterContainer extends Container
      * @param $amount float
      * @param $byChannel Channel 支付通道
      * @param DepositMethod $byMethod WithdrawMethod 支付方式
+     * @param $timeout int 订单超时秒数,null不设
      * @return array
      */
-    public function initiateDeposit($amount, Channel $byChannel, DepositMethod $byMethod)
+    public function initiateDeposit($amount, Channel $byChannel, DepositMethod $byMethod, $timeout = null)
     {
         if ($byChannel->disabled) {
             throw new Exception('该支付通道不可用');
@@ -110,7 +111,7 @@ class MasterContainer extends Container
                 break;
             }
 
-            $response = $byMethod->deposit($order);
+            $response = $byMethod->deposit($order, $timeout);
 
             if ($response == null) {
                 $order->state = Deposit::STATE_API_ERR;

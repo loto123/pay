@@ -1,7 +1,7 @@
 <template>
   <div id="shop-member">
       <div class="top">
-          <top-back :title="'店铺成员('+membersCount+')'">
+          <top-back :title="'公会成员('+membersCount+')'">
           </top-back>
       </div>
 
@@ -24,7 +24,7 @@
               </span>
           </li> -->
 
-          <li class="minus-member flex flex-v flex-align-center flex-justify-center" @click="openControlSwitch">
+          <li class="minus-member flex flex-v flex-align-center flex-justify-center" @click="openControlSwitch" v-if="isGroupMaster == 1">
               <div class="img-wrap flex flex-align-center flex-justify-center">
                   <i class="iconfont" style="margin-top:-0.2em;">
                     &#xe620;
@@ -34,11 +34,11 @@
               </span>
           </li>
 
-          <li class="flex flex-v flex-align-center" v-for="item in dataList">
+          <li class="flex flex-v flex-align-center" v-for="(item,index) in dataList">
               <img :src="item.avatar" alt="" class="avatar">
-              <h3>{{SetString(item.name,6)}}</h3>
-              <span class="notice flex flex-align-center flex-justify-center" v-if="controlSwitch" @click="deleteMember(item.id)">
-                -
+              <h3>{{SetString(item.name,6)}}  </h3>
+              <span class="notice flex flex-align-center flex-justify-center" v-if="controlSwitch &&  index!=0" @click="deleteMember(item.id)">
+                - 
               </span>
           </li>
       </ul>
@@ -165,7 +165,9 @@ export default {
       dataList:[],
       searchDataList:[],
       searchData:null,  // 玩家搜索的数据
-      controlSwitch:false
+      controlSwitch:false,
+
+      isGroupMaster:0
     };
   },
   components: { topBack },
@@ -210,6 +212,7 @@ export default {
     init(){
       Loading.getInstance().open();
       this.shopId = this.$route.query.shopId;
+      this.isGroupMaster = this.$route.query.isGroupMaster;
 
       request.getInstance().getData("api/shop/members/"+this.shopId).then(res=>{
         this.dataList = res.data.data.members;

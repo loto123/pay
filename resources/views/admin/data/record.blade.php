@@ -29,8 +29,9 @@
                     <div class="col-sm-2">
                         <input type="text" id="id" name="id" class="form-control" placeholder="请输入任务ID" value="{{$id}}">
                     </div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-1 control-label">支付状态：</label>
-
                     <div class="col-sm-2">
                         <select class="form-control" id="stat" name="stat">
                             <option value="">全部</option>
@@ -39,10 +40,8 @@
                             <option value="3" {{isset($stat) && $stat == 3 ? 'selected="selected"' : ''}}>撤销</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-group">
+                    
                     <label class="col-sm-1 control-label">起止时间：</label>
-
                     <div class="col-sm-2">
                         <input type="text" readonly name="date_time" id="reservation" class="form-control"
                                value="{{$date_time}}"/>

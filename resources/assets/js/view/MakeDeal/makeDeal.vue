@@ -1,20 +1,20 @@
 <template>
   <!-- 发起交易 -->
   <div id = "makeDeal">
-    <topBack title="发起交易" style="background:#eee;"></topBack>
+    <topBack title="发布寻找宠物任务" style="background:#eee;"></topBack>
 
     <div class="select-wrap flex flex-align-center" @click="showDropList">
-        {{dealShop?dealShop:'请选择您要发起交易的店铺'}}
+        {{dealShop?dealShop:'选择一个公会来发布任务'}}
     </div>
 
     <div class="price flex">
-        <label for="" class="flex-1">设置单价：</label>
+        <label for="" class="flex-1">任务收益倍率</label>
         <input type="text" value = "10" class="flex-1" v-model="price" maxlength="6">
         <span class="cancer"></span>
     </div>
     
     <div class="textareaWrap">
-        <textarea name="" id="" cols="20" rows="3" placeholder = "大吉大利 恭喜发财" v-model="commentMessage">
+        <textarea name="" id="" cols="20" rows="3" placeholder = "任务描述" v-model="commentMessage">
         </textarea>
     </div>
     
@@ -41,7 +41,9 @@
     <inputList 
       :showSwitch = "dropListSwitch" 
       v-on:hideDropList="hideDropList" 
-      :optionsList = "shopList">
+      :optionsList = "shopList"
+      v-if="isShow"
+    >
     </inputList>
 
     <choiseMember 
@@ -208,7 +210,8 @@ export default {
       price: 10,
       commentMessage: null,
 
-      memberList:[]              //成员数组
+      memberList:[],              //成员数组
+      isShow:false
     };
   },
 
@@ -220,6 +223,7 @@ export default {
         .getData("api/shop/lists/all")
         .then(res => {
           this.setShopList(res);
+          this.isShow = true;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -248,7 +252,7 @@ export default {
         }
       }
 
-      return "没有这个店铺";
+      return "没有这个公会";
     },
 
       getDefaultPrice(id){
@@ -258,12 +262,12 @@ export default {
               }
           }
 
-//          return "没有这个店铺";
+//          return "没有这个公会";
       },
 
     showDropList() {
       if(this.shopList.length == 0){
-        Toast("当前无可选的店铺,请先加入店铺或创建店铺");
+        Toast("当前无可选的公会,请先加入公会或创建公会");
         return;
       }
 
@@ -276,13 +280,13 @@ export default {
       this.shopId = data;
       this.price = this.getDefaultPrice(data);
 
-      this.memberList = [];    // 清空店铺成员列表
+      this.memberList = [];    // 清空公会成员列表
     },
 
     // 获取所有要提醒的成员名单
     showMemberChoise(){
       if(this.shopId == null){
-        Toast("请选择发起交易的店铺");
+        Toast("请选择发起交易的公会");
         return;
       }
       Loading.getInstance().open();
@@ -291,7 +295,7 @@ export default {
         Loading.getInstance().close();
 
         if(res.data.data.members.length == 0){
-          Toast("当前店铺无成员");
+          Toast("当前公会无成员");
           return;
         }
 
@@ -345,7 +349,7 @@ export default {
       };
 
       if(this.shopId == null){
-        Toast("请选择发起交易的店铺");
+        Toast("请选择发起交易的公会");
         return 
       }else if(this.price == ""){
         Toast("请设置单价")

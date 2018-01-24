@@ -34,7 +34,7 @@
               <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
             </div>
             <div class="transfer-accounts" >
-              <!-- <mt-button type="primary" size="large" >转账给店铺会员</mt-button> -->
+              <!-- <mt-button type="primary" size="large" >转账给公会会员</mt-button> -->
             </div>
 
             <div class="foot flex flex-v flex-align-center">

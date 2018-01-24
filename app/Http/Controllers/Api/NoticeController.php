@@ -161,8 +161,8 @@ class NoticeController extends BaseController
                         $read_state = $item->read_at ? 1 : 0;
                         $has_detail = 1;
                         $operator_state = 0;
-                        $operator_options = [];
-                        $operators_res = [];
+                        $operator_options = new \stdClass();
+                        $operators_res = new \stdClass();
                         $profit_table = (new Profit)->getTable();
                         $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
                             ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
@@ -218,8 +218,8 @@ class NoticeController extends BaseController
                         $content = $item->data['content'];
                         $link = isset($item->data['param']['link']) ? $item->data['param']['link'] : "";
                         $operator_state = 0;
-                        $operator_options = [];
-                        $operators_res = [];
+                        $operator_options = new \stdClass();
+                        $operators_res = new \stdClass();
                         $list_data = [
                             'type' => $type,
                             'notice_id' => $item->id,

@@ -171,6 +171,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
         $api->get('records/month', 'AccountController@month_data');
+        $api->get('deposit_quotas', 'AccountController@depositQuotaList');
     });
 
 });
@@ -207,6 +208,24 @@ $api->version('v1', ['middleware' => ['api.auth', 'block', 'role:promoter']], fu
     });
 
 });
+
+//宠物交易接口
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
+    $api->group([
+        'prefix' => 'pet',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/sellable', 'PetTradeController@sellable');
+        $api->get('/egg_acquire_times', 'PetTradeController@eggCanDrawTimes');
+
+        $api->post('/acquire_egg', 'PetTradeController@freeEgg');
+        $api->post('/brood', 'PetTradeController@broodTheEgg');
+        $api->post('/on_sale', 'PetTradeController@findSellBill');
+        $api->post('/bill_pet_refresh', 'PetTradeController@queryBillPet');
+    });
+
+});
+
 
 $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([

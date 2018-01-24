@@ -23,21 +23,30 @@
       <section class="content">
         <ul class="flex flex-wrap-on">
 
-          <li class="flex flex-v flex-align-center">
+          <!-- <li class="flex flex-v flex-align-center">
             <a href="/#/myAccount" class="flex flex-v flex-align-center">
                <i class="iconfont account-icon common-icon">
                 &#xe61e;
               </i>
               <h3>我的账户</h3>
             </a>
-          </li>
+          </li> -->
 
           <li class="flex flex-v flex-align-center">
             <a href="/#/shop" class="flex flex-v flex-align-center">
               <i class="iconfont myShop-icon common-icon">
                 &#xe61c;
               </i>
-              <h3>我的店铺</h3>
+              <h3>我的公会</h3>
+            </a>
+          </li>
+
+           <li class="flex flex-v flex-align-center">
+            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe63b;
+              </i>
+              <h3>我的任务</h3>
             </a>
           </li>
 
@@ -47,15 +56,6 @@
                 &#xe63b;
               </i>
               <h3>我的分润</h3>
-            </a>
-          </li>
-
-          <li class="flex flex-v flex-align-center">
-            <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
-              <i class="iconfont transaction-icon common-icon">
-                &#xe63b;
-              </i>
-              <h3>我的交易</h3>
             </a>
           </li>
 
@@ -241,30 +241,30 @@ export default {
       }
     },
     goVipOpenCard(){
-      if(this.isAgent == 0){
+      // if(this.isAgent == 0){
 
-        MessageBox({
-            title: '温馨提示',
-            message: '此功能只对代理开放，是否开通代理？?',
-            confirmButtonText:'开通',
-            showCancelButton: true
-        }).then(res=>{
+      //   MessageBox({
+      //       title: '温馨提示',
+      //       message: '此功能只对代理开放，是否开通代理？?',
+      //       confirmButtonText:'开通',
+      //       showCancelButton: true
+      //   }).then(res=>{
 
-           if(res!="confirm"){
-            return;
-          }
+      //      if(res!="confirm"){
+      //       return;
+      //     }
 
-          request.getInstance().postData("api/proxy/create").then(res=>{
-            Toast("成功开通代理...");
-            this.init();
-          }).catch(err=>{
-            Toast(err.data.msg)
-          })
-        });
+      //     request.getInstance().postData("api/proxy/create").then(res=>{
+      //       Toast("成功开通代理...");
+      //       this.init();
+      //     }).catch(err=>{
+      //       Toast(err.data.msg)
+      //     })
+      //   });
 
-      }else if(this.isAgent == 1){
+      // }else if(this.isAgent == 1){
         this.$router.push("/vipCard");
-      }
+      // }
     },
     goMyUsers(){
       if(this.isAgent == 0){

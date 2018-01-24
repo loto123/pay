@@ -58,6 +58,7 @@ export default {
             if(this.firstPassword == this.secondPassword){
                 Loading.getInstance().open();
                
+                // 重置密码    
                 if(this.status == 'resetPassword'){
 
                     var _data = {
@@ -71,7 +72,7 @@ export default {
                         Toast("支付密码设置成功，正在跳转...");
                         
                         setTimeout(()=>{
-                            this.backToLastPage();
+                            this.$router.push('/index');
                         },1500);
                     }).catch();
 

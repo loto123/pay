@@ -1,6 +1,6 @@
 <template>
   <div id="dealManagement">
-      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
+      <top-back style="background:#26a2ff;color:#fff;" :title="'我的任务'">
           <div class="list-controller flex flex-reverse" 
             style="width:100%;padding-right:1em;box-sizing:border-box;"
             v-if="tabItem[1]"
@@ -364,7 +364,7 @@ export default {
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
-            Toast("关闭成功");
+            Toast(res.data.msg);
             setTimeout(()=>{
                 this.init();
             },1500);
@@ -384,7 +384,7 @@ export default {
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
-            Toast("成功关闭所有已平账交易");
+            Toast(res.data.msg);
             this.init();
 
         }).catch(err=>{
@@ -395,6 +395,7 @@ export default {
 
     init(){
         Loading.getInstance().open();
+        this.isListRadioShow = false;
         this.shop_id = this.$route.query.shopId;
         
         var _status = 0;

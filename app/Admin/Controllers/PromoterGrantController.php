@@ -14,6 +14,7 @@ use Mockery\Exception;
 
 class PromoterGrantController extends Controller
 {
+    const PERMISSION_ALLLOW_VIEW_ALL_GRANTS = 'view_all_promoter_grants';
     use ModelForm;
 
     /**
@@ -40,7 +41,10 @@ class PromoterGrantController extends Controller
     protected function grid()
     {
         return Admin::grid(PromoterGrant::class, function (Grid $grid) {
-            $grid->model()->orderBy('id', 'desc');
+            $dataSoure = $grid->model()->orderBy('id', 'desc');
+            if (Admin::user()->cannot(self::PERMISSION_ALLLOW_VIEW_ALL_GRANTS)) {
+                $dataSoure->where([['by_admin', 1], ['grant_by', Admin::user()->id]]);
+            }
             $grid->filter(function ($filter) {
 
                 // 去掉默认的id过滤器

@@ -7,7 +7,7 @@
             <img :src="logo" alt="" class="avatar">
         </div>
         <h3 style="margin-top:0.5em;">{{shopName}}</h3>
-        <h3>店铺id:{{shopId}}</h3>
+        <h3>公会id:{{shopId}}</h3>
       </div>
 
       <div class="menu flex " v-if="isGroupMaster">
@@ -15,29 +15,29 @@
               <i class="iconfont">
                   &#xe61e;
               </i>
-              <h3>店铺账户</h3>
+              <h3>公会账户</h3>
           </div>
 
           <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goDealManagement">
               <i class="iconfont">
                   &#xe63b;
               </i>
-              <h3>交易管理</h3>
+              <h3>任务管理</h3>
           </div>
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopOrder">
+          <!-- <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopOrder">
               <i class="iconfont">
                   &#xe603;
               </i>
               <h3>
-                  店铺订单
+                  公会订单
               </h3>
-          </div>
+          </div> -->
       </div>
 
     <div class="shop-info">
 
         <div class="info-item flex flex-align-center flex-justify-between" @click="updateShop('shopName')">
-            <span class="title flex-4"> 店铺名称 </span>
+            <span class="title flex-4"> 公会名称 </span>
             <span class="name flex-5">{{SetString(shopName,16)}}</span>
             <i class="iconfont flex-1">
             &#xe62e;
@@ -45,7 +45,7 @@
         </div>
 
         <div class="shop-qrcode flex flex-align-center flex-justify-between" @click="invite">
-            <span class="title flex-8">店铺二维码</span>
+            <span class="title flex-8">公会二维码</span>
             <span class="qr-code flex-1">
                 <i class="iconfont">
                     &#xe9c4;
@@ -70,7 +70,7 @@
                 <img :src="item.avatar" alt="">
             </div>
             
-            <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember">
+            <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember" v-if="isGroupMaster">
                 <i class="iconfont">
                     &#xe600;
                 </i>
@@ -118,7 +118,7 @@
 
     <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
-            <span class="title flex-9" @click="updateShop('percent')"> 手续费率 </span>
+            <span class="title flex-9" @click="updateShop('percent')"> 公会佣金费率 </span>
             <span class="text flex-1">{{percent}}%</span>
         </div>
 
@@ -138,8 +138,8 @@
     </div>
 
     <div class="button-wrap">
-        <mt-button type="danger" size="large" @click = "dissShop" v-if="isGroupMaster">解散店铺</mt-button>
-        <mt-button type="danger" size="large" @click = "exitShop" v-if="!isGroupMaster">退出店铺</mt-button>
+        <mt-button type="danger" size="large" @click = "dissShop" v-if="isGroupMaster">解散公会</mt-button>
+        <mt-button type="danger" size="large" @click = "exitShop" v-if="!isGroupMaster">退出公会</mt-button>
     </div>
 
     <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch" v-bind:class="{poAbsolute:isFixed}">
@@ -526,7 +526,7 @@ export default {
       inviteLinkStatus: true,    // 邀请链接状态
       tradeStatus: true,         // 交易状态
       isGroupMaster: true,       // 是否是群主
-      searchUserMobile:null,     // 搜索店铺成员的手机号
+      searchUserMobile:null,     // 搜索公会成员的手机号
 
       isFixed:false,
 
@@ -539,7 +539,7 @@ export default {
       active: null,
       platform_fee:null,
       addMemberSwitch: false,      // 添加成员开关
-      logo:null,                    // 店铺的头像
+      logo:null,                    // 公会的头像
 
       searchData:{                 // 搜索出来的数据
         avatar:null,
@@ -554,10 +554,10 @@ export default {
     hide() {},
     goMember() {
       if(!this.membersCount){
-        Toast("当前店铺无成员,");
+        Toast("当前公会无成员,");
         return ;
       }
-      this.$router.push("/shop/shop_member?shopId="+this.shopId);
+      this.$router.push("/shop/shop_member?shopId="+this.shopId+"&isGroupMaster="+this.isGroupMaster);
     },
     goDealManagement() {
       this.$router.push("/shop/deal_management?shopId="+this.shopId);
@@ -641,9 +641,9 @@ export default {
         });
     },
 
-    // 解散店铺
+    // 结算公会
     dissShop() {
-        MessageBox.confirm('确定删除店铺?').then(action => {
+        MessageBox.confirm('确定删除公会?').then(action => {
 
             Loading.getInstance().open();
 
@@ -652,7 +652,7 @@ export default {
               .postData("api/shop/close/" + this.shopId)
               .then(res => {
                 Loading.getInstance().close();
-                Toast("店铺解散成功");
+                Toast("公会解散成功");
                 setTimeout(()=>{
                   this.$router.push("/shop");
                 },1000);
@@ -669,7 +669,7 @@ export default {
     },
 
     exitShop(){
-      MessageBox.confirm('确定退出店铺?').then(action => {
+      MessageBox.confirm('确定退出公会?').then(action => {
 
             Loading.getInstance().open();
 
@@ -678,7 +678,7 @@ export default {
               .postData("api/shop/quit/" + this.shopId)
               .then(res => {
                 Loading.getInstance().close();
-                Toast("退出店铺成功");
+                Toast("退出公会成功");
                 setTimeout(()=>{
                   this.$router.push("/shop");
                 },1000);
@@ -728,12 +728,12 @@ export default {
       if (!this.isGroupMaster){
           return;
       }
-      // 修改店铺名称
+      // 修改公会名称
       if(type == "shopName"){
 
-        MessageBox.prompt("请输入新的店铺名称","修改店铺名称",).then(({ value, action }) => {
+        MessageBox.prompt("请输入新的公会名称","修改公会名称",).then(({ value, action }) => {
           if(value.length ==0){
-            Toast("新店铺名称不能为空");
+            Toast("新公会名称不能为空");
             return;
           }
           Loading.getInstance().open();
@@ -743,7 +743,7 @@ export default {
           request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
             Loading.getInstance().close();
             
-            Toast("店铺改名成功");
+            Toast("公会改名成功");
             setTimeout(()=>{
               this.init();
             },1500);

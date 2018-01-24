@@ -50,7 +50,7 @@
                             <a href="javascript:;">交易</a>
                         </li>
                         <li>
-                            <a href="javascript:;">店铺转账</a>
+                            <a href="javascript:;">公会转账</a>
                         </li>
                         <li>
                             <a href="javascript:;">全部</a>
@@ -65,7 +65,7 @@
                             <a href="javascript:;">交易</a>
                         </li>
                         <li>
-                            <a href="javascript:;">店铺转账</a>
+                            <a href="javascript:;">公会转账</a>
                         </li>
                         <li>
                             <a href="javascript:;">全部</a>
@@ -152,8 +152,8 @@
                     case 1: result='提现'; break;
                     case 2: result='交易收入'; break;
                     case 3: result='交易支出'; break;
-                    case 4: result='转账到店铺'; break;
-                    case 5: result='店铺转入'; break;
+                    case 4: result='转账到公会'; break;
+                    case 5: result='公会转入'; break;
                     case 6: result='交易手续费'; break;
                     case 7: result='提现手续费'; break;
                     default: result='打赏店家费'
