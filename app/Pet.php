@@ -56,6 +56,7 @@ class Pet extends Model
         }
         $from_user_id = $this->user_id;
         $this->user_id = $user_id;
+        $this->status = self::STATUS_HATCHED;
         $record = new PetRecord();
         $record->pet_id = $this->id;
         $record->from_user_id = $from_user_id;
