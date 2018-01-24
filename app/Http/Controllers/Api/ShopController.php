@@ -1142,10 +1142,10 @@ class ShopController extends BaseController {
             return $this->json([], trans("api.error_shop_perm"), 0);
         }
         return $this->json([
-            'balance' => (double)$shop->container->balance,
-            'today_profit' => (double)$shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-            'total_profit' => (double)$shop->tips()->sum('amount'),
-            'last_profit' => (double)$shop->tips()->where("created_at", ">=", date("Y-m-d", strtotime('-1 day')))->where("created_at", "<", date("Y-m-d"))->sum('amount')
+            'balance' => $shop->container->balance,
+            'today_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
+            'total_profit' => $shop->tips()->sum('amount'),
+            'last_profit' => $shop->tips()->where("created_at", ">=", date("Y-m-d", strtotime('-1 day')))->where("created_at", "<", date("Y-m-d"))->sum('amount')
         ]);
     }
 
