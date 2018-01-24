@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -353,6 +354,10 @@ class User extends Authenticatable
         return $this->hasMany(Pet::class, "user_id", "id");
     }
 
+    public function pet_records() {
+        return $this->hasMany(PetRecord::class, "user_id", "id");
+    }
+
     /**
      *  用户可售宠物
      */
@@ -362,14 +367,39 @@ class User extends Authenticatable
 
     /**
      * 生成宠物
+     * @param integer $type 0=宠物蛋 1=宠物
+     * @param integer $nums
+     * @param integer $source 0=系统初始赠送 1=交易产生 2=订单取消补偿
      * @return Pet
      */
-    public function create_pet() {
+    public function create_pet($type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER) {
         $pet = new Pet();
         $pet->user_id = $this->id;
-        $pet->status = Pet::STATUS_HATCHING;
-        $pet->save();
-        \App\Jobs\Pet::dispatch($pet);
+        $pet->status = $type == Pet::TYPE_EGG ? Pet::STATUS_UNHATCHED : Pet::STATUS_HATCHING;
+        if ($pet->status == Pet::STATUS_HATCHING) {
+            \App\Jobs\Pet::dispatch($pet);
+        }
+        $record = new PetRecord();
+        $record->to_user_id = $this->id;
+        $record->type = $source;
+        DB::beginTransaction();
+        try {
+            $pet->save();
+            $record->pet_id = $pet->id;
+            $record->save();
+        } catch (\Exception $e){
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
         return $pet;
+    }
+
+    /**
+     * 已领取宠物蛋次数
+     * @return int
+     */
+    public function free_times() {
+        return $this->pet_records()->where("type", PetRecord::TYPE_NEW)->count();
     }
 }

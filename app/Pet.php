@@ -19,6 +19,10 @@ class Pet extends Model
 
     const DEALER_ROLE_NAME = 'pet_dealer';//宠物交易商角色名
 
+    const TYPE_EGG = 0;
+
+    const TYPE_PET = 1;
+
     const STATUS_UNHATCHED = 0;
 
     const STATUS_HATCHING = 1;
@@ -81,5 +85,19 @@ class Pet extends Model
      */
     public function for_sale() {
         return $this->status == self::STATUS_HATCHED;
+    }
+
+    /**
+     * 孵蛋
+     * @return bool
+     */
+    public function hatch() {
+        if ($this->status != Pet::STATUS_UNHATCHED) {
+            return false;
+        }
+        $this->status = Pet::STATUS_HATCHING;
+        $this->save();
+        \App\Jobs\Pet::dispatch($this);
+        return true;
     }
 }
