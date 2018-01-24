@@ -45,6 +45,7 @@ class Pet extends Model
      * @return bool
      */
     public function transfer($user_id) {
+        $record = new PetRecord();
         return true;
     }
 
@@ -53,6 +54,6 @@ class Pet extends Model
      * @return bool
      */
     public function for_sale() {
-        return true;
+        return $this->status == self::STATUS_HATCHED;
     }
 }
