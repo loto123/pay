@@ -34,6 +34,9 @@ class Pet implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->pet->status != \App\Pet::STATUS_HATCHING) {
+            return;
+        }
         //
         $pet_type = PetType::inRandomOrder()->first();
         /* @var $pet_type \App\PetType */

@@ -13,6 +13,7 @@ Route::group([
     $router->resource('users',UserController::class);
     $router->resource('versions',VersionController::class);
     $router->resource('pets',PetController::class);
+    $router->resource('pets_record',PetRecordController::class);
     $router->resource('pets_type',PetTypeController::class);
     $router->get('pets_type/{id}/preview',"PetTypeController@preview");
     $router->resource('pets_part',PetPartController::class);
