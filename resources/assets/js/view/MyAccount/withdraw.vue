@@ -8,22 +8,16 @@
 		<div class="withdraw-box">
 			<div class="price-list-box">
 				<div class="tltle">出售价格</div>
-				<ul class="price-list flex flex-wrap-on flex-justify-between">
-					<li class="active">￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥100</li>
-					<li>￥9000</li>
+				<ul class="price-list flex flex-wrap-on">
+					<li v-for="(item,index) in priceList">￥{{item}}</li>
 				</ul>
-				<div class="high-price flex flex-align-center flex-justify-center">¥8000(最高价)</div>
+				<div class="high-price flex flex-align-center flex-justify-center">¥{{balance}}(最高价)</div>
 			</div>
-			<div class="usable-diamond">拥有钻石 8000.00，出售消耗钻石<span>100.00</span></div>
+			<div class="usable-diamond">拥有钻石{{balance}}，出售消耗钻石<span>100.00</span></div>
 			<div class="withdraw-way">
 				<div class="title">收款方式</div>
 				<div class="list-wrap">
-					<mt-radio align="right" title="" v-model="value" :options="options1">
+					<mt-radio align="right" v-model="value" :options="options1" @change="check">
 					</mt-radio>
 				</div>
 			</div>
@@ -51,9 +45,12 @@
 				way: null,	//提现方式
 				value: null,
 				has_pay_password: null,//是否设置支付密码
-				fee_mode: null,			//提现状态  1代表固定手续费   0代表百分比
+				balance:null,		//最高价
+				
 				fee_value: null,
 				isFee: false,//是否展示手续费
+
+				priceList:[]	//价格列表
 			}
 		},
 		created() {
@@ -75,13 +72,28 @@
 
 				Promise.all([request.getInstance().getData("api/account"), request.getInstance().getData('api/account/withdraw-methods')])
 					.then((res) => {
+						this.balance=res[0].data.data.balance;
 						this.has_pay_password = res[0].data.data.has_pay_password;
 						this.setBankList(res[1]);//获取提现方式列表
+						// this.priceList=res[1].data.quota_list;
+						
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
 						Toast(err.data.msg);
 					})
+			},
+			setBankList(res) {
+				var _tempList = [];
+				for (let i = 0; i < res.data.data.methods.length; i++) {
+					var _t = {};
+					_t.value = res.data.data.methods[i].id.toString();
+					_t.label = res.data.data.methods[i].label;
+					_tempList.push(_t);
+					this.curId=res.data.data.methods[i].id;
+					console.log(this.curId);
+				}
+				this.options1 = _tempList;
 			},
 			withdrawBtn() {
 				var self = this;
@@ -112,25 +124,15 @@
 					.then((res) => {
 						Toast('提现成功');
 						this.$router.push('/myAccount');
-
 					})
 					.catch((err) => {
 						Toast(err.data.msg);
 					})
 			},
-			setBankList(res) {
-				var _tempList = [];
-				for (let i = 0; i < res.data.data.methods.length; i++) {
-					var _t = {};
-					_t.value = res.data.data.methods[i].id.toString();
-					_t.label = res.data.data.methods[i].label;
-					this.fee_mode = res.data.data.methods[i].fee_mode;
-					this.fee_value = res.data.data.methods[i].fee_value;
-					console.log(this.fee_value);
-					_tempList.push(_t);
-				}
-				this.options1 = _tempList;
-			}
+			check(){  
+				console.log(this.value);
+				
+			}  
 		}
 	};
 </script>
@@ -163,13 +165,13 @@
 			overflow: hidden;
 			li {
 				width: 28%;
-				height: 2.5em;
 				line-height: 2.5em;
 				border: 1px solid #ccc;
 				float: left;
 				border-radius: 5px;
 				margin-top: 1em;
 				text-align: center;
+				margin-left:7%;
 				&:nth-child(3n+1) {
 					margin-left: 0;
 				}

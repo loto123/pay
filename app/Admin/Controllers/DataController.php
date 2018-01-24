@@ -191,7 +191,7 @@ class DataController extends Controller
                     if ($value->user->parent) {
                         $profit->proxy = $value->user->parent->id;
                         $profit->proxy_percent = $value->user->parent->percent;
-                        $profit->proxy_amount = floor($value->fee_amount * $value->user->parent->percent) / 100;
+                        $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
                         //解冻代理资金
                         if ($profit->proxy_amount > 0) {
 //                            $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);

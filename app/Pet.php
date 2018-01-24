@@ -3,10 +3,20 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class Pet
+ * @property integer $user_id
+ * @package App
+ */
 class Pet extends Model
 {
+    use Skip32Trait;
+
+    protected static $skip32_id = '070bd01ce7d3161920f6';
+
     const DEALER_ROLE_NAME = 'pet_dealer';//宠物交易商角色名
 
     const STATUS_UNHATCHED = 0;
@@ -29,7 +39,7 @@ class Pet extends Model
     }
 
     public function getImageAttribute($value) {
-        if (filter_var($value, FILTER_VALIDATE_URL) === TRUE) {
+        if (!filter_var($value, FILTER_VALIDATE_URL) === false) {
             return $value;
         }
         return $value ? Storage::disk('public')->url($value) : asset("images/personal.jpg");
@@ -41,6 +51,27 @@ class Pet extends Model
      * @return bool
      */
     public function transfer($user_id) {
+        if ($user_id == $this->user_id) {
+            return false;
+        }
+        $from_user_id = $this->user_id;
+        $this->user_id = $user_id;
+        $this->status = self::STATUS_HATCHED;
+        $record = new PetRecord();
+        $record->pet_id = $this->id;
+        $record->from_user_id = $from_user_id;
+        $record->to_user_id = $user_id;
+        $record->type = PetRecord::TYPE_TRANSFER;
+
+        DB::beginTransaction();
+        try {
+            $this->save();
+            $record->save();
+        } catch (\Exception $e){
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
         return true;
     }
 
@@ -49,6 +80,6 @@ class Pet extends Model
      * @return bool
      */
     public function for_sale() {
-        return true;
+        return $this->status == self::STATUS_HATCHED;
     }
 }

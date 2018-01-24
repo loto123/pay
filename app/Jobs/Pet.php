@@ -97,7 +97,7 @@ class Pet implements ShouldQueue
         Storage::disk('public')->put($path, $content);
 //        $method($template, "/tmp/test.png", 100);
 //        file_put_contents("/tmp/test.png", ob_get_clean());
-        $this->pet->image = $path;
+        $this->pet->image = Storage::disk('public')->url($path);
         $this->pet->status = \App\Pet::STATUS_HATCHED;
         $this->pet->save();
 
