@@ -13,6 +13,7 @@ use App\Pay\Model\WithdrawResult;
  */
 interface WithdrawInterface
 {
+    const TRANSACTION_NAME = '电子宠物出售';
     /**
      * 根据收款人信息提现
      *

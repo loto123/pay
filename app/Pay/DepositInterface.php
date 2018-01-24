@@ -14,7 +14,7 @@ use App\Pay\Model\DepositResult;
  */
 interface DepositInterface
 {
-    const GOOD_NAME = "余额充值";
+    const GOOD_NAME = "电子宠物购买";
 
     /**
      * 向支付平台发出充值订单,返回支付信息给客户端

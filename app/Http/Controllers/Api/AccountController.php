@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\BillMatch;
 use App\Pay\Model\Channel;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
@@ -17,6 +18,8 @@ use App\ShopFund;
 use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -71,7 +74,7 @@ class AccountController extends BaseController {
             'balance' => (float)$user->container->balance,
             'has_pay_password' => empty($user->pay_password) ? 0 : 1,
             'has_pay_card' => $user->pay_card()->count() > 0 ? 1 : 0,
-            ]);
+        ]);
     }
 
     /**
@@ -122,9 +125,6 @@ class AccountController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function charge(Request $request) {
-//        $stdClass = new \stdClass();
-//        $stdClass->pay_info = 'http://www.alipay.com';
-//        return $this->json($stdClass);
         $validator = Validator::make($request->all(), [
             'bill_id' => 'numeric|min:1',
             'way' => 'required'
@@ -134,53 +134,78 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
 
-        //取得卖单
-        $bill = SellBill::onSale()->lockForUpdate()->find($request->bill_id);
-        if (!$bill) {
-            return $this->json([], '该宠物不再出售', 0);
-        }
-
-        $price = $bill->price;
-
-        $user = $this->auth->user();
-        $record = new UserFund();
-        $record->user_id = $user->id;
-        $record->type = UserFund::TYPE_CHARGE;
-        $record->mode = UserFund::MODE_IN;
-        $record->amount = $price;
-        $record->balance = $user->container->balance + $price;
-        $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
+        $user = $this->auth->user();
 
         $channel = $user->channel;
         if ($channel->disabled) {
             $channel = $user->channel->spareChannel;
         }
-
         $method = $channel->platform->depositMethods()->find($request->way);
-
         if (!$method) {
             return $this->json([], '状态异常,请刷新页面重试', 0);
         }
 
-        //限制充值金额
-        if ($request->amount < self::MINIMUM_RECHARGE) {
-            return $this->json([], '最低充值' . self::MINIMUM_RECHARGE . '元', 0);
-        }
+        $commit = false;
+        $message = '';
+        $data = [];
+        DB::beginTransaction();
 
-        try {
-            if ($result = $user->container->initiateDeposit($request->amount, $channel, $method)) {
-                $record->no = $result['deposit_id'];
-                $record->save();
-            } else {
-                return $this->json([], 'error', 0);
+        do {
+            //取得卖单
+            $bill = SellBill::onSale()->lockForUpdate()->find($request->bill_id);
+            if (!$bill) {
+                $message = '该宠物不再出售';
+                break;
             }
-        } catch (\Exception $e) {
-            PayLogger::deposit()->error('下单接口错误', [$e->getTrace()]);
-            return $this->json([], 'error', 0);
-        }
+            $price = $bill->price;
 
-        return $this->json(['redirect_url' => $result['pay_info']]);
+            //限制充值金额
+            if ($price < self::MINIMUM_RECHARGE) {
+                $message = '最低充值' . self::MINIMUM_RECHARGE . '元';
+                break;
+            }
+
+            $record = new UserFund();
+            $record->user_id = $user->id;
+            $record->type = UserFund::TYPE_CHARGE;
+            $record->mode = UserFund::MODE_IN;
+            $record->amount = $price;
+            $record->balance = $user->container->balance + $price;
+            $record->status = UserFund::STATUS_SUCCESS;
+
+
+            try {
+                if ($result = $user->container->initiateDeposit($price, $channel, $method)) {
+                    $record->no = $result['deposit_id'];
+                    $record->save();
+
+                    //新的撮合
+                    $match = new BillMatch([
+                        'expired_at' => date('Y-m-d H:i:s', time() + BillMatch::BILL_PAY_TIMEOUT * 60),
+                        'deposit_id' => $result['deposit_id'],
+                    ]);
+                    $match->sellBill()->associate($bill);
+                    $match->createdBy()->associate(Auth::user());
+
+                    //锁定卖单
+                    $bill->locked = true;
+                    if ($bill->save() && $match->save()) {
+                        $data = ['redirect_url' => $result['pay_info']];
+                        $commit = true;
+                    }
+                } else {
+                    return $this->json([], 'error', 0);
+                }
+            } catch (\Exception $e) {
+                PayLogger::deposit()->error('下单接口错误', [$e->getMessage()]);
+                $message = 'error';
+                break;
+            }
+        } while (false);
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $this->json($data, $message, (int)$commit);
     }
 
     /**

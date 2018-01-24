@@ -69,3 +69,6 @@ php artisan queue:work --queue=messages --tries=3
 
 宠物
 php artisan queue:work --queue=pets --tries=3
+
+添加cron任务调度
+* * * * * php /项目路径/artisan schedule:run >> /dev/null 2>&1

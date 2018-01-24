@@ -17,6 +17,16 @@ class WithdrawRetry extends PayRetry
     public static $abnormal_states = [Withdraw::STATE_SEND_FAIL, Withdraw::STATE_PROCESS_FAIL];
     protected static $type = 'withdraw';
 
+    /**
+     * 提现是否失败
+     * @param $state
+     * @return bool
+     */
+    public static function isWithdrawFailed($state)
+    {
+        return in_array($state, self::$abnormal_states);
+    }
+
     function reDo()
     {
         // 手动提现
