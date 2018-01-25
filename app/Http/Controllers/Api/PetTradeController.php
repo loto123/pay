@@ -6,9 +6,11 @@ use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
 use App\Pay\PayLogger;
 use App\Pet;
+use App\PetRecord;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 宠物交易控制器
@@ -209,9 +211,9 @@ class PetTradeController extends BaseController
     {
         return [
             'code' => 1,
-            'msg' => '孵化成功',
+            'msg' => '孵化中',
             'data' => [
-                'id' => '1', 'pic' => '/images/personal.jpg',
+                'id' => '1', 'pic' => '/images/personal.jpg', 'hatching' => 'true'
             ]
         ];
     }
@@ -283,34 +285,63 @@ class PetTradeController extends BaseController
 
         //没有符合条件的卖单由交易商随机生成一个
         if (!$sellBill) {
+
             /**
              * @var $dealer User
              */
+
             $dealer = User::whereHas('roles', function ($query) {
                 $query->where('name', '=', Pet::DEALER_ROLE_NAME);
             })->inRandomOrder()->first();
+
             if (!$dealer) {
                 PayLogger::deposit()->emergency('没有交易商,系统无法挂售宠物');
                 return $this->json([], '当前没有宠物在售', 0);
             }
 
-            $sellBill = new SellBill([
-                'price' => $price,
-                'by_dealer' => 1,
-            ]);
+            DB::beginTransaction();
+            $commit = false;
+            $error = '';
 
+            do {
+                $sellBill = new SellBill([
+                    'price' => $price,
+                    'by_dealer' => 1,
+                ]);
 
-            $sellBill->belongToUser()->associate(Auth::user());//该卖单专属于当前用户
-            $sellBill->placeBy()->associate($dealer);
-            $pet = $dealer->create_pet();
-            if (!$pet) {
-                return $this->json([], '系统异常E1,请稍后再试', 0);
+                $sellBill->belongToUser()->associate(Auth::user());//该卖单专属于当前用户
+                $sellBill->placeBy()->associate($dealer);
+
+                //从交易商现有宠物取得一只
+                $pet = $dealer->pets_for_sale()->inRandomOrder()->lockForUpdate()->first();
+                if (!$pet) {
+                    //没有则为交易商生成一只
+                    $pet = $dealer->create_pet(Pet::TYPE_PET, PetRecord::TYPE_NEW);
+                }
+
+                if (!$pet) {
+                    $error = '系统异常E1,请稍后再试';
+                    break;
+                }
+
+                /**
+                 * @var $pet Pet
+                 */
+                $pet->status = Pet::STATUS_LOCKED;
+                $sellBill->pet()->associate($pet);
+
+                if (!$pet->save() || !$sellBill->save()) {
+                    $error = '系统异常E2,请稍后再试';
+                    break;
+                }
+                $commit = true;
+            } while (false);
+
+            $commit ? DB::commit() : DB::rollBack();
+            if (!$commit) {
+                return $this->json([], $error, 0);
             }
-            $sellBill->pet()->associate($pet);
 
-            if (!$sellBill->save()) {
-                return $this->json([], '系统异常E2,请稍后再试', 0);
-            }
         }
 
         return $this->json(['id' => $sellBill->getKey(), 'hatching' => $sellBill->pet->status == Pet::STATUS_HATCHING, 'pic' => $sellBill->pet->image]);
