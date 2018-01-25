@@ -72,7 +72,7 @@
           </div>
 
           <div class="item open-deal-switch flex flex-align-center">
-            <label for="" class="flex-7" style="padding-left:0.8em;">是否开启交易</label>
+            <label for="" class="flex-7" style="padding-left:0.8em;">是否开启任务</label>
             <span class="flex-3 flex flex-reverse" style="padding-right:1em;">
               <mt-switch v-model="openNewShop.active"></mt-switch>
             </span>
@@ -347,7 +347,7 @@ export default {
   data() {
     return {
       addShopTabStatus: false,      // 创建公会拉起状态
-      dealStatus: true,             // 是否开启交易(创建公会tab)
+      dealStatus: true,             // 是否开启任务(创建公会tab)
       createShopSwitch: true,     // 防看止按钮多次点击的
 
       openNewShop:{

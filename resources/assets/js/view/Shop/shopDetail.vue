@@ -123,7 +123,7 @@
         </div>
 
         <div class="flex flex-align-center flex-justify-between">
-            <span class="title flex-9"> 是否开启交易功能 </span>
+            <span class="title flex-9"> 是否开启任务功能 </span>
             <span class="text flex-1 flex flex-reverse">
                 <mt-switch v-model="tradeStatus" @change = "changeTradeStatus"></mt-switch>
             </span>
@@ -524,7 +524,7 @@ export default {
       isShow:false,
 
       inviteLinkStatus: true,    // 邀请链接状态
-      tradeStatus: true,         // 交易状态
+      tradeStatus: true,         // 任务状态
       isGroupMaster: true,       // 是否是群主
       searchUserMobile:null,     // 搜索公会成员的手机号
 
@@ -756,21 +756,21 @@ export default {
 
       // 手续费率
       if(type=="percent"){
-         MessageBox.prompt("请输入新的手续费率(0%~"+this.platform_fee+"%)","修改手续费率(小于平台交易费率)",).then(({ value, action }) => {
+         MessageBox.prompt("请输入新的公会佣金费率(0%~"+this.platform_fee+"%)","修改公会佣金费率(必须小于平台交易费率)",).then(({ value, action }) => {
           
           if(value.length ==0){
-            Toast("手续费率不能为空");
+            Toast("公会佣金费率不能为空");
             return;
           }
 
           if(isNaN(Number(value))){
-            Toast("请输入正确的手续费率");
+            Toast("请输入正确的公会佣金费率");
             return;
           }
 
           console.log(this.platform_fee);
           if(Number(value)>= Number(this.platform_fee)){
-              Toast("手续费率必须小于平台交易费率"+this.platform_fee+"%");
+              Toast("公会佣金费率必须小于平台交易费率"+this.platform_fee+"%");
               return;
           }
 

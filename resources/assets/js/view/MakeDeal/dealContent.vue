@@ -3,7 +3,7 @@
         <section class="content flex flex-v flex-align-center">
             <img :src="renderData.user.avatar" alt="" class="avatar">
             <h3 class="user-name">{{renderData.user.name}}</h3>
-            <p class="transfer-id">交易ID:{{renderData.id}}</p>
+            <p class="transfer-id">任务ID:{{renderData.id}}</p>
             <p class="message">{{(renderData.comment==0)?'无消息':renderData.comment}}</p>
         </section>
 

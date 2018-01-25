@@ -16,7 +16,7 @@
 					<div class="content">{{changeTime(created_at)}}</div>
 				</li>
 				<li>
-					<div class="title">交易单号</div>
+					<div class="title">任务单号</div>
 					<div class="content">{{no}}</div>
 				</li>
 				<li>

@@ -16,7 +16,7 @@
           <div class="content">{{time}}</div>
         </li>
         <li>
-          <div class="title">交易单号</div>
+          <div class="title">任务单号</div>
           <div class="content">{{transfer_id}}</div>
         </li>
         <li>

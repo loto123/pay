@@ -1,5 +1,5 @@
 <template>
-  <!-- 发起交易 -->
+  <!-- 发起任务 -->
   <div id = "makeDeal">
     <topBack title="发布寻找宠物任务" style="background:#eee;"></topBack>
 
@@ -33,10 +33,10 @@
     </div>
 
     <div class="commit-btn">
-        <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">确认</mt-button>
+        <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">发布任务</mt-button>
     </div>
 
-    <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
+    <p class="notice">任务完成后每个参与者都会获得一定的奖励</p>
 
     <inputList 
       :showSwitch = "dropListSwitch" 
@@ -279,14 +279,13 @@ export default {
       this.dealShop = this.getShopName(data);
       this.shopId = data;
       this.price = this.getDefaultPrice(data);
-
       this.memberList = [];    // 清空公会成员列表
     },
 
     // 获取所有要提醒的成员名单
     showMemberChoise(){
       if(this.shopId == null){
-        Toast("请选择发起交易的公会");
+        Toast("请选择发布任务的公会");
         return;
       }
       Loading.getInstance().open();
@@ -331,7 +330,7 @@ export default {
       this.choiseMemberSwitch = false;
     },
 
-    // 提交发起交易的数据
+    // 提交发起任务的数据
     submitData() {
       var _tempMessage = null;
       if (this.commentMessage == null) {
@@ -349,7 +348,7 @@ export default {
       };
 
       if(this.shopId == null){
-        Toast("请选择发起交易的公会");
+        Toast("请选择发布任务的公会");
         return 
       }else if(this.price == ""){
         Toast("请设置单价")
