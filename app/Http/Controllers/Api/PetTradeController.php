@@ -479,6 +479,7 @@ class PetTradeController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="integer", description="记录id"),
      *                          @SWG\Property(property="state", type="string", description="状态文本"),
+     *                          @SWG\Property(property="pet_pic", type="string", description="宠物图片"),
      *                          @SWG\Property(property="price", type="double", description="出售价格"),
      *                          @SWG\Property(property="created_at", type="string", description="出售时间"),
      *                      ),
@@ -527,6 +528,7 @@ class PetTradeController extends BaseController
             return [
                 'id' => $item->getKey(),
                 'state' => $item->deal_closed ? (WithdrawRetry::isWithdrawFailed($item->withdraw->state) ? '状态异常' : '出售成功') : '出售中',
+                'pet_pic' => $item->pet->image,
                 'price' => $item->price,
                 'created_at' => $item->created_at->toDateTimeString()
             ];
