@@ -6,12 +6,30 @@
 			</div>
 		</topBack>
 		<div class="withdraw-box">
+			<div>
+				<div class="tltle">选择要出售的宠物：</div>
+				<div class="pet-list-box">
+					<ul class="pet-list">
+						<li>
+							<img src="">
+						</li>
+					</ul>
+					<div class="look-more">
+						查看更多
+					</div>
+				</div>
+				<div>
+					<div>
+						免费领取宠物蛋（剩余：3次）
+					</div>
+				</div>
+			</div>
 			<div class="price-list-box">
 				<div class="tltle">出售价格</div>
 				<ul class="price-list flex flex-wrap-on">
 					<li v-for="(item,index) in priceList">￥{{item}}</li>
 				</ul>
-				<div class="high-price flex flex-align-center flex-justify-center">¥{{balance}}(最高价)</div>
+				<div class="high-price flex flex-align-center flex-justify-center">¥{{my_max_quota}}(最高价)</div>
 			</div>
 			<div class="usable-diamond">拥有钻石{{balance}}，出售消耗钻石<span>100.00</span></div>
 			<div class="withdraw-way">
@@ -46,7 +64,7 @@
 				value: null,
 				has_pay_password: null,//是否设置支付密码
 				balance:null,		//最高价
-				
+				my_max_quota:null,
 				fee_value: null,
 				isFee: false,//是否展示手续费
 
@@ -70,13 +88,12 @@
 			init() {
 				Loading.getInstance().open("加载中...");
 
-				Promise.all([request.getInstance().getData("api/account"), request.getInstance().getData('api/account/withdraw-methods')])
+				Promise.all([request.getInstance().getData("api/pet/sellable"),request.getInstance().getData("api/account"), request.getInstance().getData('api/account/withdraw-methods')])
 					.then((res) => {
-						this.balance=res[0].data.data.balance;
-						this.has_pay_password = res[0].data.data.has_pay_password;
-						this.setBankList(res[1]);//获取提现方式列表
-						// this.priceList=res[1].data.quota_list;
-						
+						console.log(res[0]);
+						this.balance=res[1].data.data.balance;
+						this.has_pay_password = res[1].data.data.has_pay_password;
+						this.setBankList(res[2]);//获取提现方式列表
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
@@ -90,8 +107,6 @@
 					_t.value = res.data.data.methods[i].id.toString();
 					_t.label = res.data.data.methods[i].label;
 					_tempList.push(_t);
-					this.curId=res.data.data.methods[i].id;
-					console.log(this.curId);
 				}
 				this.options1 = _tempList;
 			},
@@ -131,7 +146,6 @@
 			},
 			check(){  
 				console.log(this.value);
-				
 			}  
 		}
 	};

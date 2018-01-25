@@ -12,7 +12,7 @@
       </top-back>
         <div id="tab-menu" class=" flex flex-align-center">
             <div class="menu-item flex flex-justify-center flex-align-center " v-bind:class="{active:tabItem[0]}" @click = "changeTab(0)">待结算</div>
-            <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已平账</div>
+            <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已完成</div>
             <div class="menu-item flex flex-justify-center flex-align-center" v-bind:class="{active:tabItem[2]}" @click = "changeTab(2)">已关闭</div>
         </div>
 
@@ -29,7 +29,7 @@
                         <h3>{{item.user.name}}</h3>
                     </div>
                     <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥{{item.amount}}</div>
+                        <div class="title">任务剩余钻石:{{item.amount}}</div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
@@ -50,10 +50,10 @@
                  
                 <div class="group-controller flex flex-v flex-align-center" v-if="tabItem[1]&&isListRadioShow ">
                     <div class="delete-choise">
-                        <mt-button type="primary" size="large" style="background: red;" @click="closeTradementByChoise">关闭选中交易</mt-button>
+                        <mt-button type="primary" size="large" style="background: red;" @click="closeTradementByChoise">关闭选中任务</mt-button>
                     </div>
                     <div class="delete-all">
-                        <mt-button type="primary" size="large" style="background: #777;" @click="closeAllTradement">关闭所有已平账交易</mt-button>
+                        <mt-button type="primary" size="large" style="background: #777;" @click="closeAllTradement">关闭所有已完成的任务</mt-button>
                     </div>
                 </div>
             </ul>
@@ -375,7 +375,7 @@ export default {
         });
     },
 
-    // 删除所有已平账的交易
+    // 删除所有已经完成的任务
     closeAllTradement(){
         Loading.getInstance().open();
         var _data = {

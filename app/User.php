@@ -355,7 +355,7 @@ class User extends Authenticatable
     }
 
     public function pet_records() {
-        return $this->hasMany(PetRecord::class, "user_id", "id");
+        return $this->hasMany(PetRecord::class, "to_user_id", "id");
     }
 
     /**
@@ -373,6 +373,11 @@ class User extends Authenticatable
      * @return Pet
      */
     public function create_pet($type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER) {
+        if ($type == Pet::TYPE_EGG && $source == PetRecord::TYPE_NEW) {
+            if ($this->pet_left_times() == 0) {
+                return false;
+            }
+        }
         $pet = new Pet();
         $pet->user_id = $this->id;
         $pet->status = $type == Pet::TYPE_EGG ? Pet::STATUS_UNHATCHED : Pet::STATUS_HATCHING;
@@ -396,10 +401,16 @@ class User extends Authenticatable
     }
 
     /**
-     * 已领取宠物蛋次数
+     * 可领取宠物蛋次数
      * @return int
      */
-    public function free_times() {
-        return $this->pet_records()->where("type", PetRecord::TYPE_NEW)->count();
+    public function pet_left_times() {
+        $total = (int)config("pet_free_times", 3);
+        $count = (int)$this->pet_records()->where("created_at", ">=", date("Y-m-d 00:00:00"))->where("type", PetRecord::TYPE_NEW)->count();
+        if ($count >= $total) {
+            return 0;
+        } else {
+            return $total - $count;
+        }
     }
 }

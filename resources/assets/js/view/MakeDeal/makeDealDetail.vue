@@ -10,7 +10,7 @@
             v-if="recordList.length==0 && isManager"
             @click="cancelTrade"
             >
-              撤销交易
+              撤销任务
           </div>
         </topBack>
 
@@ -18,10 +18,16 @@
             <p>任务</p>
             <p>加速</p>
         </section>
+
+        <section class="mission-status " v-bind:class="[status!=3?'active':'disable']">
+          <p>
+            {{status!=3?'任务进行中':"任务已关闭"}}
+          </p>
+        </section>
         
         <deal-content :renderData = "renderData"></deal-content>
 
-        <section class="pay-wrap flex flex-v flex-align-center">
+        <section class="pay-wrap flex flex-v flex-align-center" v-if="status!=3">
 
             <div class="pay-money flex flex-align-center flex-justify-around">
                 <label for="">交钻</label>
@@ -53,7 +59,7 @@
                   v-for="item in joiner" 
                 >
                 
-                <span class="info-friend" @click="showMemberChoise">提醒好友</span>
+                <span class="info-friend" @click="showMemberChoise" v-if="status!=3">提醒好友</span>
               </div>
             </div>
             
@@ -123,6 +129,34 @@
     text-align: center;
     font-size: 0.9em;
     color: #fff;
+  }
+}
+
+.mission-status{
+  width: 3em;
+  height: 6em;
+  position: absolute;
+  left: 2em;
+
+  p{
+    width: 1em;
+    display: block;
+    margin:0 auto;
+    margin-top:0.5em;
+  }
+}
+
+.active{
+  background: #26a2ff;
+  p{
+    color:#fff;
+  }
+}
+
+.disable{
+  background: #aaa;
+  p{
+    color:#fff;
   }
 }
 
@@ -294,7 +328,7 @@ export default {
     return {
       passWordSwitch: false,
       isShow:false,
-      isManager:false,            // 是否是交易发起者
+      isManager:false,            // 是否是任务发起者
       renderData: {
         name: null,
         user:{
@@ -308,13 +342,14 @@ export default {
         getMoney: null
       },
       payType: null,              // 支付方式，取钱get 放钱put
-      transfer_id:"",             // 交易id
+      transfer_id:"",             // 任务id
       shop_id:"",
       password:"",                // 支付密码
       allow_reward:false,         // 是否允许打赏
-      joiner:[],                  // 交易的参与者，需要提醒的人
+      joiner:[],                  // 任务的参与者，需要提醒的人
       memberList:[],              //成员数组
       
+      status:null,
       recordList:[],
 
       choiseMemberSwitch:false,
@@ -327,7 +362,7 @@ export default {
     this._getQRCode();
   },
   methods: {
-    // 撤销交易
+    // 撤销任务
     deleteIt(id) {
       Loading.getInstance().open();
       var _data={
@@ -365,6 +400,7 @@ export default {
           this.shop_id = res.data.data.shop_id;
           this.allow_reward = res.data.data.allow_reward;
           this.isManager = res.data.data.allow_cancel;
+          this.status = res.data.data.status;
           this.isShow = true;
 
           Loading.getInstance().close();
@@ -465,7 +501,7 @@ export default {
 
     },
 
-    // 提交交易  拿钱或者付钱
+    // 提交任务  拿钱或者付钱
     submitData(password){
       // 放钱
       if(this.payType == "put"){
@@ -563,7 +599,7 @@ export default {
         transfer_id:this.transfer_id
       }
       request.getInstance().postData('api/transfer/cancel',_data).then(res=>{
-        Toast("撤销交易成功");
+        Toast("撤销任务成功");
         setTimeout(()=>{
           this.$router.push("/makeDeal/my_deal");
         },1500);

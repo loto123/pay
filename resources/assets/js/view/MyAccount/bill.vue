@@ -41,7 +41,7 @@
         <transition name="slide">
             <div class="sel-type" v-if="showAlert">
                 <div class="sel-type-box">
-                    <h2>选择交易类型</h2>
+                    <h2>选择任务类型</h2>
                     <ul class="type-list">
                         <li @click="selAll">
                             <a href="javascript:;">全部</a>

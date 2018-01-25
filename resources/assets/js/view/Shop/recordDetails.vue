@@ -44,7 +44,7 @@
 				created_at:null,	//时间
 				remark:null,		//备注
 				type:null,			//类型
-				no:null,			//交易单号
+				no:null,			//任务单号
 				amount:null,		//入账金额
 				mode:null,			//0:收入		1:支出
 				balance:null		//账户余钱

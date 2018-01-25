@@ -43,6 +43,7 @@
 <script>
 	import request from '../../utils/userRequest';
 	import topBack from "../../components/topBack.vue";
+	import Loading from "../../utils/loading";
 	import { MessageBox, Toast } from "mint-ui";
 
 	export default {
@@ -55,7 +56,9 @@
 				moneyList:[],
 				curPrice:null,
 				pic:null,		//获取到的宠物
-				picId:null		//宠物id
+				picId:null,		//宠物id
+				hatching:true,	//true 在孵化中  false  孵化成功
+				timer:null
 			}
 		},
 		created() {
@@ -102,8 +105,30 @@
 				}
 				request.getInstance().postData('api/pet/on_sale', _data)
 					.then((res) => {
-						this.pic=res.data.data.pic;
-						this.picId=res.data.data.id
+						this.picId=res.data.data.id;
+						this.hatching=res.data.data.hatching;
+						if(this.hatching==true){
+							Loading.getInstance().open('宠物孵化中...');
+							this.timer = setTimeout(() => {
+								this.refresh();
+							}, 500)
+						}else{
+							clearTimeout(this.timer);
+							this.pic=res.data.data.pic;
+							Loading.getInstance().close();
+						}
+					})
+					.catch((err) => {
+						Toast(err.data.msg);
+					})
+			},
+			refresh(){
+				var _data = {
+					bill_id : this.picId
+				}
+				request.getInstance().postData('api/pet/bill_pet_refresh', _data)
+					.then((res) => {
+						this.hatching=res.data.data.hatching;
 					})
 					.catch((err) => {
 						Toast(err.data.msg);
@@ -125,6 +150,7 @@
 				request.getInstance().postData('api/account/charge', _data)
 					.then((res) => {
 						location.href = res.data.data.redirect_url;
+						
 					})
 					.catch((err) => {
 						Toast(err.data.msg);
