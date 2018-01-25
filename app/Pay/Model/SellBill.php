@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 class SellBill extends Model
 {
     const UPDATED_AT = null;
+
+    //订单有效分钟数,超过这个时间后不会被其它用户搜索到,等待与系统成交,暂定1小时45分钟
+    const VALID_MINUTES = 105;
     protected $table = 'pay_sell_bill';
     protected $guarded = ['id'];
 

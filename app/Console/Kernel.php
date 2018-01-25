@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\ShopLogo;
+use App\Pay\Model\BillMatch;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,8 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call([BillMatch::class, 'expire'])->name('pet_buy_timeout')->withoutOverlapping()->everyMinute(); //宠物交易订单超时任务
     }
 
     /**

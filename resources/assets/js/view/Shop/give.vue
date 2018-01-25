@@ -1,6 +1,6 @@
 <template>
   <div id="give" class="give-container">
-    <topBack title="转账给店铺成员">
+    <topBack title="转账给公会成员">
       <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
         <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
       </div>

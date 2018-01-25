@@ -44,9 +44,9 @@
     <div class="row">
         <div class="col-md-6">
             <div class="box-body box">
-                <div class="lead">总收款笔数:<span class="text-yellow">{{$transfer_count}}</span></div>
-                <div class="lead">总收款金额（元）:<span class="text-yellow">{{$amount}}</span></div>
-                <div class="lead">店铺分润（元）含收手续费 {{$tip_amount}} 元:<span class="text-yellow">{{$shop_amount}}</span></div>
+                <div class="lead">总拿钻笔数 :<span class="text-yellow">{{$transfer_count}}</span></div>
+                <div class="lead">总拿钻数量（元）:<span class="text-yellow">{{$amount}}</span></div>
+                <div class="lead">公会分润（元）含收任务加速费 {{$tip_amount}} 元:<span class="text-yellow">{{$shop_amount}}</span></div>
                 <div class="lead">代理分润（元）:<span class="text-yellow">{{$proxy_amount}}</span></div>
                 <div class="lead">运营收入（元）:<span class="text-yellow">{{$company_amount}}</span></div>
             </div>
@@ -63,9 +63,9 @@
                         <th>用户</th>
                         <th>上级代理</th>
                         <th>上级运营</th>
-                        <th>收款笔数</th>
-                        <th>收款金额</th>
-                        <th>店铺分润</th>
+                        <th>拿钻笔数</th>
+                        <th>拿钻金额</th>
+                        <th>公会分润</th>
                         <th>代理分润</th>
                         <th>运营业绩</th>
                     </tr>

@@ -9,8 +9,10 @@
 
 namespace App\Pay\Model;
 
+use App\Jobs\SubmitWithdrawRequest;
 use App\Pay\PayLogger;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DepositMethod extends Model
@@ -85,8 +87,34 @@ class DepositMethod extends Model
          * @var $result DepositResult
          */
         $result = (new $this->impl)->parseReturn($this);
+
+
+        //获取购买的宠物图片及获得钻石
+        $petPic = '';
+        $diamonds = 0;
+
+        try {
+            if ($result->state === Deposit::STATE_PAY_FAIL) {
+                //支付失败,更改交易状态解锁订单
+                DB::table('pay_bill_match')->join('pay_sell_bill', function ($join) {
+                    $join->on('pay_bill_match.sell_bill_id', '=', 'pay_sell_bill.id')->where([
+                        ['pay_bill_match.state', '=', BillMatch::STATE_WAIT],
+                        ['pay_bill_match.user_id', '=', Auth::id()]
+                    ]);
+                })->update(['pay_bill_match.state' => BillMatch::STATE_FAIL, 'pay_sell_bill.locked' => 0]);
+            }
+
+            if ($result->state === Deposit::STATE_COMPLETE) {
+                $sellBill = BillMatch::where('deposit_id', $result->id)->first()->sellBill;
+                $diamonds = $sellBill->price;
+                $petPic = $sellBill->pet->image;
+            }
+        } catch (\Exception $e) {
+            PayLogger::deposit()->error('支付回跳页面错误', ['exception' => $e->getMessage()]);
+        }
+
         $msg = Deposit::getStateText($result->state);
-        return view('pay_result', ['result' => $result, 'status_text' => $msg]);
+        return view('pay_result', ['result' => $result, 'status_text' => $msg, 'diamonds' => $diamonds, 'pet' => $petPic]);
     }
 
     /**
@@ -99,34 +127,74 @@ class DepositMethod extends Model
         PayLogger::deposit()->info('支付通知', ['通道' => $channel->name, '请求' => request()]);
         //启动事务
         $commit = false;
+        $result = null;
         DB::beginTransaction();
         ob_start();
 
         do {
-            $result = (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
-            if (!$result) {
-                break;
-            }
-
-            if ($result->state === Deposit::STATE_COMPLETE) {
-                $result->state = Deposit::STATE_CHARGE_FAIL;//到账失败
-                if ($result->masterContainer->changeBalance($result->amount, 0)) {
-                    $result->state = Deposit::STATE_COMPLETE;
+            try {
+                $result = (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
+                if (!$result) {
+                    break;
                 }
-            } else {
-                PayLogger::deposit()->notice('支付异常', [$result->toArray()]);
-            }
 
-            if (!$result->save()) {
-                break;
-            }
+                //获取宠物撮合订单
+                $match = BillMatch::where(['deposit_id', $result->getKey()])->where(function ($query) {
+                    $query->where('state', BillMatch::STATE_WAIT)->orWhere('state', BillMatch::STATE_EXPIRED);
+                })->lockForUpdate()->first();
 
-            $commit = true;
+                if (!$match) {
+                    PayLogger::deposit()->error('支付通知异常', ['说明' => '充值撮合订单不存在或状态异常', '充值id' => $result->getKey()]);
+                    break;
+                }
+
+                $sellBill = $match->sellBill;
+                if ($result->state === Deposit::STATE_COMPLETE) {
+                    if ($match->state == BillMatch::STATE_EXPIRED) {
+                        //超时支付
+                        $result->state = Deposit::STATE_TIMEOUT_PAY;
+                        $match->state = BillMatch::STATE_TIMEOUT_PAY;
+                    } else {
+                        //成交,执行交割:充值入账,宠物转移
+                        $result->state = Deposit::STATE_CHARGE_FAIL;
+                        $match->state = BillMatch::STATE_DEAL_FAIL;
+                        if ($result->masterContainer->changeBalance($result->amount, 0) && $sellBill->pet->transfer($match->user_id)) {
+                            $result->state = Deposit::STATE_COMPLETE;
+                            $match->state = BillMatch::STATE_DEAL_CLOSED;
+                            $sellBill->deal_closed = 1;
+                        }
+                    }
+                } else {
+                    //交易失败
+                    $match->state = BillMatch::STATE_FAIL;
+                    $sellBill->locked = 0;
+                    if ($result->state === Deposit::STATE_PAY_FAIL) {
+
+                    } else {
+                        PayLogger::deposit()->error('支付通知异常', ['result' => $result]);
+                    }
+                }
+                $sellBill->save();
+                if (!($match->save() && $result->save())) {
+                    break;
+                }
+
+                $commit = true;
+            } catch (\Exception $e) {
+                PayLogger::deposit()->error('支付通知异常', ['exception' => $e->getMessage()]);
+            }
         } while (false);
 
         //结束事务
         if ($commit) {
             DB::commit();
+            //处理卖单提现
+            if ($match->state == BillMatch::STATE_DEAL_CLOSED) {
+                if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
+                    $match->state = BillMatch::STATE_DEAL_FAIL;
+                    $match->save();
+                }
+            }
             return ob_get_clean();
         } else {
             DB::rollBack();

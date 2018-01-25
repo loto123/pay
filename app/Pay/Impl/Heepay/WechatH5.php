@@ -44,8 +44,6 @@ class WechatH5 implements DepositInterface
         //超时加到key后面一起计算
         if ($timeout) {
             $timeout = (time() + $timeout) * 1000;
-            dump($timeout);
-            return;
             $params['timestamp'] = $timeout;
             $config['key_v1'] = "{$config['key_v1']}&timestamp=$timeout";
         }
@@ -99,7 +97,7 @@ class WechatH5 implements DepositInterface
     public function parseReturn(DepositMethod $method)
     {
         $request = request();
-        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_PAY_FAIL, $request->get('pay_amt'), $request->get('jnet_bill_no'));
+        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_PAY_FAIL, IdConfuse::recoveryId($request->get('agent_bill_id')), $request->get('pay_amt'), $request->get('jnet_bill_no'));
     }
 
     public function acceptNotify(array $config)

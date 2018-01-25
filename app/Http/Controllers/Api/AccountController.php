@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Jobs\SubmitPetSell;
+use App\Pay\Model\BillMatch;
 use App\Pay\Model\Channel;
 use App\Pay\Model\Deposit;
 use App\Pay\Model\DepositMethod;
@@ -12,11 +14,15 @@ use App\Pay\Model\SellBill;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawMethod;
 use App\Pay\PayLogger;
+use App\Pet;
 use App\Shop;
 use App\ShopFund;
 use App\User;
 use App\UserFund;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -25,7 +31,8 @@ use JWTAuth;
  *
  * @package App\Http\Controllers\Api
  */
-class AccountController extends BaseController {
+class AccountController extends BaseController
+{
     const MINIMUM_WITHDRAW = 0.01; //最低提现金额
     const MINIMUM_RECHARGE = 0.01; //最低充值金额
 
@@ -64,14 +71,15 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function index(){
+    public function index()
+    {
         $user = $this->auth->user();
         /* @var $user User */
         return $this->json([
             'balance' => (float)$user->container->balance,
             'has_pay_password' => empty($user->pay_password) ? 0 : 1,
             'has_pay_card' => $user->pay_card()->count() > 0 ? 1 : 0,
-            ]);
+        ]);
     }
 
     /**
@@ -121,10 +129,8 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function charge(Request $request) {
-//        $stdClass = new \stdClass();
-//        $stdClass->pay_info = 'http://www.alipay.com';
-//        return $this->json($stdClass);
+    public function charge(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'bill_id' => 'numeric|min:1',
             'way' => 'required'
@@ -134,59 +140,85 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
 
-        //取得卖单
-        $bill = SellBill::onSale()->lockForUpdate()->find($request->bill_id);
-        if (!$bill) {
-            return $this->json([], '该宠物不再出售', 0);
-        }
-
-        $price = $bill->price;
-
-        $user = $this->auth->user();
-        $record = new UserFund();
-        $record->user_id = $user->id;
-        $record->type = UserFund::TYPE_CHARGE;
-        $record->mode = UserFund::MODE_IN;
-        $record->amount = $price;
-        $record->balance = $user->container->balance + $price;
-        $record->status = UserFund::STATUS_SUCCESS;
         /* @var $user User */
+        $user = $this->auth->user();
 
         $channel = $user->channel;
         if ($channel->disabled) {
             $channel = $user->channel->spareChannel;
         }
-
         $method = $channel->platform->depositMethods()->find($request->way);
-
         if (!$method) {
             return $this->json([], '状态异常,请刷新页面重试', 0);
         }
 
-        //限制充值金额
-        if ($request->amount < self::MINIMUM_RECHARGE) {
-            return $this->json([], '最低充值' . self::MINIMUM_RECHARGE . '元', 0);
-        }
+        $commit = false;
+        $message = '';
+        $data = [];
+        DB::beginTransaction();
 
-        try {
-            if ($result = $user->container->initiateDeposit($request->amount, $channel, $method)) {
-                $record->no = $result['deposit_id'];
-                $record->save();
-            } else {
-                return $this->json([], 'error', 0);
+        do {
+            //取得卖单
+            $bill = SellBill::onSale()->lockForUpdate()->find($request->bill_id);
+            if (!$bill) {
+                $message = '该宠物不再出售';
+                //dump(DB::getQueryLog());
+                break;
             }
-        } catch (\Exception $e) {
-            PayLogger::deposit()->error('下单接口错误', [$e->getTrace()]);
-            return $this->json([], 'error', 0);
-        }
+            $price = $bill->price;
 
-        return $this->json(['redirect_url' => $result['pay_info']]);
+            //限制充值金额
+            if ($price < self::MINIMUM_RECHARGE) {
+                $message = '最低价格' . self::MINIMUM_RECHARGE . '元';
+                break;
+            }
+
+            $record = new UserFund();
+            $record->user_id = $user->id;
+            $record->type = UserFund::TYPE_CHARGE;
+            $record->mode = UserFund::MODE_IN;
+            $record->amount = $price;
+            $record->balance = $user->container->balance + $price;
+            $record->status = UserFund::STATUS_SUCCESS;
+
+
+            try {
+                if ($result = $user->container->initiateDeposit($price, $channel, $method)) {
+                    $record->no = $result['deposit_id'];
+                    $record->save();
+
+                    //新的撮合
+                    $match = new BillMatch([
+                        'expired_at' => date('Y-m-d H:i:s', time() + BillMatch::BILL_PAY_TIMEOUT * 60),
+                        'deposit_id' => $result['deposit_id'],
+                    ]);
+                    $match->sellBill()->associate($bill);
+                    $match->createdBy()->associate(Auth::user());
+
+                    //锁定卖单
+                    $bill->locked = true;
+                    if ($bill->save() && $match->save()) {
+                        $data = ['redirect_url' => $result['pay_info']];
+                        $commit = true;
+                    }
+                } else {
+                    return $this->json([], 'error', 0);
+                }
+            } catch (\Exception $e) {
+                PayLogger::deposit()->error('下单接口错误', [$e->getMessage()]);
+                $message = 'error';
+                break;
+            }
+        } while (false);
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $this->json($data, $message, (int)$commit);
     }
 
     /**
      * @SWG\Post(
      *   path="/account/withdraw",
-     *   summary="账户提现",
+     *   summary="出售宠物",
      *   tags={"账户"},
      *   @SWG\Parameter(
      *     name="way",
@@ -262,14 +294,12 @@ class AccountController extends BaseController {
         $user = $this->auth->user();
         try {
             if (!$user->check_pay_password($request->password)) {
-                return $this->json([], trans("api.error_pay_password"),0);
+                return $this->json([], trans("api.error_pay_password"), 0);
             }
         } catch (\Exception $e) {
-            return $this->json([], $e->getMessage(),0);
+            return $this->json([], $e->getMessage(), 0);
         }
-        if (!$user->pay_card) {
-            return $this->json([], trans("api.error_pay_card"), 0);
-        }
+
         if ($user->container->balance < $request->amount) {
             return $this->json([], trans("api.error_balance"), 0);
         }
@@ -300,54 +330,108 @@ class AccountController extends BaseController {
             return $this->json([], '出售价格最高为' . $method->max_quota . '元', 0);
         }
 
-        try {
-            if ($method->targetPlatform->getKey() == 0) {
-                //提现到银行卡
-                if (!$channel->platform->isCardSupport($user->pay_card)) {
-                    return $this->json([], '暂不支持该银行', 0);
+
+        if ($method->targetPlatform->getKey() == 0) {
+            //提现到银行卡
+            if (!$user->pay_card) {
+                return $this->json([], trans("api.error_pay_card"), 0);
+            }
+
+            if (!$channel->platform->isCardSupport($user->pay_card)) {
+                return $this->json([], '暂不支持该银行', 0);
+            }
+
+            $receiver_info = ['bank_card' => $user->pay_card];
+        } else {
+            //其它提现方式,待扩展...
+            $receiver_info = [];
+        }
+
+        //限制提现金额
+        if ($request->amount < self::MINIMUM_WITHDRAW) {
+            return $this->json([], '最低价格' . self::MINIMUM_WITHDRAW . '元', 0);
+        }
+
+        //计算手续费
+        if ($method->fee_value <= 0) {
+            $fee = 0;
+        } else {
+            $fee = $method->fee_mode == 0 ? round($request->amount * $method->fee_value / 100, 2) : $method->fee_value;
+        }
+
+        if ($request->amount - $fee <= 0) {
+            return $this->json([], '提现金额必须大于0', 0);
+        }
+
+
+        DB::beginTransaction();
+        $commit = false;
+        $error = '';
+
+        do {
+            try {
+                //取得宠物
+                $pet = Pet::where([
+                    ['user_id', Auth::id()],
+                    ['status', Pet::STATUS_HATCHED]
+                ])->lockForUpdate()->find($request->pet_id);
+
+                if (!$pet) {
+                    $error = '该宠物不能出售';
+                    break;
                 }
 
-                $receiver_info = ['bank_card' => $user->pay_card];
-            } else {
-                //其它提现方式,待扩展...
-                $receiver_info = [];
-            }
+                $result = $user->container->initiateWithdraw(
+                    $request->amount,
+                    $receiver_info,
+                    $channel,
+                    $method,
+                    $fee
+                );
 
-            //限制提现金额
-            if ($request->amount < self::MINIMUM_WITHDRAW) {
-                return $this->json([], '最低提现' . self::MINIMUM_WITHDRAW . '元', 0);
-            }
+                if ($result['success']) {
+                    //下卖单
+                    $bill = new SellBill(
+                        [
+                            'price' => $request->amount,
+                            'valid_time' => date('Y-m-d H:i:s', time() + SellBill::VALID_MINUTES * 60),
+                            'withdraw_id' => $result['withdraw_id']
+                        ]
+                    );
 
-            //计算手续费
-            if ($method->fee_value <= 0) {
-                $fee = 0;
-            } else {
-                $fee = $method->fee_mode == 0 ? round($request->amount * $method->fee_value / 100, 2, PHP_ROUND_HALF_EVEN) : $method->fee_value;
-            }
+                    //锁定宠物
+                    $pet->status = Pet::STATUS_LOCKED;
+                    $record->no = $result['withdraw_id'];
 
-            if ($request->amount - $fee <= 0) {
-                return $this->json([], '提现金额必须大于0', 0);
-            }
+                    $bill->pet()->associate($pet);
+                    $bill->placeBy()->associate(Auth::user());
 
-            $result = $user->container->initiateWithdraw(
-                $request->amount,
-                $receiver_info,
-                $channel,
-                $method,
-                $fee
-            );
 
-            if ($result['success']) {
-                $record->no = $result['withdraw_id'];
-                $record->save();
-            } else {
-                return $this->json([], 'error', 0);
+                    $pet->save();
+                    $bill->save();
+                    $record->save();
+                    $commit = true;
+                } else {
+                    $error = 'error';
+                    break;
+                }
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+                break;
             }
-        } catch (\Exception $e) {
-            return $this->json([], 'error'.$e->getMessage(), 0);
+        } while (false);
+
+        $commit ? DB::commit() : DB::rollBack();
+        if (!$commit) {
+            return $this->json([], $error, 0);
         }
+
+        //加入延迟提现队列
+        SubmitPetSell::dispatch($bill)->delay(Carbon::now()->addMinutes(SellBill::VALID_MINUTES))->onQueue('withdraw');
+
         $container = MasterContainer::find($user->container->getKey());
         return $this->json(['balance' => $container->balance, 'frozen' => $container->frozen_balance]);
+
     }
 
     /**
@@ -403,7 +487,8 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer(Request $request) {
+    public function transfer(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'amount' => 'required|min:0',
         ]);
@@ -418,10 +503,10 @@ class AccountController extends BaseController {
         }
         try {
             if (!$user->check_pay_password($request->password)) {
-                return $this->json([], trans("api.error_pay_password"),0);
+                return $this->json([], trans("api.error_pay_password"), 0);
             }
         } catch (\Exception $e) {
-            return $this->json([], $e->getMessage(),0);
+            return $this->json([], $e->getMessage(), 0);
         }
         if ($user->container->balance < $request->amount) {
             return $this->json([], trans("api.error_user_balance"), 0);
@@ -444,8 +529,8 @@ class AccountController extends BaseController {
             $record->save();
             $shop_record->save();
             $user->container->transfer($shop->container, $request->amount, 0, false, false);
-        } catch (\Exception $e){
-            Log::info("shop transfer member error:".$e->getMessage());
+        } catch (\Exception $e) {
+            Log::info("shop transfer member error:" . $e->getMessage());
             return $this->json([], 'error', 0);
         }
         return $this->json();
@@ -457,7 +542,40 @@ class AccountController extends BaseController {
      *   path="/account/pay-methods/{os}/{scene}",
      *   summary="充值方式列表:占位符{os}表示操作系统:andriod,ios,unknown(未知), {scene}表示支付场景id，见后台 支付管理-支付场景",
      *   tags={"账户"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
+     *                      property="channel",
+     *                      type="integer",
+     *                      example=1,
+     *                      description="当前支付通道"
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="methods",
+     *                      type="array",
+     *                      description="购买方式列表",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="id", type="integer", description="购买方式id"),
+     *                          @SWG\Property(property="label", type="string", description="展示文本"),
+     *                      ),
+     *                  ),
+     *              )
+     *          )
+     *      ),
      * )
      * @return \Illuminate\Http\Response
      */
@@ -502,7 +620,38 @@ class AccountController extends BaseController {
      *   path="/account/withdraw-methods",
      *   summary="提现方式列表",
      *   tags={"账户"},
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  description="余额信息",
+     *                  @SWG\Property(property="channel", type="integer", example=1,description="用户当前使用的支付通道"),
+     *                  @SWG\Property(property="methods", type="array", description="提现方式列表",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="id", type="integer", description="收款方式id"),
+     *                  @SWG\Property(property="label", type="string", description="展示文本"),
+     *                  @SWG\Property(property="fee_value", type="float", example="0.3",description="手续费"),
+     *                  @SWG\Property(property="fee_mode", type="integer", example="0",description="手续费模式:0百分比,1单笔固定"),
+     *                  @SWG\Property(property="my_max_quota", type="float", example="100.00",description="我的最大价格"),
+     *                  @SWG\Property(property="quota_list", type="array", example="100,200,300",description="价格列表",@SWG\Items()),
+     *                  @SWG\Property(property="required-params", type="object", description="该方式需要的必要参数说明。每种方式不同,key/描述。仅调试模式返回"),
+     *                  ),
+     *                  )
+     *              )
+     *          )
+     *      ),
      * )
      * @return \Illuminate\Http\Response
      */
@@ -522,7 +671,7 @@ class AccountController extends BaseController {
             return $this->json(null, '没有可用支付通道', 0);
         }
 
-        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode','max_quota')->get();
+        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode', 'max_quota')->get();
         if (config('app.debug')) {
             $methods->each(function (&$item) {
                 $item['required-params'] = WithdrawMethod::find($item['id'])->getReceiverDescription();
@@ -530,10 +679,10 @@ class AccountController extends BaseController {
         }
 
         //提现额度
-        if(!empty($methods) && count($methods)>0) {
+        if (!empty($methods) && count($methods) > 0) {
             $methods->each(function (&$item) {
-                $method_quota_list = PayQuota::getPayQuotas(1,$item->id);
-                if($method_quota_list) {
+                $method_quota_list = PayQuota::getPayQuotas(1, $item->id);
+                if ($method_quota_list) {
                     $item['quota_list'] = $method_quota_list;
                 } else {
                     $item['quota_list'] = [];
@@ -622,17 +771,18 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function records(Request $request) {
+    public function records(Request $request)
+    {
         $data = [];
         $user = $this->auth->user();
         /* @var $user User */
         $query = UserFund::with(['charge_order', 'withdraw_order'])->where("user_id", $user->id)->where(function ($query1) {
-            $query1->orWhere(function($query2){
-                $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function($q){
+            $query1->orWhere(function ($query2) {
+                $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function ($q) {
                     $q->where("state", Deposit::STATE_COMPLETE);
                 });
-            })->orWhere(function($query3){
-                $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function($q){
+            })->orWhere(function ($query3) {
+                $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function ($q) {
                     $q->where("state", Withdraw::STATE_COMPLETE);
                 });
             })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
@@ -646,11 +796,11 @@ class AccountController extends BaseController {
             }
         }
         if ($request->start) {
-            $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
+            $start = date("Y-m-d H:i:s", strtotime($request->start . " +1 month"));
             $query->where("created_at", '<', $start);
         }
         $count = $query->count();
-        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
+        $query->orderBy('id', 'DESC')->limit($request->input('limit', 20));
         if ($request->offset) {
             $query->where("id", "<", UserFund::decrypt($request->offset));
         }
@@ -713,7 +863,8 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function record_detail($id) {
+    public function record_detail($id)
+    {
         $user = $this->auth->user();
 
         $fund = UserFund::findByEnId($id);
@@ -773,7 +924,8 @@ class AccountController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function month_data(Request $request) {
+    public function month_data(Request $request)
+    {
         $validator = Validator::make($request->all(),
             ['month' => 'required|regex:/^\d{4}-\d{2}$/']
         );
@@ -781,8 +933,8 @@ class AccountController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-        $in_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
-        $out_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
+        $in_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
+        $out_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 
@@ -828,10 +980,10 @@ class AccountController extends BaseController {
     public function depositQuotaList()
     {
         $quota_list = PayQuota::getPayQuotas(2);
-        if($quota_list) {
-            return $this->json(['quota_list'=>$quota_list]);
+        if ($quota_list) {
+            return $this->json(['quota_list' => $quota_list]);
         } else {
-            return $this->json([],'请求失败',0);
+            return $this->json([], '请求失败', 0);
         }
     }
 }

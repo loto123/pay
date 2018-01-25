@@ -20,7 +20,8 @@ class Deposit extends Model
     const STATE_PART_PAID = 3;//部分支付
     const STATE_API_ERR = 4;//接口不通
     const STATE_CHARGE_FAIL = 5;//到账失败
-    const STATE_PAY_TIMEOUT = 6;//超时支付(已支付,但超过订单有效期)
+    const STATE_TIMEOUT_PAY = 6;//超时支付(已支付,但超过订单有效期)
+
     protected $table = 'pay_deposit';
 
     protected $casts = [
@@ -42,7 +43,7 @@ class Deposit extends Model
             case self::STATE_UNPAID:
                 return '未支付';
             case self::STATE_COMPLETE:
-                return '充值成功';
+                return '购买成功';
             case self::STATE_PAY_FAIL:
                 return '支付失败';
             case self::STATE_PART_PAID:

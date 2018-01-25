@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
+use App\Pay\PayLogger;
 use App\Pet;
 use App\User;
 use Illuminate\Http\Request;
@@ -58,20 +59,11 @@ class PetTradeController extends BaseController
      * )
      * @return array
      */
-    public function sellable(Request $request)
+    public function sellable()
     {
-        return [
-            'code' => 1,
-            'msg' => '',
-            'data' => [
-                'list' => [
-                    ['id' => '1', 'pic' => '/images/personal.jpg', 'is_egg' => false],
-                    ['id' => '2', 'is_egg' => true],
-                    ['id' => '1', 'pic' => '/images/personal.jpg', 'is_egg' => false],
-                ]
-            ]
-        ];
-
+        return $this->json(['list' => Auth::user()->pets_for_sale()->map(function ($item) {
+            return ['id' => $item->getKey(), 'pic' => $item->status == Pet::STATUS_UNHATCHED ? '' : $item->image, 'is_egg' => $item->status == Pet::STATUS_UNHATCHED];
+        })]);
     }
 
 
@@ -298,7 +290,7 @@ class PetTradeController extends BaseController
                 $query->where('name', '=', Pet::DEALER_ROLE_NAME);
             })->inRandomOrder()->first();
             if (!$dealer) {
-                //dump( DB::getQueryLog());
+                PayLogger::deposit()->emergency('没有交易商,系统无法挂售宠物');
                 return $this->json([], '当前没有宠物在售', 0);
             }
 

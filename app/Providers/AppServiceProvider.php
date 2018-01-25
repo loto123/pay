@@ -31,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
 
         //降低隔离级别
         DB::statement('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
+
+        //开启sql记录
+        if (config('app.debug')) {
+            DB::connection()->enableQueryLog();
+        }
     }
 
     /**
