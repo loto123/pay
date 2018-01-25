@@ -70,6 +70,15 @@ class Deposit extends Model
     }
 
     /**
+     * 宠物交易买单
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function petBuyBill()
+    {
+        return $this->hasOne(BillMatch::class, 'deposit_id');
+    }
+
+    /**
      * 储值方式
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

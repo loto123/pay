@@ -83,6 +83,15 @@ class Withdraw extends Model
     }
 
     /**
+     * 宠物出售订单
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function petSellBill()
+    {
+        return $this->hasOne(SellBill::class);
+    }
+
+    /**
      * 提现通道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
