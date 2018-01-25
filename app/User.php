@@ -373,6 +373,11 @@ class User extends Authenticatable
      * @return Pet
      */
     public function create_pet($type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER) {
+        if ($type == Pet::TYPE_EGG && $source == PetRecord::TYPE_NEW) {
+            if ($this->pet_left_times() == 0) {
+                return false;
+            }
+        }
         $pet = new Pet();
         $pet->user_id = $this->id;
         $pet->status = $type == Pet::TYPE_EGG ? Pet::STATUS_UNHATCHED : Pet::STATUS_HATCHING;
