@@ -217,6 +217,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     ], function ($api) {
         $api->get('/sellable', 'PetTradeController@sellable');
         $api->get('/egg_acquire_times', 'PetTradeController@eggCanDrawTimes');
+        $api->get('/sold_record', 'PetTradeController@mySoldPets');
 
         $api->post('/acquire_egg', 'PetTradeController@freeEgg');
         $api->post('/brood', 'PetTradeController@broodTheEgg');

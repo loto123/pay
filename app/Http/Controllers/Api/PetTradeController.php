@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
+use App\Pay\Model\WithdrawRetry;
 use App\Pay\PayLogger;
 use App\Pet;
 use App\PetRecord;
@@ -11,6 +12,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * 宠物交易控制器
@@ -411,5 +413,125 @@ class PetTradeController extends BaseController
         } else {
             return $this->json([], '宠物不存在', 0);
         }
+    }
+
+    /**
+     * 我的宠物出售记录
+     * @SWG\Get(
+     *   path="/pet/sold_record",
+     *   summary="出售记录",
+     *   tags={"宠物交易"},
+     *   @SWG\Parameter(
+     *     name="month",
+     *     description="月份Y-m,默认当月",
+     *     required=false,
+     *     in="query",
+     *     type="string"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="offset",
+     *     description="已读的最后记录id",
+     *     default=0,
+     *     in="query",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="limit",
+     *     description="每页显示记录数",
+     *     default=10,
+     *     in="query",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
+     *                      property="channel",
+     *                      type="integer",
+     *                      example=1,
+     *                      description="当前支付通道"
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="methods",
+     *                      type="array",
+     *                      description="购买方式列表",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="id", type="integer", description="购买方式id"),
+     *                          @SWG\Property(property="label", type="string", description="展示文本"),
+     *                      ),
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     * )
+     * @param Request $request
+     * @return mixed
+     */
+    public function mySoldPets(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'month' => 'date_format:Y-m',
+            'offset' => 'integer|min:0',
+            'limit' => 'integer|min:1'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+
+        $month = $request->get('month', date('Y-m'));
+        $offset = (int)$request->get('offset', 0);
+        $limit = (int)$request->get('limit', 10);
+
+        $soldAmount = 0.00; //出售获得
+        $startTime = "$month-1 0:0:0";
+        $endTime = "$month-31 23:59:59";
+
+        $filter = [
+            ['place_by', Auth::id()],
+            ['created_at', '>=', $startTime],
+            ['created_at', '<=', $endTime]
+        ];
+
+
+        $where = $filter;
+        if ($offset > 0) {
+            $where [] = ['id', '<', $offset];
+        }
+
+        //取得出售记录
+        $list = SellBill::where($filter)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
+            return [
+                'id' => $item->getKey(),
+                'state' => $item->deal_closed ? (WithdrawRetry::isWithdrawFailed($item->withdraw->state) ? '状态异常' : '出售成功') : '出售中',
+                'price' => $item->price,
+                'created_at' => $item->created_at->toDateTimeString()
+            ];
+        });
+
+        //取得当月销售额
+        if ($list) {
+            $where = $filter;
+            $where [] = ['deal_closed', 1];
+            $soldAmount = SellBill::where($where)->sum('price');
+        }
+
+        return $this->json(['sold_amount' => $soldAmount, 'month' => $month, 'list' => $list]);
+
     }
 }
