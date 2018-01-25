@@ -461,18 +461,26 @@ class PetTradeController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(
-     *                      property="channel",
-     *                      type="integer",
-     *                      example=1,
-     *                      description="当前支付通道"
+     *                      property="sold_amount",
+     *                      type="float",
+     *                      example=100.00,
+     *                      description="本月成交销售额"
      *                  ),
      *                  @SWG\Property(
-     *                      property="methods",
+     *                      property="month",
+     *                      type="string",
+     *                      example="2018-01",
+     *                      description="月份"
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="list",
      *                      type="array",
      *                      description="购买方式列表",
      *                      @SWG\Items(
-     *                          @SWG\Property(property="id", type="integer", description="购买方式id"),
-     *                          @SWG\Property(property="label", type="string", description="展示文本"),
+     *                          @SWG\Property(property="id", type="integer", description="记录id"),
+     *                          @SWG\Property(property="state", type="string", description="状态文本"),
+     *                          @SWG\Property(property="price", type="float", description="出售价格"),
+     *                          @SWG\Property(property="created_at", type="datetime", description="出售时间"),
      *                      ),
      *                  ),
      *              )
