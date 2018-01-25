@@ -63,7 +63,7 @@ class PetTradeController extends BaseController
      */
     public function sellable()
     {
-        return $this->json(['list' => Auth::user()->pets_for_sale()->map(function ($item) {
+        return $this->json(['list' => Auth::user()->pets_for_sale()->get()->map(function ($item) {
             return ['id' => $item->getKey(), 'pic' => $item->status == Pet::STATUS_UNHATCHED ? '' : $item->image, 'is_egg' => $item->status == Pet::STATUS_UNHATCHED];
         })]);
     }
@@ -105,13 +105,9 @@ class PetTradeController extends BaseController
      */
     public function freeEgg()
     {
-        return [
-            'code' => 1,
-            'msg' => '领取成功',
-            'data' => [
-                'egg_id' => 1,
-            ]
-        ];
+        $pet = Auth::user()->create_pet(Pet::TYPE_EGG, PetRecord::TYPE_NEW);
+        $success = $pet === false;
+        return $this->json(['egg_id' => $success ? $pet->getKey() : 0], $success ? '领取成功' : '领取失败', (int)$success);
     }
 
     /**
@@ -150,13 +146,8 @@ class PetTradeController extends BaseController
      */
     public function eggCanDrawTimes()
     {
-        return [
-            'code' => 1,
-            'msg' => '',
-            'data' => [
-                'times' => 3
-            ]
-        ];
+        return $this->json(['times' => Auth::user()->pet_left_times()]);
+
     }
 
 
@@ -196,26 +187,27 @@ class PetTradeController extends BaseController
      *                      property="id",
      *                      type="integer",
      *                      description="孵化宠物id"
-     *                  ),
-     *                  @SWG\Property(
-     *                      property="pic",
-     *                      type="string",
-     *                      description="孵化宠物图片"
      *                  )
      *              )
      *          )
      *      )
      * )
      */
-    public function broodTheEgg()
+    public function broodTheEgg(Request $request)
     {
-        return [
-            'code' => 1,
-            'msg' => '孵化中',
-            'data' => [
-                'id' => '1', 'pic' => '/images/personal.jpg', 'hatching' => 'true'
-            ]
-        ];
+        $pet = Pet::where([['user_id', Auth::id()], ['status', Pet::STATUS_UNHATCHED]])->find($request->egg_id);
+
+        if (!$pet) {
+            return $this->json([], '该蛋不存在', 0);
+        }
+
+        if (!$pet->hatch()) {
+            return $this->json([], '孵蛋失败', 0);
+        }
+
+        return $this->json([
+            'id' => $pet->getKey(),
+        ], '孵化中');
     }
 
 
@@ -253,6 +245,11 @@ class PetTradeController extends BaseController
      *                      property="id",
      *                      type="integer",
      *                      description="卖单id"
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="pet_id",
+     *                      type="integer",
+     *                      description="宠物id,用于刷新宠物"
      *                  ),
      *                  @SWG\Property(
      *                      property="pic",
@@ -344,19 +341,19 @@ class PetTradeController extends BaseController
 
         }
 
-        return $this->json(['id' => $sellBill->getKey(), 'hatching' => $sellBill->pet->status == Pet::STATUS_HATCHING, 'pic' => $sellBill->pet->image]);
+        return $this->json(['id' => $sellBill->getKey(), 'pet_id' => $sellBill->pet->getKey(), 'hatching' => $sellBill->pet->status == Pet::STATUS_HATCHING, 'pic' => $sellBill->pet->image]);
     }
 
     /**
-     * 查询订单宠物
+     * 查询宠物状态
      * @SWG\Post(
-     *   path="/pet/bill_pet_refresh",
+     *   path="/pet/refresh_pet",
      *   summary="订单宠物刷新",
      *   tags={"宠物交易"},
      *     @SWG\Parameter(
-     *     name="bill_id",
+     *     name="pet_id",
      *     in="formData",
-     *     description="卖单id",
+     *     description="宠物(蛋)id",
      *     required=true,
      *     type="integer"
      *   ),
@@ -380,7 +377,7 @@ class PetTradeController extends BaseController
      *                  @SWG\Property(
      *                      property="id",
      *                      type="integer",
-     *                      description="卖单id"
+     *                      description="宠物id"
      *                  ),
      *                  @SWG\Property(
      *                      property="pic",
@@ -397,17 +394,22 @@ class PetTradeController extends BaseController
      *      )
      * )
      * @param Request $request
+     * @return array
      */
-    public function queryBillPet(Request $request)
+    public function queryPet(Request $request)
     {
+        $pet_id = (int)$request->pet_id;
+        if ($pet_id <= 0) {
+            return null;
+        }
 
-        $bill = SellBill::onSale()->find($request->bill_id);
-        if ($bill) {
-            return $this->json(['id' => $bill->getKey(), 'hatching' => $bill->pet->status == Pet::STATUS_HATCHING, 'pic' => $bill->pet->image]);
+        //只能查询自己的宠物或专属卖单的宠物
+        $row = DB::select('select `id`,`status`,`image` from `pets` where `id` = (select `id` from `pets` where `user_id`=? and `id`=? union select `pet_id` from `pay_sell_bill` where `belong_to`=? and `pet_id`=?)', [Auth::id(), $pet_id, Auth::id(), $pet_id]);
+        if ($row) {
+            $pet = $row[0];
+            return $this->json(['id' => $pet->id, 'hatching' => $pet->status == Pet::STATUS_HATCHING, 'pic' => $pet->image]);
         } else {
-            return $this->json([], '卖单不存在', 0);
+            return $this->json([], '宠物不存在', 0);
         }
     }
-
-
 }
