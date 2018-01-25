@@ -479,8 +479,8 @@ class PetTradeController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="integer", description="记录id"),
      *                          @SWG\Property(property="state", type="string", description="状态文本"),
-     *                          @SWG\Property(property="price", type="float", description="出售价格"),
-     *                          @SWG\Property(property="created_at", type="datetime", description="出售时间"),
+     *                          @SWG\Property(property="price", type="double", description="出售价格"),
+     *                          @SWG\Property(property="created_at", type="string", description="出售时间"),
      *                      ),
      *                  ),
      *              )
