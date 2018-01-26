@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\BillMatch;
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
 use App\Pay\Model\WithdrawRetry;
@@ -12,6 +13,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -550,5 +552,143 @@ class PetTradeController extends BaseController
 
         return $this->json(['sold_amount' => $soldAmount, 'month' => $month, 'list' => $list]);
 
+    }
+
+
+    /**
+     * 交易行在售宠物
+     * @SWG\Get(
+     *   path="/pet/all_on_sale",
+     *   summary="交易行在售宠物",
+     *   tags={"交易行"},
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  description="宠物列表",
+     *                  @SWG\Property(
+     *                      property="1",
+     *                      type="array",
+     *                      description="宠物信息",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="pet_id", type="integer", example="1", description="宠物编号"),
+     *                          @SWG\Property(property="holder_name", type="string", example="张三", description="持有人"),
+     *                          @SWG\Property(property="price", type="string", example="100", description="出售价格"),
+     *                      ),
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     * )
+     * @param Request $request
+     * @return mixed
+     */
+    public function onSalePets()
+    {
+        $data = [];
+        $bill = SellBill::onSale()->has('placeBy')->get();
+        if(!empty($bill) && count($bill)>0) {
+            foreach ($bill as $item) {
+                $data[] = [
+                    'pet_id' => $item->pet_id,
+                    'holder_name' => $item->placeBy->name,
+                    'price' => ($item->by_dealer==1)? '面议' : $item->price,
+                ];
+            }
+        }
+        return $this->json($data);
+    }
+
+    /**
+     * 交易行我的宠物
+     * @SWG\Get(
+     *   path="/pet/my_pets",
+     *   summary="交易行我的宠物",
+     *   tags={"交易行"},
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  description="宠物列表",
+     *                  @SWG\Property(
+     *                      property="1",
+     *                      type="array",
+     *                      description="宠物信息",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="pet_id", type="integer", example="1", description="宠物编号"),
+     *                          @SWG\Property(property="holder_name", type="string", example="张三", description="持有人"),
+     *                          @SWG\Property(property="price", type="string", example="100", description="出售价格"),
+     *                      ),
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     * )
+     * @param Request $request
+     * @return mixed
+     */
+    public function myPets()
+    {
+        $pets = $this->user()->pets;
+
+        //用户购买宠物记录
+        $user_bill = $this->user()->whereHas('bill_match', function($query) use($pets) {
+            $query->whereHas('sellBill', function($query) use($pets) {
+                $query->whereIn('pet_id', $pets->pluck('id'));
+            });
+        })->first();
+
+        //买来的宠物
+        $pay_pets = [];
+        if(isset($user_bill->bill_match) && count($user_bill->bill_match)>0) {
+            foreach ($user_bill->bill_match as $item) {
+                if(isset($pay_pets[$item->sellBill->pet_id])
+                    && $pay_pets[$item->sellBill->pet_id]['created_at'] > (string)$item->created_at) {
+                    continue;
+                }
+                $pay_pets[$item->sellBill->pet_id] = [
+                    'price' => $item->sellBill->price,
+                    'created_at' => (string)$item->created_at,
+                ];
+            }
+        }
+
+        //用户的宠物
+        $data = [];
+        if(isset($pets) && count($pets)>0) {
+            foreach ($pets as $_pet) {
+                $data[] = [
+                    'pet_id' => $_pet->id,
+                    'holder_name'=>$this->user()->name,
+                    'price' => isset($pay_pets[$_pet->id]) ? $pay_pets[$_pet->id]['price'] : 0,
+                ];
+            }
+        }
+
+        return $this->json($data);
     }
 }
