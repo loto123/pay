@@ -362,7 +362,7 @@ class User extends Authenticatable
      *  用户可售宠物
      */
     public function pets_for_sale() {
-        return $this->hasMany(Pet::class, "user_id", "id");
+        return $this->hasMany(Pet::class, "user_id", "id")->whereIn("status", [Pet::STATUS_HATCHED, Pet::STATUS_UNHATCHED]);
     }
 
     /**
@@ -423,9 +423,6 @@ class User extends Authenticatable
         $pet = new Pet();
         $pet->user_id = $this->id;
         $pet->status = $type == Pet::TYPE_EGG ? Pet::STATUS_UNHATCHED : Pet::STATUS_HATCHING;
-        if ($pet->status == Pet::STATUS_HATCHING) {
-            \App\Jobs\Pet::dispatch($pet);
-        }
         $record = new PetRecord();
         $record->to_user_id = $this->id;
         $record->type = $source;
@@ -440,6 +437,9 @@ class User extends Authenticatable
             return null;
         }
         DB::commit();
+        if ($pet->status == Pet::STATUS_HATCHING) {
+            \App\Jobs\Pet::dispatch($pet);
+        }
         return $pet;
     }
 

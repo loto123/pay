@@ -34,7 +34,7 @@ class Pet implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->pet->status != \App\Pet::STATUS_HATCHING) {
+        if ($this->pet->hash) {
             return;
         }
         //
@@ -101,7 +101,9 @@ class Pet implements ShouldQueue
 //        $method($template, "/tmp/test.png", 100);
 //        file_put_contents("/tmp/test.png", ob_get_clean());
         $this->pet->image = Storage::disk('public')->url($path);
-        $this->pet->status = \App\Pet::STATUS_HATCHED;
+        if ($this->pet->status == \App\Pet::STATUS_HATCHING) {
+            $this->pet->status = \App\Pet::STATUS_HATCHED;
+        }
         $this->pet->save();
 
         var_dump($path);
