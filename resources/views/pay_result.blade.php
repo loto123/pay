@@ -13,10 +13,13 @@
 </head>
 <body>
 <p>您的订单{{$status_text}}</p>
-@if ($result->state === Deposit::STATE_COMPLETE)
-    <p>获得钻石:{{$diamonds}}</p>
-    <p>获得宠物:<img src="{{$pet}}"/></p>
+    @if ($result->state === Deposit::STATE_COMPLETE)
+        <p>获得钻石:{{$diamonds}}</p>
+        <p>获得宠物:<img src="{{$pet}}"/></p>
+    @else
+        失败
 @endif
-<p><a href="/#/myAccount">返回</a></p>
+
+<p><a href="/#/myAccount">确定</a></p>
 </body>
 </html>

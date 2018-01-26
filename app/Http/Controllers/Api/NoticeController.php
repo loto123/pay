@@ -158,31 +158,26 @@ class NoticeController extends BaseController
             switch ($type){
                 case '1'://分润
                     foreach ($notice as $item) {
-                        $read_state = $item->read_at ? 1 : 0;
-                        $has_detail = 1;
-                        $operator_state = 0;
-                        $operator_options = new \stdClass();
-                        $operators_res = new \stdClass();
                         $profit_table = (new Profit)->getTable();
-                        $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table . '.user_id')
-                            ->where($profit_table . '.id', $item->data['param'])->select('proxy_amount', 'u.mobile as mobile', 'u.avatar as avatar')->first();
+                        $profit = Profit::has('user')
+                            ->where($profit_table . '.id', $item->data['param'])->first();
                         if (empty($profit)) {
                             continue;
                         }
-                        //是否需要操作
                         $list_data = [
                             'type' => $type,
                             'notice_id' => $item->id,
-                            'mobile' => $profit->mobile,
-                            'thumb' => $profit->avatar??'',
+                            'mobile' => $profit->user->mobile,
+                            'thumb' => $profit->user->avatar??'',
                             'amount' => $profit->proxy_amount,
                             'created_at' => (string)$item->created_at,
-                            'operator_state' => $operator_state,
-                            'operator_options' => $operator_options,
-                            'operators_res' => $operators_res,
-                            'read_state' => $read_state,
-                            'has_detail' => $has_detail,
+                            'operator_state' => 0,
+                            'operator_options' => new \stdClass(),
+                            'operators_res' => new \stdClass(),
+                            'read_state' => $item->read_at ? 1 : 0,
+                            'has_detail' => 1,
                         ];
+                        //是否需要操作
                         if(!empty($item->data['operators'])) {
                             $operators = $item->data['operators'];
                             //判断操作是否过期
@@ -212,26 +207,18 @@ class NoticeController extends BaseController
                 case '2'://用户注册
                 case '3'://系统消息
                     foreach ($notice as $item) {
-                        $read_state = $item->read_at ? 1 : 0;
-                        $has_detail = 1;
-                        $title = $item->data['title'];
-                        $content = $item->data['content'];
-                        $link = isset($item->data['param']['link']) ? $item->data['param']['link'] : "";
-                        $operator_state = 0;
-                        $operator_options = new \stdClass();
-                        $operators_res = new \stdClass();
                         $list_data = [
                             'type' => $type,
                             'notice_id' => $item->id,
-                            'title' => $title,
-                            'content' => $content,
+                            'title' => $item->data['title'],
+                            'content' => $item->data['content'],
                             'created_at' => (string)$item->created_at,
-                            'link' => $link,
-                            'operator_state' => $operator_state,
-                            'operator_options' => $operator_options,
-                            'operators_res' => $operators_res,
-                            'read_state' => $read_state,
-                            'has_detail' => $has_detail,
+                            'link' => isset($item->data['param']['link']) ? $item->data['param']['link'] : "",
+                            'operator_state' => 0,
+                            'operator_options' => new \stdClass(),
+                            'operators_res' => new \stdClass(),
+                            'read_state' => $item->read_at ? 1 : 0,
+                            'has_detail' => 1,
                         ];
                         //是否需要操作
                         if(!empty($item->data['operators'])) {
@@ -314,6 +301,7 @@ class NoticeController extends BaseController
     public function operator(Request $request)
     {
         $this->user = JWTAuth::parseToken()->authenticate();
+
         $validator = Validator::make($request->all(),
             [
                 'notice_id' => 'bail|required',
@@ -323,9 +311,11 @@ class NoticeController extends BaseController
                 'required' => trans('trans.required'),
             ]
         );
+
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
+
         $notice_id = $request->notice_id;
         $value = $request->selected_value;
         $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
@@ -333,22 +323,24 @@ class NoticeController extends BaseController
         $flag = false;
         $res = '';
         $message = '失败';
+
         if(!empty($notice) && isset($notice['data']['operators'])) {
             $operators = $notice['data']['operators'];
             try{
                 $res = call_user_func(unserialize($operators['callback_method']),$value,$operators['callback_params']);
-            } catch (\Exception $e) {
+            }catch (\Exception $e) {
                 $message = '无法响应';
             }
             if(is_object($res) && $res->result == ConfirmExecuteResult::EXECUTE_SUCCESS) {
                 $flag = true;
-            } else {
+            }else {
 //                Log::info($res->exception);
                 $message ='请求失败,'.$res->message;
             }
-        } else {
+        }else {
             return  $this->json([],'该消息无法操作',0);
         }
+
         if($flag) {
             try{
                 $data = $notice['data'];
@@ -358,7 +350,7 @@ class NoticeController extends BaseController
             } catch (\Exception $e) {
                 return $this->json([],'请求失败，请稍后重试',0);
             }
-        } else {
+        }else {
             return $this->json([],$message,0);
         }
     }
@@ -538,10 +530,10 @@ class NoticeController extends BaseController
         }
         if($notice->type == 'App\Notifications\ProfitApply') {
             $profit_table = (new Profit)->getTable();
-            $profit = Profit::leftJoin('users as u', 'u.id', '=', $profit_table.'.user_id')
-                ->leftJoin('transfer_record as tr', 'tr.id', '=', $profit_table.'.record_id')
+            $profit = Profit::leftJoin('transfer_record as tr', 'tr.id', '=', $profit_table.'.record_id')
                 ->where($profit_table.'.id',$notice->data['param'])
-                ->select($profit_table.'.*','u.mobile as mobile','u.avatar as avatar','tr.transfer_id as transfer_id')->first();
+                ->has('user')
+                ->select($profit_table.'.*','tr.transfer_id as transfer_id')->first();
             if (empty($profit)) {
                 return $this->json([],'分润不存在',0);
             }
@@ -550,10 +542,10 @@ class NoticeController extends BaseController
                 'type' => '分润',
                 'time' => (string)$notice->created_at,
                 'transfer_id' => $profit->transfer_id,
-                'mobile' => $profit->mobile,
-                'thumb' => $profit->avatar??'',
+                'mobile' => $profit->user->mobile,
+                'thumb' => $profit->user->avatar??'',
             ];
-        } else {
+        }else {
             //后台消息
             $content = $notice->data['content'];
             $title = $notice->data['title'];
