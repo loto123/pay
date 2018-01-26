@@ -39,7 +39,7 @@
 			<div class="price-list-box">
 				<div class="tltle">出售价格</div>
 				<ul class="price-list flex flex-wrap-on">
-					<li v-for="(item,index) in priceList" @click="choiseSalePrice(item.price)">￥{{item.price}}
+					<li v-for="item in priceList" @click="choiseSalePrice(item.price)" v-bind:class="{active:item.isChecked == true}" >￥{{item.price}}
 					</li>
 				</ul>
 				<div class="high-price flex flex-align-center flex-justify-center">¥{{my_max_quota}}(最高价)</div>
@@ -94,7 +94,8 @@
 				<mt-button type="primary" size="large" @click="getEggs">领取</mt-button>
 			</div>
 		</div>
-
+		
+		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
 		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
 	</div>
 </template>
@@ -128,9 +129,18 @@
 				isPopGetEggsShow:false, // 领取宠物蛋
 				amount:null, // 提交的价格
 				petId:null,
-				priceList:[]	//价格列表
+				priceList:[],	//价格列表
+				sheetVisible:false,
+				actions:[] // 右上角动作列表
 			}
 		},
+		mounted(){
+			this.actions = [{
+		        name: '出售状态',
+		        method: this.goStatus
+	        }];
+		},
+
 		created() {
 			this.init();
 		},
@@ -140,8 +150,8 @@
 		components: { topBack, passWorld },
 		methods: {
 			openOption() {
+				this.sheetVisible = true;
 				console.log("打开了选项");
-				// this.$router.push('/index');
 			},
 			hidePassword() {
 				this.showPasswordTag = false;
@@ -222,7 +232,7 @@
 					way: this.value,
 					password: password,
 					amount:this.amount,
-					pet_id:0
+					pet_id:this.petId
 				}
 				Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/account/withdraw', _data)])
 					.then((res) => {
@@ -241,15 +251,12 @@
 						for(var k = 0; k < this.dataList[i].quota_list.length; k++){
 							var _temp =  {};
 							_temp.price = this.dataList[i].quota_list[k];
+							_temp.isChecked = false;
 							this.priceList.push(_temp);
 						}
-						// this.priceList = this.dataList[i].quota_list;
 					}
 				}
-
-				for(var j = 0; j<this.priceList.length; j ++){
-					this.priceList[j].isChecked = false;
-				}
+				
 			},
 
 			closePanel(){
@@ -275,11 +282,11 @@
 			// 选择出售狗狗的价格
 			choiseSalePrice(price){
 
-				for(var j = 0; j<this.priceList.length; j ++){
+				for(let j = 0; j<this.priceList.length; j ++){
+					this.priceList[j].isChecked = false;
 					if(price == this.priceList[j].price){
 						this.priceList[j].isChecked = true;
 						this.amount = this.priceList[j].price;
-						console.log(this.amount);
 					}
 				}
 			},
@@ -298,7 +305,12 @@
 					Toast(err.data.msg);
 					this.isPopGetEggsShow = false;
 				});
-			} 
+			},
+
+			goStatus(){
+				console.log(" go Status");
+			}
+
 		},
 		watch:{
 			value:function(){
