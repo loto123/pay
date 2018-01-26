@@ -423,9 +423,6 @@ class User extends Authenticatable
         $pet = new Pet();
         $pet->user_id = $this->id;
         $pet->status = $type == Pet::TYPE_EGG ? Pet::STATUS_UNHATCHED : Pet::STATUS_HATCHING;
-        if ($pet->status == Pet::STATUS_HATCHING) {
-            \App\Jobs\Pet::dispatch($pet);
-        }
         $record = new PetRecord();
         $record->to_user_id = $this->id;
         $record->type = $source;
@@ -440,6 +437,9 @@ class User extends Authenticatable
             return null;
         }
         DB::commit();
+        if ($pet->status == Pet::STATUS_HATCHING) {
+            \App\Jobs\Pet::dispatch($pet);
+        }
         return $pet;
     }
 
