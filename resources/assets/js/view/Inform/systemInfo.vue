@@ -20,10 +20,11 @@
                     <div class="bottom-info flex flex-align-center flex-justify-between">
                         <div class="content flex-6" v-html="item.content"></div>
                         <div class="isRead flex-1">{{item.read_state==1?'已读':''}}</div>
-                        <div class="btn-wrap flex-2 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
+                        <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
                             <span v-for="(option,index) in item.operator_options" :style="{background: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
                         </div>
-                        <div v-if="item.operators_res.length != 0" class="status flex-1">{{item.operators_res.message}}</div>
+                        <!-- 显示操作后的结果 -->
+                        <div v-if="item.operators_res.length != 0" class="status">{{item.operators_res.message}}</div>
                     </div>
                 </li>
             </ul>
@@ -133,7 +134,6 @@
                     .then((res) => {
                         if(res.data.msg !=''){
                             Toast(res.data.msg);
-                            // this.systemInfo();
                         }
                         this.systemInfo();
                         Loading.getInstance().close();
@@ -188,7 +188,7 @@
         width: 100%;
         padding-top: 2em;
         box-sizing: border-box;
-        height: 100vh;
+        min-height: 100vh;
         background: #f4f4f4;
         .clear-inform {
             box-sizing: border-box;
@@ -257,13 +257,15 @@
         width: 40%;
         height: 100%;
         >span {
-            width: 40%;
-            height: 70%;
+            width: 50%;
             border-radius: 0.3em;
             text-align: center;
-            line-height: 2em;
+            line-height: 2.5em;
             font-size: 0.7em;
             color: #fff;
+            &:first-child{
+                margin-right:0.3em;
+            }
         }
     }
 </style>
