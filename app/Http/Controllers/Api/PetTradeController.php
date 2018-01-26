@@ -314,8 +314,9 @@ class PetTradeController extends BaseController
                 //从交易商现有宠物取得一只
                 $pet = $dealer->pets_for_sale()->inRandomOrder()->lockForUpdate()->first();
                 if (!$pet) {
-                    //没有则为交易商生成一只
+                    //没有则通过交易商发行一只宠物
                     $pet = $dealer->create_pet(Pet::TYPE_PET, PetRecord::TYPE_NEW);
+                    $sellBill->pet_issued = 1;
                 }
 
                 if (!$pet) {
