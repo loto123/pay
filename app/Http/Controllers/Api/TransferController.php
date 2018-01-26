@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\PayFactory;
+use App\Pet;
+use App\PetRecord;
 use App\Profit;
 use App\Shop;
 use App\TipRecord;
@@ -210,6 +212,7 @@ class TransferController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
+     *                          @SWG\Property(property="eggs", type="int", example=9, description="产生宠物蛋数量"),
      *                          @SWG\Property(property="avatar",type="string", example="url", description="实际交易金额"),
      *                          @SWG\Property(property="stat", type="int", example="1", description="状态 0 未知 1 付钱 2 提钱 3 撤回"),
      *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="交易记录时间"),
@@ -301,6 +304,7 @@ class TransferController extends BaseController
                 $transfer->record[$key]->allow_cancel = true;
             }
             $transfer->record[$key]->user->id = $record->user->en_id();
+            $transfer->record[$key]->eggs = $record->pet_record()->count();
             unset($transfer->record[$key]->transfer_id);
             unset($transfer->record[$key]->user_id);
         }
@@ -1103,6 +1107,7 @@ class TransferController extends BaseController
      *                          @SWG\Property(property="transfer_id", type="string", example="1234567",description="交易红包ID"),
      *                          @SWG\Property(property="shop_name", type="string", example="XX的店",description="交易红包所属店铺名称"),
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
+     *                          @SWG\Property(property="eggs", type="int", example=9, description="获得宠物蛋数量"),
      *                          @SWG\Property(property="created_at", type="string", example="2017-12-22 10:19:23",description="参与交易时间"),
      *                          @SWG\Property(property="makr", type="integer", example="1",description="是否标记 0 未标记 1 已标记"),
      *                      )
@@ -1165,7 +1170,9 @@ class TransferController extends BaseController
             $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
             $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
             $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
-                ->where('stat', '<>', 3)->where('stat', '<>', 0)->sum('amount') : 0;
+                ->where('stat', 1)->orWhere('stat', 2)->sum('amount') : 0;
+            $data[$key]['eggs'] = PetRecord::whereIn('order',$item->transfer->record()->where('user_id', $user->id)
+                ->where('stat', 1)->orWhere('stat', 2)->pluck('id'))->count();
             $data[$key]['makr'] = $item->mark;
         }
         return $this->json(['data' => $data, 'count' => $count], 'ok', 1);
@@ -1441,40 +1448,46 @@ class TransferController extends BaseController
 //                    $shop->balance = $shop->balance + $transfer->tip_amount;
 //                    $shop->save();
 //                }
-                    //公司分润 代理分润 运营分润
-                    $records = $transfer->record()->where('stat', 2)->get();
+
+//                    $records = $transfer->record()->where('stat', 2)->get();
+                    $records = $transfer->record()->with('user')->where('stat', '<>', 3)->get();
                     foreach ($records as $key => $value) {
-                        $profit = new Profit();
-                        $profit->record_id = $value->id;
-                        $profit->user_id = $value->user_id;
-                        $profit->fee_percent = $transfer->fee_percent;
-                        $profit->proxy = 0;
-                        $profit->operator = 0;
-                        $profit->proxy_percent = 0;
-                        $profit->proxy_amount = 0;
-                        if ($value->user->parent && $value->user->parent->percent) {
-                            $profit->proxy = $value->user->parent->id;
-                            $profit->proxy_percent = $value->user->parent->percent;
-                            $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
-                        }
-                        if ($profit->proxy_amount <= 0) {
-                            continue;
-                        }
-                        //解冻代理资金
+                        //宠物蛋
+                        $value->user->batch_create_pet(rand(1, 4), Pet::TYPE_EGG, PetRecord::TYPE_TRANSFER, $value->id);
+                        if ($value->stat == 2) {
+                            //公司分润 代理分润 运营分润
+                            $profit = new Profit();
+                            $profit->record_id = $value->id;
+                            $profit->user_id = $value->user_id;
+                            $profit->fee_percent = $transfer->fee_percent;
+                            $profit->proxy = 0;
+                            $profit->operator = 0;
+                            $profit->proxy_percent = 0;
+                            $profit->proxy_amount = 0;
+                            if ($value->user->parent && $value->user->parent->percent) {
+                                $profit->proxy = $value->user->parent->id;
+                                $profit->proxy_percent = $value->user->parent->percent;
+                                $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
+                            }
+                            if ($profit->proxy_amount <= 0) {
+                                continue;
+                            }
+                            //解冻代理资金
 //                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
-                        //解冻代理分润账户资金
-                        $proxy_container = $value->user->parent->proxy_container;
-                        $proxy_container->unfreeze($profit->proxy_amount);
-                        $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
-                        if ($value->user->operator) {
-                            $profit->operator = $value->user->operator->id;
+                            //解冻代理分润账户资金
+                            $proxy_container = $value->user->parent->proxy_container;
+                            $proxy_container->unfreeze($profit->proxy_amount);
+                            $profit->fee_amount = $value->fee_amount - $profit->proxy_amount;
+                            if ($value->user->operator) {
+                                $profit->operator = $value->user->operator->id;
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
-                        }
-                        if ($profit->save()) {
-                            //发送通知
-                            if ($profit->proxy_amount > 0) {
-                                \App\Admin\Controllers\NoticeController::send([$profit->user_id], 1, '', '', $profit->id);
+                            }
+                            if ($profit->save()) {
+                                //发送通知
+                                if ($profit->proxy_amount > 0) {
+                                    \App\Admin\Controllers\NoticeController::send([$profit->user_id], 1, '', '', $profit->id);
+                                }
                             }
                         }
                     }
