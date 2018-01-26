@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Pay\Model\BillMatch;
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
 use App\Pay\Model\WithdrawRetry;
@@ -13,7 +12,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 /**
