@@ -108,7 +108,7 @@ class PetTradeController extends BaseController
     public function freeEgg()
     {
         $pet = Auth::user()->create_pet(Pet::TYPE_EGG, PetRecord::TYPE_NEW);
-        $success = $pet === false;
+        $success = $pet != false;
         return $this->json(['egg_id' => $success ? $pet->getKey() : 0], $success ? '领取成功' : '领取失败', (int)$success);
     }
 
@@ -317,6 +317,12 @@ class PetTradeController extends BaseController
                     //没有则通过交易商发行一只宠物
                     $pet = $dealer->create_pet(Pet::TYPE_PET, PetRecord::TYPE_NEW);
                     $sellBill->pet_issued = 1;
+
+                    //交易商进货记录
+                    if (!DB::table('pay_dealer_pets_stock')->insert(['dealer_id' => $dealer->getKey(), 'price' => $price * 0.9, 'pet_id' => $pet->getKey()])) {
+                        $error = '系统异常E3,请稍后再试';
+                        break;
+                    }
                 }
 
                 if (!$pet) {

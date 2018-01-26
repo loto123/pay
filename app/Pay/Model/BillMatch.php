@@ -37,7 +37,7 @@ class BillMatch extends Model
     public static function expire()
     {
         $affected = 0;
-        $exception = '无';
+        $exception = null;
         try {
             //将所有待成交且超时的撮合状态改为已超时。并将其对手单解锁。
             $affected = DB::table('pay_bill_match')->join('pay_sell_bill', function ($join) {
