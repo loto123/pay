@@ -47,6 +47,17 @@ class DealerTransactionsController extends Controller
                 });
             });
 
+            //筛选
+            $grid->filter(function ($filter) {
+
+                // 在这里添加字段过滤器
+                $filter->disableIdFilter();
+                $filter->equal('from_uid', '交易商ID');
+                $filter->equal('to_uid', '交易对象ID');
+                $filter->between('create_time', '时间')->datetime();
+
+            });
+
             $grid->from_user('交易商')->display(function () {
                 return <<<EOT
             <div style="width:140px;height:60px;">
