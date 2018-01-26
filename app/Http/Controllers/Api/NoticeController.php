@@ -69,6 +69,12 @@ class NoticeController extends BaseController
      *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
      *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
      *                           )
+     *                      ),
+     *                      @SWG\Property(property="operator_res", type="array",description="处理结果，[]表示未处理",
+     *                           @SWG\Items(
+     *                                @SWG\Property(property="code", type="string", example="1",description="处理结果,1：成功，0：失败"),
+     *                                @SWG\Property(property="message", type="string", example="已确认",description="显示结果")
+     *                           )
      *                      )
      *                  )
      *              )
@@ -106,7 +112,7 @@ class NoticeController extends BaseController
      *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
      *                           )
      *                      ),
-     *                     @SWG\Property(property="operator_result", type="array",description="处理结果，[]表示未处理",
+     *                     @SWG\Property(property="operator_res", type="array",description="处理结果，[]表示未处理",
      *                           @SWG\Items(
      *                                @SWG\Property(property="code", type="string", example="1",description="处理结果,1：成功，0：失败"),
      *                                @SWG\Property(property="message", type="string", example="已确认",description="显示结果")

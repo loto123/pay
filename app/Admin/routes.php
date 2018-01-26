@@ -15,6 +15,7 @@ Route::group([
     $router->resource('pets',PetController::class);
     $router->resource('pets_record',PetRecordController::class);
     $router->resource('pets_type',PetTypeController::class);
+    $router->resource('pets_dealer_transactions', DealerTransactionsController::class);
     $router->get('pets_type/{id}/preview',"PetTypeController@preview");
     $router->resource('pets_part',PetPartController::class);
     $router->resource('pets_part_item',PetPartItemController::class);

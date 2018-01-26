@@ -5,6 +5,7 @@ namespace App;
 use App\Agent\Card;
 use App\Agent\CardUse;
 use App\Agent\PromoterGrant;
+use App\Pay\Model\BillMatch;
 use App\Pay\Model\Channel;
 use App\Pay\Model\MasterContainer;
 use Carbon\Carbon;
@@ -455,5 +456,11 @@ class User extends Authenticatable
         } else {
             return $total - $count;
         }
+    }
+
+    //用户的买单
+    public function bill_match()
+    {
+        return $this->hasMany(BillMatch::class);
     }
 }
