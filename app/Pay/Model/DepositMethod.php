@@ -139,7 +139,7 @@ class DepositMethod extends Model
                 }
 
                 //获取宠物撮合订单
-                $match = BillMatch::where(['deposit_id', $result->getKey()])->where(function ($query) {
+                $match = BillMatch::where('deposit_id', $result->getKey())->where(function ($query) {
                     $query->where('state', BillMatch::STATE_WAIT)->orWhere('state', BillMatch::STATE_EXPIRED);
                 })->lockForUpdate()->first();
 

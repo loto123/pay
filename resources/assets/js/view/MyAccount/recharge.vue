@@ -135,10 +135,7 @@
 					})
 			},
 			purchaseBtn() {
-				if(!this.bill_id){
-					Toast('请选择宠物')
-					return
-				}else if(!this.value){
+				if(!this.value){
 					Toast('请选择购买方式')
 					return
 				}
@@ -150,7 +147,7 @@
 				request.getInstance().postData('api/account/charge', _data)
 					.then((res) => {
 						location.href = res.data.data.redirect_url;
-						
+
 					})
 					.catch((err) => {
 						Toast(err.data.msg);

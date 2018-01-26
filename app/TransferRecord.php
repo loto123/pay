@@ -40,4 +40,10 @@ class TransferRecord extends Model
 //    public static function findByEnId($en_id) {
 //        return self::find(Skip32::decrypt("0123456789abcdef0123", $en_id));
 //    }
+
+    //宠物蛋
+    public function pet_record()
+    {
+        return $this->hasMany(PetRecord::class, 'order',  'id');
+    }
 }
