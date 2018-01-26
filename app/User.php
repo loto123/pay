@@ -366,6 +366,48 @@ class User extends Authenticatable
     }
 
     /**
+     * 批量生成宠物
+     * @param integer $nums
+     * @param integer $type 0=宠物蛋 1=宠物
+     * @param integer $source 0=系统初始赠送 1=交易产生 2=订单取消补偿
+     * @param integer $order 订单号
+     * @return array
+     */
+    public function batch_create_pet($num, $type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER, $order = "") {
+        $pets = [];
+        #todo
+        for ($k = 0 ; $k < $num; $k++){
+            if ($type == Pet::TYPE_EGG && $source == PetRecord::TYPE_NEW) {
+                if ($this->pet_left_times() == 0) {
+                    return null;
+                }
+            }
+            $pet = new Pet();
+            $pet->user_id = $this->id;
+            $pet->status = $type == Pet::TYPE_EGG ? Pet::STATUS_UNHATCHED : Pet::STATUS_HATCHING;
+            if ($pet->status == Pet::STATUS_HATCHING) {
+                \App\Jobs\Pet::dispatch($pet);
+            }
+            $record = new PetRecord();
+            $record->to_user_id = $this->id;
+            $record->type = $source;
+            $record->order = $order;
+            DB::beginTransaction();
+            try {
+                $pet->save();
+                $record->pet_id = $pet->id;
+                $record->save();
+            } catch (\Exception $e){
+                DB::rollBack();
+                return null;
+            }
+            DB::commit();
+            $pets[] = $pet;
+        }
+        return $pets;
+    }
+
+    /**
      * 生成宠物
      * @param integer $type 0=宠物蛋 1=宠物
      * @param integer $nums
@@ -375,7 +417,7 @@ class User extends Authenticatable
     public function create_pet($type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER) {
         if ($type == Pet::TYPE_EGG && $source == PetRecord::TYPE_NEW) {
             if ($this->pet_left_times() == 0) {
-                return false;
+                return null;
             }
         }
         $pet = new Pet();
@@ -387,6 +429,7 @@ class User extends Authenticatable
         $record = new PetRecord();
         $record->to_user_id = $this->id;
         $record->type = $source;
+//        $record->order = $order;
         DB::beginTransaction();
         try {
             $pet->save();
@@ -394,7 +437,7 @@ class User extends Authenticatable
             $record->save();
         } catch (\Exception $e){
             DB::rollBack();
-            return false;
+            return null;
         }
         DB::commit();
         return $pet;
