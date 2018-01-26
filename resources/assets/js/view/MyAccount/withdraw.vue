@@ -9,20 +9,24 @@
 			<div class="flex flex-v flex-align-start">
 				<div class="tltle">选择要出售的宠物：</div>
 				<div class="pet-list-box">
+
 					<ul class="pet-list flex flex-justify-around">
-						<li class="flex flex-align-center flex-justify-center active">
-							<img src="/images/avatar.jpg">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg">
+						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
+							<img :src="item.pic">
 						</li>
 					</ul>
+					
+					<div class="notice flex flex-v flex-align-center " v-if="isShow && petsList.length==0">
+						<h3>当前无宠物可售</h3>
+						<p>（每天可免费领取3次宠物蛋）</p>
+					</div>
 
-					<div class="look-more">
+					<div class="look-more" v-if="isShow && petsList.length!=0">
 						<mt-button type="primary" size="large" style="height: 100%;" @click="lookMore">查看更多</mt-button>
+					</div>
+
+					<div class="look-more" v-if="isShow && petsList.length==0">
+						<mt-button type="primary" size="large" style="height: 100%;" @click="showGetEggsPop">免费领取宠物蛋(剩余:{{getEggsTimes}}次)</mt-button>
 					</div>
 				</div>
 
@@ -35,7 +39,7 @@
 			<div class="price-list-box">
 				<div class="tltle">出售价格</div>
 				<ul class="price-list flex flex-wrap-on">
-					<li v-for="(item,index) in priceList">￥{{item}}
+					<li v-for="(item,index) in priceList" @click="choiseSalePrice(item.price)">￥{{item.price}}
 					</li>
 				</ul>
 				<div class="high-price flex flex-align-center flex-justify-center">¥{{my_max_quota}}(最高价)</div>
@@ -52,7 +56,8 @@
 				<mt-button type="primary" size="large">出售</mt-button>
 			</a>
 		</div>
-
+		
+		<!-- 更多宠物弹窗 -->
 		<div class="popDetail flex flex-align-center flex-justify-center" v-if="isPopDetailShow">
 			<div class="mask" @touchmove.stop.prevent></div>
 			<div class="content flex flex-v flex-align-center">
@@ -66,38 +71,8 @@
 
 				<div class="pets">
 					<ul class="flex flex-wrap-on">
-						<li class="flex flex-align-center flex-justify-center active">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
-						</li>
-						<li class="flex flex-align-center flex-justify-center">
-							<img src="/images/avatar.jpg" alt="">
+						<li class="flex flex-align-center flex-justify-center" v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
+							<img :src="item.pic" alt="">
 						</li>
 					</ul>
 				</div>
@@ -106,6 +81,17 @@
 					<mt-button type="primary" size="large">确定</mt-button>
 				</div>
 
+			</div>
+		</div>
+		
+		<!-- 领取宠物蛋弹窗 -->
+		<div class="popGetEggs flex flex-v flex-align-center" v-if="isPopGetEggsShow" @touchmove.stop.prevent>
+			<div class="imgWrap">
+				<img src="/images/egg.jpg" alt="">
+			</div>
+
+			<div class="comfirm-button">
+				<mt-button type="primary" size="large" @click="getEggs">领取</mt-button>
 			</div>
 		</div>
 
@@ -124,9 +110,10 @@
 		data() {
 			return {
 				showPasswordTag: false,       // 密码弹出开关
-				dataList:[],
-
+				dataList:[], // 支付方式数据数组
+				petsList:[], // 宠物数组
 				cardOptions: [],
+
 				way: null,	//提现方式
 				value: null,
 				has_pay_password: null,//是否设置支付密码
@@ -136,8 +123,11 @@
 				isFee: false,//是否展示手续费
 				isShow:false,
 
+				getEggsTimes:0,
 				isPopDetailShow:false,  // 查看更多显示
-
+				isPopGetEggsShow:false, // 领取宠物蛋
+				amount:null, // 提交的价格
+				petId:null,
 				priceList:[]	//价格列表
 			}
 		},
@@ -158,6 +148,7 @@
 			},
 			init() {
 				Loading.getInstance().open("加载中...");
+				this.petsList = []; // 清空狗狗数组
 				// /account/withdraw-methods
 				Promise.all([
 					request.getInstance().getData("api/pet/sellable"),
@@ -165,6 +156,23 @@
 					request.getInstance().getData('api/account/withdraw-methods')
 					])
 					.then((res) => {
+
+						for(var i = 0; i <res[0].data.data.list.length; i++){
+							var _temp = res[0].data.data.list[i];
+							_temp.isChecked = false;
+							this.petsList.push(_temp);
+						}
+						// this.petsList = [];
+
+						if(this.petsList.length == 0){
+							request.getInstance().getData("api/pet/egg_acquire_times").then(res=>{
+								this.getEggsTimes = res.data.data.times;
+							}).catch(err=>{
+								Toast(err.data.msg);
+							});
+						}
+						console.log(this.petsList);
+
 						this.balance=res[1].data.data.balance;
 						this.has_pay_password = res[1].data.data.has_pay_password;
 
@@ -178,7 +186,6 @@
 					})
 			},
 			setBankList(res) {
-				console.log(res);
 				var _tempList = [];
 				for (let i = 0; i < res.data.data.methods.length; i++) {
 					var _t = {};
@@ -188,7 +195,6 @@
 				}
 				this.cardOptions = _tempList;
 				this.value = this.cardOptions[0].value;
-				console.log(this.cardOptions);
 				this.isShow = true;
 			},
 			withdrawBtn() {
@@ -214,11 +220,13 @@
 				temp.password = password;
 				var _data = {
 					way: this.value,
-					password: password
+					password: password,
+					amount:this.amount,
+					pet_id:0
 				}
 				Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/account/withdraw', _data)])
 					.then((res) => {
-						Toast('提现成功');
+						Toast('出售成功');
 						this.$router.push('/myAccount');
 					})
 					.catch((err) => {
@@ -226,10 +234,21 @@
 					})
 			},
 			check(){  
+				this.priceList = [];
+
 				for(var i = 0 ; i < this.dataList.length; i++){
 					if(this.value == this.dataList[i].id){
-						this.priceList = this.dataList[i].quota_list;
+						for(var k = 0; k < this.dataList[i].quota_list.length; k++){
+							var _temp =  {};
+							_temp.price = this.dataList[i].quota_list[k];
+							this.priceList.push(_temp);
+						}
+						// this.priceList = this.dataList[i].quota_list;
 					}
+				}
+
+				for(var j = 0; j<this.priceList.length; j ++){
+					this.priceList[j].isChecked = false;
 				}
 			},
 
@@ -239,6 +258,46 @@
 
 			lookMore(){
 				this.isPopDetailShow = true;
+			},
+
+			// 选择狗狗
+			setActive(id){
+				for( var i = 0; i < this.petsList.length; i++){
+					this.petsList[i].isChecked = false;
+
+					if(this.petsList[i].id == id){
+						this.petsList[i].isChecked = true;
+						this.petId = id;
+					}
+				}
+			},
+
+			// 选择出售狗狗的价格
+			choiseSalePrice(price){
+
+				for(var j = 0; j<this.priceList.length; j ++){
+					if(price == this.priceList[j].price){
+						this.priceList[j].isChecked = true;
+						this.amount = this.priceList[j].price;
+						console.log(this.amount);
+					}
+				}
+			},
+
+			showGetEggsPop(){
+				this.isPopGetEggsShow = true;
+			},
+
+			// 免费领取宠物蛋 
+			getEggs(){
+				request.getInstance().postData("api/pet/acquire_egg").then(res=>{
+					console.log(res);
+					this.isPopGetEggsShow = false;
+					this.init();
+				}).catch(err=>{
+					Toast(err.data.msg);
+					this.isPopGetEggsShow = false;
+				});
 			} 
 		},
 		watch:{
@@ -257,6 +316,7 @@
 		box-sizing: border-box;
 	}
 	
+	/* 查看更多狗狗弹窗 */
 	.popDetail{
 		width: 100%;
 		height: 100vh;
@@ -323,8 +383,27 @@
 				width: 96%;
 			}
 		}
+	}
 
+	.popGetEggs{
+		width: 100%;
+		height: 100vh;
+		position: fixed;
+		top:0;
+		left: 0;
+		background: rgba(0,0,0,0.8);
+		box-sizing: border-box;
+		padding-top: 2em;
+		
+		.imgWrap{
+			margin-top:5em;
+		}
 
+		.comfirm-button{
+			margin: 0 auto;
+			margin-top:1em;
+			width: 96%;
+		}
 	}
 
 	.withdraw-box {
@@ -347,6 +426,19 @@
 			border:1px solid #eee;
 			box-sizing: border-box;
 			border-radius: 0.4em;
+			
+			.notice{
+				height: 4em;
+				h3{
+					font-size: 1.2em;
+					color:#555;
+				}
+				p{
+					font-size:0.9em;
+					color:#555;
+				}
+			}
+
 			.pet-list{
 				padding-top:0.5em;
 				padding-bottom: 0.5em;
