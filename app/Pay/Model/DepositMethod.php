@@ -159,19 +159,22 @@ class DepositMethod extends Model
                         $result->state = Deposit::STATE_CHARGE_FAIL;
                         $match->state = BillMatch::STATE_DEAL_FAIL;
                         $moneyAddSuccess = $result->masterContainer->changeBalance($result->amount, 0);
+
+                        if ($moneyAddSuccess) {
+                            $result->state = Deposit::STATE_COMPLETE;
+                        }
                         $petTransferSuccess = $moneyAddSuccess ? $sellBill->pet->transfer($match->user_id) : false;
 
-                        if ($moneyAddSuccess && $petTransferSuccess) {
-                            $result->state = Deposit::STATE_COMPLETE;
-                            $match->state = BillMatch::STATE_DEAL_CLOSED;
-                            $sellBill->deal_closed = 1;
+                        if ($petTransferSuccess) {
+                            $match->state = BillMatch::STATE_DEAL_CLOSED;//收到了宠物和钻石
+                            $sellBill->deal_closed = 1;//转出了宠物
                         } else {
-                            PayLogger::deposit()->error('购买交割失败', ['sell_bill_id' => $sellBill->getKey(), 'match_id' => $match->getKey(), 'fund_suc' => $moneyAddSuccess, 'pet_transfer' => $petTransferSuccess]);
+                            PayLogger::deposit()->error('购买宠物转移失败', ['sell_bill_id' => $sellBill->getKey(), 'match_id' => $match->getKey(), 'fund_suc' => $moneyAddSuccess, 'pet_transfer' => $petTransferSuccess]);
                         }
                     }
                 } else {
                     //交易失败
-                    $match->state = BillMatch::STATE_FAIL;
+                    $match->state = BillMatch::STATE_FAIL;//没有支付
                     $sellBill->locked = 0;
                     if ($result->state === Deposit::STATE_PAY_FAIL) {
 
@@ -193,10 +196,10 @@ class DepositMethod extends Model
         //结束事务
         if ($commit) {
             DB::commit();
-            //处理卖单提现
-            if ($match->state == BillMatch::STATE_DEAL_CLOSED) {
+            //卖家转出了宠物给卖家提现
+            if ($sellBill->deal_closed) {
                 if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
-                    PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_di' => $sellBill->getKey()]);
+                    PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_di' => $sellBill->getKey(), 'match_id' => $match->getKey()]);
                 }
             }
             return ob_get_clean();
