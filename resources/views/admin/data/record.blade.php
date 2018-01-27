@@ -57,7 +57,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="box-body box">
-                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 条支付记录 ，累计拿钻 <span
+                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 条任务参与记录 ，累计拿钻 <span
                             class="text-yellow">{{$get_amount}}</span> 元， 累计交钻 <span
                             class="text-yellow">{{abs($put_amount)}}</span> 元
                 </div>
