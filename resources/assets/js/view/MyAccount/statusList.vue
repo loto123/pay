@@ -1,9 +1,10 @@
 <template>
-    <div id="bill">
-        <topBack title="账单明细">
-            <div class="flex flex-reverse flex-align-center header-right" @click="show">
+    <!-- 出售状态 -->
+    <div id="status-list">
+        <topBack title="出售状态">
+            <!-- <div class="flex flex-reverse flex-align-center header-right" @click="show">
                 <a href="javascript:;">筛选</a>
-            </div>
+            </div> -->
         </topBack>
         <div class="bill-box">
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none">
@@ -26,38 +27,28 @@
                 </i>
                 <div>暂无数据</div>
             </div>
+            
             <ul class="bill-list" v-else>
-                <li  v-for="item in billList" @click="details(item.id)">
-                    <a href="javascript:;" class="flex">
-                        <div class="bill-content">
-                            <h5>{{status(item.type)}}</h5>
-                            <div class="time">{{changeTime(item.created_at)}}</div>
+                <li  v-for="item in billList" class="flex flex-align-center">
+
+                        <div class="imgWrap flex-2">
+                            <img :src="item.pet_pic" alt="">
                         </div>
-                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
-                    </a>
+
+                        <div class="bill-content flex-8">
+                            <h5>{{item.state}}</h5>
+                            <div class="time">{{item.created_at}}</div>
+                        </div>
+
+                        <div class="bill-money flex-3">
+                            <div class="title">出售价格:</div>
+                            <div class="price">{{item.price}}</div>
+                        </div>
+
                 </li>
             </ul>
         </div>
-        <transition name="slide">
-            <div class="sel-type" v-if="showAlert">
-                <div class="sel-type-box">
-                    <h2>选择任务类型</h2>
-                    <ul class="type-list">
-                        <li @click="selAll">
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li v-for="item in items" @click="selContent(item.type)">
-                            <a href="javascript:;">{{item.title}}</a>
-                        </li>
-                    </ul>
-                    <div class="cancel-btn">
-                        <a href="javascript:;" @click="cancel">
-                            <mt-button type="default" size="large">取消</mt-button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </transition>
+   
     </div>
 </template>
 
@@ -71,18 +62,18 @@
         data() {
             return {
                 showAlert: false,
-                type:null,		//类型
-                created_at:null,		//结束时间
+                type:null,      //类型
+                created_at:null,        //结束时间
                 size:null,  //数目
                 billList:[],
                 items:[
-                    {type:0,title:'购买'},
-                    {type:1,title:'出售'},
-                    {type:[2,3],title:'任务'},
-                    {type:[4,5],title:'公会转账'},
-                    {type:6,title:'任务手续费'},
-                    {type:7,title:'出售手续费'},
-                    {type:8,title:'任务加速'}
+                    {type:0,title:'充值'},
+                    {type:1,title:'提现'},
+                    {type:2,title:'交易收入'},
+                    {type:3,title:'交易支出'},
+                    {type:4,title:'转账到公会'},
+                    {type:5,title:'公会转入'},
+                    {type:8,title:'打赏店家费'},
                 ],
                 selected: null
             };
@@ -97,20 +88,21 @@
             cancel() {
                 this.showAlert = false;
             },
-            details(id) {
-                this.$router.push({ path: "/myAccount/bill/bill_details?id="+id});
-            },
+            // details(id) {
+            //     this.$router.push({ path: "/myAccount/bill/bill_details?id="+id});
+            // },
             init(){
                 var data={
                     type:this.type,
                     created_at:this.created_at,
-                    size:this.size
+                    limit:10
                 }
-                Loading.getInstance().open("加载中...");
+                Loading.getInstance().open();
 
-                request.getInstance().getData("api/account/records")
+                request.getInstance().getData("api/pet/sold_record",data)
                     .then((res) => {
-                        this.billList=res.data.data.data
+                        // console.log(res);
+                        this.billList=res.data.data.list;
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
@@ -134,15 +126,15 @@
             status(type){
                 let result='';
                 switch(type){
-                    case 0: result='购买'; break;
-                    case 1: result='出售'; break;
-                    case 2: result='任务'; break;
-                    case 3: result='任务'; break;
-                    case 4: result='公会转账'; break;
-                    case 5: result='公会转账'; break;
-                    case 6: result='任务手续费'; break;
-                    case 7: result='出售手续费'; break;
-                    case 8: result='任务加速'; break;
+                    case 0: result='充值'; break;
+                    case 1: result='提现'; break;
+                    case 2: result='交易收入'; break;
+                    case 3: result='交易支出'; break;
+                    case 4: result='转账到公会'; break;
+                    case 5: result='公会转入'; break;
+                    case 6: result='交易手续费'; break;
+                    case 7: result='提现手续费'; break;
+                    case 8: result='打赏店家费'; break;
                 }
                 return result;
             },
@@ -171,8 +163,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../../sass/oo_flex.scss";
-    #bill {
+    #status-list {
         padding-top: 2em;
         box-sizing: border-box;
         .header-right {
@@ -185,10 +176,6 @@
 
     .bill-box {
         font-size: 0.9em;
-        /* height: 3.4em; */
-        /* line-height: 1.7em; */
-        /* background: #eee; */
-        /* padding-top: 0.5em; */
         .bill-date {
             padding: 0 1em;
             color: #666;
@@ -205,22 +192,33 @@
         li {
             padding: 0 1em;
             border-top: 1px solid #ccc;
-            a {
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                height: 55px;
-                line-height: 20px;
+            width: 100%;
+            height: 4em;
+            box-sizing: border-box;
+           
+            .imgWrap{
+                >img{
+                    width:100%;
+                }
             }
+
             .bill-content {
+                padding-left: 0.7em;
+                padding-right: 0.7em;
+                box-sizing: border-box;
+
                 .time {
                     color: #999;
                     font-size: 0.8em;
+                    margin-top:0.5em;
                 }
+
             }
             .bill-money {
-                font-size: 1.2em;
+                font-size: 1em;
+                .price{
+                    margin-top:0.5em;
+                }
             }
             .active {
                 color: #00cc00;

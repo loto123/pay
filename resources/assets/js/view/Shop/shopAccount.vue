@@ -22,7 +22,7 @@
         <div class="content flex flex-v flex-align-center">
             <div class="rest-money flex flex-v flex-align-center flex-justify-start">
                 <div class="money-text">
-                    {{balance}}
+                    {{balance}} <i class="diamond">&#xe6f9;</i>
                 </div>
                 <h3>当前公会余额</h3>
                 <h4>单位(元)</h4>

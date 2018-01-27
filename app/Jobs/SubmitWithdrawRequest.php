@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Pay\Model\SellBill;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawException;
 use App\Pay\Model\WithdrawResult;
@@ -68,8 +69,8 @@ class SubmitWithdrawRequest implements ShouldQueue
             $result = $withdraw->method->withdraw($withdraw);
             PayLogger::withdraw()->info('通道返回', [$result]);
 
+            $withdraw->state = $result->state;
             if ($result->raw_response) {
-                $withdraw->state = $result->state;
                 //通道交易号
                 if ($result->out_batch_no) {
                     $withdraw->out_batch_no = $result->out_batch_no;
@@ -90,6 +91,14 @@ class SubmitWithdrawRequest implements ShouldQueue
         $withdraw->save();
 
         if ($withdraw->state == Withdraw::STATE_SEND_FAIL || $withdraw->state == Withdraw::STATE_PROCESS_FAIL) {
+
+            //失败要更改卖单成交失败
+            try {
+                SellBill::where('withdraw_id', $withdraw->getKey())->update(['deal_closed' => 0]);//卖家没有收到钱
+            } catch (\Exception $e) {
+                PayLogger::withdraw()->error('提现交割失败状态更改错误', ['withdraw_id' => $withdraw->getKey(), 'exception' => $e->getMessage()]);
+            }
+
             $this->withdraw->exceptions()->save(new WithdrawException([
                 'message' => (string)$result->raw_response,
                 'state' => $withdraw->state,

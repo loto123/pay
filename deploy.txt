@@ -37,7 +37,7 @@ REDIS_PORT=6379
 QUEUE_DRIVER=redis
 
 ;APP_LOG_LEVEL=info 仅生产环境设置
-
+;APP_DEBUG = false 仅生产环境
 APP_URL=https://实际域名
 API_DOMAIN=实际域名(不含http://和端口)
 

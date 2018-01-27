@@ -12,10 +12,10 @@
             </div>
             <div class="submit-btn">
                 <a href="/#/myAccount/recharge" class="mb15">
-                    <button type="button" class="recharge-btn">购买(充值)</button>
+                    <button type="button" class="recharge-btn">购买</button>
                 </a>
                 <a href="javascript:;"  @click="withdraw" class="mb15">
-                    <button type="button" class="withdraw-btn">出售(提现)</button>
+                    <button type="button" class="withdraw-btn">出售</button>
                 </a>  
                 <a href="javascript:;" @click="give">
                     <button type="button" class="give-btn">转钻到公会</button>    
@@ -59,19 +59,7 @@
             },
             //提现
             withdraw(){
-                if(this.has_pay_card==0){
-                    MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
-                        () => {
-                            this.$router.push('/my');
-                        },
-                        () => {
-                            //取消操作
-                            console.log("已经取消");
-                        }
-                    );
-                }else{
-                    this.$router.push('/myAccount/withdraw')
-                }
+                this.$router.push('/myAccount/withdraw')
             },
             //转账
             give(){
@@ -151,6 +139,7 @@
                 margin: auto;
                 border-radius: 5px;
                 font-size: 1em;
+                outline: none;
             }
             .recharge-btn{
                 background:#00CC00;

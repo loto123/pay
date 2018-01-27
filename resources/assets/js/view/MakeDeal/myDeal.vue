@@ -11,7 +11,7 @@
             <div class="menu-item flex flex-justify-center flex-align-center" v-bind:class="{active:tabItem[2]}" @click = "changeTab(2)">已关闭</div>
         </div>
 
-        <div class="deal-wrap" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <div class="deal-wrap" ref="wrapper" >
             <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
                         <!-- <div class="title">手续费收益</div> -->
-                        <div class="m-text">￥{{item.amount}}</div>
+                        <div class="m-text">{{item.amount}}<i class="diamond" style="margin-left:0.4em;">&#xe6f9;</i></div>
                     </div>
                     <div class="star-wrap flex flex-align-center flex-justify-center flex-1" @click.stop="markItem(item.id)">
                       <i class="iconfont " v-bind:class="{'edit':isStar}" >

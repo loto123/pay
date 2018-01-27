@@ -14,8 +14,8 @@
               <div class="imggWrap flex flex-justify-center flex-align-center">
                     <img :src="avatar" alt="">
               </div>
-              <h3>{{amount}}</h3>
-              <h4>账户余额(元)</h4>
+              <h3 class="flex">{{amount}} <i class="diamond" style="margin-top:0.4em;margin-left:0.2em;">&#xe6f9;</i></h3>
+              <!-- <h4>账户余额(元)</h4> -->
             </a>
           </section>
       </section>
@@ -134,16 +134,13 @@ i {
     width: 100%;
 
     .imggWrap {
-      width: 5em;
       height: 5em;
-      // background: #fff;
-      // border-radius: 50%;
+     
       > img {
         width: 4em;
         height: 4em;
         border-radius: 50%;
         display: block;
-        //   margin-top:0.4em;
       }
     }
 
