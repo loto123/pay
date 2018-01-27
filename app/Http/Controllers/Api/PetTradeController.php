@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Pay\Model\BillMatch;
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
 use App\Pay\Model\WithdrawRetry;
@@ -13,7 +12,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -282,7 +280,7 @@ class PetTradeController extends BaseController
         }
 
         //查找卖单
-        $sellBill = SellBill::onSale()->where('price', $price)->inRandomOrder()->first();
+        $sellBill = SellBill::onSale()->where([['price', $price], ['place_by', '<>', Auth::id()]])->inRandomOrder()->first();
 
         //没有符合条件的卖单由交易商随机生成一个
         if (!$sellBill) {

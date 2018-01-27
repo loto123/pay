@@ -162,6 +162,8 @@ class DepositMethod extends Model
                             $result->state = Deposit::STATE_COMPLETE;
                             $match->state = BillMatch::STATE_DEAL_CLOSED;
                             $sellBill->deal_closed = 1;
+                        } else {
+                            PayLogger::deposit()->error('购买交割失败', ['sell_bill_id' => $sellBill->getKey(), 'match_id' => $match->getKey()]);
                         }
                     }
                 } else {
@@ -191,6 +193,7 @@ class DepositMethod extends Model
             //处理卖单提现
             if ($match->state == BillMatch::STATE_DEAL_CLOSED) {
                 if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
+                    PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_di' => $sellBill->getKey()]);
                     $match->state = BillMatch::STATE_DEAL_FAIL;
                     $match->save();
                 }
