@@ -76,13 +76,13 @@
                 size:null,  //数目
                 billList:[],
                 items:[
-                    {type:0,title:'充值'},
-                    {type:1,title:'提现'},
-                    {type:2,title:'交易收入'},
-                    {type:3,title:'交易支出'},
-                    {type:4,title:'转账到公会'},
-                    {type:5,title:'公会转入'},
-                    {type:8,title:'打赏店家费'},
+                    {type:0,title:'购买'},
+                    {type:1,title:'出售'},
+                    {type:[2,3],title:'任务'},
+                    {type:[4,5],title:'公会转账'},
+                    {type:6,title:'任务手续费'},
+                    {type:7,title:'出售手续费'},
+                    {type:8,title:'任务加速'}
                 ],
                 selected: null
             };
@@ -134,15 +134,15 @@
             status(type){
                 let result='';
                 switch(type){
-                    case 0: result='充值'; break;
-                    case 1: result='提现'; break;
-                    case 2: result='交易收入'; break;
-                    case 3: result='交易支出'; break;
-                    case 4: result='转账到公会'; break;
-                    case 5: result='公会转入'; break;
-                    case 6: result='交易手续费'; break;
-                    case 7: result='提现手续费'; break;
-                    case 8: result='打赏店家费'; break;
+                    case 0: result='购买'; break;
+                    case 1: result='出售'; break;
+                    case 2: result='任务'; break;
+                    case 3: result='任务'; break;
+                    case 4: result='公会转账'; break;
+                    case 5: result='公会转账'; break;
+                    case 6: result='任务手续费'; break;
+                    case 7: result='出售手续费'; break;
+                    case 8: result='任务加速'; break;
                 }
                 return result;
             },
