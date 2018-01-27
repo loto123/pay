@@ -24,10 +24,10 @@
         <div class="content flex flex-v flex-align-center">
             <div class="rest-money flex flex-v flex-align-center flex-justify-start">
                 <div class="money-text">
-                    {{balance}}
+                    {{balance}}<i class="diamond" style="margin-top:0.4em;margin-left:0.2em;">&#xe6f9;</i>
                 </div>
                 <h3>当前可提现分润</h3>
-                <h4>单位(元)</h4>
+                <!-- <h4>单位(元)</h4> -->
             </div>
 
             <div class="withdraw-cash" @click="goWithdraw">

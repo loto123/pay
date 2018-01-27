@@ -17,7 +17,7 @@
           &#xe6a3;
         </i>
       </span>
-      <h3 class="flex-9">店主用户</h3>
+      <h3 class="flex-9">公会会长用户</h3>
       <div class="flex-1">{{indexData.manager_total}}</div>
       <span class="flex-1" >
         <i class="iconfont">
