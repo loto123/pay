@@ -308,6 +308,7 @@
 			},
 
 			goStatus(){
+				this.$router.push("/myAccount/withdraw/status_list");
 				console.log(" go Status");
 			}
 
