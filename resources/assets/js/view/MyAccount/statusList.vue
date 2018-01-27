@@ -1,7 +1,7 @@
 <template>
     <!-- 出售状态 -->
     <div id="status-list">
-        <topBack title="账单明细">
+        <topBack title="出售状态">
             <!-- <div class="flex flex-reverse flex-align-center header-right" @click="show">
                 <a href="javascript:;">筛选</a>
             </div> -->
@@ -27,41 +27,28 @@
                 </i>
                 <div>暂无数据</div>
             </div>
+            
             <ul class="bill-list" v-else>
                 <li  v-for="item in billList" class="flex flex-align-center">
 
-                        <div class="imgWrap flex-1">
-                            <img src="/images/avatar.jpg" alt="">
+                        <div class="imgWrap flex-2">
+                            <img :src="item.pet_pic" alt="">
                         </div>
 
-                        <div class="bill-content flex-6">
+                        <div class="bill-content flex-8">
                             <h5>{{item.state}}</h5>
                             <div class="time">{{item.created_at}}</div>
                         </div>
-                        <div class="bill-money flex-1"  v-bind:class="[item.mode == 1?'':'active']">{{item.price}}</div>
+
+                        <div class="bill-money flex-3">
+                            <div class="title">出售价格:</div>
+                            <div class="price">{{item.price}}</div>
+                        </div>
+
                 </li>
             </ul>
         </div>
-        <transition name="slide">
-            <div class="sel-type" v-if="showAlert">
-                <div class="sel-type-box">
-                    <h2>选择任务类型</h2>
-                    <ul class="type-list">
-                        <li @click="selAll">
-                            <a href="javascript:;">全部</a>
-                        </li>
-                        <li v-for="item in items" @click="selContent(item.type)">
-                            <a href="javascript:;">{{item.title}}</a>
-                        </li>
-                    </ul>
-                    <div class="cancel-btn">
-                        <a href="javascript:;" @click="cancel">
-                            <mt-button type="default" size="large">取消</mt-button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </transition>
+   
     </div>
 </template>
 
@@ -189,10 +176,6 @@
 
     .bill-box {
         font-size: 0.9em;
-        /* height: 3.4em; */
-        /* line-height: 1.7em; */
-        /* background: #eee; */
-        /* padding-top: 0.5em; */
         .bill-date {
             padding: 0 1em;
             color: #666;
@@ -210,7 +193,7 @@
             padding: 0 1em;
             border-top: 1px solid #ccc;
             width: 100%;
-            height: 3em;
+            height: 4em;
             box-sizing: border-box;
            
             .imgWrap{
@@ -220,18 +203,22 @@
             }
 
             .bill-content {
-                padding-left: 0.5em;
-                padding-right: 0.5em;
+                padding-left: 0.7em;
+                padding-right: 0.7em;
                 box-sizing: border-box;
-                
+
                 .time {
                     color: #999;
                     font-size: 0.8em;
+                    margin-top:0.5em;
                 }
 
             }
             .bill-money {
-                font-size: 1.2em;
+                font-size: 1em;
+                .price{
+                    margin-top:0.5em;
+                }
             }
             .active {
                 color: #00cc00;
