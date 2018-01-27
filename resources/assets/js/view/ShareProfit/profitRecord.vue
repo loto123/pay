@@ -47,7 +47,7 @@
             <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80" >
 
                 <li  v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
-                    <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="details(item.id)">
+                    <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="tabStatus[0]?tabdetails(item.id):''">
                         <div class="bill-content">
                             <h5>{{tabStatus[0]?"分润":"提现"}}(分润比例 {{item.proxy_percent}})</h5>
                             <div class="time">{{item.created_at}}</div>
