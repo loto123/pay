@@ -58,7 +58,8 @@
                 pic:null,		//获取到的宠物
                 picId:null,		//宠物id
                 hatching:null,	// true 在孵化中  false  孵化成功
-                timer:null
+                timer:null,
+                billId:null
             }
         },
         created() {
@@ -107,6 +108,7 @@
                     .then((res) => {
                         this.picId=res.data.data.pet_id;
                         this.hatching=res.data.data.hatching;
+                        this.billId=res.data.data.id
                         if(this.hatching==true){
                             Loading.getInstance().open('宠物孵化中...');
                             this.timer = setTimeout(() => {
@@ -151,7 +153,7 @@
                 }
                 var self = this;
                 var _data = {
-                    bill_id :this.picId,
+                    bill_id :this.billId,
                     way: this.value
                 }
                 request.getInstance().postData('api/account/charge', _data)
