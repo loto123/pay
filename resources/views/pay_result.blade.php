@@ -50,6 +50,8 @@
             color:#fff;
             text-decoration:none;
             font-size:1.2em;
+            width: 100%;
+            display: block;
         }
     </style>
 </head>
