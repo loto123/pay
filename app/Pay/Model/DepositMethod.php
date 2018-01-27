@@ -197,7 +197,7 @@ class DepositMethod extends Model
         if ($commit) {
             DB::commit();
             //卖家转出了宠物给卖家提现
-            if ($sellBill->deal_closed) {
+            if ($sellBill->deal_closed && $sellBill->withdraw) {
                 if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
                     PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_di' => $sellBill->getKey(), 'match_id' => $match->getKey()]);
                 }
