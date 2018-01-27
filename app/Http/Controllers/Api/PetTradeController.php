@@ -559,6 +559,20 @@ class PetTradeController extends BaseController
      *   path="/pet/all_on_sale",
      *   summary="交易行在售宠物",
      *   tags={"交易行"},
+     *     @SWG\Parameter(
+     *     name="offset",
+     *     in="query",
+     *     description="最后记录id",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -581,6 +595,7 @@ class PetTradeController extends BaseController
      *                      type="array",
      *                      description="宠物信息",
      *                      @SWG\Items(
+     *                          @SWG\Property(property="id", type="integer", example="1", description="记录id"),
      *                          @SWG\Property(property="pet_id", type="integer", example="1", description="宠物编号"),
      *                          @SWG\Property(property="holder_name", type="string", example="张三", description="持有人"),
      *                          @SWG\Property(property="price", type="string", example="100", description="出售价格"),
@@ -593,20 +608,27 @@ class PetTradeController extends BaseController
      * @param Request $request
      * @return mixed
      */
-    public function onSalePets()
+    public function onSalePets(Request $request)
     {
         $data = [];
-        $bill = SellBill::onSale()->has('placeBy')->get();
+        $query = SellBill::onSale()->has('placeBy')->has('pet')->with(['placeBy','pet']);
+        if($request->offset) {
+            $query = $query->where('id','<',$request->offset);
+        }
+        $count = $query->count();
+        $bill = $query->orderBy('id','DESC')->limit($request->input('limit', 20))->get();
         if(!empty($bill) && count($bill)>0) {
             foreach ($bill as $item) {
                 $data[] = [
+                    'id' => $item->id,
                     'pet_id' => $item->pet_id,
+                    'pet_image' => $item->pet->image,
                     'holder_name' => $item->placeBy->name,
                     'price' => ($item->by_dealer==1)? '面议' : $item->price,
                 ];
             }
         }
-        return $this->json($data);
+        return $this->json(compact('count','data'));
     }
 
     /**
@@ -615,6 +637,20 @@ class PetTradeController extends BaseController
      *   path="/pet/my_pets",
      *   summary="交易行我的宠物",
      *   tags={"交易行"},
+     *     @SWG\Parameter(
+     *     name="offset",
+     *     in="query",
+     *     description="最后记录time",
+     *     required=false,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -640,6 +676,7 @@ class PetTradeController extends BaseController
      *                          @SWG\Property(property="pet_id", type="integer", example="1", description="宠物编号"),
      *                          @SWG\Property(property="holder_name", type="string", example="张三", description="持有人"),
      *                          @SWG\Property(property="price", type="string", example="100", description="出售价格"),
+     *                          @SWG\Property(property="time", type="string", example="100", description="时间"),
      *                      ),
      *                  ),
      *              )
@@ -649,10 +686,15 @@ class PetTradeController extends BaseController
      * @param Request $request
      * @return mixed
      */
-    public function myPets()
+    public function myPets(Request $request)
     {
-        $pets = $this->user()->pets;
+        $query = Pet::where('user_id',$this->user()->id);
+        if($request->offset)
+        {
+            $query = $query->where('updated_at', '<', date('Y-m-d H:i:s',$request->offset));
+        }
 
+        $pets = $query->limit($request->input('limit', 20))->get();
         //用户购买宠物记录
         $user_bill = $this->user()->whereHas('bill_match', function($query) use($pets) {
             $query->whereHas('sellBill', function($query) use($pets) {
@@ -677,16 +719,19 @@ class PetTradeController extends BaseController
 
         //用户的宠物
         $data = [];
+        $count = $pets->count();
         if(isset($pets) && count($pets)>0) {
             foreach ($pets as $_pet) {
                 $data[] = [
                     'pet_id' => $_pet->id,
                     'holder_name'=>$this->user()->name,
+                    'pet_image' => $_pet->image,
                     'price' => isset($pay_pets[$_pet->id]) ? $pay_pets[$_pet->id]['price'] : 0,
+                    'time' => strtotime((string)$_pet->updated_at),
                 ];
             }
         }
 
-        return $this->json($data);
+        return $this->json(compact('data','count'));
     }
 }
