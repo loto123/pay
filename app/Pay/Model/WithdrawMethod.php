@@ -121,9 +121,20 @@ class WithdrawMethod extends Model
             }
 
             if ($result->state === Withdraw::STATE_PROCESS_FAIL) {
+                $exception = '';
+
+                //失败要更改宠物撮合状态为交割失败
+                try {
+                    SellBill::where('withdraw_id', $result->getKey())->first()->matches()->where('state', BillMatch::STATE_DEAL_CLOSED)->update(['state' => BillMatch::STATE_DEAL_FAIL]);
+                } catch (\Exception $e) {
+                    $exception = $e->getMessage();
+                    //break;
+                }
+
                 $result->exceptions()->save(new WithdrawException([
                     'message' => json_encode(['query' => request()->query(), 'body' => file_get_contents('php://input')], JSON_UNESCAPED_UNICODE),
                     'state' => $result->state,
+                    'exception' => $exception
                 ]));
             }
 

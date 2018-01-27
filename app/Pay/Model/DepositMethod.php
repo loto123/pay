@@ -194,8 +194,6 @@ class DepositMethod extends Model
             if ($match->state == BillMatch::STATE_DEAL_CLOSED) {
                 if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
                     PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_di' => $sellBill->getKey()]);
-                    $match->state = BillMatch::STATE_DEAL_FAIL;
-                    $match->save();
                 }
             }
             return ob_get_clean();

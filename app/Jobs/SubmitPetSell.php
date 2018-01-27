@@ -113,8 +113,6 @@ class SubmitPetSell implements ShouldQueue
         if ($commit && $match->state == BillMatch::STATE_DEAL_CLOSED) {
             if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($bill->withdraw))->handle()->state)) {
                 PayLogger::withdraw()->error('系统自动提现失败', ['match_id' => $match->getKey()]);
-                $match->state = BillMatch::STATE_DEAL_FAIL;
-                $match->save();
             }
         }
     }

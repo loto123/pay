@@ -41,6 +41,15 @@ class SellBill extends Model
     }
 
     /**
+     * 卖单的所有撮合
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function matches()
+    {
+        return $this->hasMany(BillMatch::class, 'sell_bill_id');
+    }
+
+    /**
      * 下单用户
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
