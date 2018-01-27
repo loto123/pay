@@ -123,9 +123,9 @@ class WithdrawMethod extends Model
             if ($result->state === Withdraw::STATE_PROCESS_FAIL) {
                 $exception = '';
 
-                //失败要更改宠物撮合状态为交割失败
+                //失败要更改卖单状态为未成交
                 try {
-                    SellBill::where('withdraw_id', $result->getKey())->first()->matches()->where('state', BillMatch::STATE_DEAL_CLOSED)->update(['state' => BillMatch::STATE_DEAL_FAIL]);
+                    SellBill::where('withdraw_id', $result->getKey())->update(['deal_closed' => 0]);
                 } catch (\Exception $e) {
                     $exception = $e->getMessage();
                     //break;

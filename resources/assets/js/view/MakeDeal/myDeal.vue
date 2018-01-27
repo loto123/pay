@@ -19,10 +19,14 @@
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" >
+                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" v-bind:class="{h_5em:tabItem[2]==true}">
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{SettingString(item.shop_name,10)}}</div>
+                        <div class="eggs-wrap" v-if="tabItem[2]">
+                          <span>任务获得：</span>
+                          <span> <img src="/images/egg.jpg" alt=""> x {{item.eggs}}</span>
+                        </div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
@@ -48,6 +52,10 @@
 </template>
 
 <style lang="scss" scoped>
+.h_5em{
+  height: 5em !important;
+}
+
 #my-deal {
   padding-top: 2em;
   background: #eee;
@@ -103,19 +111,7 @@
         margin-top: 0.1em;
         /*border-bottom:1px solid #eee;*/
 
-        // .avatar-wrap {
-        //   box-sizing: border-box;
-        //   padding-left: 0.5em;
-        //   img {
-        //     width: 2.3em;
-        //     height: 2.3em;
-        //     border-radius: 0.2em;
-        //   }
-        //   h3 {
-        //     font-size: 0.5em;
-        //     margin-top: 0.2em;
-        //   }
-        // }
+      
         .content-wrap {
           height: 100%;
           box-sizing: border-box;
@@ -124,12 +120,22 @@
             margin-top: 0.8em;
             width: 100%;
           }
+          
+          .eggs-wrap{
+            width:100%;
+            margin-top:0.4em;
+            font-size: 0.9em;
+            img{
+              width:1em;
+              height: 1em;
+            }
+          }
 
           .date {
             color: #999;
             font-size: 0.9em;
-            margin-top: 1em;
             width: 100%;
+            margin-top:0.4em;
           }
         }
 

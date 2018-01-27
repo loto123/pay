@@ -34,9 +34,25 @@ class ChargeRetry extends PayRetry
 
             $deposit->state = Deposit::STATE_COMPLETE;
             if (!$deposit->save()) {
-                $msg = '数据更新失败';
+                $msg = '数据更新失败E1';
                 break;
             }
+
+            //将宠物也划拨一下,并将撮合状态改为成功
+            $petBillMatch = BillMatch::where('deposit_id', $deposit->getKey())->first();
+            $petBillMatch->state = BillMatch::STATE_DEAL_CLOSED;//拿到了宠物和钻石
+            $thePet = $petBillMatch->sellBill->pet;
+            if ($thePet->user_id != $petBillMatch->user_id) {
+                if (!$thePet->transfer($petBillMatch->user_id)) {
+                    $msg = '数据更新失败E2';
+                    break;
+                }
+            }
+            if (!$petBillMatch->save()) {
+                $msg = '数据更新失败E3';
+                break;
+            }
+
 
             $commit = true;
             $msg = '到账成功';
