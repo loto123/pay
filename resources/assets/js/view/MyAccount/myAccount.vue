@@ -139,6 +139,7 @@
                 margin: auto;
                 border-radius: 5px;
                 font-size: 1em;
+                outline: none;
             }
             .recharge-btn{
                 background:#00CC00;

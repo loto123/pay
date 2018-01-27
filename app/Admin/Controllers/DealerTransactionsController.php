@@ -72,10 +72,11 @@ EOT;
             $grid->pet_id('宠物编号');
             $grid->trade_type('类型');
             $grid->to_user('交易对象')->display(function () {
+                $toUid = $this->to_uid ? "ID:$this->to_uid" : '';
                 return <<<EOT
             <div style="width:140px;height:60px;">
             <img style="width:60px;height:60px;margin:auto 10px;border-radius:50%;float:left;" src="{$this->to_avatar}"/>
-            <div style="float:left;width:60px;height:60px;word-break:keep-all; white-space:nowrap; ">{$this->to_name}<br/>ID:{$this->to_uid}</div>
+            <div style="float:left;width:60px;height:60px;word-break:keep-all; white-space:nowrap; ">{$this->to_name}<br/>{$toUid}</div>
 </div>
 EOT;
             });

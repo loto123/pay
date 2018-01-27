@@ -350,7 +350,7 @@ class PetTradeController extends BaseController
 
         }
 
-        return $this->json(['id' => $sellBill->getKey(), 'pet_id' => $sellBill->pet->getKey(), 'hatching' => $sellBill->pet->status == Pet::STATUS_HATCHING, 'pic' => $sellBill->pet->image]);
+        return $this->json(['id' => $sellBill->getKey(), 'pet_id' => $sellBill->pet->getKey(), 'hatching' => empty($sellBill->pet->hash), 'pic' => $sellBill->pet->image]);
     }
 
     /**

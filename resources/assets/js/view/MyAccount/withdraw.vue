@@ -10,7 +10,7 @@
 				<div class="tltle">选择要出售的宠物：</div>
 				<div class="pet-list-box">
 
-					<ul class="pet-list flex flex-justify-around">
+					<ul class="pet-list flex flex-justify-start flex-wrap-on">
 						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
 							<img :src="item.pic">
 						</li>
@@ -42,7 +42,7 @@
 					<li v-for="item in priceList" @click="choiseSalePrice(item.price)" v-bind:class="{active:item.isChecked == true}" >￥{{item.price}}
 					</li>
 				</ul>
-				<div class="high-price flex flex-align-center flex-justify-center">¥{{my_max_quota}}(最高价)</div>
+				<div class="high-price flex flex-align-center flex-justify-center" @click="choiseMaxQuoto" v-bind:class="{active:isMaxQuota}">¥{{myMaxQuota}}(最高价)</div>
 			</div>
 			<div class="usable-diamond">拥有钻石{{balance}}，出售消耗钻石<span>100.00</span></div>
 			<div class="withdraw-way">
@@ -77,8 +77,8 @@
 					</ul>
 				</div>
 
-				<div class="comfirm-button">
-					<mt-button type="primary" size="large">确定</mt-button>
+				<div class="comfirm-button" >
+					<mt-button type="primary" size="large" @click="closePanel">确定</mt-button>
 				</div>
 
 			</div>
@@ -115,13 +115,12 @@
 				petsList:[],                    // 宠物数组
 				cardOptions: [],
 
-				way: null,	                    //提现方式
+				way: null,	                    // 提现方式
 				value: null,
-				has_pay_password: null,         //是否设置支付密码
-				balance:null,		            //最高价
-				my_max_quota:null,
+				has_pay_password: null,         // 是否设置支付密码
+				balance:null,		            // 最高价
 				fee_value: null,
-				isFee: false,                   //是否展示手续费
+				isFee: false,                   // 是否展示手续费
 				isShow:false,
 
 				getEggsTimes:0,
@@ -129,7 +128,9 @@
 				isPopGetEggsShow:false,         // 领取宠物蛋
 				amount:null,                    // 提交的价格
 				petId:null,
-				priceList:[],	                //价格列表
+				myMaxQuota:0,                   // 玩家可以提现的最高价格
+				isMaxQuota:false,               // 是否选中了最高价格
+				priceList:[],	                // 价格列表
 				sheetVisible:false,
 				has_pay_card:0,                 // 是否绑定了银行卡
 				actions:[]                      // 右上角动作列表
@@ -257,6 +258,10 @@
 
 				for(var i = 0 ; i < this.dataList.length; i++){
 					if(this.value == this.dataList[i].id){
+
+						// 获取最高价
+						this.myMaxQuota = this.dataList[i].my_max_quota;
+
 						for(var k = 0; k < this.dataList[i].quota_list.length; k++){
 							var _temp =  {};
 							_temp.price = this.dataList[i].quota_list[k];
@@ -290,7 +295,7 @@
 
 			// 选择出售狗狗的价格
 			choiseSalePrice(price){
-
+				this.isMaxQuota = false;
 				for(let j = 0; j<this.priceList.length; j ++){
 					this.priceList[j].isChecked = false;
 					if(price == this.priceList[j].price){
@@ -335,6 +340,15 @@
 			goStatus(){
 				this.$router.push("/myAccount/withdraw/status_list");
 				console.log(" go Status");
+			},
+
+			// 以最高价出售
+			choiseMaxQuoto(){
+				this.amount = this.myMaxQuota;
+				this.isMaxQuota = true;
+				for(var i = 0 ; i < this.priceList.length; i++){
+					this.priceList[i].isChecked = false;
+				}
 			}
 
 		},
@@ -481,12 +495,17 @@
 				padding-top:0.5em;
 				padding-bottom: 0.5em;
 				box-sizing: border-box;
+				width:100%;
+				overflow: hidden;
+				height: 5.6em;
+
 				li{
 					width: 4em;
 					height: 4em;
 					border-radius: 0.2em;
 					box-sizing: border-box;
 					border:1px solid #eee;
+					margin-left: 1em;
 
 					>img{
 						display: block;
@@ -516,6 +535,12 @@
 		.tltle {
 			color: #666;
 		}
+
+		.active{
+			color: #00CC00;
+			border: 1px solid #00CC00 !important;
+		}
+
 		.price-list {
 			width: 100%;
 			overflow: hidden;

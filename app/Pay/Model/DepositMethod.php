@@ -158,12 +158,15 @@ class DepositMethod extends Model
                         //成交,执行交割:充值入账,宠物转移
                         $result->state = Deposit::STATE_CHARGE_FAIL;
                         $match->state = BillMatch::STATE_DEAL_FAIL;
-                        if ($result->masterContainer->changeBalance($result->amount, 0) && $sellBill->pet->transfer($match->user_id)) {
+                        $moneyAddSuccess = $result->masterContainer->changeBalance($result->amount, 0);
+                        $petTransferSuccess = $moneyAddSuccess ? $sellBill->pet->transfer($match->user_id) : false;
+
+                        if ($moneyAddSuccess && $petTransferSuccess) {
                             $result->state = Deposit::STATE_COMPLETE;
                             $match->state = BillMatch::STATE_DEAL_CLOSED;
                             $sellBill->deal_closed = 1;
                         } else {
-                            PayLogger::deposit()->error('购买交割失败', ['sell_bill_id' => $sellBill->getKey(), 'match_id' => $match->getKey()]);
+                            PayLogger::deposit()->error('购买交割失败', ['sell_bill_id' => $sellBill->getKey(), 'match_id' => $match->getKey(), 'fund_suc' => $moneyAddSuccess, 'pet_transfer' => $petTransferSuccess]);
                         }
                     }
                 } else {
@@ -194,8 +197,6 @@ class DepositMethod extends Model
             if ($match->state == BillMatch::STATE_DEAL_CLOSED) {
                 if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
                     PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_di' => $sellBill->getKey()]);
-                    $match->state = BillMatch::STATE_DEAL_FAIL;
-                    $match->save();
                 }
             }
             return ob_get_clean();
