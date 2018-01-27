@@ -110,28 +110,29 @@
 	export default {
 		data() {
 			return {
-				showPasswordTag: false,       // 密码弹出开关
-				dataList:[], // 支付方式数据数组
-				petsList:[], // 宠物数组
+				showPasswordTag: false,         // 密码弹出开关
+				dataList:[],                    // 支付方式数据数组
+				petsList:[],                    // 宠物数组
 				cardOptions: [],
 
-				way: null,	//提现方式
+				way: null,	                    //提现方式
 				value: null,
-				has_pay_password: null,//是否设置支付密码
-				balance:null,		//最高价
+				has_pay_password: null,         //是否设置支付密码
+				balance:null,		            //最高价
 				my_max_quota:null,
 				fee_value: null,
-				isFee: false,//是否展示手续费
+				isFee: false,                   //是否展示手续费
 				isShow:false,
 
 				getEggsTimes:0,
-				isPopDetailShow:false,  // 查看更多显示
-				isPopGetEggsShow:false, // 领取宠物蛋
-				amount:null, // 提交的价格
+				isPopDetailShow:false,          // 查看更多显示
+				isPopGetEggsShow:false,         // 领取宠物蛋
+				amount:null,                    // 提交的价格
 				petId:null,
-				priceList:[],	//价格列表
+				priceList:[],	                //价格列表
 				sheetVisible:false,
-				actions:[] // 右上角动作列表
+				has_pay_card:0,                 // 是否绑定了银行卡
+				actions:[]                      // 右上角动作列表
 			}
 		},
 		mounted(){
@@ -151,7 +152,6 @@
 		methods: {
 			openOption() {
 				this.sheetVisible = true;
-				console.log("打开了选项");
 			},
 			hidePassword() {
 				this.showPasswordTag = false;
@@ -159,7 +159,6 @@
 			init() {
 				Loading.getInstance().open("加载中...");
 				this.petsList = []; // 清空狗狗数组
-				// /account/withdraw-methods
 				Promise.all([
 					request.getInstance().getData("api/pet/sellable"),
 					request.getInstance().getData("api/account"), 
@@ -172,7 +171,6 @@
 							_temp.isChecked = false;
 							this.petsList.push(_temp);
 						}
-						// this.petsList = [];
 
 						if(this.petsList.length == 0){
 							request.getInstance().getData("api/pet/egg_acquire_times").then(res=>{
@@ -184,7 +182,9 @@
 						console.log(this.petsList);
 
 						this.balance=res[1].data.data.balance;
+
 						this.has_pay_password = res[1].data.data.has_pay_password;
+						this.has_pay_card = res[1].data.data.has_pay_card;
 
 						this.dataList = res[2].data.data.methods
 						this.setBankList(res[2]);//获取提现方式列表
@@ -209,6 +209,9 @@
 			},
 			withdrawBtn() {
 				var self = this;
+
+				this.withdraw();
+
 				//成功内容
 				var _data = {
 					way: this.value
@@ -234,6 +237,12 @@
 					amount:this.amount,
 					pet_id:this.petId
 				}
+
+				if(this.amount == null){
+					Toast("请选择出售的价格");
+					return;
+				}
+
 				Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/account/withdraw', _data)])
 					.then((res) => {
 						Toast('出售成功');
@@ -294,6 +303,22 @@
 			showGetEggsPop(){
 				this.isPopGetEggsShow = true;
 			},
+			
+			withdraw(){
+                if(this.has_pay_card==0){
+                    MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
+                        () => {
+                            this.$router.push('/my');
+                        },
+                        () => {
+                            //取消操作
+                            console.log("已经取消");
+                        }
+                    );
+                }else{
+                    this.$router.push('/myAccount/withdraw')
+                }
+            },
 
 			// 免费领取宠物蛋 
 			getEggs(){

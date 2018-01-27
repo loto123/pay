@@ -58,21 +58,21 @@
 					})
             },
             //提现
-            withdraw(){
-                if(this.has_pay_card==0){
-                    MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
-                        () => {
-                            this.$router.push('/my');
-                        },
-                        () => {
-                            //取消操作
-                            console.log("已经取消");
-                        }
-                    );
-                }else{
-                    this.$router.push('/myAccount/withdraw')
-                }
-            },
+            // withdraw(){
+            //     if(this.has_pay_card==0){
+            //         MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
+            //             () => {
+            //                 this.$router.push('/my');
+            //             },
+            //             () => {
+            //                 //取消操作
+            //                 console.log("已经取消");
+            //             }
+            //         );
+            //     }else{
+            //         this.$router.push('/myAccount/withdraw')
+            //     }
+            // },
             //转账
             give(){
                 if(this.has_pay_card==0){
