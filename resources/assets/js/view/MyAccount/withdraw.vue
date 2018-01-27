@@ -10,7 +10,7 @@
 				<div class="tltle">选择要出售的宠物：</div>
 				<div class="pet-list-box">
 
-					<ul class="pet-list flex flex-justify-around">
+					<ul class="pet-list flex flex-justify-start flex-wrap-on">
 						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
 							<img :src="item.pic">
 						</li>
@@ -77,8 +77,8 @@
 					</ul>
 				</div>
 
-				<div class="comfirm-button">
-					<mt-button type="primary" size="large">确定</mt-button>
+				<div class="comfirm-button" >
+					<mt-button type="primary" size="large" @click="closePanel">确定</mt-button>
 				</div>
 
 			</div>
@@ -481,12 +481,17 @@
 				padding-top:0.5em;
 				padding-bottom: 0.5em;
 				box-sizing: border-box;
+				width:100%;
+				overflow: hidden;
+				height: 5.6em;
+
 				li{
 					width: 4em;
 					height: 4em;
 					border-radius: 0.2em;
 					box-sizing: border-box;
 					border:1px solid #eee;
+					margin-left: 1em;
 
 					>img{
 						display: block;
