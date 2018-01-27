@@ -160,6 +160,9 @@
       allGive() { //全部转账
         this.amount = this.balance;
       },
+      hidePassword(){
+        this.showPasswordTag = false;
+      }
     }
   };
 </script>
