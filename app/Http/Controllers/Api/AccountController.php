@@ -679,16 +679,19 @@ class AccountController extends BaseController
         }
 
         //提现额度
+        $user_balance = (float)$this->user->container->balance;
         if (!empty($methods) && count($methods) > 0) {
-            $methods->each(function (&$item) {
+            $methods->each(function (&$item) use($user_balance){
                 $method_quota_list = PayQuota::getPayQuotas(1, $item->id);
                 if ($method_quota_list) {
                     $item['quota_list'] = $method_quota_list;
                 } else {
                     $item['quota_list'] = [];
                 }
-                $item['my_max_quota'] = $item['max_quota'] > (float)$this->user->container->balance
-                    ? (float)$this->user->container->balance : $item['max_quota'];
+
+                //如果支付方式的额度是0,则不做限制
+                $item['my_max_quota'] = $item['max_quota']>0 ? ($item['max_quota'] > $user_balance ? $user_balance : $item['max_quota']) : $user_balance;
+
                 unset($item['max_quota']);
             });
         }
