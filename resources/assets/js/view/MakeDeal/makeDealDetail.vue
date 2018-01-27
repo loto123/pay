@@ -67,11 +67,24 @@
 
                 <li v-for=" item in recordList">
                     <slider @deleteIt="deleteIt(item.id)" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==2 && item.allow_cancel?false:true">
+
                         <div class="slider-item flex flex-align-center flex-justify-between">
                             <div class="img-wrap flex-2">
                                 <img :src=item.user.avatar alt="">
                             </div>
-                            <span class="flex-8">{{item.user.name}}</span>
+
+                            <span class="flex-8 infos flex flex-v">
+                                <span>{{item.user.name}}</span>
+
+                                <span class="flex eggs-info" v-if="status==3"> 
+                                  <span class="flex-1">获得:</span> 
+                                  <span class="egg-wrap flex-1 flex flex-align-center flex-justify-center">
+                                    <img src="/images/egg.jpg" alt="">
+                                  </span>
+                                  <span class="flex-2 flex flex-justify-start">x {{item.eggs}}</span>
+                                </span>
+
+                            </span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center flex-4">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
                                 <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钻":"拿钻"}}</span>
@@ -271,18 +284,39 @@
             background: #fff;
           }
         }
-          .img-wrap{
-              img {
-                  width: 2.5em;
-                  height: 2.5em;
-                  display: block;
+
+        .img-wrap{
+            img {
+                width: 2.5em;
+                height: 2.5em;
+                display: block;
+            }
+        }
+        
+        .infos{
+          box-sizing: border-box;
+          padding-left: 0.5em;
+          padding-right: 0.5em;
+
+          .eggs-info{
+            margin-top:0.4em;
+
+            .egg-wrap{
+              >img{
+                width: 1em;
+                height: 1em;
+                display: block;
               }
+            }
           }
 
+          
+        }
 
-        span {
+        >span {
           display: block;
           text-align: center;
+          height: auto;
         }
       }
       /*#slider-component {

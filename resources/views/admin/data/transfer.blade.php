@@ -39,7 +39,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="box-body box">
-                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 个红包  ，累计交易费 <span class="text-yellow">{{$amount}}</span> 元</div>
+                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 个任务  ，累计手续费 <span class="text-yellow">{{$amount}}</span> 元</div>
             </div>
         </div>
     </div>

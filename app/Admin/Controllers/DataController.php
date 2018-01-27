@@ -136,7 +136,7 @@ class DataController extends Controller
         $data = compact('aid', 'date_time', 'shop_id', 'shop_name', 'id', 'count', 'amount', 'list');
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/transfer', $data));
-            $content->header("交易管理");
+            $content->header("任务管理");
         });
     }
 
@@ -269,7 +269,7 @@ class DataController extends Controller
         $data = compact('aid', 'date_time', 'shop_id', 'owner_id', 'id', 'stat', 'count', 'get_amount', 'put_amount', 'list');
         return Admin::content(function (Content $content) use ($data) {
             $content->body(view('admin/data/record', $data));
-            $content->header("支付流水");
+            $content->header("任务参与记录");
         });
     }
 
