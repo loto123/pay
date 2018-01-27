@@ -159,7 +159,7 @@ class AccountController extends BaseController
 
         do {
             //取得卖单
-            $bill = SellBill::onSale()->lockForUpdate()->find($request->bill_id);
+            $bill = SellBill::onSale()->where('place_by', '<>', Auth::id())->lockForUpdate()->find($request->bill_id);
             if (!$bill) {
                 $message = '该宠物已售出,请重新查询';
                 //dump(DB::getQueryLog());
@@ -427,7 +427,7 @@ class AccountController extends BaseController
         }
 
         //加入延迟提现队列
-        SubmitPetSell::dispatch($bill)->delay(Carbon::now()->addMinutes(SellBill::VALID_MINUTES))->onQueue('withdraw');
+        SubmitPetSell::dispatch($bill)->delay(Carbon::now()->addMinutes(3))->onQueue('withdraw');
 
         $container = MasterContainer::find($user->container->getKey());
         return $this->json(['balance' => $container->balance, 'frozen' => $container->frozen_balance]);

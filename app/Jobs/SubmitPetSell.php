@@ -96,6 +96,7 @@ class SubmitPetSell implements ShouldQueue
             $bill->locked = 1;
             $bill->deal_closed = 1;
             if (!$bill->pet->transfer($dealer->getKey())) {
+                PayLogger::withdraw()->error('系统宠物交割失败', ['dealer' => $dealer->getKey(), 'sell_bill' => $bill->getKey()]);
                 $match->state = BillMatch::STATE_DEAL_FAIL;
             }
 
@@ -111,6 +112,7 @@ class SubmitPetSell implements ShouldQueue
         //卖单提现
         if ($commit && $match->state == BillMatch::STATE_DEAL_CLOSED) {
             if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($bill->withdraw))->handle()->state)) {
+                PayLogger::withdraw()->error('系统自动提现失败', ['match_id' => $match->getKey()]);
                 $match->state = BillMatch::STATE_DEAL_FAIL;
                 $match->save();
             }

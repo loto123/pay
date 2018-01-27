@@ -280,7 +280,7 @@ class PetTradeController extends BaseController
         }
 
         //查找卖单
-        $sellBill = SellBill::onSale()->where('price', $price)->inRandomOrder()->first();
+        $sellBill = SellBill::onSale()->where([['price', $price], ['place_by', '<>', Auth::id()]])->inRandomOrder()->first();
 
         //没有符合条件的卖单由交易商随机生成一个
         if (!$sellBill) {
