@@ -156,12 +156,15 @@
                     bill_id :this.billId,
                     way: this.value
                 }
+                Loading.getInstance().open();
                 request.getInstance().postData('api/account/charge', _data)
                     .then((res) => {
                         location.href = res.data.data.redirect_url;
+                        Loading.getInstance().close();
                     })
                     .catch((err) => {
                         Toast(err.data.msg);
+                        Loading.getInstance().close();
                     })
             }
         }

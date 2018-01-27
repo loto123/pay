@@ -12,10 +12,10 @@
             </div>
             <div class="submit-btn">
                 <a href="/#/myAccount/recharge" class="mb15">
-                    <button type="button" class="recharge-btn">购买(充值)</button>
+                    <button type="button" class="recharge-btn">购买</button>
                 </a>
                 <a href="javascript:;"  @click="withdraw" class="mb15">
-                    <button type="button" class="withdraw-btn">出售(提现)</button>
+                    <button type="button" class="withdraw-btn">出售</button>
                 </a>  
                 <a href="javascript:;" @click="give">
                     <button type="button" class="give-btn">转钻到公会</button>    

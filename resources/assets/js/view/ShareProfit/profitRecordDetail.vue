@@ -78,7 +78,7 @@
                 }
 
                 else if(this.mode == "withDraw"){
-                    request.getInstance().getData("api/profit/show/"+_id)
+                    request.getInstance().getData("api/profit/withdraw/show/"+_id)
                     .then((res) => {
                         
                         this.created_at=res.data.data.created_at.date;
