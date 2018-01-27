@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Pay\Model\BillMatch;
 use App\Pay\Model\SellBill;
 use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawException;
@@ -92,18 +91,19 @@ class SubmitWithdrawRequest implements ShouldQueue
         $withdraw->save();
 
         if ($withdraw->state == Withdraw::STATE_SEND_FAIL || $withdraw->state == Withdraw::STATE_PROCESS_FAIL) {
+
+            //失败要更改卖单成交失败
+            try {
+                SellBill::where('withdraw_id', $withdraw->getKey())->update(['deal_closed' => 0]);//卖家没有收到钱
+            } catch (\Exception $e) {
+                PayLogger::withdraw()->error('提现交割失败状态更改错误', ['withdraw_id' => $withdraw->getKey(), 'exception' => $e->getMessage()]);
+            }
+
             $this->withdraw->exceptions()->save(new WithdrawException([
                 'message' => (string)$result->raw_response,
                 'state' => $withdraw->state,
                 'exception' => $prev_except ? $prev_except->getMessage() : ''
             ]));
-        } else {
-            //失败要更改宠物撮合状态为交割失败
-            try {
-                SellBill::where('withdraw_id', $withdraw->getKey())->first()->matches()->where('state', BillMatch::STATE_DEAL_CLOSED)->update(['state' => BillMatch::STATE_DEAL_FAIL]);
-            } catch (\Exception $e) {
-                PayLogger::withdraw()->error('提现交割失败状态更改错误', ['withdraw_id' => $withdraw->getKey(), 'exception' => $e->getMessage()]);
-            }
         }
         return $result;
 
