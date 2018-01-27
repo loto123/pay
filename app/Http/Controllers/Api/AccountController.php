@@ -427,7 +427,7 @@ class AccountController extends BaseController
         }
 
         //加入延迟提现队列
-        SubmitPetSell::dispatch($bill)->delay(Carbon::now()->addMinutes(3))->onQueue('withdraw');
+        SubmitPetSell::dispatch($bill)->delay(Carbon::now()->addMinutes(SellBill::VALID_MINUTES))->onQueue('withdraw');
 
         $container = MasterContainer::find($user->container->getKey());
         return $this->json(['balance' => $container->balance, 'frozen' => $container->frozen_balance]);
