@@ -68,8 +68,8 @@ class SubmitWithdrawRequest implements ShouldQueue
             $result = $withdraw->method->withdraw($withdraw);
             PayLogger::withdraw()->info('通道返回', [$result]);
 
+            $withdraw->state = $result->state;
             if ($result->raw_response) {
-                $withdraw->state = $result->state;
                 //通道交易号
                 if ($result->out_batch_no) {
                     $withdraw->out_batch_no = $result->out_batch_no;
