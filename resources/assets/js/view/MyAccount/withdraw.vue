@@ -10,7 +10,7 @@
 				<div class="tltle">选择要出售的宠物：</div>
 				<div class="pet-list-box">
 
-					<ul class="pet-list flex flex-justify-start flex-wrap-on">
+					<ul class="pet-list flex flex-justify-start flex-wrap-on" v-if="isShow && petsList.length!=0">
 						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
 							<img :src="item.pic">
 						</li>
@@ -96,7 +96,13 @@
 		</div>
 		
 		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
-		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
+		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack">
+			<div class="withdraw-info flex flex-v flex-align-center">
+				<div class="title">出售</div>
+				<div class="price">￥{{amount}}</div>
+				<div class="notice">额外扣除2元/次 手续费</div>
+			</div>
+		</passWorld>
 	</div>
 </template>
 
@@ -212,6 +218,16 @@
 				var self = this;
 
 				this.withdraw();
+
+				if(this.amount == null){
+					Toast("请输入出售金额");
+					return;
+				}
+
+				if(this.petId == null){
+					Toast("请选择出售的宠物");
+					return;
+				}
 
 				//成功内容
 				var _data = {
@@ -361,6 +377,26 @@
 </script>
 
 <style lang="scss" scoped>
+
+	/*密码提示*/
+	.withdraw-info{
+		width:100%;
+		height: 5em;
+		
+		>div{
+			margin-top: 0.5em;
+		}
+		.title{
+			font-weight: bold;
+		}
+		.price{
+			font-size: 1.3em;
+		}
+		.notice{
+			color: #555;
+		}
+	}
+
 	.withdraw-container {
 		background: #eee;
 		height: 100vh;
@@ -481,6 +517,9 @@
 			
 			.notice{
 				height: 4em;
+				padding-top:1em;
+				box-sizing: border-box;
+				
 				h3{
 					font-size: 1.2em;
 					color:#555;
