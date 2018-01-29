@@ -537,7 +537,7 @@ class PetTradeController extends BaseController
         }
 
         //取得出售记录
-        $list = SellBill::where($filter)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
+        $list = SellBill::where($where)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
             return [
                 'id' => $item->getKey(),
                 'state' => $item->deal_closed ? (WithdrawRetry::isWithdrawFailed($item->withdraw->state) ? '状态异常' : '出售成功') : '出售中',
