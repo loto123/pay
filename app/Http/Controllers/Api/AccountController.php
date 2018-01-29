@@ -266,7 +266,17 @@ class AccountController extends BaseController
      *                  type="object",
      *                  description="余额信息",
      *                  @SWG\Property(property="balance", type="float", example=20.00,description="可用余额"),
-     *                  @SWG\Property(property="frozen", type="float", example=0.00,description="冻结余额")
+     *                  @SWG\Property(property="frozen", type="float", example=0.00,description="冻结余额"),
+     *                  @SWG\Property(property="price", type="float", example=100.00,description="出售价格"),
+     *                  @SWG\Property(property="fee", type="float", example=1.00,description="手续费"),
+     *                  @SWG\Property(property="expected_arrival_time", type="string", example="2018-01-29 19:14",description="预计最晚到账时间"),
+     *                  @SWG\Property(
+     *                      property="receiver",
+     *                      type="object",
+     *                      description="收款信息,每种提现方式返回不同,以银行卡为例",
+     *                      @SWG\Property(property="bank_name", type="string", description="到账银行"),
+     *                      @SWG\Property(property="card_tail_number", type="string", description="银行卡尾号")
+     *                  )
      *              )
      *          )
      *      ),
@@ -329,7 +339,6 @@ class AccountController extends BaseController
         if ($method->max_quota > 0 && $method->max_quota < $request->amount) {
             return $this->json([], '出售价格最高为' . $method->max_quota . '元', 0);
         }
-
 
         if ($method->targetPlatform->getKey() == 0) {
             //提现到银行卡
@@ -430,7 +439,17 @@ class AccountController extends BaseController
         SubmitPetSell::dispatch($bill)->delay(Carbon::now()->addMinutes(SellBill::VALID_MINUTES))->onQueue('withdraw');
 
         $container = MasterContainer::find($user->container->getKey());
-        return $this->json(['balance' => $container->balance, 'frozen' => $container->frozen_balance]);
+        $response = ['balance' => $container->balance, 'frozen' => $container->frozen_balance, 'price' => $request->amount, 'fee' => $fee, 'expected_arrival_time' => date('Y-m-d H:i', time() + 60 * 60 * 2)];
+        $show_receiver_info = [];
+        if ($method->targetPlatform->getKey() == 0) {
+            //仅银行卡提现有
+            $show_receiver_info['bank_name'] = $user->pay_card->bank->name;
+            $show_receiver_info['card_tail_number'] = substr($user->pay_card->card_num, -4);
+        } else {
+            //..
+        }
+        $response['receiver'] = $show_receiver_info;
+        return $this->json($response);
 
     }
 
