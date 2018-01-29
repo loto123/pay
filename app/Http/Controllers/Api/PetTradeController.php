@@ -51,7 +51,13 @@ class PetTradeController extends BaseController
      *                  @SWG\Property(property="pic", type="string", example="http://xy.com/a.gif",description="宠物图片"),
      *                  @SWG\Property(property="is_egg", type="boolean", example=false,description="是不是蛋"),
      *                  )
-     *                  )
+     *                  ),
+     *               @SWG\Property(
+     *                      property="egg_acquire_times",
+     *                      type="integer",
+     *                      description="免费宠物蛋可领取次数"
+     *              )
+     *               )
      *              )
      *          )
      *      ),
@@ -65,7 +71,7 @@ class PetTradeController extends BaseController
      */
     public function sellable()
     {
-        return $this->json(['list' => Auth::user()->pets_for_sale()->get()->map(function ($item) {
+        return $this->json(['egg_acquire_times' => Auth::user()->pet_left_times(), 'list' => Auth::user()->pets_for_sale()->get()->map(function ($item) {
             return ['id' => $item->getKey(), 'pic' => $item->status == Pet::STATUS_UNHATCHED ? '' : $item->image, 'is_egg' => $item->status == Pet::STATUS_UNHATCHED];
         })]);
     }

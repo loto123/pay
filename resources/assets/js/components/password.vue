@@ -7,6 +7,10 @@
 
             <div id="content-wrap" class="flex flex-v flex-align-center">
                 <h3 v-if="!settingPasswordSwitch">请输入支付密码</h3>
+
+                <slot>
+                  
+                </slot>
                 <h3 v-if="settingPasswordSwitch">{{secondValid?"请再次输入支付密码":"请设置支付密码"}}</h3>
                 <h4 v-if="settingPasswordSwitch&&secondValid">(二次验证)</h4>
                 <ul class="flex"  ref="showPassWord">
