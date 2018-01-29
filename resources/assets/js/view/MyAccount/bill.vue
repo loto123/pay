@@ -1,11 +1,15 @@
 <template>
     <div id="bill">
-        <topBack title="账单明细">
-            <div class="flex flex-reverse flex-align-center header-right" @click="show">
-                <i class="iconfont" style="font-size:1.4em;" @click="filterDate">
-                    &#xe704;
-                </i>
-                <a href="javascript:;">筛选</a>
+        <topBack title="账单明细" style="background:#26a2ff;color:#fff;">
+            <div class="flex flex-reverse flex-align-center header-right">
+               <div style="width:50%;text-align:right;height: 100%;line-height: 2em;" @click="show">
+                    <a href="javascript:;" style="color:#fff;">筛选</a>
+               </div>
+               <div style="width:50%;text-align:center">
+                    <i class="iconfont" style="font-size:1.4em;" @click="filterDate">
+                        &#xe704;
+                    </i>
+                </div>
             </div>
         </topBack>
         <div class="change-tab flex">
@@ -43,11 +47,15 @@
             <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <li v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="details(item.id)">
-                        <div class="bill-content">
-                            <h5>{{tabStatus[0]?"分润":"提现"}}</h5>
+                        <div class="bill-content" v-if="tabStatus[0]">
+                            <h5>{{status(item.type)}}</h5>
                             <div class="time">{{changeTime(item.created_at)}}</div>
                         </div>
-                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{tabStatus[0]?item.proxy_amount:item.amount}}</div>
+                        <div class="bill-content" v-if="tabStatus[1]">
+                            <h5>{{status(item.type)}}</h5>
+                            <div class="time">{{changeTime(item.created_at)}}</div>
+                        </div>
+                        <div class="bill-money">{{tabStatus[0]?item.amount:item.proxy_amount}}</div>
                     </a>
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
@@ -57,10 +65,8 @@
                 </li>
             </ul>
             <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
-                <!--<span>-->
                 <mt-spinner type="fading-circle"></mt-spinner>
                 <span style="margin-left: 0.5em;color:#999;">加载中...</span>
-                <!--</span>-->
             </p>
 
             <mt-datetime-picker v-model="dateModel" class="profit-date" type="date" ref="picker" year-format="{value} 年" month-format="{value} 月"
@@ -142,8 +148,7 @@
                     { type: 6, title: '任务手续费' },
                     { type: 7, title: '出售手续费' },
                     { type: 8, title: '任务加速' }
-                ],
-                selected: null
+                ]
             };
         },
         created() {
@@ -165,10 +170,10 @@
             details(id) {
                 if (this.tabStatus[0] == true) {
                     // 分润状态
-                    this.$router.push({ path: "/profit_record/detail/?id=" + id + "&type=profit" });
+                    this.$router.push({ path: "/myAccount/bill/bill_details/?id=" + id + "&type=profit" });
                 } else if (this.tabStatus[1] == true) {
                     // 提现状态
-                    this.$router.push({ path: "/profit_record/detail/?id=" + id + "&type=withDraw" });
+                    this.$router.push({ path: "/myAccount/bill/bill_details/?id=" + id + "&type=withDraw" });
                 }
             },
             // init() {
@@ -195,11 +200,10 @@
                 this.dateChoise = null;
                 var _data = {
                     limit: 15,
-                    offset: 0
+                    offset: 0,
+                    type:[0,1]
                 }
-
                 Loading.getInstance().open();
-
                 if (this.tabStatus[0] == true) {
                     request.getInstance().getData("api/account/records", _data)
                         .then((res) => {
@@ -227,7 +231,8 @@
                 } else if (this.tabStatus[1] == true) {
                     var _data = {
                         limit: 15,
-                        offset: 0
+                        offset: 0,
+                        type:[2,3]
                     }
 
                     request.getInstance().getData("api/account/records", _data)
@@ -302,23 +307,20 @@
                             }
 
                             // 获取当月的总额度
-                            request.getInstance().postData("api/profit/count", _data)
+                            request.getInstance().postData("api/account/records/month", _data)
                                 .then(res => {
                                     var _initialData = {
                                         time: _head,
                                         index: key,
                                         total: res.data.data.total
                                     }
-
                                     // this.headList.push(_initialData);
                                     // this.timeInfo = this.headList[0].time;
                                     // this.tabTotal = this.headList[0].total;
-
                                 }).catch();
                         } else {
-
                             // 获取当月的总额度
-                            request.getInstance().postData("api/profit/count")
+                            request.getInstance().postData("api/account/records/month")
                                 .then(res => {
                                     var _initialData = {
                                         time: _head,
@@ -328,7 +330,6 @@
                                     // this.headList.push(_initialData);
                                     // this.timeInfo = this.headList[0].time;
                                     // this.tabTotal = this.headList[0].total;
-
                                 }).catch();
                         }
 
@@ -339,7 +340,6 @@
                             var _data = {
                                 date: this.dateChoise
                             }
-
                             // 获取当月的总额度
                             request.getInstance().postData("api/profit/withdraw/count", _data)
                                 .then(res => {
@@ -348,23 +348,19 @@
                                         index: key,
                                         total: res.data.data.total
                                     }
-
                                     // this.headList.push(_initialData);
                                     // this.timeInfo = this.headList[0].time;
                                     // this.tabTotal = this.headList[0].total;
-
                                 }).catch();
                         } else {
                             // 获取当月的总额度
                             request.getInstance().postData("api/profit/withdraw/count")
                                 .then(res => {
-
                                     // var _initialData = {
                                     //     time:_head,
                                     //     index:key,
                                     //     total:res.data.data.total
                                     // }
-
                                     // this.headList.push(_initialData);
                                     // this.timeInfo = this.headList[0].time;
                                     // this.tabTotal = this.headList[0].total;
@@ -439,7 +435,7 @@
 
                         if (this.tabStatus[0] == true) {
                             // 获取当月的总额度(分润)
-                            request.getInstance().postData("api/profit/count", _data)
+                            request.getInstance().postData("api/account/records/month", _data)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
@@ -540,7 +536,7 @@
                 var _data = {
                     limit: 15,
                     offset: 0,
-                    date: this.dateChoise
+                    start: this.dateChoise
                 }
                 //明细
                 if (this.tabStatus[0] == true) {
@@ -652,7 +648,7 @@
         box-sizing: border-box;
         .header-right {
             width: 100%;
-            padding-right: 1em;
+            padding-right: 0.5em;
             height: 2em;
             box-sizing: border-box;
         }
