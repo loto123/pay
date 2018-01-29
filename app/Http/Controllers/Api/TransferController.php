@@ -1170,9 +1170,14 @@ class TransferController extends BaseController
             $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
             $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
             $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
-                ->where('stat', 1)->orWhere('stat', 2)->sum('amount') : 0;
+                ->where(function($query) {
+                    $query->where('stat', 1)->orWhere('stat', 2);
+                })->sum('amount') : 0;
             $data[$key]['eggs'] = PetRecord::whereIn('order',$item->transfer->record()->where('user_id', $user->id)
-                ->where('stat', 1)->orWhere('stat', 2)->pluck('id'))->count();
+                ->where(function($query) {
+                    $query->where('stat', 1)->orWhere('stat', 2);
+                })->pluck('id'))->count();
+//                ->where('stat', 1)->orWhere('stat', 2)
             $data[$key]['makr'] = $item->mark;
         }
         return $this->json(['data' => $data, 'count' => $count], 'ok', 1);
