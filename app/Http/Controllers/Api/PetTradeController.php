@@ -297,7 +297,7 @@ class PetTradeController extends BaseController
 
             $dealer = User::whereHas('roles', function ($query) {
                 $query->where('name', '=', Pet::DEALER_ROLE_NAME);
-            })->inRandomOrder()->first();
+            })->where('id', '<>', Auth::id())->inRandomOrder()->first();
 
             if (!$dealer) {
                 PayLogger::deposit()->emergency('没有交易商,系统无法挂售宠物');
