@@ -387,7 +387,11 @@ export default {
     },
 
     getMembersId(){
-      if(this.memberList.length == 0){
+      if(!this.memberList){
+        return [];
+      }
+
+      if( this.memberList.length == 0){
         return [];
       }
 

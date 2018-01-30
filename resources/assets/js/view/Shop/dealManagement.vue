@@ -354,6 +354,8 @@ export default {
 
         if(_tList.length == 0 ){
             Toast("当前未选择记录");
+            Loading.getInstance().close();
+            
             return;
         }
 

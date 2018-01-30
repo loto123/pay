@@ -14,7 +14,7 @@ class Profit extends Model
     }
 
     //分润所属代理
-    public function proxy() {
-        return $this->belongsTo('App\User', 'proxy', 'id');
-    }
+//    public function proxys() {
+//        return $this->belongsTo('App\User', 'proxy', 'id');
+//    }
 }

@@ -250,6 +250,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/', 'IndexController@index');
+        $api->get('/safe', 'IndexController@safe');
     });
 
 });
