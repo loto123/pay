@@ -451,12 +451,12 @@ class TransferController extends BaseController
         $amount = $request->points * $transfer->price;
         $tips = 0;
         if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
-            $tips = $transfer->tip_percent * $amount / 100;
+            $tips = bcdiv(bcmul($transfer->tip_percent, $amount, 2), 100, 2);
         }
         //收手续费
         $fee_amount = 0;
         if ($transfer->fee_percent) {
-            $fee_amount = $amount * $transfer->fee_percent / 100;
+            $fee_amount = bcdiv(bcmul($amount, $transfer->fee_percent, 2), 100, 2);
         }
         $real_amount = $amount - $tips - $fee_amount;
         return $this->json(['amount' => $amount, 'real_amount' => $real_amount], 'ok', 1);
@@ -993,6 +993,7 @@ class TransferController extends BaseController
             ],
             [
                 'required' => trans('trans.required'),
+                'between' => trans('trans.between')
             ]
         );
 
@@ -1170,11 +1171,11 @@ class TransferController extends BaseController
             $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
             $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
             $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
-                ->where(function($query) {
+                ->where(function ($query) {
                     $query->where('stat', 1)->orWhere('stat', 2);
                 })->sum('amount') : 0;
-            $data[$key]['eggs'] = PetRecord::whereIn('order',$item->transfer->record()->where('user_id', $user->id)
-                ->where(function($query) {
+            $data[$key]['eggs'] = PetRecord::whereIn('order', $item->transfer->record()->where('user_id', $user->id)
+                ->where(function ($query) {
                     $query->where('stat', 1)->orWhere('stat', 2);
                 })->pluck('id'))->count();
 //                ->where('stat', 1)->orWhere('stat', 2)

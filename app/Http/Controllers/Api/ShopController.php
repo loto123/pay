@@ -653,7 +653,7 @@ class ShopController extends BaseController {
         }
         $count = $query->count();
         $members = [];
-        $query->orderBy("id");
+        $query->orderBy((new ShopUser)->getTable().".id");
         if ($request->offset) {
             $query->where("id", ">", User::decrypt($request->offset));
         }
@@ -1661,6 +1661,7 @@ class ShopController extends BaseController {
         }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
+        $record->user_id = $shop->manager->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
@@ -1760,6 +1761,7 @@ class ShopController extends BaseController {
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
+        $record->user_id = $member->id;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
         $record->remark = $request->remark;
@@ -1939,6 +1941,7 @@ class ShopController extends BaseController {
             'created_at' => strtotime($fund->created_at),
             'no' => (string)$fund->no,
             'remark' => (string)$fund->remark,
+            'user_name' => $fund->user ? $fund->user->mobile : '',
             'balance' => $fund->balance
         ]);
     }
