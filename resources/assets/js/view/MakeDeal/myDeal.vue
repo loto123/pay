@@ -12,7 +12,7 @@
         </div>
 
         <div class="deal-wrap" ref="wrapper" >
-            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
+            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80" v-if="isListShow">
                 <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
@@ -30,7 +30,6 @@
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
-                        <!-- <div class="title">手续费收益</div> -->
                         <div class="m-text">{{item.amount}}<i class="diamond" style="margin-left:0.4em;">&#xe6f9;</i></div>
                     </div>
                     <div class="star-wrap flex flex-align-center flex-justify-center flex-1" @click.stop="markItem(item.id)">
@@ -52,6 +51,7 @@
 </template>
 
 <style lang="scss" scoped>
+
 .h_5em{
   height: 5em !important;
 }
@@ -195,6 +195,8 @@ export default {
   },
   data() {
     return {
+      isListShow:false,                     // 列表是否显示
+
       tabItem: [true, false, false],
       isStar:false,
       dataList:[],
@@ -259,6 +261,8 @@ export default {
     },
 
     changeTab(item) {
+      this.isListShow = false;
+
       if (item > 2 || item < 0) {
         return;
       } else {
@@ -275,6 +279,7 @@ export default {
           request.getInstance().getData('api/transfer/record',_data).then(res=>{
             this.dataList = res.data.data.data;
             Loading.getInstance().close();
+            this.isListShow = true;
             
           }).catch(err=>{
             Loading.getInstance().close();
@@ -340,6 +345,7 @@ export default {
     },
     init(){
       Loading.getInstance().open();
+      this.isListShow = false;
       var _status = 0;
       for(var i = 0; i<this.tabItem.length; i++){
         if(this.tabItem[i] == true){
@@ -354,6 +360,7 @@ export default {
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
         this.dataList = res.data.data.data;
         Loading.getInstance().close();
+        this.isListShow = true;
         
       }).catch(err=>{
         Loading.getInstance().close();
