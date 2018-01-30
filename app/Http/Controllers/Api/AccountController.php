@@ -173,6 +173,11 @@ class AccountController extends BaseController
                 break;
             }
 
+            if ($price > $method->maximum_amount) {
+                $message = '该方式最大金额' . $method->maximum_amount . '元';
+                break;
+            }
+
             $record = new UserFund();
             $record->user_id = $user->id;
             $record->type = UserFund::TYPE_CHARGE;
