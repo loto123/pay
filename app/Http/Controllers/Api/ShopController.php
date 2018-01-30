@@ -1647,7 +1647,7 @@ class ShopController extends BaseController {
         $shop = Shop::findByEnId($shop_id);
 
         if ($shop->container->balance < $request->amount) {
-            return $this->json([], trans("error_balance"), 0);
+            return $this->json([], trans("api.error_balance"), 0);
         }
         if (!$shop->manager) {
             return $this->json([], trans("error_shop_manager"), 0);
@@ -1754,7 +1754,7 @@ class ShopController extends BaseController {
         }
         $shop = Shop::findByEnId($shop_id);
         if ($shop->container->balance < $request->amount) {
-            return $this->json([], trans("error_balance"), 0);
+            return $this->json([], trans("api.error_balance"), 0);
         }
         $member = User::findByEnId($user_id);
         $record = new ShopFund();

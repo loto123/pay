@@ -297,7 +297,7 @@ class PetTradeController extends BaseController
 
             $dealer = User::whereHas('roles', function ($query) {
                 $query->where('name', '=', Pet::DEALER_ROLE_NAME);
-            })->inRandomOrder()->first();
+            })->where('id', '<>', Auth::id())->inRandomOrder()->first();
 
             if (!$dealer) {
                 PayLogger::deposit()->emergency('没有交易商,系统无法挂售宠物');
@@ -422,7 +422,7 @@ class PetTradeController extends BaseController
         $row = DB::select('select `id`,`status`,`image` from `pets` where `id` = (select `id` from `pets` where `user_id`=? and `id`=? union select `pet_id` from `pay_sell_bill` where `belong_to`=? and `pet_id`=?)', [Auth::id(), $pet_id, Auth::id(), $pet_id]);
         if ($row) {
             $pet = $row[0];
-            return $this->json(['id' => $pet->id, 'hatching' => $pet->status == Pet::STATUS_HATCHING, 'pic' => $pet->image]);
+            return $this->json(['id' => $pet->id, 'hatching' => empty($pet->hash), 'pic' => $pet->image]);
         } else {
             return $this->json([], '宠物不存在', 0);
         }
@@ -537,7 +537,7 @@ class PetTradeController extends BaseController
         }
 
         //取得出售记录
-        $list = SellBill::where($filter)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
+        $list = SellBill::where($where)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
             return [
                 'id' => $item->getKey(),
                 'state' => $item->deal_closed ? (WithdrawRetry::isWithdrawFailed($item->withdraw->state) ? '状态异常' : '出售成功') : '出售中',
