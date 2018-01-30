@@ -371,7 +371,7 @@ class User extends Authenticatable
      * @param integer $nums
      * @param integer $type 0=宠物蛋 1=宠物
      * @param integer $source 0=系统初始赠送 1=交易产生 2=订单取消补偿
-     * @param integer $order 订单号
+     * @param string $order 订单号
      * @return array
      */
     public function batch_create_pet($num, $type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER, $order = "") {
