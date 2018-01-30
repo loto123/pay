@@ -119,6 +119,7 @@ class ShopController extends BaseController {
         $shop->price = $request->rate;
         $shop->fee = $request->percent;
         $shop->container_id = $wallet->id;
+        $shop->active = $request->active ? 1 : 0;
         $shop->save();
         $shop_user = new ShopUser();
         $shop_user->shop_id = $shop->id;
