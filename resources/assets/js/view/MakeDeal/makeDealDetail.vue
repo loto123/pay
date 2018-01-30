@@ -441,7 +441,9 @@ export default {
           Loading.getInstance().close();
         })
         .catch(err => {
-          console.error(err);
+          Toast(err.data.msg);
+          Loading.getInstance().close();
+          this.$router.push('/404notfound');
         });
     },
 

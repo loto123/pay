@@ -12,6 +12,7 @@ import Inform from './inform'
 import Share from './share'
 import ShareProfit from './shareProfit'
 import Vip from './vip'
+import ForOForPage from './404'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -22,6 +23,7 @@ Vue.use(Router)
 
 var index = [
     { path: '/index', name: 'index', component: Index },
+    { path: '/', name: 'indexDefault', component: Index },
 ]
 
 var routerList = {
@@ -47,7 +49,10 @@ var routerList = {
     shareProfit:ShareProfit ,
     
     // vip
-    vip:Vip
+    vip:Vip,
+
+    // 404页面
+    notFound:ForOForPage
 };
 
 var router = [];
