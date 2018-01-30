@@ -55,7 +55,7 @@
                             <h5>{{status(item.type)}}</h5>
                             <div class="time">{{changeTime(item.created_at)}}</div>
                         </div>
-                        <div class="bill-money">{{tabStatus[0]?item.amount:item.proxy_amount}}</div>
+                        <div class="bill-money">{{tabStatus[0]?item.amount:item.amount}}</div>
                     </a>
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
@@ -207,7 +207,6 @@
                 if (this.tabStatus[0] == true) {
                     request.getInstance().getData("api/account/records", _data)
                         .then((res) => {
-
                             var _dataList = res.data.data.data;
 
                             if (_dataList.length == 0) {
@@ -276,11 +275,11 @@
                         return null;
                     }
 
-                    var _index = timecode.indexOf("-");
+                    var _index = this.changeTime(timecode).indexOf("-");
                     if (_index == -1) {
                         return null
                     }
-                    var _t = timecode.split("-");
+                    var _t = this.changeTime(timecode).split("-");
                     var data = _t[0] + "年" + _t[1] + "月";
                     return data;
                 }
@@ -303,11 +302,12 @@
                         // 日期筛选 
                         if (this.dateChoise != null) {
                             var _data = {
-                                date: this.dateChoise
+                                month: this.dateChoise,
+                                type:[0,1]
                             }
 
                             // 获取当月的总额度
-                            request.getInstance().postData("api/account/records/month", _data)
+                            request.getInstance().getData("api/account/records/month", _data)
                                 .then(res => {
                                     var _initialData = {
                                         time: _head,
@@ -320,7 +320,7 @@
                                 }).catch();
                         } else {
                             // 获取当月的总额度
-                            request.getInstance().postData("api/account/records/month")
+                            request.getInstance().getData("api/account/records/month", _data)
                                 .then(res => {
                                     var _initialData = {
                                         time: _head,
@@ -332,16 +332,16 @@
                                     // this.tabTotal = this.headList[0].total;
                                 }).catch();
                         }
-
                     } else if (this.tabStatus[1] == true) {
                         // 提现列表
                         // 日期筛选 
                         if (this.dateChoise != null) {
                             var _data = {
-                                date: this.dateChoise
+                                month: this.dateChoise,
+                                type:[2,3,4,]
                             }
                             // 获取当月的总额度
-                            request.getInstance().postData("api/profit/withdraw/count", _data)
+                            request.getInstance().getData("api/account/records/month", _data)
                                 .then(res => {
                                     var _initialData = {
                                         time: _head,
@@ -354,7 +354,7 @@
                                 }).catch();
                         } else {
                             // 获取当月的总额度
-                            request.getInstance().postData("api/profit/withdraw/count")
+                            request.getInstance().getData("api/account/records/month", _data)
                                 .then(res => {
                                     // var _initialData = {
                                     //     time:_head,
@@ -430,12 +430,12 @@
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
                         var _timer = _year + "-" + _month;
                         var _data = {
-                            date: _timer
+                            month: _timer
                         }
 
                         if (this.tabStatus[0] == true) {
                             // 获取当月的总额度(分润)
-                            request.getInstance().postData("api/account/records/month", _data)
+                            request.getInstance().getData("api/account/records/month", _data)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
@@ -443,7 +443,7 @@
                                 }).catch();
                         } else {
                             // 获取当月的总额度(分润)
-                            request.getInstance().getData("api/account/records", _data)
+                            request.getInstance().getData("api/account/records/month", _data)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
@@ -512,9 +512,8 @@
                         this.loading = false;
                         this.buildTimePanel();
                     }).catch(err => {
-
                         Loading.getInstance().close;
-                        Toast(err.data.meg);
+                        Toast(err.data.msg);
 
                     });
                 }, 1500);
@@ -621,7 +620,8 @@
                 Loading.getInstance().open("加载中...");
                 request.getInstance().getData("api/account/records?type=" + type)
                     .then((res) => {
-                        this.billList = res.data.data.data;
+                        this.recordList = res.data.data.data;
+                        console.log(this.recordList);
                         this.showAlert = false;
                         Loading.getInstance().close();
                     })

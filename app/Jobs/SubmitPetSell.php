@@ -78,7 +78,7 @@ class SubmitPetSell implements ShouldQueue
              */
             $dealer = User::whereHas('roles', function ($query) {
                 $query->where('name', '=', \App\Pet::DEALER_ROLE_NAME);
-            })->inRandomOrder()->first();
+            })->where('id', '<>', $bill->place_by)->inRandomOrder()->first();
             if (!$dealer) {
                 $this->retry();
                 PayLogger::withdraw()->emergency('没有交易商,系统无法回收宠物');
