@@ -10,7 +10,7 @@
 				<div class="tltle">选择要出售的宠物：</div>
 				<div class="pet-list-box">
 
-					<ul class="pet-list flex flex-justify-start flex-wrap-on">
+					<ul class="pet-list flex flex-justify-start flex-wrap-on" v-if="isShow && petsList.length!=0">
 						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
 							<img :src="item.pic">
 						</li>
@@ -96,7 +96,38 @@
 		</div>
 		
 		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
-		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
+
+		<!-- 提交后的付款信息 -->
+		<div class="pay-info-detail flex flex-v flex-align-center" v-if="isPayInfoDetailShow">
+			<div class="top-wrap"></div>
+			<div class="bottom-wrap">
+				<ul>
+					<li class="flex flex-align-center">
+						<span class="flex-1 ">出售价格</span>
+						<span class="flex-1 flex flex-justify-end">￥100</span>
+					</li>
+					<li class="flex flex-align-center">
+						<span class="flex-1">手续费</span>
+						<span class="flex-1 flex flex-justify-end">￥100</span>
+					</li>
+					<li class="flex flex-align-center">
+						<span class="flex-1">到账银行卡</span>
+						<span class="flex-1 flex flex-justify-end">招商银行 尾号2027</span>
+					</li>
+				</ul>
+			</div>
+			<div class="button-wrap">
+				<mt-button type="primary" size="large">完成</mt-button>
+			</div>
+		</div>
+
+		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack">
+			<div class="withdraw-info flex flex-v flex-align-center">
+				<div class="title">出售</div>
+				<div class="price">￥{{amount}}</div>
+				<div class="notice">额外扣除2元/次 手续费</div>
+			</div>
+		</passWorld>
 	</div>
 </template>
 
@@ -122,6 +153,7 @@
 				fee_value: null,
 				isFee: false,                   // 是否展示手续费
 				isShow:false,
+				isPayInfoDetailShow:false,      // 付款后的提示
 
 				getEggsTimes:0,
 				isPopDetailShow:false,          // 查看更多显示
@@ -213,6 +245,16 @@
 
 				this.withdraw();
 
+				if(this.amount == null){
+					Toast("请输入出售金额");
+					return;
+				}
+
+				if(this.petId == null){
+					Toast("请选择出售的宠物");
+					return;
+				}
+
 				//成功内容
 				var _data = {
 					way: this.value
@@ -247,7 +289,8 @@
 				Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/account/withdraw', _data)])
 					.then((res) => {
 						Toast('出售成功');
-						this.$router.push('/myAccount');
+						this.isPayInfoDetailShow = true;
+						// this.$router.push('/myAccount');
 					})
 					.catch((err) => {
 						Toast(err.data.msg);
@@ -361,6 +404,60 @@
 </script>
 
 <style lang="scss" scoped>
+
+	.pay-info-detail{
+		padding-top:2em;
+		position: fixed;
+		width: 100%;
+		height: 100vh;
+		background: #fff;
+		top:0;
+		left: 0;
+
+		.top-wrap{
+			width:90%;
+			height: 8em;
+		}
+
+		.bottom-wrap{
+			border-top:1px solid #eee;
+			width:90%;
+			height: 8em;
+			/*background: red;*/
+			ul{
+				li{
+					width:100%;
+					height: 2.5em;
+				}
+			}
+		}
+
+		.button-wrap{
+			width:90%;
+			margin-top:0.5em;
+		}
+	}
+
+
+	/*密码提示*/
+	.withdraw-info{
+		width:100%;
+		height: 5em;
+		
+		>div{
+			margin-top: 0.5em;
+		}
+		.title{
+			font-weight: bold;
+		}
+		.price{
+			font-size: 1.3em;
+		}
+		.notice{
+			color: #555;
+		}
+	}
+
 	.withdraw-container {
 		background: #eee;
 		height: 100vh;
@@ -481,6 +578,9 @@
 			
 			.notice{
 				height: 4em;
+				padding-top:1em;
+				box-sizing: border-box;
+
 				h3{
 					font-size: 1.2em;
 					color:#555;

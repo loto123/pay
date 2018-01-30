@@ -47,6 +47,10 @@ class WithdrawRetry extends PayRetry
 
         $commit ? DB::commit() : DB::rollBack();
         $success = !in_array($result->state, self::$abnormal_states);
+        if ($success) {
+            //卖单状态变为成交
+            SellBill::where('withdraw_id', $this->id)->update(['deal_closed' => 1]);
+        }
         return $this->response($success, $success ? Withdraw::getStateText($result->state) : "错误:" . $result->raw_response);
     }
 }

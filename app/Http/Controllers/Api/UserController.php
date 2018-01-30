@@ -133,8 +133,8 @@ class UserController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'old_password' => 'bail|required',
-                'new_password' => 'bail|required|min:6|max:16',
-                'confirm_password' => 'bail|required|min:6|max:16',
+                'new_password' => 'bail|required|min:8|max:16',
+                'confirm_password' => 'bail|required|min:8|max:16',
             ],
             [
                 'required' => trans('trans.required'),

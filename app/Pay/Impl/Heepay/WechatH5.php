@@ -26,7 +26,7 @@ class WechatH5 implements DepositInterface
             'agent_id' => $config['agent_id'],
             'pay_type' => 30,
             'is_frame' => (int)(strpos(request()->header('User-Agent'), 'MicroMessenger') !== false),
-            'goods_name' => DepositInterface::GOOD_NAME,
+            'goods_name' => mb_convert_encoding(DepositInterface::GOOD_NAME, 'GB2312', 'UTF-8'),
             'agent_bill_time' => date('Ymdhis'),
             'agent_bill_id' => $this->mixUpDepositId($deposit_id),
             'notify_url' => $notify_url,

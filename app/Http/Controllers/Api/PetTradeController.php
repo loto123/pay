@@ -51,7 +51,13 @@ class PetTradeController extends BaseController
      *                  @SWG\Property(property="pic", type="string", example="http://xy.com/a.gif",description="宠物图片"),
      *                  @SWG\Property(property="is_egg", type="boolean", example=false,description="是不是蛋"),
      *                  )
-     *                  )
+     *                  ),
+     *               @SWG\Property(
+     *                      property="egg_acquire_times",
+     *                      type="integer",
+     *                      description="免费宠物蛋可领取次数"
+     *              )
+     *               )
      *              )
      *          )
      *      ),
@@ -65,7 +71,7 @@ class PetTradeController extends BaseController
      */
     public function sellable()
     {
-        return $this->json(['list' => Auth::user()->pets_for_sale()->get()->map(function ($item) {
+        return $this->json(['egg_acquire_times' => Auth::user()->pet_left_times(), 'list' => Auth::user()->pets_for_sale()->get()->map(function ($item) {
             return ['id' => $item->getKey(), 'pic' => $item->status == Pet::STATUS_UNHATCHED ? '' : $item->image, 'is_egg' => $item->status == Pet::STATUS_UNHATCHED];
         })]);
     }
@@ -291,7 +297,7 @@ class PetTradeController extends BaseController
 
             $dealer = User::whereHas('roles', function ($query) {
                 $query->where('name', '=', Pet::DEALER_ROLE_NAME);
-            })->inRandomOrder()->first();
+            })->where('id', '<>', Auth::id())->inRandomOrder()->first();
 
             if (!$dealer) {
                 PayLogger::deposit()->emergency('没有交易商,系统无法挂售宠物');
@@ -413,10 +419,10 @@ class PetTradeController extends BaseController
         }
 
         //只能查询自己的宠物或专属卖单的宠物
-        $row = DB::select('select `id`,`status`,`image` from `pets` where `id` = (select `id` from `pets` where `user_id`=? and `id`=? union select `pet_id` from `pay_sell_bill` where `belong_to`=? and `pet_id`=?)', [Auth::id(), $pet_id, Auth::id(), $pet_id]);
+        $row = DB::select('select `id`,`image`,`hash` from `pets` where `id` = (select `id` from `pets` where `user_id`=? and `id`=? union select `pet_id` from `pay_sell_bill` where `belong_to`=? and `pet_id`=?)', [Auth::id(), $pet_id, Auth::id(), $pet_id]);
         if ($row) {
             $pet = $row[0];
-            return $this->json(['id' => $pet->id, 'hatching' => $pet->status == Pet::STATUS_HATCHING, 'pic' => $pet->image]);
+            return $this->json(['id' => $pet->id, 'hatching' => empty($pet->hash), 'pic' => $pet->image]);
         } else {
             return $this->json([], '宠物不存在', 0);
         }
@@ -531,7 +537,7 @@ class PetTradeController extends BaseController
         }
 
         //取得出售记录
-        $list = SellBill::where($filter)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
+        $list = SellBill::where($where)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
             return [
                 'id' => $item->getKey(),
                 'state' => $item->deal_closed ? (WithdrawRetry::isWithdrawFailed($item->withdraw->state) ? '状态异常' : '出售成功') : '出售中',
