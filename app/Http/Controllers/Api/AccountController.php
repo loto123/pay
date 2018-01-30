@@ -173,8 +173,8 @@ class AccountController extends BaseController
                 break;
             }
 
-            if ($price > $method->maximum_amount) {
-                $message = '该方式最大金额' . $method->maximum_amount . '元';
+            if ($method->maximum_amount > 0 && $price > $method->maximum_amount) {
+                $message = $method->show_label . '购买最大金额为' . $method->maximum_amount . '元';
                 break;
             }
 
