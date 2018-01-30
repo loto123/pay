@@ -37,7 +37,7 @@ export default class UserRequest {
                         resolve(res);
                     }else if(res.data.code == 2){
                         Loading.getInstance().close();
-                        Toast("用户未登录,即将跳转登录...");
+                        // Toast("用户未登录,即将跳转登录...");
                         setTimeout(function(){
                             window.location.href = "/#/login";
                         },1000);
@@ -74,7 +74,7 @@ export default class UserRequest {
                     }else if(res.data.code == 2){
 
                         Loading.getInstance().close();
-                        Toast("用户未登录,即将跳转登录...");
+                        // Toast("用户未登录,即将跳转登录...");
                         setTimeout(function(){
                             window.location.href = "/#/login"
                         },2000);

@@ -16,8 +16,8 @@
             </i>
           </div>
           
-          <h3 class="money-text">{{total_profit}}元</h3>
-          <h3>公会总收益(元)</h3>
+          <h3 class="money-text">{{total_profit}}<i class="diamond" style="margin-left: 0.5em;">&#xe6f9;</i></h3>
+          <h3>公会总收益</h3>
 
       </div>
       

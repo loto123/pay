@@ -385,7 +385,7 @@ export default {
       
       status:null,
       recordList:[],
-
+      canClick:true,              // 防止连续点击
       choiseMemberSwitch:false,
     };
   },
@@ -419,6 +419,7 @@ export default {
 
     init() {
       Loading.getInstance().open();
+      this.canClick = true;
       this.transfer_id = this.$route.query.id;
       var _data = {
         transfer_id: this.transfer_id
@@ -628,10 +629,16 @@ export default {
 
       qrcode.makeCode(window.location.href);
     },
+
     cancelTrade(){
+      if(this.canClick == false){
+        return;
+      }
+      this.canClick = false;
       var _data = {
         transfer_id:this.transfer_id
       }
+
       request.getInstance().postData('api/transfer/cancel',_data).then(res=>{
         Toast("撤销任务成功");
         setTimeout(()=>{
