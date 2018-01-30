@@ -1495,10 +1495,13 @@ class TransferController extends BaseController
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
                             }
-                            if ($profit->save()) {
-                                //发送通知
-                                if ($profit->proxy_amount > 0) {
-                                    \App\Admin\Controllers\NoticeController::send([$profit->proxy], 1, '', '', $profit->id);
+                            //公司与代理分润为0时不记录分润 并且不发送提醒通知
+                            if ($profit->fee_amount > 0 || $profit->proxy_amount > 0) {
+                                if ($profit->save()) {
+                                    //发送通知
+                                    if ($profit->proxy_amount > 0) {
+                                        \App\Admin\Controllers\NoticeController::send([$profit->proxy], 1, '', '', $profit->id);
+                                    }
                                 }
                             }
                         }
