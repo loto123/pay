@@ -1474,14 +1474,16 @@ class TransferController extends BaseController
                             $profit->operator = 0;
                             $profit->proxy_percent = 0;
                             $profit->proxy_amount = 0;
-                            if ($value->user->parent && $value->user->parent->percent) {
-                                $profit->proxy = $value->user->parent->id;
-                                $profit->proxy_percent = $value->user->parent->percent;
+                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent) {
                                 $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
+                                if ($profit->proxy_amount > 0) {
+                                    $profit->proxy = $value->user->parent->id;
+                                    $profit->proxy_percent = $value->user->parent->percent;
+                                }
                             }
-                            if ($profit->proxy_amount <= 0) {
-                                continue;
-                            }
+//                            if ($profit->proxy_amount <= 0) {
+//                                continue;
+//                            }
                             //解冻代理资金
 //                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
                             //解冻代理分润账户资金
