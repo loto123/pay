@@ -318,8 +318,7 @@ export default {
           Loading.getInstance().close();
           
         }).catch(err=>{
-        Loading.getInstance().close();
-
+          Loading.getInstance().close();
         });
       }
     },

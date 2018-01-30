@@ -158,7 +158,28 @@
                     request.getInstance().postData("api/profit/data",_data)
                     .then((res) => {
 
-                        var _dataList = res.data.data.data;
+                        var _dataList = [
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":'2017-1-1'},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589},
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":1517300655},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589},
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":1517300655},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589},
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":1517300655},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589}
+                        ];
 
                         if(_dataList.length == 0){
                             this.recordList = [];
