@@ -895,6 +895,7 @@ class AccountController extends BaseController
         $user = $this->auth->user();
 
         $fund = UserFund::findByEnId($id);
+        /* @var $fund UserFund */
         if (!$fund || $fund->user_id != $user->id) {
             return $this->json([], trans("error_fund"), 0);
         }
@@ -904,7 +905,7 @@ class AccountController extends BaseController
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => (string)$fund->no,
+            'no' => $fund->en_id(),
             'remark' => (string)$fund->remark,
             'balance' => $fund->balance
         ]);

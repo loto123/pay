@@ -135,7 +135,18 @@
                 request.getInstance().postData('api/pet/refresh_pet', _data)
                     .then((res) => {
                         this.hatching=res.data.data.hatching;
-                        this.pic=res.data.data.pic;
+                        if (this.hatching==false) {
+                            this.pic=res.data.data.pic;    
+                        }else{
+                            this.timer = setTimeout(() => {
+                                Loading.getInstance().open('宠物孵化中...');
+                                this.refresh();
+                                if(this.hatching==false){
+                                    clearTimeout(this.timer);
+                                    Loading.getInstance().close();
+                                }
+                            }, 500)
+                        }
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
