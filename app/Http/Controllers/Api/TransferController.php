@@ -596,7 +596,9 @@ class TransferController extends BaseController
                     if ($transfer->shop && $transfer->shop->container) {
 //                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
                         $receiver = $transfer->shop->container;
-                        $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
+                        if($tip->amount) {
+                            $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
+                        }
                     }
                 }
                 //收手续费
