@@ -993,6 +993,7 @@ class TransferController extends BaseController
             ],
             [
                 'required' => trans('trans.required'),
+                'between' => trans('trans.between')
             ]
         );
 
