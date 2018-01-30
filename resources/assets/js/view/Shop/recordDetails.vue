@@ -66,7 +66,7 @@
 						this.amount=res.data.data.amount
 						this.type=res.data.data.type	
 						this.mode=res.data.data.mode
-						this.userName=res.data.user_name
+						this.userName=res.data.data.user_name
                         Loading.getInstance().close();
 					})
 					.catch((err) => {
