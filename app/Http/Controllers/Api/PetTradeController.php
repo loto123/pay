@@ -422,7 +422,7 @@ class PetTradeController extends BaseController
         $row = DB::select('select `id`,`status`,`image` from `pets` where `id` = (select `id` from `pets` where `user_id`=? and `id`=? union select `pet_id` from `pay_sell_bill` where `belong_to`=? and `pet_id`=?)', [Auth::id(), $pet_id, Auth::id(), $pet_id]);
         if ($row) {
             $pet = $row[0];
-            return $this->json(['id' => $pet->id, 'hatching' => $pet->status == Pet::STATUS_HATCHING, 'pic' => $pet->image]);
+            return $this->json(['id' => $pet->id, 'hatching' => empty($pet->hash), 'pic' => $pet->image]);
         } else {
             return $this->json([], '宠物不存在', 0);
         }
