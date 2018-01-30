@@ -10,7 +10,7 @@
       <div class="user-box flex flex-v flex-align-center">
         <img :src="transferData.avatar" alt="">
         <h3 class="name">{{transferData.name}}</h3>
-        <h3 class="id">{{transferData.id}}</h3>
+        <h3 class="id">{{transferData.mobile}}</h3>
       </div>
     </div>
 

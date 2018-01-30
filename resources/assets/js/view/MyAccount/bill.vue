@@ -296,79 +296,79 @@
                     }
                 }
 
-                if (this.headList.length == 0) {
-                    // 分润列表
-                    if (this.tabStatus[0] == true) {
-                        // 日期筛选 
-                        if (this.dateChoise != null) {
-                            var _data = {
-                                month: this.dateChoise,
-                                type:[0,1]
-                            }
+                // if (this.headList.length == 0) {
+                //     // 分润列表
+                //     if (this.tabStatus[0] == true) {
+                //         // 日期筛选 
+                //         if (this.dateChoise != null) {
+                //             var _data = {
+                //                 month: this.dateChoise,
+                //                 type:[0,1]
+                //             }
 
-                            // 获取当月的总额度
-                            request.getInstance().getData("api/account/records/month", _data)
-                                .then(res => {
-                                    var _initialData = {
-                                        time: _head,
-                                        index: key,
-                                        total: res.data.data.total
-                                    }
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
-                                }).catch();
-                        } else {
-                            // 获取当月的总额度
-                            request.getInstance().getData("api/account/records/month", _data)
-                                .then(res => {
-                                    var _initialData = {
-                                        time: _head,
-                                        index: key,
-                                        total: res.data.data.total
-                                    }
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
-                                }).catch();
-                        }
-                    } else if (this.tabStatus[1] == true) {
-                        // 提现列表
-                        // 日期筛选 
-                        if (this.dateChoise != null) {
-                            var _data = {
-                                month: this.dateChoise,
-                                type:[2,3,4,]
-                            }
-                            // 获取当月的总额度
-                            request.getInstance().getData("api/account/records/month", _data)
-                                .then(res => {
-                                    var _initialData = {
-                                        time: _head,
-                                        index: key,
-                                        total: res.data.data.total
-                                    }
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
-                                }).catch();
-                        } else {
-                            // 获取当月的总额度
-                            request.getInstance().getData("api/account/records/month", _data)
-                                .then(res => {
-                                    // var _initialData = {
-                                    //     time:_head,
-                                    //     index:key,
-                                    //     total:res.data.data.total
-                                    // }
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
-                                }).catch();
-                        }
+                //             // 获取当月的总额度
+                //             request.getInstance().getData("api/account/records/month", _data)
+                //                 .then(res => {
+                //                     var _initialData = {
+                //                         time: _head,
+                //                         index: key,
+                //                         total: res.data.data.total
+                //                     }
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
+                //                 }).catch();
+                //         } else {
+                //             // 获取当月的总额度
+                //             request.getInstance().getData("api/account/records/month", _data)
+                //                 .then(res => {
+                //                     var _initialData = {
+                //                         time: _head,
+                //                         index: key,
+                //                         total: res.data.data.total
+                //                     }
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
+                //                 }).catch();
+                //         }
+                //     } else if (this.tabStatus[1] == true) {
+                //         // 提现列表
+                //         // 日期筛选 
+                //         if (this.dateChoise != null) {
+                //             var _data = {
+                //                 month: this.dateChoise,
+                //                 type:[2,3,4,]
+                //             }
+                //             // 获取当月的总额度
+                //             request.getInstance().getData("api/account/records/month", _data)
+                //                 .then(res => {
+                //                     var _initialData = {
+                //                         time: _head,
+                //                         index: key,
+                //                         total: res.data.data.total
+                //                     }
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
+                //                 }).catch();
+                //         } else {
+                //             // 获取当月的总额度
+                //             request.getInstance().getData("api/account/records/month", _data)
+                //                 .then(res => {
+                //                     // var _initialData = {
+                //                     //     time:_head,
+                //                     //     index:key,
+                //                     //     total:res.data.data.total
+                //                     // }
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
+                //                 }).catch();
+                //         }
 
-                    }
-                }
+                //     }
+                // }
 
                 var _initialData = {
                     time: _head,
@@ -430,9 +430,9 @@
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
                         var _timer = _year + "-" + _month;
                         var _data = {
-                            month: _timer
+                            month: _timer,
+                            type:[0,1]
                         }
-
                         if (this.tabStatus[0] == true) {
                             // 获取当月的总额度(分润)
                             request.getInstance().getData("api/account/records/month", _data)
@@ -443,6 +443,10 @@
                                 }).catch();
                         } else {
                             // 获取当月的总额度(分润)
+                            var _data = {
+                                month: _timer,
+                                type:[2,3,4,5,6,7,8,9]
+                            }
                             request.getInstance().getData("api/account/records/month", _data)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
@@ -717,7 +721,20 @@
             }
         }
     }
+    .time-tab{
+        width:100%;
+        // height:3em;
+        background:#eee;
+        padding:0;
+        box-sizing:border-box;
+        padding-left: 1em;
+        padding-right:1em;
 
+         >div{
+            color: #555;
+            margin-top:0.3em;
+        }
+    }
     .slide-enter-active,
     .slide-leave-active {
         transition: all 1s ease;
