@@ -60,4 +60,5 @@ return [
     'date_format' => '日期格式错误',
     'proxy_withdraw_success' => '提现成功',
     'proxy_withdraw_failed' => '提现失败',
+    'trans_permission_deny' => '您不是该公会成员，暂无访问权限',
 ];
