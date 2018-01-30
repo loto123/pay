@@ -12,7 +12,7 @@
         </div>
         <div class="systemInfo-box" ref='wrapper'>
             <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
-                <li v-for="item in systemList" @click="goDetails(item.operator_state,item.notice_id,item.link,item.has_detail)">
+                <li v-for="item in systemList" @click="goDetails(item.notice_id,item.link)">
                     <div class="top-info flex flex-align-end flex-justify-between">
                         <div class="title flex-6">{{item.title}}</div>
                         <div class="date flex-4">{{item.created_at}}</div>
@@ -21,7 +21,7 @@
                         <div class="content flex-6" v-html="item.content"></div>
                         <div class="isRead flex-1">{{item.read_state==1?'已读':''}}</div>
                         <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around" v-if="item.operator_state==1">
-                            <span v-for="(option,index) in item.operator_options" :style="{background: option.color}" @click="optionBtn(item.notice_id,index)">{{option.text}}</span>
+                            <span v-for="(option,index) in item.operator_options" :style="{background: option.color}" v-on:click.stop="optionBtn(item.notice_id,index)">{{option.text}}</span>
                         </div>
                         <!-- 显示操作后的结果 -->
                         <div v-if="item.operators_res.length != 0" class="status">{{item.operators_res.message}}</div>
@@ -68,17 +68,16 @@
             goUser() {
                 this.$router.push("/userRegister");
             },
-            goDetails(status, e,links,isDetails) { //详情
-                if (status == 1) {
-                    return
-                }
+            goDetails(e,links) { //详情
+                // if (status == 1) {
+                //     return
+                // }
                 if (links != '') {
                     location.href=links
                     return
                 }
-                if(isDetails == 1){
-                  this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
-                }
+                this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
+                console.log(231);
             },
             systemInfo() { //列表
                 var self = this;

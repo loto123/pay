@@ -176,12 +176,12 @@ class UserController extends Controller
                 return $this->en_id();
             });
             if ($id) {
-                $form->display('name', '用户名');
+                $form->display('name', '昵称');
             } else {
-                $form->text('name', '用户名');
+                $form->text('name', '昵称 *')->rules('required');
             }
-            $form->password('password', '密码');
-            $form->text('mobile', '手机号码');
+            $form->password('password', '密码 *')->rules('required|min:8|max:16');
+            $form->text('mobile', '手机号码 *')->rules('required|regex:/^1[34578][0-9]{9}$/');
             if ($id) {
                 $form->display('container.balance', '剩余钻石');
             }
@@ -212,11 +212,6 @@ class UserController extends Controller
             $form->hidden('channel_id');
             $form->ignore(['wechat']);
             $form->saving(function (Form $form) {
-                /*
-                 * 提交前需要做一些处理：
-                 * 1.解绑微信号，需要弹出一个js确认框
-                 * 2.验证手机号的唯一性
-                 * */
                 if($form->model()->mobile != $form->mobile && User::where('mobile',$form->mobile)->count()>0) {
                     $error = new MessageBag([
                         'title'   => '操作有误',

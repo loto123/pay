@@ -344,6 +344,9 @@
             if (this.userPassword.length < 8) {
               Toast("密码长度最少为8位");
               return;
+            }else if(this.userPassword.length >16){
+              Toast("密码长度最多不能超过16位");
+              return;
             }
 
             var _data = {
@@ -370,6 +373,9 @@
 
             if (this.userPassword.length < 8) {
               Toast("密码长度最少为8位");
+              return;
+            }else if(this.userPassword.length >16){
+              Toast("密码长度最多不能超过16位");
               return;
             }
 

@@ -160,6 +160,7 @@ class NoticeController extends BaseController
         }
         $notice = $notice_query->orderBy("uid", "DESC")->limit($request->input('limit', 20))->get();
         $list = [];
+        $has_detail = 1;
         if (!empty($notice) && count($notice)> 0) {
             switch ($type){
                 case '1'://分润
@@ -181,7 +182,7 @@ class NoticeController extends BaseController
                             'operator_options' => new \stdClass(),
                             'operators_res' => new \stdClass(),
                             'read_state' => $item->read_at ? 1 : 0,
-                            'has_detail' => 1,
+                            'has_detail' => $has_detail,
                         ];
                         //是否需要操作
                         if(!empty($item->data['operators'])) {
@@ -193,7 +194,6 @@ class NoticeController extends BaseController
                                 $item->markAsRead();
                                 continue;
                             }
-                            $list_data['has_detail'] = 0;
                             //判断是否已经操作过了
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
@@ -211,6 +211,11 @@ class NoticeController extends BaseController
                     }
                     break;
                 case '2'://用户注册
+                    //用户注册的消息标志为已读
+                    foreach ($notice as $value) {
+                        $value->markAsRead();
+                    }
+                    $has_detail = 0;
                 case '3'://系统消息
                     foreach ($notice as $item) {
                         $list_data = [
@@ -224,11 +229,10 @@ class NoticeController extends BaseController
                             'operator_options' => new \stdClass(),
                             'operators_res' => new \stdClass(),
                             'read_state' => $item->read_at ? 1 : 0,
-                            'has_detail' => 1,
+                            'has_detail' => $has_detail,
                         ];
                         //是否需要操作
                         if(!empty($item->data['operators'])) {
-                            $list_data['has_detail'] = 0;
                             $operators = $item->data['operators'];
                             //判断操作是否过期
                             if(!empty($operators['expire_time'])
@@ -237,7 +241,6 @@ class NoticeController extends BaseController
                                 $item->markAsRead();
                                 continue;
                             }
-                            $list_data['has_detail'] = 0;
                             //判断是否已经操作过了
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
@@ -324,7 +327,7 @@ class NoticeController extends BaseController
 
         $notice_id = $request->notice_id;
         $value = $request->selected_value;
-        $notice = $this->user->unreadNotifications()->where("id", $notice_id)->first();
+        $notice = $this->user->notifications()->where("id", $notice_id)->first();
         $notice->markAsRead();
         $flag = false;
         $res = '';
