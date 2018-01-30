@@ -527,6 +527,9 @@ class TransferController extends BaseController
         if (!$transfer) {
             return $this->json([], trans('trans.trans_not_exist'), 0);
         }
+        if (!$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+            return $this->json([], trans('trans.trans_permission_deny'), 0);
+        }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
         }
@@ -593,7 +596,9 @@ class TransferController extends BaseController
                     if ($transfer->shop && $transfer->shop->container) {
 //                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
                         $receiver = $transfer->shop->container;
-                        $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
+                        if($tip->amount) {
+                            $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
+                        }
                     }
                 }
                 //收手续费
@@ -624,9 +629,9 @@ class TransferController extends BaseController
 //                $user_container = PayFactory::MasterContainer($user->container->id);
 //                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
 //                $pay_transfer = $transfer_container->transfer($user_container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
-                $pay_transfer = $transfer->container->transfer($user->container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
+                $pay_transfer = $transfer->container->transfer($user->container, $record->amount, bcsub($record->fee_amount, $proxy_fee, 2), 0, 0, $profit_shares);
                 if (!$pay_transfer) {
-                    Log::error('拿钱失败,容器转账失败', [$transfer->container->getKey(), $user->container->getKey(), $record->amount - $tips, $record->fee_amount - $proxy_fee, json_encode($profit_shares)]);
+                    Log::error('拿钱失败,容器转账失败', [$transfer->container->getKey(), $user->container->getKey(), bcsub($record->amount, $tips, 2), bcsub($record->fee_amount, $proxy_fee, 2), json_encode($profit_shares)]);
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }
             }
@@ -1471,29 +1476,35 @@ class TransferController extends BaseController
                             $profit->operator = 0;
                             $profit->proxy_percent = 0;
                             $profit->proxy_amount = 0;
-                            if ($value->user->parent && $value->user->parent->percent) {
-                                $profit->proxy = $value->user->parent->id;
-                                $profit->proxy_percent = $value->user->parent->percent;
+                            $profit->fee_amount = 0;
+                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent) {
                                 $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
+                                if ($profit->proxy_amount > 0) {
+                                    $profit->proxy = $value->user->parent->id;
+                                    $profit->proxy_percent = $value->user->parent->percent;
+                                }
                             }
-                            if ($profit->proxy_amount <= 0) {
-                                continue;
-                            }
+//                            if ($profit->proxy_amount <= 0) {
+//                                continue;
+//                            }
                             //解冻代理资金
 //                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
                             //解冻代理分润账户资金
                             $proxy_container = $value->user->parent->proxy_container;
                             $proxy_container->unfreeze($profit->proxy_amount);
-                            $profit->fee_amount = bcsub($value->fee_amount, $profit->proxy_amount, 2);
                             if ($value->user->operator) {
                                 $profit->operator = $value->user->operator->id;
+                                $profit->fee_amount = bcsub($value->fee_amount, $profit->proxy_amount, 2);
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
                             }
-                            if ($profit->save()) {
-                                //发送通知
-                                if ($profit->proxy_amount > 0) {
-                                    \App\Admin\Controllers\NoticeController::send([$profit->user_id], 1, '', '', $profit->id);
+                            //公司与代理分润为0时不记录分润 并且不发送提醒通知
+                            if ($profit->fee_amount > 0 || $profit->proxy_amount > 0) {
+                                if ($profit->save()) {
+                                    //发送通知
+                                    if ($profit->proxy_amount > 0) {
+                                        \App\Admin\Controllers\NoticeController::send([$profit->proxy], 1, '', '', $profit->id);
+                                    }
                                 }
                             }
                         }

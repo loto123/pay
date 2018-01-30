@@ -623,6 +623,7 @@ class ShopController extends BaseController {
      *                      @SWG\Property(property="id", type="string", example="1234567890", description="成员id"),
      *                      @SWG\Property(property="name", type="string", example="我的店铺", description="成员名"),
      *                      @SWG\Property(property="avatar", type="string", example="http://url/logo", description="成员头像地址"),
+     *                      @SWG\Property(property="mobile", type="string", example="1333333333",description="用户手机号"),
      *                  )
      *                  ),
      *              )
@@ -1916,6 +1917,7 @@ class ShopController extends BaseController {
      *                  @SWG\Property(property="no", type="string", example="123123",description="交易单号"),
      *                  @SWG\Property(property="remark", type="string", example="xxxx",description="备注"),
      *                  @SWG\Property(property="balance", type="double", example=9.9,description="交易后余额"),
+     *                  @SWG\Property(property="user_name", type="string", example="noname",description="转账帐户"),
      *              )
      *          )
      *      ),
