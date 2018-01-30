@@ -68,4 +68,41 @@ class IndexController extends BaseController {
         ]);
     }
 
+    /**
+     * @SWG\Get(
+     *   path="/index/safe",
+     *   summary="安全保障",
+     *   tags={"首页"},
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="users", type="integer", example=123,description="累计服务用户"),
+     *                  @SWG\Property(property="days", type="integer", example=234,description="累计服务天数"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function safe() {
+        return $this->json(['users' => 1, 'days' => 2]);
+    }
 }
