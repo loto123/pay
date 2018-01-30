@@ -664,7 +664,7 @@ class ShopController extends BaseController {
                 'id' => (string)$_user->en_id(),
                 'name' => $_user->name,
                 'avatar' => $_user->avatar,
-
+                'mobile' => $_user->mobile,
             ];
         }
         return $this->json([
