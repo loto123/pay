@@ -173,6 +173,11 @@ class AccountController extends BaseController
                 break;
             }
 
+            if ($method->maximum_amount > 0 && $price > $method->maximum_amount) {
+                $message = $method->show_label . '购买最大金额为' . $method->maximum_amount . '元';
+                break;
+            }
+
             $record = new UserFund();
             $record->user_id = $user->id;
             $record->type = UserFund::TYPE_CHARGE;
@@ -890,6 +895,7 @@ class AccountController extends BaseController
         $user = $this->auth->user();
 
         $fund = UserFund::findByEnId($id);
+        /* @var $fund UserFund */
         if (!$fund || $fund->user_id != $user->id) {
             return $this->json([], trans("error_fund"), 0);
         }
@@ -899,7 +905,7 @@ class AccountController extends BaseController
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => (string)$fund->no,
+            'no' => $fund->en_id(),
             'remark' => (string)$fund->remark,
             'balance' => $fund->balance
         ]);

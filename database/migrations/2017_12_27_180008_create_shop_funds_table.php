@@ -17,6 +17,7 @@ class CreateShopFundsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('shop_id')->index();
             $table->unsignedTinyInteger('type')->nullable()->default(0)->comment("0=转账给个人 1=转账给个人 2=从个人转账");
+            $table->unsignedInteger('user_id')->nullable()->default(0);
             $table->unsignedTinyInteger('mode')->nullable()->default(0)->comment("0=收入,1=支出");
             $table->decimal('amount', 15)->default(0)->comment("交易金额");
             $table->decimal('balance', 15)->default(0)->comment("店铺余额");

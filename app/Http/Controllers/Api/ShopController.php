@@ -119,6 +119,7 @@ class ShopController extends BaseController {
         $shop->price = $request->rate;
         $shop->fee = $request->percent;
         $shop->container_id = $wallet->id;
+        $shop->active = $request->active ? 1 : 0;
         $shop->save();
         $shop_user = new ShopUser();
         $shop_user->shop_id = $shop->id;
@@ -653,7 +654,7 @@ class ShopController extends BaseController {
         }
         $count = $query->count();
         $members = [];
-        $query->orderBy("id");
+        $query->orderBy((new ShopUser)->getTable().".id");
         if ($request->offset) {
             $query->where("id", ">", User::decrypt($request->offset));
         }
@@ -1647,7 +1648,7 @@ class ShopController extends BaseController {
         $shop = Shop::findByEnId($shop_id);
 
         if ($shop->container->balance < $request->amount) {
-            return $this->json([], trans("error_balance"), 0);
+            return $this->json([], trans("api.error_balance"), 0);
         }
         if (!$shop->manager) {
             return $this->json([], trans("error_shop_manager"), 0);
@@ -1661,6 +1662,7 @@ class ShopController extends BaseController {
         }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
+        $record->user_id = $shop->manager->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
@@ -1754,12 +1756,13 @@ class ShopController extends BaseController {
         }
         $shop = Shop::findByEnId($shop_id);
         if ($shop->container->balance < $request->amount) {
-            return $this->json([], trans("error_balance"), 0);
+            return $this->json([], trans("api.error_balance"), 0);
         }
         $member = User::findByEnId($user_id);
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
+        $record->user_id = $member->id;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
         $record->remark = $request->remark;
@@ -1939,6 +1942,7 @@ class ShopController extends BaseController {
             'created_at' => strtotime($fund->created_at),
             'no' => (string)$fund->no,
             'remark' => (string)$fund->remark,
+            'user_name' => $fund->user ? $fund->user->mobile : '',
             'balance' => $fund->balance
         ]);
     }

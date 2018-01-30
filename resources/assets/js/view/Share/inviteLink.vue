@@ -95,7 +95,7 @@
         let url=window.location.href.split('#')[0];
         let links = url+'/#/shareUser/inviteLink/download?mobile='+this.mobile;
         let title = '聚宝朋';
-        let desc = '这是一段文字';
+        let desc = '广聚天下朋友，共享时代财富';
         let imgUrl = '';
         wx.ready(() => {
           //分享给朋友
