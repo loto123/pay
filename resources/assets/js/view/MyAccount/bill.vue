@@ -19,7 +19,7 @@
         <!-- 固定 -->
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
             <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
-            <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{tabTotal}}</div>
+            <div class="amount">{{tabStatus[0]==true?'宠物买卖:':'公会:'}}</div>
         </div>
 
         <div class="bill-box">
@@ -129,7 +129,8 @@
                 timeInfo: null,
                 tabTotal: "",
                 tabStatus: [true, false],
-
+                inMoney:"",  //收入
+                outMoney:"", //支出
                 wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
@@ -198,14 +199,14 @@
             init() {
                 Loading.getInstance().open();
                 this.dateChoise = null;
-                var _data = {
+                var _data1 = {
                     limit: 15,
                     offset: 0,
                     type:[0,1]
                 }
                 Loading.getInstance().open();
                 if (this.tabStatus[0] == true) {
-                    request.getInstance().getData("api/account/records", _data)
+                    request.getInstance().getData("api/account/records", _data1)
                         .then((res) => {
                             var _dataList = res.data.data.data;
 
@@ -228,13 +229,12 @@
                             Loading.getInstance().close();
                         })
                 } else if (this.tabStatus[1] == true) {
-                    var _data = {
+                    var _data2 = {
                         limit: 15,
                         offset: 0,
-                        type:[2,3]
+                        type:[2,3,4,5,6,7,8,9]
                     }
-
-                    request.getInstance().getData("api/account/records", _data)
+                    request.getInstance().getData("api/account/records", _data2)
                         .then((res) => {
 
                             var _dataList = res.data.data.data;
@@ -429,25 +429,27 @@
                         var _year = this.recordList[m].time.split("年")[0];
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
                         var _timer = _year + "-" + _month;
-                        var _data = {
-                            month: _timer,
-                            type:[0,1]
-                        }
                         if (this.tabStatus[0] == true) {
+                            var _data1 = {
+                                month: _timer,
+                                type:[0,1]
+                            }
                             // 获取当月的总额度(分润)
-                            request.getInstance().getData("api/account/records/month", _data)
+                            request.getInstance().getData("api/account/records/month", _data1)
                                 .then(res => {
-                                    this.recordList[m].total = res.data.data.total;
+                                    this.inMoney=res.data.data.in;
+                                    this.outMoney=res.data.data.out;
+                                    // this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
-                                    this.tabTotal = this.recordList[0].total;
+                                    // this.tabTotal = this.recordList[0].in;
                                 }).catch();
                         } else {
                             // 获取当月的总额度(分润)
-                            var _data = {
+                            var _data2 = {
                                 month: _timer,
                                 type:[2,3,4,5,6,7,8,9]
                             }
-                            request.getInstance().getData("api/account/records/month", _data)
+                            request.getInstance().getData("api/account/records/month", _data2)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
@@ -536,13 +538,14 @@
                 }
                 var _date = _year + '-' + _month;
                 this.dateChoise = _date;
-                var _data = {
-                    limit: 15,
-                    offset: 0,
-                    start: this.dateChoise
-                }
                 //明细
                 if (this.tabStatus[0] == true) {
+                    var _data = {
+                        limit: 15,
+                        offset: 0,
+                        start: this.dateChoise,
+                        type:[0,1]
+                    }
                     request.getInstance().getData("api/account/records", _data)
                         .then((res) => {
 
@@ -566,6 +569,12 @@
                             Loading.getInstance().close();
                         })
                 } else if (this.tabStatus[1] == true) {
+                    var _data = {
+                        limit: 15,
+                        offset: 0,
+                        start: this.dateChoise,
+                        type:[2,3,4,5,6,7,8,9]
+                    }
                     request.getInstance().getData("api/account/records", _data)
                         .then((res) => {
 
