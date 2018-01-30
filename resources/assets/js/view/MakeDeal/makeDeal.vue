@@ -358,7 +358,7 @@ export default {
         //  输入数据验证
       if (!utils.testStringisNumber(parseFloat(_data.price)*10))
       {
-          Toast("请输入正确的金额，最多只能包含一位小数");
+          Toast("请输入正确的倍率，最多只能包含一位小数");
           return;
       }
 
