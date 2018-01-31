@@ -282,87 +282,87 @@
                     }
                 }
 
-                if(this.headList.length == 0){
-                    // 分润列表
-                    if(this.tabStatus[0] == true){
-                        // 日期筛选 
-                        if(this.dateChoise != null){
-                            var _data = {
-                                date:this.dateChoise
-                            }
+                // if(this.headList.length == 0){
+                //     // 分润列表
+                //     if(this.tabStatus[0] == true){
+                //         // 日期筛选 
+                //         if(this.dateChoise != null){
+                //             var _data = {
+                //                 date:this.dateChoise
+                //             }
 
-                            // 获取当月的总额度
-                            request.getInstance().postData("api/profit/count",_data)
-                                .then(res=>{
-                                    var _initialData = {
-                                        time:_head,
-                                        index:key,
-                                        total:res.data.data.total
-                                    }
+                //             // 获取当月的总额度
+                //             request.getInstance().postData("api/profit/count",_data)
+                //                 .then(res=>{
+                //                     var _initialData = {
+                //                         time:_head,
+                //                         index:key,
+                //                         total:res.data.data.total
+                //                     }
                                     
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
 
-                                }).catch();
-                        }else {
+                //                 }).catch();
+                //         }else {
 
-                            // 获取当月的总额度
-                            request.getInstance().postData("api/profit/count")
-                                .then(res=>{
-                                    var _initialData = {
-                                        time:_head,
-                                        index:key,
-                                        total:res.data.data.total
-                                    }
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
+                //             // 获取当月的总额度
+                //             request.getInstance().postData("api/profit/count")
+                //                 .then(res=>{
+                //                     var _initialData = {
+                //                         time:_head,
+                //                         index:key,
+                //                         total:res.data.data.total
+                //                     }
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
 
-                                }).catch();
-                        }
+                //                 }).catch();
+                //         }
 
-                    }else if(this.tabStatus[1] == true){
-                        // 提现列表
-                        // 日期筛选 
-                        if(this.dateChoise != null){
-                            var _data = {
-                                date:this.dateChoise
-                            }
+                //     }else if(this.tabStatus[1] == true){
+                //         // 提现列表
+                //         // 日期筛选 
+                //         if(this.dateChoise != null){
+                //             var _data = {
+                //                 date:this.dateChoise
+                //             }
 
-                            // 获取当月的总额度
-                            request.getInstance().postData("api/profit/withdraw/count",_data)
-                                .then(res=>{
-                                    var _initialData = {
-                                        time:_head,
-                                        index:key,
-                                        total:res.data.data.total
-                                    }
+                //             // 获取当月的总额度
+                //             request.getInstance().postData("api/profit/withdraw/count",_data)
+                //                 .then(res=>{
+                //                     var _initialData = {
+                //                         time:_head,
+                //                         index:key,
+                //                         total:res.data.data.total
+                //                     }
 
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
 
-                                }).catch();
-                        }else {
-                            // 获取当月的总额度
-                            request.getInstance().postData("api/profit/withdraw/count")
-                                .then(res=>{
+                //                 }).catch();
+                //         }else {
+                //             // 获取当月的总额度
+                //             request.getInstance().postData("api/profit/withdraw/count")
+                //                 .then(res=>{
 
-                                    // var _initialData = {
-                                    //     time:_head,
-                                    //     index:key,
-                                    //     total:res.data.data.total
-                                    // }
+                //                     // var _initialData = {
+                //                     //     time:_head,
+                //                     //     index:key,
+                //                     //     total:res.data.data.total
+                //                     // }
                                     
-                                    // this.headList.push(_initialData);
-                                    // this.timeInfo = this.headList[0].time;
-                                    // this.tabTotal = this.headList[0].total;
-                                }).catch();
-                        }
+                //                     // this.headList.push(_initialData);
+                //                     // this.timeInfo = this.headList[0].time;
+                //                     // this.tabTotal = this.headList[0].total;
+                //                 }).catch();
+                //         }
                         
-                    }
-                }
+                //     }
+                // }
                 
                  var _initialData = {
                     time:_head,
@@ -476,6 +476,16 @@
                     return;
                 }
 
+                var _url = "";
+                var _data = {};
+
+                if(this.tabStatus[0] == true){
+                    _url = "api/profit/withdraw/data"
+                }else if(this.tabStatus[1]){
+
+                }
+
+                cosnole.log(this.tabStatus);
                 this.loading = true;
 
                 this.canLoading = false;

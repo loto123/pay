@@ -417,7 +417,7 @@ class TransferController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="交易获得"),
-     *                  @SWG\Property(property="real_amount", type="double", example=9.9, description="实际获得")
+     *                  @SWG\Property(property="real_amount", type="double", example=9.9, description="实际获得"),
      *                  @SWG\Property(property="fee_total", type="double", example=9.9, description="手续费")
      *              )
      *          )
