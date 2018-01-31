@@ -739,6 +739,11 @@ class TransferController extends BaseController
             //交易记录变为撤回状态
             $record->stat = 3;
             $record->save();
+            //扣除红包手续费
+            if($record->fee_amount > 0) {
+                //红包茶水费减少
+                $transfer->tip_amount = bcsub($transfer->fee_amount, $record->fee_amount, 2);
+            }
             //扣除商店茶水费
             $tip = $record->tip;
             if ($tip) {
@@ -1470,7 +1475,7 @@ class TransferController extends BaseController
                         //宠物蛋
                         $value->user->batch_create_pet(rand(1, 4), Pet::TYPE_EGG, PetRecord::TYPE_TRANSFER, $value->id);
                         if ($value->stat == 2) {
-                            $tip_amount = bcadd($tip_amount, $value->tips()->value('amount'), 2);
+                            $tip_amount = bcadd($tip_amount, $value->tip()->value('amount'), 2);
                             //公司分润 代理分润 运营分润
                             $profit = new Profit();
                             $profit->record_id = $value->id;
