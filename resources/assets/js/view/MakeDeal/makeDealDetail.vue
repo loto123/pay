@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <mt-button type="primary" size="large" @click="callPassword">确认</mt-button>
+            <mt-button type="primary" size="large" @click="callPassword" :disabled="submitClick">确认</mt-button>
         </section>
         
         <!-- 参与玩家记录 -->
@@ -386,6 +386,7 @@ export default {
       status:null,
       recordList:[],
       canClick:true,              // 防止连续点击
+      submitClick:false,
       choiseMemberSwitch:false,
     };
   },
@@ -459,6 +460,10 @@ export default {
     },
 
     callPassword(){
+      this.submitClick = true;
+      setTimeout(()=>{
+        this.submitClick = false;
+      },3000);
 
       if(this.payType == "put"){
         var _put = this.moneyData.payMoney;

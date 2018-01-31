@@ -48,11 +48,11 @@
                                             class="divide-prop ml-5" id="card_num">
                                 </div>
                                 <div>
-                                    @foreach($card_type as $value)
                                     <select name="卡类型" id="card_type">
+                                        @foreach($card_type as $value)
                                         <option value="{{$value->id}}">{{$value->name}}</option>
+                                        @endforeach
                                     </select>
-                                    @endforeach
                                 </div>
                                 <div class="withdraw-wx mt-15 mb-10">
                                     <button class="btn btn-success ml-10" id="affirm_btn">确定</button>
