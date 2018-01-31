@@ -28,8 +28,8 @@ class Transfer extends Model
     protected $casts = [
         'fee' => 'float',
         'amount' => 'float',
-        'create_at' => 'datetime',
-        'update_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'state' => 'integer',
         'from_frozen' => 'boolean',
         'to_frozen' => 'boolean'

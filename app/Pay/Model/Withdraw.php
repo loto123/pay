@@ -27,8 +27,8 @@ class Withdraw extends Model
         'amount' => 'float',
         'system_fee' => 'float',
         'channel_fee' => 'float',
-        'create_at' => 'datetime',
-        'update_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'state' => 'integer'
     ];
     protected $guarded = ['id'];
