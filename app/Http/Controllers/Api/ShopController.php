@@ -1942,7 +1942,7 @@ class ShopController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => (string)$fund->no,
+            'no' => (string)$fund->en_id(),
             'remark' => (string)$fund->remark,
             'user_name' => $fund->user ? $fund->user->mobile : '',
             'balance' => $fund->balance
