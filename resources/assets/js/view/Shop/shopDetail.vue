@@ -110,7 +110,7 @@
         </div>
 
         <div class="flex flex-align-center flex-justify-between" @click="updateShop('rate')">
-            <span class="title flex-9"> 默认单价 </span>
+            <span class="title flex-9"> 任务默认倍率 </span>
             <span class="text flex-1">{{rate}}</span>
         </div>
         
@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <div class="complaint" v-if="!isGroupMaster">
+    <div class="complaint" v-if="!isGroupMaster && user_feedback" @click="complaint">
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 投诉 </span>
             <span class="text flex-1"></span>
@@ -198,7 +198,7 @@
 
   .top {
     padding-top: 2em;
-    height: 10em;
+    /*height: 10em;*/
     background: #26a2ff;
     box-sizing: border-box;
 
@@ -523,10 +523,10 @@ export default {
     return {
       isShow:false,
 
-      inviteLinkStatus: true,    // 邀请链接状态
-      tradeStatus: true,         // 任务状态
-      isGroupMaster: true,       // 是否是群主
-      searchUserMobile:null,     // 搜索公会成员的手机号
+      inviteLinkStatus: true,     // 邀请链接状态
+      tradeStatus: true,          // 任务状态
+      isGroupMaster: true,        // 是否是群主
+      searchUserMobile:null,      // 搜索公会成员的手机号
 
       isFixed:false,
 
@@ -538,15 +538,16 @@ export default {
       membersList:[],
       active: null,
       platform_fee:null,
-      addMemberSwitch: false,      // 添加成员开关
+      addMemberSwitch: false,       // 添加成员开关
       logo:null,                    // 公会的头像
 
-      searchData:{                 // 搜索出来的数据
+      searchData:{                  // 搜索出来的数据
         avatar:null,
         id:null,
         mobile:null,
         name:null
-      }
+      },
+      user_feedback:null            // 投诉配置的地址
     };
   },
   methods: {
@@ -598,6 +599,9 @@ export default {
     // 数据控制
     init() {
       Loading.getInstance().open();
+
+      this.user_feedback = window.user_feedback;
+
       var self = this;
       var _id = this.$route.query.id;
 
@@ -888,7 +892,12 @@ export default {
         Toast("设置失败");
         this.init();
       });
+    },
+
+    complaint(){
+      location.href=this.user_feedback;
     }
+
 
   },
 //  watch:{

@@ -119,6 +119,7 @@ class ShopController extends BaseController {
         $shop->price = $request->rate;
         $shop->fee = $request->percent;
         $shop->container_id = $wallet->id;
+        $shop->active = $request->active ? 1 : 0;
         $shop->save();
         $shop_user = new ShopUser();
         $shop_user->shop_id = $shop->id;
@@ -622,6 +623,7 @@ class ShopController extends BaseController {
      *                      @SWG\Property(property="id", type="string", example="1234567890", description="成员id"),
      *                      @SWG\Property(property="name", type="string", example="我的店铺", description="成员名"),
      *                      @SWG\Property(property="avatar", type="string", example="http://url/logo", description="成员头像地址"),
+     *                      @SWG\Property(property="mobile", type="string", example="1333333333",description="用户手机号"),
      *                  )
      *                  ),
      *              )
@@ -653,7 +655,7 @@ class ShopController extends BaseController {
         }
         $count = $query->count();
         $members = [];
-        $query->orderBy("id");
+        $query->orderBy((new ShopUser)->getTable().".id");
         if ($request->offset) {
             $query->where("id", ">", User::decrypt($request->offset));
         }
@@ -663,7 +665,7 @@ class ShopController extends BaseController {
                 'id' => (string)$_user->en_id(),
                 'name' => $_user->name,
                 'avatar' => $_user->avatar,
-
+                'mobile' => $_user->mobile,
             ];
         }
         return $this->json([
@@ -1661,6 +1663,7 @@ class ShopController extends BaseController {
         }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
+        $record->user_id = $shop->manager->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
@@ -1760,6 +1763,7 @@ class ShopController extends BaseController {
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
+        $record->user_id = $member->id;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
         $record->remark = $request->remark;
@@ -1913,6 +1917,7 @@ class ShopController extends BaseController {
      *                  @SWG\Property(property="no", type="string", example="123123",description="交易单号"),
      *                  @SWG\Property(property="remark", type="string", example="xxxx",description="备注"),
      *                  @SWG\Property(property="balance", type="double", example=9.9,description="交易后余额"),
+     *                  @SWG\Property(property="user_name", type="string", example="noname",description="转账帐户"),
      *              )
      *          )
      *      ),
@@ -1939,6 +1944,7 @@ class ShopController extends BaseController {
             'created_at' => strtotime($fund->created_at),
             'no' => (string)$fund->no,
             'remark' => (string)$fund->remark,
+            'user_name' => $fund->user ? $fund->user->mobile : '',
             'balance' => $fund->balance
         ]);
     }

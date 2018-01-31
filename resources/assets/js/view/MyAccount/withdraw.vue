@@ -243,7 +243,11 @@
 			withdrawBtn() {
 				var self = this;
 
-				this.withdraw();
+				var _isUnBindCard = this.withdraw();
+
+				if(_isUnBindCard == true){
+					return;
+				}
 
 				if(this.amount == null){
 					Toast("请输入出售金额");
@@ -353,6 +357,7 @@
 			},
 			
 			withdraw(){
+				// 未绑定银行卡
                 if(this.has_pay_card==0){
                     MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
                         () => {
@@ -363,9 +368,14 @@
                             console.log("已经取消");
                         }
                     );
+
+                    return true;
                 }else{
+
+                	// 已绑定银行卡
                     this.$router.push('/myAccount/withdraw')
                 }
+
             },
 
 			// 免费领取宠物蛋 
