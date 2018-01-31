@@ -1484,11 +1484,16 @@ class TransferController extends BaseController
                             $profit->proxy_percent = 0;
                             $profit->proxy_amount = 0;
                             $profit->fee_amount = 0;
-                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent) {
+                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent > 0
+                                && $value->user->parent->proxy_container)
+                            {
                                 $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
                                 if ($profit->proxy_amount > 0) {
                                     $profit->proxy = $value->user->parent->id;
                                     $profit->proxy_percent = $value->user->parent->percent;
+                                    //解冻代理分润账户资金
+                                    $proxy_container = $value->user->parent->proxy_container;
+                                    $proxy_container->unfreeze($profit->proxy_amount);
                                 }
                             }
 //                            if ($profit->proxy_amount <= 0) {
@@ -1496,9 +1501,6 @@ class TransferController extends BaseController
 //                            }
                             //解冻代理资金
 //                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
-                            //解冻代理分润账户资金
-                            $proxy_container = $value->user->parent->proxy_container;
-                            $proxy_container->unfreeze($profit->proxy_amount);
                             if ($value->user->operator) {
                                 $profit->operator = $value->user->operator->id;
                                 $profit->fee_amount = bcsub($value->fee_amount, $profit->proxy_amount, 2);
