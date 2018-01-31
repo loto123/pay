@@ -1264,16 +1264,22 @@ class ShopController extends BaseController {
         $query->limit($request->input("limit", 20))->orderBy("uid","DESC");
         foreach ($query->get() as $notification) {
             try {
-                $user = User::find($notification->data['user_id']);
+                if ($notification->data['type'] == ShopApply::TYPE_INVITE) {
+                    $user = User::find($notification->data['invite_id']);
+                } else {
+                    $user = User::find($notification->data['user_id']);
+                }
                 $shop = Shop::find($notification->data['shop_id']);
-                $data[] = [
-                    'user_avatar' => $user->avatar,
-                    'user_name' => $user->name,
-                    'shop_name' => $shop->name,
-                    'id' => $notification->id,
-                    'type' => (int)$notification->data['type'],
-                    'created_at' => strtotime($notification->created_at)
-                ];
+                if ($user && $shop) {
+                    $data[] = [
+                        'user_avatar' => $user->avatar,
+                        'user_name' => $user->name,
+                        'shop_name' => $shop->name,
+                        'id' => $notification->id,
+                        'type' => (int)$notification->data['type'],
+                        'created_at' => strtotime($notification->created_at)
+                    ];
+                }
             } catch (\Exception $e){}
         }
         return $this->json(['count' => $count, 'data' => $data]);
