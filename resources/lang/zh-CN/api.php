@@ -22,4 +22,5 @@ return [
     'user_exist' => '用户已存在',
     'invite_unexist' => '邀请人不存在',
     'user_unexist' => '用户不存在',
+    'user_already_is_proxy' => '用户已是代理'
 ];
