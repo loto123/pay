@@ -71,7 +71,18 @@
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
                         <div class="month">{{item.time}}</div>
-                        <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{item.total}}</div>
+                        <div v-if="tabStatus[0]==true">
+                            <div class="amount">
+                                <span>出售:{{item.outMoney}}</span>
+                                <span>购买:{{item.inMoney}}</span>
+                            </div>
+                        </div>
+                        <div v-if="tabStatus[1]==true">
+                            <div class="amount">
+                                <span>收入:{{item.inMoney}}</span>
+                                <span>支出:{{item.outMoney}}</span>
+                            </div>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -105,7 +116,10 @@
                         <li @click="selAll">
                             <a href="javascript:;">全部</a>
                         </li>
-                        <li v-for="item in items" @click="selContent(item.type)">
+                        <li  v-for="item in items" v-if="tabStatus[0]==true&&item.isBuy==true"@click="selContent(item.type)">
+                            <a href="javascript:;">{{item.title}}</a>
+                        </li>
+                        <li  v-for="item in items" v-if="tabStatus[1]==true&&item.isBuy==false"@click="selContent(item.type)">
                             <a href="javascript:;">{{item.title}}</a>
                         </li>
                     </ul>
@@ -151,17 +165,16 @@
                 dateChoise: null,    // 选择的日期
                 startDate: new Date("2017,1,1"),
                 endDate: new Date(),
-
                 items: [
-                    { type: 0, title: '购买' },
-                    { type: 1, title: '出售' },
-                    { type: 2, title: '任务拿钻' },
-                    { type: 3, title: '任务交钻' },
-                    { type: 4, title: '转账到公会' },
-                    { type: 5, title: '公会转入' },
-                    { type: 6, title: '任务手续费' },
-                    { type: 7, title: '出售手续费' },
-                    { type: 8, title: '任务加速' }
+                    { type: 0, title: '购买', isBuy:true},
+                    { type: 1, title: '出售', isBuy:true},
+                    { type: 2, title: '任务拿钻', isBuy:false},
+                    { type: 3, title: '任务交钻', isBuy:false},
+                    { type: 4, title: '转账到公会', isBuy:false},
+                    { type: 5, title: '公会转入', isBuy:false},
+                    { type: 6, title: '任务手续费', isBuy:false},
+                    { type: 7, title: '出售手续费', isBuy:false},
+                    { type: 8, title: '任务加速', isBuy:false}
                 ]
             };
         },
@@ -222,7 +235,6 @@
                     request.getInstance().getData("api/account/records", _data1)
                         .then((res) => {
                             var _dataList = res.data.data.data;
-
                             if (_dataList.length == 0) {
                                 this.recordList = [];
                                 Loading.getInstance().close();
@@ -501,18 +513,27 @@
                 if (this.recordList.length == 0 || !this.canLoading) {
                     return;
                 }
-
+                var _data = {};
+                //宠物买卖
+                if(this.tabStatus[0] == true){
+                    _data = {
+                        limit: 5,
+                        offset: [].concat(this.recordList).pop().id,
+                        type:[0,1]
+                    }
+                //公会
+                }else if(this.tabStatus[1]){
+                    _data = {
+                        limit: 5,
+                        offset: [].concat(this.recordList).pop().id,
+                        type:[2,3,4,5,6,7,8]
+                    }
+                }
                 this.loading = true;
 
                 this.canLoading = false;
 
                 setTimeout(() => {
-
-                    var _data = {
-                        limit: 5,
-                        offset: [].concat(this.recordList).pop().id,
-                    }
-
                     if (this.dateChoise != null) {
                         _data.date = this.dateChoise;
                     }
@@ -814,7 +835,7 @@
         right: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.2);
-        z-index: 1000;
+        z-index: 1002;
         transition: all 0.3s ease-in-out;
     }
 
