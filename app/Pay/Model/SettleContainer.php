@@ -25,8 +25,8 @@ class SettleContainer extends Container
     protected $table = 'pay_settle_container';
     protected $casts = [
         'state' => 'integer',
-        'create_at' => 'datetime',
-        'update_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'balance' => 'float',
         'frozen_balance' => 'float',
     ];
