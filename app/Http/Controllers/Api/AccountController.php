@@ -188,7 +188,7 @@ class AccountController extends BaseController
 
 
             try {
-                if ($result = $user->container->initiateDeposit($price, $channel, $method)) {
+                if ($result = $user->container->initiateDeposit($price, $channel, $method, BillMatch::BILL_PAY_TIMEOUT * 60)) {
                     $record->no = $result['deposit_id'];
                     $record->save();
 

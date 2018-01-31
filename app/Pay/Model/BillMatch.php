@@ -45,8 +45,8 @@ class BillMatch extends Model
                     ['pay_bill_match.state', '=', self::STATE_WAIT],
                     ['pay_bill_match.expired_at', '<', date('Y-m-d H:i:s')]
                 ]);
-            })->update(['pay_bill_match.state' => self::STATE_EXPIRED, 'pay_sell_bill.locked' => 0]);
-            $affected /= 2;
+            })->join('pay_deposit', 'pay_bill_match.deposit_id', '=', 'pay_deposit.id')->update(['pay_bill_match.state' => self::STATE_EXPIRED, 'pay_sell_bill.locked' => 0, 'pay_deposit.state' => Deposit::STATE_EXPIRED]);
+            $affected /= 3;
 
             //dump(DB::getQueryLog());
         } catch (\Exception $e) {
