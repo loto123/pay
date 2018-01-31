@@ -308,11 +308,14 @@ export default {
     },
 
     getMemberData(data){
-      this.memberList = data;
+      if(data){
+        this.memberList = data;
+      }
     },
     // 初始化提醒玩家列表
     initMemberList(res){
-
+      console.log(this.memberList);
+      
       if(this.memberList.length>0){
         return;
       }
@@ -351,7 +354,7 @@ export default {
         Toast("请选择发布任务的公会");
         return 
       }else if(this.price == ""){
-        Toast("请设置单价")
+        Toast("请设置任务默认倍率")
         return
       }
 

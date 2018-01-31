@@ -798,9 +798,9 @@ export default {
         }).catch(err=>{});
       }
 
-      // 设置单价
+      // 设置任务默认倍率
       if(type=="rate"){
-          MessageBox.prompt("请输入新的单价(允许有1位小数)","修改单价",).then(({ value, action }) => {
+          MessageBox.prompt("请输入新的任务默认倍率(允许有1位小数)","修改任务默认倍率",).then(({ value, action }) => {
 
             if(!value){
               Toast("单价不能为空");
