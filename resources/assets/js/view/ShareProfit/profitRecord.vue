@@ -159,26 +159,26 @@
                     .then((res) => {
 
                         var _dataList = [
-                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":'2017-1-1'},
-                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
-                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
-                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
-                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589},
-                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":1517300655},
-                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
-                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
-                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
-                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589},
-                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":1517300655},
-                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
-                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
-                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
-                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589},
-                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":1517300655},
-                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":1517300628},
-                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":1517300617},
-                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":1517300604},
-                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":1517300589}
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":'2017-01-01'},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":'2017-01-01'},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":'2017-01-01'},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":'2017-01-01'},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":"2017-01-01"},
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":"2017-01-01"},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":"2017-01-01"},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":"2017-01-01"},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":"2017-01-01"},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":"2017-01-01"},
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":"2017-01-01"},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":"2017-01-01"},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":"2017-01-01"},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":"2017-01-01"},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":"2017-01-01"},
+                            {"id":"4004109766","type":0,"mode":0,"amount":"1000.00","created_at":"2017-01-01"},
+                            {"id":"1183601355","type":0,"mode":0,"amount":"500.00","created_at":"2017-01-01"},
+                            {"id":"991147483","type":0,"mode":0,"amount":"200.00","created_at":"2017-01-01"},
+                            {"id":"2951358204","type":0,"mode":0,"amount":"0.01","created_at":"2017-01-01"},
+                            {"id":"1985063624","type":0,"mode":0,"amount":"200.00","created_at":"2017-01-01"}
                         ];
 
                         if(_dataList.length == 0){
@@ -281,90 +281,8 @@
                         var _head = getTheDate(this.recordList[key].created_at);
                     }
                 }
-
-                // if(this.headList.length == 0){
-                //     // 分润列表
-                //     if(this.tabStatus[0] == true){
-                //         // 日期筛选 
-                //         if(this.dateChoise != null){
-                //             var _data = {
-                //                 date:this.dateChoise
-                //             }
-
-                //             // 获取当月的总额度
-                //             request.getInstance().postData("api/profit/count",_data)
-                //                 .then(res=>{
-                //                     var _initialData = {
-                //                         time:_head,
-                //                         index:key,
-                //                         total:res.data.data.total
-                //                     }
-                                    
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-
-                //                 }).catch();
-                //         }else {
-
-                //             // 获取当月的总额度
-                //             request.getInstance().postData("api/profit/count")
-                //                 .then(res=>{
-                //                     var _initialData = {
-                //                         time:_head,
-                //                         index:key,
-                //                         total:res.data.data.total
-                //                     }
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-
-                //                 }).catch();
-                //         }
-
-                //     }else if(this.tabStatus[1] == true){
-                //         // 提现列表
-                //         // 日期筛选 
-                //         if(this.dateChoise != null){
-                //             var _data = {
-                //                 date:this.dateChoise
-                //             }
-
-                //             // 获取当月的总额度
-                //             request.getInstance().postData("api/profit/withdraw/count",_data)
-                //                 .then(res=>{
-                //                     var _initialData = {
-                //                         time:_head,
-                //                         index:key,
-                //                         total:res.data.data.total
-                //                     }
-
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-
-                //                 }).catch();
-                //         }else {
-                //             // 获取当月的总额度
-                //             request.getInstance().postData("api/profit/withdraw/count")
-                //                 .then(res=>{
-
-                //                     // var _initialData = {
-                //                     //     time:_head,
-                //                     //     index:key,
-                //                     //     total:res.data.data.total
-                //                     // }
-                                    
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-                //                 }).catch();
-                //         }
-                        
-                //     }
-                // }
                 
-                 var _initialData = {
+                var _initialData = {
                     time:_head,
                     index:key,
                     total:"加载中..."
@@ -480,12 +398,11 @@
                 var _data = {};
 
                 if(this.tabStatus[0] == true){
-                    _url = "api/profit/withdraw/data"
-                }else if(this.tabStatus[1]){
-
+                    _url = "api/profit/data";
+                }else if(this.tabStatus[1] == true){
+                    _url = "api/profit/withdraw/data";
                 }
 
-                cosnole.log(this.tabStatus);
                 this.loading = true;
 
                 this.canLoading = false;
@@ -501,7 +418,7 @@
                         _data.date = this.dateChoise;
                     }
 
-                    request.getInstance().postData('api/profit/data',_data).then(res=>{
+                    request.getInstance().postData(_url,_data).then(res=>{
                         if(res.data.data.data.length == 0){
                             this.canLoading = false;
                             this.loading = false;
