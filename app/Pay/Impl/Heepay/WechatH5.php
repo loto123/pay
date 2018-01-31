@@ -41,12 +41,10 @@ class WechatH5 implements DepositInterface
             $val = strtolower($val);
         });
 
-        //超时加到key后面一起计算
-        if ($timeout) {
-            $timeout = (time() + $timeout) * 1000;
-            $params['timestamp'] = $timeout;
-            $config['key_v1'] = "{$config['key_v1']}&timestamp=$timeout";
-        }
+        //订单提交时间
+        $params['timestamp'] = time() * 1000;
+        $config['key_v1'] = "{$config['key_v1']}&timestamp={$params['timestamp']}";
+
 
         //坑爹,汇付宝说参数全部转换为小写,这个参数不要
         $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding('{"s":"WAP","n":"' . $config['website_name'] . '","id":"' . route('home') . '"}', "GB2312", "UTF-8")));
