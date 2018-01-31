@@ -582,13 +582,14 @@ export default {
           .then(res=>{
             var _data = {
               amount:res.data.data.amount,
-              real_amount:res.data.data.real_amount
+              real_amount:res.data.data.real_amount,
+              fee_total:res.data.data.fee_total
             }
 
             return Promise.resolve(_data);
           })
           .then(realData=>{
-            MessageBox.confirm("实际拿钻"+ realData.real_amount+ ",手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "钻石").then(action => {
+            MessageBox.confirm("实际拿钻"+ realData.real_amount+ ",手续费" + realData.fee_total+ "钻石").then(action => {
 
               var _data = {
                 transfer_id :this.transfer_id,
