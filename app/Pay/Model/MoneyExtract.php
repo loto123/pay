@@ -16,7 +16,7 @@ class MoneyExtract extends Model
     protected $table = 'pay_money_extract';
     protected $casts = [
         'amount' => 'float',
-        'create_at' => 'datetime'
+        'created_at' => 'datetime'
     ];
     protected $fillable = ['amount'];
 
