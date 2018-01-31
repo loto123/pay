@@ -51,13 +51,13 @@ class Handler extends ExceptionHandler
     {
         if (preg_match("#^/".$request->server->get('API_PREFIX')."/#i", $request->getPathInfo())) {
             if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return response()->json(['code'=>2, 'msg' => 'token_expired', 'data'=> new \stdClass()]);
+                return response()->json(['code'=>2, 'msg' => '用户未登录', 'data'=> new \stdClass()]);
             } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return response()->json(['code' => 2, 'msg' => 'token_invalid', 'data' => new \stdClass()]);
+                return response()->json(['code' => 2, 'msg' => '用户未登录', 'data' => new \stdClass()]);
             } else if ($exception instanceof \Tymon\JWTAuth\Exceptions\JWTException) {
-                return response()->json(['code' => 2, 'msg' => 'token_invalid', 'data' => new \stdClass()]);
+                return response()->json(['code' => 2, 'msg' => '用户未登录', 'data' => new \stdClass()]);
             } else if ($exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
-                return response()->json(['code' => 2, 'msg' => 'token_unauthorized', 'data' => new \stdClass()]);
+                return response()->json(['code' => 2, 'msg' => '用户未登录', 'data' => new \stdClass()]);
 
             } else if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
                 return response()->json(['code'=>0, 'msg' => '404 Not Found', 'data'=> new \stdClass()], 404);

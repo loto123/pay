@@ -14,7 +14,7 @@
               <div class="imggWrap flex flex-justify-center flex-align-center">
                     <img :src="avatar" alt="">
               </div>
-              <h3 class="flex">{{amount}} <i class="diamond" style="margin-top:0.4em;margin-left:0.2em;">&#xe6f9;</i></h3>
+              <h3 class="flex">{{amount}} <i class="diamond" style="margin-top:0.1em;margin-left:0.4em;">&#xe6f9;</i></h3>
               <!-- <h4>账户余额(元)</h4> -->
             </a>
           </section>
