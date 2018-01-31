@@ -1456,7 +1456,7 @@ class TransferController extends BaseController
                     $shop_container = $transfer->shop->container;
                     if ($transfer->tip_amount > 0) {
                         if (!$shop_container->unfreeze($transfer->tip_amount)) {
-                            Log::error('关闭交易，解冻店铺资金失败:' . '     shop frozen_balance:' . $shop_container->frozen_balance . '     unfreeze_amount:' . $transfer->tip_amount);
+                            Log::error('关闭交易，解冻店铺资金失败:' . '     shop container:' . $shop_container->id . ' frozen_balance:' . $shop_container->frozen_balance . '     unfreeze_amount:' . $transfer->tip_amount);
                             DB::rollBack();
                             continue;
                         }
@@ -1522,8 +1522,8 @@ class TransferController extends BaseController
                 DB::commit();
                 $success++;
             } catch (\Exception $e) {
-                Log::info('$profit：' . $profit);
-                Log::error('关闭交易失败：' . $e->getMessage());
+//                Log::info('$profit：' . $profit);
+                Log::error('关闭交易失败：' . $e->getTraceAsString());
                 DB::rollBack();
             }
         }
