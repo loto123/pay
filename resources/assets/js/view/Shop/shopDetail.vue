@@ -173,8 +173,11 @@
                 <span style="margin-top:-0.5em;">昵称:{{searchData.name}}</span>
                 <span>账号:{{searchData.mobile}}</span>
             </div>
-
           </div>
+        </div>
+
+        <div class="no-result" v-if="searchData.id!=0 && !searchData.id">
+          <h3>无匹配结果</h3>
         </div>
 
       <div class="submit flex flex-justify-center" v-if="searchData.id" @click="submitAddMember">
@@ -496,6 +499,16 @@
         }
       }
 
+      .no-result{
+        h3{
+          text-align: center;
+          font-size: 1.5em;
+          height: 4em;
+          line-height:4em;
+          color:#555;
+        }
+      }
+
       .submit{
         width:100%;
       }
@@ -543,7 +556,7 @@ export default {
 
       searchData:{                  // 搜索出来的数据
         avatar:null,
-        id:null,
+        id:0,
         mobile:null,
         name:null
       },
@@ -772,7 +785,6 @@ export default {
             return;
           }
 
-          console.log(this.platform_fee);
           if(Number(value)>= Number(this.platform_fee)){
               Toast("公会佣金费率必须小于平台交易费率"+this.platform_fee+"%");
               return;

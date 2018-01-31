@@ -12,7 +12,7 @@
 
 					<ul class="pet-list flex flex-justify-start flex-wrap-on" v-if="isShow && petsList.length!=0">
 						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
-							<img :src="item.pic">
+							<img :src="item.pic?item.pic:'/images/egg.jpg'">
 						</li>
 					</ul>
 					
@@ -44,7 +44,7 @@
 				</ul>
 				<div class="high-price flex flex-align-center flex-justify-center" @click="choiseMaxQuoto" v-bind:class="{active:isMaxQuota}">¥{{myMaxQuota}}(最高价)</div>
 			</div>
-			<div class="usable-diamond">拥有钻石{{balance}}，出售消耗钻石<span>100.00</span></div>
+			<div class="usable-diamond">拥有钻石{{balance}}，出售消耗钻石<span>{{amount}}</span></div>
 			<div class="withdraw-way">
 				<div class="title">收款方式</div>
 				<div class="list-wrap">
@@ -72,7 +72,7 @@
 				<div class="pets">
 					<ul class="flex flex-wrap-on">
 						<li class="flex flex-align-center flex-justify-center" v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
-							<img :src="item.pic" alt="">
+							<img :src="item.pic?item.pic:'/images/egg.jpg'" alt="">
 						</li>
 					</ul>
 				</div>
@@ -212,7 +212,6 @@
 								Toast(err.data.msg);
 							});
 						}
-						console.log(this.petsList);
 
 						this.balance=res[1].data.data.balance;
 
@@ -364,8 +363,7 @@
                             this.$router.push('/my');
                         },
                         () => {
-                            //取消操作
-                            console.log("已经取消");
+
                         }
                     );
 
@@ -381,7 +379,6 @@
 			// 免费领取宠物蛋 
 			getEggs(){
 				request.getInstance().postData("api/pet/acquire_egg").then(res=>{
-					console.log(res);
 					this.isPopGetEggsShow = false;
 					this.init();
 				}).catch(err=>{
@@ -392,7 +389,6 @@
 
 			goStatus(){
 				this.$router.push("/myAccount/withdraw/status_list");
-				console.log(" go Status");
 			},
 
 			// 以最高价出售

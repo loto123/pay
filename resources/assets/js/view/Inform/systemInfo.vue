@@ -77,7 +77,6 @@
                     return
                 }
                 this.$router.push("/systemInfo/system_Details" + "?notice_id=" + e);
-                console.log(231);
             },
             systemInfo() { //列表
                 var self = this;
