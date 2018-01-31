@@ -1789,7 +1789,10 @@ class ShopController extends BaseController {
      *     in="query",
      *     description="类型",
      *     required=false,
-     *     type="integer"
+     *     type="array",
+     *     @SWG\Items(
+     *      type="integer"
+     *     )
      *   ),
      *   @SWG\Parameter(
      *     name="start",
@@ -1942,7 +1945,7 @@ class ShopController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => (string)$fund->no,
+            'no' => (string)$fund->en_id(),
             'remark' => (string)$fund->remark,
             'user_name' => $fund->user ? $fund->user->mobile : '',
             'balance' => $fund->balance
@@ -1960,6 +1963,16 @@ class ShopController extends BaseController {
      *     description="店铺id",
      *     required=true,
      *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="query",
+     *     description="类型",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *      type="integer"
+     *     )
      *   ),
      *   @SWG\Parameter(
      *     name="month",
@@ -2005,8 +2018,17 @@ class ShopController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $shop = Shop::findByEnId($shop_id);
-        $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
-        $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        if (!$shop) {
+            return $this->json([], "error", 0);
+        }
+        if ($request->type) {
+            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        } else {
+            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        }
+
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 }

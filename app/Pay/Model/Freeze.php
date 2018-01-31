@@ -15,7 +15,7 @@ class Freeze extends Model
     protected $table = 'pay_freeze';
     protected $casts = [
         'amount' => 'float',
-        'create_at' => 'datetime'
+        'created_at' => 'datetime'
     ];
 
     public function container()

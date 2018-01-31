@@ -21,6 +21,7 @@ class Deposit extends Model
     const STATE_API_ERR = 4;//接口不通
     const STATE_CHARGE_FAIL = 5;//到账失败
     const STATE_TIMEOUT_PAY = 6;//超时支付(已支付,但超过订单有效期)
+    const STATE_EXPIRED = 7;//订单失效
 
     protected $table = 'pay_deposit';
 
@@ -50,6 +51,8 @@ class Deposit extends Model
                 return '金额不足';
             case self::STATE_CHARGE_FAIL:
                 return '入账失败';
+            case self::STATE_EXPIRED:
+                return '订单失效';
             default:
                 return '异常';
         }

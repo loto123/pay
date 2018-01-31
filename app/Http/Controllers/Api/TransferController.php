@@ -596,7 +596,7 @@ class TransferController extends BaseController
                     if ($transfer->shop && $transfer->shop->container) {
 //                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
                         $receiver = $transfer->shop->container;
-                        if($tip->amount) {
+                        if($tip->amount > 0) {
                             $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
                         }
                     }
@@ -614,7 +614,7 @@ class TransferController extends BaseController
                         //分润至代理分润账户
                         $user_receiver = $user->parent->proxy_container;
                         $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
-                        if ($proxy_fee) {
+                        if ($proxy_fee > 0) {
                             $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
                         }
                     }

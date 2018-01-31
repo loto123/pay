@@ -108,6 +108,7 @@ SCRIPT
                 $class = 'default';
                 switch ($value) {
                     case Deposit::STATE_UNPAID:
+                    case Deposit::STATE_EXPIRED:
                         $class = 'default';
                         break;
                     case Deposit::STATE_COMPLETE:

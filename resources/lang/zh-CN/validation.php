@@ -124,7 +124,7 @@ return [
         'transfer_id' => '交易ID',
         'points' => '积分',
         'friend_id' => '好友ID',
-        'fee' => '茶水费',
+        'fee' => '任务加速费',
         'record_id' => '交易记录ID',
         'date' => '查询日期',
     ],

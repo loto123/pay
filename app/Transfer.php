@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Pay\Model\MasterContainer;
+use App\Pay\Model\SettleContainer;
 use Illuminate\Database\Eloquent\Model;
 use Skip32;
 
@@ -51,6 +52,6 @@ class Transfer extends Model
 
     public function container()
     {
-        return $this->hasOne(MasterContainer::class, 'id', 'container_id');
+        return $this->hasOne(SettleContainer::class, 'id', 'container_id');
     }
 }
