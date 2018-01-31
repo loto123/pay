@@ -418,6 +418,7 @@ class TransferController extends BaseController
      *                  type="object",
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="交易获得"),
      *                  @SWG\Property(property="real_amount", type="double", example=9.9, description="实际获得")
+     *                  @SWG\Property(property="fee_total", type="double", example=9.9, description="手续费")
      *              )
      *          )
      *      ),
@@ -465,8 +466,8 @@ class TransferController extends BaseController
             $fee_amount = bcdiv(bcmul($amount, $transfer->fee_percent, 2), 100, 2);
         }
         $real_amount = bcsub(bcsub($amount, $tips, 2), $fee_amount, 2);
-        Log::info("bcsub(bcsub($amount, $tips, 2), $fee_amount, 2)");
-        return $this->json(['amount' => $amount, 'real_amount' => $real_amount], 'ok', 1);
+        $fee_total = bcadd($fee_amount, $tips, 2);
+        return $this->json(['amount' => $amount, 'real_amount' => $real_amount, 'fee_total' => $fee_total], 'ok', 1);
     }
 
 
@@ -602,7 +603,7 @@ class TransferController extends BaseController
                     if ($transfer->shop && $transfer->shop->container) {
 //                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
                         $receiver = $transfer->shop->container;
-                        if($tip->amount > 0) {
+                        if ($tip->amount > 0) {
                             $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
                         }
                     }
