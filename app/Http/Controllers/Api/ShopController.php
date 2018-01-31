@@ -93,7 +93,7 @@ class ShopController extends BaseController {
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
         ],['name.required'=>'店铺名必填',
-        'name.max'=>'店铺名不能超过10',
+        'name.max'=>'公会名称不能超过10个字符',
         'rate.required'=>'单价必填',
         'rate.regex'=>'格式错误',
         'percent.required'=>'手续费率不能为空',
@@ -926,7 +926,7 @@ class ShopController extends BaseController {
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
             'percent' => 'integer|between:0,100',
         ],[
-        'name.max'=>'店铺名不能超过10',
+        'name.max'=>'公会名称不能超过10个字符',
         'rate.regex'=>'格式错误',
         'percent.integer'=>'手续费必须为0-100的整数',
         'percent.between'=>'手续费必须为0-100的整数'
@@ -1264,16 +1264,22 @@ class ShopController extends BaseController {
         $query->limit($request->input("limit", 20))->orderBy("uid","DESC");
         foreach ($query->get() as $notification) {
             try {
-                $user = User::find($notification->data['user_id']);
+                if ($notification->data['type'] == ShopApply::TYPE_INVITE) {
+                    $user = User::find($notification->data['invite_id']);
+                } else {
+                    $user = User::find($notification->data['user_id']);
+                }
                 $shop = Shop::find($notification->data['shop_id']);
-                $data[] = [
-                    'user_avatar' => $user->avatar,
-                    'user_name' => $user->name,
-                    'shop_name' => $shop->name,
-                    'id' => $notification->id,
-                    'type' => (int)$notification->data['type'],
-                    'created_at' => strtotime($notification->created_at)
-                ];
+                if ($user && $shop) {
+                    $data[] = [
+                        'user_avatar' => $user->avatar,
+                        'user_name' => $user->name,
+                        'shop_name' => $shop->name,
+                        'id' => $notification->id,
+                        'type' => (int)$notification->data['type'],
+                        'created_at' => strtotime($notification->created_at)
+                    ];
+                }
             } catch (\Exception $e){}
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -1789,7 +1795,10 @@ class ShopController extends BaseController {
      *     in="query",
      *     description="类型",
      *     required=false,
-     *     type="integer"
+     *     type="array",
+     *     @SWG\Items(
+     *      type="integer"
+     *     )
      *   ),
      *   @SWG\Parameter(
      *     name="start",
@@ -1942,7 +1951,7 @@ class ShopController extends BaseController {
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => (string)$fund->no,
+            'no' => (string)$fund->en_id(),
             'remark' => (string)$fund->remark,
             'user_name' => $fund->user ? $fund->user->mobile : '',
             'balance' => $fund->balance
@@ -1960,6 +1969,16 @@ class ShopController extends BaseController {
      *     description="店铺id",
      *     required=true,
      *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="query",
+     *     description="类型",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *      type="integer"
+     *     )
      *   ),
      *   @SWG\Parameter(
      *     name="month",
@@ -2005,8 +2024,17 @@ class ShopController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         $shop = Shop::findByEnId($shop_id);
-        $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
-        $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        if (!$shop) {
+            return $this->json([], "error", 0);
+        }
+        if ($request->type) {
+            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        } else {
+            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+        }
+
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 }
