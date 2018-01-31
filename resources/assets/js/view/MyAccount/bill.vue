@@ -94,18 +94,6 @@
             <mt-datetime-picker v-model="dateModel" class="profit-date" type="date" ref="picker" year-format="{value} 年" month-format="{value} 月"
                 :startDate="startDate" :endDate="endDate" @confirm="choiseDate">
             </mt-datetime-picker>
-
-            <!-- <ul class="bill-list" v-else>
-                <li v-for="item in billList" @click="details(item.id)">
-                    <a href="javascript:;" class="flex">
-                        <div class="bill-content">
-                            <h5>{{status(item.type)}}</h5>
-                            <div class="time">{{changeTime(item.created_at)}}</div>
-                        </div>
-                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
-                    </a>
-                </li>
-            </ul> -->
         </div>
 
         <transition name="slide">
@@ -183,7 +171,6 @@
         },
 
         mounted() {
-            // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
             window.addEventListener('scroll', this.handleScroll);
         },
 
@@ -320,81 +307,6 @@
                         var _head = getTheDate(this.recordList[key].created_at);
                     }
                 }
-
-                // if (this.headList.length == 0) {
-                //     // 分润列表
-                //     if (this.tabStatus[0] == true) {
-                //         // 日期筛选 
-                //         if (this.dateChoise != null) {
-                //             var _data = {
-                //                 month: this.dateChoise,
-                //                 type:[0,1]
-                //             }
-
-                //             // 获取当月的总额度
-                //             request.getInstance().getData("api/account/records/month", _data)
-                //                 .then(res => {
-                //                     var _initialData = {
-                //                         time: _head,
-                //                         index: key,
-                //                         total: res.data.data.total
-                //                     }
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-                //                 }).catch();
-                //         } else {
-                //             // 获取当月的总额度
-                //             request.getInstance().getData("api/account/records/month", _data)
-                //                 .then(res => {
-                //                     var _initialData = {
-                //                         time: _head,
-                //                         index: key,
-                //                         total: res.data.data.total
-                //                     }
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-                //                 }).catch();
-                //         }
-                //     } else if (this.tabStatus[1] == true) {
-                //         // 提现列表
-                //         // 日期筛选 
-                //         if (this.dateChoise != null) {
-                //             var _data = {
-                //                 month: this.dateChoise,
-                //                 type:[2,3,4,]
-                //             }
-                //             // 获取当月的总额度
-                //             request.getInstance().getData("api/account/records/month", _data)
-                //                 .then(res => {
-                //                     var _initialData = {
-                //                         time: _head,
-                //                         index: key,
-                //                         total: res.data.data.total
-                //                     }
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-                //                 }).catch();
-                //         } else {
-                //             // 获取当月的总额度
-                //             request.getInstance().getData("api/account/records/month", _data)
-                //                 .then(res => {
-                //                     // var _initialData = {
-                //                     //     time:_head,
-                //                     //     index:key,
-                //                     //     total:res.data.data.total
-                //                     // }
-                //                     // this.headList.push(_initialData);
-                //                     // this.timeInfo = this.headList[0].time;
-                //                     // this.tabTotal = this.headList[0].total;
-                //                 }).catch();
-                //         }
-
-                //     }
-                // }
-
                 var _initialData = {
                     time: _head,
                     index: key,
@@ -415,7 +327,6 @@
                         var label = getTheDate(this.recordList[i].created_at);
 
                         //  当头部与当前的创建时间不一致时
-
                         if (_head != getTheDate(this.recordList[i].created_at)) {
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
@@ -565,7 +476,6 @@
                 this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
             },
             choiseDate(res) {
-                // this.dateChoise = null;
                 this.headList = [];
                 var _year = res.getFullYear();
                 var _month = res.getMonth() + 1;
