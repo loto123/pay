@@ -19,7 +19,18 @@
         <!-- 固定 -->
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
             <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
-            <div class="amount">{{tabStatus[0]==true?'宠物买卖:':'公会:'}}</div>
+            <div v-if="tabStatus[0]==true">
+                <div class="amount">
+                    <span>出售:{{outMoney}}</span>
+                    <span>购买:{{inMoney}}</span>
+                </div>
+            </div>
+            <div v-if="tabStatus[1]==true">
+                <div class="amount">
+                    <span>收入:{{inMoney}}</span>
+                    <span>支出:{{outMoney}}</span>
+                </div>
+            </div>
         </div>
 
         <div class="bill-box">
@@ -144,8 +155,10 @@
                 items: [
                     { type: 0, title: '购买' },
                     { type: 1, title: '出售' },
-                    { type: [2, 3], title: '任务' },
-                    { type: [4, 5], title: '公会转账' },
+                    { type: 2, title: '任务拿钻' },
+                    { type: 3, title: '任务交钻' },
+                    { type: 4, title: '转账到公会' },
+                    { type: 5, title: '公会转入' },
                     { type: 6, title: '任务手续费' },
                     { type: 7, title: '出售手续费' },
                     { type: 8, title: '任务加速' }
@@ -232,7 +245,7 @@
                     var _data2 = {
                         limit: 15,
                         offset: 0,
-                        type:[2,3,4,5,6,7,8,9]
+                        type:[2,3,4,5,6,7,8]
                     }
                     request.getInstance().getData("api/account/records", _data2)
                         .then((res) => {
@@ -447,13 +460,15 @@
                             // 获取当月的总额度(分润)
                             var _data2 = {
                                 month: _timer,
-                                type:[2,3,4,5,6,7,8,9]
+                                type:[2,3,4,5,6,7,8]
                             }
                             request.getInstance().getData("api/account/records/month", _data2)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
                                     this.tabTotal = this.recordList[0].total;
+                                    this.inMoney=res.data.data.in;
+                                    this.outMoney=res.data.data.out;
                                 }).catch();
                         }
 
@@ -573,37 +588,31 @@
                         limit: 15,
                         offset: 0,
                         start: this.dateChoise,
-                        type:[2,3,4,5,6,7,8,9]
+                        type:[2,3,4,5,6,7,8]
                     }
                     request.getInstance().getData("api/account/records", _data)
-                        .then((res) => {
-
-                            var _dataList = res.data.data.data;
-
-                            if (_dataList.length == 0) {
-                                Loading.getInstance().close();
-                                this.recordList = [];
-                                return;
-                            }
-                            for (var i = 0; i < _dataList.length; i++) {
-                                _dataList[i].isTimePanel = false;
-                            }
-
-                            this.recordList = _dataList;
-                            this.buildTimePanel();
+                    .then((res) => {
+                        var _dataList = res.data.data.data;
+                        if (_dataList.length == 0) {
                             Loading.getInstance().close();
-                        })
-                        .catch((err) => {
-                            Toast(err.data.msg);
-                            Loading.getInstance().close();
-                        })
+                            this.recordList = [];
+                            return;
+                        }
+                        for (var i = 0; i < _dataList.length; i++) {
+                            _dataList[i].isTimePanel = false;
+                        }
+                        this.recordList = _dataList;
+                        this.buildTimePanel();
+                        Loading.getInstance().close();
+                    })
+                    .catch((err) => {
+                        Toast(err.data.msg);
+                        Loading.getInstance().close();
+                    })
                 }
-
-
             },
             changeTime(shijianchuo) {
                 function add0(m) { return m < 10 ? '0' + m : m }
-
                 var time = new Date(shijianchuo * 1000);
                 var y = time.getFullYear();
                 var m = time.getMonth() + 1;
@@ -618,10 +627,10 @@
                 switch (type) {
                     case 0: result = '购买'; break;
                     case 1: result = '出售'; break;
-                    case 2: result = '任务'; break;
-                    case 3: result = '任务'; break;
-                    case 4: result = '公会转账'; break;
-                    case 5: result = '公会转账'; break;
+                    case 2: result = '任务拿钻'; break;
+                    case 3: result = '任务交钻'; break;
+                    case 4: result = '转账到公会'; break;
+                    case 5: result = '公会转入'; break;
                     case 6: result = '任务手续费'; break;
                     case 7: result = '出售手续费'; break;
                     case 8: result = '任务加速'; break;
@@ -633,8 +642,19 @@
                 Loading.getInstance().open("加载中...");
                 request.getInstance().getData("api/account/records?type=" + type)
                     .then((res) => {
-                        this.recordList = res.data.data.data;
-                        console.log(this.recordList);
+                        var _dataList = res.data.data.data;
+                        if (_dataList.length == 0) {
+                            this.recordList = [];
+                            Loading.getInstance().close();
+                            this.showAlert = false;
+                            return;
+                        }
+                        for (var i = 0; i < _dataList.length; i++) {
+                            _dataList[i].isTimePanel = false;
+                        }
+
+                        this.recordList = _dataList;
+                        this.buildTimePanel();
                         this.showAlert = false;
                         Loading.getInstance().close();
                     })
