@@ -36,8 +36,8 @@
           </div>
 
           <h3>{{SetString(item.name,6)}}</h3>
-          <p class="today-earn">今日收益:{{item.today_profit}}</p>
-          <p class="all-earn">总收益:{{item.total_profit}}</p>
+          <p class="today-earn">今日收益:{{item.today_profit}} <i class="diamond">&#xe6f9;</i></p>
+          <p class="all-earn">总收益:{{item.total_profit}}<i class="diamond">&#xe6f9;</i></p>
         </div>
 
         <div class="add-shop flex flex-v flex-align-center flex-justify-center" @click="addShop">

@@ -273,6 +273,12 @@ class TransferController extends BaseController
             return $this->json([], trans('trans.trans_not_exist'), 0);
         }
 
+        $user = JWTAuth::parseToken()->authenticate();
+
+//        if (!$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
+//            return $this->json([], trans('trans.trans_permission_deny'), 0);
+//        }
+
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }, 'record' => function ($query) {
@@ -285,7 +291,6 @@ class TransferController extends BaseController
             $query->select('id', 'name', 'avatar');
         }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status')->first();
 
-        $user = JWTAuth::parseToken()->authenticate();
         //装填响应数据
         //是否允许撤销交易
         $transfer->allow_cancel = false;
@@ -413,6 +418,7 @@ class TransferController extends BaseController
      *                  type="object",
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="交易获得"),
      *                  @SWG\Property(property="real_amount", type="double", example=9.9, description="实际获得")
+     *                  @SWG\Property(property="fee_total", type="double", example=9.9, description="手续费")
      *              )
      *          )
      *      ),
@@ -460,7 +466,8 @@ class TransferController extends BaseController
             $fee_amount = bcdiv(bcmul($amount, $transfer->fee_percent, 2), 100, 2);
         }
         $real_amount = bcsub(bcsub($amount, $tips, 2), $fee_amount, 2);
-        return $this->json(['amount' => $amount, 'real_amount' => $real_amount], 'ok', 1);
+        $fee_total = bcadd($fee_amount, $tips, 2);
+        return $this->json(['amount' => $amount, 'real_amount' => $real_amount, 'fee_total' => $fee_total], 'ok', 1);
     }
 
 
@@ -596,8 +603,7 @@ class TransferController extends BaseController
                     if ($transfer->shop && $transfer->shop->container) {
 //                        $receiver = PayFactory::MasterContainer($transfer->shop->container->id);
                         $receiver = $transfer->shop->container;
-                        if($tip->amount) {
-                            Log::info("拿钱茶水费分润：tip->amount".$tip->amount);
+                        if ($tip->amount > 0) {
                             $profit_shares[] = PayFactory::profitShare($receiver, $tip->amount, true);
                         }
                     }
@@ -615,8 +621,7 @@ class TransferController extends BaseController
                         //分润至代理分润账户
                         $user_receiver = $user->parent->proxy_container;
                         $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
-                        if ($proxy_fee) {
-                            Log::info("代理分润：proxy_fee".$proxy_fee);
+                        if ($proxy_fee > 0) {
                             $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
                         }
                     }
@@ -1571,6 +1576,9 @@ class TransferController extends BaseController
             return $this->json([], trans('trans.trans_not_belong_user'), 0);
         }
         if ($transfer->record()->exists()) {
+            return $this->json([], trans('trans.trans_not_allow_to_cancel'), 0);
+        }
+        if ($transfer->tips()->exists()) {
             return $this->json([], trans('trans.trans_not_allow_to_cancel'), 0);
         }
         //删除交易用户关联关系

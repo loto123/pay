@@ -57,7 +57,6 @@
 
                 // 获取当前的模式
                 this.mode = this.$route.query.type;
-                console.log(this.mode);
 
                 if(this.mode == 'profit'){
                      request.getInstance().getData("api/profit/show/"+_id)

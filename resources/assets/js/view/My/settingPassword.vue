@@ -40,13 +40,11 @@ export default {
     this.status = this.$route.query.status;
     this.mobile = this.$route.query.mobile;
     this.code = this.$route.query.code;
-    console.log(this.status);
   },
 
   components: { password },
   methods: {
     getPassword(value) {
-        console.log(value);
 
         if(this.valideTimes == false){
             this.firstPassword = value;

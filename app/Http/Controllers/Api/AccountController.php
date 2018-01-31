@@ -188,7 +188,7 @@ class AccountController extends BaseController
 
 
             try {
-                if ($result = $user->container->initiateDeposit($price, $channel, $method, BillMatch::BILL_PAY_TIMEOUT * 60)) {
+                if ($result = $user->container->initiateDeposit($price, $channel, $method, null)) {
                     $record->no = $result['deposit_id'];
                     $record->save();
 
@@ -923,6 +923,16 @@ class AccountController extends BaseController
      *     required=true,
      *     type="string"
      *   ),
+     *   @SWG\Parameter(
+     *     name="type",
+     *     in="query",
+     *     description="类型",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *      type="integer"
+     *     )
+     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -961,8 +971,13 @@ class AccountController extends BaseController
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-        $in_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
-        $out_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
+        if ($request->type) {
+            $in_amount = (double)UserFund::where("user_id", $user->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
+            $out_amount = (double)UserFund::where("user_id", $user->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
+        } else {
+            $in_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
+            $out_amount = (double)UserFund::where("user_id", $user->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
+        }
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
     }
 

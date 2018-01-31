@@ -101,7 +101,6 @@
 
                 request.getInstance().getData("api/pet/sold_record",data)
                     .then((res) => {
-                        // console.log(res);
                         this.billList=res.data.data.list;
                         Loading.getInstance().close();
                     })
