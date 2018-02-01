@@ -59,7 +59,7 @@
                   v-for="item in joiner" 
                 >
                 
-                <span class="info-friend" @click="showMemberChoise" v-if="status!=3">提醒好友</span>
+                <span class="info-friend" @click="showMemberChoise" v-if="status!=3 && allow_remind == true">提醒好友</span>
               </div>
             </div>
             
@@ -383,11 +383,12 @@ export default {
       joiner:[],                  // 任务的参与者，需要提醒的人
       memberList:[],              //成员数组
       
-      status:null,
+      status:null,                // 1 待结算 2 已平账 3 已关闭
       recordList:[],
       canClick:true,              // 防止连续点击
       submitClick:false,
       choiseMemberSwitch:false,
+      allow_remind:true           // 是否允许提醒其他人
     };
   },
   created() {
@@ -435,8 +436,8 @@ export default {
           this.allow_reward = res.data.data.allow_reward;
           this.isManager = res.data.data.allow_cancel;
           this.status = res.data.data.status;
+          this.allow_remind = res.data.data.allow_remind;
           this.isShow = true;
-
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -693,8 +694,8 @@ export default {
         this.choiseMemberSwitch = true;
         
       }).catch(err=>{
-        console.error(err);
         Loading.getInstance().close();
+        Toast(err.data.msg);
       });
 
     },
