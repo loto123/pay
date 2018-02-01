@@ -792,6 +792,7 @@ class AccountController extends BaseController
      *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
      *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
+     *                  @SWG\Property(property="fee", type="double", example=9.9,description="手续费"),
      *                  )
      *                  )
      *              )
@@ -844,7 +845,8 @@ class AccountController extends BaseController
                 'type' => (int)$_fund->type,
                 'mode' => (int)$_fund->mode,
                 'amount' => $_fund->amount,
-                'created_at' => strtotime($_fund->created_at)
+                'created_at' => strtotime($_fund->created_at),
+                'fee' => $_fund->withdraw_order ? $_fund->withdraw_order->system_fee : 0
             ];
         }
         return $this->json(['count' => (int)$count, 'data' => $data]);
@@ -886,6 +888,7 @@ class AccountController extends BaseController
      *                  @SWG\Property(property="no", type="string", example="123123",description="交易单号"),
      *                  @SWG\Property(property="remark", type="string", example="xxxx",description="备注"),
      *                  @SWG\Property(property="balance", type="double", example=9.9,description="交易后余额"),
+     *                  @SWG\Property(property="fee", type="double", example=9.9,description="手续费"),
      *              )
      *          )
      *      ),
@@ -914,7 +917,9 @@ class AccountController extends BaseController
             'created_at' => strtotime($fund->created_at),
             'no' => $fund->en_id(),
             'remark' => (string)$fund->remark,
-            'balance' => $fund->balance
+            'balance' => $fund->balance,
+            'fee' => $fund->withdraw_order ? $fund->withdraw_order->system_fee : 0
+
         ]);
     }
 
