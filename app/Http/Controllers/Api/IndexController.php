@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Notice;
 use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
@@ -62,7 +63,7 @@ class IndexController extends BaseController {
         return $this->json([
             'avatar' => $user->avatar,
             'balance' => $user->container->balance,
-            'new_message' => $user->unreadNotifications()->count() > 0 ? 1 : 0,
+            'new_message' => $user->unreadNotifications()->whereIn("type", Notice::typeConfig())->count() > 0 ? 1 : 0,
             'is_agent' => $user->hasRole("agent") ? 1 : 0,
             'is_promoter' => $user->hasRole("promoter") ? 1 : 0,
         ]);
