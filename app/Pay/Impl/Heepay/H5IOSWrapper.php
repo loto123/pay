@@ -11,7 +11,7 @@ namespace App\Pay\Impl\Heepay;
 
 use App\Pay\Model\DepositMethod;
 
-class H5IOSWrapper
+class H5IOSWrapper extends WechatH5
 {
     protected $wrapper = DepositMethod::OS_IOS;
 }
