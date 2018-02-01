@@ -17,6 +17,8 @@ use App\Pay\PayLogger;
 
 class WechatH5 implements DepositInterface
 {
+    protected $wrapper = null;
+    private $meta_option; //包装平台,DepositMethod::OS_*
 
     public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
@@ -45,9 +47,24 @@ class WechatH5 implements DepositInterface
         $params['timestamp'] = time() * 1000;
         $config['key_v1'] = "{$config['key_v1']}&timestamp={$params['timestamp']}";
 
-
+        switch ($this->wrapper) {
+            case null:
+                //原生H5
+                $this->setMetaOption('WAP', $config['website_name'], route('home'));
+                break;
+            case DepositMethod::OS_ANDROID:
+                //安卓
+                $this->setMetaOption('Android', $config['android_app_name'], $config['android_apk_key']);
+                break;
+            case DepositMethod::OS_IOS:
+                //苹果
+                $this->setMetaOption('IOS', $config['ios_app_name'], $config['ios_app_key']);
+                break;
+            default:
+                return null;
+        }
         //坑爹,汇付宝说参数全部转换为小写,这个参数不要
-        $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding('{"s":"WAP","n":"' . $config['website_name'] . '","id":"' . route('home') . '"}', "GB2312", "UTF-8")));
+        $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding($this->meta_option, "GB2312", "UTF-8")));
 
         //签名
         $fieldsToSign = ['version', 'agent_id', 'agent_bill_id', 'agent_bill_time', 'pay_type', 'pay_amt', 'notify_url', 'return_url', 'user_ip'];
@@ -59,6 +76,14 @@ class WechatH5 implements DepositInterface
     public function mixUpDepositId($depositId)
     {
         return IdConfuse::mixUpId($depositId, 30);
+    }
+
+    /**
+     * 微信H5APP包装仅有meta_option不同
+     */
+    private function setMetaOption($s, $n, $id)
+    {
+        $this->meta_option = "{\"s\":\"$s\",\"n\":\"$n\",\"id\":\"$id\"}";
     }
 
     /**
