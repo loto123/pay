@@ -107,7 +107,7 @@ class DepositMethodController extends Controller
                 return [$item['id'] => $item['name']];
             }))->rules('required', ['required' => '必须选择所属平台']);
             $form->text('impl', '实现路径')->rules('required|max:255', ['required' => '必填项']);
-            $form->textarea('interact_form', '交互形式')->rules('required|max:255', ['required' => '必填项']);
+            $form->text('interact_form', '交互形式')->rules('required|max:255', ['required' => '必填项']);
             $form->text('memo', '备注')->rules('nullable');
             $form->decimal('maximum_amount', '最大充值金额(元,0不限)')->default(0)->rules('required|min:0');
 

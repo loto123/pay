@@ -21,14 +21,14 @@
             <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
             <div v-if="tabStatus[0]==true">
                 <div class="amount">
-                    <span>出售:{{outMoney}}</span>
-                    <span>购买:{{inMoney}}</span>
+                    <span>出售:{{tabDisburse}}</span>
+                    <span>购买:{{tabIncome}}</span>
                 </div>
             </div>
             <div v-if="tabStatus[1]==true">
                 <div class="amount">
-                    <span>收入:{{inMoney}}</span>
-                    <span>支出:{{outMoney}}</span>
+                    <span>出售:{{tabDisburse}}</span>
+                    <span>购买:{{tabIncome}}</span>
                 </div>
             </div>
         </div>
@@ -58,29 +58,34 @@
             <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <li v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="details(item.id)">
-                        <div class="bill-content" v-if="tabStatus[0]">
-                            <h5>{{status(item.type)}}</h5>
-                            <div class="time">{{changeTime(item.created_at)}}</div>
+                        <div class="flex-8">
+                            <div class="bill-content" v-if="tabStatus[0]">
+                                <h5>{{status(item.type)}}</h5>
+                                <div class="time">{{changeTime(item.created_at)}}</div>
+                            </div>
+                            <div class="bill-content" v-if="tabStatus[1]">
+                                <h5>{{status(item.type)}}</h5>
+                                <div class="time">{{changeTime(item.created_at)}}</div>
+                            </div>
                         </div>
-                        <div class="bill-content" v-if="tabStatus[1]">
-                            <h5>{{status(item.type)}}</h5>
-                            <div class="time">{{changeTime(item.created_at)}}</div>
+                        <div class="flex-2">
+                            <div class="bill-money">{{tabStatus[0]?item.amount:item.amount}}</div>
+                            <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>
                         </div>
-                        <div class="bill-money">{{tabStatus[0]?item.amount:item.amount}}</div>
                     </a>
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
                         <div class="month">{{item.time}}</div>
                         <div v-if="tabStatus[0]==true">
                             <div class="amount">
-                                <span>出售:{{item.outMoney}}</span>
-                                <span>购买:{{item.inMoney}}</span>
+                                <span>出售:{{item.out}}</span>
+                                <span>购买:{{item.in}}</span>
                             </div>
                         </div>
                         <div v-if="tabStatus[1]==true">
                             <div class="amount">
-                                <span>收入:{{item.inMoney}}</span>
-                                <span>支出:{{item.outMoney}}</span>
+                                <span>收入:{{item.out}}</span>
+                                <span>支出:{{item.in}}</span>
                             </div>
                         </div>
                     </div>
@@ -142,8 +147,8 @@
                 timeInfo: null,
                 tabTotal: "",
                 tabStatus: [true, false],
-                inMoney:"",  //收入
-                outMoney:"", //支出
+                tabIncome:"",  //收入
+                tabDisburse:"", //支出
                 wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
@@ -273,6 +278,9 @@
 
             },
             changeTab(tabindex){
+                if(this.loading==true){
+                    return
+                }
                 this.tabStatus = [false,false];
                 this.tabStatus[tabindex] = true;
                 this.headList = [];
@@ -341,7 +349,7 @@
 
                         }
                     } catch (e) {
-                        console.log(e);
+                        console.error(e);
                     }
 
                 }
@@ -372,13 +380,19 @@
                             }
                             // 获取当月的总额度(分润)
                             request.getInstance().getData("api/account/records/month", _data1)
-                                .then(res => {
-                                    this.inMoney=res.data.data.in;
-                                    this.outMoney=res.data.data.out;
-                                    // this.recordList[m].total = res.data.data.total;
-                                    this.timeInfo = this.recordList[0].time;
-                                    // this.tabTotal = this.recordList[0].in;
-                                }).catch();
+                            .then(res => {
+                                this.recordList[m].in = res.data.data.in;
+                                this.recordList[m].out = res.data.data.out;   
+                                this.timeInfo = this.recordList[0].time;
+                                this.tabIncome = this.recordList[0].in; //收入
+                                this.tabDisburse = this.recordList[0].out;//支出
+
+                                // this.inMoney=res.data.data.in;
+                                // this.outMoney=res.data.data.out;
+                                // // this.recordList[m].total = res.data.data.total;
+                                // this.timeInfo = this.recordList[0].time;
+                                // this.tabTotal = this.recordList[0].in;
+                            }).catch();
                         } else {
                             // 获取当月的总额度(分润)
                             var _data2 = {
@@ -386,15 +400,14 @@
                                 type:[2,3,4,5,6,7,8]
                             }
                             request.getInstance().getData("api/account/records/month", _data2)
-                                .then(res => {
-                                    this.recordList[m].total = res.data.data.total;
-                                    this.timeInfo = this.recordList[0].time;
-                                    this.tabTotal = this.recordList[0].total;
-                                    this.inMoney=res.data.data.in;
-                                    this.outMoney=res.data.data.out;
-                                }).catch();
+                            .then(res => {
+                                this.recordList[m].in = res.data.data.in;
+                                this.recordList[m].out = res.data.data.out;   
+                                this.timeInfo = this.recordList[0].time;
+                                this.tabIncome = this.recordList[0].in; //收入
+                                this.tabDisburse = this.recordList[0].out;//支出
+                            }).catch();
                         }
-
                     }
                 }
                 count = 0;
@@ -411,7 +424,8 @@
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
                         if (i > 1) {
                             this.timeInfo = this.headList[i - 1].time;
-                            this.tabTotal = this.headList[i - 1].total;
+                            this.tabIncome = this.headList[i - 1].in;
+                            this.tabDisburse = this.headList[i - 1].out;
                         }
                     }
 
@@ -671,7 +685,11 @@
                 }
             }
             .bill-money {
-                font-size: 1.2em;
+                font-size: 1em;
+            }
+            .fee{
+                color: #aaa;
+                font-size: 0.8em;
             }
             .active {
                 color: #00cc00;
