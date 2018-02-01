@@ -11,6 +11,7 @@ use App\TipRecord;
 use App\Transfer;
 use App\TransferRecord;
 use App\TransferUserRelation;
+use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -568,8 +569,18 @@ class TransferController extends BaseController
 //                $pay_transfer = $user_container->transfer($transfer_container, $record->amount, 0, 0, 0);
                 $pay_transfer = $user->container->transfer($transfer->container, $record->amount, 0, 0, 0);
                 if (!$pay_transfer) {
+                    DB::rollBack();
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }
+                //账单明细
+                $found = new UserFund();
+                $found->user_id = $user->id;
+                $found->status = UserFund::STATUS_SUCCESS;
+                $found->type = UserFund::TYPE_TRADE_OUT;
+                $found->mode = UserFund::MODE_OUT;
+                $found->amount = $record->amount;
+                $found->save();
+
                 //红包加钱
                 $transfer->amount = bcadd($transfer->amount, $record->amount, 2);
                 $record->real_amount = bcmul($record->amount, -1, 2);
@@ -641,8 +652,26 @@ class TransferController extends BaseController
                 $pay_transfer = $transfer->container->transfer($user->container, $record->amount, bcsub($record->fee_amount, $proxy_fee, 2), 0, 0, $profit_shares);
                 if (!$pay_transfer) {
                     Log::error('拿钱失败,容器转账失败', [$transfer->container->getKey(), $user->container->getKey(), bcsub($record->amount, $tips, 2), bcsub($record->fee_amount, $proxy_fee, 2), json_encode($profit_shares)]);
+                    DB::rollBack();
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }
+
+                //账单明细
+                $found = new UserFund();
+                $found->user_id = $user->id;
+                $found->status = UserFund::STATUS_SUCCESS;
+                $found->type = UserFund::TYPE_TRADE_IN;
+                $found->mode = UserFund::MODE_IN;
+                $found->amount = $record->real_amount;
+                $found->save();
+                //账单明细
+                $found = new UserFund();
+                $found->user_id = $user->id;
+                $found->status = UserFund::STATUS_SUCCESS;
+                $found->type = UserFund::TYPE_TRADE_FEE;
+                $found->mode = UserFund::MODE_OUT;
+                $found->amount = bcadd($record->fee_amount, $tips, 2);
+                $found->save();
             }
 //            $user->save();
             //判断红包状态
@@ -740,7 +769,7 @@ class TransferController extends BaseController
             $record->stat = 3;
             $record->save();
             //扣除红包手续费
-            if($record->fee_amount > 0) {
+            if ($record->fee_amount > 0) {
                 //红包茶水费减少
                 $transfer->tip_amount = bcsub($transfer->fee_amount, $record->fee_amount, 2);
             }
@@ -766,10 +795,18 @@ class TransferController extends BaseController
 //                $user->save();
             //红包余额增加
             $transfer->amount = bcadd($transfer->amount, $record->amount, 2);
-            if($transfer->amount > 0) {
+            if ($transfer->amount > 0) {
                 $transfer->status = 1;
             }
             $transfer->save();
+            //账单明细
+            $found = new UserFund();
+            $found->user_id = $user->id;
+            $found->status = UserFund::STATUS_SUCCESS;
+            $found->type = UserFund::TYPE_TRADE_BACK;
+            $found->mode = UserFund::MODE_OUT;
+            $found->amount = $record->real_amount;
+            $found->save();
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
         } catch (\Exception $e) {
@@ -946,7 +983,7 @@ class TransferController extends BaseController
         $transfer = Transfer::where('id', $transferObj->id)->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }, 'tips' => function ($query) {
-            $query->select('transfer_id', 'user_id', 'amount', 'created_at')->orderBy('created_at', 'DESC');
+            $query->select('transfer_id', 'user_id', 'amount', 'created_at')->where('record_id', 0)->orderBy('created_at', 'DESC');
         }, 'tips.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status')->first();
@@ -1070,6 +1107,14 @@ class TransferController extends BaseController
                 $record->amount = $request->fee;
                 $record->record_id = 0;
                 $record->save();
+                //账单明细
+                $found = new UserFund();
+                $found->user_id = $user->id;
+                $found->status = UserFund::STATUS_SUCCESS;
+                $found->type = UserFund::TYPE_TIPS;
+                $found->mode = UserFund::MODE_OUT;
+                $found->amount = $record->amount;
+                $found->save();
                 DB::commit();
                 return $this->json([], trans('trans.pay_fee_success'), 1);
             } catch (\Exception $e) {
