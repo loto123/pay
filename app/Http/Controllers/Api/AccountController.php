@@ -589,7 +589,7 @@ class AccountController extends BaseController
      *                      description="当前支付通道"
      *                  ),
      *                  @SWG\Property(
-     *                      property="scence",
+     *                      property="scene",
      *                      type="integer",
      *                      example=1,
      *                      description="当前支付场景"
@@ -635,7 +635,7 @@ class AccountController extends BaseController
 
             $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label', 'interact_form')->get();
             //dump($methods);
-            return $this->json(['channel' => $channelBind->getKey(), 'scence' => $scene->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
+            return $this->json(['channel' => $channelBind->getKey(), 'scene' => $scene->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
                 return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
                     ($method->os == DepositMethod::OS_ANY || $method->os == $os);//不限系统,或系统匹配
             })->map(function ($item) {
