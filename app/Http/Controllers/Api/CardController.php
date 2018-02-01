@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\ALiPay\Auth;
 use App\Pay\Impl\Heepay\Heepay;
 use App\Pay\Impl\Heepay\Reality;
 use App\Pay\Impl\Heepay\SmallBatchTransfer;
+use App\Pay\Impl\Showapi\Showapi;
 use App\PayInterfaceRecord;
 use App\User;
 use App\UserCard;
@@ -231,26 +233,27 @@ class CardController extends BaseController
             $pay_record->bill_id = $bill_id;
             $pay_record->user_id = $this->user->id;
             $pay_record->type = UserCard::AUTH_TYPE;
-            $pay_record->platform = Heepay::PLATFORM;
+//            $pay_record->platform = Heepay::PLATFORM;
+            $pay_record->platform = Showapi::PLATFORM;
             $pay_record->save();
         } catch (\Exception $e) {
             return $this->json([],'记录无法生成',0);
         }
         //鉴权
-        if(!config('app.debug')) {
-            $auth_res = Reality::authentication(
-                $pay_record->id,
-                $bill_id,
-                date('YmdHis'),
-                $request->card_num,
-                $this->user->id_number,
-                $this->user->name
-            );
+        if(config('app.debug')) {
+//            $auth_res = Reality::authentication(
+//                $pay_record->id,
+//                $bill_id,
+//                date('YmdHis'),
+//                $request->card_num,
+//                $this->user->id_number,
+//                $this->user->name
+//            );
+            $auth_res = Showapi::authentication($pay_record->id, $request->card_num, $this->user->id_number, $this->user->name);
             if ($auth_res !== true) {
                 return $this->json([],$auth_res,0);
             }
         }
-
         $cards = new UserCard();
         $cards->user_id = $this->user->id;
         $cards->card_num = $request->card_num;
