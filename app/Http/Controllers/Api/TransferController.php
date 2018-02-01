@@ -868,6 +868,12 @@ class TransferController extends BaseController
         if (!$transfer) {
             return $this->json([], trans('trans.trans_not_exist'), 0);
         }
+
+        $user = JWTAuth::parseToken()->authenticate();
+        if($transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+            return $this->json([], trans('trans.notice_not_allow'), 0);
+        }
+
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
         }
