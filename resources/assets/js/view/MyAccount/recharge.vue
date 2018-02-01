@@ -110,7 +110,7 @@
                         this.hatching=res.data.data.hatching;
                         this.billId=res.data.data.id
                         if(this.hatching==true){
-                            Loading.getInstance().open('宠物孵化中...');
+                            Loading.getInstance().open();
                             this.timer = setTimeout(() => {
                                 this.refresh();
                                 if(this.hatching==false){
@@ -139,7 +139,7 @@
                             this.pic=res.data.data.pic;    
                         }else{
                             this.timer = setTimeout(() => {
-                                Loading.getInstance().open('宠物孵化中...');
+                                Loading.getInstance().open();
                                 this.refresh();
                                 if(this.hatching==false){
                                     clearTimeout(this.timer);
