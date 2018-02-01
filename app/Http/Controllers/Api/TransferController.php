@@ -294,7 +294,7 @@ class TransferController extends BaseController
         //装填响应数据
         //是否允许撤销交易
         $transfer->allow_cancel = false;
-        if (!$transfer->record->count() && $transfer->user->id == $user->id) {
+        if (!$transfer->record()->exists() && !$transfer->tips()->exists() && $transfer->user->id == $user->id) {
             $transfer->allow_cancel = true;
         }
         $transfer->id = $transfer->en_id();
@@ -620,9 +620,11 @@ class TransferController extends BaseController
 //                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         //分润至代理分润账户
                         $user_receiver = $user->parent->proxy_container;
-                        $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
-                        if ($proxy_fee > 0) {
-                            $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
+                        if ($user_receiver) {
+                            $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
+                            if ($proxy_fee > 0) {
+                                $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
+                            }
                         }
                     }
                 }
@@ -737,6 +739,11 @@ class TransferController extends BaseController
             //交易记录变为撤回状态
             $record->stat = 3;
             $record->save();
+            //扣除红包手续费
+            if($record->fee_amount > 0) {
+                //红包茶水费减少
+                $transfer->tip_amount = bcsub($transfer->fee_amount, $record->fee_amount, 2);
+            }
             //扣除商店茶水费
             $tip = $record->tip;
             if ($tip) {
@@ -759,6 +766,9 @@ class TransferController extends BaseController
 //                $user->save();
             //红包余额增加
             $transfer->amount = bcadd($transfer->amount, $record->amount, 2);
+            if($transfer->amount > 0) {
+                $transfer->status = 1;
+            }
             $transfer->save();
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
@@ -1451,16 +1461,8 @@ class TransferController extends BaseController
             try {
                 $transfer->status = 3;
                 if ($transfer->save()) {
-                    //解冻店铺茶水费资金
 //                    $shop_container = PayFactory::MasterContainer($transfer->shop->container->id);
-                    $shop_container = $transfer->shop->container;
-                    if ($transfer->tip_amount > 0) {
-                        if (!$shop_container->unfreeze($transfer->tip_amount)) {
-                            Log::error('关闭交易，解冻店铺资金失败:' . '     shop container:' . $shop_container->id . ' frozen_balance:' . $shop_container->frozen_balance . '     unfreeze_amount:' . $transfer->tip_amount);
-                            DB::rollBack();
-                            continue;
-                        }
-                    }
+
 //                $shop = $transfer->shop;
 //                if ($shop) {
 //                    $shop->frozen_balance = $shop->frozen_balance - $transfer->tip_amount;
@@ -1470,10 +1472,13 @@ class TransferController extends BaseController
 
 //                    $records = $transfer->record()->where('stat', 2)->get();
                     $records = $transfer->record()->with('user')->where('stat', '<>', 3)->get();
+                    //交易产生的茶水费
+                    $tip_amount = 0;
                     foreach ($records as $key => $value) {
                         //宠物蛋
                         $value->user->batch_create_pet(rand(1, 4), Pet::TYPE_EGG, PetRecord::TYPE_TRANSFER, $value->id);
                         if ($value->stat == 2) {
+                            $tip_amount = bcadd($tip_amount, $value->tip()->value('amount'), 2);
                             //公司分润 代理分润 运营分润
                             $profit = new Profit();
                             $profit->record_id = $value->id;
@@ -1484,11 +1489,16 @@ class TransferController extends BaseController
                             $profit->proxy_percent = 0;
                             $profit->proxy_amount = 0;
                             $profit->fee_amount = 0;
-                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent) {
+                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent > 0
+                                && $value->user->parent->proxy_container
+                            ) {
                                 $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
                                 if ($profit->proxy_amount > 0) {
                                     $profit->proxy = $value->user->parent->id;
                                     $profit->proxy_percent = $value->user->parent->percent;
+                                    //解冻代理分润账户资金
+                                    $proxy_container = $value->user->parent->proxy_container;
+                                    $proxy_container->unfreeze($profit->proxy_amount);
                                 }
                             }
 //                            if ($profit->proxy_amount <= 0) {
@@ -1496,9 +1506,6 @@ class TransferController extends BaseController
 //                            }
                             //解冻代理资金
 //                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
-                            //解冻代理分润账户资金
-                            $proxy_container = $value->user->parent->proxy_container;
-                            $proxy_container->unfreeze($profit->proxy_amount);
                             if ($value->user->operator) {
                                 $profit->operator = $value->user->operator->id;
                                 $profit->fee_amount = bcsub($value->fee_amount, $profit->proxy_amount, 2);
@@ -1514,6 +1521,15 @@ class TransferController extends BaseController
                                     }
                                 }
                             }
+                        }
+                    }
+                    //解冻店铺茶水费资金
+                    $shop_container = $transfer->shop->container;
+                    if ($tip_amount > 0) {
+                        if (!$shop_container->unfreeze($transfer->tip_amount)) {
+                            Log::error('关闭交易，解冻店铺资金失败:' . '     shop container:' . $shop_container->id . ' frozen_balance:' . $shop_container->frozen_balance . '     unfreeze_amount:' . $transfer->tip_amount);
+                            DB::rollBack();
+                            continue;
                         }
                     }
                 }
@@ -1575,10 +1591,7 @@ class TransferController extends BaseController
         if ($transfer->user_id != $user->id) {
             return $this->json([], trans('trans.trans_not_belong_user'), 0);
         }
-        if ($transfer->record()->exists()) {
-            return $this->json([], trans('trans.trans_not_allow_to_cancel'), 0);
-        }
-        if ($transfer->tips()->exists()) {
+        if ($transfer->record()->exists() || $transfer->tips()->exists()) {
             return $this->json([], trans('trans.trans_not_allow_to_cancel'), 0);
         }
         //删除交易用户关联关系

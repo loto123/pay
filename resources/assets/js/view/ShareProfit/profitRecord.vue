@@ -246,6 +246,10 @@
             },
             
             changeTab(tabindex){
+                if(this.loading == true){
+                    return;
+                }
+                
                 this.tabStatus = [false,false];
                 this.tabStatus[tabindex] = true;
                 this.headList = [];

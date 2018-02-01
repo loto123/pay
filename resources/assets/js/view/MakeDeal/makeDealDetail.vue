@@ -407,10 +407,7 @@ export default {
       request.getInstance().postData("api/transfer/withdraw",_data).then(res=>{
         Loading.getInstance().close();
         Toast("撤销成功");
-        
-        setTimeout(()=>{
-          this.init();
-        },1500);
+        this.init();
       }).catch(err=>{
         Toast("撤销失败");
         Loading.getInstance().close();
