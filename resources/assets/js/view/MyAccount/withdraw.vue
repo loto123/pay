@@ -11,7 +11,7 @@
 				<div class="pet-list-box">
 
 					<ul class="pet-list flex flex-justify-start flex-wrap-on" v-if="isShow && petsList.length!=0">
-						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
+						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id,item.is_egg)">
 							<img :src="item.pic?item.pic:'/images/egg.jpg'">
 						</li>
 					</ul>
@@ -71,7 +71,7 @@
 
 				<div class="pets">
 					<ul class="flex flex-wrap-on">
-						<li class="flex flex-align-center flex-justify-center" v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id)">
+						<li class="flex flex-align-center flex-justify-center" v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id,item.is_egg)">
 							<img :src="item.pic?item.pic:'/images/egg.jpg'" alt="">
 						</li>
 					</ul>
@@ -89,10 +89,14 @@
 			<div class="imgWrap">
 				<img src="/images/egg.jpg" alt="">
 			</div>
-
+			<h3>
+				{{broodInfo}}
+			</h3>
 			<div class="comfirm-button">
-				<mt-button type="primary" size="large" @click="getEggs">领取</mt-button>
+				<mt-button type="primary" size="large" @click="getEggs" v-if='!isPopBroodEggs'>领取</mt-button>
+				<mt-button type="primary" size="large" @click="broodEggs" v-else :disabled="isBroodClick">孵化</mt-button>
 			</div>
+			
 		</div>
 		
 		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
@@ -117,7 +121,7 @@
 				</ul>
 			</div>
 			<div class="button-wrap">
-				<mt-button type="primary" size="large">完成</mt-button>
+				<mt-button type="primary" size="large" @click="closePayInfoDetail">完成</mt-button>
 			</div>
 		</div>
 
@@ -157,15 +161,18 @@
 
 				getEggsTimes:0,
 				isPopDetailShow:false,          // 查看更多显示
-				isPopGetEggsShow:false,         // 领取宠物蛋
+				isPopGetEggsShow:false,         // 领取宠物蛋弹窗显示
+				isPopBroodEggs:false,		    // 是否孵蛋
+				broodInfo:null,					// 孵蛋提示信息
 				amount:null,                    // 提交的价格
-				petId:null,
+				petId:null,						// 宠物id
 				myMaxQuota:0,                   // 玩家可以提现的最高价格
 				isMaxQuota:false,               // 是否选中了最高价格
 				priceList:[],	                // 价格列表
 				sheetVisible:false,
 				has_pay_card:0,                 // 是否绑定了银行卡
-				actions:[]                      // 右上角动作列表
+				actions:[],                      // 右上角动作列表
+				isBroodClick:false               // 孵化按钮防止连续点击
 			}
 		},
 		mounted(){
@@ -204,7 +211,6 @@
 							_temp.isChecked = false;
 							this.petsList.push(_temp);
 						}
-
 						if(this.petsList.length == 0){
 							request.getInstance().getData("api/pet/egg_acquire_times").then(res=>{
 								this.getEggsTimes = res.data.data.times;
@@ -289,13 +295,17 @@
 					return;
 				}
 
+				Loading.getInstance().open();
 				Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/account/withdraw', _data)])
 					.then((res) => {
+						Loading.getInstance().close();
 						Toast('出售成功');
 						this.isPayInfoDetailShow = true;
+						this.hidePassword();
 						// this.$router.push('/myAccount');
 					})
 					.catch((err) => {
+						Loading.getInstance().close();
 						Toast(err.data.msg);
 					})
 			},
@@ -327,8 +337,13 @@
 				this.isPopDetailShow = true;
 			},
 
-			// 选择狗狗
-			setActive(id){
+			// 选择狗狗 或者 蛋
+			setActive(id,isegg){
+				if(isegg == true){
+					this.isPopBroodEggs = true;
+					this.isPopGetEggsShow  = true;
+				}
+
 				for( var i = 0; i < this.petsList.length; i++){
 					this.petsList[i].isChecked = false;
 
@@ -387,6 +402,51 @@
 				});
 			},
 
+			// 孵化宠物蛋
+			broodEggs(){
+				this.broodInfo =null;
+				var _data = {
+					egg_id:this.petId
+				};
+
+				// 禁止连续点击
+				this.isBroodClick = true;
+			
+				request.getInstance().postData('api/pet/brood',_data).then(res=>{
+						this.broodInfo = "正在孵化中";
+						return Promise.resolve();
+					}).then(res=>{
+						var goLoop = ()=>{
+								var timer = setTimeout(()=>{
+								var _data = {
+									pet_id :this.petId
+								};
+								
+								request.getInstance().postData('api/pet/refresh_pet',_data).then(res=>{
+									if(res.data.data.hatching == false){
+										Toast("孵化成功");
+										this.isPopBroodEggs =false;
+										this.isPopGetEggsShow = false;
+										this.isBroodClick = false;
+										this.init();
+									}else {
+										goLoop();
+										this.broodInfo = "正在孵化中";
+									}
+								}).catch(err=>{
+									console.error(err);
+								});
+							},1000);
+						}
+
+						goLoop();
+					})
+					
+					.catch(err=>{
+						Toast(err.data.msg);
+					});
+			},
+
 			goStatus(){
 				this.$router.push("/myAccount/withdraw/status_list");
 			},
@@ -398,6 +458,12 @@
 				for(var i = 0 ; i < this.priceList.length; i++){
 					this.priceList[i].isChecked = false;
 				}
+			},
+
+			// 关闭支付详情弹窗
+			closePayInfoDetail(){
+				this.isPayInfoDetailShow = false;
+				this.init();
 			}
 
 		},
@@ -558,6 +624,12 @@
 			margin: 0 auto;
 			margin-top:1em;
 			width: 96%;
+		}
+
+		h3{
+			font-size:1.2em;
+			color:#fff;
+			text-align: center;
 		}
 	}
 

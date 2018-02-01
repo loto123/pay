@@ -114,6 +114,7 @@
 					case 6: result='任务手续费'; break;
 					case 7: result='出售手续费'; break;
 					case 8: result='任务加速'; break;
+					case 9: result='拿钻撤销'; break;
 				}
 				return result;
 			}
