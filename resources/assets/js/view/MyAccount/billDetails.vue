@@ -105,15 +105,15 @@
 			status(type){
 				let result='';
 				switch(type){
-					case 0: result='充值'; break;
-					case 1: result='提现'; break;
-					case 2: result='交易收入'; break;
-					case 3: result='交易支出'; break;
+					case 0: result='购买'; break;
+					case 1: result='出售'; break;
+					case 2: result='任务拿钻'; break;
+					case 3: result='任务交钻'; break;
 					case 4: result='转账到公会'; break;
 					case 5: result='公会转入'; break;
-					case 6: result='交易手续费'; break;
-					case 7: result='提现手续费'; break;
-					default: result='打赏店家费'
+					case 6: result='任务手续费'; break;
+					case 7: result='出售手续费'; break;
+					case 8: result='任务加速'; break;
 				}
 				return result;
 			}
