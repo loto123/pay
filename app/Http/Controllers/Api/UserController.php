@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\ALiPay\Auth;
 use App\Pay\Impl\Heepay\Heepay;
 use App\Pay\Impl\Heepay\Reality;
+use App\Pay\Impl\Showapi\Showapi;
 use App\PayInterfaceRecord;
 use App\User;
 use App\UserCard;
@@ -12,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
 
@@ -527,16 +530,18 @@ class UserController extends BaseController
             $pay_record->bill_id = $bill_id;
             $pay_record->user_id = $this->user->id;
             $pay_record->type = UserCard::IDENTIFY_TYPE;
-            $pay_record->platform = Heepay::PLATFORM;
+//            $pay_record->platform = Heepay::PLATFORM;
+            $pay_record->platform = Showapi::PLATFORM;
             $pay_record->save();
         } catch (\Exception $e) {
             return $this->json([], '记录无法生成', 0);
         }
         //调用实名认证接口
-        if(config('app.debug')) {
-            $reality_res = true;
+        if(!config('app.debug')) {
+            $reality_res = Showapi::identify($pay_record->id,$name,$id_number);
+//            $reality_res = Reality::identify($pay_record->id,$name,$id_number);
         } else {
-            $reality_res = Reality::identify($pay_record->id,$name,$id_number);
+            $reality_res = true;
         }
         if($reality_res === true) {
             User::where('id',$this->user->id)->update([
