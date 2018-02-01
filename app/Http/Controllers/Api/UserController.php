@@ -538,10 +538,10 @@ class UserController extends BaseController
         }
         //调用实名认证接口
         if(!config('app.debug')) {
-            $reality_res = true;
-        } else {
             $reality_res = Showapi::identify($pay_record->id,$name,$id_number);
 //            $reality_res = Reality::identify($pay_record->id,$name,$id_number);
+        } else {
+            $reality_res = true;
         }
         if($reality_res === true) {
             User::where('id',$this->user->id)->update([

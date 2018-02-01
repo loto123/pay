@@ -240,7 +240,7 @@ class CardController extends BaseController
             return $this->json([],'记录无法生成',0);
         }
         //鉴权
-        if(config('app.debug')) {
+        if(!config('app.debug')) {
 //            $auth_res = Reality::authentication(
 //                $pay_record->id,
 //                $bill_id,
