@@ -593,7 +593,6 @@ class AccountController extends BaseController
      *                      type="integer",
      *                      example=1,
      *                      description="当前支付场景",
-     *                      example="http_redirect"
      *                  ),
      *                  @SWG\Property(
      *                      property="methods",
@@ -602,7 +601,7 @@ class AccountController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="integer", description="购买方式id"),
      *                          @SWG\Property(property="label", type="string", description="展示文本"),
-     *                          @SWG\Property(property="interact_form", type="string", description="客户端交互形式"),
+     *                          @SWG\Property(property="interact_form", type="string", description="客户端交互形式",example="http_redirect"),
      *                      ),
      *                  ),
      *              )
