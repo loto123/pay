@@ -366,7 +366,7 @@ export default {
       }
 
       if(parseFloat(_data.price)>99999){
-          Toast("最大单价只能为99999");
+          Toast("最大任务默认倍率只能为99999");
           return;
       }
         this.submitSwitch = false;
