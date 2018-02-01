@@ -64,7 +64,7 @@
           </div>
 
           <div class= "item">
-            <mt-field label="设置单价" placeholder="请输入单价(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
+            <mt-field label="任务默认倍率" placeholder="请输入任务默认倍率(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
           </div>
 
           <div class= "item">
@@ -397,12 +397,12 @@ export default {
       console.log(parseFloat(data.rate));
 
       if((parseFloat(data.rate)*10).toString().indexOf(".")!=-1 || parseFloat(data.rate) < 0){
-        Toast("请输入正确的单价(允许有一位小数)");
+        Toast("请输入正确的任务默认倍率(允许有一位小数)");
         return;
       }
 
       if(data.rate > 99999){
-        Toast("单价不能超过99999");
+        Toast("任务默认倍率不能超过99999");
         return;
       }
 
