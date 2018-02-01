@@ -212,7 +212,7 @@ export default {
         }
       }).catch(function(err){
         Toast(err.data.msg);
-        console.log(err);
+        console.error(err);
       });
 
     },
