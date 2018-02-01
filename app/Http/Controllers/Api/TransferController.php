@@ -199,6 +199,8 @@ class TransferController extends BaseController
      *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
      *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
      *                  @SWG\Property(property="status", type="int", example="1", description="1 待结算 2 已平账 3 已关闭"),
+     *                  @SWG\Property(property="allow_cancel", type="boolean", example=true, description="是否允许撤销"),
+     *                  @SWG\Property(property="allow_remind", type="boolean", example=false, description="是否允许提醒好友"),
      *                  @SWG\Property(
      *                      property="user",
      *                      type="object",
@@ -297,6 +299,11 @@ class TransferController extends BaseController
         $transfer->allow_cancel = false;
         if (!$transfer->record()->exists() && !$transfer->tips()->exists() && $transfer->user->id == $user->id) {
             $transfer->allow_cancel = true;
+        }
+        //是否允许提醒好友
+        $transfer->allow_remind = false;
+        if ($transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
+            $transfer->allow_remind = true;
         }
         $transfer->id = $transfer->en_id();
         $transfer->allow_reward = false;
@@ -861,6 +868,12 @@ class TransferController extends BaseController
         if (!$transfer) {
             return $this->json([], trans('trans.trans_not_exist'), 0);
         }
+
+        $user = JWTAuth::parseToken()->authenticate();
+        if($transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+            return $this->json([], trans('trans.notice_not_allow'), 0);
+        }
+
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
         }

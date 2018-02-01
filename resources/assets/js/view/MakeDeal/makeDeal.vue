@@ -314,7 +314,6 @@ export default {
     },
     // 初始化提醒玩家列表
     initMemberList(res){
-      console.log(this.memberList);
       
       if(this.memberList.length>0){
         return;

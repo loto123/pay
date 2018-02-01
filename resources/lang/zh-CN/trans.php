@@ -61,4 +61,5 @@ return [
     'proxy_withdraw_success' => '提现成功',
     'proxy_withdraw_failed' => '提现失败',
     'trans_permission_deny' => '您不是该公会成员，暂无访问权限',
+    'notice_not_allow' => '您不是该公会成员，不能通知好友',
 ];

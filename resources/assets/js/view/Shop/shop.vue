@@ -394,7 +394,6 @@ export default {
     createShop(){
       
       var data = this.openNewShop;
-      console.log(parseFloat(data.rate));
 
       if((parseFloat(data.rate)*10).toString().indexOf(".")!=-1 || parseFloat(data.rate) < 0){
         Toast("请输入正确的任务默认倍率(允许有一位小数)");
