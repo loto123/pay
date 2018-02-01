@@ -815,22 +815,22 @@ export default {
           MessageBox.prompt("请输入新的任务默认倍率(允许有1位小数)","修改任务默认倍率",).then(({ value, action }) => {
 
             if(!value){
-              Toast("单价不能为空");
+              Toast("任务默认倍率不能为空");
               return;
             }
 
             if(isNaN(Number(value))){
-              Toast("请输入正确的单价");
+              Toast("请输入正确的任务默认倍率");
               return;
             }
 
             if((parseFloat(value)*10).toString().indexOf(".")!=-1 && parseFloat(value) > 0){
-              Toast("请输入正确的单价(允许有1位小数)");
+              Toast("请输入正确的任务默认倍率(允许有1位小数)");
               return;
             }
 
             if(parseFloat(value) >=100000){
-              Toast("单价的最大值位99999");
+              Toast("任务默认倍率的最大值位99999");
             }
 
             var _data = {
@@ -841,7 +841,7 @@ export default {
             request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
               Loading.getInstance().close();
               
-              Toast("修改单价成功");
+              Toast("修任务默认倍率成功");
               setTimeout(()=>{
                 this.init();
               },1500);

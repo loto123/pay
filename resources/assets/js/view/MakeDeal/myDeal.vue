@@ -261,8 +261,10 @@ export default {
     },
 
     changeTab(item) {
+      if(this.loading == true){
+        return;
+      }
       this.isListShow = false;
-
       if (item > 2 || item < 0) {
         return;
       } else {
