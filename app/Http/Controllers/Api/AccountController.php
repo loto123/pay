@@ -837,7 +837,8 @@ class AccountController extends BaseController
                 'type' => (int)$_fund->type,
                 'mode' => (int)$_fund->mode,
                 'amount' => $_fund->amount,
-                'created_at' => strtotime($_fund->created_at)
+                'created_at' => strtotime($_fund->created_at),
+                'fee' => $_fund->withdraw_order ? $_fund->withdraw_order->system_fee : 0
             ];
         }
         return $this->json(['count' => (int)$count, 'data' => $data]);
@@ -907,7 +908,9 @@ class AccountController extends BaseController
             'created_at' => strtotime($fund->created_at),
             'no' => $fund->en_id(),
             'remark' => (string)$fund->remark,
-            'balance' => $fund->balance
+            'balance' => $fund->balance,
+            'fee' => $fund->withdraw_order ? $fund->withdraw_order->system_fee : 0
+
         ]);
     }
 
