@@ -30,7 +30,7 @@
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
-                        <div class="m-text">{{item.amount}}<i class="diamond" style="margin-left:0.4em;">&#xe6f9;</i></div>
+                        <div class="m-text">{{item.amount}}<i class="diamond" style="margin-left:0.4em;font-size:1em;">&#xe6f9;</i></div>
                     </div>
                     <div class="star-wrap flex flex-align-center flex-justify-center flex-1" @click.stop="markItem(item.id)">
                       <i class="iconfont " v-bind:class="{'edit':isStar}" >

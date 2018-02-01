@@ -32,11 +32,18 @@
 export default {
   name: "topBack",
   props: ["title", "backUrl", "userAction"],
+  // mounted(){
+ 
+  // },
   methods: {
     goBack() {
       if (!this.$props.userAction) {
         if (!this.$props.backUrl) {
-          this.$router.go(-1);
+          if(window.history.length <= 2){
+            this.$router.push('/index');
+          }else {
+            this.$router.go(-1);
+          }
         } else {
           this.$router.push(this.$props.backUrl);
         }

@@ -69,7 +69,6 @@
 				Loading.getInstance().open("加载中...");
 
 				request.getInstance().getData('api/my/getPayCard').then((res) => {
-					console.log(res);
 					this.userMobile = res.data.data.user_mobile
 					this.realName = res.data.data.holder_name
 					this.idCard = res.data.data.holder_id
