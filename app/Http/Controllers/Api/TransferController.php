@@ -294,7 +294,7 @@ class TransferController extends BaseController
         //装填响应数据
         //是否允许撤销交易
         $transfer->allow_cancel = false;
-        if (!$transfer->record->count() && $transfer->user->id == $user->id) {
+        if (!$transfer->record()->exists() && !$transfer->tips()->exists() && $transfer->user->id == $user->id) {
             $transfer->allow_cancel = true;
         }
         $transfer->id = $transfer->en_id();
@@ -766,6 +766,9 @@ class TransferController extends BaseController
 //                $user->save();
             //红包余额增加
             $transfer->amount = bcadd($transfer->amount, $record->amount, 2);
+            if($transfer->amount > 0) {
+                $transfer->status = 1;
+            }
             $transfer->save();
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
@@ -1588,10 +1591,7 @@ class TransferController extends BaseController
         if ($transfer->user_id != $user->id) {
             return $this->json([], trans('trans.trans_not_belong_user'), 0);
         }
-        if ($transfer->record()->exists()) {
-            return $this->json([], trans('trans.trans_not_allow_to_cancel'), 0);
-        }
-        if ($transfer->tips()->exists()) {
+        if ($transfer->record()->exists() || $transfer->tips()->exists()) {
             return $this->json([], trans('trans.trans_not_allow_to_cancel'), 0);
         }
         //删除交易用户关联关系
