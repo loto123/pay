@@ -592,7 +592,8 @@ class AccountController extends BaseController
      *                      property="scene",
      *                      type="integer",
      *                      example=1,
-     *                      description="当前支付场景"
+     *                      description="当前支付场景",
+     *                      example="http_redirect"
      *                  ),
      *                  @SWG\Property(
      *                      property="methods",
