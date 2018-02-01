@@ -58,15 +58,20 @@
             <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <li v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="details(item.id)">
-                        <div class="bill-content" v-if="tabStatus[0]">
-                            <h5>{{status(item.type)}}</h5>
-                            <div class="time">{{changeTime(item.created_at)}}</div>
+                        <div class="flex-8">
+                            <div class="bill-content" v-if="tabStatus[0]">
+                                <h5>{{status(item.type)}}</h5>
+                                <div class="time">{{changeTime(item.created_at)}}</div>
+                            </div>
+                            <div class="bill-content" v-if="tabStatus[1]">
+                                <h5>{{status(item.type)}}</h5>
+                                <div class="time">{{changeTime(item.created_at)}}</div>
+                            </div>
                         </div>
-                        <div class="bill-content" v-if="tabStatus[1]">
-                            <h5>{{status(item.type)}}</h5>
-                            <div class="time">{{changeTime(item.created_at)}}</div>
+                        <div class="flex-2">
+                            <div class="bill-money">{{tabStatus[0]?item.amount:item.amount}}</div>
+                            <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>
                         </div>
-                        <div class="bill-money">{{tabStatus[0]?item.amount:item.amount}}</div>
                     </a>
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
@@ -273,6 +278,9 @@
 
             },
             changeTab(tabindex){
+                if(this.loading==true){
+                    return
+                }
                 this.tabStatus = [false,false];
                 this.tabStatus[tabindex] = true;
                 this.headList = [];
@@ -677,7 +685,11 @@
                 }
             }
             .bill-money {
-                font-size: 1.2em;
+                font-size: 1em;
+            }
+            .fee{
+                color: #aaa;
+                font-size: 0.8em;
             }
             .active {
                 color: #00cc00;
