@@ -416,6 +416,7 @@ export default {
     },
 
     init() {
+
       Loading.getInstance().open();
       this.canClick = true;
       this.transfer_id = this.$route.query.id;
@@ -650,7 +651,7 @@ export default {
           this.$router.push("/makeDeal/my_deal");
         },1500);
       }).catch(err=>{
-        Toast(err.data.data.msg);
+        Toast(err.data.msg);
       });
     },
 
@@ -699,6 +700,7 @@ export default {
     },
     
   },
+
   watch: {
     "moneyData.payMoney": function() {
       // 放钱
