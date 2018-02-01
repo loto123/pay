@@ -1584,7 +1584,7 @@ class TransferController extends BaseController
                     //解冻店铺茶水费资金
                     $shop_container = $transfer->shop->container;
                     if ($tip_amount > 0) {
-                        if (!$shop_container->unfreeze($transfer->tip_amount)) {
+                        if (!$shop_container->unfreeze($tip_amount)) {
                             Log::error('关闭交易，解冻店铺资金失败:' . '     shop container:' . $shop_container->id . ' frozen_balance:' . $shop_container->frozen_balance . '     unfreeze_amount:' . $transfer->tip_amount);
                             DB::rollBack();
                             continue;
