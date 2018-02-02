@@ -108,7 +108,7 @@
 				<ul>
 					<li class="flex flex-align-center">
 						<span class="flex-1 ">出售价格</span>
-						<span class="flex-1 flex flex-justify-end">￥100</span>
+						<span class="flex-1 flex flex-justify-end">￥{{amount}}</span>
 					</li>
 					<li class="flex flex-align-center">
 						<span class="flex-1">手续费</span>
