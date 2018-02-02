@@ -36,7 +36,7 @@
                         <select class="form-control" id="stat" name="stat">
                             <option value="">全部</option>
                             <option value="1" {{isset($stat) && $stat == 1 ? 'selected="selected"' : ''}}>交钻</option>
-                            <option value="2" {{isset($stat) && $stat == 2 ? 'selected="selected"' : ''}}>拿钻</option>
+                            <option value="2" {{isset($stat) && $stat == 2 ? 'selected="selected"' : ''}}>拿钻（不含撤销）</option>
                             <option value="3" {{isset($stat) && $stat == 3 ? 'selected="selected"' : ''}}>撤销</option>
                         </select>
                     </div>
@@ -137,7 +137,7 @@
                             </td>
                             <td>{{$item->fee_amount}}</td>
                             <td>{{$item->tip ? $item->tip->amount : 0}}</td>
-                            @switch($item->status)
+                            @switch($item->stat)
                             @case(1)
                             <td>交钻</td>
                             @break
