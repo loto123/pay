@@ -34,7 +34,7 @@
                     </div>
                     <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
                         <div class="title">收益</div>
-                        <div class="m-text">￥{{item.tip_amount}}</div>
+                        <div class="m-text">{{item.tip_amount}}钻石</div>
                     </div>
 
                     <div class="controller-wrap flex flex-align-center" v-if="isListRadioShow">
