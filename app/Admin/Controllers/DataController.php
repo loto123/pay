@@ -365,7 +365,7 @@ class DataController extends Controller
         $role = $request->input('role');
         if ($role) {
             $listQuery->whereHas('roles', function ($query) use ($role) {
-                $query->where('role_id', $role);
+                $query->where('id', $role);
             });
         }
         //排序方式
@@ -467,7 +467,7 @@ class DataController extends Controller
         $role = $request->input('role');
         if ($role) {
             $listQuery->whereHas('roles', function ($query) use ($role) {
-                $query->where('name', $role);
+                $query->where('id', $role);
             });
         }
         $roles = Role::get();
