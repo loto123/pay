@@ -167,7 +167,8 @@
                     { type: 5, title: '公会转入', isBuy:false},
                     { type: 6, title: '任务手续费', isBuy:false},
                     { type: 7, title: '出售手续费', isBuy:false},
-                    { type: 8, title: '任务加速', isBuy:false}
+                    { type: 8, title: '任务加速', isBuy:false},
+                    { type: 9, title: '拿钻撤销', isBuy:false}
                 ]
             };
         },
@@ -249,7 +250,7 @@
                     var _data2 = {
                         limit: 15,
                         offset: 0,
-                        type:[2,3,4,5,6,7,8]
+                        type:[2,3,4,5,6,7,8,9]
                     }
                     request.getInstance().getData("api/account/records", _data2)
                         .then((res) => {
@@ -397,7 +398,7 @@
                             // 获取当月的总额度(分润)
                             var _data2 = {
                                 month: _timer,
-                                type:[2,3,4,5,6,7,8]
+                                type:[2,3,4,5,6,7,8,9]
                             }
                             request.getInstance().getData("api/account/records/month", _data2)
                             .then(res => {
@@ -451,7 +452,7 @@
                     _data = {
                         limit: 5,
                         offset: [].concat(this.recordList).pop().id,
-                        type:[2,3,4,5,6,7,8]
+                        type:[2,3,4,5,6,7,8,9]
                     }
                 }
                 this.loading = true;
@@ -533,7 +534,7 @@
                         limit: 15,
                         offset: 0,
                         start: this.dateChoise,
-                        type:[2,3,4,5,6,7,8]
+                        type:[2,3,4,5,6,7,8,9]
                     }
                     request.getInstance().getData("api/account/records", _data)
                     .then((res) => {
@@ -579,6 +580,7 @@
                     case 6: result = '任务手续费'; break;
                     case 7: result = '出售手续费'; break;
                     case 8: result = '任务加速'; break;
+                    case 9: result = '拿钻撤销'; break;
                 }
                 return result;
             },
