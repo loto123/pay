@@ -777,8 +777,8 @@ class TransferController extends BaseController
             $record->save();
             //扣除红包手续费
             if ($record->fee_amount > 0) {
-                //红包茶水费减少
-                $transfer->tip_amount = bcsub($transfer->fee_amount, $record->fee_amount, 2);
+                //红包手续费减少
+                $transfer->fee_amount = bcsub($transfer->fee_amount, $record->fee_amount, 2);
             }
             //扣除商店茶水费
             $tip = $record->tip;
@@ -812,7 +812,7 @@ class TransferController extends BaseController
             $found->status = UserFund::STATUS_SUCCESS;
             $found->type = UserFund::TYPE_TRADE_BACK;
             $found->mode = UserFund::MODE_OUT;
-            $found->amount = $record->real_amount;
+            $found->amount = $record->amount;
             $found->save();
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
@@ -870,7 +870,7 @@ class TransferController extends BaseController
         }
 
         $user = JWTAuth::parseToken()->authenticate();
-        if($transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+        if(!$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
             return $this->json([], trans('trans.notice_not_allow'), 0);
         }
 

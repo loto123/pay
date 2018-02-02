@@ -634,13 +634,14 @@ class AccountController extends BaseController
             }
 
             $methods = $channelBind->platform->depositMethods()->where('disabled', 0)->select('id', 'os', 'scene', 'show_label', 'interact_form')->get();
-            //dump($methods);
-            return $this->json(['channel' => $channelBind->getKey(), 'scene' => $scene->getKey(), 'methods' => $methods->filter(function ($method) use ($scene, $os) {
+            $data = array_values($methods->filter(function ($method) use ($scene, $os) {
                 return in_array($scene->getKey(), $method->scene) &&  //支付场景筛选
                     ($method->os == DepositMethod::OS_ANY || $method->os == $os);//不限系统,或系统匹配
             })->map(function ($item) {
                 return ['id' => $item['id'], 'label' => $item['show_label'], 'interact_form' => $item['interact_form']];
-            })]);
+            })->all());
+            //dump($data);
+            return $this->json(['channel' => $channelBind->getKey(), 'scene' => $scene->getKey(), 'methods' => $data]);
         } else {
             return $this->json(null, '不存在的场景或系统', 0);
         }
