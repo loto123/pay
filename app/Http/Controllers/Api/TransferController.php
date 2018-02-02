@@ -870,7 +870,7 @@ class TransferController extends BaseController
         }
 
         $user = JWTAuth::parseToken()->authenticate();
-        if($transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+        if(!$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
             return $this->json([], trans('trans.notice_not_allow'), 0);
         }
 
