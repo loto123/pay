@@ -20,10 +20,6 @@
 					<div class="content">{{no}}</div>
 				</li>
 				<li>
-					<div class="title">账户余钱</div>
-					<div class="content">{{balance}}</div>
-				</li>
-				<li>
 					<div class="title">备注</div>
 					<div class="content">{{status(type)}}</div>
 				</li>
@@ -46,9 +42,7 @@
 				type:null,			//类型
 				no:null,			//交易单号
 				amount:null,		//入账金额
-				mode:null,			//0:收入		1:支出
-				balance:null		//账户余钱
-
+				mode:null			//0:收入		1:支出
 			};
 		},
 		created(){
@@ -63,7 +57,6 @@
 					.then((res) => {
                         this.remark=res.data.data.remark
 						this.no=res.data.data.no
-						this.balance=res.data.data.balance
 						this.created_at=res.data.data.created_at
 						this.amount=res.data.data.amount
 						this.type=res.data.data.type	

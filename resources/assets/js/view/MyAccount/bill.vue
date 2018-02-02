@@ -27,8 +27,8 @@
             </div>
             <div v-if="tabStatus[1]==true">
                 <div class="amount">
-                    <span>出售:{{tabDisburse}}</span>
-                    <span>购买:{{tabIncome}}</span>
+                    <span>支出:{{tabDisburse}}</span>
+                    <span>收入:{{tabIncome}}</span>
                 </div>
             </div>
         </div>
@@ -84,8 +84,8 @@
                         </div>
                         <div v-if="tabStatus[1]==true">
                             <div class="amount">
-                                <span>收入:{{item.out}}</span>
-                                <span>支出:{{item.in}}</span>
+                                <span>支出:{{item.out}}</span>
+                                <span>收入:{{item.in}}</span>
                             </div>
                         </div>
                     </div>
@@ -196,26 +196,8 @@
                     this.$router.push({ path: "/myAccount/bill/bill_details/?id=" + id + "&type=withDraw" });
                 }
             },
-            // init() {
-            //     var data = {
-            //         type: this.type,
-            //         created_at: this.created_at,
-            //         size: this.size
-            //     }
-            //     Loading.getInstance().open("加载中...");
-
-            //     request.getInstance().getData("api/account/records")
-            //         .then((res) => {
-            //             this.billList = res.data.data.data
-            //             Loading.getInstance().close();
-            //         })
-            //         .catch((err) => {
-            //             Toast(err.data.msg);
-            //             Loading.getInstance().close();
-            //         })
-            // },
-
             init() {
+                this.canLoading = true;
                 Loading.getInstance().open();
                 this.dateChoise = null;
                 var _data1 = {
@@ -319,7 +301,8 @@
                 var _initialData = {
                     time: _head,
                     index: key,
-                    total: "加载中..."
+                    in:"加载中...",
+                    out:"加载中..."
                 }
                 if (this.headList.length == 0) {
                     this.headList.push(_initialData);
@@ -340,10 +323,11 @@
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
 
-                            var data = {
+                            var data= {
                                 time: _head,
                                 index: i,
-                                total: "加载中..."
+                                in:"加载中...",
+                                out:"加载中..."
                             }
 
                             this.headList.push(data);
@@ -364,12 +348,11 @@
                     if (this.recordList[_index].isTimePanel == true) {
                         continue;
                     }
-                    this.recordList.splice(_index, 0, { isTimePanel: true, time: this.headList[k].time, total: this.headList[k].total });
+                    this.recordList.splice(_index, 0, { isTimePanel: true, time: this.headList[k].time, in: this.headList[k].in, out: this.headList[k].out});
                     count++;
                 }
-
                 for (let m = 0; m < this.recordList.length; m++) {
-                    if (this.recordList[m].isTimePanel == true && this.recordList[m].total == "加载中...") {
+                    if (this.recordList[m].isTimePanel == true && this.recordList[m].in == "加载中..."&& this.recordList[m].out == "加载中...") {
 
                         var _year = this.recordList[m].time.split("年")[0];
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
@@ -387,12 +370,6 @@
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
-
-                                // this.inMoney=res.data.data.in;
-                                // this.outMoney=res.data.data.out;
-                                // // this.recordList[m].total = res.data.data.total;
-                                // this.timeInfo = this.recordList[0].time;
-                                // this.tabTotal = this.recordList[0].in;
                             }).catch();
                         } else {
                             // 获取当月的总额度(分润)
@@ -403,7 +380,7 @@
                             request.getInstance().getData("api/account/records/month", _data2)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
-                                this.recordList[m].out = res.data.data.out;   
+                                this.recordList[m].out = res.data.data.out; 
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
