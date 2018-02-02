@@ -531,9 +531,7 @@ export default {
       request.getInstance().postData("api/transfer/notice",_data).then(res=>{
         Loading.getInstance().close();   
         Toast("编辑提醒成员成功...");
-        setTimeout(()=>{
-          this.init();
-        },2000);
+        this.init();
         
       }).catch(err=>{
         Loading.getInstance().close();
