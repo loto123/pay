@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Pay\Model\PayQuota;
 use App\Pay\Model\SellBill;
+use App\Pay\Model\Withdraw;
 use App\Pay\Model\WithdrawRetry;
 use App\Pay\PayLogger;
 use App\Pet;
@@ -540,7 +541,7 @@ class PetTradeController extends BaseController
         $list = SellBill::where($where)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
             return [
                 'id' => $item->getKey(),
-                'state' => $item->deal_closed ? (WithdrawRetry::isWithdrawFailed($item->withdraw->state) ? '状态异常' : '出售成功') : '出售中',
+                'state' => $item->deal_closed ? '出售成功' : (WithdrawRetry::isWithdrawFailed($item->withdraw->state) || $item->withdraw->state == Withdraw::STATE_SEND_FAIL ? '状态异常' : '出售中'),
                 'pet_pic' => $item->pet->image,
                 'price' => $item->price,
                 'created_at' => $item->created_at->toDateTimeString()
