@@ -27,8 +27,8 @@
             </div>
             <div v-if="tabStatus[1]==true">
                 <div class="amount">
-                    <span>出售:{{tabDisburse}}</span>
-                    <span>购买:{{tabIncome}}</span>
+                    <span>支出:{{tabDisburse}}</span>
+                    <span>收入:{{tabIncome}}</span>
                 </div>
             </div>
         </div>
@@ -84,8 +84,8 @@
                         </div>
                         <div v-if="tabStatus[1]==true">
                             <div class="amount">
-                                <span>收入:{{item.out}}</span>
-                                <span>支出:{{item.in}}</span>
+                                <span>支出:{{item.out}}</span>
+                                <span>收入:{{item.in}}</span>
                             </div>
                         </div>
                     </div>
