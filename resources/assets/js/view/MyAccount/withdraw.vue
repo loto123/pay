@@ -112,7 +112,7 @@
 					</li>
 					<li class="flex flex-align-center">
 						<span class="flex-1">手续费</span>
-						<span class="flex-1 flex flex-justify-end">￥100</span>
+						<span class="flex-1 flex flex-justify-end">￥{{fee}}</span>
 					</li>
 					<li class="flex flex-align-center">
 						<span class="flex-1">到账银行卡</span>
@@ -129,7 +129,7 @@
 			<div class="withdraw-info flex flex-v flex-align-center">
 				<div class="title">出售</div>
 				<div class="price">￥{{amount}}</div>
-				<div class="notice">额外扣除2元/次 手续费</div>
+				<div class="notice">额外扣除{{fee}}元/次 手续费</div>
 			</div>
 		</passWorld>
 	</div>
@@ -172,7 +172,10 @@
 				sheetVisible:false,
 				has_pay_card:0,                 // 是否绑定了银行卡
 				actions:[],                      // 右上角动作列表
-				isBroodClick:false               // 孵化按钮防止连续点击
+				isBroodClick:false,               // 孵化按钮防止连续点击
+				fee_mode:0,                      // 手续费支付方式  0 为百分比  1为单笔固定
+				fee_value:0,
+				fee:0
 			}
 		},
 		mounted(){
@@ -224,6 +227,8 @@
 						this.has_pay_password = res[1].data.data.has_pay_password;
 						this.has_pay_card = res[1].data.data.has_pay_card;
 
+						this.fee_mode= res[2].data.data.fee_mode;
+						this.fee_value = res[2].data.data.fee_value;
 						this.dataList = res[2].data.data.methods
 						this.setBankList(res[2]);//获取提现方式列表
 						Loading.getInstance().close();
@@ -245,6 +250,7 @@
 				this.value = this.cardOptions[0].value;
 				this.isShow = true;
 			},
+
 			withdrawBtn() {
 				var self = this;
 
@@ -269,6 +275,12 @@
 					way: this.value
 				}
 
+				if(this.fee_mode == 0){          // 百分比模式
+					this.fee = this.amount * this.fee_value
+				}else if(this.fee_mode == 1){    // 指定金额模式
+					this.fee = this.fee_value;
+				}
+
 				if (!this.value) {
 					Toast('请选择支付方式');
 					return
@@ -279,6 +291,7 @@
 					this.showPasswordTag = true;   //密码层弹出
 				}
 			},
+
 			//支付密码验证
 			callBack(password) {
 				var temp = {};
@@ -302,7 +315,6 @@
 						Toast('出售成功');
 						this.isPayInfoDetailShow = true;
 						this.hidePassword();
-						// this.$router.push('/myAccount');
 					})
 					.catch((err) => {
 						Loading.getInstance().close();
