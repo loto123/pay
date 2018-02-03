@@ -1674,7 +1674,7 @@ class ShopController extends BaseController {
         $record = new ShopFund();
         $record->shop_id = $shop->id;
         $record->user_id = $shop->manager->id;
-        $record->type = ShopFund::TYPE_TRANAFER_MEMBER;
+        $record->type = ShopFund::TYPE_TRANAFER;
         $record->mode = ShopFund::MODE_OUT;
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;

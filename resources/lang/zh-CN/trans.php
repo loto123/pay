@@ -49,7 +49,7 @@ return [
     'min' => ':attribute的长度不能小于:min位',
     'max' => ':attribute的长度不能超过:max位',
     'digits_between' => ':attribute必须为数字，且长度在:min到:max之间',
-    'digits' => ':attribute必须为数字，且长度必须是:value位',
+    'digits' => ':attribute必须为数字，且长度必须是:digits位',
     'user_pay_password_error' => '支付密码错误',
     'user_check_pay_password_times_out' => '超出支付密码错误次数上限',
     'not_need_trans_closed' => '关闭交易失败，没有符合关闭条件的交易',

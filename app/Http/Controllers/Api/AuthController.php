@@ -223,7 +223,7 @@ class AuthController extends BaseController {
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return $this->json([], trans("error code"), 0);
+            return $this->json([], trans("api.error_sms_code"), 0);
         }
         Cache::forget($cache_key);
         $input = $request->all();
@@ -369,6 +369,7 @@ class AuthController extends BaseController {
         if (!$oauth_user) {
             $oauth_user = new OauthUser();
             $oauth_user->openid = $user['openid'];
+//            $oauth_user->appid =
         }
         $oauth_user->subscribe = isset($user['subscribe']) ? $user['subscribe'] : 0;
         $oauth_user->nickname = isset($user['nickname']) ? $user['nickname'] : '';
@@ -479,7 +480,7 @@ class AuthController extends BaseController {
             $cache_key = "SMS_".$request->mobile;
             $cache_value = Cache::get($cache_key);
             if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-                return $this->json([], trans("error code"), 0);
+                return $this->json([], trans("api.error_sms_code"), 0);
             }
         }
         return $this->json();
@@ -594,7 +595,7 @@ class AuthController extends BaseController {
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return $this->json([], trans("error code"), 0);
+            return $this->json([], trans("api.error_sms_code"), 0);
         }
         Cache::forget($cache_key);
         $user = User::where("mobile", $request->mobile)->first();

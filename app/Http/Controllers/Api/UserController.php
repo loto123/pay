@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Agent\Card;
 use App\Bank;
 use App\Pay\Impl\ALiPay\Auth;
 use App\Pay\Impl\Heepay\Heepay;
@@ -295,6 +296,7 @@ class UserController extends BaseController
             ],
             [
                 'required' => trans('trans.required'),
+                'digits' => trans('trans.digits'),
             ]
         );
 
@@ -436,8 +438,8 @@ class UserController extends BaseController
         $data = [
             'user_mobile' => $this->user->mobile,
             'holder_name' => $user_card->holder_name,
-            'holder_id' => $this->formatNum($user_card->holder_id,6,4),
-            'card_num' => $this->formatNum($user_card->card_num,6,4),
+            'holder_id' => $this->user->formatNum($user_card->holder_id,6,4),
+            'card_num' => $this->user->formatNum($user_card->card_num,6,4),
             'bank' => $bank->name,
         ];
         return $this->json($data);
@@ -524,7 +526,7 @@ class UserController extends BaseController
         }
         Cache::forget($cache_key);
         //添加记录
-        $bill_id = CardController::createUniqueId();
+        $bill_id = UserCard::createUniqueId();
         try{
             $pay_record = new PayInterfaceRecord();
             $pay_record->bill_id = $bill_id;
@@ -604,29 +606,13 @@ class UserController extends BaseController
             'mobile' => $this->user->mobile,
             'thumb' => $this->user->avatar??'',
             'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
-            'id_number' => $this->user->id_number ? str_replace(' ','',$this->formatNum($this->user->id_number,4,4)) : '',
+            'id_number' => $this->user->id_number ? str_replace(' ','',$this->user->formatNum($this->user->id_number,4,4)) : '',
             'has_parent'=> $this->user->parent_id>0 ? 1 : 0,
             'parent_name' => $parent->name??'',
             'parent_mobile' => $parent->mobile??'',
             'pay_card_id' => $this->user->pay_card_id??'',
         ];
         return $this->json($data);
-    }
-
-    //对字符串做掩码处理
-    private function formatNum($num,$pre=0,$suf=4)
-    {
-        $prefix = '';
-        $suffix = '';
-        if($pre>0) {
-            $prefix = substr($num, 0, $pre);
-        }
-        if ($suf>0){
-            $suffix = substr($num, 0-$suf, $suf);
-        }
-        $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
-        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
-        return $maskBankCardNo;
     }
 
     /**
@@ -685,7 +671,8 @@ class UserController extends BaseController
      */
     public function pay_password(Request $request) {
         $validator = Validator::make($request->all(),
-            ['password' => 'bail|required']
+            ['password' => 'bail|required'],
+            ['required' => trans('trans.required'),]
         );
 
         if ($validator->fails()) {
@@ -746,7 +733,12 @@ class UserController extends BaseController
             'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable(),
             'pay_password' => 'required|digits:6',
             'code' => 'required'
-        ]);
+        ],
+        [
+            'required' => trans('trans.required'),
+            'digits' => trans('trans.digits'),
+        ]
+        );
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
@@ -754,7 +746,7 @@ class UserController extends BaseController
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return $this->json([], trans("error code"), 0);
+            return $this->json([], trans("api.error_sms_code"), 0);
         }
         Cache::forget($cache_key);
         $user = User::where("mobile", $request->mobile)->first();
