@@ -211,6 +211,11 @@ class PromoterController extends BaseController
             return $this->json([], '该代理不存在', 0);
         }
 
+        //加成后分润比例不能超过100%
+        if ($bindTo->percent + $card->type->percent > 100) {
+            return $this->json([], '无效数据,绑定后分润比例超过100%', 0);
+        }
+
         //只有更高分润比例卡可以绑定
         if ($bindTo->myVipProfitShareRate() >= $card->type->percent) {
             return $this->json([], '有生效中的vip卡,只能绑定更高级卡片', 0);

@@ -53,12 +53,12 @@ class DataController extends Controller
         //推荐人ID
         $parent = $request->input('parent');
         if ($parent) {
-            $query->where('users.parent_id','>',0)->where('users.parent_id', User::where('mobile', $parent)->value('id'));
+            $query->where('users.parent_id', '>', 0)->where('users.parent_id', User::where('mobile', $parent)->value('id'));
         }
         //运营ID
         $operator = $request->input('operator');
         if ($operator) {
-            $query->where('users.operator_id','>',0)->where('users.operator_id', AdminUser::where('username', $operator)->value('id'));
+            $query->where('users.operator_id', '>', 0)->where('users.operator_id', AdminUser::where('username', $operator)->value('id'));
         }
         $date_time = $request->input('date_time');
         if (!empty($date_time)) {
@@ -104,7 +104,7 @@ class DataController extends Controller
         //店主ID
         $aid = $request->input('aid');
         if ($aid) {
-            $tmp_aid = User::where('mobile',$aid)->value('id');
+            $tmp_aid = User::where('mobile', $aid)->value('id');
             $listQuery->whereHas('shop.manager', function ($query) use ($tmp_aid) {
                 $query->where('id', $tmp_aid);
             });
@@ -232,7 +232,7 @@ class DataController extends Controller
         //用户ID
         $aid = $request->input('aid');
         if ($aid) {
-            $listQuery->where('user_id', User::where('mobile',$aid)->value('id'));
+            $listQuery->where('user_id', User::where('mobile', $aid)->value('id'));
         }
         //店铺ID
         $shop_id = $request->input('shop_id');
@@ -244,7 +244,7 @@ class DataController extends Controller
         //店主ID
         $owner_id = $request->input('owner_id');
         if ($owner_id) {
-            $owner_tmp_id = User::where('mobile',$owner_id)->value('id');
+            $owner_tmp_id = User::where('mobile', $owner_id)->value('id');
             $listQuery->whereHas('transfer.shop', function ($query) use ($owner_tmp_id) {
                 $query->where('manager_id', $owner_tmp_id);
             });
@@ -394,7 +394,7 @@ class DataController extends Controller
         if (!empty($date_time)) {
             $date_time_arr = explode(' - ', $request->input('date_time'));
             $begin = $date_time_arr[0];
-            $end = $date_time_arr[1];
+            $end = $date_time_arr[1] . '23:59:59';
         }
         //获取所有运营
         $listQuery = AdminUser::leftJoin('profit_record', function ($join) use ($begin, $end) {
@@ -437,7 +437,7 @@ class DataController extends Controller
         if (!empty($date_time)) {
             $date_time_arr = explode(' - ', $request->input('date_time'));
             $begin = $date_time_arr[0];
-            $end = $date_time_arr[1];
+            $end = $date_time_arr[1] . '23:59:59';
         }
 
         //运营详情
