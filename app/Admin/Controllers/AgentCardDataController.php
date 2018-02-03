@@ -28,7 +28,9 @@ class AgentCardDataController extends Controller
         $operators = [];
         $operator_username = $request->operator_username;
         if(!empty($operator_username)) {
-            $operators = AdminUser::where('username',$operator_username)->withCount('card_stock')->first();
+            $operators = AdminUser::where('username',$operator_username)->withCount(['card_stock'=>function($query) {
+                $query->where('state',CardStock::SALE);
+            }])->first();
             if(empty($operators)) {
                 $_error = '用户不存在';
             }
@@ -41,7 +43,7 @@ class AgentCardDataController extends Controller
         $data = isset($_error)?compact('_error','operator_username')
             :compact('operators','operator_username','card_type');
         return Admin::content(function (Content $content) use ($data) {
-            $content->header("添加VIP卡");
+            $content->header("添加VIP卡给运营");
             $content->body(view('admin.agent_card.operator', $data));
         });
     }
@@ -113,18 +115,21 @@ class AgentCardDataController extends Controller
         $request_promoter = $request->promoter;
         if(!empty($request_promoter)) {
             $promoter = User::where('mobile',$request_promoter)->withCount('promoter_cards')->first();
-            $sale_card_cnt = CardStock::where('operator',Admin::user()->id)->where('state',CardStock::SALE)->count();
+            $card_stock_query = CardStock::where('operator',Admin::user()->id)->where('state',CardStock::SALE);
+            $sale_card_cnt = $card_stock_query->count();
             if(empty($promoter) || !$promoter->isPromoter()) {
                 $_error = '该推广员不存在';
             }
             if(empty($sale_card_cnt)) {
                 $_error = '您没有可用的VIP卡';
             }
+
         }
 
-        $data= isset($_error)?compact('_error','request_promoter'):compact('promoter','operator','sale_card_cnt','request_promoter');
+        $data= isset($_error) ? compact('_error','request_promoter')
+            : compact('promoter','operator','sale_card_cnt','request_promoter');
         return Admin::content(function (Content $content) use($data) {
-            $content->header("添加VIP卡");
+            $content->header("添加VIP卡给推广员");
             $content->body(view('admin.agent_card.promoter', $data));
         });
     }
