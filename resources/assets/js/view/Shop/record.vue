@@ -148,15 +148,10 @@
             status(type){
                 let result='';
                 switch(type){
-                    case 0: result='充值'; break;
-                    case 1: result='提现'; break;
-                    case 2: result='交易收入'; break;
-                    case 3: result='交易支出'; break;
-                    case 4: result='转账到公会'; break;
-                    case 5: result='公会转入'; break;
-                    case 6: result='交易手续费'; break;
-                    case 7: result='提现手续费'; break;
-                    default: result='打赏店家费'
+                    case 0: result='转账给个人'; break;
+                    case 1: result='转账给成员'; break;
+                    case 2: result='从个人转账'; break;
+                 
                 }
                 return result;
             }

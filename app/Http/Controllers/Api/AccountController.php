@@ -340,10 +340,16 @@ class AccountController extends BaseController
             return $this->json([], '状态异常,请刷新页面重试', 0);
         }
 
-        //判断限额
-        if ($method->max_quota > 0 && $method->max_quota < $request->amount) {
-            return $this->json([], '出售价格最高为' . $method->max_quota . '元', 0);
+        if ($request->amount < max(self::MINIMUM_WITHDRAW, config('tixian_min', 0))) {
+            return $this->json([], '最低价格' . self::MINIMUM_WITHDRAW . '元', 0);
         }
+
+        //判断限额
+        $max_quota = min($method->max_quota, config('tixian_max', 0));
+        if ($max_quota > 0 && $max_quota < $request->amount) {
+            return $this->json([], '单笔收款最高为' . $max_quota . '元', 0);
+        }
+
 
         if ($method->targetPlatform->getKey() == 0) {
             //提现到银行卡
@@ -361,10 +367,6 @@ class AccountController extends BaseController
             $receiver_info = [];
         }
 
-        //限制提现金额
-        if ($request->amount < self::MINIMUM_WITHDRAW) {
-            return $this->json([], '最低价格' . self::MINIMUM_WITHDRAW . '元', 0);
-        }
 
         //计算手续费
         if ($method->fee_value <= 0) {

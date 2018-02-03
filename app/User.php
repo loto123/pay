@@ -374,7 +374,7 @@ class User extends Authenticatable
      * @param string $order 订单号
      * @return array
      */
-    public function batch_create_pet($num, $type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER, $order = "") {
+    public function batch_create_pet($num, $type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER, $order = "", $transfer_id = 0) {
         $pets = [];
         #todo
         for ($k = 0 ; $k < $num; $k++){
@@ -393,6 +393,7 @@ class User extends Authenticatable
             $record->to_user_id = $this->id;
             $record->type = $source;
             $record->order = $order;
+            $record->transfer_id = $transfer_id;
             DB::beginTransaction();
             try {
                 $pet->save();
@@ -416,10 +417,12 @@ class User extends Authenticatable
      * @return Pet
      */
     public function create_pet($type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER) {
+        $key = sprintf("PET_FREE_TIMES_%s_%d", date("Ymd"), $this->id);
         if ($type == Pet::TYPE_EGG && $source == PetRecord::TYPE_NEW) {
             if ($this->pet_left_times() == 0) {
                 return null;
             }
+            Cache::store('redis')->increment($key);
         }
         $pet = new Pet();
         $pet->user_id = $this->id;
@@ -435,6 +438,7 @@ class User extends Authenticatable
             $record->save();
         } catch (\Exception $e){
             DB::rollBack();
+            Cache::store('redis')->forget($key);
             return null;
         }
         DB::commit();
@@ -450,7 +454,13 @@ class User extends Authenticatable
      */
     public function pet_left_times() {
         $total = (int)config("pet_free_times", 3);
-        $count = (int)$this->pet_records()->where("created_at", ">=", date("Y-m-d 00:00:00"))->where("type", PetRecord::TYPE_NEW)->count();
+        $key = sprintf("PET_FREE_TIMES_%s_%d", date("Ymd"), $this->id);
+        if (!Cache::store('redis')->has($key)) {
+            $count = (int)$this->pet_records()->where("created_at", ">=", date("Y-m-d 00:00:00"))->where("type", PetRecord::TYPE_NEW)->count();
+            Cache::store('redis')->put($key, $count, 60*24);
+        } else {
+            $count = Cache::store('redis')->get($key);
+        }
         if ($count >= $total) {
             return 0;
         } else {

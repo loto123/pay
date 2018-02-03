@@ -212,7 +212,7 @@ class PromoterController extends BaseController
         }
 
         //加成后分润比例不能超过100%
-        if (config('default_agent_ratio', 0) + $card->type->percent > 100) {
+        if ($bindTo->percent + $card->type->percent > 100) {
             return $this->json([], '无效数据,绑定后分润比例超过100%', 0);
         }
 
