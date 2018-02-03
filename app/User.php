@@ -374,7 +374,7 @@ class User extends Authenticatable
      * @param string $order 订单号
      * @return array
      */
-    public function batch_create_pet($num, $type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER, $order = "") {
+    public function batch_create_pet($num, $type = Pet::TYPE_PET, $source = PetRecord::TYPE_TRANSFER, $order = "", $transfer_id = 0) {
         $pets = [];
         #todo
         for ($k = 0 ; $k < $num; $k++){
@@ -393,6 +393,7 @@ class User extends Authenticatable
             $record->to_user_id = $this->id;
             $record->type = $source;
             $record->order = $order;
+            $record->transfer_id = $transfer_id;
             DB::beginTransaction();
             try {
                 $pet->save();
