@@ -9,7 +9,7 @@
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{status(mode)}}</div>
+					<div class="content">{{status(type)}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
@@ -87,11 +87,12 @@
 				return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
 			},
 			status(type){
+				console.log(type);
 				let res='';
 				switch(type){
-					case 0: res='提现'; break;
-					case 1: res='转钻给店铺成员'; break;
-					case 2: res='收入'; break;
+					case 0: res='转账给个人'; break;
+                    case 1: res='转账给成员'; break;
+                    case 2: res='从个人转账'; break;
 				}
 				return res;
 			}
