@@ -785,7 +785,7 @@ export default {
             return;
           }
 
-          if(Number(value)>= Number(this.platform_fee)){
+          if(Number(value)> Number(this.platform_fee)){
               Toast("公会佣金费率必须小于平台交易费率"+this.platform_fee+"%");
               return;
           }

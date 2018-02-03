@@ -200,9 +200,9 @@ class UserController extends Controller
                 });
             }
 
-            $form->select('operator_id','上级运营')->options(\App\Admin::whereHas("roles", function($query){
+            $form->select('operator_id','上级运营 *')->options(\App\Admin::whereHas("roles", function($query){
                 $query->where("slug", 'operator');
-            })->pluck("username", 'id'));
+            })->pluck("username", 'id'))->rules('required');
             if ($id) {
                 $form->checkbox('wechat', '解绑微信号')->options(OauthUser::where('user_id',$id)->pluck('nickname','id'));
             }

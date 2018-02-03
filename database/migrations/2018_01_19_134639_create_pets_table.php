@@ -31,6 +31,7 @@ class CreatePetsTable extends Migration
             $table->unsignedInteger("to_user_id")->comment("转入用户id")->index();
             $table->unsignedSmallInteger('type')->nullable()->default(0)->comment("0=系统初始赠送，1=交易, 2=交易撤销赠送");
             $table->string("order")->nullable()->default("");
+            $table->unsignedInteger("transfer_id")->nullable()->default(0);
             $table->timestamps();
         });
         Schema::create('pet_types', function (Blueprint $table) {
@@ -66,8 +67,8 @@ class CreatePetsTable extends Migration
     {
         Schema::dropIfExists('pets');
         Schema::dropIfExists('pet_records');
-//        Schema::dropIfExists('pet_types');
-//        Schema::dropIfExists('pet_parts');
-//        Schema::dropIfExists('pet_part_items');
+        Schema::dropIfExists('pet_types');
+        Schema::dropIfExists('pet_parts');
+        Schema::dropIfExists('pet_part_items');
     }
 }
