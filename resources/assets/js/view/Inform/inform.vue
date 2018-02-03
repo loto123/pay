@@ -23,7 +23,7 @@
 						</div>
 						<div class="date">{{item.created_at}}</div>
 					</div>
-					<div class="shareBenefit-money active">{{item.amount}}</div>
+					<div class="shareBenefit-money active">+{{item.amount}}</div>
 				</li>
 			</ul>
 			<p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
