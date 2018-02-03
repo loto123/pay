@@ -202,6 +202,8 @@
 			init() {
 				Loading.getInstance().open("加载中...");
 				this.petsList = []; // 清空狗狗数组
+				this.petId = null;
+				this.amount = null;
 				Promise.all([
 					request.getInstance().getData("api/pet/sellable"),
 					request.getInstance().getData("api/account"), 

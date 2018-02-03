@@ -1534,7 +1534,9 @@ class TransferController extends BaseController
                     $tip_amount = 0;
                     foreach ($records as $key => $value) {
                         //宠物蛋
-                        $value->user->batch_create_pet(rand(1, 4), Pet::TYPE_EGG, PetRecord::TYPE_TRANSFER, $value->id);
+                        if(!$value->user->pet_records()->where('transfer_id',$transfer->id)->exists()) {
+                            $value->user->batch_create_pet(rand(1, 4), Pet::TYPE_EGG, PetRecord::TYPE_TRANSFER, $value->id, $transfer->id);
+                        }
                         if ($value->stat == 2) {
                             $tip_amount = bcadd($tip_amount, $value->tip()->value('amount'), 2);
                             //公司分润 代理分润 运营分润
