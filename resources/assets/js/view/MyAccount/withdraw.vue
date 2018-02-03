@@ -93,7 +93,7 @@
 				{{broodInfo}}
 			</h3>
 			<div class="comfirm-button">
-				<mt-button type="primary" size="large" @click="getEggs" v-if='!isPopBroodEggs'>领取</mt-button>
+				<mt-button type="primary" size="large" @click="getEggs" v-if='!isPopBroodEggs' :disabled="isBroodClick">领取</mt-button>
 				<mt-button type="primary" size="large" @click="broodEggs" v-else :disabled="isBroodClick">孵化</mt-button>
 			</div>
 			
@@ -171,9 +171,9 @@
 				priceList:[],	                // 价格列表
 				sheetVisible:false,
 				has_pay_card:0,                 // 是否绑定了银行卡
-				actions:[],                      // 右上角动作列表
-				isBroodClick:false,               // 孵化按钮防止连续点击
-				fee_mode:0,                      // 手续费支付方式  0 为百分比  1为单笔固定
+				actions:[],                     // 右上角动作列表
+				isBroodClick:false,             // 孵化按钮防止连续点击
+				fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
 				fee_value:0,
 				fee:0
 			}
@@ -204,6 +204,9 @@
 				this.petsList = []; // 清空狗狗数组
 				this.petId = null;
 				this.amount = null;
+				this.broodInfo = null;
+				// this.isBroodClick = null;
+
 				Promise.all([
 					request.getInstance().getData("api/pet/sellable"),
 					request.getInstance().getData("api/account"), 
@@ -233,6 +236,8 @@
 						this.fee_value = res[2].data.data.fee_value;
 						this.dataList = res[2].data.data.methods
 						this.setBankList(res[2]);//获取提现方式列表
+
+						this.check();
 						Loading.getInstance().close();
 					})
 					.catch((err) => {
@@ -407,13 +412,21 @@
 
 			// 免费领取宠物蛋 
 			getEggs(){
+				
+				this.isBroodClick = true;
+
 				request.getInstance().postData("api/pet/acquire_egg").then(res=>{
 					this.isPopGetEggsShow = false;
 					this.init();
+					
 				}).catch(err=>{
 					Toast(err.data.msg);
 					this.isPopGetEggsShow = false;
 				});
+
+				setTimeout(()=>{
+					this.isBroodClick = false;
+				},3500);
 			},
 
 			// 孵化宠物蛋
