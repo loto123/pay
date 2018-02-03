@@ -35,6 +35,7 @@ class DealerTransactionsController extends Controller
     protected function grid()
     {
         return Admin::grid(DealerTransaction::class, function (Grid $grid) {
+            $grid->model()->orderBy('create_time', 'desc')->orderBy('trade_type', 'desc');
             //工具按钮
             $grid->disableCreation();
             $grid->actions(function ($actions) {

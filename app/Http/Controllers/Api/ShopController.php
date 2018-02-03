@@ -89,13 +89,15 @@ class ShopController extends BaseController {
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:10',
-            'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/',
+            'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/|numeric|between:0.1,99999',
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
         ],['name.required'=>'店铺名必填',
         'name.max'=>'公会名称不能超过10个字符',
         'rate.required'=>'单价必填',
         'rate.regex'=>'格式错误',
+        'rate.between' => '请填写0.1到99999之间数字',
+        'rate.numeric' => '请填写0.1到99999之间数字',
         'percent.required'=>'手续费率不能为空',
         'percent.integer'=>'手续费必须为0-100的整数',
         'percent.between'=>'手续费必须为0-100的整数'
@@ -923,11 +925,13 @@ class ShopController extends BaseController {
     public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'max:10',
-            'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/',
+            'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/|numeric|between:0.1,99999',
             'percent' => 'integer|between:0,100',
         ],[
         'name.max'=>'公会名称不能超过10个字符',
         'rate.regex'=>'格式错误',
+        'rate.between' => '请填写0.1到99999之间数字',
+        'rate.numeric' => '请填写0.1到99999之间数字',
         'percent.integer'=>'手续费必须为0-100的整数',
         'percent.between'=>'手续费必须为0-100的整数'
         ]);
