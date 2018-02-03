@@ -381,12 +381,14 @@ class DataController extends Controller
     public function users(Request $request)
     {
         $today = date('Y-m-d');
-        $user_count = User::whereHas('roles', function ($query) {
-            $query->where('name', 'user');
-        })->count();
-        $user_new = User::whereHas('roles', function ($query) {
-            $query->where('name', 'user');
-        })->where('created_at', '>=', $today)->count();
+//        $user_count = User::whereHas('roles', function ($query) {
+//            $query->where('name', 'user');
+//        })->count();
+        $user_count = User::count();
+//        $user_new = User::whereHas('roles', function ($query) {
+//            $query->where('name', 'user');
+//        })->where('created_at', '>=', $today)->count();
+        $user_new = User::where('created_at', '>=', $today)->count();
         $promoter_count = User::whereHas('roles', function ($query) {
             $query->where('name', 'promoter');
         })->count();
