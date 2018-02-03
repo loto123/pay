@@ -198,11 +198,9 @@ class NoticeController extends BaseController
                             if(isset($operators['result']) && isset($operators['result']['code'])
                                 && isset($operators['result']['message'])) {
                                 $list_data['operators_res'] = $operators['result'];
-                            } else if( !empty($operators['options']) && isset($operators['options']['color'])
-                                && isset($operators['options']['text']) ) {
+                            } else if( !empty($operators['options'])) {
                                 $list_data['operator_options'] = $operators['options'];
                                 $list_data['operator_state'] = 1;
-                                //置顶
                                 array_unshift($list,$list_data);
                                 continue;
                             }
@@ -485,6 +483,19 @@ class NoticeController extends BaseController
      *                  @SWG\Property(property="transfer_id", type="string", example="111111",description="交易单号"),
      *                  @SWG\Property(property="mobile", type="string", example="13333333333",description="分润来源的账号"),
      *                  @SWG\Property(property="thumb", type="string", example="url",description="分润来源的头像"),
+     *                  @SWG\Property(property="operator_state", type="integer", example="1",description="是否可操作：1：是,0:不是"),
+ *                      @SWG\Property(property="operator_options", type="array",
+ *                           @SWG\Items(
+ *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
+ *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
+ *                           )
+ *                      ),
+ *                     @SWG\Property(property="operator_res", type="array",description="处理结果，[]表示未处理",
+ *                           @SWG\Items(
+ *                                @SWG\Property(property="code", type="string", example="1",description="处理结果,1：成功，0：失败"),
+ *                                @SWG\Property(property="message", type="string", example="已确认",description="显示结果")
+ *                           )
+ *                      )
      *              )
      *          )
      *      ),
@@ -506,7 +517,20 @@ class NoticeController extends BaseController
      *                  type="object",
      *                  @SWG\Property(property="content", type="string", example="这是一条系统消息",description="消息内容"),
      *                  @SWG\Property(property="title", type="string", example="系统消息",description="消息标题"),
-     *                  @SWG\Property(property="time", type="string", example="2018-01-01 12:00:00",description="时间")
+     *                  @SWG\Property(property="time", type="string", example="2018-01-01 12:00:00",description="时间"),
+     *                  @SWG\Property(property="operator_state", type="integer", example="1",description="是否可操作：1：是,0:不是"),
+ *                      @SWG\Property(property="operator_options", type="array",
+ *                           @SWG\Items(
+ *                                @SWG\Property(property="text", type="string", example="确认",description="文本"),
+ *                                @SWG\Property(property="color", type="string", example="#bbb",description="颜色")
+ *                           )
+ *                      ),
+ *                     @SWG\Property(property="operator_res", type="array",description="处理结果，[]表示未处理",
+ *                           @SWG\Items(
+ *                                @SWG\Property(property="code", type="string", example="1",description="处理结果,1：成功，0：失败"),
+ *                                @SWG\Property(property="message", type="string", example="已确认",description="显示结果")
+ *                           )
+ *                      )
      *              )
      *          )
      *      ),
@@ -532,11 +556,34 @@ class NoticeController extends BaseController
         if ($validator->fails()) {
             return $this->json([],$validator->errors()->first(),0);
         }
+
         $notice_id = $request->input('notice_id');
         $notice = $this->user->notifications()->where("id", $notice_id)->first();
         if (empty($notice)) {
             return $this->json([],'消息不存在',0);
         }
+
+        //操作消息
+        $perator_options = new \stdClass();
+        $operators_res = new \stdClass();
+        $operator_state = 0;
+        if(!empty($notice->data['operators'])) {
+            $operators = $notice->data['operators'];
+            //判断是否已经操作过了
+            if(isset($operators['result']) && isset($operators['result']['code'])
+                && isset($operators['result']['message'])) {
+                $operators_res = $operators['result'];
+            }
+            if( !empty($operators['options'])) {
+                $perator_options = $operators['options'];
+                $operator_state = 1;
+            }
+        }
+
+        Log::info([$operators_res,$perator_options,$operator_state]);
+
+
+        //分润
         if($notice->type == 'App\Notifications\ProfitApply') {
             $profit_table = (new Profit)->getTable();
             $profit = Profit::leftJoin('transfer_record as tr', 'tr.id', '=', $profit_table.'.record_id')
@@ -553,8 +600,11 @@ class NoticeController extends BaseController
                 'transfer_id' => $profit->transfer_id,
                 'mobile' => $profit->user->mobile,
                 'thumb' => $profit->user->avatar??'',
+                'operators_res' => $operators_res,
+                'perator_options' => $perator_options,
+                'operator_state' => $operator_state,
             ];
-        }else {
+        }else {//其他
             //后台消息
             $content = $notice->data['content'];
             $title = $notice->data['title'];
@@ -566,7 +616,10 @@ class NoticeController extends BaseController
             $data = [
                 'time' => (string)$notice->created_at,
                 'content'=> $content,
-                'title' => $title
+                'title' => $title,
+                'operators_res' => $operators_res,
+                'perator_options' => $perator_options,
+                'operator_state' => $operator_state,
             ];
         }
         $notice->markAsRead();
