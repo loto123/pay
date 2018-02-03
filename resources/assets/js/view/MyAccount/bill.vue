@@ -27,8 +27,8 @@
             </div>
             <div v-if="tabStatus[1]==true">
                 <div class="amount">
-                    <span>支出:{{tabDisburse}}</span>
-                    <span>收入:{{tabIncome}}</span>
+                    <span>支出:{{tabDisburse}}<i class="diamond">&#xe6f9;</i></span>
+                    <span>收入:{{tabIncome}}<i class="diamond">&#xe6f9;</i></span>
                 </div>
             </div>
         </div>
@@ -69,11 +69,16 @@
                             </div>
                         </div>
                         <div class="flex-2">
-                            <div class="bill-money">{{tabStatus[0]?item.amount:item.amount}}</div>
+                            <div v-if="tabStatus[0]">
+                                <div class="bill-money" v-bind:class="[item.type == 0?'':'green-color']">{{item.type == 0?-item.amount:'+'+item.amount}}</div>
+                            </div>
+                            <div v-if="tabStatus[1]">
+                                <div class="bill-money"v-bind:class="[item.type == 2 || item.type == 5?'green-color':'']">{{item.type == 2||item.type == 5?'+'+item.amount:-item.amount}}<i class="diamond">&#xe6f9;</i></div>
+                            </div>
+                            
                             <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>
                         </div>
                     </a>
-
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
                         <div class="month">{{item.time}}</div>
                         <div v-if="tabStatus[0]==true">
@@ -84,8 +89,8 @@
                         </div>
                         <div v-if="tabStatus[1]==true">
                             <div class="amount">
-                                <span>支出:{{item.out}}</span>
-                                <span>收入:{{item.in}}</span>
+                                <span>支出:{{item.out}}<i class="diamond">&#xe6f9;</i></span>
+                                <span>收入:{{item.in}}<i class="diamond">&#xe6f9;</i></span>
                             </div>
                         </div>
                     </div>
@@ -600,6 +605,12 @@
 
 <style lang="scss" scoped>
     @import "../../../sass/oo_flex.scss";
+    .green-color{
+        color: #00cc00;
+    }
+    .diamond{
+        margin-left: 3px;
+    }
     #bill {
         padding-top: 5em;
         box-sizing: border-box;

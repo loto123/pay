@@ -155,11 +155,11 @@
                                 <td>无</td>
                             @endif
                             <td>{{$item->trans_amount or 0}}</td>
-                            <td>{{$item->transfer_record()->count()}}</td>
-                            <td>{{$item->transfer_record()->where('stat',2)->sum('amount')}}</td>
-                            <td>{{abs($item->transfer_record()->where('stat',1)->sum('amount'))}}</td>
+                            <td>{{$item->transfer_record->count()}}</td>
+                            <td>{{$item->transfer_record->where('stat',2)->sum('amount')}}</td>
+                            <td>{{abs($item->transfer_record->where('stat',1)->sum('amount'))}}</td>
                             <td>{{$item->balance}}</td>
-                            <td>{{$item->output_profit()->sum('fee_amount')}}</td>
+                            <td>{{$item->output_profit->sum('fee_amount')}}</td>
                             <td>{{$item->child_user_count}}</td>
                             <td>{{$item->child_proxy_count}}</td>
                             <td>{{$item->proxy_fee_amount or 0}}</td>

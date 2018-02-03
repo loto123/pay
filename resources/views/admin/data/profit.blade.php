@@ -118,11 +118,11 @@
                             @else
                                 <td>无</td>
                             @endif
-                            <td>{{$item->transfer_record()->where('stat',2)->count()}}</td>
-                            <td>{{$item->transfer_record()->where('stat',2)->sum('amount')}}</td>
-                            <td>{{$item->tips()->sum('amount')}}</td>
-                            <td>{{$item->output_profit()->sum('proxy_amount')}}</td>
-                            <td>{{$item->output_profit()->sum('fee_amount')}}</td>
+                            <td>{{$item->transfer_record->where('stat',2)->count()}}</td>
+                            <td>{{$item->transfer_record->where('stat',2)->sum('amount')}}</td>
+                            <td>{{$item->tips->sum('amount')}}</td>
+                            <td>{{$item->output_profit->sum('proxy_amount')}}</td>
+                            <td>{{$item->output_profit->sum('fee_amount')}}</td>
                         </tr>
                     @endforeach
                     </tbody>
