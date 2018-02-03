@@ -3,7 +3,7 @@
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
 			<div class="money-box">
-				<span>{{mode == 1?'出':'入'}}账金额</span>
+				<span>转钻金额</span>
 				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
 			</div>
 			<ul class="billDetails-list">
@@ -19,10 +19,10 @@
 					<div class="title">单号</div>
 					<div class="content">{{no}}</div>
 				</li>
-				<li>
+				<!-- <li>
 					<div class="title">提钻账户</div>
 					<div class="content">{{userName}}</div>
-				</li>
+				</li> -->
 				<li>
 					<div class="title">备注</div>
 					<div class="content">{{remark.length==0?"无":remark}}</div>
@@ -90,7 +90,7 @@
 				let res='';
 				switch(type){
 					case 0: res='提现'; break;
-					case 1: res='转账'; break;
+					case 1: res='转钻给店铺成员'; break;
 					case 2: res='收入'; break;
 				}
 				return res;
