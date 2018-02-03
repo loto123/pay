@@ -7,6 +7,7 @@ use App\Agent\Card;
 use App\Agent\CardDistribution;
 use App\Agent\CardStock;
 use App\Agent\CardType;
+use App\Agent\CardUse;
 use App\Http\Controllers\Controller;
 use App\User;
 use Encore\Admin\Controllers\ModelForm;
@@ -318,22 +319,37 @@ class AgentCardDataController extends Controller
         });
     }
 
-    //冻结vip卡
-    public function updates_card($card_id)
+    /*
+     * 冻结vip卡
+     * type 1:冻结（默认），0：解冻
+     * */
+    public function updates_card($card_id,$type=1)
     {
-        $card_id = (new Card)->recover_id($card_id);
-        $card = Card::find($card_id);
         $redirect_url = '/admin/agent_card/cards';
+        $type_list = [1,0];
+        if(!in_array($type,$type_list)) {
+            return redirect($redirect_url)->with('status', '请求有误！');
+        }
+
+        $card = Card::find(Card::recover_id($card_id));
         if(empty($card)) {
             return redirect($redirect_url)->with('status', '该VIP卡不存在！');
         }
-        if($card->is_bound == Card::BOUND) {
-            return redirect($redirect_url)->with('status', '未出售的卡不能冻结！');
+        if($type==1) {//冻结
+            if($card->is_bound == $card::UNBOUND) {
+                return redirect($redirect_url)->with('status', '未出售的卡不能冻结！');
+            }
+            if($card->is_frozen == $card::FROZEN) {
+                return redirect($redirect_url)->with('status', '该卡已冻结！');
+            }
+            $card->is_frozen = $card::FROZEN;
+        } else {//解冻
+            if($card->is_frozen != $card::FROZEN) {
+                return redirect($redirect_url)->with('status', '未冻结的卡不能解冻！');
+            }
+            $card->is_frozen = $card::UNFROZEN;
         }
-        if($card->is_frozen == Card::FROZEN) {
-            return redirect($redirect_url)->with('status', '该卡已冻结！');
-        }
-        $card->is_frozen = Card::FROZEN;
+
         if ($card->save()) {
             return redirect($redirect_url)->with('status', '成功！');
         } else {
@@ -345,11 +361,11 @@ class AgentCardDataController extends Controller
     public function card_trace($card_id)
     {
         $card = Card::where('id',Card::recover_id($card_id))
-            ->with('stock','card_use','stock.distributions','card_use.fromUser','card_use.toUser')
+            ->with('stock','card_use','stock.distributions','card_use','card_use.fromUser','card_use.toUser')
             ->first();
         $allocate_bys = AdminUser::find($card->stock['allocate_by']);
         $operators = AdminUser::find($card->stock['operator']);
-        $card_use = $card->card_use;;
+        $card_use = $card->card_use;
         $promoter = User::find($card->stock['distributions']['to_promoter']);
 
         $list[] = [
@@ -367,10 +383,10 @@ class AgentCardDataController extends Controller
 
         if($card_use) {
             foreach ($card_use as $item) {
-                $list[strtotime((string)$card->created_at)] =  [
+                $list[] =  [
                     'from'=> $item->fromUser,
                     'to' => $item->toUser,
-                    'created_at' => $card->created_at
+                    'created_at' => $item->created_at
                 ];
             }
             krsort($list);

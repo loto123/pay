@@ -158,12 +158,14 @@
                                     无
                                 @endif
                             </td>
-                            <td>{{$item->is_bound?'已使用':'未使用'}}</td>
-                            <td>{{$item->is_frozen?'已冻结':'未冻结'}}</td>
+                            <td>{{($item->is_bound==$item::BOUND) ? '已使用':'未使用'}}</td>
+                            <td>{{($item->is_frozen==$item::FROZEN) ? '已冻结':'未冻结'}}</td>
                             <td>
                                 <button><a href="card_trace/{{$item->mix_id()}}">流转记录</a></button>
                                 @if($item->is_frozen==$item::UNFROZEN)
-                                <button><a href="updates_card/{{$item->mix_id()}}">冻结</a></button>
+                                    <button><a href="updates_card/{{$item->mix_id()}}">冻结</a></button>
+                                @else
+                                    <button><a href="updates_card/{{$item->mix_id()}}/0">取消冻结</a></button>
                                 @endif
                             </td>
                         </tr>
