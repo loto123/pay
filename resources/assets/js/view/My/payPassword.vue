@@ -51,8 +51,8 @@
         }else if(!this.new_pay_password){
           Toast('请填写新支付密码')
           return
-        }else if(this.new_password.length !=6){
-          Toast("支付密码必须为6位纯数字");
+        }else if(this.new_pay_password.length !=6){
+          Toast("新支付密码必须为6位纯数字");
           return;
         }else if(!this.confirm_pay_password){
           Toast('请确认新支付密码')

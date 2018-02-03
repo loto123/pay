@@ -4,12 +4,12 @@
 		<div class="details-content">
 			<div class="money-box">
 				<span>{{mode == 1?'出':'入'}}账金额</span>
-				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
+				<em v-bind:class="[(mode==1)?'active':'']">{{mode == 1?'+'+amount:-amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{(mode==1)?'支出':'收入'}}</div>
+					<div class="content">{{(mode==1)?'收入':'支出'}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
