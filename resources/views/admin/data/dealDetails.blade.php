@@ -122,6 +122,7 @@
     </div>
 </div>
 <script type="text/javascript">
+    $(document).off("click",'#close_transfer_btn');
     $(document).on("click", '#close_transfer_btn', function () {
         var _btn = $(this);
         $.ajax({
