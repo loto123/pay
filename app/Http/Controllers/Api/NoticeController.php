@@ -564,7 +564,7 @@ class NoticeController extends BaseController
         }
 
         //操作消息
-        $perator_options = new \stdClass();
+        $operator_options = new \stdClass();
         $operators_res = new \stdClass();
         $operator_state = 0;
         if(!empty($notice->data['operators'])) {
@@ -579,9 +579,6 @@ class NoticeController extends BaseController
                 $operator_state = 1;
             }
         }
-
-        Log::info([$operators_res,$perator_options,$operator_state]);
-
 
         //分润
         if($notice->type == 'App\Notifications\ProfitApply') {
@@ -601,7 +598,7 @@ class NoticeController extends BaseController
                 'mobile' => $profit->user->mobile,
                 'thumb' => $profit->user->avatar??'',
                 'operators_res' => $operators_res,
-                'perator_options' => $perator_options,
+                'operator_options' => $operator_options,
                 'operator_state' => $operator_state,
             ];
         }else {//其他
