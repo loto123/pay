@@ -119,7 +119,7 @@ return [
 
     'attributes' => [
         'shop_id' => '店铺ID',
-        'price' => '单价',
+        'price' => '任务收益倍率',
         'comment' => '备注',
         'transfer_id' => '交易ID',
         'points' => '积分',
