@@ -10,6 +10,20 @@
                                 <input type="text" value="{{$operator_username}}" name="operator_username" id="operator"
                                        class="form-control" placeholder="请输入运营ID">
                             </div>
+                            <label class="col-sm-1 control-label">卡类型：</label>
+                            <div class="col-sm-2">
+                                @if($card_type_list)
+                                <select class="form-control" name="card_type" id="card_type">
+                                    @foreach($card_type_list as $value)
+                                        <option value="{{$value['id']}}"
+                                            @if (isset($card_type) && $value['id'] == $card_type)
+                                            selected="selected"
+                                            @endif
+                                        >{{$value['name']}}</option>
+                                    @endforeach
+                                </select>
+                                @endif
+                            </div>
                             <span class="col-sm-3">
                                 <button type="submit" id="search-button" class="btn btn-primary">查询</button>
                             </span>
@@ -39,20 +53,16 @@
                                         <div>{{ $operators->roles->first()['name']}}</div>
                                     </li>
                                     <li class="clearfix">
-                                        <div>现有VIP卡:</div>
-                                        <div>{{ $operators->card_stock_count}}</div>
+                                        <div>现有VIP卡共:</div>
+                                        <div>{{ $card_stock_count??0}}</div>
+                                    </li>
+                                    <li class="clearfix">
+                                        <div>当前类型VIP卡共:</div>
+                                        <div>{{ $current_card_cnt??0}}</div>
                                     </li>
                                 </ul>
-                                <div class="divide-prop-box"><label for="divideProp">添加VIP卡数量</label><input
-                                            value="" type="text"
-                                            class="divide-prop ml-5" id="card_num">
-                                </div>
-                                <div>
-                                    <select name="卡类型" id="card_type">
-                                        @foreach($card_type as $value)
-                                        <option value="{{$value->id}}">{{$value->name}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="divide-prop-box"><label for="divideProp">添加VIP卡数量</label>
+                                    <input value="" type="text" class="divide-prop ml-5" id="card_num">
                                 </div>
                                 <div class="withdraw-wx mt-15 mb-10">
                                     <button class="btn btn-success ml-10" id="affirm_btn">确定</button>

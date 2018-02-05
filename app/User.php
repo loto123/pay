@@ -473,4 +473,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(BillMatch::class);
     }
+
+    //对字符串做掩码处理
+    public static function formatNum($num,$pre=0,$suf=4)
+    {
+        $prefix = '';
+        $suffix = '';
+        if($pre>0) {
+            $prefix = substr($num, 0, $pre);
+        }
+        if ($suf>0){
+            $suffix = substr($num, 0-$suf, $suf);
+        }
+        $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
+        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
+        return $maskBankCardNo;
+    }
+
 }
