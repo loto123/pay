@@ -774,7 +774,7 @@ class TransferController extends BaseController
             //容器撤回
             $pay_transfer = $record->pay_transfer()->first();
             if ($pay_transfer->chargeback() != 1) {
-                Log::error('交易撤回容器转账失败： ', $pay_transfer);
+                Log::error('交易撤回容器转账失败： ', $pay_transfer->toArray());
                 DB::rollBack();
                 return $this->json([], trans('trans.withdraw_failed'), 0);
             }
