@@ -213,6 +213,12 @@ class CardController extends BaseController
         }
         Cache::forget($cache_key);
 
+        //验证当天可用次数
+        $times = $this->user->check_action_times('authentication', config('authentication_max_times',3));
+        if(!$times) {
+            return $this->json([], '添加银行卡请求次数超过当天最大限制次数！', 0);
+        }
+
         //同一用户只能绑定一次
         $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$request->card_num)->first();
         if (!empty($card_list) && count($card_list)>0) {
