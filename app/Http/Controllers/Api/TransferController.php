@@ -774,6 +774,7 @@ class TransferController extends BaseController
             //容器撤回
             $pay_transfer = $record->pay_transfer()->first();
             if ($pay_transfer->chargeback() != 1) {
+                DB::rollBack();
                 return $this->json([], trans('trans.withdraw_failed'), 0);
             }
             //交易记录变为撤回状态
@@ -822,6 +823,7 @@ class TransferController extends BaseController
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
         } catch (\Exception $e) {
+            Log::error('交易撤回失败,异常', $e->getTrace());
             DB::rollBack();
         }
         return $this->json([], trans('trans.withdraw_failed'), 0);
