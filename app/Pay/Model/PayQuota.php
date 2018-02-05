@@ -21,15 +21,27 @@ class PayQuota
     {
         try{
             $quota_list = json_decode(config('pay_quota_list'),true);
-            sort($quota_list);
         } catch (\Exception $e){
             $quota_list = ['100','200','500','1000','5000'];
         }
+        sort($quota_list);
 
         switch ($type) {
             case 1:
                 $withdraw_method = WithdrawMethod::find($pay_method_id);
                 if(!empty($withdraw_method) && isset($withdraw_method['max_quota'])) {
+                    //后台配置中的提现最大最小限制
+                    $tixian_min = config('tixian_min');
+                    $tixian_max = config('tixian_max');
+                    if($tixian_min || $tixian_max) {
+                        foreach ($quota_list as $key => $_quota) {
+                            if(($_quota < $tixian_min) || ($_quota > $tixian_max)) {
+                                unset($quota_list[$key]);
+                            }
+                        }
+                    }
+
+                    //提现方式设置的最大值限制
                     if(floor($withdraw_method['max_quota']) > 0) {
                         $data = [];
                         foreach ($quota_list as $_quota) {
