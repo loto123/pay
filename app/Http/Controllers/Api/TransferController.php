@@ -586,6 +586,7 @@ class TransferController extends BaseController
                 $found->type = UserFund::TYPE_TRADE_OUT;
                 $found->mode = UserFund::MODE_OUT;
                 $found->amount = $record->amount;
+                $found->no = $record->transfer_id;
                 $found->save();
 
                 //红包加钱
@@ -671,6 +672,7 @@ class TransferController extends BaseController
                 $found->mode = UserFund::MODE_IN;
 //                $found->amount = $record->real_amount;
                 $found->amount = $record->amount;
+                $found->no = $record->transfer_id;
                 $found->save();
                 //账单明细
                 $found = new UserFund();
@@ -679,6 +681,7 @@ class TransferController extends BaseController
                 $found->type = UserFund::TYPE_TRADE_FEE;
                 $found->mode = UserFund::MODE_OUT;
                 $found->amount = bcadd($record->fee_amount, $tips, 2);
+                $found->no = $record->transfer_id;
                 $found->save();
             }
 //            $user->save();
@@ -814,6 +817,7 @@ class TransferController extends BaseController
             $found->type = UserFund::TYPE_TRADE_BACK;
             $found->mode = UserFund::MODE_OUT;
             $found->amount = $record->real_amount;
+            $found->no = $record->transfer_id;
             $found->save();
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
@@ -1129,6 +1133,7 @@ class TransferController extends BaseController
                 $found->type = UserFund::TYPE_TIPS;
                 $found->mode = UserFund::MODE_OUT;
                 $found->amount = $record->amount;
+                $found->no = $record->transfer_id;
                 $found->save();
                 DB::commit();
                 return $this->json([], trans('trans.pay_fee_success'), 1);
