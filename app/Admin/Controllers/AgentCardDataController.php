@@ -175,7 +175,6 @@ class AgentCardDataController extends Controller
     //给推广员添加VIP卡
     public function send_card_to_promoter(Request $request)
     {
-        Log::info($request);
         $request_promoter = $request->promoter;
         $num = $request->num;
         $card_type = $request->card_type;
