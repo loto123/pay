@@ -33,7 +33,10 @@
                             <h5>{{status(item.type)}}</h5>
                             <div class="time">{{changeTime(item.created_at)}}</div>
                         </div>
-                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
+                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">
+                            {{item.mode == 1?-item.amount:item.amount}}
+                            <i class="diamond">&#xe6f9;</i>
+                        </div>
                     </a>
                 </li>
             </ul>
