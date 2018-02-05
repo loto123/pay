@@ -78,11 +78,12 @@ class Shop extends Model
     public function totalProfit($condition = [])
     {
         //打赏金额
-        $reward = $this->tips()->where($condition)->where('record_id', 0)->sum('amount');
+//        $reward = $this->tips()->where($condition)->where('record_id', 0)->sum('amount');
         //交易产生店铺手续费
-        $fee = $this->tips()->where($condition)->where('record', '>', 0)->whereHas('transfer', function ($query) {
-            $query->where('status', 3);
-        })->sum('amount');
-        return bcadd($reward, $fee);
+//        $fee = $this->tips()->where($condition)->where('record', '>', 0)->whereHas('transfer', function ($query) {
+//            $query->where('status', 3);
+//        })->sum('amount');
+//        return bcadd($reward, $fee);
+        return $this->tips()->where($condition)->where('status', TipRecord::USEABLE_STATUS)->sum('amount');
     }
 }

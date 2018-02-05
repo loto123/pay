@@ -1162,9 +1162,9 @@ class ShopController extends BaseController
         }
         return $this->json([
             'balance' => (double)$shop->container->balance,
-            'today_profit' => (double)$shop->totalProfit([["created_at", ">=", date("Y-m-d")]]),
+            'today_profit' => (double)$shop->totalProfit([["updated_at", ">=", date("Y-m-d")]]),
             'total_profit' => (double)$shop->totalProfit(),
-            'last_profit' => (double)$shop->totalProfit([["created_at", ">=", date("Y-m-d", strtotime('-1 day'))],["created_at", "<", date("Y-m-d")]])
+            'last_profit' => (double)$shop->totalProfit([["updated_at", ">=", date("Y-m-d", strtotime('-1 day'))],["updated_at", "<", date("Y-m-d")]])
         ]);
     }
 
