@@ -94,10 +94,10 @@ class ShopController extends BaseController {
             'active' => 'required'
         ],['name.required'=>'店铺名必填',
         'name.max'=>'公会名称不能超过10个字符',
-        'rate.required'=>'单价必填',
-        'rate.regex'=>'格式错误',
-        'rate.between' => '请填写0.1到99999之间数字',
-        'rate.numeric' => '请填写0.1到99999之间数字',
+        'rate.required'=>'默认倍率必填',
+        'rate.regex'=>'默认倍率格式错误',
+        'rate.between' => '默认倍率请填写0.1到99999之间数字',
+        'rate.numeric' => '默认倍率请填写0.1到99999之间数字',
         'percent.required'=>'手续费率不能为空',
         'percent.integer'=>'手续费必须为0-100的整数',
         'percent.between'=>'手续费必须为0-100的整数'
@@ -929,9 +929,9 @@ class ShopController extends BaseController {
             'percent' => 'integer|between:0,100',
         ],[
         'name.max'=>'公会名称不能超过10个字符',
-        'rate.regex'=>'格式错误',
-        'rate.between' => '请填写0.1到99999之间数字',
-        'rate.numeric' => '请填写0.1到99999之间数字',
+        'rate.regex'=>'倍率格式错误',
+        'rate.between' => '倍率请填写0.1到99999之间数字',
+        'rate.numeric' => '倍率请填写0.1到99999之间数字',
         'percent.integer'=>'手续费必须为0-100的整数',
         'percent.between'=>'手续费必须为0-100的整数'
         ]);
