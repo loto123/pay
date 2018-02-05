@@ -7,6 +7,9 @@
       <h2>{{title}}</h2>
       <div class="details-date">{{time}}</div>
       <div class="content" v-html="content"></div>
+      <div class="btn-wrap flex-3 flex flex-align-center flex-justify-around" v-if="operator_state==1">
+          <span v-for="(option,index) in operator_options" :style="{background: option.color}" v-on:click.stop="optionBtn(item.notice_id,index)">{{option.text}}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -23,7 +26,9 @@
       return {
         title:null,
         time:null,
-        content:null
+        content:null,
+        operator_state:null,     //状态
+        operator_options:null     //颜色数组
       };
     },
     created() {
@@ -36,9 +41,13 @@
         _temp.notice_id = this.$route.query.notice_id;
         request.getInstance().getData('api/notice/detail', _temp)
           .then((res) => {
+            console.log(res);
             this.title=res.data.data.title;
             this.time=res.data.data.time;
             this.content=res.data.data.content;
+            this.operator_state=res.data.data.operator_state;
+            this.operator_options=res.data.data.operator_options;
+            console.log(this.operator_options);
           })
           .catch((err) => {
             Toast(err.data.msg);
