@@ -179,20 +179,9 @@ class AccountController extends BaseController
                 break;
             }
 
-            $record = new UserFund();
-            $record->user_id = $user->id;
-            $record->type = UserFund::TYPE_CHARGE;
-            $record->mode = UserFund::MODE_IN;
-            $record->amount = $price;
-            $record->balance = $user->container->balance + $price;
-            $record->status = UserFund::STATUS_SUCCESS;
-
 
             try {
                 if ($result = $user->container->initiateDeposit($price, $channel, $method, null)) {
-                    $record->no = $result['deposit_id'];
-                    $record->save();
-
                     //新的撮合
                     $match = new BillMatch([
                         'expired_at' => date('Y-m-d H:i:s', time() + BillMatch::BILL_PAY_TIMEOUT * 60),

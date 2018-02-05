@@ -8,6 +8,7 @@ use App\Pay\Model\PayFactory;
 use App\Shop;
 use App\ShopFund;
 use App\ShopUser;
+use App\TipRecord;
 use App\Transfer;
 use App\User;
 use Illuminate\Http\Request;
@@ -87,22 +88,21 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:10',
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/|numeric|between:0.1,99999',
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
-        ], ['name.required' => '店铺名必填',
-            'name.max' => '公会名称不能超过10个字符',
-            'rate.required' => '单价必填',
-            'rate.regex' => '格式错误',
-            'rate.between' => '请填写0.1到99999之间数字',
-            'rate.numeric' => '请填写0.1到99999之间数字',
-            'percent.required' => '手续费率不能为空',
-            'percent.integer' => '手续费必须为0-100的整数',
-            'percent.between' => '手续费必须为0-100的整数'
+        ],['name.required'=>'店铺名必填',
+        'name.max'=>'公会名称不能超过10个字符',
+        'rate.required'=>'默认倍率必填',
+        'rate.regex'=>'默认倍率格式错误',
+        'rate.between' => '默认倍率请填写0.1到99999之间数字',
+        'rate.numeric' => '默认倍率请填写0.1到99999之间数字',
+        'percent.required'=>'手续费率不能为空',
+        'percent.integer'=>'手续费必须为0-100的整数',
+        'percent.between'=>'手续费必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -381,8 +381,8 @@ class ShopController extends BaseController
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => $_shop->logo,
-                'today_profit' => (double)$_shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-                'total_profit' => (double)$_shop->tips()->sum('amount')
+                'today_profit' => (double)$_shop->totalProfit([["updated_at", ">=", date("Y-m-d")]]),
+                'total_profit' => (double)$_shop->totalProfit()
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -556,8 +556,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function shop_summary($id)
-    {
+    public function shop_summary($id) {
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
             return $this->json([], trans("api.error_shop_status"), 0);
@@ -657,13 +656,13 @@ class ShopController extends BaseController
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($request->keyword) {
-            $query = $shop->users()->where("name", 'like', '%' . $request->keyword . '%');
+            $query = $shop->users()->where("name", 'like', '%'.$request->keyword.'%');
         } else {
             $query = $shop->users();
         }
         $count = $query->count();
         $members = [];
-        $query->orderBy((new ShopUser)->getTable() . ".id");
+        $query->orderBy((new ShopUser)->getTable().".id");
         if ($request->offset) {
             $query->where("id", ">", User::decrypt($request->offset));
         }
@@ -728,8 +727,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function member_delete($shop_id, $user_id)
-    {
+    public function member_delete($shop_id, $user_id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
         $member = User::findByEnId($user_id);
@@ -745,7 +743,7 @@ class ShopController extends BaseController
         ])->onQueue('shop_logo');
         return $this->json();
     }
-
+    
     /**
      * @SWG\Post(
      *   path="/shop/close/{id}",
@@ -785,8 +783,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function close($id)
-    {
+    public function close($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
         if (!$shop) {
@@ -845,8 +842,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function quit($id)
-    {
+    public function quit($id) {
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
@@ -931,19 +927,18 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request)
-    {
+    public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'max:10',
             'rate' => 'regex:/^\d{0,5}(\.\d{1})?$/|numeric|between:0.1,99999',
             'percent' => 'integer|between:0,100',
-        ], [
-            'name.max' => '公会名称不能超过10个字符',
-            'rate.regex' => '格式错误',
-            'rate.between' => '请填写0.1到99999之间数字',
-            'rate.numeric' => '请填写0.1到99999之间数字',
-            'percent.integer' => '手续费必须为0-100的整数',
-            'percent.between' => '手续费必须为0-100的整数'
+        ],[
+        'name.max'=>'公会名称不能超过10个字符',
+        'rate.regex'=>'倍率格式错误',
+        'rate.between' => '倍率请填写0.1到99999之间数字',
+        'rate.numeric' => '倍率请填写0.1到99999之间数字',
+        'percent.integer'=>'手续费必须为0-100的整数',
+        'percent.between'=>'手续费必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -1030,8 +1025,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function qrcode($id, Request $request)
-    {
+    public function qrcode($id, Request $request) {
 //        $validator = Validator::make($request->all(), [
 //            'width' => 'required',
 //            'height' => 'required',
@@ -1045,12 +1039,12 @@ class ShopController extends BaseController
         $user = $this->auth->user();
         /* @var $user User */
         $url = url(sprintf("/#/share/?shopId=%s&userId=%s", $shop->en_id(), $user->en_id()));
-        $filename = md5($url . "_" . $size);
-        $path = 'qrcode/' . $filename . '.png';
+        $filename = md5($url."_".$size);
+        $path = 'qrcode/'.$filename.'.png';
         if (!Storage::disk('public')->exists($path)) {
             Storage::disk('public')->put($path, QrCode::format('png')->size($size)->margin(1)->generate($url));
         }
-        return $this->json(['url' => url('storage/' . $path)]);
+        return $this->json(['url' => url('storage/'.$path)]);
     }
 
     /**
@@ -1092,8 +1086,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function join($id)
-    {
+    public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
         if (!$shop || !$shop->use_link) {
@@ -1150,8 +1143,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function account($id)
-    {
+    public function account($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
@@ -1162,9 +1154,9 @@ class ShopController extends BaseController
         }
         return $this->json([
             'balance' => (double)$shop->container->balance,
-            'today_profit' => (double)$shop->totalProfit([["created_at", ">=", date("Y-m-d")]]),
+            'today_profit' => (double)$shop->totalProfit([["updated_at", ">=", date("Y-m-d")]]),
             'total_profit' => (double)$shop->totalProfit(),
-            'last_profit' => (double)$shop->totalProfit([["created_at", ">=", date("Y-m-d", strtotime('-1 day'))],["created_at", "<", date("Y-m-d")]])
+            'last_profit' => (double)$shop->totalProfit([["updated_at", ">=", date("Y-m-d", strtotime('-1 day'))],["updated_at", "<", date("Y-m-d")]])
         ]);
     }
 
@@ -1201,11 +1193,10 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function profit()
-    {
+    public function profit() {
         $user = $this->auth->user();
 
-        return $this->json(['profit' => (double)$user->shop_tips()->sum('amount')]);
+        return $this->json(['profit' => (double)$user->shop_tips()->where("status", TipRecord::USEABLE_STATUS)->sum('amount')]);
     }
 
     /**
@@ -1267,8 +1258,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function messages(Request $request)
-    {
+    public function messages(Request $request) {
         $user = $this->auth->user();
 
         $data = [];
@@ -1280,7 +1270,7 @@ class ShopController extends BaseController
                 $query->where("uid", "<", $last->uid);
             }
         }
-        $query->limit($request->input("limit", 20))->orderBy("uid", "DESC");
+        $query->limit($request->input("limit", 20))->orderBy("uid","DESC");
         foreach ($query->get() as $notification) {
             try {
                 if ($notification->data['type'] == ShopApply::TYPE_INVITE) {
@@ -1299,8 +1289,7 @@ class ShopController extends BaseController
                         'created_at' => strtotime($notification->created_at)
                     ];
                 }
-            } catch (\Exception $e) {
-            }
+            } catch (\Exception $e){}
         }
         return $this->json(['count' => $count, 'data' => $data]);
     }
@@ -1338,8 +1327,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function messages_count()
-    {
+    public function messages_count() {
         $user = $this->auth->user();
 
         return $this->json(['count' => (int)$user->unreadNotifications()->where("type", "App\Notifications\ShopApply")->count()]);
@@ -1384,8 +1372,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function agree(Request $request)
-    {
+    public function agree(Request $request) {
         $user = $this->auth->user();
         $shop_ids = [];
         if ($request->id) {
@@ -1403,8 +1390,7 @@ class ShopController extends BaseController
                         $shop_user->save();
                         $shop_ids[] = $shop->id;
                     }
-                } catch (\Exception $e) {
-                }
+                } catch (\Exception $e){}
             }
         } else {
             foreach ($user->unreadNotifications as $notification) {
@@ -1419,8 +1405,7 @@ class ShopController extends BaseController
                         $shop_user->save();
                         $shop_ids[] = $shop->id;
                     }
-                } catch (\Exception $e) {
-                }
+                } catch (\Exception $e){}
             }
             $user->unreadNotifications->markAsRead();
         }
@@ -1471,8 +1456,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function ignore(Request $request)
-    {
+    public function ignore(Request $request) {
         $user = $this->auth->user();
         if ($request->id) {
             $message = $user->unreadNotifications()->where("id", $request->id)->first();
@@ -1531,8 +1515,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function invite($shop_id, $user_id)
-    {
+    public function invite($shop_id, $user_id) {
         $shop = Shop::findByEnId($shop_id);
         $user = User::findByEnId($user_id);
         if (!$user || $user->status == User::STATUS_BLOCK) {
@@ -1598,8 +1581,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function user_search(Request $request)
-    {
+    public function user_search(Request $request) {
         $validator = Validator::make($request->all(),
             ['mobile' => 'bail|required']
         );
@@ -1671,8 +1653,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer($shop_id, Request $request)
-    {
+    public function transfer($shop_id, Request $request) {
         $validator = Validator::make($request->all(), [
             'amount' => 'required|min:0',
         ]);
@@ -1690,10 +1671,10 @@ class ShopController extends BaseController
         }
         try {
             if (!$shop->manager->check_pay_password($request->password)) {
-                return $this->json([], trans("api.error_pay_password"), 0);
+                return $this->json([], trans("api.error_pay_password"),0);
             }
         } catch (\Exception $e) {
-            return $this->json([], $e->getMessage(), 0);
+            return $this->json([], $e->getMessage(),0);
         }
         $record = new ShopFund();
         $record->shop_id = $shop->id;
@@ -1706,11 +1687,11 @@ class ShopController extends BaseController
         try {
             $record->save();
             $shop->container->transfer($shop->manager->container, $request->amount, 0, false, false);
-        } catch (\Exception $e) {
-            Log::info("shop transfer error:" . $e->getMessage());
+        } catch (\Exception $e){
+            Log::info("shop transfer error:".$e->getMessage());
             return $this->json([], 'error', 0);
         }
-
+        
         return $this->json();
     }
 
@@ -1781,8 +1762,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer_member($shop_id, $user_id, Request $request)
-    {
+    public function transfer_member($shop_id, $user_id, Request $request) {
         $validator = Validator::make($request->all(), [
             'amount' => 'required|min:0',
         ]);
@@ -1807,8 +1787,8 @@ class ShopController extends BaseController
         try {
             $record->save();
             $shop->container->transfer($member->container, $request->amount, 0, false, false);
-        } catch (\Exception $e) {
-            Log::info("shop transfer member error:" . $e->getMessage());
+        } catch (\Exception $e){
+            Log::info("shop transfer member error:".$e->getMessage());
             return $this->json([], 'error', 0);
         }
         return $this->json();
@@ -1889,8 +1869,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function transfer_records($shop_id, Request $request)
-    {
+    public function transfer_records($shop_id, Request $request) {
         $data = [];
         $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
@@ -1899,11 +1878,11 @@ class ShopController extends BaseController
             $query->where("type", $request->type);
         }
         if ($request->start) {
-            $start = date("Y-m-d H:i:s", strtotime($request->start . " +1 month"));
+            $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
             $query->where("created_at", "<", $start);
         }
         $count = $query->count();
-        $query->orderBy('id', 'DESC')->limit($request->input('limit', 20));
+        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
         if ($request->offset) {
             $query->where("id", "<", ShopFund::decrypt($request->offset));
         }
@@ -1968,8 +1947,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function record_detail($id)
-    {
+    public function record_detail($id) {
         $user = $this->auth->user();
 
         $fund = ShopFund::findByEnId($id);
@@ -2047,8 +2025,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function month_data($shop_id, Request $request)
-    {
+    public function month_data($shop_id, Request $request) {
         $validator = Validator::make($request->all(),
             ['month' => 'required|regex:/^\d{4}-\d{2}$/']
         );

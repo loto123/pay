@@ -1119,6 +1119,7 @@ class TransferController extends BaseController
                 $record->user_id = $user->id;
                 $record->amount = $request->fee;
                 $record->record_id = 0;
+                $record->status = 1;
                 $record->save();
                 //账单明细
                 $found = new UserFund();
@@ -1538,7 +1539,11 @@ class TransferController extends BaseController
                             $value->user->batch_create_pet(rand(1, 4), Pet::TYPE_EGG, PetRecord::TYPE_TRANSFER, $value->id, $transfer->id);
                         }
                         if ($value->stat == 2) {
-                            $tip_amount = bcadd($tip_amount, $value->tip()->value('amount'), 2);
+                            //茶水费记录到账
+                            $tipModel = $value->tip;
+                            $tip_amount = bcadd($tip_amount, $tipModel->amount, 2);
+                            $tipModel->status = 1;
+                            $tipModel->save();
                             //公司分润 代理分润 运营分润
                             $profit = new Profit();
                             $profit->record_id = $value->id;

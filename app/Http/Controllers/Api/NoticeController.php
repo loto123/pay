@@ -573,8 +573,7 @@ class NoticeController extends BaseController
             if(isset($operators['result']) && isset($operators['result']['code'])
                 && isset($operators['result']['message'])) {
                 $operators_res = $operators['result'];
-            }
-            if( !empty($operators['options'])) {
+            } else if( !empty($operators['options'])) {
                 $operator_options = $operators['options'];
                 $operator_state = 1;
             }
