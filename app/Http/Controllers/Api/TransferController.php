@@ -669,7 +669,8 @@ class TransferController extends BaseController
                 $found->status = UserFund::STATUS_SUCCESS;
                 $found->type = UserFund::TYPE_TRADE_IN;
                 $found->mode = UserFund::MODE_IN;
-                $found->amount = $record->real_amount;
+//                $found->amount = $record->real_amount;
+                $found->amount = $record->amount;
                 $found->save();
                 //账单明细
                 $found = new UserFund();
@@ -812,7 +813,7 @@ class TransferController extends BaseController
             $found->status = UserFund::STATUS_SUCCESS;
             $found->type = UserFund::TYPE_TRADE_BACK;
             $found->mode = UserFund::MODE_OUT;
-            $found->amount = $record->amount;
+            $found->amount = $record->real_amount;
             $found->save();
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
