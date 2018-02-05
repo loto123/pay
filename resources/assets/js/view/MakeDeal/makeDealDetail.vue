@@ -513,7 +513,6 @@ export default {
       }else if(this.payType == "get"){
         if(this.moneyData.getMoney == null){
           Toast("请填写交钻分数或者拿钻分数");
-          return;
         }
 
         this.submitData();
