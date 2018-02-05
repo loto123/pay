@@ -8,6 +8,7 @@ use App\Pay\Model\PayFactory;
 use App\Shop;
 use App\ShopFund;
 use App\ShopUser;
+use App\TipRecord;
 use App\Transfer;
 use App\User;
 use Illuminate\Http\Request;
@@ -380,8 +381,8 @@ class ShopController extends BaseController
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => $_shop->logo,
-                'today_profit' => (double)$_shop->totalProfit([["created_at", ">=", date("Y-m-d")]]),
-                'total_profit' => (double)$_shop->totalProfit([["created_at", ">=", date("Y-m-d")]])
+                'today_profit' => (double)$_shop->totalProfit([["updated_at", ">=", date("Y-m-d")]]),
+                'total_profit' => (double)$_shop->totalProfit()
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -1195,7 +1196,7 @@ class ShopController extends BaseController
     public function profit() {
         $user = $this->auth->user();
 
-        return $this->json(['profit' => (double)$user->shop_tips()->sum('amount')]);
+        return $this->json(['profit' => (double)$user->shop_tips()->where("status", TipRecord::USEABLE_STATUS)->sum('amount')]);
     }
 
     /**
