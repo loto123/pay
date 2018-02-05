@@ -68,7 +68,7 @@
           </div>
 
           <div class= "item">
-            <mt-field label="设置手续费率" placeholder="设置手续费率(整数%)" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
+            <mt-field label="设置公会佣金费率" placeholder="设置公会佣金费率(整数%)" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
           </div>
 
           <div class="item open-deal-switch flex flex-align-center">
