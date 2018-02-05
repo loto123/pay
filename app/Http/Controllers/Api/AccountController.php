@@ -977,54 +977,25 @@ class AccountController extends BaseController
             return $this->json([], $validator->errors()->first(), 0);
         }
         $user = $this->auth->user();
-        if ($request->type) {
-            $in_amount = (double)UserFund::where("user_id", $user->id)->with(['charge_order', 'withdraw_order'])->where(function ($query1) {
-            $query1->orWhere(function ($query2) {
-                $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function ($q) {
-                    $q->where("state", Deposit::STATE_COMPLETE);
-                });
-            })->orWhere(function ($query3) {
-                $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function ($q) {
-                    $q->where("state", Withdraw::STATE_COMPLETE);
-                });
-            })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
-        })->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
-            $out_amount = (double)UserFund::where("user_id", $user->id)->with(['charge_order', 'withdraw_order'])->where(function ($query1) {
-            $query1->orWhere(function ($query2) {
-                $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function ($q) {
-                    $q->where("state", Deposit::STATE_COMPLETE);
-                });
-            })->orWhere(function ($query3) {
-                $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function ($q) {
-                    $q->where("state", Withdraw::STATE_COMPLETE);
-                });
-            })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
-        })->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
-        } else {
-            $in_amount = (double)UserFund::where("user_id", $user->id)->with(['charge_order', 'withdraw_order'])->where(function ($query1) {
-            $query1->orWhere(function ($query2) {
-                $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function ($q) {
-                    $q->where("state", Deposit::STATE_COMPLETE);
-                });
-            })->orWhere(function ($query3) {
-                $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function ($q) {
-                    $q->where("state", Withdraw::STATE_COMPLETE);
-                });
-            })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
-        })->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_IN)->sum("amount");
-            $out_amount = (double)UserFund::where("user_id", $user->id)->with(['charge_order', 'withdraw_order'])->where(function ($query1) {
-            $query1->orWhere(function ($query2) {
-                $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function ($q) {
-                    $q->where("state", Deposit::STATE_COMPLETE);
-                });
-            })->orWhere(function ($query3) {
-                $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function ($q) {
-                    $q->where("state", Withdraw::STATE_COMPLETE);
-                });
-            })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
-        })->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", UserFund::MODE_OUT)->sum("amount");
-        }
-        return $this->json(['in' => $in_amount, 'out' => $out_amount]);
+        $query_func = function($type) use ($user, $request) {
+            $query = UserFund::where("user_id", $user->id)->with(['charge_order', 'withdraw_order'])->where(function ($query1) {
+                $query1->orWhere(function ($query2) {
+                    $query2->where('type', UserFund::TYPE_CHARGE)->whereHas("charge_order", function ($q) {
+                        $q->where("state", Deposit::STATE_COMPLETE);
+                    });
+                })->orWhere(function ($query3) {
+                    $query3->where('type', UserFund::TYPE_WITHDRAW)->whereHas("withdraw_order", function ($q) {
+                        $q->where("state", Withdraw::STATE_COMPLETE);
+                    });
+                })->whereNotIn("type", [UserFund::TYPE_CHARGE, UserFund::TYPE_WITHDRAW], 'or');
+            })->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")));
+            if ($request->type) {
+                $query->whereIn("type", $request->type);
+            }
+            return $query->where("mode", $type)->sum("amount");
+        };
+
+        return $this->json(['in' => $query_func(UserFund::MODE_IN), 'out' => $query_func(UserFund::MODE_OUT)]);
     }
 
 
