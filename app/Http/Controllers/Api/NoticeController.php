@@ -575,7 +575,7 @@ class NoticeController extends BaseController
                 $operators_res = $operators['result'];
             }
             if( !empty($operators['options'])) {
-                $perator_options = $operators['options'];
+                $operator_options = $operators['options'];
                 $operator_state = 1;
             }
         }
@@ -615,7 +615,7 @@ class NoticeController extends BaseController
                 'content'=> $content,
                 'title' => $title,
                 'operators_res' => $operators_res,
-                'perator_options' => $perator_options,
+                'operator_options' => $operator_options,
                 'operator_state' => $operator_state,
             ];
         }

@@ -87,7 +87,6 @@
 				return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
 			},
 			status(type){
-				console.log(type);
 				let res='';
 				switch(type){
 					case 0: res='转账给个人'; break;

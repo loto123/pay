@@ -53,7 +53,7 @@ class AgentCardDataController extends Controller
             })->count();
         }
 
-        $data = isset($_error)?compact('_error','operator_username')
+        $data = isset($_error)?compact('_error','operator_username','card_type_list')
             :compact('operators','operator_username','card_type_list','card_type','card_stock_count','current_card_cnt');
 
         return Admin::content(function (Content $content) use ($data) {
@@ -142,30 +142,31 @@ class AgentCardDataController extends Controller
             $promoter = User::where('mobile',$request_promoter)->withCount(['promoter_cards'=>function($query){
                 $query->where('is_bound',Card::UNBOUND);
             }])->first();
-            $promoter_current_card_cnt = Card::where('promoter_id',$promoter->id)
-                ->where('is_bound',Card::UNBOUND)->where('card_type',$card_type)->count();
-            $card_stock_query = CardStock::where('operator',Admin::user()->id)->where('state',CardStock::SALE)->with('card');
-            $card_stock = $card_stock_query->get();
-            $sale_card_cnt = $card_stock->count();
 
             if(empty($promoter) || !$promoter->isPromoter()) {
                 $_error = '该推广员不存在';
-            }
+            } else {
+                $promoter_current_card_cnt = Card::where('promoter_id',$promoter->id)
+                    ->where('is_bound',Card::UNBOUND)->where('card_type',$card_type)->count();
+                $card_stock_query = CardStock::where('operator',Admin::user()->id)->where('state',CardStock::SALE)->with('card');
+                $card_stock = $card_stock_query->get();
+                $sale_card_cnt = $card_stock->count();
 
-            if(empty($sale_card_cnt)) {
-                $_error = '您没有可用的VIP卡';
-            }
+                if(empty($sale_card_cnt)) {
+                    $_error = '您没有可用的VIP卡';
+                }
 
-            $operator_card_cnt = $card_stock_query->whereHas('card',function($query) use ($card_type) {
-                $query->where('card_type',$card_type);
-            })->count();
+                $operator_card_cnt = $card_stock_query->whereHas('card',function($query) use ($card_type) {
+                    $query->where('card_type',$card_type);
+                })->count();
+            }
 
         }
 
-        $data= isset($_error) ? compact('_error','request_promoter')
+        $data= isset($_error) ? compact('_error','request_promoter','card_type_list')
             : compact('promoter','operator','sale_card_cnt','request_promoter','card_type','card_type_list',
                 'operator_card_cnt','promoter_current_card_cnt');
-        return Admin::content(function (Content $content) use($data) {
+        return Admin::content(function (Content $content) use($data){
             $content->header("添加VIP卡给推广员");
             $content->body(view('admin.agent_card.promoter', $data));
         });
