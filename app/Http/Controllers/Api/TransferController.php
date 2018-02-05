@@ -766,7 +766,7 @@ class TransferController extends BaseController
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
         }
-        if ($user->balance < $record->amount) {
+        if ($user->balance < $record->real_amount) {
             return $this->json([], trans('trans.user_not_enough_money'), 0);
         }
         DB::beginTransaction();
