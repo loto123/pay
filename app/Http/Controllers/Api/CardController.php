@@ -68,11 +68,8 @@ class CardController extends BaseController
         if($this->user->identify_status != 1) {
             return $this->json([],'未实名认证，该功能不可用',0);
         }
-        $user_card_table = (new UserCard)->getTable();
-        $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank_id')
-            ->where('user_id', '=', $this->user->id)
-            ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')
-            ->orderBy('id')->get();
+
+        $cards = UserCard::where('user_id',$this->user->id)->with('bank')->orderBy('id')->get();
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
@@ -88,9 +85,9 @@ class CardController extends BaseController
                 $data[$item->id] = [
                     'card_id' => $item->id,
                     'card_num' => $this->user->formatNum($item->card_num), //做掩码处理
-                    'bank' => $item->bank_name,
+                    'bank' => $item->bank->name,
                     'card_type' => $card_type,
-                    'card_logo' => Bank::LOGO_PRE . $item->bank_logo,
+                    'card_logo' => $item->bank->logo ,
                     'is_pay_card' => ($item->id == $this->user->pay_card_id)? 1:0,
                 ];
             }

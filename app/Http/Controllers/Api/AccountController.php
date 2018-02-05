@@ -714,9 +714,19 @@ class AccountController extends BaseController
                     $item['quota_list'] = [];
                 }
 
-                //如果支付方式的额度是0,则不做限制
-                $item['my_max_quota'] = $item['max_quota']>0 ? ($item['max_quota'] > $user_balance ? $user_balance : $item['max_quota']) : $user_balance;
-
+                //介于充值列表最大值和最小值之间
+                $min = min($method_quota_list);
+                $max = max($method_quota_list);
+                if($user_balance > $min) {
+                    if($user_balance > $max) {
+                        $my_max_quota = $max;
+                    } else {
+                        $my_max_quota = $user_balance;
+                    }
+                } else {
+                    $my_max_quota = $min;
+                }
+                $item['my_max_quota'] = $my_max_quota;
                 unset($item['max_quota']);
             });
         }

@@ -17,7 +17,7 @@
           <button class="del" @click="del(item.card_id)">
             <i class="iconfont">&#xe634;</i>
           </button>
-          <div class="binding">{{item.is_pay_card? '结算卡' : '不是结算卡' }}</div>
+          <div class="binding">{{item.is_pay_card? '结算卡' : '' }}</div>
         </li>
       </ul>
       <div class="add-bankCard" @click="showPassword">
