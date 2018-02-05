@@ -11,6 +11,8 @@ namespace App\Pay\Model;
 
 use App\Jobs\SubmitWithdrawRequest;
 use App\Pay\PayLogger;
+use App\User;
+use App\UserFund;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -186,6 +188,16 @@ class DepositMethod extends Model
                 if (!($match->save() && $result->save())) {
                     break;
                 }
+
+                //添加用户账单明细
+                $record = new UserFund();
+                $record->user_id = User::where('container_id', $result->master_container)->value('id');
+                $record->type = UserFund::TYPE_CHARGE;
+                $record->mode = UserFund::MODE_IN;
+                $record->amount = $result->amount;
+                $record->status = $result->state == Deposit::STATE_COMPLETE ? UserFund::STATUS_SUCCESS : UserFund::STATUS_FAIL;
+                $record->no = $result->getKey();
+                $record->save();
 
                 $commit = true;
             } catch (\Exception $e) {
