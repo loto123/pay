@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -276,6 +277,24 @@ class User extends Authenticatable
 //            return $this->json(['times' => config("pay_pwd_validate_times", 5) - $times], trans("api.error_pay_password"),0);
         } else {
             return true;
+        }
+    }
+
+    /*
+     * 检查某行为的剩余可执行次数
+     * */
+    public function check_action_times($action, $total_times)
+    {
+        $key = sprintf("ACTION_%s_%s_%d", strtoupper($action),date("Ymd"), $this->id);
+        $times = Cache::get($key);
+        if ($times && $times >= $total_times) {
+            return false;
+        } else if (!$times) {
+            Cache::put($key, 1, Carbon::now()->addDay(1));
+            return $total_times-$times-1;
+        } else {
+            Cache::increment($key);
+            return $total_times-1;
         }
     }
 

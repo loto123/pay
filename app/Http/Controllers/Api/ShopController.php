@@ -1196,7 +1196,7 @@ class ShopController extends BaseController
     public function profit() {
         $user = $this->auth->user();
 
-        return $this->json(['profit' => (double)$user->shop_tips()->where("status", TipRecord::USEABLE_STATUS)->sum('amount')]);
+        return $this->json(['profit' => (double)$user->shop_tips()->where((new TipRecord)->getTable().".status", TipRecord::USEABLE_STATUS)->sum('amount')]);
     }
 
     /**

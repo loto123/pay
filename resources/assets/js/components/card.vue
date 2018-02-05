@@ -4,6 +4,7 @@
       <div class="flex-8 card-type">
         <div class="type">
           <em>{{cardName}}</em>
+          <span>金卡</span>
         </div>
         <div class="share-profit">尊享分润比例：{{percent}}‰</div>
       </div>
@@ -30,7 +31,13 @@
         em {
           font-weight: 700;
           display: inline-block;
-          font-size: 1.5em;
+          font-size: 1.8em;
+          margin-bottom: 0.2em;
+        }
+        span{
+          font-weight: 700;
+          display: inline-block;
+          font-size: 1em;
           margin-bottom: 0.2em;
         }
       }
