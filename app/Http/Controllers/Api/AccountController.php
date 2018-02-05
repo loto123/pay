@@ -340,8 +340,9 @@ class AccountController extends BaseController
             return $this->json([], '状态异常,请刷新页面重试', 0);
         }
 
-        if ($request->amount < max(self::MINIMUM_WITHDRAW, config('tixian_min', 0))) {
-            return $this->json([], '最低价格' . self::MINIMUM_WITHDRAW . '元', 0);
+        $min_quota = max(self::MINIMUM_WITHDRAW, config('tixian_min', 0));
+        if ($request->amount < $min_quota) {
+            return $this->json([], '最低价格' . $min_quota . '元', 0);
         }
 
         //判断限额
