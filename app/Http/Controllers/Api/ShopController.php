@@ -380,8 +380,8 @@ class ShopController extends BaseController
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => $_shop->logo,
-                'today_profit' => (double)$_shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-                'total_profit' => (double)$_shop->tips()->sum('amount')
+                'today_profit' => (double)$_shop->totalProfit([["created_at", ">=", date("Y-m-d")]]),
+                'total_profit' => (double)$_shop->totalProfit([["created_at", ">=", date("Y-m-d")]])
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
