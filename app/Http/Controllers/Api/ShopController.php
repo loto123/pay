@@ -24,7 +24,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  *
  * @package App\Http\Controllers\Api
  */
-class ShopController extends BaseController {
+class ShopController extends BaseController
+{
 
     /**
      * @SWG\Post(
@@ -94,10 +95,10 @@ class ShopController extends BaseController {
             'active' => 'required'
         ],['name.required'=>'店铺名必填',
         'name.max'=>'公会名称不能超过10个字符',
-        'rate.required'=>'单价必填',
-        'rate.regex'=>'格式错误',
-        'rate.between' => '请填写0.1到99999之间数字',
-        'rate.numeric' => '请填写0.1到99999之间数字',
+        'rate.required'=>'默认倍率必填',
+        'rate.regex'=>'默认倍率格式错误',
+        'rate.between' => '默认倍率请填写0.1到99999之间数字',
+        'rate.numeric' => '默认倍率请填写0.1到99999之间数字',
         'percent.required'=>'手续费率不能为空',
         'percent.integer'=>'手续费必须为0-100的整数',
         'percent.between'=>'手续费必须为0-100的整数'
@@ -115,7 +116,7 @@ class ShopController extends BaseController {
         }
         $wallet = PayFactory::MasterContainer();
         $wallet->save();
-        $shop  = new Shop();
+        $shop = new Shop();
         $shop->name = $request->name;
         $shop->manager_id = $user->id;
         $shop->price = $request->rate;
@@ -197,7 +198,7 @@ class ShopController extends BaseController {
         $query = $user->in_shops()->whereNotIn((new Shop)->getTable() . ".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL);
         $count = (int)$query->count();
         if ($request->offset) {
-            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
+            $query->where((new Shop)->getTable() . ".id", "<", Shop::decrypt($request->offset));
         }
         $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
         foreach ($query->get() as $_shop) {
@@ -260,7 +261,8 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function all(Request $request) {
+    public function all(Request $request)
+    {
         $limit = $request->input('limit', 10);
         $user = $this->auth->user();
         $shops = [];
@@ -273,7 +275,7 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
+        $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
         $count += $query1->count();
         if (count($shops) < $limit) {
             foreach ($query1->limit($limit - count($shops))->get() as $_shop) {
@@ -282,7 +284,7 @@ class ShopController extends BaseController {
                 }
             }
         }
-        $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable().'.id', array_keys($shops));
+        $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
         $count += $query2->count();
         if (count($shops) < $limit) {
             foreach ($query2->limit($limit - count($shops))->get() as $_shop) {
@@ -369,7 +371,7 @@ class ShopController extends BaseController {
         $query = $user->shop()->where("status", Shop::STATUS_NORMAL);
         $count = (int)$query->count();
         if ($request->offset) {
-            $query->where((new Shop)->getTable().".id", "<", Shop::decrypt($request->offset));
+            $query->where((new Shop)->getTable() . ".id", "<", Shop::decrypt($request->offset));
         }
         $query->limit($request->input("limit", 20))->orderBy("ID", "DESC");
         foreach ($query->get() as $_shop) {
@@ -378,8 +380,8 @@ class ShopController extends BaseController {
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
                 'logo' => $_shop->logo,
-                'today_profit' => (double)$_shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-                'total_profit' => (double)$_shop->tips()->sum('amount')
+                'today_profit' => (double)$_shop->totalProfit([["created_at", ">=", date("Y-m-d")]]),
+                'total_profit' => (double)$_shop->totalProfit([["created_at", ">=", date("Y-m-d")]])
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -448,7 +450,8 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function detail($id, Request $request) {
+    public function detail($id, Request $request)
+    {
         $user = $this->auth->user();
 
         $member_size = $request->input('member_size', 5);
@@ -639,7 +642,8 @@ class ShopController extends BaseController {
      * )
      * @return \Illuminate\Http\Response
      */
-    public function members($id, Request $request) {
+    public function members($id, Request $request)
+    {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status) {
@@ -929,9 +933,9 @@ class ShopController extends BaseController {
             'percent' => 'integer|between:0,100',
         ],[
         'name.max'=>'公会名称不能超过10个字符',
-        'rate.regex'=>'格式错误',
-        'rate.between' => '请填写0.1到99999之间数字',
-        'rate.numeric' => '请填写0.1到99999之间数字',
+        'rate.regex'=>'倍率格式错误',
+        'rate.between' => '倍率请填写0.1到99999之间数字',
+        'rate.numeric' => '倍率请填写0.1到99999之间数字',
         'percent.integer'=>'手续费必须为0-100的整数',
         'percent.between'=>'手续费必须为0-100的整数'
         ]);
@@ -1149,9 +1153,9 @@ class ShopController extends BaseController {
         }
         return $this->json([
             'balance' => (double)$shop->container->balance,
-            'today_profit' => (double)$shop->tips()->where("created_at", ">=", date("Y-m-d"))->sum('amount'),
-            'total_profit' => (double)$shop->tips()->sum('amount'),
-            'last_profit' => (double)$shop->tips()->where("created_at", ">=", date("Y-m-d", strtotime('-1 day')))->where("created_at", "<", date("Y-m-d"))->sum('amount')
+            'today_profit' => (double)$shop->totalProfit([["created_at", ">=", date("Y-m-d")]]),
+            'total_profit' => (double)$shop->totalProfit(),
+            'last_profit' => (double)$shop->totalProfit([["created_at", ">=", date("Y-m-d", strtotime('-1 day'))],["created_at", "<", date("Y-m-d")]])
         ]);
     }
 
@@ -2032,11 +2036,11 @@ class ShopController extends BaseController {
             return $this->json([], "error", 0);
         }
         if ($request->type) {
-            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
-            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
         } else {
-            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
-            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month." +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
         }
 
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);

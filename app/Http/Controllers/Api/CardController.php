@@ -87,7 +87,7 @@ class CardController extends BaseController
                 }
                 $data[$item->id] = [
                     'card_id' => $item->id,
-                    'card_num' => $this->formatNum($item->card_num), //做掩码处理
+                    'card_num' => $this->user->formatNum($item->card_num), //做掩码处理
                     'bank' => $item->bank_name,
                     'card_type' => $card_type,
                     'card_logo' => Bank::LOGO_PRE . $item->bank_logo,
@@ -222,12 +222,22 @@ class CardController extends BaseController
             return $this->json([],'已经绑定的银行卡不能重复绑定',0);
         }
 
+//        //验证银行卡号是否归属银行
+//        $bank = Bank::find($request->bank_id);
+//        if(!empty($bank) && !empty($bank->card_num_pre)) {
+//            $bank_card_pre_list = explode(',',$bank->card_num_pre);
+//            $card_pre = substr($request->card_no,0,$bank->card_num_pre_size);
+//            if(!isset($bank_card_pre_list[$card_pre])) {
+//                return $this->json([],'银行卡号输入错误或所属银行选择错误',0);
+//            }
+//        }
+
         if(!isset($this->user->channel['platform_id'])) {
             return $this->json([],'用户没有分配通道',0);
         }
 
         //添加记录
-        $bill_id = $this->createUniqueId();
+        $bill_id = UserCard::createUniqueId();
         try{
             $pay_record = new PayInterfaceRecord();
             $pay_record->bill_id = $bill_id;
@@ -518,7 +528,7 @@ class CardController extends BaseController
                 }
                 $data[] = [
                     'card_id' => $item->id,
-                    'card_num' => $this->formatNum($item->card_num), //做掩码处理
+                    'card_num' => $this->user->formatNum($item->card_num), //做掩码处理
                     'bank' => $item->bank_name,
                     'card_type' => $card_type,
                     'card_logo' => Bank::LOGO_PRE . $item->bank_logo,
@@ -528,27 +538,4 @@ class CardController extends BaseController
         return $this->json($data);
     }
 
-
-
-    //对字符串做掩码处理
-    private function formatNum($num,$pre=0,$suf=4)
-    {
-        $prefix = '';
-        $suffix = '';
-        if($pre>0) {
-            $prefix = substr($num, 0, $pre);
-        }
-        if ($suf>0){
-            $suffix = substr($num, 0-$suf, $suf);
-        }
-        $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
-        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
-        return $maskBankCardNo;
-    }
-
-    //生成订单号
-    public static function createUniqueId()
-    {
-        return date('YmdHis') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
-    }
 }

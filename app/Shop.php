@@ -31,7 +31,8 @@ class Shop extends Model
 
     const STATUS_FREEZE = 2;
 
-    public function getLogoAttribute($value) {
+    public function getLogoAttribute($value)
+    {
         return $value ? url($value) : asset("images/personal.jpg");
     }
 
@@ -54,19 +55,34 @@ class Shop extends Model
 
     protected static $skip32_id = '0123456789abcdef0123';
 
-    public function container() {
+    public function container()
+    {
         return $this->hasOne(MasterContainer::class, 'id', 'container_id');
     }
 
-    public function transfer() {
+    public function transfer()
+    {
         return $this->hasMany('App\Transfer', 'shop_id', 'id');
     }
 
-    public function tips() {
+    public function tips()
+    {
         return $this->hasMany(TipRecord::class, 'shop_id', 'id');
     }
 
-    public function funds() {
+    public function funds()
+    {
         return $this->hasMany(ShopFund::class, 'shop_id');
+    }
+
+    public function totalProfit($condition = [])
+    {
+        //打赏金额
+        $reward = $this->tips()->where($condition)->where('record_id', 0)->sum('amount');
+        //交易产生店铺手续费
+        $fee = $this->tips()->where($condition)->where('record', '>', 0)->whereHas('transfer', function ($query) {
+            $query->where('status', 3);
+        })->sum('amount');
+        return bcadd($reward, $fee);
     }
 }

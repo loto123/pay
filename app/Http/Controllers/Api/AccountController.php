@@ -17,6 +17,7 @@ use App\Pay\PayLogger;
 use App\Pet;
 use App\Shop;
 use App\ShopFund;
+use App\Transfer;
 use App\User;
 use App\UserFund;
 use Carbon\Carbon;
@@ -908,7 +909,7 @@ class AccountController extends BaseController
             'mode' => (int)$fund->mode,
             'amount' => $fund->amount,
             'created_at' => strtotime($fund->created_at),
-            'no' => $fund->en_id(),
+            'no' => $fund->no ? Transfer::encrypt($fund->no) : $fund->en_id(),
             'remark' => (string)$fund->remark,
             'balance' => $fund->balance,
             'fee' => $fund->withdraw_order ? $fund->withdraw_order->system_fee : 0

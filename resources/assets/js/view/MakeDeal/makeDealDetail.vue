@@ -512,7 +512,7 @@ export default {
     },
 
     addMembersNotice(dataList){
-      if(!dataList){
+      if(dataList.length == 0){
         return;
       }
 
