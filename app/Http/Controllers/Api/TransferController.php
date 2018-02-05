@@ -1599,7 +1599,7 @@ class TransferController extends BaseController
                 $success++;
             } catch (\Exception $e) {
 //                Log::info('$profit：' . $profit);
-                Log::error('关闭交易失败：' . $e->getTraceAsString());
+                Log::error('关闭交易失败：' . $e->getTraceAsString(),$e->getTrace());
                 DB::rollBack();
             }
         }
