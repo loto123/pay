@@ -3,13 +3,13 @@
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
 			<div class="money-box">
-				<span>{{mode == 1?'入':'出'}}账金额</span>
-				<em v-bind:class="[(mode==1)?'active':'']">{{mode == 1?'+'+amount:-amount}}</em>
+				<span>{{mode == 1?'出':'入'}}账金额</span>
+				<em v-bind:class="[mode==1?'':'active']">{{mode == 1?-amount:'+'+amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{(mode==1)?'收入':'支出'}}</div>
+					<div class="content">{{(mode==1)?'支出':'收入'}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
@@ -21,7 +21,7 @@
 				</li>
 				<li>
 					<div class="title">备注</div>
-					<div class="content">{{remark}}</div>
+					<div class="content">{{remark?remark:"无"}}</div>
 				</li>
 			</ul>
 		</div>
@@ -108,6 +108,7 @@
 					case 7: result='出售手续费'; break;
 					case 8: result='任务加速'; break;
 					case 9: result='拿钻撤销'; break;
+					case 10: result='分润'; break;
 				}
 				return result;
 			}
