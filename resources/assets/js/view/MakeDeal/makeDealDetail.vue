@@ -459,6 +459,12 @@ export default {
     },
 
     callPassword(){
+      
+      if(this.moneyData.payMoney == null && this.moneyData.getMoney==null){
+        Toast("请填写交钻分数或者拿钻分数");
+        return;
+      }
+
       this.submitClick = true;
       setTimeout(()=>{
         this.submitClick = false;
@@ -505,9 +511,13 @@ export default {
         }
 
       }else if(this.payType == "get"){
+        if(this.moneyData.getMoney == null){
+          Toast("请填写交钻分数或者拿钻分数");
+        }
+
         this.submitData();
       }else {
-        Toast("请填写拿钱数额或取钱数额");
+        Toast("请填写交钻分数或者拿钻分数");
       }
     },
 
@@ -542,6 +552,7 @@ export default {
 
     // 提交任务  拿钱或者付钱
     submitData(password){
+
       // 放钱
       if(this.payType == "put"){
 
@@ -568,6 +579,9 @@ export default {
         this.hidePassword();
 
       }else if(this.payType == "get"){
+
+      
+
         // 拿钱
         var _data = {
           transfer_id :this.transfer_id,
@@ -701,13 +715,21 @@ export default {
   },
 
   watch: {
-    "moneyData.payMoney": function() {
+    "moneyData.payMoney": function(e) {
+      console.log(e);
+      if(e == ""){
+        this.moneyData.payMoney = null;
+      }
       // 放钱
       this.moneyData.getMoney = null;
       this.payType = "put";
     },
-    "moneyData.getMoney": function() {
+    "moneyData.getMoney": function(e) {
       // 拿钱
+      if(e == ""){
+        this.moneyData.getMoney = null;
+      }
+
       this.moneyData.payMoney = null;
       this.payType = "get";
     }

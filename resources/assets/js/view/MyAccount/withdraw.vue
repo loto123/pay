@@ -116,7 +116,7 @@
 					</li>
 					<li class="flex flex-align-center">
 						<span class="flex-1">到账银行卡</span>
-						<span class="flex-1 flex flex-justify-end">招商银行 尾号2027</span>
+						<span class="flex-1 flex flex-justify-end">{{bankInfo}}</span>
 					</li>
 				</ul>
 			</div>
@@ -174,8 +174,8 @@
 				actions:[],                     // 右上角动作列表
 				isBroodClick:false,             // 孵化按钮防止连续点击
 				fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
-				fee_value:0,
-				fee:0
+				bankInfo:null,                  // 提现成功后的银行卡信息提示
+				fee:1
 			}
 		},
 		mounted(){
@@ -232,9 +232,9 @@
 						this.has_pay_password = res[1].data.data.has_pay_password;
 						this.has_pay_card = res[1].data.data.has_pay_card;
 
-						this.fee_mode= res[2].data.data.fee_mode;
-						this.fee_value = res[2].data.data.fee_value;
-						this.dataList = res[2].data.data.methods
+						// this.fee_mode= res[2].data.data.fee_mode;
+						// this.fee_value = res[2].data.data.fee_value;
+						this.dataList = res[2].data.data.methods;
 						this.setBankList(res[2]);//获取提现方式列表
 
 						this.check();
@@ -281,13 +281,14 @@
 				var _data = {
 					way: this.value
 				}
-
+				console.log(this.fee_mode);
 				if(this.fee_mode == 0){          // 百分比模式
-					this.fee = this.amount * this.fee_value
+					this.fee = this.amount * ((this.fee_value)/100)
 				}else if(this.fee_mode == 1){    // 指定金额模式
 					this.fee = this.fee_value;
 				}
 
+				console.log(this.fee);
 				if (!this.value) {
 					Toast('请选择支付方式');
 					return
@@ -319,12 +320,17 @@
 				Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/account/withdraw', _data)])
 					.then((res) => {
 						Loading.getInstance().close();
+						this.fee  = res[1].data.data.fee;
+						this.bankInfo = res[1].data.data.receiver.bank_name+" "+res[1].data.data.receiver.card_tail_number;
+						console.log(this.fee);
 						Toast('出售成功');
 						this.isPayInfoDetailShow = true;
 						this.hidePassword();
 					})
 					.catch((err) => {
 						Loading.getInstance().close();
+						this.hidePassword();
+						console.error(err);
 						Toast(err.data.msg);
 					})
 			},
@@ -336,6 +342,8 @@
 
 						// 获取最高价
 						this.myMaxQuota = this.dataList[i].my_max_quota;
+						this.fee_mode = this.dataList[i].fee_mode;
+						this.fee_value = this.dataList[i].fee_value;
 
 						for(var k = 0; k < this.dataList[i].quota_list.length; k++){
 							var _temp =  {};

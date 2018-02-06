@@ -6,6 +6,7 @@ use App\Notice;
 use App\Notifications\ConfirmExecuteResult;
 use App\Profit;
 use App\SystemMessage;
+use App\Transfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use JWTAuth;
@@ -573,8 +574,7 @@ class NoticeController extends BaseController
             if(isset($operators['result']) && isset($operators['result']['code'])
                 && isset($operators['result']['message'])) {
                 $operators_res = $operators['result'];
-            }
-            if( !empty($operators['options'])) {
+            } else if( !empty($operators['options'])) {
                 $operator_options = $operators['options'];
                 $operator_state = 1;
             }
@@ -594,7 +594,7 @@ class NoticeController extends BaseController
                 'amount' => $profit->proxy_amount,
                 'type' => '分润',
                 'time' => (string)$notice->created_at,
-                'transfer_id' => $profit->transfer_id,
+                'transfer_id' => Transfer::encrypt($profit->transfer_id),
                 'mobile' => $profit->user->mobile,
                 'thumb' => $profit->user->avatar??'',
                 'operators_res' => $operators_res,

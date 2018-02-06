@@ -515,16 +515,22 @@ class UserController extends BaseController
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-//        Log::info(['param'=>$request->all()]);
+
         $name = $request->input('name');
         $id_number = $request->input('id_number');
         $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
-//        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return $this->json([], '验证码已失效或填写错误', 0);
         }
         Cache::forget($cache_key);
+
+        //验证当天可用次数
+        $times = $this->user->check_action_times('identify', config('identify_max_times',10));
+        if(!$times) {
+            return $this->json([], '实名认证超过当天最大限制次数！', 0);
+        }
+
         //添加记录
         $bill_id = UserCard::createUniqueId();
         try{
