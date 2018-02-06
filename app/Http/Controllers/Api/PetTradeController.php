@@ -606,6 +606,7 @@ class PetTradeController extends BaseController
      *                          @SWG\Property(property="pet_id", type="integer", example="1", description="宠物编号"),
      *                          @SWG\Property(property="holder_name", type="string", example="张三", description="持有人"),
      *                          @SWG\Property(property="price", type="string", example="100", description="出售价格"),
+     *                          @SWG\Property(property="pet_image", type="string", example="url", description="宠物图片"),
      *                      ),
      *                  ),
      *              )
@@ -684,6 +685,7 @@ class PetTradeController extends BaseController
      *                          @SWG\Property(property="holder_name", type="string", example="张三", description="持有人"),
      *                          @SWG\Property(property="price", type="string", example="100", description="出售价格"),
      *                          @SWG\Property(property="time", type="string", example="100", description="时间"),
+     *                          @SWG\Property(property="pet_image", type="string", example="url", description="宠物图片"),
      *                      ),
      *                  ),
      *              )
