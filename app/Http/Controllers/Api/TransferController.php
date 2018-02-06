@@ -773,7 +773,9 @@ class TransferController extends BaseController
         try {
             //容器撤回
             $pay_transfer = $record->pay_transfer()->first();
-            if ($pay_transfer->chargeback() != 1) {
+            $result = $pay_transfer->chargeback();
+            if ($result != 1) {
+                Log::error('交易撤回容器转账结果： ' . $result);
                 Log::error('交易撤回容器转账失败： ', $pay_transfer->toArray());
                 DB::rollBack();
                 return $this->json([], trans('trans.withdraw_failed'), 0);
@@ -878,7 +880,7 @@ class TransferController extends BaseController
         }
 
         $user = JWTAuth::parseToken()->authenticate();
-        if(!$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+        if (!$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
             return $this->json([], trans('trans.notice_not_allow'), 0);
         }
 
@@ -1544,13 +1546,13 @@ class TransferController extends BaseController
                     $tip_amount = 0;
                     foreach ($records as $key => $value) {
                         //宠物蛋
-                        if(!$value->user->pet_records()->where('transfer_id',$transfer->id)->exists()) {
+                        if (!$value->user->pet_records()->where('transfer_id', $transfer->id)->exists()) {
                             $value->user->batch_create_pet(rand(1, 4), Pet::TYPE_EGG, PetRecord::TYPE_TRANSFER, $value->id, $transfer->id);
                         }
                         if ($value->stat == 2) {
                             //茶水费记录到账
                             $tipModel = $value->tip;
-                            if($tipModel) {
+                            if ($tipModel) {
                                 $tip_amount = bcadd($tip_amount, $tipModel->amount, 2);
                                 $tipModel->status = 1;
                                 $tipModel->save();
