@@ -165,8 +165,19 @@
             },
             //开卡
             openCard(card_id) {
-                this.curCard_id = card_id;
-                this.showPasswordTag = true;
+                request.getInstance().getData('api/my/info')
+					.then((res) => {
+						if (res.data.data.has_pay_password == 0) {
+							//调转到设置支付密码
+							this.$router.push('/my/setting_password');
+						} else {
+							this.curCard_id = card_id;
+                            this.showPasswordTag = true;
+						}
+					})
+					.catch((err) => {
+						Toast(err.data.msg);
+					})
             },
             //推广授权
             goGeneralize() {
