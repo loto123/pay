@@ -152,7 +152,7 @@ abstract class Container extends Model
             if ($profit_shares != []) {
                 if (array_filter($profit_shares, function ($profit_share) use (&$share_sum) {
                         if ($profit_share instanceof ProfitShare) {
-                            $share_sum += $profit_share->amount;
+                            $share_sum = bcadd($share_sum, $profit_share->amount, 2);
                         } else {
                             return false;
                         }
@@ -169,7 +169,7 @@ abstract class Container extends Model
              * 检查金额
              */
 
-            $actual_received = $amount - $fee - $share_sum; //实收金额
+            $actual_received = bcsub(bcsub($amount, $fee, 2), $share_sum, 2); //实收金额
             if ($actual_received <= 0) {
                 break;
             }
