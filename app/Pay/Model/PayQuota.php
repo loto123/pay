@@ -51,14 +51,15 @@ class PayQuota
                         }
                         return $data;
                     } else {
-                        return $quota_list;
+                        //数组下标从0开始的是数组，从1开始的会被解析成对象
+                        return array_values($quota_list);
                     }
                 } else {
                     return false;
                 }
 
             case 2:
-                return $quota_list;
+                return array_values($quota_list);
 
             default:
                 return false;
