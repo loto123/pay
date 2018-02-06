@@ -23,6 +23,8 @@ class UserFund extends Model
 
     const TYPE_TRADE_BACK = 9;
 
+    const TYPE_PROFIT = 10;
+
     const TYPE_TIPS = 8;
 
     const MODE_IN = 0;
