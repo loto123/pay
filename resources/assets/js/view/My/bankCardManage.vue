@@ -1,6 +1,6 @@
 <template>
 	<div id="bankManage">
-		<topBack title="银行卡管理" style="background:#fff;"></topBack>
+		<topBack title="银行卡管理" style="background:#fff;" :backUrl="'\/my\/'"></topBack>
 		<div class="bankCard-container">
 			<ul class="bankCard-list">
 				<li v-for="item in bankList">
