@@ -81,7 +81,7 @@ class Transfer extends Model
             }
 
             //撤回实收资金
-            $actual_received = $transfer->amount - $transfer->fee - $profit_share_sum;
+            $actual_received = bcsub(bcsub($transfer->amount, $transfer->fee, 2), $profit_share_sum, 2);
             if (!$transfer->containerTo->changeBalance($transfer->to_frozen ? 0 : -$actual_received, $transfer->to_frozen ? -$actual_received : 0)) {
                 $result = self::CHARGE_BACK_OUT_OF_BALANCE;
                 $error_code = 3;
