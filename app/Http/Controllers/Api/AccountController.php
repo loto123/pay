@@ -715,16 +715,10 @@ class AccountController extends BaseController
                 }
 
                 //介于充值列表最大值和最小值之间
-                $min = min($method_quota_list);
-                $max = max($method_quota_list);
-                if($user_balance > $min) {
-                    if($user_balance > $max) {
-                        $my_max_quota = $max;
-                    } else {
-                        $my_max_quota = $user_balance;
-                    }
+                if(($user_balance < config('tixian_min')) || $user_balance > config('tixian_max')) {
+                    $my_max_quota = 0;
                 } else {
-                    $my_max_quota = $min;
+                    $my_max_quota = $user_balance;
                 }
                 $item['my_max_quota'] = $my_max_quota;
                 unset($item['max_quota']);
