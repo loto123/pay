@@ -196,7 +196,7 @@ class ShopController extends BaseController
         $user = $this->auth->user();
         $my_shop_ids = $user->shop()->pluck("id");
         $data = [];
-        $query = $user->in_shops()->whereNotIn((new Shop)->getTable() . ".id", $my_shop_ids)->where("status", Shop::STATUS_NORMAL);
+        $query = $user->in_shops()->whereNotIn((new Shop)->getTable() . ".id", $my_shop_ids)->whereIn("status", [Shop::STATUS_NORMAL, Shop::STATUS_FREEZE]);
         $count = (int)$query->count();
         if ($request->offset) {
             $query->where((new Shop)->getTable() . ".id", "<", Shop::decrypt($request->offset));
@@ -207,7 +207,8 @@ class ShopController extends BaseController
             $data[] = [
                 'id' => $_shop->en_id(),
                 'name' => $_shop->name,
-                'logo' => $_shop->logo
+                'logo' => $_shop->logo,
+                'status' => (int)$_shop->status
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
@@ -369,7 +370,7 @@ class ShopController extends BaseController
     {
         $user = $this->auth->user();
         $data = [];
-        $query = $user->shop()->where("status", Shop::STATUS_NORMAL);
+        $query = $user->shop()->whereIn("status", [Shop::STATUS_NORMAL, Shop::STATUS_FREEZE]);
         $count = (int)$query->count();
         if ($request->offset) {
             $query->where((new Shop)->getTable() . ".id", "<", Shop::decrypt($request->offset));
@@ -382,7 +383,8 @@ class ShopController extends BaseController
                 'name' => $_shop->name,
                 'logo' => $_shop->logo,
                 'today_profit' => (double)$_shop->totalProfit([["updated_at", ">=", date("Y-m-d")]]),
-                'total_profit' => (double)$_shop->totalProfit()
+                'total_profit' => (double)$_shop->totalProfit(),
+                'status' => (int)$_shop->status
             ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
