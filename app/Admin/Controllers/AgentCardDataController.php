@@ -244,6 +244,7 @@ class AgentCardDataController extends Controller
         $en_card_id = (new Card())->recover_id($card_id);
         $promoter_id = $request->promoter_id;
         $date_time = $request->date_time;
+        $card_type = $request->card_type;
         $begin = '';
         $end = '';
         if (!empty($date_time)) {
@@ -252,7 +253,9 @@ class AgentCardDataController extends Controller
             $end = $end = $date_time_arr[1] . ' 23:59:59';
         }
 
-        $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card']);
+        $card_type_list = CardType::query()->select('id','name')->get();
+
+        $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card','card.type']);
         //运营只能看到自己的
         if(!Admin::user()->can('create_agent_card')) {
             $query = $query->where('operator',Admin::user()->id);
@@ -285,10 +288,17 @@ class AgentCardDataController extends Controller
             $query = $query->where('created_at','>=',$begin)->where('created_at','<=',$end);
         }
 
+        if(!empty($card_type)) {
+            $query = $query->whereHas('card', function($query) use($card_type) {
+                $query->where('card_type',$card_type);
+            });
+        }
+
         $count = $query->count();
         $list = $query->paginate($this->limit);
         $offset = ($request->page>1 ? $request->page-1 : 0 ) * $this->limit;
-        $data = compact('count','offset','list','allocate_id','operator_id','card_id','promoter_id','date_time');
+        $data = compact('count','offset','list','allocate_id','operator_id','card_id','promoter_id',
+            'date_time','card_type_list','card_type');
         return Admin::content(function (Content $content) use ($data) {
             $content->header("拨卡记录");
             $content->body(view('admin.agent_card.card_record', $data));
@@ -305,13 +315,15 @@ class AgentCardDataController extends Controller
         $is_bound = $request->is_bound;
         $is_frozen = $request->is_frozen;
         $date_time = $request->date_time;
+        $card_type = $request->card_type;
+
         if (!empty($date_time)) {
             $date_time_arr = explode(' - ', $date_time);
             $begin = $date_time_arr[0];
             $end = $end = $date_time_arr[1] . ' 23:59:59';
         }
 
-        $query = Card::query()->with(['owner_user', 'stock.operators', 'promoter']);
+        $query = Card::query()->with(['owner_user', 'stock.operators', 'promoter','type']);
         //运营只能看到自己的
         if(!Admin::user()->can('create_agent_card')) {
             $query = $query->whereHas('stock.operators', function ($query) {
@@ -353,12 +365,18 @@ class AgentCardDataController extends Controller
             $query = $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
         }
 
+        if(!empty($card_type)) {
+            $query = $query->where('card_type',$card_type);
+        }
+
         $count = $query->count();
         $list = $query->paginate($this->limit);
         $offset = ($request->page > 1 ? $request->page - 1 : 0) * $this->limit;
 
+        $card_type_list = CardType::query()->select('id','name')->get();
 
-        $data = compact('list','count','offset','card_id','agent_id','operator_id','promoter_id','is_bound','is_frozen');
+        $data = compact('list','count','offset','card_id','agent_id','operator_id','promoter_id','is_bound',
+            'is_frozen','card_type_list','card_type');
         return Admin::content(function (Content $content) use ($data) {
             $content->header("VIP卡查询");
             $content->body(view('admin.agent_card.card', $data));

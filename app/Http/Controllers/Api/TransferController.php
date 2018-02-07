@@ -11,6 +11,7 @@ use App\TipRecord;
 use App\Transfer;
 use App\TransferRecord;
 use App\TransferUserRelation;
+use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,7 @@ class TransferController extends BaseController
         //交易关系包含自己
         $joiners = $request->input('joiner', []);
         foreach ($joiners as $key => $value) {
-            $joiners[$key] = Skip32::decrypt("0123456789abcdef0123", $value);
+            $joiners[$key] = User::decrypt($value);
         }
         array_push($joiners, $user->id);
         if ($transfer->save()) {
@@ -635,11 +636,12 @@ class TransferController extends BaseController
                     //红包手续费金额
                     $transfer->fee_amount = bcadd($transfer->fee_amount, $record->fee_amount, 2);
                     //代理分润
-                    if ($user->parent && $user->parent->percent) {
+                    if ($user->parent && $user->parent->percent && $user->parent->status == 0) {
 //                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         //分润至代理分润账户
                         $user_receiver = $user->parent->proxy_container;
                         if ($user_receiver) {
+                            $record->proxy_percent = $user->parent->percent;
                             $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
                             if ($proxy_fee > 0) {
                                 $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
@@ -893,7 +895,7 @@ class TransferController extends BaseController
         DB::beginTransaction();
         try {
             foreach ($request->friend_id as $value) {
-                $real_id = Skip32::decrypt("0123456789abcdef0123", $value);
+                $real_id = User::decrypt( $value);
                 if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
                     $relation = new TransferUserRelation();
                     $relation->transfer_id = $transfer->id;
@@ -1517,7 +1519,7 @@ class TransferController extends BaseController
         if (isset($request->transfer_id) && $request->transfer_id) {
             $tmpIds = [];
             foreach ($request->transfer_id as $key => $value) {
-                $tmpIds[] = Skip32::decrypt("0123456789abcdef0123", $value);
+                $tmpIds[] = Transfer::decrypt($value);
             }
             $query->whereIn('id', $tmpIds);
         }
@@ -1567,13 +1569,11 @@ class TransferController extends BaseController
                             $profit->proxy_percent = 0;
                             $profit->proxy_amount = 0;
                             $profit->fee_amount = 0;
-                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent > 0
-                                && $value->user->parent->proxy_container
-                            ) {
-                                $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
+                            if ($value->proxy_percent > 0) {
+                                $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->proxy_percent), 2), '100', 2);
                                 if ($profit->proxy_amount > 0) {
                                     $profit->proxy = $value->user->parent->id;
-                                    $profit->proxy_percent = $value->user->parent->percent;
+                                    $profit->proxy_percent = $value->proxy_percent;
                                     //解冻代理分润账户资金
                                     $proxy_container = $value->user->parent->proxy_container;
                                     $proxy_container->unfreeze($profit->proxy_amount);

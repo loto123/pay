@@ -37,6 +37,20 @@
                         <input type="text" readonly name="date_time" id="reservation" class="form-control"
                                value="{{$date_time??''}}"/>
                     </div>
+
+                    <label class="col-sm-1 control-label">卡类型：</label>
+                    <div class="col-sm-2">
+                            <select class="form-control" name="card_type" id="card_type">
+                                <option value="">所有</option>
+                                @foreach($card_type_list as $value)
+                                    <option value="{{$value['id']}}"
+                                            @if (isset($card_type) && $value['id'] == $card_type)
+                                            selected="selected"
+                                            @endif
+                                    >{{$value['name']}}</option>
+                                @endforeach
+                            </select>
+                    </div>
                     <span class="col-sm-2">
                         <button type="submit" class="btn btn-primary">查询</button>
                         <button type="button" class="btn btn-primary" onclick="data_export()">导出</button>
@@ -54,6 +68,7 @@
                     <thead>
                     <tr>
                         <th>序号</th>
+                        <th>卡类型</th>
                         <th>制卡人</th>
                         <th>拨卡人</th>
                         <th>卡号</th>
@@ -65,6 +80,7 @@
                     @foreach ($list as $key => $item)
                         <tr>
                             <td>{{$offset+$key+1}}</td>
+                            <td>{{$item->card['type']['name']}}</td>
                             <td>
                                 <div class="user-panel clearfix">
                                     <div class="pull-left">
@@ -123,6 +139,7 @@
         var promoter_id = $("#promoter_id").val();
         var card_id = $("#card_id").val();
         var date_time = $("#date_time").val();
+        var card_type = $("#card_type").val();
         var form = $("<form></form>");
         form.attr('style', 'display:none');
         form.attr('method', 'post');
@@ -151,6 +168,10 @@
         input6.attr('type', 'hidden');
         input6.attr('name', 'date_time');
         input6.val(date_time);
+        var input7 = $('<input />');
+        input7.attr('type', 'hidden');
+        input7.attr('name', 'card_type');
+        input7.val(card_type);
         $('body').append(form);
         form.append(input3);
         form.append(input1);
@@ -158,6 +179,7 @@
         form.append(input4);
         form.append(input5);
         form.append(input6);
+        form.append(input7);
         form.submit();
         form.remove();
     }

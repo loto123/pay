@@ -39,7 +39,7 @@ class UserFund extends Model
 
     use Skip32Trait;
 
-    protected static $skip32_id = '0123456789abcdef0123';
+    protected static $skip32_id = '048571cc8f64f34dc730';
 
     public function charge_order() {
         return $this->hasOne(Deposit::class, 'id', 'no');

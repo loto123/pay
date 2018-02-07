@@ -67,14 +67,16 @@ app('api.exception')->register(function (Exception $exception) {
     $request = Illuminate\Http\Request::capture();
     return app('App\Exceptions\Handler')->render($request, $exception);
 });
-$api->version('v1', function ($api) {
+$api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' => 1], function ($api) {
     $api->group([
         'prefix' => 'auth',
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->post('login', 'AuthController@login');
+        $api->post('sms/login', 'AuthController@sms_login');
         $api->post('register', 'AuthController@register');
         $api->get("login/wechat/url", 'AuthController@wechat_login_url');
+        $api->get("mobile/status", 'AuthController@mobile_status');
         $api->post("login/wechat", 'AuthController@wechat_login');
         $api->post("valid", 'AuthController@valid');
         $api->post("sms", 'AuthController@sms');

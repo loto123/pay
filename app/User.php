@@ -32,7 +32,7 @@ class User extends Authenticatable
 {
     const STATUS_NORMAL = 0;
     const STATUS_BLOCK = 1;
-    protected static $skip32_id = '0123456789abcdef0123';
+    protected static $skip32_id = '494d771adf20f3ac15cd';
 
     use Notifiable;
     use EntrustUserTrait;

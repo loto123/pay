@@ -4,6 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Bank;
 
+use App\User;
+use App\UserCard;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -80,6 +82,12 @@ class BankController extends Controller
 //            $grid->card_num_pre_size('卡号开头长度');
             $grid->created_at('添加时间');
             $grid->updated_at('更新时间');
+            $grid->actions(function (Grid\Displayers\Actions $action) use ($grid) {
+                //只有管理员才有权限删除，并且没有用户绑定这个银行的卡
+                if(!Admin::user()->isRole('administrator') || UserCard::where('bank_id',$action->getKey())->count() > 0) {
+                    $action->disableDelete();
+                }
+            });
         });
     }
 
@@ -92,8 +100,8 @@ class BankController extends Controller
     {
         return Admin::form(Bank::class, function (Form $form) {
             $form->display('id', 'ID');
-            $form->text('name',  '银行')->rules('required');
-            $form->image('logo', '图片')->uniqueName();
+            $form->text('name',  '银行 *')->rules('required|unique:'.(new Bank())->getTable());
+            $form->image('logo', '图片 *')->uniqueName()->rules('required');
 //            $form->textarea('card_num_pre','卡号开头')->placeholder('请输入卡号开头，用英文逗号分隔');
 //            $form->text('card_num_pre_size','卡号开头长度')->rules('required|min:0|max:8');
             $form->display('created_at', '添加时间');
