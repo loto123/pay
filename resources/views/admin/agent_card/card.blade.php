@@ -38,6 +38,7 @@
                                placeholder="请输入推广员ID"
                                value="{{$promoter_id??''}}">
                     </div>
+
                     <label class="col-sm-1 control-label">使用状态：</label>
                     <div class="col-sm-2">
                         <select class="form-control" name="is_bound" id="is_bound">
@@ -56,6 +57,7 @@
                             </option>
                             </select>
                     </div>
+
                     <label class="col-sm-1 control-label">是否冻结：</label>
                     <div class="col-sm-2">
                         <select class="form-control" name="is_frozen" id="is_frozen">
@@ -72,6 +74,20 @@
                             </option>
                         </select>
                     </div>
+                </div>
+
+                <label class="col-sm-1 control-label">卡类型：</label>
+                <div class="col-sm-2">
+                    <select class="form-control" name="card_type" id="card_type">
+                        <option value="">所有</option>
+                        @foreach($card_type_list as $value)
+                            <option value="{{$value['id']}}"
+                                    @if (isset($card_type) && $value['id'] == $card_type)
+                                    selected="selected"
+                                    @endif
+                            >{{$value['name']}}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -97,6 +113,7 @@
                     <thead>
                     <tr>
                         <th>序号</th>
+                        <th>卡类型</th>
                         <th>卡号</th>
                         <th>运营</th>
                         <th>推广员</th>
@@ -110,6 +127,7 @@
                     @foreach ($list as $key => $item)
                         <tr>
                             <td>{{$offset+$key+1}}</td>
+                            <td>{{$item->type['name']}}</td>
                             <td>{{$item->mix_id()}}</td>
                             <td>
                                 @if($promoter = $item->stock['operators'])
@@ -190,6 +208,7 @@
         var is_bound = $("#is_bound").val();
         var is_frozen = $("#is_frozen").val();
         var date_time = $("#date_time").val();
+        var card_type = $("#card_type").val();
         var form = $("<form></form>");
         form.attr('style', 'display:none');
         form.attr('method', 'post');
@@ -226,6 +245,10 @@
         input8.attr('type', 'hidden');
         input8.attr('name', 'is_frozen');
         input8.val(is_frozen);
+        var input9 = $('<input />');
+        input9.attr('type', 'hidden');
+        input9.attr('name', 'card_type');
+        input9.val(card_type);
         $('body').append(form);
         form.append(input1);
         form.append(input2);
@@ -235,6 +258,7 @@
         form.append(input6);
         form.append(input7);
         form.append(input8);
+        form.append(input9);
         form.submit();
         form.remove();
     }

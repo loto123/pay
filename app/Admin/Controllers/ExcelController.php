@@ -341,13 +341,14 @@ class ExcelController extends Controller
     //VIP卡-拨卡记录
     public function card_record(Request $request)
     {
-        $cellData = [['序号', '制卡人', '制卡人ID', '拨卡人', '拨卡人ID', '卡号', '收卡人', '收卡人ID', '拨卡时间']];
+        $cellData = [['序号', '卡类型','制卡人', '制卡人ID', '拨卡人', '拨卡人ID', '卡号', '收卡人', '收卡人ID', '拨卡时间']];
         $allocate_id = $request->allocate_id;
         $operator_id = $request->operator_id;
         $card_id = $request->card_id;
         $en_card_id = (new Card())->recover_id($card_id);
         $promoter_id = $request->promoter_id;
         $date_time = $request->date_time;
+        $card_type = $request->card_type;
         $begin = '';
         $end = '';
         if (!empty($date_time)) {
@@ -356,21 +357,24 @@ class ExcelController extends Controller
             $end = $end = $date_time_arr[1] . ' 23:59:59';
         }
 
-        $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card']);
+        $query = CardStock::query()->with(['distributions.promoter', 'allocate_bys', 'operators', 'card', 'card.type']);
         //运营只能看到自己的
         if (!Admin::user()->can('create_agent_card') && Admin::user()->can('operate_agent_card')) {
             $query = $query->where('operator', Admin::user()->id);
         }
+
         if (!empty($allocate_id)) {
             $query = $query->whereHas('allocate_bys', function ($query) use ($allocate_id) {
                 $query->where('username', $allocate_id);
             });
         }
+
         if (!empty($operator_id)) {
             $query = $query->whereHas('operators', function ($query) use ($operator_id) {
                 $query->where('username', $operator_id);
             });
         }
+
         if (!empty($promoter_id)) {
             $query = $query->whereHas('distributions', function ($query) use ($promoter_id) {
                 $query->whereHas('promoter', function ($query) use ($promoter_id) {
@@ -378,17 +382,27 @@ class ExcelController extends Controller
                 });
             });
         }
+
         if (!empty($card_id)) {
             $query = $query->where('card_id', $en_card_id);
         }
+
         if (!empty($begin) && !empty($end)) {
             $query = $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
         }
+
+        if(!empty($card_type)) {
+            $query = $query->whereHas('card', function($query) use($card_type) {
+                $query->where('card_type',$card_type);
+            });
+        }
+
         $list = $query->get();
         if (!empty($list)) {
             foreach ($list as $key => $item) {
                 $cellData[] = [
                     $key + 1,
+                    $item->card['type']['name'],
                     $item->allocate_bys ? $item->allocate_bys['name'] : '无',
                     $item->allocate_bys ? $item->allocate_bys['username'] : '无',
                     $item->operators ? $item->operators['name'] : '无',
@@ -410,7 +424,7 @@ class ExcelController extends Controller
     //VIP卡-查询
     public function cards(Request $request)
     {
-        $cellData = [['序号', '卡号', '运营', '运营ID', '推广员', '推广员ID', '用卡人', '用卡人ID', '状态', '是否冻结']];
+        $cellData = [['序号','卡类型','卡号', '运营', '运营ID', '推广员', '推广员ID', '用卡人', '用卡人ID', '状态', '是否冻结']];
         $card_id = $request->card_id;
         $agent_id = $request->agent_id;
         $operator_id = $request->operator_id;
@@ -418,39 +432,54 @@ class ExcelController extends Controller
         $is_bound = $request->is_bound;
         $is_frozen = $request->is_frozen;
         $date_time = $request->date_time;
+        $card_type = $request->card_type;
+
         if (!empty($date_time)) {
             $date_time_arr = explode(' - ', $date_time);
             $begin = $date_time_arr[0];
             $end = $end = $date_time_arr[1] . ' 23:59:59';
         }
-        $query = Card::query()->with(['owner_user', 'stock.operators', 'promoter']);
+
+        $query = Card::query()->with(['owner_user', 'stock.operators', 'promoter', 'type']);
+
         if (!empty($card_id)) {
             $query = $query->where('id', (new Card())->recover_id($card_id));
         }
+
         if (!empty($agent_id)) {
             $query = $query->whereHas('owner_user', function ($query) use ($agent_id) {
                 $query->where('mobile', $agent_id);
             })->where('is_bound', Card::BOUND);
         }
+
         if (!empty($operator_id)) {
             $query = $query->whereHas('stock.operators', function ($query) use ($operator_id) {
                 $query->where('username', $operator_id);
             });
         }
+
         if (!empty($promoter_id)) {
             $query = $query->whereHas('promoter', function ($query) use ($promoter_id) {
                 $query->where('mobile', $promoter_id);
             });
         }
+
         if (!empty($is_bound)) {
             $query = $query->where('is_bound', $is_bound);
         }
+
         if (!empty($is_frozen)) {
             $query = $query->where('is_frozen', $is_frozen);
         }
+
         if (!empty($begin) && !empty($end)) {
             $query = $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
         }
+
+        if(!empty($card_type)) {
+            $query = $query->where('card_type',$card_type);
+        }
+Log::info($request);
         $list = $query->get();
         if (!empty($list)) {
             foreach ($list as $key => $item) {
@@ -468,6 +497,7 @@ class ExcelController extends Controller
                 }
                 $cellData[] = [
                     $key + 1,
+                    $item->type['name'],
                     $item->mix_id(),
                     $item_operator_name,
                     $item_operator_id,
