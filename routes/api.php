@@ -75,6 +75,7 @@ $api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' =>
         $api->post('login', 'AuthController@login');
         $api->post('register', 'AuthController@register');
         $api->get("login/wechat/url", 'AuthController@wechat_login_url');
+        $api->get("mobile/status", 'AuthController@mobile_status');
         $api->post("login/wechat", 'AuthController@wechat_login');
         $api->post("valid", 'AuthController@valid');
         $api->post("sms", 'AuthController@sms');
