@@ -70,7 +70,7 @@
 			<mt-button type="primary" size="large">确认</mt-button>
 		</a>
 
-		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList">
+		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList" title="请选择银行">
 		</inputList>
 	</div>
 </template>

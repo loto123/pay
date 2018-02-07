@@ -41,8 +41,19 @@
 		components: { topBack },
 		methods: {
 			verfyCode() {
-				this.mobile = this.$route.query.mobile;
-				this.$router.push('/my/pay_password?mobile='+ this.mobile);
+				request.getInstance().getData('api/my/info')
+					.then((res) => {
+						if (res.data.data.has_pay_password == 0) {
+							//调转到设置支付密码
+							this.$router.push('/my/setting_password');
+						} else {
+							this.mobile = this.$route.query.mobile;
+							this.$router.push('/my/pay_password?mobile='+ this.mobile);
+						}
+					})
+					.catch((err) => {
+						Toast(err.data.msg);
+					})
 			},
 			exit(){
 				request.getInstance().removeToken();

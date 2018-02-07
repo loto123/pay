@@ -114,10 +114,10 @@
                         <li @click="selAll">
                             <a href="javascript:;">全部</a>
                         </li>
-                        <li  v-for="item in items" v-if="tabStatus[0]==true&&item.isBuy==true"@click="selContent(item.type)">
+                        <li  v-for="item in items" v-if="tabStatus[0]==true&&item.isBuy==true" @click="selContent(item.type)">
                             <a href="javascript:;">{{item.title}}</a>
                         </li>
-                        <li  v-for="item in items" v-if="tabStatus[1]==true&&item.isBuy==false"@click="selContent(item.type)">
+                        <li  v-for="item in items" v-if="tabStatus[1]==true&&item.isBuy==false" @click="selContent(item.type)">
                             <a href="javascript:;">{{item.title}}</a>
                         </li>
                     </ul>
@@ -173,7 +173,8 @@
                     { type: 6, title: '任务手续费', isBuy:false},
                     { type: 7, title: '出售手续费', isBuy:false},
                     { type: 8, title: '任务加速', isBuy:false},
-                    { type: 9, title: '拿钻撤销', isBuy:false}
+                    { type: 9, title: '拿钻撤销', isBuy:false},
+                    { type: 10, title: '分润', isBuy:false}
                 ]
             };
         },
@@ -563,6 +564,7 @@
                     case 7: result = '出售手续费'; break;
                     case 8: result = '任务加速'; break;
                     case 9: result = '拿钻撤销'; break;
+                    case 9: result = '分润转入'; break;
                 }
                 return result;
             },
@@ -581,18 +583,21 @@
                         for (var i = 0; i < _dataList.length; i++) {
                             _dataList[i].isTimePanel = false;
                         }
-
+                        this.showAlert = false;
                         this.recordList = _dataList;
                         this.buildTimePanel();
-                        this.showAlert = false;
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
+                        console.error(err);
                         Toast(err.data.msg);
+                        this.showAlert = false;
                         Loading.getInstance().close();
                     })
             },
             selAll() {
+                this.headList = [];
+                this._dataList=[];
                 this.init();
                 this.showAlert = false;
             }
