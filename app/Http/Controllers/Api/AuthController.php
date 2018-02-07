@@ -515,6 +515,7 @@ class AuthController extends BaseController {
         $oauth_user->remark = isset($user['remark']) ? $user['remark'] : '';
         $oauth_user->groupid = isset($user['groupid']) ? $user['groupid'] : 0;
         $oauth_user->save();
+        $result = ['token' => '', 'oauth_user' => ''];
         if ($request->user_id) {
             if ($oauth_user->user_id) {
                 return $this->json([], trans("api.wechat_already_bind"), 0);
@@ -526,7 +527,7 @@ class AuthController extends BaseController {
                 $login_user->save();
                 $oauth_user->user_id = $login_user->id;
                 $oauth_user->save();
-                return $this->json(['token' => JWTAuth::fromUser($login_user)]);
+                $result['token'] = JWTAuth::fromUser($login_user);
             }
         } else {
             if ($oauth_user->user_id) {
@@ -535,12 +536,13 @@ class AuthController extends BaseController {
                     $login_user->avatar = $oauth_user->headimgurl;
                     $login_user->name = $oauth_user->nickname;
                     $login_user->save();
-                    return $this->json(['token' => JWTAuth::fromUser($login_user)]);
+                    $result['token'] = JWTAuth::fromUser($login_user);
                 }
             } else {
-                return $this->json(['oauth_user' => $oauth_user->en_id()]);
+                $result['oauth_user'] = $oauth_user->en_id();
             }
         }
+        return $this->json($result);
 
     }
 
