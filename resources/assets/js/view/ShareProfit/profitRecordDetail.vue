@@ -3,7 +3,7 @@
         <topBack title="账单明细"></topBack>
         <div class="details-content">
             <div class="money-box">
-                <span>收益金额</span>
+                <span>收益钻石</span>
                 <em class="active">{{amount}}</em>
             </div>
             <ul class="billDetails-list">
@@ -40,7 +40,7 @@
                 showAlert: false,
                 created_at:null,	//时间
                 type:null,			//类型
-                amount:null,		//入账金额
+                amount:null,		//入账
                 mode:null,		
                 nick:null,
                 nickAccount:null	

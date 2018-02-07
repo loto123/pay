@@ -3,7 +3,7 @@
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
 			<div class="money-box">
-				<span>转钻金额</span>
+				<span>转钻数量</span>
 				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
 			</div>
 			<ul class="billDetails-list">
@@ -45,7 +45,7 @@
 				remark:0,		//备注
 				type:null,			//类型
 				no:null,			//任务单号
-				amount:null,		//入账金额
+				amount:null,		//入账
 				mode:null,			//0:收入		1:支出
 				userName:null		//提钻账户
 			};
