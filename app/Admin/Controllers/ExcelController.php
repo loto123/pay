@@ -479,7 +479,7 @@ class ExcelController extends Controller
         if(!empty($card_type)) {
             $query = $query->where('card_type',$card_type);
         }
-Log::info($request);
+
         $list = $query->get();
         if (!empty($list)) {
             foreach ($list as $key => $item) {
