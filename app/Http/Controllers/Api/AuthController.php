@@ -367,7 +367,7 @@ class AuthController extends BaseController {
         }
         if ($request->is_app) {
             $appid = config("wechat.open_platform.app_id");
-            $app = Factory::openPlatform([
+            $app = Factory::officialAccount([
                 'app_id' => $appid,
                 'secret' => config("wechat.open_platform.secret"),
             ]);
