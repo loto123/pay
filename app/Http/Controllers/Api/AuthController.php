@@ -8,6 +8,7 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
 use App\Role;
+use App\WechatOpen;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -338,6 +339,13 @@ class AuthController extends BaseController {
      *         required=false,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="is_app",
+     *         in="formData",
+     *         description="是否为app调用 0=否 1=是",
+     *         required=false,
+     *         type="boolean",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="A list with products",
@@ -358,18 +366,29 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $app = Factory::officialAccount([
-            'app_id' => config("wechat.official_account.app_id"),
-            'secret' => config("wechat.official_account.secret"),
-        ]);
+        if ($request->is_app) {
+            $appid = config("wechat.open_platform.app_id");
+            $app = new WechatOpen($appid, config("wechat.open_platform.secret"));
+            $user = $app->user($request->code);
+        } else {
+            $appid = config("wechat.official_account.app_id");
+            $app = Factory::officialAccount([
+                'app_id' => $appid,
+                'secret' => config("wechat.official_account.secret"),
+            ]);
+            $access_token = $app->oauth->getAccessToken($request->code);
+            $user = $app->user->get($access_token->openid);
+        }
 //        $app = app('wechat.official_account');
-        $access_token = $app->oauth->getAccessToken($request->code);
-        $user = $app->user->get($access_token->openid);
-        $oauth_user = OauthUser::where("openid", $access_token->openid)->first();
+        if (!$user || !isset($user['openid'])) {
+            return $this->json([], "auth error", 0);
+        }
+        $oauth_user = OauthUser::where("unionid", $user['unionid'])->first();
+        Log::info("oauth_user:".var_export($user, true));
         if (!$oauth_user) {
             $oauth_user = new OauthUser();
             $oauth_user->openid = $user['openid'];
-//            $oauth_user->appid =
+            $oauth_user->appid = $appid;
         }
         $oauth_user->subscribe = isset($user['subscribe']) ? $user['subscribe'] : 0;
         $oauth_user->nickname = isset($user['nickname']) ? $user['nickname'] : '';

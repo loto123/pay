@@ -74,14 +74,14 @@
                             </div>
 
                             <span class="flex-8 infos flex flex-v">
-                                <span>{{item.user.name}}</span>
+                                <span class="flex" style="margin-left:0.5em;">{{item.user.name}}</span>
 
-                                <span class="flex eggs-info" v-if="status==3"> 
-                                  <span class="flex-1">获得:</span> 
-                                  <span class="egg-wrap flex-1 flex flex-align-center flex-justify-center">
+                                <span class="flex eggs-info" v-if="status==3 && item.eggs!=0"> 
+                                  <span>获得:</span> 
+                                  <span class="egg-wrap  flex flex-align-center flex-justify-center">
                                     <img src="/images/egg.jpg" alt="">
                                   </span>
-                                  <span class="flex-2 flex flex-justify-start">x {{item.eggs}}</span>
+                                  <span class=" flex flex-justify-start">x {{item.eggs}}</span>
                                 </span>
 
                             </span>
@@ -307,6 +307,10 @@
                 height: 1em;
                 display: block;
               }
+            }
+
+            >span{
+              margin-left: 0.5em;
             }
           }
 

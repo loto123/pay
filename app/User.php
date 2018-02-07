@@ -14,7 +14,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -59,26 +58,41 @@ class User extends Authenticatable
 
     //发起的交易
 
+    public static function formatNum($num, $pre = 0, $suf = 4)
+    {
+        $prefix = '';
+        $suffix = '';
+        if ($pre > 0) {
+            $prefix = substr($num, 0, $pre);
+        }
+        if ($suf > 0) {
+            $suffix = substr($num, 0 - $suf, $suf);
+        }
+        $maskBankCardNo = $prefix . str_repeat('*', strlen($num) - $pre - $suf) . $suffix;
+        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
+        return $maskBankCardNo;
+    }
+
+    //交易记录
+
     public function getAvatarAttribute($value)
     {
         return $value ? $value : asset("images/personal.jpg");
     }
-
-    //交易记录
 
     public function transfer()
     {
         return $this->hasMany('App\Transfer', 'user_id', 'id');
     }
 
+    //茶水费
+
+    /*<!----------------代理VIP卡功能BEGIN-----------------*/
+
     public function transfer_record()
     {
         return $this->hasMany('App\TransferRecord', 'user_id', 'id');
     }
-
-    //茶水费
-
-    /*<!----------------代理VIP卡功能BEGIN-----------------*/
 
     /**
      * 我的卡使用记录
@@ -126,35 +140,37 @@ class User extends Authenticatable
         return $this->hasMany('App\TipRecord', 'user_id', 'id');
     }
 
+    /*----------------代理VIP卡功能END----------------!>*/
+
+    //缴纳的茶水费
+
     public function proxy_profit()
     {
         return $this->hasMany('App\Profit', 'proxy', 'id');
     }
 
-    /*----------------代理VIP卡功能END----------------!>*/
-
-    //缴纳的茶水费
+    //获得利润
 
     public function output_profit()
     {
         return $this->hasMany('App\Profit', 'user_id', 'id');
     }
 
-    //获得利润
+    //产出利润
 
     public function involved_transfer()
     {
         return $this->hasMany('App\TransferUserRelation', 'user_id', 'id');
     }
 
-    //产出利润
+    //参与的交易
 
     public function parent()
     {
         return $this->hasOne('App\User', 'id', 'parent_id');
     }
 
-    //参与的交易
+    //代理
 
     public function operator()
     {
@@ -162,7 +178,7 @@ class User extends Authenticatable
 
     }
 
-    //代理
+    //运营
 
     /**
      * 我管理的店铺
@@ -172,8 +188,6 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Shop', 'manager_id', 'id');
     }
-
-    //运营
 
     public function shop_tips()
     {
@@ -199,6 +213,8 @@ class User extends Authenticatable
         return $this->hasMany('App\PaypwdValidateRecord', 'user_id');
     }
 
+    //子代理
+
     public function child_proxy()
     {
         return $this->hasMany('App\User', 'parent_id', 'id');
@@ -207,7 +223,7 @@ class User extends Authenticatable
 //        });
     }
 
-    //子代理
+    //子用户
 
     public function child_user()
     {
@@ -216,8 +232,6 @@ class User extends Authenticatable
 //            $query->where('roles.name', 'user');
 //        });
     }
-
-    //子用户
 
     public function funds()
     {
@@ -260,6 +274,10 @@ class User extends Authenticatable
         return $this->hasOne(UserCard::class, 'id', 'pay_card_id');
     }
 
+    /*
+     * 检查某行为的剩余可执行次数
+     * */
+
     public function check_pay_password($input)
     {
         $key = sprintf("PAY_PASSWORD_TIMES_%s_%d", date("Ymd"), $this->id);
@@ -280,9 +298,6 @@ class User extends Authenticatable
         }
     }
 
-    /*
-     * 检查某行为的剩余可执行次数
-     * */
     public function check_action_times($action, $total_times)
     {
         $key = sprintf("ACTION_%s_%s_%d", strtoupper($action),date("Ymd"), $this->id);
@@ -303,12 +318,12 @@ class User extends Authenticatable
         return $this->hasMany(ProxyWithdraw::class, 'user_id');
     }
 
+    //分润提现记录
+
     public function getPercentAttribute($value)
     {
         return $value + $this->myVipProfitShareRate();
     }
-
-    //分润提现记录
 
     /**
      * 我的vip分润加成比例(百分比)
@@ -352,30 +367,36 @@ class User extends Authenticatable
 
     //vip卡的分销记录
 
+    /**
+     * 获取默认分润百分比
+     * @return mixed
+     */
+    public function myDefaultProfitShareRate()
+    {
+        return $this->attributes['percent'];
+    }
+
+    //持有的vip卡
+
     public function distributions()
     {
         return $this->hasMany('App\Agent\CardDistribution', 'to_promoter', 'id');
     }
 
-    //持有的vip卡
+    //推广员的vip卡
+
     public function owner_cards()
     {
         return $this->hasMany('App\Agent\Card', 'owner', 'id');
     }
 
-    //推广员的vip卡
     public function promoter_cards()
     {
         return $this->hasMany('App\Agent\Card', 'promoter_id', 'id');
     }
 
-
     public function pets() {
         return $this->hasMany(Pet::class, "user_id", "id");
-    }
-
-    public function pet_records() {
-        return $this->hasMany(PetRecord::class, "to_user_id", "id");
     }
 
     /**
@@ -429,6 +450,34 @@ class User extends Authenticatable
     }
 
     /**
+     * 可领取宠物蛋次数
+     * @return int
+     */
+    public function pet_left_times()
+    {
+        $total = (int)config("pet_free_times", 3);
+        $key = sprintf("PET_FREE_TIMES_%s_%d", date("Ymd"), $this->id);
+        if (!Cache::store('redis')->has($key)) {
+            $count = (int)$this->pet_records()->where("created_at", ">=", date("Y-m-d 00:00:00"))->where("type", PetRecord::TYPE_NEW)->count();
+            Cache::store('redis')->put($key, $count, 60 * 24);
+        } else {
+            $count = Cache::store('redis')->get($key);
+        }
+        if ($count >= $total) {
+            return 0;
+        } else {
+            return $total - $count;
+        }
+    }
+
+    public function pet_records()
+    {
+        return $this->hasMany(PetRecord::class, "to_user_id", "id");
+    }
+
+    //用户的买单
+
+    /**
      * 生成宠物
      * @param integer $type 0=宠物蛋 1=宠物
      * @param integer $nums
@@ -467,46 +516,11 @@ class User extends Authenticatable
         return $pet;
     }
 
-    /**
-     * 可领取宠物蛋次数
-     * @return int
-     */
-    public function pet_left_times() {
-        $total = (int)config("pet_free_times", 3);
-        $key = sprintf("PET_FREE_TIMES_%s_%d", date("Ymd"), $this->id);
-        if (!Cache::store('redis')->has($key)) {
-            $count = (int)$this->pet_records()->where("created_at", ">=", date("Y-m-d 00:00:00"))->where("type", PetRecord::TYPE_NEW)->count();
-            Cache::store('redis')->put($key, $count, 60*24);
-        } else {
-            $count = Cache::store('redis')->get($key);
-        }
-        if ($count >= $total) {
-            return 0;
-        } else {
-            return $total - $count;
-        }
-    }
+    //对字符串做掩码处理
 
-    //用户的买单
     public function bill_match()
     {
         return $this->hasMany(BillMatch::class);
-    }
-
-    //对字符串做掩码处理
-    public static function formatNum($num,$pre=0,$suf=4)
-    {
-        $prefix = '';
-        $suffix = '';
-        if($pre>0) {
-            $prefix = substr($num, 0, $pre);
-        }
-        if ($suf>0){
-            $suffix = substr($num, 0-$suf, $suf);
-        }
-        $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
-        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
-        return $maskBankCardNo;
     }
 
 }

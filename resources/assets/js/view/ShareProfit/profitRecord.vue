@@ -50,9 +50,12 @@
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="tabStatus[0]?tabdetails(item.id):''">
                         <div class="bill-content">
                             <h5>{{tabStatus[0]?"分润":"提现"}}(分润比例 {{item.proxy_percent}})</h5>
-                            <div class="time">{{item.created_at}}</div>
+                            <div class="time"> {{item.created_at}}</div>
                         </div>
-                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{tabStatus[0]?item.proxy_amount:item.amount}}</div>
+                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">
+                            {{tabStatus[0]?"+":"-"}} {{tabStatus[0]?item.proxy_amount:item.amount}} 
+                            <i class="diamond">#xe6f9;</i>
+                        </div>
                     </a>
 
                     <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">

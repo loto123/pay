@@ -249,13 +249,11 @@ class DataController extends Controller
                         $profit->proxy_percent = 0;
                         $profit->proxy_amount = 0;
                         $profit->fee_amount = 0;
-                        if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent > 0
-                            && $value->user->parent->proxy_container
-                        ) {
-                            $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
+                        if ($value->proxy_percent > 0) {
+                            $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->proxy_percent), 2), '100', 2);
                             if ($profit->proxy_amount > 0) {
                                 $profit->proxy = $value->user->parent->id;
-                                $profit->proxy_percent = $value->user->parent->percent;
+                                $profit->proxy_percent = $value->proxy_percent;
                                 //解冻代理分润账户资金
                                 $proxy_container = $value->user->parent->proxy_container;
                                 $proxy_container->unfreeze($profit->proxy_amount);
