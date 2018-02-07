@@ -53,7 +53,7 @@ class Shop extends Model
     }
 
 
-    protected static $skip32_id = '0123456789abcdef0123';
+    protected static $skip32_id = 'ecf724065cb8387f6b82';
 
     public function container()
     {
