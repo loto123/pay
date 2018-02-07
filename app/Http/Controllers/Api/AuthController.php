@@ -366,13 +366,15 @@ class AuthController extends BaseController {
             return $this->json([], $validator->errors()->first(), 0);
         }
         if ($request->is_app) {
+            $appid = config("wechat.open_platform.app_id");
             $app = Factory::openPlatform([
-                'app_id' => config("wechat.open_platform.app_id"),
+                'app_id' => $appid,
                 'secret' => config("wechat.open_platform.secret"),
             ]);
         } else {
+            $appid = config("wechat.official_account.app_id");
             $app = Factory::officialAccount([
-                'app_id' => config("wechat.official_account.app_id"),
+                'app_id' => $appid,
                 'secret' => config("wechat.official_account.secret"),
             ]);
         }
@@ -383,7 +385,7 @@ class AuthController extends BaseController {
         if (!$oauth_user) {
             $oauth_user = new OauthUser();
             $oauth_user->openid = $user['openid'];
-//            $oauth_user->appid =
+            $oauth_user->appid = $appid;
         }
         $oauth_user->subscribe = isset($user['subscribe']) ? $user['subscribe'] : 0;
         $oauth_user->nickname = isset($user['nickname']) ? $user['nickname'] : '';
