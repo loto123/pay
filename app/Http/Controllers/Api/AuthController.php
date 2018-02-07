@@ -8,6 +8,7 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
 use App\Role;
+use App\WechatOpen;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -367,21 +368,22 @@ class AuthController extends BaseController {
         }
         if ($request->is_app) {
             $appid = config("wechat.open_platform.app_id");
-            $app = Factory::officialAccount([
-                'app_id' => $appid,
-                'secret' => config("wechat.open_platform.secret"),
-            ]);
+            $app = new WechatOpen($appid, config("wechat.open_platform.secret"));
+            $user = $app->user($request->code);
         } else {
             $appid = config("wechat.official_account.app_id");
             $app = Factory::officialAccount([
                 'app_id' => $appid,
                 'secret' => config("wechat.official_account.secret"),
             ]);
+            $access_token = $app->oauth->getAccessToken($request->code);
+            $user = $app->user->get($access_token->openid);
         }
 //        $app = app('wechat.official_account');
-        $access_token = $app->oauth->getAccessToken($request->code);
-        $user = $app->user->get($access_token->openid);
-        $oauth_user = OauthUser::where("openid", $access_token->openid)->first();
+        if (!$user || !isset($user['openid'])) {
+            return $this->json([], "auth error", 0);
+        }
+        $oauth_user = OauthUser::where("openid", $user['openid'])->first();
         Log::info("oauth_user:".var_export($user, true));
         if (!$oauth_user) {
             $oauth_user = new OauthUser();
