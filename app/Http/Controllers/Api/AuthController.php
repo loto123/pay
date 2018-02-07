@@ -113,14 +113,33 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="A list with products",
-     *     examples={
-     *      "code":0,
-     *      "msg":"ok"
-     *     }
-     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="token", type="string", example="abcd",description="jwt token"),
+     *                  @SWG\Property(property="wechat", type="boolean", example=0,description="是否绑定微信"),
+     *                  @SWG\Property(property="id", type="string", example="1234",description="用户id"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -140,6 +159,100 @@ class AuthController extends BaseController {
         $user = JWTAuth::toUser($token);
         if ($user->status == User::STATUS_BLOCK) {
             return $this->json([], trans('api.user_block'), 0);
+        }
+        $wechat = $user->wechat_user ? 1 : 0;
+        $id = $user->en_id();
+        return $this->json(compact('token', 'wechat', 'id'));
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/auth/sms/login",
+     *   summary="手机验证码登录",
+     *     tags={"登录"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="code",
+     *         in="formData",
+     *         description="验证码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="oauth_user",
+     *         in="formData",
+     *         description="微信用户id",
+     *         required=false,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="token", type="string", example="abcd",description="jwt token"),
+     *                  @SWG\Property(property="wechat", type="boolean", example=0,description="是否绑定微信"),
+     *                  @SWG\Property(property="id", type="string", example="1234",description="用户id"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function sms_login(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable(),
+            'code' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json([], trans("api.error_sms_code"), 0);
+        }
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+            return $this->json([], trans("api.error_sms_code"), 0);
+        }
+        Cache::forget($cache_key);
+        $token = JWTAuth::fromUser($user);
+
+        if ($user->status == User::STATUS_BLOCK) {
+            return $this->json([], trans('api.user_block'), 0);
+        }
+        if ($request->oauth_user) {
+            $oauth_user = OauthUser::findByEnId($request->oauth_user);
+            if ($oauth_user) {
+                $oauth_user->user_id = $user->id;
+                $user->avatar = $oauth_user->headimgurl;
+                $user->name = $oauth_user->nickname;
+                $oauth_user->save();
+            }
         }
         $wechat = $user->wechat_user ? 1 : 0;
         $id = $user->en_id();

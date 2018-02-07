@@ -73,6 +73,7 @@ $api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' =>
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->post('login', 'AuthController@login');
+        $api->post('sms/login', 'AuthController@sms_login');
         $api->post('register', 'AuthController@register');
         $api->get("login/wechat/url", 'AuthController@wechat_login_url');
         $api->get("mobile/status", 'AuthController@mobile_status');
