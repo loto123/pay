@@ -67,7 +67,7 @@ app('api.exception')->register(function (Exception $exception) {
     $request = Illuminate\Http\Request::capture();
     return app('App\Exceptions\Handler')->render($request, $exception);
 });
-$api->version('v1', function ($api) {
+$api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' => 1], function ($api) {
     $api->group([
         'prefix' => 'auth',
         'namespace' => 'App\Http\Controllers\Api',
