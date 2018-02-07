@@ -230,16 +230,16 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $user = User::where("mobile", $request->mobile)->first();
-        if (!$user) {
-            return $this->json([], trans("api.error_sms_code"), 0);
-        }
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return $this->json([], trans("api.error_sms_code"), 0);
         }
         Cache::forget($cache_key);
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json([], trans("api.error_sms_code"), 0);
+        }
         $token = JWTAuth::fromUser($user);
 
         if ($user->status == User::STATUS_BLOCK) {
