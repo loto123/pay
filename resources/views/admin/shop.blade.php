@@ -107,8 +107,15 @@
                                 @endif
                             </td>
                             <td><a href="/admin/shop/detail/{{$item->id}}">详情</a></td>
+                            @if(Admin::user()->isRole('administrator'))
+                                @if($item->status == \App\Shop::STATUS_NORMAL)
+                                    <td><a href="/admin/shop/updates/{{$item->id}}/{{\App\Shop::STATUS_FREEZE}}"><span style='color:green'>冻结</span></a></td>
+                                @elseif ($item->status == \App\Shop::STATUS_FREEZE)
+                                    <td><a href="/admin/shop/updates/{{$item->id}}/{{\App\Shop::STATUS_NORMAL}}"><span style='color:blue'>解冻</span></a></td>
+                                @endif
+                            @endif
                             @if(Admin::user()->isRole('administrator') && $unclose_cnt_list[$item->id] == 0)
-                                <td><a href="/admin/shop/delete/{{$item->id}}">删除</a></td>
+                                <td><a href="/admin/shop/delete/{{$item->id}}"><span style='color:red'>删除</span></a></td>
                             @endif
                         </tr>
                     @endforeach

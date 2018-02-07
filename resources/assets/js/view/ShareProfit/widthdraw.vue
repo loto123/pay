@@ -1,21 +1,21 @@
 <template>
   <div id="withdraw" class="withdraw-container">
-    <topBack title="提现到个人账户">
+    <topBack title="提钻到个人账户">
       <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
         <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
       </div>
     </topBack>
     <div class="withdraw-box">
-      <div class="title">提现金额</div>
+      <div class="title">体钻</div>
       <div class="withdraw-money flex flex-justify-center">
-        <label>￥</label>
-        <input type="text" placeholder="请输入金额" v-model="amount">
+        <label><i class="diamond">&#xe6f9;</i></label>
+        <input type="text" placeholder="请输入钻石数量" v-model="amount">
       </div>
       <div class="all-money flex">
         <div class="money">
-          可提现余额 ¥<span>{{balance}}</span>,
+          可提现钻石数量 <span>{{balance}}<i class="diamond">&#xe6f9;</i></span>,
         </div>
-        <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提现</a>
+        <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提钻</a>
       </div>
       <a href="javascript:;" class="withdraw-btn" @click="withdrawBtn">
         <mt-button type="primary" size="large">提现</mt-button>

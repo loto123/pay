@@ -26,7 +26,7 @@ Route::group([
 
     $router->any('shop','ShopController@index');
     $router->any('/shop/detail/{shop_id}','ShopController@details');
-    $router->any('/shop/updates','ShopController@updates');
+    $router->any('/shop/updates/{shop_id}/{status}','ShopController@updates');
     $router->any('/shop/delete/{shop_id}','ShopController@delete');
 
     $router->post('/excel/shop', 'ExcelController@shop');
