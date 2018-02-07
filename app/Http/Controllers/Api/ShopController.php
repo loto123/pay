@@ -953,8 +953,11 @@ class ShopController extends BaseController
         if ($shop->manager_id != $user->id) {
             return $this->json([], trans("api.error_shop_perm"), 0);
         }
-        if ($request->name) {
-            $shop->name = $request->name;
+        if ($request->name !== null) {
+            $name = trim($request->name);
+            if (strlen($name) > 0) {
+                $shop->name = $name;
+            }
         }
         if ($request->use_link !== null) {
             $shop->use_link = $request->use_link ? 1 : 0;

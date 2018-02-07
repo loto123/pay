@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\ProxyWithdraw;
+use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -395,6 +396,15 @@ class ProfitController extends BaseController
             $recorder->amount = $request->amount;
             $recorder->user_id = $user->id;
             $recorder->save();
+            //账单明细
+            $found = new UserFund();
+            $found->user_id = $user->id;
+            $found->status = UserFund::STATUS_SUCCESS;
+            $found->type = UserFund::TYPE_PROFIT;
+            $found->mode = UserFund::MODE_IN;
+            $found->amount = $request->amount;
+//            $found->no = $record->transfer_id;
+            $found->save();
             DB::commit();
             return $this->json([], trans('proxy_withdraw_success'), 1);
         } catch (\Exception $e) {
