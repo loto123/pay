@@ -20,12 +20,12 @@ class AgentController extends Controller
      * @SWG\Get(
      *   path="/agent/bound_vip",
      *   summary="已绑定vip",
-     *   tags={"代理功能"},
+     *   tags={"代理"},
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
      *          @SWG\Schema(
-     *     @SWG\Property(
+     *               @SWG\Property(
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(
@@ -34,7 +34,8 @@ class AgentController extends Controller
      *                  example=true,
      *                  description="是否有绑定vip卡",
      *                  ),
-     *              property="if_frozen",
+     *              @SWG\Property(
+     *                  property="if_frozen",
      *                  type="boolean",
      *                  example=true,
      *                  description="卡片是否被冻结",
