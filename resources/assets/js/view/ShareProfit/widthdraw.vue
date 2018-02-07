@@ -109,7 +109,8 @@
         Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/profit/withdraw' , _data)])
           .then((res) => {
             Toast('提现成功');
-            this.$router.push('/shop/shopAccount?id='+this.shopId);
+            this.$router.go(-1);
+            // this.$router.push('/shop/shopAccount?id='+this.shopId);
 
           })
           .catch((err) => {

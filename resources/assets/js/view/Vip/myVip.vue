@@ -24,6 +24,7 @@
             :cardName="cardName"
             :cardNumber="cardNumber"
             :percent="percent"
+            :defaultPercent="default_percent"
           >
             <div class="card-tag flex flex-v flex-align-center">
                 <h3>(已绑定)</h3>
@@ -192,6 +193,7 @@ import topBack from '../../components/topBack'
 import request from '../../utils/userRequest'
 import Loading from '../../utils/loading'
 import Card from '../../components/card'
+import { MessageBox } from 'mint-ui';
 
 export default {
   components:{topBack,Card},
@@ -202,7 +204,7 @@ export default {
           cardName:null,
           cardNumber:null,
           percent:null,
-
+          default_percent:null,
           userName:null,
           avatar:null,
 
@@ -218,18 +220,29 @@ export default {
           Loading.getInstance().open();
 
           Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData('api/agent/bound_vip')]).then(res=>{
+              if(res[1].data.data.if_frozen){
+                MessageBox({
+                    title: '温馨提示',
+                    message: '您的VIP卡已被冻结，请联系相关人员解冻',
+                    showCancelButton: false
+                }).then(res=>{
+                    this.$router.go(-1);
+                });
+              }
+
               this.userName = res[0].data.data.name;
               this.avatar = res[0].data.data.thumb;
               
-                  try{
+                try{
                     this.isBindVIP =  res[1].data.data.if_bound;
                     this.cardName = res[1].data.data.card_name;
                     this.cardNumber = res[1].data.data.card_no;
                     this.percent = res[1].data.data.percent;
-                    }catch(e){
-                        console.error(e);
-                    }
-              
+                    this.default_percent = res[1].data.data.default_percent;
+                }catch(e){
+                    console.error(e);
+                }
+
               this.isShow = true;
               Loading.getInstance().close();
           }).catch(err=>{

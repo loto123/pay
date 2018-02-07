@@ -506,6 +506,66 @@ class AuthController extends BaseController {
     }
 
     /**
+     * @SWG\Get(
+     *   path="/auth/mobile/status",
+     *   summary="手机号状态",
+     *     tags={"登录"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="用户手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="status", type="integer", example=0,description="状态 0=未注册 1=已注册未绑定微信 2=已注册已绑定微信"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function mobile_status(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
+        ], ['mobile.regex'=>trans("api.error_mobile_format")]);
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json(['status' => 0]);
+        }
+
+        if ($user->wechat_user) {
+            return $this->json(['status' => 2]);
+        } else {
+            return $this->json(['status' => 1]);
+
+        }
+    }
+
+    /**
      * @SWG\Post(
      *   path="/auth/sms",
      *   summary="发送手机验证码",
