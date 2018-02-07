@@ -382,6 +382,7 @@ class AuthController extends BaseController {
         $access_token = $app->oauth->getAccessToken($request->code);
         $user = $app->user->get($access_token->openid);
         $oauth_user = OauthUser::where("openid", $access_token->openid)->first();
+        Log::info("oauth_user:".var_export($user, true));
         if (!$oauth_user) {
             $oauth_user = new OauthUser();
             $oauth_user->openid = $user['openid'];
