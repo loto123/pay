@@ -6,7 +6,7 @@
           <em>{{cardName}}</em>
           <span>金卡</span>
         </div>
-        <div class="share-profit">尊享分润比例：{{percent}}‰</div>
+        <div class="share-profit" style="font-size:0.9em;">尊享分润比例：{{defaultPercent}}‰(原比例) + {{percent}}‰(vip)</div>
       </div>
       <div class="flex-2 right-arrow">
         <slot></slot>
@@ -57,7 +57,7 @@
 <script>
   export default {
     name: "card",
-    props: ["cardName", "percent", "cardNumber"],
+    props: ["defaultPercent","cardName", "percent", "cardNumber"],
     methods: {
 
     }
