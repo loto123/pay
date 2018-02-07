@@ -15,13 +15,14 @@
     </div>
 
     <div class="give-box">
-      <div class="title">转账金额</div>
+      <div class="title">转钻</div>
       <div class="give-money flex flex-justify-center">
         <label>￥</label>
-        <input type="text" placeholder="请输入金额" v-model="amount">
+        <input type="text" placeholder="请输入钻石数量" v-model="amount">
       </div>
       <div class="all-money flex">
-        <div class="money">可转账余额 ¥
+        <div class="money">可转账余额 
+          <i class="diamond">&#xe6f9;</i>
           <span>{{balance}}</span>, </div>
         <a href="javascript:;" class="all-giveAcc" @click="allGive">全部转账</a>
       </div>
@@ -92,10 +93,10 @@
       submitDate() {
         // /shop/transfer/{shop_id}/{user_id}
         if (this.amount <= 0) {
-          Toast("请输入转账金额");
+          Toast("请输入转账钻石数量");
           return
         } else if (this.amount > this.balance) {
-          Toast("余额不足");
+          Toast("钻石数量不足");
           return
         }
         if (this.has_pay_password == 0) {
