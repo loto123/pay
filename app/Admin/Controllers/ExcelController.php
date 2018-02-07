@@ -30,36 +30,36 @@ class ExcelController extends Controller
         }
 
         $table_name = (new Shop)->getTable();
-        $listQuery = Shop::leftJoin('transfer as t', function ($join) use ($table_name) {
-            $join->on($table_name . '.id', '=', 't.shop_id')
+        $listQuery = Shop::leftJoin('transfer as t',function ($join) use($table_name) {
+            $join->on( $table_name.'.id' ,'=' ,'t.shop_id' )
                 ->where('t.status', '=', '3');
         })->leftJoin('transfer_record as tfr', function ($join) {
-            $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=', '2');
-        })->leftJoin('tip_record as tr', 'tr.transfer_id', '=', 't.id')
-            ->with(['container', 'manager'])
-            ->select(DB::raw($table_name . '.*'),
+            $join->on('tfr.transfer_id', '=', 't.id')->where('tfr.stat', '=' , '2');
+        })->leftJoin('tip_record as tr','tr.transfer_id','=','t.id')
+            ->with(['container','manager'])
+            ->select( DB::raw($table_name.'.*'),
                 DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
                 DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
                 DB::raw('SUM(tr.amount) as tip_amount_cnt'));
-        if (!empty($manager_id)) {
-            $listQuery->whereHas('manager', function ($query) use ($manager_id) {
-                $query->where('mobile', $manager_id);
+        if(!empty($manager_id)) {
+            $listQuery->whereHas('manager', function ($query) use($manager_id) {
+                $query->where('mobile',$manager_id);
             });
         }
-        if (!empty($shop_id)) {
-            $listQuery->where($table_name . '.id', $shop_id);
+        if(!empty($shop_id)) {
+            $listQuery->where($table_name.'.id', $shop_id);
         }
-        if (!empty($shop_name)) {
-            $listQuery->where($table_name . '.name', 'like', '%' . $shop_name . '%');
+        if(!empty($shop_name)) {
+            $listQuery->where($table_name.'.name', 'like', '%'.$shop_name.'%');
         }
-        if ($begin && $end) {
-            $listQuery->where($table_name . '.created_at', '>=', $begin)->where($table_name . '.created_at', '<=', $end);
+        if($begin && $end) {
+            $listQuery->where($table_name.'.created_at', '>=', $begin)->where($table_name.'.created_at', '<=', $end);
         }
-        $listQuery->groupBy($table_name . '.id')->orderBy('tip_amount_cnt', 'DESC')->withCount('shop_user');
+        $listQuery->groupBy($table_name.'.id')->orderBy('tip_amount_cnt','DESC')->orderBy($table_name.'.id','DESC')->withCount('shop_user');
 
         $list = $listQuery->get();
         $cellData = [
-            ['排名', '店铺ID', '店铺名', '店主ID', '店主名', '店铺会员数', '店铺手续费率', '已付平台交易费', '交易笔数', '总交易额', '店铺收入', '店铺余额', '店铺状态', '店铺交易状态']
+            ['排名','公会ID','公会名称','会长ID','会长昵称','公会会员数','公会佣金费率','已付平台手续费','任务笔数','总交易额','公会获得钻石','公会剩余钻石','公会状态','公会任务开启状态']
         ];
         if (!empty($list) && count($list) > 0) {
             foreach ($list as $key => $value) {
@@ -91,10 +91,9 @@ class ExcelController extends Controller
     public function user(Request $request)
     {
         $cellData = [
-            ['编号', '用户id', '用户名称', '身份', '交易笔数', '余额', '收益', '收款', '付款', '上级运营id', '上级运营名称', '上级代理', '支付渠道']
+            ['编号', '用户id', '用户名称', '身份', '任务笔数', '剩余钻石', '收益', '拿钻', '交钻', '上级运营id', '上级运营名称', '上级代理', '支付渠道']
         ];
 
-        Log::info($request->all());
         $user_table = (new User)->getTable();
         $query = User::leftJoin('transfer_record as tfr', 'tfr.user_id', '=', $user_table . '.id')
             ->with(['roles', 'operator'])
@@ -103,13 +102,15 @@ class ExcelController extends Controller
                 DB::raw('ABS(SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END)) AS profit'),
                 DB::raw('COUNT(tfr.id) AS transfer_count'));
         if ($request->user_id) {
-            $query->where($user_table . '.id', $request->user_id);
+            $query->where($user_table . '.mobile', $request->user_id);
         }
         if ($request->parent_id) {
-            $query->where($user_table . '.parent_id', $request->parent_id);
+            $query->whereHas('parent',function ($query) use($request) {
+                $query->where('mobile',$request->parent_id);
+            });
         }
         if ($request->operator_id) {
-            $query->where($user_table . '.operator_id', $request->operator_id);
+            $query->join('admin_users as au','au.id','=',$user_table.'.operator_id')->where('au.username', $request->operator_id);
         }
         if ($request->role > 0) {
             $query->whereHas('roles', function ($query) use ($request) {
@@ -119,15 +120,16 @@ class ExcelController extends Controller
         if ($request->channel_id) {
             $query->where($user_table . '.channel_id', $request->channel_id);
         }
-        $query = $query->groupBy($user_table . '.id')->get();
+        $query = $query->groupBy($user_table . '.id')->orderBy('transfer_count','DESC')->orderBy($user_table.'.id')->get();
 
         if (!empty($query) && count($query) > 0) {
             foreach ($query as $item) {
                 $role_name = '';
                 if (!empty($item->roles) && count($item->roles) > 0) {
                     foreach ($item->roles as $_role) {
-                        $role_name = $_role->display_name;
+                        $role_name .= $_role->display_name . '/';
                     }
+                    $role_name = rtrim($role_name,'/');
                 }
                 $cellData[] = [
                     User::encrypt($item->id),
