@@ -78,11 +78,11 @@ class AgentCardDataController extends Controller
         if(empty($operators)) {
             return response()->json(['code' => -1,'msg' => '该用户不存在','data' => []]);
         }
-
-        if(CardStock::where('operator',$operators->id)->count() + $num
-            > config('max_agent_card','50')) {
-            return response()->json(['code' => -1,'msg' => '开卡数目超出上限','data' => []]);
-        }
+//        //限制运营最多开卡数
+//        if(CardStock::where('operator',$operators->id)->count() + $num
+//            > config('max_agent_card','50')) {
+//            return response()->json(['code' => -1,'msg' => '开卡数目超出上限','data' => []]);
+//        }
 
         //生成卡
         $time = date('Y-m-d H:i:s');

@@ -42,7 +42,9 @@
 					<li v-for="item in priceList" @click="choiseSalePrice(item.price)" v-bind:class="{active:item.isChecked == true}" >￥{{item.price}}
 					</li>
 				</ul>
-				<div class="high-price flex flex-align-center flex-justify-center" @click="choiseMaxQuoto" v-bind:class="{active:isMaxQuota}">¥{{myMaxQuota}}(最高价)</div>
+
+				<div class="high-price flex flex-align-center flex-justify-center" @click="choiseMaxQuoto" v-bind:class="{active:isMaxQuota}" v-if="balance!=0">¥{{myMaxQuota}}(最高价)</div>
+
 			</div>
 			<div class="usable-diamond">拥有钻石{{balance}}，出售消耗钻石<span>{{amount}}</span></div>
 			<div class="withdraw-way">
@@ -108,11 +110,11 @@
 				<ul>
 					<li class="flex flex-align-center">
 						<span class="flex-1 ">出售价格</span>
-						<span class="flex-1 flex flex-justify-end">￥{{amount}}</span>
+						<span class="flex-1 flex flex-justify-end">{{amount}}钻</span>
 					</li>
 					<li class="flex flex-align-center">
 						<span class="flex-1">手续费</span>
-						<span class="flex-1 flex flex-justify-end">￥{{fee}}</span>
+						<span class="flex-1 flex flex-justify-end">{{fee}}钻</span>
 					</li>
 					<li class="flex flex-align-center">
 						<span class="flex-1">到账银行卡</span>

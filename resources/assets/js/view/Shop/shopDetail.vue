@@ -753,6 +753,13 @@ export default {
             Toast("新公会名称不能为空");
             return;
           }
+          console.log(value)
+          if (value.replace(/(^s*)|(s*$)/g, "").length !=0) 
+          { 
+            Toast("新公会名称不能包含空格");
+            return;
+          }
+
           Loading.getInstance().open();
           var _data = {
             name:value

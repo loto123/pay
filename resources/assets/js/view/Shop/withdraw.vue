@@ -8,12 +8,12 @@
     <div class="withdraw-box">
       <div class="title">提现金额</div>
       <div class="withdraw-money flex flex-justify-center">
-        <label>￥</label>
-        <input type="text" placeholder="请输入金额" v-model="amount">
+        <label><i class="diamond">&#xe6f9;</i></label>
+        <input type="text" placeholder="请输入钻石数量" v-model="amount">
       </div>
       <div class="all-money flex">
         <div class="money">
-          可提现余额 ¥<span>{{balance}}</span>,
+          可提现钻石数量 <span>{{balance}}<i class="diamond">&#xe6f9;</i></span>,
         </div>
         <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提现</a>
       </div>

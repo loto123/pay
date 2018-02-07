@@ -6,7 +6,7 @@
         </div>
         <div class="content">
             <h3 class="flex flex-align-center flex-justify-center">
-                请选择您要发起任务的公会
+                {{title?title:"请选择您要发起任务的公会"}}
             </h3>
             <div class="list-wrap">
                  <mt-radio
@@ -86,7 +86,7 @@
 <script>
 import utils from '../utils/utils.js'
 export default {
-  props:["showSwitch","optionsList"],
+  props:["title","showSwitch","optionsList"],
 
   // showSwitch:组件显示开关
   // optionsList:渲染选择对象

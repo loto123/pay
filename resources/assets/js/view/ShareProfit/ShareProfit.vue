@@ -12,11 +12,11 @@
       <div class="profit-wrap flex flex-align-center">
         <div class="left flex flex-v flex-align-center flex-justify-around">
           <div class="money">{{yesterday_profit}}</div>
-          <div class="title">昨日收益(元)</div>
+          <div class="title">昨日收益(钻石)</div>
         </div>
         <div class="right flex flex-v flex-align-center flex-justify-around">
           <div class="money">{{today_profit}}</div>
-          <div class="title">今日收益(元)</div>
+          <div class="title">今日收益(钻石)</div>
         </div>
       </div> 
     </div>  
@@ -26,12 +26,12 @@
                 <div class="money-text">
                     {{balance}}<i class="diamond" style="margin-top:0.4em;margin-left:0.2em;">&#xe6f9;</i>
                 </div>
-                <h3>当前可提现分润</h3>
+                <h3>当前可提现钻石</h3>
                 <!-- <h4>单位(元)</h4> -->
             </div>
 
             <div class="withdraw-cash" @click="goWithdraw">
-              <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
+              <mt-button type="primary" size="large" style="background:#06d29d;">提钻到个人账户</mt-button>
             </div>
             <div class="transfer-accounts" >
               <!-- <mt-button type="primary" size="large" >转账给公会会员</mt-button> -->
@@ -42,7 +42,7 @@
                   {{total_profit}}
               </div>
               <div class="title">
-                共累计收益（元）
+                共累计收益（钻石）
               </div>
             </div>
         </div>
