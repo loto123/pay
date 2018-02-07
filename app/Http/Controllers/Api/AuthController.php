@@ -338,6 +338,13 @@ class AuthController extends BaseController {
      *         required=false,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="is_app",
+     *         in="formData",
+     *         description="是否为app调用 0=否 1=是",
+     *         required=false,
+     *         type="boolean",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="A list with products",
@@ -358,10 +365,17 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $app = Factory::officialAccount([
-            'app_id' => config("wechat.official_account.app_id"),
-            'secret' => config("wechat.official_account.secret"),
-        ]);
+        if ($request->is_app) {
+            $app = Factory::openPlatform([
+                'app_id' => config("wechat.open_platform.app_id"),
+                'secret' => config("wechat.open_platform.secret"),
+            ]);
+        } else {
+            $app = Factory::officialAccount([
+                'app_id' => config("wechat.official_account.app_id"),
+                'secret' => config("wechat.official_account.secret"),
+            ]);
+        }
 //        $app = app('wechat.official_account');
         $access_token = $app->oauth->getAccessToken($request->code);
         $user = $app->user->get($access_token->openid);
