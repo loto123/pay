@@ -635,11 +635,12 @@ class TransferController extends BaseController
                     //红包手续费金额
                     $transfer->fee_amount = bcadd($transfer->fee_amount, $record->fee_amount, 2);
                     //代理分润
-                    if ($user->parent && $user->parent->percent) {
+                    if ($user->parent && $user->parent->percent && $user->parent->status == 0) {
 //                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
                         //分润至代理分润账户
                         $user_receiver = $user->parent->proxy_container;
                         if ($user_receiver) {
+                            $record->proxy_percent = $user->parent->percent;
                             $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
                             if ($proxy_fee > 0) {
                                 $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
@@ -1567,13 +1568,11 @@ class TransferController extends BaseController
                             $profit->proxy_percent = 0;
                             $profit->proxy_amount = 0;
                             $profit->fee_amount = 0;
-                            if ($value->user->parent && $value->user->parent->status == 0 && $value->user->parent->percent > 0
-                                && $value->user->parent->proxy_container
-                            ) {
-                                $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->user->parent->percent), 2), '100', 2);
+                            if ($value->proxy_percent > 0) {
+                                $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->proxy_percent), 2), '100', 2);
                                 if ($profit->proxy_amount > 0) {
                                     $profit->proxy = $value->user->parent->id;
-                                    $profit->proxy_percent = $value->user->parent->percent;
+                                    $profit->proxy_percent = $value->proxy_percent;
                                     //解冻代理分润账户资金
                                     $proxy_container = $value->user->parent->proxy_container;
                                     $proxy_container->unfreeze($profit->proxy_amount);
