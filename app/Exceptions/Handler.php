@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
             } else if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
                 return response()->json(['code' => 0, 'msg' => '404 Not Found', 'data' => new \stdClass()], 404);
             } else if ($exception instanceof \Dingo\Api\Exception\RateLimitExceededException) {
-                return response()->json(['code' => 0, 'msg' => '操作频繁', 'data' => new \stdClass()], 404);
+                return response()->json(['code' => 0, 'msg' => '操作频繁', 'data' => new \stdClass()], 200);
             } else {
                 return response()->json(['code'=>0, 'msg' => config("app.debug") ? $exception->getMessage() : 'error', 'data'=> new \stdClass()]);
             }
