@@ -457,7 +457,7 @@ class ShopController extends BaseController
 
         $member_size = $request->input('member_size', 5);
         $shop = Shop::findByEnId($id);
-        if (!$shop || $shop->status) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         /* @var $shop Shop */
@@ -558,7 +558,7 @@ class ShopController extends BaseController
      */
     public function shop_summary($id) {
         $shop = Shop::findByEnId($id);
-        if (!$shop || $shop->status) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         $data = [
@@ -647,7 +647,7 @@ class ShopController extends BaseController
     {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if (!$shop || $shop->status) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         $is_manager = $shop->manager_id == $user->id ? true : false;
@@ -731,7 +731,10 @@ class ShopController extends BaseController
         $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
         $member = User::findByEnId($user_id);
-        if (!$shop || $shop->manager_id != $user->id) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if ($shop->manager_id != $user->id) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($member->id == $user->id) {
@@ -786,7 +789,7 @@ class ShopController extends BaseController
     public function close($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if (!$shop) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($shop->status == Shop::STATUS_CLOSED) {
@@ -846,6 +849,9 @@ class ShopController extends BaseController
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         ShopUser::where('shop_id', $shop->id)->where("user_id", $user->id)->delete();
         Artisan::queue('shop:logo', [
             '--id' => $shop->id
@@ -947,7 +953,7 @@ class ShopController extends BaseController
         $user = $this->auth->user();
 
         $shop = Shop::findByEnId($id);
-        if (!$shop || $shop->status) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($shop->manager_id != $user->id) {
@@ -1039,6 +1045,9 @@ class ShopController extends BaseController
 //        }
         $size = $request->input("size", 200);
         $shop = Shop::findByEnId($id);
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         $user = $this->auth->user();
         /* @var $user User */
         $url = url(sprintf("/#/share/?shopId=%s&userId=%s", $shop->en_id(), $user->en_id()));
@@ -1092,7 +1101,10 @@ class ShopController extends BaseController
     public function join($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if (!$shop || !$shop->use_link) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
+        if (!$shop->use_link) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if (ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->count() > 0) {
@@ -1149,7 +1161,7 @@ class ShopController extends BaseController
     public function account($id) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($id);
-        if (!$shop || $shop->status) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($shop->manager_id != $user->id) {
@@ -1520,6 +1532,9 @@ class ShopController extends BaseController
      */
     public function invite($shop_id, $user_id) {
         $shop = Shop::findByEnId($shop_id);
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         $user = User::findByEnId($user_id);
         if (!$user || $user->status == User::STATUS_BLOCK) {
             return $this->json([], trans("api.user_unexist"), 0);
@@ -1665,7 +1680,9 @@ class ShopController extends BaseController
             return $this->json([], $validator->errors()->first(), 0);
         }
         $shop = Shop::findByEnId($shop_id);
-
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("api.error_balance"), 0);
         }
@@ -1774,6 +1791,9 @@ class ShopController extends BaseController
             return $this->json([], $validator->errors()->first(), 0);
         }
         $shop = Shop::findByEnId($shop_id);
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("api.error_balance"), 0);
         }
@@ -1874,8 +1894,11 @@ class ShopController extends BaseController
      */
     public function transfer_records($shop_id, Request $request) {
         $data = [];
-        $user = $this->auth->user();
+//        $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
+        }
         $query = $shop->funds();
         if ($request->type !== null) {
             $query->where("type", $request->type);
@@ -2036,8 +2059,8 @@ class ShopController extends BaseController
             return $this->json([], $validator->errors()->first(), 0);
         }
         $shop = Shop::findByEnId($shop_id);
-        if (!$shop) {
-            return $this->json([], "error", 0);
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+            return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($request->type) {
             $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
