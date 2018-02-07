@@ -1799,6 +1799,13 @@ class ShopController extends BaseController
         if ($shop->container->balance < $request->amount) {
             return $this->json([], trans("api.error_balance"), 0);
         }
+        try {
+            if (!$shop->manager->check_pay_password($request->password)) {
+                return $this->json([], trans("api.error_pay_password"),0);
+            }
+        } catch (\Exception $e) {
+            return $this->json([], $e->getMessage(),0);
+        }
         $member = User::findByEnId($user_id);
         $record = new ShopFund();
         $record->shop_id = $shop->id;
