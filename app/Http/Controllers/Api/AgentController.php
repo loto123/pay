@@ -34,6 +34,11 @@ class AgentController extends Controller
      *                  example=true,
      *                  description="是否有绑定vip卡",
      *                  ),
+     *              property="if_frozen",
+     *                  type="boolean",
+     *                  example=true,
+     *                  description="卡片是否被冻结",
+     *                  ),
      *              @SWG\Property(
      *                  property="card_name",
      *                  type="string",
@@ -41,10 +46,16 @@ class AgentController extends Controller
      *                  description="卡片名称"
      *              ),
      *              @SWG\Property(
+     *                  property="default_percent",
+     *                  type="number",
+     *                  example="5",
+     *                  description="默认分润比例,千分比"
+     *              ),
+     *              @SWG\Property(
      *                  property="percent",
      *                  type="number",
      *                  example="5",
-     *                  description="分润比例,千分比"
+     *                  description="VIP加成分润比例,千分比"
      *              ),
      *              @SWG\Property(
      *                  property="expired_at",
@@ -82,6 +93,8 @@ class AgentController extends Controller
         $json = ['if_bound' => !empty($card)];//是否绑定
         if ($json['if_bound']) {
             $json['card_name'] = $card->type->name; //卡名
+            $json['if_frozen'] = !!$card->is_frozen;
+            $json['default_percent'] = Auth::user()->myDefaultProfitShareRate() * 10;
             $json['percent'] = $card->type->percent * 10;//卡分润比例(千分比)
             $json['expired_at'] = $card->expired_at ? $card->expired_at : null;//过期时间
             $json['card_no'] = $card->mix_id();//卡号
