@@ -48,16 +48,16 @@ class ShopController extends Controller
                 DB::raw('COUNT(t.id) as transfer_cnt'), DB::raw('SUM(tfr.amount) as summary'),
                 DB::raw('SUM(tfr.fee_amount) as fee_amount_cnt '),
                 DB::raw('SUM(tr.amount) as tip_amount_cnt'));
-        if(!empty($manager_id)) {
+        if($manager_id) {
             $listQuery->whereHas('manager', function ($query) use($manager_id) {
                 $query->where('mobile',$manager_id);
             });
         }
-        if(!empty($shop_id)) {
+        if($shop_id) {
             $listQuery->where($table_name.'.id', $shop_id);
             $countQuery->where($table_name.'.id', $shop_id);
         }
-        if(!empty($shop_name)) {
+        if($shop_name) {
             $listQuery->where($table_name.'.name', 'like', '%'.$shop_name.'%');
             $countQuery->where($table_name.'.name', 'like', '%'.$shop_name.'%');
         }
