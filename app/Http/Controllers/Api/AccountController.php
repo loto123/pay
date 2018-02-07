@@ -366,7 +366,7 @@ class AccountController extends BaseController
             $fee = $method->fee_mode == 0 ? round($request->amount * $method->fee_value / 100, 2) : $method->fee_value;
         }
 
-        if ($request->amount - $fee <= 0) {
+        if (bcsub($request->amount, $fee, 2) <= 0) {
             return $this->json([], '提现金额必须大于0', 0);
         }
 
