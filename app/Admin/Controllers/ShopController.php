@@ -118,21 +118,18 @@ class ShopController extends Controller
      * 更新公会状态
      * 返回公会详情页面
      * */
-    public function updates(Request $request)
+    public function updates($shop_id,$status)
     {
-        $status = $request->input('status');
-        $shop_id = $request->input('shop_id');
         //只有管理员才能操作
         //只能在冻结和正常两种状态互切
         if(!Admin::user()->isRole('administrator')) {
             abort(404);
         }
-        if (isset($status)) {
-            Shop::where('id',$shop_id)->update(['status'=>Shop::STATUS_FREEZE]);
+        if(Shop::where('id',$shop_id)->update(['status'=>$status])) {
+            return redirect('/admin/shop')->with('status', '更新成功！');
         } else {
-            Shop::where('id',$shop_id)->update(['status'=>Shop::STATUS_NORMAL]);
+            return redirect('/admin/shop')->with('status','更新失败！');
         }
-        return redirect('/admin/shop/detail/'.$shop_id);
     }
 
     public function delete($shop_id) {

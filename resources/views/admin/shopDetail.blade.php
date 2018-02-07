@@ -43,23 +43,24 @@
                     <h4 class="widget-user-desc">公会是否开启任务：<span>{{$list->active?'开启':'关闭'}}</span></h4>
                     <h4 class="widget-user-desc">公会创建时间：<span>{{$list->created_at}}</span></h4>
                 </div>
-                @if(Admin::user()->isRole('administrator'))
-                <form class="form-horizontal" method="post" action="/admin/shop/updates">
-                    {{csrf_field()}}
-                    <input type="hidden" name="shop_id" value={{$list->id}}>
-                    <div class="form-group">
-                        <div class="col-sm-8">
-                            <h4 class="widget-user-desc">
-                                <input type="checkbox" name="status" {{($list->status==\App\Shop::STATUS_FREEZE)?'checked':''}} value="1">冻结公会
-                            </h4>
-                        </div>
-                        <span class="col-sm-8">
-                            <button type="submit" class="btn btn-primary">确认</button>
-                            <button type="button" class="btn btn-primary" onclick="javascript:history.go(-1);">返回</button>
-                        </span>
-                    </div>
-                </form>
-                @endif
+                {{--@if(Admin::user()->isRole('administrator'))--}}
+                {{--<form class="form-horizontal" method="post" action="/admin/shop/updates">--}}
+                    {{--{{csrf_field()}}--}}
+                    {{--<input type="hidden" name="shop_id" value={{$list->id}}>--}}
+                    {{--<div class="form-group">--}}
+                        {{--<div class="col-sm-8">--}}
+                            {{--<h4 class="widget-user-desc">--}}
+                                {{--<input type="checkbox" name="status" {{($list->status==\App\Shop::STATUS_FREEZE)?'checked':''}} value="1">冻结公会--}}
+                            {{--</h4>--}}
+                        {{--</div>--}}
+                        {{--<span class="col-sm-8">--}}
+                            {{--<button type="submit" class="btn btn-primary">确认</button>--}}
+                            {{--<button type="button" class="btn btn-primary" onclick="javascript:history.go(-1);">返回</button>--}}
+                        {{--</span>--}}
+                    {{--</div>--}}
+                {{--</form>--}}
+                {{--@endif--}}
+                <button type="button" class="btn btn-primary" onclick="javascript:history.go(-1);">返回</button>
             </div>
         </div>
     </div>
