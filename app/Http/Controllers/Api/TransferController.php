@@ -11,6 +11,7 @@ use App\TipRecord;
 use App\Transfer;
 use App\TransferRecord;
 use App\TransferUserRelation;
+use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,7 @@ class TransferController extends BaseController
         //交易关系包含自己
         $joiners = $request->input('joiner', []);
         foreach ($joiners as $key => $value) {
-            $joiners[$key] = Skip32::decrypt("0123456789abcdef0123", $value);
+            $joiners[$key] = User::decrypt($value);
         }
         array_push($joiners, $user->id);
         if ($transfer->save()) {
@@ -894,7 +895,7 @@ class TransferController extends BaseController
         DB::beginTransaction();
         try {
             foreach ($request->friend_id as $value) {
-                $real_id = Skip32::decrypt("0123456789abcdef0123", $value);
+                $real_id = User::decrypt( $value);
                 if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
                     $relation = new TransferUserRelation();
                     $relation->transfer_id = $transfer->id;
@@ -1518,7 +1519,7 @@ class TransferController extends BaseController
         if (isset($request->transfer_id) && $request->transfer_id) {
             $tmpIds = [];
             foreach ($request->transfer_id as $key => $value) {
-                $tmpIds[] = Skip32::decrypt("0123456789abcdef0123", $value);
+                $tmpIds[] = Transfer::decrypt($value);
             }
             $query->whereIn('id', $tmpIds);
         }
