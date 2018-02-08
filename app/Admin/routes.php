@@ -39,6 +39,7 @@ Route::group([
     $router->resource('pay/scene', PaySceneController::class);
     $router->resource('pay/deposits', DepositController::class);
     $router->resource('pay/withdraws', WithdrawController::class);
+    $router->resource('pay/transactions', ContainerTransactionsController::class);
     $router->resource('uploads', UploadFileController::class);
 
     //代理vip卡模块
