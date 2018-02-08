@@ -90,6 +90,7 @@ class ContainerTransactionsController extends Controller
                         break;
                     case ContainerTransaction::TYPE_TRANSFER_OUT:
                     case ContainerTransaction::TYPE_WITHDRAW:
+                    case ContainerTransaction::TYPE_MONEY_EXTRACT:
                         $class = 'label-primary';
                         break;
                     case ContainerTransaction::TYPE_DEPOSIT:

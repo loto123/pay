@@ -21,6 +21,7 @@ class ContainerTransaction extends Model
     const TYPE_WITHDRAW = 5;
     const TYPE_FREEZE = 6;
     const TYPE_UNFREEZE = 7;
+    const TYPE_MONEY_EXTRACT = 8;
     protected $table = 'pay_container_transactions';
 
     public static function getTypeTextArray()
@@ -31,6 +32,7 @@ class ContainerTransaction extends Model
             ContainerTransaction::TYPE_DEPOSIT => '充值',
             ContainerTransaction::TYPE_WITHDRAW => '提现',
             ContainerTransaction::TYPE_FREEZE => '冻结',
-            ContainerTransaction::TYPE_UNFREEZE => '解冻'];
+            ContainerTransaction::TYPE_UNFREEZE => '解冻',
+            ContainerTransaction::TYPE_MONEY_EXTRACT => '提取余额'];
     }
 }
