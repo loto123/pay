@@ -11,6 +11,7 @@ use App\ShopUser;
 use App\TipRecord;
 use App\Transfer;
 use App\User;
+use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -1706,8 +1707,17 @@ class ShopController extends BaseController
         $record->amount = $request->amount;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
+
+        $user_record = new UserFund();
+        $user_record->user_id = $shop->manager->id;
+        $user_record->type = UserFund::TYPE_SHOP_TRANSFER;
+        $user_record->mode = UserFund::MODE_IN;
+        $user_record->amount = $request->amount;
+//        $user_record->balance = $user->container->balance - $request->amount;
+        $user_record->status = UserFund::STATUS_SUCCESS;
         try {
             $record->save();
+            $user_record->save();
             $shop->container->transfer($shop->manager->container, $request->amount, 0, false, false);
         } catch (\Exception $e){
             Log::info("shop transfer error:".$e->getMessage());
@@ -1816,8 +1826,17 @@ class ShopController extends BaseController
         $record->remark = $request->remark;
         $record->balance = $shop->container->balance - $request->amount;
         $record->status = ShopFund::STATUS_SUCCESS;
+
+        $user_record = new UserFund();
+        $user_record->user_id = $member->id;
+        $user_record->type = UserFund::TYPE_SHOP_TRANSFER;
+        $user_record->mode = UserFund::MODE_IN;
+        $user_record->amount = $request->amount;
+//        $user_record->balance = $user->container->balance - $request->amount;
+        $user_record->status = UserFund::STATUS_SUCCESS;
         try {
             $record->save();
+            $user_record->save();
             $shop->container->transfer($member->container, $request->amount, 0, false, false);
         } catch (\Exception $e){
             Log::info("shop transfer member error:".$e->getMessage());
