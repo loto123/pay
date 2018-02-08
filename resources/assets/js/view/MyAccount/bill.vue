@@ -166,14 +166,14 @@
                 items: [
                     { type: 0, title: '购买', isBuy:true},
                     { type: 1, title: '出售', isBuy:true},
-                    { type: 2, title: '任务拿钻', isBuy:false},
-                    { type: 3, title: '任务交钻', isBuy:false},
-                    { type: 4, title: '转账到公会', isBuy:false},
-                    { type: 5, title: '公会转入', isBuy:false},
+                    { type: [2,3,9], title: '任务', isBuy:false},
+                    // { type: 3, title: '任务交钻', isBuy:false},
+                    { type: [4,5], title: '公会转账', isBuy:false},
+                    // { type: 5, title: '公会转入', isBuy:false},
                     { type: 6, title: '任务手续费', isBuy:false},
-                    { type: 7, title: '出售手续费', isBuy:false},
+                    // { type: 7, title: '出售手续费', isBuy:false},
                     { type: 8, title: '任务加速', isBuy:false},
-                    { type: 9, title: '拿钻撤销', isBuy:false},
+                    // { type: 9, title: '拿钻撤销', isBuy:false},
                     { type: 10, title: '分润', isBuy:false}
                 ]
             };
@@ -238,7 +238,7 @@
                     var _data2 = {
                         limit: 15,
                         offset: 0,
-                        type:[2,3,4,5,6,7,8,9]
+                        type:[2,3,4,5,6,8,9,10]
                     }
                     request.getInstance().getData("api/account/records", _data2)
                         .then((res) => {
@@ -381,7 +381,7 @@
                             // 获取当月的总额度(分润)
                             var _data2 = {
                                 month: _timer,
-                                type:[2,3,4,5,6,7,8,9]
+                                type:[2,3,4,5,6,8,9,10]
                             }
                             request.getInstance().getData("api/account/records/month", _data2)
                             .then(res => {
@@ -435,7 +435,7 @@
                     _data = {
                         limit: 5,
                         offset: [].concat(this.recordList).pop().id,
-                        type:[2,3,4,5,6,7,8,9]
+                        type:[2,3,4,5,6,7,8,9,10]
                     }
                 }
                 this.loading = true;
@@ -517,7 +517,7 @@
                         limit: 15,
                         offset: 0,
                         start: this.dateChoise,
-                        type:[2,3,4,5,6,7,8,9]
+                        type:[2,3,4,5,6,8,9,10]
                     }
                     request.getInstance().getData("api/account/records", _data)
                     .then((res) => {
@@ -561,17 +561,19 @@
                     case 4: result = '转账到公会'; break;
                     case 5: result = '公会转入'; break;
                     case 6: result = '任务手续费'; break;
-                    case 7: result = '出售手续费'; break;
                     case 8: result = '任务加速'; break;
                     case 9: result = '拿钻撤销'; break;
-                    case 9: result = '分润转入'; break;
+                    case 10: result = '分润转入'; break;
                 }
                 return result;
             },
 
-            selContent(type) {
-                Loading.getInstance().open("加载中...");
-                request.getInstance().getData("api/account/records?type=" + type)
+            selContent(type2) {
+                // Loading.getInstance().open("加载中...");
+                var data={
+                    type:type2
+                }
+                request.getInstance().getData("api/account/records?",data)
                     .then((res) => {
                         var _dataList = res.data.data.data;
                         if (_dataList.length == 0) {
@@ -589,7 +591,6 @@
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
-                        console.error(err);
                         Toast(err.data.msg);
                         this.showAlert = false;
                         Loading.getInstance().close();

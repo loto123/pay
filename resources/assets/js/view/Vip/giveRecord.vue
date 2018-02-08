@@ -11,22 +11,28 @@
         <div class="giveCard-account flex flex-align-center">
             <div class="">已出卡({{cardNumber}})</div>
         </div>
-        <ul class="card-list">
-            <li class="list" v-for="(item,index) in cardList">
-                <div class="content-box flex flex-v flex-justify-around">
-                    <div class="top-content flex flex-align-center">
-                        <div class="openCard">
-                            <img :src="item.type == 'binding'? '/images/openCard.png':'/images/giveCard.png'"/>
+        <div  class="card-container" ref='wrapper'>
+            <ul class="card-list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
+                <li class="list" v-for="(item,index) in cardList">
+                    <div class="content-box flex flex-v flex-justify-around">
+                        <div class="top-content flex flex-align-center">
+                            <div class="openCard">
+                                <img :src="item.type == 'binding'? '/images/openCard.png':'/images/giveCard.png'"/>
+                            </div>
+                            <div class="card-account">{{item.type == 'binding'?'绑定':'转让'}}账户<em>{{item.to_user}}</em></div>
                         </div>
-                        <div class="card-account">{{item.type == 'binding'?'绑定':'转让'}}账户<em>{{item.to_user}}</em></div>
+                        <div class="bottom-content flex flex-justify-between">
+                            <div class="card-number">NO.{{item.card_no}}</div>
+                            <div class="time">{{item.type == 'binding'?'开卡':'转卡'}}时间:{{item.created_at}}</div>
+                        </div>
                     </div>
-                    <div class="bottom-content flex flex-justify-between">
-                        <div class="card-number">NO.{{item.card_no}}</div>
-                        <div class="time">{{item.type == 'binding'?'开卡':'转卡'}}时间:{{item.created_at}}</div>
-                    </div>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+            </p>
+        </div>
     </div>
 </template>
 
@@ -118,16 +124,28 @@
         data() {
             return {
                 cardList:[],
-                cardNumber:null     //出卡多少张
+                cardNumber:null,     //出卡多少张
+
+                wrapperHeight: null,
+                loading: false,
+                allLoaded: false,
+                canLoading: true
             }
         },
         created() {
             this.init();
         },
+        mounted(){
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        },
         methods: {
             init() {
-                Loading.getInstance().open();
-                request.getInstance().getData('api/promoter/cards-used').then(res => {
+                var _data = {
+                    limit: 15,
+                    offset: 0
+                }
+                Loading.getInstance().open("加载中...");
+                request.getInstance().getData('api/promoter/cards-used',_data).then(res => {
                     this.cardList=res.data.data;
                     this.cardNumber=this.cardList.length;
                     Loading.getInstance().close();
@@ -139,7 +157,41 @@
             //查看授权记录
             goAuthRecord(){
                 this.$router.push('/vipCard/authRecord');
-            }
+            },
+            loadMore() {
+				this.loading = false;
+				if (this.cardList.length == 0 || !this.canLoading) {
+					return;
+				}
+				this.loading = true;
+				this.canLoading = false;
+				setTimeout(() => {
+
+					var _data = {
+						limit: 15,
+						offset: [].concat(this.cardList).pop().id
+					}
+
+					request.getInstance().getData('api/promoter/cards-used',_data).then(res => {
+
+						if (res.data.data.list.length == 0) {
+							this.canLoading = false;
+							this.loading = false;
+							return;
+						}
+
+						for (var i = 0; i < res.data.data.list.length; i++) {
+							this.cardList.push(res.data.data.list[i]);
+						}
+
+						this.canLoading = true;
+						this.loading = false;
+					}).catch(err => {
+
+					});
+				}, 1500);
+
+			}
         }
     }
 </script>

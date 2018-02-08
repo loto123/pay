@@ -11,18 +11,24 @@
         <div class="giveCard-account flex flex-align-center">
             <div class="">已成功授权({{personalNumber}}人)</div>
         </div>
-        <ul class="auth-list">
-            <li class="list flex flex-align-start" v-for="(item,index) in authList">
-                <div class="personal-img">
-                    <img :src="item.avatar">
-                </div>
-                <div class="auth-content">
-                    <div class="personal">{{item.name}}</div>
-                    <div class="account">账号:{{item.user_id}}</div>
-                    <div class="time">授权时间:{{item.created_at}}</div>
-                </div>
-            </li>
-        </ul>
+        <div class="auth-container" ref='wrapper'>
+            <ul class="auth-list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
+                <li class="list flex flex-align-start" v-for="(item,index) in authList">
+                    <div class="personal-img">
+                        <img :src="item.avatar">
+                    </div>
+                    <div class="auth-content">
+                        <div class="personal">{{item.name}}</div>
+                        <div class="account">账号:{{item.user_id}}</div>
+                        <div class="time">授权时间:{{item.created_at}}</div>
+                    </div>
+                </li>
+            </ul>
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+            </p>
+        </div>
     </div>
 </template>
 
@@ -106,16 +112,28 @@
         data() {
             return {
                 authList:[],
-                personalNumber:null     //出卡多少张
+                personalNumber:null,     //出卡多少张
+
+                wrapperHeight: null,
+                loading: false,
+                allLoaded: false,
+                canLoading: true
             }
         },
         created() {
             this.init();
         },
+        mounted(){
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+        },
         methods: {
             init() {
-                Loading.getInstance().open();
-                request.getInstance().getData('api/promoter/grant-history').then(res => {
+                var _data = {
+                    limit: 15,
+                    offset: 0
+                }
+                Loading.getInstance().open("加载中...");
+                request.getInstance().getData('api/promoter/grant-history',_data).then(res => {
                     this.authList=res.data.data;
                     this.personalNumber=this.authList.length;
                     Loading.getInstance().close();
@@ -127,7 +145,41 @@
             //查看出卡记录
             goGiveRecord(){
                 this.$router.push('/vipCard/giveRecord');
-            }
+            },
+            loadMore() {
+				this.loading = false;
+				if (this.cardList.length == 0 || !this.canLoading) {
+					return;
+				}
+				this.loading = true;
+				this.canLoading = false;
+				setTimeout(() => {
+
+					var _data = {
+						limit: 15,
+						offset: [].concat(this.cardList).pop().id
+					}
+
+					request.getInstance().getData('api/promoter/grant-history',_data).then(res => {
+
+						if (res.data.data.list.length == 0) {
+							this.canLoading = false;
+							this.loading = false;
+							return;
+						}
+
+						for (var i = 0; i < res.data.data.list.length; i++) {
+							this.cardList.push(res.data.data.list[i]);
+						}
+
+						this.canLoading = true;
+						this.loading = false;
+					}).catch(err => {
+
+					});
+				}, 1500);
+
+			}
         }
     }
 </script>
