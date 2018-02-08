@@ -462,29 +462,29 @@ class PromoterController extends BaseController
      *          response=200,
      *          description="成功返回",
      *          @SWG\Schema(
-     *          @SWG\Property(
-     *              property="data",
-     *              type="object",
-     *          @SWG\Property(
-     *              property="list",
-     *              type="array",
-     *              description="卡片列表",
-     *              @SWG\Items(
-     *              @SWG\Property(property="id", type="integer", example="12",description="记录id"),
-     *              @SWG\Property(property="card_no", type="string", example="12345678",description="卡号"),
-     *              @SWG\Property(property="card_name", type="string", example="vip金卡",description="卡名"),
-     *              @SWG\Property(property="percent", type="float", example="5",description="分润千分比"),
-     *          ),
-     *          @SWG\Property(
-     *              property="num",
-     *              type="integer",
-     *              description="可用卡片数量",
-     *          )
-     *        )
-     *          ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
+     *                      property="list",
+     *                      type="array",
+     *                      description="卡片列表",
+     *                      @SWG\Items(
+     *                      @SWG\Property(property="id", type="integer", example="12",description="记录id"),
+     *                      @SWG\Property(property="card_no", type="string", example="12345678",description="卡号"),
+     *                      @SWG\Property(property="card_name", type="string", example="vip金卡",description="卡名"),
+     *                      @SWG\Property(property="percent", type="float", example="5",description="分润千分比"),
+     *                      ),
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="num",
+     *                      type="integer",
+     *                      description="可用卡片数量",
+     *                  )
+     *              )
      *          )
      *      )
-     * )
+     * ))
      */
     public function cardsReserve(Request $request)
     {
