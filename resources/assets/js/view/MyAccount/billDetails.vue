@@ -2,14 +2,19 @@
 	<div id="billDetails">
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
-			<div class="money-box">
+			<div class="money-box" v-if="this.type==0||this.type==1">
+				<span>{{mode == 1?'入':'出'}}账钻石数量</span>
+				<em v-bind:class="[mode==1?'active':'']">{{mode == 1?'+'+amount:-amount}}</em>
+			</div>
+			<div class="money-box" v-if="this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10">
 				<span>{{mode == 1?'出':'入'}}账钻石数量</span>
 				<em v-bind:class="[mode==1?'':'active']">{{mode == 1?-amount:'+'+amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{(mode==1)?'支出':'收入'}}</div>
+					<div class="content" v-if="this.type==0||this.type==1">{{mode==1?'收入':'支出'}}</div>
+					<div class="content" v-if="this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10">{{mode==1?'支出':'收入'}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
@@ -105,7 +110,6 @@
 					case 4: result='转账到公会'; break;
 					case 5: result='公会转入'; break;
 					case 6: result='任务手续费'; break;
-					case 7: result='出售手续费'; break;
 					case 8: result='任务加速'; break;
 					case 9: result='拿钻撤销'; break;
 					case 10: result='分润'; break;
