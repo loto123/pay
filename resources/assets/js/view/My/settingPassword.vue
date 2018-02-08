@@ -67,11 +67,8 @@ export default {
 
                     request.getInstance().postData('api/my/resetPayPassword',_data).then(res=>{
                         Loading.getInstance().close();
-                        Toast("支付密码设置成功，正在跳转...");
-                        
-                        setTimeout(()=>{
-                            this.$router.push('/index');
-                        },1500);
+                        Toast("支付密码设置成功");
+                        this.$router.push('/index');
                     }).catch();
 
                 }else if(!this.status){
@@ -81,11 +78,8 @@ export default {
 
                     request.getInstance().postData("api/my/setPayPassword",_data).then(res=>{
                         Loading.getInstance().close();
-                        Toast("支付密码设置成功，正在跳转...");
-                        
-                        setTimeout(()=>{
-                            this.backToLastPage();
-                        },1500);
+                        Toast("支付密码设置成功");
+                        this.backToLastPage();
                         
                     }).catch(err=>{
                         Toast(err.data.msg);

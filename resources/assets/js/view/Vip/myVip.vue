@@ -224,9 +224,10 @@ export default {
                 MessageBox({
                     title: '温馨提示',
                     message: '您的VIP卡已被冻结，请联系相关人员解冻',
-                    showCancelButton: false
+                    showCancelButton: false,
+                    confirmButtonText:"我知道了"
                 }).then(res=>{
-                    this.$router.go(-1);
+                    this.$router.push("/index");
                 });
               }
 

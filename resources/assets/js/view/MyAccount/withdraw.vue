@@ -283,14 +283,14 @@
 				var _data = {
 					way: this.value
 				}
-				console.log(this.fee_mode);
+
 				if(this.fee_mode == 0){          // 百分比模式
-					this.fee = this.amount * ((this.fee_value)/100)
+					var temp = this.amount * ((this.fee_value)/100);
+					this.fee = Math.floor(temp*100)/100;
 				}else if(this.fee_mode == 1){    // 指定金额模式
 					this.fee = this.fee_value;
 				}
 
-				console.log(this.fee);
 				if (!this.value) {
 					Toast('请选择支付方式');
 					return

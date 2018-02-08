@@ -3,7 +3,7 @@
     <topBack title="详情"></topBack>
     <div class="details-content">
       <div class="money-box">
-        <span>入账金额</span>
+        <span>入账钻石</span>
         <em>{{amount}}</em>
       </div>
       <ul class="billDetails-list">

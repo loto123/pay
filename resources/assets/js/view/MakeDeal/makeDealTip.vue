@@ -144,7 +144,7 @@ export default {
     },
     payTip() {
       if (this.renderData.moneyData == null) {
-        Toast("请输入打赏店家金额");
+        Toast("请输入打赏店家钻石数");
         return;
       }
 
