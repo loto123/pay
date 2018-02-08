@@ -54,7 +54,7 @@
                         </div>
                         <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">
                             {{tabStatus[0]?"+":"-"}} {{tabStatus[0]?item.proxy_amount:item.amount}} 
-                            <i class="diamond">#xe6f9;</i>
+                            <i class="diamond">&#xe6f9;</i>
                         </div>
                     </a>
 

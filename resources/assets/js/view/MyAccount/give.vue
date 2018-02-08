@@ -8,7 +8,7 @@
 		<div class="give-box">
 			<div class="title">转移钻石</div>
 			<div class="give-money flex flex-justify-center">
-				<input type="text" placeholder="请输入钻石" v-model="amount">
+				<input type="number" placeholder="请输入钻石" v-model="amount">
 			</div>
 			<div class="all-money flex">
 				<div class="money">可转钻石 ¥<span>{{balance}}</span>,</div>
@@ -47,7 +47,7 @@
 				showPasswordTag:false,
 				dealShop: null,
 				shopList: null,
-				balance:null,  	            //可转账金额
+				balance:null,  	            //可转账
 
 				shopId: null,	            //公会ID
 				amount:null, 	            //提现money
@@ -118,7 +118,7 @@
 				}
 
 				if (this.amount<=0) {
-					Toast('请输入转账金额');
+					Toast('请输入转账钻石数量');
 					return
 				}else if(this.amount>this.balance){
 					Toast('余额不足');

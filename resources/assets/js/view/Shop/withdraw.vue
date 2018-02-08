@@ -1,24 +1,24 @@
 <template>
   <div id="withdraw" class="withdraw-container">
-    <topBack title="提现到个人账户">
+    <topBack title="转钻到个人账户">
       <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
         <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
       </div>
     </topBack>
     <div class="withdraw-box">
-      <div class="title">提现金额</div>
+      <div class="title">转钻</div>
       <div class="withdraw-money flex flex-justify-center">
         <label><i class="diamond">&#xe6f9;</i></label>
-        <input type="text" placeholder="请输入钻石数量" v-model="amount">
+        <input type="number" placeholder="请输入钻石数量" v-model="amount">
       </div>
       <div class="all-money flex">
         <div class="money">
-          可提现钻石数量 <span>{{balance}}<i class="diamond">&#xe6f9;</i></span>,
+          公会可转钻石 <span>{{balance}}<i class="diamond">&#xe6f9;</i></span>,
         </div>
-        <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部提现</a>
+        <a href="javascript:;" class="all-withdraw" @click="allWithdraw">全部转移</a>
       </div>
       <a href="javascript:;" class="withdraw-btn" @click="withdrawBtn">
-        <mt-button type="primary" size="large">提现</mt-button>
+        <mt-button type="primary" size="large">转移</mt-button>
       </a>
     </div>
     <passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
@@ -38,7 +38,7 @@
         balance: null,//可用余额
         showPasswordTag: false,       // 密码弹出开关
 
-        amount: null,	//提现金钱
+        amount: null,	// 转钻数量
         options1: [],
         value: null,
         has_pay_password: null,//是否设置支付密码
@@ -79,7 +79,7 @@
         }
 
         if (this.amount<=0) {
-          Toast('请输入提现金额');
+          Toast('请输入转钻数量');
           return
         }else if (this.amount>this.balance) {
           Toast('余额不足');
@@ -102,7 +102,7 @@
         }
         Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/shop/transfer/'+this.shopId, _data)])
           .then((res) => {
-            Toast('提现成功');
+            Toast('转钻成功');
             this.$router.push('/shop/shopAccount?id='+this.shopId);
 
           })
