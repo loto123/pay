@@ -37,6 +37,7 @@ class ContainerTransactionsController extends Controller
     protected function grid()
     {
         return Admin::grid(ContainerTransaction::class, function (Grid $grid) {
+            $grid->model()->orderBy('created_at', 'asc');
             //工具按钮
             $grid->disableCreation();
             $grid->actions(function ($actions) {
