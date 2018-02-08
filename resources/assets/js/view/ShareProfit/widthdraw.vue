@@ -9,7 +9,7 @@
       <div class="title">体钻</div>
       <div class="withdraw-money flex flex-justify-center">
         <label><i class="diamond">&#xe6f9;</i></label>
-        <input type="text" placeholder="请输入钻石数量" v-model="amount">
+        <input type="number" placeholder="请输入钻石数量" v-model="amount" >
       </div>
       <div class="all-money flex">
         <div class="money">
@@ -82,7 +82,7 @@
         }
 
         if (this.amount<=0) {
-          Toast('请输入提现金额');
+          Toast('请输入提现钻石');
           return
         }else if (this.amount>this.balance) {
           Toast('余额不足');

@@ -2,18 +2,15 @@
 	<div id="bankManage">
 		<topBack title="更换结算卡"></topBack>
 		<div class="bankCard-container">
-			<ul class="bankCard-list" v-for="item in bankList">
-				<li @click="changeSet(item.card_id)">
-					<div class="bankCard-box flex">
-						<div class="card-image">
-							<img src="/images/personal.jpg">
-						</div>
+			<ul class="bankCard-list">
+				<li  v-for="item in bankList" @click="changeSet(item.card_id)">
+					<div class="bankCard-box" :style="{backgroundImage: 'url(' + item.card_logo + ')'}">
 						<div class="card-info">
 							<div class="bank-name">{{item.bank}}</div>
 							<div class="card-type">{{item.card_type}}</div>
 							<div class="card-number">{{item.card_num}}</div>
 						</div>
-						<div class="icon flex flex-align-center">
+						<div class="icon">
 							<i class="iconfont">{{item.is_pay_card ?'&#xe62b;':''}}</i>
 						</div>
 					</div>
@@ -91,9 +88,7 @@
 		width: 90%;
 		margin: auto;
 		li {
-			border: 1px solid #ccc;
 			margin-bottom: 1em;
-			padding: 0.7em;
 			position: relative;
 			.del,
 			.binding {
@@ -119,24 +114,19 @@
 	}
 
 	.bankCard-box {
-		.card-image {
-			width: 3em;
-			height: 3em;
-			>img {
-				display: block;
-				width: 100%;
-				border-radius: 50%;
-			}
-		}
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		height: 7.5em;
 		.card-info {
-			margin-left: 1em;
+			margin-left: 18%;
+			padding-top: 6%;
+			color: #fff;
 			.card-type,
 			.bank-name {
 				margin-bottom: 0.3em;
 			}
 			.card-type,
 			.card-number {
-				color: #999;
 				font-size: 0.9em;
 			}
 			.bank-name {
@@ -149,6 +139,9 @@
 		}
 	}
 	.icon{
+		position: absolute;
+		right: 1em;
+		top: 1em;
 		color:#09BB07;
 		i{
 			font-size:2em;

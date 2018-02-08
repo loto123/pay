@@ -23,16 +23,21 @@
             </div>
             <div class="flex-3">我的VIP卡({{cardNumber}}张)</div>
         </div>
-
-        <ul class="card-list">
-            <li class="list" v-for="item in cardList" @click="openCard(item.id)">
-                <card :cardName="item.card_name" :percent="item.percent" :cardNumber="item.card_no" style="height:6em;">
-                    <i class="iconfont" style="font-size:1.5em;">
-                        &#xe62e;
-                    </i>
-                </card>
-            </li>
-        </ul>
+        <div class="card-container" ref='wrapper'>
+            <ul class="card-list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
+                <li class="list" v-for="item in cardList" @click="openCard(item.id)">
+                    <card :cardName="item.card_name" :percent="item.percent" :cardNumber="item.card_no" style="height:6em;">
+                        <i class="iconfont" style="font-size:1.5em;">
+                            &#xe62e;
+                        </i>
+                    </card>
+                </li>
+            </ul>
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+            </p>
+        </div>
         <passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
     </div>
 </template>
@@ -127,11 +132,19 @@
                 used_cards: null,
                 cardList: [],
                 curCard_id: null,
-                cardNumber: null      //多少张卡
+                cardNumber: null,      //多少张卡
+
+                wrapperHeight: null,
+                loading: false,
+                allLoaded: false,
+                canLoading: true
             }
         },
         created() {
             this.init();
+        },
+        mounted(){
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
         },
         methods: {
             hidePassword() {
@@ -150,12 +163,16 @@
                     })
             },
             init() {
+                var _data = {
+						limit: 10,
+						offset: 0
+					}
                 Loading.getInstance().open("加载中...");
-                Promise.all([request.getInstance().getData('api/promoter/cards_used_num'), request.getInstance().getData('api/promoter/cards-reserve')])
+                Promise.all([request.getInstance().getData('api/promoter/cards_used_num'), request.getInstance().getData('api/promoter/cards-reserve',_data)])
                     .then((res) => {
                         this.used_cards = res[0].data.data.used_cards;
-                        this.cardList = res[1].data.data;
-                        this.cardNumber = this.cardList.length;
+                        this.cardList = res[1].data.data.list;
+                        this.cardNumber = res[1].data.data.num;
                         Loading.getInstance().close();
                     })
                     .catch((err) => {
@@ -186,7 +203,42 @@
             //查看记录
             checkRecord() {
                 this.$router.push('/vipCard/giveRecord')
-            }
+            },
+            loadMore() {
+				this.loading = false;
+				if (this.cardList.length == 0 || !this.canLoading) {
+					return;
+				}
+				this.loading = true;
+				this.canLoading = false;
+				setTimeout(() => {
+
+					var _data = {
+						type: 1,
+						limit: 10,
+						offset: [].concat(this.cardList).pop().id
+					}
+
+					request.getInstance().getData('api/promoter/cards-reserve',_data).then(res => {
+
+						if (res.data.data.list.length == 0) {
+							this.canLoading = false;
+							this.loading = false;
+							return;
+						}
+
+						for (var i = 0; i < res.data.data.list.length; i++) {
+							this.cardList.push(res.data.data.list[i]);
+						}
+
+						this.canLoading = true;
+						this.loading = false;
+					}).catch(err => {
+
+					});
+				}, 1500);
+
+			}
         }
     }
 </script>

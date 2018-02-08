@@ -23,7 +23,7 @@ use Illuminate\Routing\Router;
 //    $router->post('auth/register', 'Api\AuthController@register');
 //});
 
-Route::any('test', 'Api\TestController@index');
+//Route::any('test', 'Api\TestController@index');
 
 Route::group([
     'prefix'       => '/my',

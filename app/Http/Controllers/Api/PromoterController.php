@@ -212,7 +212,7 @@ class PromoterController extends BaseController
         }
 
         //加成后分润比例不能超过100%
-        if ($bindTo->percent + $card->type->percent > 100) {
+        if ($bindTo->myDefaultProfitShareRate() + $card->type->percent > 100) {
             return $this->json([], '无效数据,绑定后分润比例超过100%', 0);
         }
 
@@ -361,14 +361,6 @@ class PromoterController extends BaseController
      */
     public function cardsUseRecords(Request $request)
     {
-//        return $this->json([
-//            ['id' => 12, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-//            ['id' => 13, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-//            ['id' => 14, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-//            ['id' => 15, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-//            ['id' => 16, 'type' => 'binding', 'card_name' => 'vip金卡', 'card_no' => '12345678', 'to_user' => '13111111111', 'created_at' => '2017-01-01 0:0:0'],
-//        ]);
-
         $offset = (int)$request->get('offset', 0);
         $limit = (int)$request->get('limit', 10);
 
@@ -428,29 +420,6 @@ class PromoterController extends BaseController
      */
     public function grantRecords(Request $request)
     {
-//        return $this->json([
-//            [
-//                "id" => "12",
-//                "name" => "张三",
-//                "user_id" => "13111111111",
-//                "avatar" => "http://x.com/img/a.gif",
-//                "created_at" => "2017-01-01 0:0:0"
-//            ],
-//            [
-//                "id" => "13",
-//                "name" => "张三",
-//                "user_id" => "13111111111",
-//                "avatar" => "http://x.com/img/a.gif",
-//                "created_at" => "2017-01-01 0:0:0"
-//            ],
-//            [
-//                "id" => "14",
-//                "name" => "张三",
-//                "user_id" => "13111111111",
-//                "avatar" => "http://x.com/img/a.gif",
-//                "created_at" => "2017-01-01 0:0:0"
-//            ]
-//        ]);
 
         $offset = (int)$request->get('offset', 0);
         $limit = (int)$request->get('limit', 10);
@@ -493,52 +462,44 @@ class PromoterController extends BaseController
      *          response=200,
      *          description="成功返回",
      *          @SWG\Schema(
-     *              @SWG\Items(
-     *                  @SWG\Property(property="id", type="integer", example="12",description="记录id"),
-     *                  @SWG\Property(property="card_no", type="string", example="12345678",description="卡号"),
-     *                  @SWG\Property(property="card_name", type="string", example="vip金卡",description="卡名"),
-     *                  @SWG\Property(property="percent", type="float", example="5",description="分润千分比"),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
+     *                      property="list",
+     *                      type="array",
+     *                      description="卡片列表",
+     *                      @SWG\Items(
+     *                      @SWG\Property(property="id", type="integer", example="12",description="记录id"),
+     *                      @SWG\Property(property="card_no", type="string", example="12345678",description="卡号"),
+     *                      @SWG\Property(property="card_name", type="string", example="vip金卡",description="卡名"),
+     *                      @SWG\Property(property="percent", type="float", example="5",description="分润千分比"),
+     *                      ),
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="num",
+     *                      type="integer",
+     *                      description="可用卡片数量",
      *                  )
+     *              )
      *          )
      *      )
-     * )
+     * ))
      */
     public function cardsReserve(Request $request)
     {
-//        return $this->json([[
-//            "id" => "12",
-//            "card_no" => "12345678",
-//            "card_name" => "vip金卡",
-//            "percent" => "5"
-//        ],
-//            [
-//                "id" => "13",
-//                "card_no" => "12345678",
-//                "card_name" => "vip金卡",
-//                "percent" => "5"
-//            ],
-//            [
-//                "id" => "14",
-//                "card_no" => "12345678",
-//                "card_name" => "vip金卡",
-//                "percent" => "5"
-//            ],
-//            [
-//                "id" => "15",
-//                "card_no" => "12345678",
-//                "card_name" => "vip金卡",
-//                "percent" => "5"
-//            ]]);
         $offset = (int)$request->get('offset', 0);
         $limit = (int)$request->get('limit', 10);
-        return $this->json(Card::where([
+        $query = Card::where([
                 ['promoter_id', Auth::id()],
                 ['is_bound', 0],
-                ['is_frozen', 0],
-                ['id', '>', $offset]]
-        )->with('type')->limit($limit)->get()->map(function ($item) {
+                ['is_frozen', 0]
+            ]
+        );
+        $query_count = clone $query;
+        return $this->json(['list' => $query->where('id', '>', $offset)->with('type')->limit($limit)->get()->map(function ($item) {
             return ['id' => $item->getKey(), 'card_no' => $item->mix_id(), 'card_name' => $item->type->name, 'percent' => $item->type->percent * 10];
-        }));
+        }), 'num' => $query_count->count()]);
     }
 
     /**

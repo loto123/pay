@@ -38,7 +38,7 @@ class WechatOpen extends Model
             // Base URI is used with relative requests
             'base_uri' => $this->base_url,
             // You can set any number of default request options.
-            'timeout'  => 2.0,
+            'timeout'  => 10.0,
         ]);
         $response = $client->get("sns/userinfo",[
             'query' => [
@@ -58,7 +58,7 @@ class WechatOpen extends Model
             // Base URI is used with relative requests
             'base_uri' => $this->base_url,
             // You can set any number of default request options.
-            'timeout'  => 2.0,
+            'timeout'  => 10.0,
         ]);
         $response = $client->get("sns/oauth2/access_token",[
             'query' => [

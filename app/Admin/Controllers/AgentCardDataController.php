@@ -28,7 +28,7 @@ class AgentCardDataController extends Controller
         $operators = [];
         $operator_username = $request->operator_username;
         $card_type = $request->card_type;
-        if(!empty($operator_username)) {
+        if($operator_username) {
             $operators = AdminUser::where('username',$operator_username)->first();
             if(empty($operators)) {
                 $_error = '用户不存在';
@@ -44,7 +44,7 @@ class AgentCardDataController extends Controller
         }
 
         $current_card_cnt = 0;
-        if(!empty($card_type)) {
+        if($card_type) {
             if(!CardType::find($card_type)) {
                 $_error = '该卡片类型不存在';
             }
@@ -134,11 +134,11 @@ class AgentCardDataController extends Controller
             $_error = '没有可选的卡片，请先添加卡片类型';
         }
 
-        if(!empty($card_type) && !CardType::find($card_type)) {
+        if($card_type && !CardType::find($card_type)) {
             $_error = '该卡片类型不存在';
         }
 
-        if(!empty($request_promoter)) {
+        if($request_promoter) {
             $promoter = User::where('mobile',$request_promoter)->withCount(['promoter_cards'=>function($query){
                 $query->where('is_bound',Card::UNBOUND);
             }])->first();
@@ -261,18 +261,18 @@ class AgentCardDataController extends Controller
             $query = $query->where('operator',Admin::user()->id);
         }
 
-        if(!empty($allocate_id)) {
+        if($allocate_id) {
             $query = $query->whereHas('allocate_bys',function($query) use($allocate_id) {
                 $query->where('username',$allocate_id);
             });
         }
 
-        if(!empty($operator_id)) {
+        if($operator_id) {
             $query = $query->whereHas('operators',function($query) use($operator_id) {
                 $query->where('username',$operator_id);
             });
         }
-        if(!empty($promoter_id)) {
+        if($promoter_id) {
             $query = $query->whereHas('distributions', function ($query) use ($promoter_id) {
                 $query->whereHas('promoter', function ($query) use ($promoter_id) {
                     $query->where('mobile', $promoter_id);
@@ -280,7 +280,7 @@ class AgentCardDataController extends Controller
             });
         }
 
-        if(!empty($card_id)) {
+        if($card_id) {
             $query = $query->where('card_id',$en_card_id);
         }
 
@@ -288,7 +288,7 @@ class AgentCardDataController extends Controller
             $query = $query->where('created_at','>=',$begin)->where('created_at','<=',$end);
         }
 
-        if(!empty($card_type)) {
+        if($card_type) {
             $query = $query->whereHas('card', function($query) use($card_type) {
                 $query->where('card_type',$card_type);
             });
@@ -331,33 +331,33 @@ class AgentCardDataController extends Controller
             });
         }
 
-        if (!empty($card_id)) {
+        if ($card_id) {
             $query = $query->where('id', (new Card())->recover_id($card_id));
         }
 
-        if (!empty($agent_id)) {
+        if ($agent_id) {
             $query = $query->whereHas('owner_user', function ($query) use ($agent_id) {
                 $query->where('mobile', $agent_id);
             })->where('is_bound', Card::BOUND);
         }
 
-        if (!empty($operator_id)) {
+        if ($operator_id) {
             $query = $query->whereHas('stock.operators', function ($query) use ($operator_id) {
                 $query->where('username', $operator_id);
             });
         }
 
-        if (!empty($promoter_id)) {
+        if ($promoter_id) {
             $query = $query->whereHas('promoter', function ($query) use ($promoter_id) {
                 $query->where('mobile', $promoter_id);
             });
         }
 
-        if (!empty($is_bound)) {
+        if (isset($is_bound)) {
             $query = $query->where('is_bound', $is_bound);
         }
 
-        if (!empty($is_frozen)) {
+        if (isset($is_frozen)) {
             $query = $query->where('is_frozen', $is_frozen);
         }
 
@@ -365,7 +365,7 @@ class AgentCardDataController extends Controller
             $query = $query->where('created_at', '>=', $begin)->where('created_at', '<=', $end);
         }
 
-        if(!empty($card_type)) {
+        if($card_type) {
             $query = $query->where('card_type',$card_type);
         }
 

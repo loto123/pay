@@ -61,7 +61,24 @@ abstract class Container extends Model
         if ($amount <= 0) {
             return false;
         }
-        return $this->changeBalance(-$amount, $amount);
+
+        DB::beginTransaction();
+        $commit = false;
+
+        if ($this->changeBalance(-$amount, $amount)) {
+            $freeze = new Freeze([
+                'amount' => $amount,
+                'operation' => Freeze::OPERATION_FREEZE,
+                'memo' => '',
+            ]);
+            $freeze->container()->associate($this);
+            if ($freeze->save()) {
+                $commit = true;
+            }
+        }
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $commit;
     }
 
     /**
@@ -116,7 +133,23 @@ abstract class Container extends Model
         if ($amount <= 0) {
             return false;
         }
-        return $this->changeBalance($amount, -$amount);
+
+        DB::beginTransaction();
+        $commit = false;
+        if ($this->changeBalance($amount, -$amount)) {
+            $freeze = new Freeze([
+                'amount' => $amount,
+                'operation' => Freeze::OPERATION_UNFREEZE,
+                'memo' => '',
+            ]);
+            $freeze->container()->associate($this);
+            if ($freeze->save()) {
+                $commit = true;
+            }
+        }
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $commit;
     }
 
     /**
