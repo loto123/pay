@@ -800,7 +800,7 @@ class ShopController extends BaseController
         if ($shop->manager_id != $user->id) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
-        if ($shop->container->balance > 0 || $shop->active || Transfer::where("shop_id", $shop->id)->where("status", 3)->count() > 0) {
+        if ($shop->container->balance > 0 || $shop->active || Transfer::where("shop_id", $shop->id)->where("status", "!=", 3)->count() > 0) {
             return $this->json([], trans("api.shop_cannot_close"), 0);
         }
         $shop->status = Shop::STATUS_CLOSED;
