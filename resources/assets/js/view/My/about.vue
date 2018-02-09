@@ -35,9 +35,7 @@
 				height: 4em;
 				display: block;
 				margin: auto;
-				border-radius: 50%;
 				padding:1em;
-				background:#fff;
 			}
 		}
 		.versions {

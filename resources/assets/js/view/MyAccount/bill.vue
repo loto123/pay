@@ -70,10 +70,10 @@
                         </div>
                         <div class="flex-2">
                             <div v-if="tabStatus[0]">
-                                <div class="bill-money" v-bind:class="[item.type == 0?'':'green-color']">{{item.type == 0?-item.amount:'+'+item.amount}}</div>
+                                <div class="bill-money" v-bind:class="[item.type == 0?'':'green-color']">{{item.type == 0?'-'+item.amount:'+'+item.amount}}</div>
                             </div>
                             <div v-if="tabStatus[1]">
-                                <div class="bill-money"v-bind:class="[item.type == 2 || item.type == 5?'green-color':'']">{{item.type == 2||item.type == 5?'+'+item.amount:-item.amount}}<i class="diamond">&#xe6f9;</i></div>
+                                <div class="bill-money"v-bind:class="[item.type == 2 || item.type == 5||item.type == 10?'green-color':'']">{{item.type == 2||item.type == 5||item.type == 10?'+'+item.amount:'-'+item.amount}}<i class="diamond">&#xe6f9;</i></div>
                             </div>
                             
                             <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>

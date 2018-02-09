@@ -65,7 +65,6 @@
     width: 7em;
     height: 7em;
     border-radius: 50%;
-    border: 1px solid #eee;
   }
 
   img {

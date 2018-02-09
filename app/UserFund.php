@@ -19,6 +19,8 @@ class UserFund extends Model
 
     const TYPE_TRADE_OUT = 3;
 
+    const TYPE_SHOP_TRANSFER = 5;
+
     const TYPE_TRADE_FEE = 6;
 
     const TYPE_TRADE_BACK = 9;
