@@ -10,6 +10,7 @@ use App\Pay\PayLogger;
 use App\Pet;
 use App\PetRecord;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -458,9 +459,17 @@ class PetTradeController extends BaseController
      *     required=false,
      *     type="integer"
      *   ),
+     *     @SWG\Parameter(
+     *     name="version",
+     *     description="接口版本,1返回指定月,2返回指定月及以前",
+     *     default=1,
+     *     in="query",
+     *     required=false,
+     *     type="integer"
+     *   ),
      *   @SWG\Response(
-     *          response=200,
-     *          description="成功返回",
+     *          response="default",
+     *          description="成功返回,V1",
      *          @SWG\Schema(
      *              @SWG\Property(
      *                  property="code",
@@ -501,6 +510,45 @@ class PetTradeController extends BaseController
      *              )
      *          )
      *      ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回,V2",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(
+     *                      property="grouping",
+     *                      type="array",
+     *                      @SWG\Items(
+     *                          @SWG\Property(
+     *                              property="list",
+     *                              type="array",
+     *                              description="销售记录",
+     *                              @SWG\Items(
+     *                                  @SWG\Property(property="id", type="integer", description="记录id"),
+     *                                  @SWG\Property(property="state", type="string", description="状态文本"),
+     *                                  @SWG\Property(property="pet_pic", type="string", description="宠物图片"),
+     *                                  @SWG\Property(property="price", type="double", description="出售价格"),
+     *                                  @SWG\Property(property="created_at", type="string", description="出售时间"),
+     *                              )
+     *                          ),
+     *                          @SWG\Property(property="sold_amount", type="float", description="月销售额"),
+     *                          @SWG\Property(property="month", type="string", description="月份"),
+     *                      ),
+     *                  )
+     *              )
+     *          )
+     *      ),
      * )
      * @param Request $request
      * @return mixed
@@ -520,42 +568,92 @@ class PetTradeController extends BaseController
         $month = $request->get('month', date('Y-m'));
         $offset = (int)$request->get('offset', 0);
         $limit = (int)$request->get('limit', 10);
+        $version = $request->get('version', 1);
 
-        $soldAmount = 0.00; //出售获得
-        $startTime = "$month-1 0:0:0";
         $endTime = "$month-31 23:59:59";
 
-        $filter = [
-            ['place_by', Auth::id()],
-            ['created_at', '>=', $startTime],
-            ['created_at', '<=', $endTime]
-        ];
+        if ($version == 1) {
+            //V1版本
+            $soldAmount = 0.00; //出售获得
+            $startTime = "$month-1 0:0:0";
 
-
-        $where = $filter;
-        if ($offset > 0) {
-            $where [] = ['id', '<', $offset];
-        }
-
-        //取得出售记录
-        $list = SellBill::where($where)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
-            return [
-                'id' => $item->getKey(),
-                'state' => $item->deal_closed ? '出售成功' : (WithdrawRetry::isWithdrawFailed($item->withdraw->state) || $item->withdraw->state == Withdraw::STATE_SEND_FAIL ? '状态异常' : '出售中'),
-                'pet_pic' => $item->pet->image,
-                'price' => $item->price,
-                'created_at' => $item->created_at->toDateTimeString()
+            $filter = [
+                ['place_by', Auth::id()],
+                ['created_at', '>=', $startTime],
+                ['created_at', '<=', $endTime]
             ];
-        });
 
-        //取得当月销售额
-        if ($list) {
+
             $where = $filter;
-            $where [] = ['deal_closed', 1];
-            $soldAmount = SellBill::where($where)->sum('price');
-        }
+            if ($offset > 0) {
+                $where [] = ['id', '<', $offset];
+            }
 
-        return $this->json(['sold_amount' => $soldAmount, 'month' => $month, 'list' => $list]);
+            //取得出售记录
+            $list = SellBill::where($where)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get()->map(function ($item) {
+                return [
+                    'id' => $item->getKey(),
+                    'state' => $item->deal_closed ? '出售成功' : (WithdrawRetry::isWithdrawFailed($item->withdraw->state) || $item->withdraw->state == Withdraw::STATE_SEND_FAIL ? '状态异常' : '出售中'),
+                    'pet_pic' => $item->pet->image,
+                    'price' => $item->price,
+                    'created_at' => $item->created_at->toDateTimeString()
+                ];
+            });
+
+            //取得当月销售额
+            if ($list) {
+                $where = $filter;
+                $where [] = ['deal_closed', 1];
+                $soldAmount = SellBill::where($where)->sum('price');
+            }
+
+            return $this->json(['sold_amount' => $soldAmount, 'month' => $month, 'list' => $list]);
+        } else {
+            //V2版本
+            $filter = [
+                ['place_by', Auth::id()],
+                ['created_at', '<=', $endTime]
+            ];
+
+
+            $where = $filter;
+            if ($offset > 0) {
+                $where [] = ['id', '<', $offset];
+            }
+
+            //取得出售记录
+            //dump($limit);
+            $collection = SellBill::where($where)->limit($limit)->with(['pet', 'withdraw'])->orderByDesc('id')->get();
+            //dump(DB::getQueryLog());
+            $startTime = $collection->min('created_at');
+
+            //获取每月的销售额
+            /**
+             * @var $startTime Carbon
+             */
+            $where = $filter;
+            $where [] = ['created_at', '>=', $startTime->format('Y-m-1 0:0:0')];
+            $where [] = ['deal_closed', 1];
+            $sellAmounts = SellBill::where($where)->selectRaw('date_format(`created_at`,\'%Y-%m\') as `month`,sum(price) as total_amount')->groupBy('month')->get()->pluck('total_amount', 'month');
+
+            $grouped = $collection->groupBy(function ($item) {
+                return substr($item->created_at, 0, 7);
+            })->map(function ($list, $month) use ($sellAmounts) {
+                $list->transform(function ($item) {
+                    return [
+                        'id' => $item->getKey(),
+                        'state' => $item->deal_closed ? '出售成功' : (WithdrawRetry::isWithdrawFailed($item->withdraw->state) || $item->withdraw->state == Withdraw::STATE_SEND_FAIL ? '状态异常' : '出售中'),
+                        'pet_pic' => $item->pet->image,
+                        'price' => $item->price,
+                        'created_at' => $item->created_at->toDateTimeString()
+                    ];
+
+                });
+                return ['list' => $list, 'month' => $month, 'sold_amount' => (float)$sellAmounts->get($month)];
+            });
+
+            return $this->json(['grouping' => $grouped->sortByDesc('month')->values()]);
+        }
 
     }
 
