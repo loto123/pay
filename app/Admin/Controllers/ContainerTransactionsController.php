@@ -37,6 +37,9 @@ class ContainerTransactionsController extends Controller
     protected function grid()
     {
         return Admin::grid(ContainerTransaction::class, function (Grid $grid) {
+            if (!request()->has('container_type')) {
+                $grid->model()->whereRaw('1 > 2');
+            }
             $grid->model()->orderBy('created_at', 'asc');
             //工具按钮
             $grid->disableCreation();
