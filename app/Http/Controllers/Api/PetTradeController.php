@@ -627,32 +627,36 @@ class PetTradeController extends BaseController
             //dump(DB::getQueryLog());
             $startTime = $collection->min('created_at');
 
-            //获取每月的销售额
-            /**
-             * @var $startTime Carbon
-             */
-            $where = $filter;
-            $where [] = ['created_at', '>=', $startTime->format('Y-m-1 0:0:0')];
-            $where [] = ['deal_closed', 1];
-            $sellAmounts = SellBill::where($where)->selectRaw('date_format(`created_at`,\'%Y-%m\') as `month`,sum(price) as total_amount')->groupBy('month')->get()->pluck('total_amount', 'month');
+            if ($startTime) {
+                //获取每月的销售额
+                /**
+                 * @var $startTime Carbon
+                 */
+                $where = $filter;
+                $where [] = ['created_at', '>=', $startTime->format('Y-m-1 0:0:0')];
+                $where [] = ['deal_closed', 1];
+                $sellAmounts = SellBill::where($where)->selectRaw('date_format(`created_at`,\'%Y-%m\') as `month`,sum(price) as total_amount')->groupBy('month')->get()->pluck('total_amount', 'month');
 
-            $grouped = $collection->groupBy(function ($item) {
-                return substr($item->created_at, 0, 7);
-            })->map(function ($list, $month) use ($sellAmounts) {
-                $list->transform(function ($item) {
-                    return [
-                        'id' => $item->getKey(),
-                        'state' => $item->deal_closed ? '出售成功' : (WithdrawRetry::isWithdrawFailed($item->withdraw->state) || $item->withdraw->state == Withdraw::STATE_SEND_FAIL ? '状态异常' : '出售中'),
-                        'pet_pic' => $item->pet->image,
-                        'price' => $item->price,
-                        'created_at' => $item->created_at->toDateTimeString()
-                    ];
 
+                $grouped = $collection->groupBy(function ($item) {
+                    return substr($item->created_at, 0, 7);
+                })->map(function ($list, $month) use ($sellAmounts) {
+                    $list->transform(function ($item) {
+                        return [
+                            'id' => $item->getKey(),
+                            'state' => $item->deal_closed ? '出售成功' : (WithdrawRetry::isWithdrawFailed($item->withdraw->state) || $item->withdraw->state == Withdraw::STATE_SEND_FAIL ? '状态异常' : '出售中'),
+                            'pet_pic' => $item->pet->image,
+                            'price' => $item->price,
+                            'created_at' => $item->created_at->toDateTimeString()
+                        ];
+
+                    });
+                    return ['list' => $list, 'month' => $month, 'sold_amount' => (float)$sellAmounts->get($month)];
                 });
-                return ['list' => $list, 'month' => $month, 'sold_amount' => (float)$sellAmounts->get($month)];
-            });
+            }
 
-            return $this->json(['grouping' => $grouped->sortByDesc('month')->values()]);
+
+            return $this->json(['grouping' => $startTime ? $grouped->sortByDesc('month')->values() : []]);
         }
 
     }
