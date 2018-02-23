@@ -96,7 +96,7 @@
         let links = url+'/#/shareUser/inviteLink/download?mobile='+this.mobile;
         let title = '聚宝朋';
         let desc = '广聚天下朋友，共享时代财富';
-        let imgUrl = '';
+        let imgUrl = url+'/images/logo.png';
         wx.ready(() => {
           //分享给朋友
           wx.onMenuShareAppMessage({

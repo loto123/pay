@@ -65,7 +65,6 @@
     width: 7em;
     height: 7em;
     border-radius: 50%;
-    border: 1px solid #eee;
   }
 
   img {
@@ -185,14 +184,14 @@ export default {
           self.userId = res.data.data.id;
 
           // 微信登录控制，生产环境开启
-          // if(res.data.data.wechat == 0 && debug == 0){
-          //    Toast("登录成功，正在跳转绑定微信...");
-          //    setTimeout(()=>{
-          //        Loading.getInstance().open();
-          //    },1000);
+          if(res.data.data.wechat == 0 && debug == 0){
+             Toast("登录成功，正在跳转绑定微信...");
+             setTimeout(()=>{
+                 Loading.getInstance().open();
+             },1000);
 
-          //    return Promise.resolve(true);
-          // }
+             return Promise.resolve(true);
+          }
 
           request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");

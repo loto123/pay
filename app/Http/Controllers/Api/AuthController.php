@@ -496,7 +496,11 @@ class AuthController extends BaseController {
         if (!$user || !isset($user['openid'])) {
             return $this->json([], "auth error", 0);
         }
-        $oauth_user = OauthUser::where("unionid", $user['unionid'])->first();
+        if (isset($user['unionid'])) {
+            $oauth_user = OauthUser::where("unionid", $user['unionid'])->first();
+        } else {
+            $oauth_user = OauthUser::where("openid", $user['openid'])->first();
+        }
         Log::info("oauth_user:".var_export($user, true));
         if (!$oauth_user) {
             $oauth_user = new OauthUser();
