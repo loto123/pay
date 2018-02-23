@@ -469,6 +469,14 @@ export default {
         return;
       }
 
+      var reg = /^\s*(\S+)\s*$/;
+
+      if (!reg.test(this.moneyData.payMoney) ||!reg.test(this.moneyData.getMoney) ) 
+      { 
+        Toast("金额格式不正确");
+        return;
+      }
+
       this.submitClick = true;
       setTimeout(()=>{
         this.submitClick = false;
@@ -720,7 +728,6 @@ export default {
 
   watch: {
     "moneyData.payMoney": function(e) {
-      console.log(e);
       if(e == ""){
         this.moneyData.payMoney = null;
       }
