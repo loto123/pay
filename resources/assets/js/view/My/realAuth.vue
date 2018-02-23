@@ -31,6 +31,8 @@
   import topBack from "../../components/topBack";
   import request from '../../utils/userRequest';
   import { Toast } from "mint-ui";
+  import Loading from '../../utils/loading'
+  
   export default {
     data () {
       return {
