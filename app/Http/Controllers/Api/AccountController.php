@@ -297,6 +297,12 @@ class AccountController extends BaseController
         }
 
         $user = $this->auth->user();
+
+        //判断当日剩余出售次数
+        if ($this->remains_sell_times() <= 0) {
+            return $this->json([], '超过今日允许出售次数', 0);
+        }
+
         try {
             if (!$user->check_pay_password($request->password)) {
                 return $this->json([], trans("api.error_pay_password"), 0);
@@ -449,6 +455,20 @@ class AccountController extends BaseController
         $response['receiver'] = $show_receiver_info;
         return $this->json($response);
 
+    }
+
+    /**
+     * 今日剩余宠物出售次数
+     * @return int
+     */
+    private function remains_sell_times()
+    {
+        $max_sell_times = config('max_times_to_sell_pets', 3);
+        if ($max_sell_times <= 0) {
+            return 0;
+        } else {
+            return max(0, $max_sell_times - SellBill::where([['place_by', Auth::id()], ['created_at', '>=', date('Y-m-d 0:0:0')]])->count());
+        }
     }
 
     /**
@@ -673,7 +693,8 @@ class AccountController extends BaseController
      *                  @SWG\Property(property="quota_list", type="array", example="100,200,300",description="价格列表",@SWG\Items()),
      *                  @SWG\Property(property="required-params", type="object", description="该方式需要的必要参数说明。每种方式不同,key/描述。仅调试模式返回"),
      *                  ),
-     *                  )
+     *                  ),
+     *                  @SWG\Property(property="remains_times", type="integer", example=3,description="用户今日剩余可出售次数"),
      *              )
      *          )
      *      ),
@@ -725,7 +746,7 @@ class AccountController extends BaseController
             });
         }
 
-        return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods]);
+        return $this->json(['channel' => $channelBind->getKey(), 'methods' => $methods, 'remains_times' => $this->remains_sell_times()]);
     }
 
     /**
