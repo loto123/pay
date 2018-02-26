@@ -323,6 +323,10 @@ export default {
           var _temp = {};
           _temp = res.data.data.members[i];
           _temp.checked = false;
+
+          if(i == 0){
+            _temp.checked = true;
+          }
           this.memberList.push(_temp);
         }
 

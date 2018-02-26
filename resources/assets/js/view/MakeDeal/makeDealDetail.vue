@@ -469,6 +469,14 @@ export default {
         return;
       }
 
+      var reg = /^\s*(\S+)\s*$/;
+
+      if (!reg.test(this.moneyData.payMoney) ||!reg.test(this.moneyData.getMoney) ) 
+      { 
+        Toast("金额格式不正确");
+        return;
+      }
+
       this.submitClick = true;
       setTimeout(()=>{
         this.submitClick = false;
@@ -480,7 +488,7 @@ export default {
         if((parseFloat(_put)).toString().indexOf(".") != -1 || isNaN(Number(_put))){
           this.moneyData.payMoney = null;
 
-          Toast("分数只能是整数");
+          Toast("积分只能是整数");
           Loading.getInstance().close();
           return;
 
@@ -720,7 +728,6 @@ export default {
 
   watch: {
     "moneyData.payMoney": function(e) {
-      console.log(e);
       if(e == ""){
         this.moneyData.payMoney = null;
       }

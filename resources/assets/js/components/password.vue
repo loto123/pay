@@ -174,6 +174,7 @@ export default {
 
       if (this.password.length >= 6) {
         console.info(this.password);
+        // this.closePassword();
         this.doCallback();
       }
     },

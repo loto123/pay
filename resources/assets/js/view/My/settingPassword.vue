@@ -54,6 +54,7 @@ export default {
 
             // 两次的密码相同
             if(this.firstPassword == this.secondPassword){
+                this.passwordSwitch = false;
                 Loading.getInstance().open();
                
                 // 重置密码    

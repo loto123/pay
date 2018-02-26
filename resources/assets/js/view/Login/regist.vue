@@ -244,12 +244,9 @@
       var _step = localStorage.getItem("registStep");
       var _findPassWord = localStorage.getItem("findPasswordSwitch");
 
-      console.log(_findPassWord);
-
       if (_step && _findPassWord == true) {
         this.$store.dispatch("setRefindPassWordState", true);
         this.$store.dispatch("setStep", _step);
-        // localStorage.removeItem("registStep");
       }
 
     },
@@ -376,6 +373,16 @@
               return;
             }else if(this.userPassword.length >16){
               Toast("密码长度最多不能超过16位");
+              return;
+            }
+
+            var reg = /^\s*(\S+)\s*$/;
+            console.log("--------------test");
+            console.log(reg.test(this.userPassword));
+
+            if (!reg.test(this.userPassword)) 
+            { 
+              Toast("密码不能包含空格");
               return;
             }
 

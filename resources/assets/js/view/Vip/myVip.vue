@@ -221,6 +221,7 @@ export default {
 
           Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData('api/agent/bound_vip')]).then(res=>{
               if(res[1].data.data.if_frozen){
+                  
                 MessageBox({
                     title: '温馨提示',
                     message: '您的VIP卡已被冻结，请联系相关人员解冻',

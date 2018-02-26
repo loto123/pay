@@ -51,6 +51,12 @@
           confirm_password:this.confirm_password
         }
 
+        var reg = /\s/;
+        if (reg.test(this.new_password)) { 
+          Toast("新密码不能包含空格");
+          return;
+        }
+        console.log(reg.test(this.new_password));
         if(!this.old_password){
           Toast('请填写原密码')
           return
