@@ -9,6 +9,7 @@ use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
 use App\User;
 use App\UserFund;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -104,6 +105,9 @@ class IndexController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function safe() {
-        return $this->json(['users' => 1, 'days' => 2]);
+        $start_date = config("safe_runtime", date("Ymd"));
+        $diff = (new DateTime($start_date))->diff(new DateTime())->format('%a') + 1;
+
+        return $this->json(['users' => User::count(), 'days' => $diff]);
     }
 }
