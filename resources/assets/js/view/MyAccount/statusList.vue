@@ -2,9 +2,6 @@
     <!-- 出售状态 -->
     <div id="status-list">
         <topBack title="出售状态">
-            <!-- <div class="flex flex-reverse flex-align-center header-right" @click="show">
-                <a href="javascript:;">筛选</a>
-            </div> -->
         </topBack>
         <div class="bill-box">
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none">
@@ -21,6 +18,12 @@
                 </div>
                 <div>图标</div>
             </div>
+            
+            <div class="tab-fixed flex flex-v flex-align-start" v-if="billList.length != 0">
+                <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
+                <div class="amount">出售获得：{{tabTotal}}</div>
+            </div>
+
             <div v-if="billList.length == 0" class="flex flex-v flex-align-center nodata" >
                 <i class="iconfont">
                     &#xe655;
@@ -75,7 +78,16 @@
                     {type:5,title:'公会转入'},
                     {type:8,title:'打赏店家费'},
                 ],
-                selected: null
+                selected: null,
+
+                timeInfo:null,
+                tabTotal:"",
+                headList:[],
+
+                wrapperHeight:null,
+                loading: false,
+                allLoaded: false,
+                canLoading:true,
             };
         },
         created(){
@@ -102,9 +114,17 @@
                 request.getInstance().getData("api/pet/sold_record",data)
                     .then((res) => {
                         this.billList=res.data.data.list;
+
+                        for(var i = 0; i <this.billList.length;i++){
+                            this.billList[i].isTimePanel = false;
+                        }
+
                         Loading.getInstance().close();
+
+                        this.buildTimePanel();
                     })
                     .catch((err) => {
+                        console.error(err);
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
@@ -153,7 +173,137 @@
             selAll(){
                 this.init();
                 this.showAlert = false;
-            }
+            },
+
+             // 建立时间面板
+            buildTimePanel(){
+                var _head=0;
+
+                var getTheDate = (timecode)=>{
+
+                    if(!timecode){
+                        return null;
+                    }
+
+                    var _index = timecode.indexOf("-");
+                    if(_index == -1){
+                        return null
+                    }
+                    var _t = timecode.split("-");
+                    var data = _t[0]+"年"+_t[1]+"月";
+                    return data;
+                }
+                
+                var key = 0;
+
+                // 设置头部
+                if(this.billList.length!=0){
+                    if(this.billList[0].isTimePanel == false){
+                        key = 0;
+                        var _head = getTheDate(this.billList[key].created_at);
+                    }else if(this.billList[1].isTimePanel == false){
+                        key = 1;
+                        var _head = getTheDate(this.billList[key].created_at);
+                    }
+                }
+
+                console.log(_head);
+
+                var _initialData = {
+                    time:_head,
+                    index:key,
+                    total:"加载中..."
+                }
+                if(this.headList.length == 0){
+                    this.headList.push(_initialData);
+                }
+
+                // 插入时间标签
+                for(var i = 0; i <this.billList.length; i++){
+                    if(this.billList[i].isTimePanel == true){
+                        _head =getTheDate(this.billList[i+1].created_at);
+                        continue;
+                    }
+
+                    try{
+                         var label = getTheDate(this.billList[i].created_at);
+                         
+                        //  当头部与当前的创建时间不一致时
+                       
+                         if(_head != getTheDate(this.billList[i].created_at)){
+                            // 更新头部
+                            _head = getTheDate(this.billList[i].created_at);
+                            
+                            var data = {
+                                time:_head,
+                                index:i,
+                                total:"加载中..."
+                            }
+                         
+                            this.headList.push(data);
+                          
+                        }
+                    }catch(e){
+                        console.error(e);
+                    }
+                   
+                }
+
+                var count=  0;
+
+                // billList 插值
+                for(let k=0 ;k<this.headList.length;k++){
+                    var _index = this.headList[k].index+count;
+
+                    if(this.billList[_index].isTimePanel == true){
+                        continue;
+                    }
+                    this.billList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time,total:this.headList[k].total});
+                    count++;
+                }
+
+                for(let m = 0; m < this.billList.length; m++){
+                    if(this.billList[m].isTimePanel == true && this.billList[m].total == "加载中..."){
+                        console.log(m);
+                        console.log(this.billList[m].time.split("年")[0]);
+
+                        var _year = this.billList[m].time.split("年")[0];
+                        var _month = this.billList[m].time.split("年")[1].split("月")[0];
+                        var _timer = _year+"-"+_month;
+
+                        var _data = {
+                            date :_timer
+                        }
+                        console.log(_data);
+                        this.timeInfo = this.billList[0].time;
+                        // request.getInstance().postData().then(res=>{
+
+                        // }).catch(err=>{
+
+                        // });
+
+                        // if(this.tabStatus[0] == true){
+                        //     // 获取当月的总额度(分润)
+                        //     request.getInstance().postData("api/profit/count",_data)
+                        //         .then(res=>{
+                        //             this.billList[m].total = res.data.data.total;
+                        //             this.timeInfo = this.billList[0].time;
+                        //             this.tabTotal = this.billList[0].total;
+                        //         }).catch();
+                        // }else {
+                        //     // 获取当月的总额度(分润)
+                        //     request.getInstance().postData("api/profit/withdraw/count",_data)
+                        //         .then(res=>{
+                        //             this.billList[m].total = res.data.data.total;
+                        //             this.timeInfo = this.billList[0].time;
+                        //             this.tabTotal = this.billList[0].total;
+                        //         }).catch();
+                        // }
+                        
+                    }
+                }
+                count = 0;
+            },
         },
         components: {
             topBack
@@ -187,7 +337,26 @@
         }
     }
 
+    .tab-fixed{
+        position: fixed;
+        top:2em;
+        left: 0em;
+        z-index:1001;
+        width:100%;
+        height:3em;
+        background:#eee;
+        box-sizing:border-box;
+        padding-left: 1em;
+        padding-right:1em;
+
+        >div{
+            color: #555;
+            margin-top:0.3em;
+        }
+    }
+
     .bill-list {
+        /*padding-top:2em;*/
         li {
             padding: 0 1em;
             border-top: 1px solid #ccc;

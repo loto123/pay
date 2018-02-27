@@ -738,7 +738,12 @@ class AuthController extends BaseController {
             return $this->json();
         } else {
             Log::info("send sms error".var_export($result, true));
-            return $this->json([], 'error', 0);
+            if (isset($result['logs'][0]['result']['code']) && $result['logs'][0]['result']['code'] == '160040'){
+                return $this->json([], '今日短信发送次数已用完', 0);
+            } else {
+
+                return $this->json([], '发送失败', 0);
+            }
         }
     }
 
