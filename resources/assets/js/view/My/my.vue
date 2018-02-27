@@ -5,7 +5,7 @@
 				<div class="imgWrap">
 					<img :src="thumb">
 				</div>
-				<h3>{{name}}</h3>
+				<h3>{{identify_name}}</h3>
 				<div class="acc-number">账号:
 					<span>{{mobile}}</span>
 				</div>
@@ -104,6 +104,7 @@
 		data () {
 			return {
 				name:null,		//名字
+				identify_name:null,
 				mobile:null,	//手机号
 				thumb:null,		//图像
 
@@ -127,6 +128,7 @@
 				Promise.all([request.getInstance().getData("api/my/info"),request.getInstance().getData("api/my/index")])
 				.then((res)=>{
 					this.name=res[0].data.data.name;
+					this.identify_name=res[0].data.data.identify_name;
 					this.mobile=res[0].data.data.mobile;
 					this.thumb=res[0].data.data.thumb;
 

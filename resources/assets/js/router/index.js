@@ -14,6 +14,7 @@ import ShareProfit from './shareProfit'
 import Vip from './vip'
 import ForOForPage from './404'
 import SalePet from './dealList'
+import Safety from './safety'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -54,6 +55,9 @@ var routerList = {
 
     //交易行
     salePet:SalePet,
+
+    //安全保障
+    safety:Safety,
 
     // 404页面
     notFound:ForOForPage

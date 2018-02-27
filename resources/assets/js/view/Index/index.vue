@@ -95,13 +95,21 @@
             </a>
           </li>
           <li class="flex flex-v flex-align-center">
-              <a class="flex flex-v flex-align-center" @click="goDealList">
-                <i class="iconfont transaction-icon common-icon">
-                    &#xe639;
-                </i>
-                <h3>前往交易行</h3>
-              </a>
-            </li>
+            <a class="flex flex-v flex-align-center" @click="goDealList">
+              <i class="iconfont transaction-icon common-icon">
+                  &#xe639;
+              </i>
+              <h3>前往交易行</h3>
+            </a>
+          </li>
+          <li class="flex flex-v flex-align-center">
+            <a class="flex flex-v flex-align-center" @click="goSafety">
+              <i class="iconfont transaction-icon common-icon">
+                  &#xe639;
+              </i>
+              <h3>安全保障</h3>
+            </a>
+          </li>
         </ul>
       </section>
       <tabBar :status="'index'"></tabBar> 
@@ -272,6 +280,10 @@ export default {
       }else if(this.isAgent == 1){
         this.$router.push("/my/my_users");
       }
+    },
+
+    goSafety(){
+      this.$router.push('/safety')
     },
 
     init(){
