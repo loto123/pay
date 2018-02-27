@@ -10,6 +10,7 @@ use App\Shop;
 use App\TransferRecord;
 use App\User;
 
+use App\UserFund;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -80,12 +81,12 @@ class UserController extends Controller
             $channel_id = Request::input('channel_id');
             $role = Request::input('role');
             $user_table = (new User)->getTable();
-            $grid->model()->leftJoin('transfer_record as tfr', 'tfr.user_id', '=', $user_table .'.id')
+            $grid->model()->leftJoin('user_funds as uf', 'uf.user_id', '=', $user_table .'.id')
                 ->with(['roles', 'operator'])
                 ->select($user_table.'.*',
-                    DB::raw('abs(SUM( CASE WHEN stat=1 THEN amount ELSE 0 END)) AS payment'),
-                    DB::raw('abs(SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END)) AS profits'),
-                    DB::raw('COUNT(tfr.id) AS transfer_count'));
+                    DB::raw('abs(SUM( CASE WHEN mode=1 THEN amount ELSE 0 END)) AS payment'),
+                    DB::raw('abs(SUM( CASE WHEN mode=0 THEN amount ELSE 0 END)) AS profits'),
+                    DB::raw('COUNT(*) AS transfer_count'));
             if ($user_mobile) {
                 $grid->model()->where($user_table.'.mobile', $user_mobile);
             }
@@ -290,10 +291,10 @@ class UserController extends Controller
             $list = User::where('id',$id)->with(['roles','wechat_user'])->first();
             $list->id = $list->en_id($list->id);
             $list->parent_id = $list->parent_id==0?$list->parent_id:$list->parent->en_id($list->parent_id);
-            $transfer_record = TransferRecord::where('user_id', $id)
-                ->select(DB::raw('abs(SUM( CASE WHEN  stat=1 THEN amount ELSE 0 END)) AS payment'),
-                    DB::raw('abs(SUM( CASE WHEN  stat=2 THEN real_amount ELSE 0 END)) AS profits'),
-                    DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(fee_amount) AS fee_amount_count'))
+            $transfer_record = UserFund::where('user_id', $id)
+                ->select(DB::raw('abs(SUM( CASE WHEN  mode=1 THEN amount ELSE 0 END)) AS payment'),
+                    DB::raw('abs(SUM( CASE WHEN  mode=0 THEN amount ELSE 0 END)) AS profits'),
+                    DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(CASE WHEN type=6 THEN amount ELSE 0 END) AS fee_amount_count'))
                 ->first();
             $data = compact('list', 'transfer_record');
             $content->row(view('admin/userDetail', $data));
