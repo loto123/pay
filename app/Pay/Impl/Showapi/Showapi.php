@@ -51,7 +51,7 @@ class Showapi
         $request_url = $url . $param;
         $res_json = file_get_contents($request_url);
         $res = json_decode($res_json,true);
-        Log::info($res);
+//        Log::info($res);
 
         //处理结果
         if(isset($res['showapi_res_code']) && $res['showapi_res_code']===0
@@ -59,6 +59,11 @@ class Showapi
             $result = true;
         } else {
             $result = isset($res['showapi_res_body']['error']) ? $res['showapi_res_body']['error'] : '失败';
+            Log::info([
+                'showapi_identify_fail'=>'接口调用结果解析失败',
+                'record_id'=> $record_id,
+                'res' => $res,
+            ]);
         }
 
         //完善记录
@@ -120,6 +125,11 @@ class Showapi
             $result = true;
         } else {
             $result = isset($res['showapi_res_body']['error']) ? $res['showapi_res_body']['error'] : '失败';
+            Log::info([
+                'showapi_authentication_fail'=>'接口调用结果解析失败',
+                'record_id'=> $record_id,
+                'res' => $res,
+            ]);
         }
 
         //完善记录
