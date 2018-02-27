@@ -115,7 +115,7 @@
         }
         .number {
             position: absolute;
-            left: 1.5em;
+            left: 4.5em;
             top: 3.2em;
             color: #fff;
             font-size: 1.3em;
