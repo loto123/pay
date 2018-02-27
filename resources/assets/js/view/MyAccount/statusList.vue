@@ -1,7 +1,7 @@
 <template>
     <!-- 出售状态 -->
     <div id="status-list">
-        <topBack title="出售状态">
+        <topBack title="出售状态" style="background:#fff;">
         </topBack>
         <div class="bill-box">
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none">
@@ -19,12 +19,12 @@
                 <div>图标</div>
             </div>
             
-            <div class="tab-fixed flex flex-v flex-align-start" v-if="billList.length != 0">
+            <div class="tab-fixed flex flex-v flex-align-start" v-if="showList.length != 0">
                 <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
                 <div class="amount">出售获得：{{tabTotal}}</div>
             </div>
 
-            <div v-if="billList.length == 0" class="flex flex-v flex-align-center nodata" >
+            <div v-if="showList.length == 0" class="flex flex-v flex-align-center nodata" >
                 <i class="iconfont">
                     &#xe655;
                 </i>
@@ -32,20 +32,39 @@
             </div>
             
             <ul class="bill-list" v-else>
-                <li  v-for="item in billList" class="flex flex-align-center">
+                <li  v-for="item in showList" class="flex flex-align-center" :class="{'time-panel-li':item.isTimePanel}">
 
-                        <div class="imgWrap flex-2">
+                        <!-- 时间面板 -->
+                        <div class="time-panel flex flex-align-center" v-if="item.isTimePanel == true" ref="timeTab">
+                             <div class="bill-content flex-8 flex flex-v">
+                                <!-- <h5></h5> -->
+                                <div>{{item.time}}</div>
+                                <div class="flex" style="margin-top:0.2em;">
+                                    <div class="title" style="color:#999;">出售价格:</div>
+                                    <div class="price" style="color:#999;">{{item.amount}}</div>
+                                </div>  
+                            </div>
+
+                            <!-- <div class="bill-money flex-3">
+                                
+                            </div> -->
+                        </div>
+                        
+                        <!-- 内容 -->
+                        <div class="content flex flex-align-center" v-else>
+                            <div class="imgWrap flex-2">
                             <img :src="item.pet_pic" alt="">
-                        </div>
+                            </div>
 
-                        <div class="bill-content flex-8">
-                            <h5>{{item.state}}</h5>
-                            <div class="time">{{item.created_at}}</div>
-                        </div>
+                            <div class="bill-content flex-8">
+                                <h5>{{item.state}}</h5>
+                                <div class="time">{{item.created_at}}</div>
+                            </div>
 
-                        <div class="bill-money flex-3">
-                            <div class="title">出售价格:</div>
-                            <div class="price">{{item.price}}</div>
+                            <div class="bill-money flex-3">
+                                <div class="title">出售价格:</div>
+                                <div class="price">{{item.price}}</div>
+                            </div>
                         </div>
 
                 </li>
@@ -68,17 +87,10 @@
                 type:null,      //类型
                 created_at:null,        //结束时间
                 size:null,  //数目
+
                 billList:[],
-                items:[
-                    {type:0,title:'充值'},
-                    {type:1,title:'提现'},
-                    {type:2,title:'交易收入'},
-                    {type:3,title:'交易支出'},
-                    {type:4,title:'转账到公会'},
-                    {type:5,title:'公会转入'},
-                    {type:8,title:'打赏店家费'},
-                ],
-                selected: null,
+                originList:[],
+                showList :[],
 
                 timeInfo:null,
                 tabTotal:"",
@@ -100,79 +112,46 @@
             cancel() {
                 this.showAlert = false;
             },
-            // details(id) {
-            //     this.$router.push({ path: "/myAccount/bill/bill_details?id="+id});
-            // },
+            
             init(){
                 var data={
                     type:this.type,
                     created_at:this.created_at,
-                    limit:10
+                    limit:10,
+                    version:2
                 }
+
                 Loading.getInstance().open();
 
                 request.getInstance().getData("api/pet/sold_record",data)
                     .then((res) => {
-                        this.billList=res.data.data.list;
 
-                        for(var i = 0; i <this.billList.length;i++){
-                            this.billList[i].isTimePanel = false;
+                        // 获取事件分组
+                        this.originList = res.data.data.grouping;
+
+                        this.billList=[].concat(this.originList);
+
+                        // for(var i = 0; i <this.billList.length;i++){
+                        //     this.billList[i].isTimePanel = false;
+                        // }
+
+                        this.tabTotal = res.data.data.sold_amount;
+                        
+                        this.showList = this.buildDataList();
+
+                        if(this.showList.length>0){
+                            this.timeInfo = this.showList[0].time;
+                            this.tabTotal = this.showList[0].amount;
                         }
 
                         Loading.getInstance().close();
-
-                        this.buildTimePanel();
+                        
                     })
                     .catch((err) => {
                         console.error(err);
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
-            },
-
-            changeTime(shijianchuo){
-                function add0(m){return m<10?'0'+m:m }
-
-                var time = new Date(shijianchuo*1000);
-                var y = time.getFullYear();
-                var m = time.getMonth()+1;
-                var d = time.getDate();
-                var h = time.getHours();
-                var mm = time.getMinutes();
-                var s = time.getSeconds();
-                return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
-            },
-            status(type){
-                let result='';
-                switch(type){
-                    case 0: result='充值'; break;
-                    case 1: result='提现'; break;
-                    case 2: result='交易收入'; break;
-                    case 3: result='交易支出'; break;
-                    case 4: result='转账到公会'; break;
-                    case 5: result='公会转入'; break;
-                    case 6: result='交易手续费'; break;
-                    case 7: result='提现手续费'; break;
-                    case 8: result='打赏店家费'; break;
-                }
-                return result;
-            },
-            selContent(type){
-                Loading.getInstance().open("加载中...");
-                request.getInstance().getData("api/account/records?type="+type)
-                    .then((res) => {
-                        this.billList=res.data.data.data;
-                        this.showAlert = false;
-                        Loading.getInstance().close();
-                    })
-                    .catch((err) => {
-                        Toast(err.data.msg);
-                        Loading.getInstance().close();
-                    })
-            },
-            selAll(){
-                this.init();
-                this.showAlert = false;
             },
 
              // 建立时间面板
@@ -276,6 +255,7 @@
                         }
                         console.log(_data);
                         this.timeInfo = this.billList[0].time;
+
                         // request.getInstance().postData().then(res=>{
 
                         // }).catch(err=>{
@@ -304,6 +284,29 @@
                 }
                 count = 0;
             },
+
+            // 建立数据列表
+            buildDataList(){
+                var _dataList = [];
+
+                for (var i = 0; i< this.billList.length; i ++){
+
+                    var _timePanelInfo = {};
+                    _timePanelInfo.time = this.billList[i].month;
+                    _timePanelInfo.amount = this.billList[i].sold_amount;
+                    _timePanelInfo.isTimePanel = true;
+
+                    this.billList[i].list.unshift(_timePanelInfo);
+
+                    _dataList = _dataList.concat(this.billList[i].list);
+                }
+
+                return _dataList;
+                console.log(_dataList);
+            }
+
+
+
         },
         components: {
             topBack
@@ -363,12 +366,17 @@
             width: 100%;
             height: 4em;
             box-sizing: border-box;
-           
-            .imgWrap{
-                >img{
-                    width:100%;
+
+            .content{
+                width: 100%;
+                height: 4em;
+                .imgWrap{
+                    >img{
+                        width:100%;
+                    }
                 }
             }
+            
 
             .bill-content {
                 padding-left: 0.7em;
@@ -393,6 +401,16 @@
             }
             &:last-child {
                 border-bottom: 1px solid #ccc;
+            }
+        }
+
+        .time-panel-li{
+            background: #eee;
+            height: 3em;
+
+            .time-panel{
+                width: 100%;
+                height: 100%;
             }
         }
     }
