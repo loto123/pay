@@ -520,7 +520,7 @@ class UserController extends BaseController
             return $this->json([], $validator->errors()->first(), 0);
         }
 
-        $name = $request->input('name');
+        $identify_name = $request->input('name');
         $id_number = $request->input('id_number');
         $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
@@ -550,7 +550,7 @@ class UserController extends BaseController
         }
         //调用实名认证接口
         if(!config('app.debug')) {
-            $reality_res = Showapi::identify($pay_record->id,$name,$id_number);
+            $reality_res = Showapi::identify($pay_record->id,$identify_name,$id_number);
 //            $reality_res = Reality::identify($pay_record->id,$name,$id_number);
         } else {
             $reality_res = true;
@@ -558,7 +558,7 @@ class UserController extends BaseController
         if($reality_res === true) {
             User::where('id',$this->user->id)->update([
                 'identify_status' => 1,
-                'name' => $name,
+                'identify_name' => $identify_name,
                 'id_number' => $id_number,
             ]);
             return $this->json();
