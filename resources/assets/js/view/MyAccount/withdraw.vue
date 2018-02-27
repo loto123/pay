@@ -108,7 +108,27 @@
 
 		<!-- 提交后的付款信息 -->
 		<div class="pay-info-detail flex flex-v flex-align-center" v-if="isPayInfoDetailShow">
-			<div class="top-wrap"></div>
+			<div class="top-wrap flex">
+				<div class="left flex-3">
+					<div class="line-bg"></div>
+					<div class="line-green"></div>
+					<div class="circle-green"></div>
+					<div class="circle-bg"></div>
+					<div class="clock">
+						<i class="iconfont">&#xe78b;</i>
+					</div>
+				</div>
+
+				<div class="right flex-6">
+					<h3>发出出售申请</h3>
+					<div>
+						<h3 style="color:#000;">银行处理中</h3>
+						<h3 style="margin-top:0.3em;">预计01-17 18:25前到账</h3>
+					</div>
+					<h3 style="margin-top:3.95em;">到账成功</h3>
+				</div>
+
+			</div>
 			<div class="bottom-wrap">
 				<ul>
 					<li class="flex flex-align-center">
@@ -162,7 +182,7 @@
 				fee_value: null,
 				isFee: false,                   // 是否展示手续费
 				isShow:false,
-				isPayInfoDetailShow:false,      // 付款后的提示
+				isPayInfoDetailShow:true,      // 付款后的提示
 
 				getEggsTimes:0,
 				isPopDetailShow:false,          // 查看更多显示
@@ -177,6 +197,7 @@
 				sheetVisible:false,
 				has_pay_card:0,                 // 是否绑定了银行卡
 				actions:[],                     // 右上角动作列表
+
 				isBroodClick:false,             // 孵化按钮防止连续点击
 				fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
 				bankInfo:null,                  // 提现成功后的银行卡信息提示
@@ -338,7 +359,6 @@
 						Loading.getInstance().close();
 						this.fee  = res[1].data.data.fee;
 						this.bankInfo = res[1].data.data.receiver.bank_name+" "+res[1].data.data.receiver.card_tail_number;
-						console.log(this.fee);
 						Toast('出售成功');
 						this.isPayInfoDetailShow = true;
 						this.hidePassword();
@@ -539,7 +559,68 @@
 
 		.top-wrap{
 			width:90%;
-			height: 8em;
+			height: 14em;
+
+			.left{
+				position: relative;
+				.line-bg{
+					height: 11em;
+					width: 1em;
+					border-right: 0.1em solid #eee;
+					position: absolute;
+					top:1.5em;
+					right: 0.55em;
+				}
+
+				.line-green{
+					@extend .line-bg;
+					height: 5.5em;
+					border-right: 0.1em solid #00CC00;
+				}
+
+				.circle-green{
+					width:1.2em;
+					height: 1.2em;
+					background:#00CC00;
+					border-radius: 50%;
+					position: absolute;
+					top:1.5em;
+					right: 0em;
+				}
+
+				.circle-bg{
+					@extend .circle-green;
+					background:#eee;
+					top:12em;
+				}
+
+				.clock{
+
+					background: #fff;
+					position: absolute;
+					top:5.9em;
+					right: -0.5em;
+					>i{
+						font-size:2.5em;
+						color:#26a2ff;
+					}
+				}
+				
+			}
+			
+			.right{
+				padding-left: 0.5em;
+				padding-top:1.6em;
+				
+				>div{
+					margin-top:3.3em;
+				}
+
+				h3{
+					color:#999;
+				}
+			}
+
 		}
 
 		.bottom-wrap{
@@ -735,6 +816,7 @@
 					box-sizing: border-box;
 					border:1px solid #eee;
 					margin-left: 1em;
+					margin-top:0.5em;
 
 					>img{
 						display: block;
