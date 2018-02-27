@@ -161,7 +161,7 @@
                     request.getInstance().postData("api/profit/data",_data)
                     .then((res) => {
 
-                        var _dataList = res.data.data.data
+                        var _dataList = res.data.data.data;
 
                         if(_dataList.length == 0){
                             this.recordList = [];
@@ -197,6 +197,7 @@
                             this.recordList = [];
                             return;
                         }
+                        
                         for(var i = 0; i <_dataList.length;i++){
                             _dataList[i].isTimePanel = false;
                         }

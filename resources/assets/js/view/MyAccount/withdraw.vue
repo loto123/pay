@@ -55,8 +55,11 @@
 				</div>
 			</div>
 			<a href="javascript:;" class="withdraw-btn" @click="withdrawBtn">
-				<mt-button type="primary" size="large">出售</mt-button>
+				<mt-button type="primary" size="large" :disabled = "isCanSale">出售</mt-button>
 			</a>
+
+			<p class="withdraw-notice">今日剩余出售次数：{{remains_times}}</p>
+
 		</div>
 		
 		<!-- 更多宠物弹窗 -->
@@ -177,7 +180,9 @@
 				isBroodClick:false,             // 孵化按钮防止连续点击
 				fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
 				bankInfo:null,                  // 提现成功后的银行卡信息提示
-				fee:1
+				fee:1,
+				isCanSale:false,
+				remains_times:0                 // 剩余的提现次数
 			}
 		},
 		mounted(){
@@ -239,6 +244,15 @@
 						this.dataList = res[2].data.data.methods;
 						this.setBankList(res[2]);//获取提现方式列表
 
+						this.remains_times = res[2].data.data.remains_times;
+
+						// 剩余提现次数为0
+						if(this.remains_times == 0){
+							this.isCanSale = true;
+						}else{
+							this.isCanSale = false;
+						}
+						
 						this.check();
 						Loading.getInstance().close();
 					})
@@ -741,6 +755,12 @@
 				width: 95%;
 				margin: 0 auto;
 			}
+		}
+
+		.withdraw-notice{
+			text-align: center;
+			color:#555;
+			font-size: 0.9em;
 		}
 	}
 
