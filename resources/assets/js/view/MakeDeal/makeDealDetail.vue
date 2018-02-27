@@ -488,7 +488,7 @@ export default {
         if((parseFloat(_put)).toString().indexOf(".") != -1 || isNaN(Number(_put))){
           this.moneyData.payMoney = null;
 
-          Toast("分数只能是整数");
+          Toast("积分只能是整数");
           Loading.getInstance().close();
           return;
 
