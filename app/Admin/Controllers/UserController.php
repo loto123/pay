@@ -294,7 +294,7 @@ class UserController extends Controller
             $transfer_record = UserFund::where('user_id', $id)
                 ->select(DB::raw('abs(SUM( CASE WHEN  mode=1 THEN amount ELSE 0 END)) AS payment'),
                     DB::raw('abs(SUM( CASE WHEN  mode=0 THEN amount ELSE 0 END)) AS profits'),
-                    DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(amount) AS fee_amount_count'))
+                    DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(CASE WHEN type=6 THEN amount ELSE 0 END) AS fee_amount_count'))
                 ->first();
             $data = compact('list', 'transfer_record');
             $content->row(view('admin/userDetail', $data));
