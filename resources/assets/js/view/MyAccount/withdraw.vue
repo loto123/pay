@@ -123,7 +123,7 @@
 					<h3>发出出售申请</h3>
 					<div>
 						<h3 style="color:#000;">银行处理中</h3>
-						<h3 style="margin-top:0.3em;">预计01-17 18:25前到账</h3>
+						<h3 style="margin-top:0.3em;">预计{{expected_arrival_time}}前到账</h3>
 					</div>
 					<h3 style="margin-top:3.95em;">到账成功</h3>
 				</div>
@@ -182,7 +182,8 @@
 				fee_value: null,
 				isFee: false,                   // 是否展示手续费
 				isShow:false,
-				isPayInfoDetailShow:true,      // 付款后的提示
+				isPayInfoDetailShow:false,      // 付款后的提示
+				expected_arrival_time:"",
 
 				getEggsTimes:0,
 				isPopDetailShow:false,          // 查看更多显示
@@ -359,6 +360,7 @@
 						Loading.getInstance().close();
 						this.fee  = res[1].data.data.fee;
 						this.bankInfo = res[1].data.data.receiver.bank_name+" "+res[1].data.data.receiver.card_tail_number;
+						this.expected_arrival_time = res[1].data.data.expected_arrival_time;
 						Toast('出售成功');
 						this.isPayInfoDetailShow = true;
 						this.hidePassword();
@@ -598,7 +600,7 @@
 
 					background: #fff;
 					position: absolute;
-					top:5.9em;
+					top:6em;
 					right: -0.5em;
 					>i{
 						font-size:2.5em;
