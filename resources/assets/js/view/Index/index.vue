@@ -261,7 +261,6 @@ i {
 
   ul {
     background: #fff;
-    margin-top:0.5em;
 
     li {
       padding-top: 0.5em;
@@ -275,7 +274,8 @@ i {
       }
       h3 {
         color: #000;
-        font-size: 0.95em;
+        margin-top:0.4em;
+        font-size: 0.90em;
       }
     }
 
