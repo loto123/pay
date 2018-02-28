@@ -38,7 +38,6 @@
 
       <section class="content">
         <ul class="flex flex-wrap-on">
-
           <!-- <li class="flex flex-v flex-align-center">
             <a href="/#/myAccount" class="flex flex-v flex-align-center">
                <i class="iconfont account-icon common-icon">
@@ -51,7 +50,7 @@
           <li class="flex flex-v flex-align-center">
             <a href="/#/shop" class="flex flex-v flex-align-center">
               <i class="iconfont myShop-icon common-icon">
-                &#xe61c;
+                &#xe611;
               </i>
               <h3>我的公会</h3>
             </a>
@@ -134,6 +133,16 @@
 </template>
 
 <style lang="scss" scoped>
+
+body{
+  ::-webkit-scrollbar
+  {
+      width: 16px;
+      height: 16px;
+      background-color: #F5F5F5;
+  }
+}
+
 i {
   display: block;
 }
@@ -207,6 +216,10 @@ i {
           font-size:2.5em;
           color:#fff;
         }
+        
+        i:nth-child(1){
+          color:#1b53af;
+        }
 
         i:nth-child(2){
           font-size:1.0em;
@@ -221,6 +234,8 @@ i {
   box-sizing: border-box;
 
   ul {
+    padding-bottom:3em;
+
     li {
       padding-top: 0.5em;
       box-sizing: border-box;
@@ -228,7 +243,7 @@ i {
       height: 6em;
 
       .common-icon {
-        font-size: 3em;
+        font-size: 2em;
         color: #26a2ff;
       }
       h3 {
