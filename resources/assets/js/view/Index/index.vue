@@ -133,15 +133,23 @@
 </template>
 
 <style lang="scss" scoped>
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+// ::-webkit-scrollbar-track {
+// 		  background-color: #b46868;
+// 	} /* 滚动条的滑轨背景颜色 */
 
-body{
-  ::-webkit-scrollbar
-  {
-      width: 16px;
-      height: 16px;
-      background-color: #F5F5F5;
-  }
-}
+// 	::-webkit-scrollbar-thumb {
+// 		  background-color: rgba(0, 0, 0, 0.2); 
+// 	} /* 滑块颜色 */
+
+// 	::-webkit-scrollbar-button {
+// 		  background-color: #7c2929;
+// 	} /* 滑轨两头的监听按钮颜色 */
+
+// 	::-webkit-scrollbar-corner {
+// 		  background-color: black;
+// 	} /* 横向滚动条和纵向滚动条相交处尖角的颜色 */
+
 
 i {
   display: block;
