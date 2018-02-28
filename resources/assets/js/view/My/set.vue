@@ -29,13 +29,13 @@
 <script>
 	import request from '../../utils/userRequest';
 	import topBack from '../../components/topBack'
-	import {Toast } from "mint-ui";
+	import { Toast } from "mint-ui";
 
 	export default {
 		data() {
 			return {
 				mobile: null,
-				user_feedback:window.user_feedback
+				user_feedback: window.user_feedback
 			}
 		},
 		components: { topBack },
@@ -48,22 +48,22 @@
 							this.$router.push('/my/setting_password');
 						} else {
 							this.mobile = this.$route.query.mobile;
-							this.$router.push('/my/pay_password?mobile='+ this.mobile);
+							this.$router.push('/my/pay_password?mobile=' + this.mobile);
 						}
 					})
 					.catch((err) => {
 						Toast(err.data.msg);
 					})
 			},
-			exit(){
+			exit() {
 				request.getInstance().removeToken();
 				Toast("用户已经退出...");
-				setTimeout(function(){
+				setTimeout(function () {
 					window.location.href = "/#/login"
-				},2000);
+				}, 2000);
 			},
-			help(){
-				location.href=this.user_feedback;
+			help() {
+				location.href = this.user_feedback;
 			}
 		}
 	}

@@ -1,26 +1,27 @@
 <template>
     <div id="myAccount" class="myAccount-container">
-        <topBack title="我的钱包" style="background:#eee;">
+        <topBack title="我的钱包" style="background:#26a2ff;color:#fff;">
             <div class= "flex flex-reverse flex-align-center header-right">
-                <a href="/#/myAccount/bill" class="recharge-btn ">账单明细</a>
+                <a href="/#/myAccount/bill" style="color:#fff;">账单明细</a>
             </div>
         </topBack>
         <div class="myAccount-box">
             <div class="withDraw-money">
-                <div class="money">{{balance}}</div>
+                <div class="money flex flex-align-center flex-justify-center">{{balance}}<i class="diamond" style="margin-top: -0.1em;margin-left:0.4em;">&#xe6f9;</i></div>
                 <div class="title">当前可用钻石</div>
             </div>
-            <div class="submit-btn">
-                <a href="/#/myAccount/recharge" class="mb15">
-                    <button type="button" class="recharge-btn">购买</button>
-                </a>
-                <a href="javascript:;"  @click="withdraw" class="mb15">
-                    <button type="button" class="withdraw-btn">出售</button>
-                </a>  
-                <a href="javascript:;" @click="give">
-                    <button type="button" class="give-btn">转钻到公会</button>    
-                </a>  
-            </div>
+
+            <ul class="myAccount-list">
+				<li @click="purchase">
+					<mt-cell title="购买" is-link></mt-cell>
+                </li>
+                <li @click="withdraw">
+					<mt-cell title="出售" is-link></mt-cell>
+                </li>
+                <li @click="give">
+					<mt-cell title="转钻到公会" is-link></mt-cell>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -57,11 +58,15 @@
                         Loading.getInstance().close();
 					})
             },
-            //提现
+            //购买
+            purchase(){
+                this.$router.push('/myAccount/recharge')
+            },
+            //出售
             withdraw(){
                 this.$router.push('/myAccount/withdraw')
             },
-            //转账
+            //转钻到公会
             give(){
                 if(this.has_pay_card==0){
                     MessageBox.confirm("您还没有绑定银行卡,是否前往绑定！", "温馨提示").then(
@@ -99,17 +104,14 @@
         }
     }
     .myAccount-box{
-        margin-top: 2em;
+        /* margin-top: 2em; */
     }
     .withDraw-money{
-        width: 13em;
         height: 13em;
-        border: 1px solid #aaa;
-        border-radius: 50%;
-        margin: 0 auto 2em auto;
-        background: #199ED8;
+        background: #26a2ff;
         position: relative;
         text-align: center;
+        color: #fff;
         .money,.title{
             position: absolute;
             width:100%;
@@ -118,45 +120,33 @@
         .money{
             top: 30%;
             color: #fff;
-            font-size: 2em;
+            font-size: 1.8em;
         }
         .title{
             top: 50%;
             color:#ddd;
         }
     }
-    .submit-btn{
-        width: 90%;
-        margin:auto;
-        a{
-            display: block;
-            button{
-                border: none;
-                height: 2.8em;
-                line-height: 2.8em;
-                text-align: center;
-                width: 100%;
-                margin: auto;
-                border-radius: 5px;
-                font-size: 1em;
-                outline: none;
-            }
-            .recharge-btn{
-                background:#00CC00;
-                color: #fff;
-            }
-            .withdraw-btn{
-                background:#fff;
-                color: #333;
-            }
-            .give-btn{
-                background:#199ED8;
-                color:#fff;
-            }
-        }
-    }
+    .myAccount-list {
+		border-bottom: 1px solid #d9d9d9;
+		li {
+			.mint-cell {
+				background-image: none;
+				background-size: 100% 1px;
+				background-repeat: no-repeat;
+				background-position: top;
+				span {
+					font-size: 0.9em;
+				}
+			}
+		}
+	}
     .mint-button--danger{
         background:#fff !important;
+    }
+    .diamond {
+        color: orange;
+        font-size: 0.8em;
     }
 </style>
 
