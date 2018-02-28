@@ -15,7 +15,7 @@
           
       </div>
       <div class="infos flex flex-align-center" v-if="isShow">
-          <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益由'+ default_percent+'提升至'+percent+'‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
+          <h3 v-bind:class="[isBindVIP?'goldFont':'redFont']">{{isBindVIP?'受益于您的VIP权益，您获得的分润收益由'+ default_percent+'‰'+'提升至'+percent+'‰':'您还没有绑定VIP卡，绑定VIP卡后可实现收益翻倍！'}}</h3>
       </div>
       
       <div class="card-wrap" v-if="isBindVIP">

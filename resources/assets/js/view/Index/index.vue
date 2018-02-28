@@ -37,15 +37,12 @@
       </section>
 
       <section class="content">
+
+        <div class="menu-class flex flex-align-center">
+          <span></span>我的
+        </div>
+
         <ul class="flex flex-wrap-on">
-          <!-- <li class="flex flex-v flex-align-center">
-            <a href="/#/myAccount" class="flex flex-v flex-align-center">
-               <i class="iconfont account-icon common-icon">
-                &#xe61e;
-              </i>
-              <h3>我的账户</h3>
-            </a>
-          </li> -->
 
           <li class="flex flex-v flex-align-center">
             <a href="/#/shop" class="flex flex-v flex-align-center">
@@ -92,6 +89,23 @@
             </a>
           </li>
 
+        </ul>
+
+        <div class="menu-class flex flex-align-center">
+           <span></span>拓展
+        </div>
+
+         <ul class="flex flex-wrap-on">
+          
+          <li class="flex flex-v flex-align-center">
+            <a href="/#/my_vip" class="flex flex-v flex-align-center">
+              <i class="iconfont transaction-icon common-icon">
+                &#xe6e1;
+              </i>
+              <h3>我的vip</h3>
+            </a>
+          </li>
+
           <li class="flex flex-v flex-align-center">
             <a href="/#/shareUser" class="flex flex-v flex-align-center">
               <i class="iconfont transaction-icon common-icon">
@@ -126,6 +140,7 @@
             </a>
           </li>
         </ul>
+
       </section>
       <tabBar :status="'index'"></tabBar> 
   </div>
@@ -133,23 +148,11 @@
 </template>
 
 <style lang="scss" scoped>
-/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-// ::-webkit-scrollbar-track {
-// 		  background-color: #b46868;
-// 	} /* 滚动条的滑轨背景颜色 */
 
-// 	::-webkit-scrollbar-thumb {
-// 		  background-color: rgba(0, 0, 0, 0.2); 
-// 	} /* 滑块颜色 */
-
-// 	::-webkit-scrollbar-button {
-// 		  background-color: #7c2929;
-// 	} /* 滑轨两头的监听按钮颜色 */
-
-// 	::-webkit-scrollbar-corner {
-// 		  background-color: black;
-// 	} /* 横向滚动条和纵向滚动条相交处尖角的颜色 */
-
+#index{
+  background: #f5f7fb;
+  height: 100vh;
+}
 
 i {
   display: block;
@@ -238,11 +241,27 @@ i {
 }
 
 .content {
-  padding-top: 0.5em;
   box-sizing: border-box;
+  padding-bottom:3em;
+  
+  .menu-class{
+    background: #fff;
+    margin-top:0.5em;
+    height: 2em;
+    padding-left: 0.5em;
+    box-sizing: border-box;
+
+    >span{
+      width: 0.4em;
+      height: 85%;
+      background: #26a2ff;
+      margin-right: 0.5em;
+    }
+  }
 
   ul {
-    padding-bottom:3em;
+    background: #fff;
+    margin-top:0.5em;
 
     li {
       padding-top: 0.5em;
@@ -259,10 +278,10 @@ i {
         font-size: 0.95em;
       }
     }
+
   }
 }
 </style>
-
 
 <script>
 import tabBar from "../../components/tabBar";
