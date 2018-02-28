@@ -41,7 +41,7 @@ i {
 }
 
 #tabBar {
-  position: absolute;
+  position: fixed;
   bottom: 0em;
   left: 0em;
   height: 3em;
