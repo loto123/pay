@@ -62,6 +62,7 @@ class IndexController extends BaseController {
         $user = $this->auth->user();
         /* @var $user User */
         return $this->json([
+            'name' => $user->name,
             'avatar' => $user->avatar,
             'balance' => $user->container->balance,
             'new_message' => $user->unreadNotifications()->whereIn("type", Notice::typeConfig())->count() > 0 ? 1 : 0,
