@@ -1,10 +1,7 @@
 <template>
     <!-- 出售状态 -->
     <div id="status-list">
-        <topBack title="出售状态">
-            <!-- <div class="flex flex-reverse flex-align-center header-right" @click="show">
-                <a href="javascript:;">筛选</a>
-            </div> -->
+        <topBack title="出售状态" style="background:#fff;">
         </topBack>
         <div class="bill-box">
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none">
@@ -21,28 +18,53 @@
                 </div>
                 <div>图标</div>
             </div>
-            <div v-if="billList.length == 0" class="flex flex-v flex-align-center nodata" >
+            
+            <div class="tab-fixed flex flex-v flex-align-start" v-if="showList.length != 0">
+                <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
+                <div class="amount">出售获得：{{tabTotal}}</div>
+            </div>
+
+            <div v-if="showList.length == 0" class="flex flex-v flex-align-center nodata" >
                 <i class="iconfont">
                     &#xe655;
                 </i>
                 <div>暂无数据</div>
             </div>
             
-            <ul class="bill-list" v-else>
-                <li  v-for="item in billList" class="flex flex-align-center">
+            <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
+                <li  v-for="item in showList" class="flex flex-align-center" :class="{'time-panel-li':item.isTimePanel}">
 
-                        <div class="imgWrap flex-2">
+                        <!-- 时间面板 -->
+                        <div class="time-panel flex flex-align-center" v-if="item.isTimePanel == true" ref="timeTab">
+                             <div class="bill-content flex-8 flex flex-v">
+                                <!-- <h5></h5> -->
+                                <div>{{item.time}}</div>
+                                <div class="flex" style="margin-top:0.2em;">
+                                    <div class="title" style="color:#999;">出售价格:</div>
+                                    <div class="price" style="color:#999;">{{item.amount}}</div>
+                                </div>  
+                            </div>
+
+                            <!-- <div class="bill-money flex-3">
+                                
+                            </div> -->
+                        </div>
+                        
+                        <!-- 内容 -->
+                        <div class="content flex flex-align-center" v-else>
+                            <div class="imgWrap flex-2">
                             <img :src="item.pet_pic" alt="">
-                        </div>
+                            </div>
 
-                        <div class="bill-content flex-8">
-                            <h5>{{item.state}}</h5>
-                            <div class="time">{{item.created_at}}</div>
-                        </div>
+                            <div class="bill-content flex-8">
+                                <h5>{{item.state}}</h5>
+                                <div class="time">{{item.created_at}}</div>
+                            </div>
 
-                        <div class="bill-money flex-3">
-                            <div class="title">出售价格:</div>
-                            <div class="price">{{item.price}}</div>
+                            <div class="bill-money flex-3">
+                                <div class="title">出售价格:</div>
+                                <div class="price">{{item.price}}</div>
+                            </div>
                         </div>
 
                 </li>
@@ -65,22 +87,30 @@
                 type:null,      //类型
                 created_at:null,        //结束时间
                 size:null,  //数目
+
                 billList:[],
-                items:[
-                    {type:0,title:'充值'},
-                    {type:1,title:'提现'},
-                    {type:2,title:'交易收入'},
-                    {type:3,title:'交易支出'},
-                    {type:4,title:'转账到公会'},
-                    {type:5,title:'公会转入'},
-                    {type:8,title:'打赏店家费'},
-                ],
-                selected: null
+                originList:[],
+                showList :[],
+
+                timeInfo:null,
+                tabTotal:"",
+                headList:[],
+
+                wrapperHeight:null,
+                loading: false,
+                allLoaded: false,
+                canLoading:true,
             };
         },
         created(){
             this.init();
         },
+
+        mounted(){
+            // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            window.addEventListener('scroll', this.handleScroll);
+        },
+
         methods: {
             show() {
                 this.showAlert = true;
@@ -88,71 +118,279 @@
             cancel() {
                 this.showAlert = false;
             },
-            // details(id) {
-            //     this.$router.push({ path: "/myAccount/bill/bill_details?id="+id});
-            // },
+            
             init(){
                 var data={
                     type:this.type,
                     created_at:this.created_at,
-                    limit:10
+                    limit:50,
+                    version:2
                 }
+
                 Loading.getInstance().open();
 
                 request.getInstance().getData("api/pet/sold_record",data)
                     .then((res) => {
-                        this.billList=res.data.data.list;
+
+                        // 获取事件分组
+                        this.originList = res.data.data.grouping;
+
+                        this.billList=[].concat(this.originList);
+
+                        // for(var i = 0; i <this.billList.length;i++){
+                        //     this.billList[i].isTimePanel = false;
+                        // }
+
+                        this.tabTotal = res.data.data.sold_amount;
+                        
+                        this.showList = this.buildDataList();
+
+                        // if(this.showList.length>0){
+                            this.timeInfo = this.showList[0].time;
+                            this.tabTotal = this.showList[0].amount;
+                        // }
+
                         Loading.getInstance().close();
+                        
                     })
                     .catch((err) => {
+                        console.error(err);
                         Toast(err.data.msg);
                         Loading.getInstance().close();
                     })
             },
 
-            changeTime(shijianchuo){
-                function add0(m){return m<10?'0'+m:m }
+             // 建立时间面板
+            buildTimePanel(){
+                var _head=0;
 
-                var time = new Date(shijianchuo*1000);
-                var y = time.getFullYear();
-                var m = time.getMonth()+1;
-                var d = time.getDate();
-                var h = time.getHours();
-                var mm = time.getMinutes();
-                var s = time.getSeconds();
-                return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
-            },
-            status(type){
-                let result='';
-                switch(type){
-                    case 0: result='充值'; break;
-                    case 1: result='提现'; break;
-                    case 2: result='交易收入'; break;
-                    case 3: result='交易支出'; break;
-                    case 4: result='转账到公会'; break;
-                    case 5: result='公会转入'; break;
-                    case 6: result='交易手续费'; break;
-                    case 7: result='提现手续费'; break;
-                    case 8: result='打赏店家费'; break;
+                var getTheDate = (timecode)=>{
+
+                    if(!timecode){
+                        return null;
+                    }
+
+                    var _index = timecode.indexOf("-");
+                    if(_index == -1){
+                        return null
+                    }
+                    var _t = timecode.split("-");
+                    var data = _t[0]+"年"+_t[1]+"月";
+                    return data;
                 }
-                return result;
+                
+                var key = 0;
+
+                // 设置头部
+                if(this.billList.length!=0){
+                    if(this.billList[0].isTimePanel == false){
+                        key = 0;
+                        var _head = getTheDate(this.billList[key].created_at);
+                    }else if(this.billList[1].isTimePanel == false){
+                        key = 1;
+                        var _head = getTheDate(this.billList[key].created_at);
+                    }
+                }
+
+                console.log(_head);
+
+                var _initialData = {
+                    time:_head,
+                    index:key,
+                    total:"加载中..."
+                }
+                if(this.headList.length == 0){
+                    this.headList.push(_initialData);
+                }
+
+                // 插入时间标签
+                for(var i = 0; i <this.billList.length; i++){
+                    if(this.billList[i].isTimePanel == true){
+                        _head =getTheDate(this.billList[i+1].created_at);
+                        continue;
+                    }
+
+                    try{
+                         var label = getTheDate(this.billList[i].created_at);
+                         
+                        //  当头部与当前的创建时间不一致时
+                       
+                         if(_head != getTheDate(this.billList[i].created_at)){
+                            // 更新头部
+                            _head = getTheDate(this.billList[i].created_at);
+                            
+                            var data = {
+                                time:_head,
+                                index:i,
+                                total:"加载中..."
+                            }
+                         
+                            this.headList.push(data);
+                          
+                        }
+                    }catch(e){
+                        console.error(e);
+                    }
+                   
+                }
+
+                var count = 0;
+
+                // billList 插值
+                for(let k=0 ;k<this.headList.length;k++){
+                    var _index = this.headList[k].index+count;
+
+                    if(this.billList[_index].isTimePanel == true){
+                        continue;
+                    }
+                    this.billList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time,total:this.headList[k].total});
+                    count++;
+                }
+
+                for(let m = 0; m < this.billList.length; m++){
+                    if(this.billList[m].isTimePanel == true && this.billList[m].total == "加载中..."){
+                        console.log(m);
+                        console.log(this.billList[m].time.split("年")[0]);
+
+                        var _year = this.billList[m].time.split("年")[0];
+                        var _month = this.billList[m].time.split("年")[1].split("月")[0];
+                        var _timer = _year+"-"+_month;
+
+                        var _data = {
+                            date :_timer
+                        }
+                        console.log(_data);
+                        this.timeInfo = this.billList[0].time;
+
+                        // request.getInstance().postData().then(res=>{
+
+                        // }).catch(err=>{
+
+                        // });
+
+                        // if(this.tabStatus[0] == true){
+                        //     // 获取当月的总额度(分润)
+                        //     request.getInstance().postData("api/profit/count",_data)
+                        //         .then(res=>{
+                        //             this.billList[m].total = res.data.data.total;
+                        //             this.timeInfo = this.billList[0].time;
+                        //             this.tabTotal = this.billList[0].total;
+                        //         }).catch();
+                        // }else {
+                        //     // 获取当月的总额度(分润)
+                        //     request.getInstance().postData("api/profit/withdraw/count",_data)
+                        //         .then(res=>{
+                        //             this.billList[m].total = res.data.data.total;
+                        //             this.timeInfo = this.billList[0].time;
+                        //             this.tabTotal = this.billList[0].total;
+                        //         }).catch();
+                        // }
+                        
+                    }
+                }
+                count = 0;
             },
-            selContent(type){
-                Loading.getInstance().open("加载中...");
-                request.getInstance().getData("api/account/records?type="+type)
-                    .then((res) => {
-                        this.billList=res.data.data.data;
-                        this.showAlert = false;
-                        Loading.getInstance().close();
-                    })
-                    .catch((err) => {
-                        Toast(err.data.msg);
-                        Loading.getInstance().close();
-                    })
+
+            // 建立数据列表
+            buildDataList(){
+                var _dataList = [];
+
+                for (var i = 0; i< this.billList.length; i ++){
+
+                    var _timePanelInfo = {};
+                    _timePanelInfo.time = this.billList[i].month;
+                    _timePanelInfo.amount = this.billList[i].sold_amount;
+                    _timePanelInfo.isTimePanel = true;
+
+                    this.billList[i].list.unshift(_timePanelInfo);
+
+                    _dataList = _dataList.concat(this.billList[i].list);
+                }
+
+                return _dataList;
+                console.log(_dataList);
             },
-            selAll(){
-                this.init();
-                this.showAlert = false;
+
+            
+
+             // 滚动
+            handleScroll(){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                if(!this.$refs.timeTab){
+                    return;
+                }
+                // console.log(this.$refs.timeTab[0]);
+                for(var i = 0; i< this.$refs.timeTab.length; i++){
+                    if(this.$refs.timeTab[i].getBoundingClientRect().top <= 30 && this.$refs.timeTab[i].getBoundingClientRect().top >=-10){
+                            var _list = this.$refs.timeTab[i].innerText.split("出售价格:");
+
+                            this.timeInfo = _list[0];
+                            this.tabTotal = _list[1];
+                            return;
+                        
+                    }
+                    // if(this.$refs.timeTab[i].getBoundingClientRect().top > "70" && this.$refs.timeTab[i].getBoundingClientRect().top<window.innerHeight){
+                    //         var _list = this.$refs.timeTab[i-1].innerText.split("出售价格:");
+                    //         this.timeInfo = _list[0];
+                    //         this.tabTotal = _list[1];
+                    // }
+                  
+                }
+            },
+
+            loadMore() {
+                return;
+                this.loading =false;
+                if(this.recordList.length==0 || !this.canLoading){
+                    return;
+                }
+
+                var _url = "";
+                var _data = {};
+
+                if(this.tabStatus[0] == true){
+                    _url = "api/profit/data";
+                }else if(this.tabStatus[1] == true){
+                    _url = "api/profit/withdraw/data";
+                }
+
+                this.loading = true;
+
+                this.canLoading = false;
+
+                setTimeout(() => {
+
+                    var _data = {
+                        limit:5,
+                        offset :[].concat(this.recordList).pop().id,
+                    }
+                    
+                    if (this.dateChoise!=null){
+                        _data.date = this.dateChoise;
+                    }
+
+                    request.getInstance().postData(_url,_data).then(res=>{
+                        if(res.data.data.data.length == 0){
+                            this.canLoading = false;
+                            this.loading = false;
+                            return;
+                        }
+        
+                        for(var i = 0; i< res.data.data.data.length; i ++){
+                            res.data.data.data[i].isTimePanel = false;
+                            this.recordList.push(res.data.data.data[i]);
+                        }
+
+                        this.canLoading = true;
+                        this.loading = false;
+                        this.buildTimePanel();
+                    }).catch(err=>{
+
+                        Loading.getInstance().close;
+                        Toast(err.data.meg);
+
+                    });
+                }, 1500);
             }
         },
         components: {
@@ -187,19 +425,44 @@
         }
     }
 
+    .tab-fixed{
+        position: fixed;
+        top:2em;
+        left: 0em;
+        z-index:1001;
+        width:100%;
+        height:3em;
+        background:#eee;
+        box-sizing:border-box;
+        padding-left: 1em;
+        padding-right:1em;
+
+        >div{
+            color: #555;
+            margin-top:0.3em;
+        }
+    }
+
     .bill-list {
+        /*padding-top:2em;*/
         li {
             padding: 0 1em;
             border-top: 1px solid #ccc;
             width: 100%;
             height: 4em;
             box-sizing: border-box;
-           
-            .imgWrap{
-                >img{
-                    width:100%;
+
+            .content{
+                width: 100%;
+                height: 4em;
+
+                .imgWrap{
+                    >img{
+                        width:3em;
+                    }
                 }
             }
+            
 
             .bill-content {
                 padding-left: 0.7em;
@@ -224,6 +487,16 @@
             }
             &:last-child {
                 border-bottom: 1px solid #ccc;
+            }
+        }
+
+        .time-panel-li{
+            background: #eee;
+            height: 3em;
+
+            .time-panel{
+                width: 100%;
+                height: 100%;
             }
         }
     }

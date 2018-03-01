@@ -4,7 +4,6 @@
             style="background:#26a2ff;color:#fff;"
         >
             <div class="flex flex-reverse flex-align-center header-right">
-                <!-- <a href="javascript:;" @click="show">筛选</a> -->
                 <i class="iconfont" style="font-size:1.4em;" @click="filterDate">
                     &#xe704;
                 </i>
@@ -16,12 +15,13 @@
             <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(1)" :class="{active:tabStatus[1]}">提现记录</div>
         </div>
 
+        <!-- 大状态tab -->
         <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0">
             <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
             <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{tabTotal}}</div>
         </div>
 
-        <div class="bill-box"  >
+        <div class="bill-box" >
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
                 <div class="left-content">
                     <div class="cur-date">2017年11月</div>
@@ -66,10 +66,8 @@
             </ul>
 
             <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
-                <!--<span>-->
                 <mt-spinner type="fading-circle"></mt-spinner>
                 <span style="margin-left: 0.5em;color:#999;">加载中...</span>
-                <!--</span>-->
             </p>
         </div>
        
@@ -161,7 +159,7 @@
                     request.getInstance().postData("api/profit/data",_data)
                     .then((res) => {
 
-                        var _dataList = res.data.data.data
+                        var _dataList = res.data.data.data;
 
                         if(_dataList.length == 0){
                             this.recordList = [];
@@ -197,6 +195,7 @@
                             this.recordList = [];
                             return;
                         }
+                        
                         for(var i = 0; i <_dataList.length;i++){
                             _dataList[i].isTimePanel = false;
                         }

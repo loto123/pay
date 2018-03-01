@@ -1424,8 +1424,9 @@ class ShopController extends BaseController
                         $shop_ids[] = $shop->id;
                     }
                 } catch (\Exception $e){}
+                $notification->markAsRead();
             }
-            $user->unreadNotifications->markAsRead();
+//            $user->unreadNotifications->markAsRead();
         }
         if ($shop_ids) {
             Artisan::queue('shop:logo', [
@@ -1482,7 +1483,9 @@ class ShopController extends BaseController
                 $message->markAsRead();
             }
         } else {
-            $user->unreadNotifications->markAsRead();
+            foreach ($user->unreadNotifications as $notification) {
+                $notification->markAsRead();
+            }
         }
         return $this->json();
     }

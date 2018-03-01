@@ -6,7 +6,7 @@
       </div>
     </topBack>
     <div class="withdraw-box">
-      <div class="title">体钻</div>
+      <div class="title">提钻</div>
       <div class="withdraw-money flex flex-justify-center">
         <label><i class="diamond">&#xe6f9;</i></label>
         <input type="number" placeholder="请输入钻石数量" v-model="amount" >
