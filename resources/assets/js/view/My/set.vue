@@ -7,7 +7,7 @@
 					<mt-cell title="修改登录密码" is-link to="/my/login_password"></mt-cell>
 				</li>
 				<li @click="verfyCode">
-					<mt-cell title="修改支付密码" is-link></mt-cell>
+					<mt-cell title="设置支付密码" is-link></mt-cell>
 				</li>
 			</ul>
 			<ul class="list mt1">
