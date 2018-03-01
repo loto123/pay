@@ -161,4 +161,9 @@ class WechatH5 implements DepositInterface
         echo 'error';
         return null;
     }
+
+    public function benefitShare(array $config)
+    {
+
+    }
 }

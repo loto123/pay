@@ -50,4 +50,10 @@ interface DepositInterface
      * @return string
      */
     public function mixUpDepositId($depositId);
+
+    /**
+     * 分润
+     * @return bool
+     */
+    public function benefitShare(array $config);
 }
