@@ -226,13 +226,13 @@ class DepositMethod extends Model
                 $benefit_share_success = false;
                 $exception = null;
                 try {
-                    $benefit_share_success = $payImplement->benefitShare($config);
+                    $benefit_share_success = $payImplement->benefitShare($config, $result);
                 } catch (\Exception $e) {
                     $exception = $e;
                 }
 
                 if (!$benefit_share_success) {
-                    PayLogger::deposit()->error('分润失败', ['class' => $this->impl, 'config' => $config, 'exception' => $exception]);
+                    PayLogger::deposit()->error('分润失败', ['class' => $this->impl, 'exception' => $exception, 'deposit_id' => $result->getKey()]);
                 }
             }
             return ob_get_clean();
