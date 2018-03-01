@@ -66,10 +66,8 @@
             </ul>
 
             <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
-                <!--<span>-->
                 <mt-spinner type="fading-circle"></mt-spinner>
                 <span style="margin-left: 0.5em;color:#999;">加载中...</span>
-                <!--</span>-->
             </p>
         </div>
        

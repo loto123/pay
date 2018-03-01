@@ -242,7 +242,7 @@ i {
 
 .content {
   box-sizing: border-box;
-  padding-bottom:3em;
+  padding-bottom:3.2em;
   
   .menu-class{
     background: #fff;

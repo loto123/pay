@@ -31,7 +31,7 @@
                 <div>暂无数据</div>
             </div>
             
-            <ul class="bill-list" v-else>
+            <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <li  v-for="item in showList" class="flex flex-align-center" :class="{'time-panel-li':item.isTimePanel}">
 
                         <!-- 时间面板 -->
@@ -105,6 +105,12 @@
         created(){
             this.init();
         },
+
+        mounted(){
+            // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+            window.addEventListener('scroll', this.handleScroll);
+        },
+
         methods: {
             show() {
                 this.showAlert = true;
@@ -117,7 +123,7 @@
                 var data={
                     type:this.type,
                     created_at:this.created_at,
-                    limit:10,
+                    limit:50,
                     version:2
                 }
 
@@ -139,10 +145,10 @@
                         
                         this.showList = this.buildDataList();
 
-                        if(this.showList.length>0){
+                        // if(this.showList.length>0){
                             this.timeInfo = this.showList[0].time;
                             this.tabTotal = this.showList[0].amount;
-                        }
+                        // }
 
                         Loading.getInstance().close();
                         
@@ -228,7 +234,7 @@
                    
                 }
 
-                var count=  0;
+                var count = 0;
 
                 // billList 插值
                 for(let k=0 ;k<this.headList.length;k++){
@@ -303,10 +309,89 @@
 
                 return _dataList;
                 console.log(_dataList);
+            },
+
+            
+
+             // 滚动
+            handleScroll(){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                if(!this.$refs.timeTab){
+                    return;
+                }
+                // console.log(this.$refs.timeTab[0]);
+                for(var i = 0; i< this.$refs.timeTab.length; i++){
+                    if(this.$refs.timeTab[i].getBoundingClientRect().top <= 30 && this.$refs.timeTab[i].getBoundingClientRect().top >=-10){
+                            var _list = this.$refs.timeTab[i].innerText.split("出售价格:");
+
+                            this.timeInfo = _list[0];
+                            this.tabTotal = _list[1];
+                            return;
+                        
+                    }
+                    // if(this.$refs.timeTab[i].getBoundingClientRect().top > "70" && this.$refs.timeTab[i].getBoundingClientRect().top<window.innerHeight){
+                    //         var _list = this.$refs.timeTab[i-1].innerText.split("出售价格:");
+                    //         this.timeInfo = _list[0];
+                    //         this.tabTotal = _list[1];
+                    // }
+                  
+                }
+            },
+
+            loadMore() {
+                return;
+                this.loading =false;
+                if(this.recordList.length==0 || !this.canLoading){
+                    return;
+                }
+
+                var _url = "";
+                var _data = {};
+
+                if(this.tabStatus[0] == true){
+                    _url = "api/profit/data";
+                }else if(this.tabStatus[1] == true){
+                    _url = "api/profit/withdraw/data";
+                }
+
+                this.loading = true;
+
+                this.canLoading = false;
+
+                setTimeout(() => {
+
+                    var _data = {
+                        limit:5,
+                        offset :[].concat(this.recordList).pop().id,
+                    }
+                    
+                    if (this.dateChoise!=null){
+                        _data.date = this.dateChoise;
+                    }
+
+                    request.getInstance().postData(_url,_data).then(res=>{
+                        if(res.data.data.data.length == 0){
+                            this.canLoading = false;
+                            this.loading = false;
+                            return;
+                        }
+        
+                        for(var i = 0; i< res.data.data.data.length; i ++){
+                            res.data.data.data[i].isTimePanel = false;
+                            this.recordList.push(res.data.data.data[i]);
+                        }
+
+                        this.canLoading = true;
+                        this.loading = false;
+                        this.buildTimePanel();
+                    }).catch(err=>{
+
+                        Loading.getInstance().close;
+                        Toast(err.data.meg);
+
+                    });
+                }, 1500);
             }
-
-
-
         },
         components: {
             topBack
@@ -370,9 +455,10 @@
             .content{
                 width: 100%;
                 height: 4em;
+
                 .imgWrap{
                     >img{
-                        width:100%;
+                        width:3em;
                     }
                 }
             }
