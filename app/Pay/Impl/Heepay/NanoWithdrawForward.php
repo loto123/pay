@@ -64,7 +64,7 @@ class NanoWithdrawForward implements WithdrawInterface
 
     public function mixUpWithdrawId($withdrawId)
     {
-        return IdConfuse::mixUpId($withdrawId, 15);
+        return IdConfuse::mixUpId($withdrawId, 15, true);
     }
 
     public function receiverInfoDescription()
@@ -83,7 +83,7 @@ class NanoWithdrawForward implements WithdrawInterface
                 PayLogger::withdraw()->info('非法通知源IP', ['ip' => $source_ip, 'params' => request()->all()]);
             }
         } else {
-            PayLogger::withdraw()->error('汇付宝提现内部接口未设置通知白名单');
+            PayLogger::withdraw()->error('汇付宝提现转发接口未设置通知白名单');
             return null;
         }
         $params = request()->only('state', 'user_id');
