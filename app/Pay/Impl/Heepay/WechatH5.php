@@ -217,7 +217,7 @@ class WechatH5 implements DepositInterface
             $response_arr[strtok($kv_pair, '=')] = strtok($kv_pair);
         }
         if (self::makeSign($response_arr, ['ret_code', 'ret_msg', 'agent_bill_id', 'jnet_bill_no', 'total_amt', 'timestamp'], $key) != $response_arr['sign']) {
-            throw new \Exception('分润签名验证错误');
+            throw new \Exception('分润签名验证错误:' . $response);
         }
         $response = mb_convert_encoding($response, 'utf-8', 'gb2312');
 

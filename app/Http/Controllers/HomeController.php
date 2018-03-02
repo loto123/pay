@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\ConfirmExecuteResult;
+use App\Pay\Impl\Heepay\WechatH5;
+use App\Pay\Model\Deposit;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        dump(ConfirmExecuteResult::fail('执行失败'));
+        $wepay = new WechatH5();
+        $deposit = new Deposit();
+        $deposit->out_batch_no = 'abcdefg';
+        $deposit->amount = 120.01;
+        $wepay->benefitShare(['allot_data' => 'huanghongzhao@supernano.com^1^F'], $deposit);
+        echo 'hello';
     }
 }
