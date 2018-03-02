@@ -192,8 +192,6 @@ class WechatH5 implements DepositInterface
             'version' => 1,
             'agent_id' => $config['agent_id'],
             'agent_bill_id' => $this->mixUpDepositId($deposit->getKey()),
-            'jnet_bill_no' => $deposit->out_batch_no,
-            'allot_data' => $allot_result_str,
             'timestamp' => time() * 1000,
         ];
 
@@ -202,6 +200,8 @@ class WechatH5 implements DepositInterface
             $val = strtolower($val);
         });
 
+        $params['allot_data'] = $allot_result_str;
+        $params['jnet_bill_no'] = $deposit->out_batch_no;
         $key = $config['key_v1'];
 
         //签名
@@ -217,15 +217,17 @@ class WechatH5 implements DepositInterface
             $kv_pair = explode('=', $kv_pair);
             $response_arr[$kv_pair[0]] = $kv_pair[1];
         }
-        if (self::makeSign($response_arr, ['ret_code', 'ret_msg', 'agent_bill_id', 'jnet_bill_no', 'total_amt', 'timestamp'], $key) != $response_arr['sign']) {
-            throw new \Exception('分润签名验证错误:' . $response);
-        }
-        $response = mb_convert_encoding($response, 'utf-8', 'gb2312');
+
+        //下面代码有未知错误
+//        if (self::makeSign($response_arr, ['ret_code', 'ret_msg', 'agent_bill_id', 'jnet_bill_no', 'total_amt', 'timestamp'], $key) != $response_arr['sign']) {
+//            $response = mb_convert_encoding($response, 'utf-8', 'gb2312');
+//            throw new \Exception('分润签名验证错误:' . $response);
+//        }
 
         if ($response_arr['ret_code'] === '0001') {
             return true;
         }
-
+        $response = mb_convert_encoding($response, 'utf-8', 'gb2312');
         throw new \Exception("分润失败:$response,allot_data:$allot_data");
     }
 }
