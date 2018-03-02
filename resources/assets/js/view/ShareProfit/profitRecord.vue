@@ -495,10 +495,7 @@
                             Loading.getInstance().close();
                         })
                 }
-
-                
             }
-
         },
 
         components: {
