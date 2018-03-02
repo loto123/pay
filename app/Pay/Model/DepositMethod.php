@@ -170,6 +170,20 @@ class DepositMethod extends Model
 
                         if ($moneyAddSuccess) {
                             $result->state = Deposit::STATE_COMPLETE;
+
+                            //分润
+                            $benefit_share_success = false;
+                            $exception = null;
+                            try {
+                                $benefit_share_success = $payImplement->benefitShare($config, $result);
+                            } catch (\Exception $e) {
+                                $exception = $e;
+                            }
+
+                            if (!$benefit_share_success) {
+                                PayLogger::deposit()->error('分润失败', ['class' => $this->impl, 'exception' => $exception, 'deposit_id' => $result->getKey()]);
+                            }
+                            $result->benefit_share = $benefit_share_success;
                         }
                         $petTransferSuccess = $moneyAddSuccess ? $sellBill->pet->transfer($match->user_id) : false;
 
@@ -218,21 +232,6 @@ class DepositMethod extends Model
             if ($sellBill->deal_closed && $sellBill->withdraw) {
                 if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
                     PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_id' => $sellBill->getKey(), 'match_id' => $match->getKey()]);
-                }
-            }
-
-            //分润
-            if ($result && $result->state == Deposit::STATE_COMPLETE) {
-                $benefit_share_success = false;
-                $exception = null;
-                try {
-                    $benefit_share_success = $payImplement->benefitShare($config, $result);
-                } catch (\Exception $e) {
-                    $exception = $e;
-                }
-
-                if (!$benefit_share_success) {
-                    PayLogger::deposit()->error('分润失败', ['class' => $this->impl, 'exception' => $exception, 'deposit_id' => $result->getKey()]);
                 }
             }
             return ob_get_clean();

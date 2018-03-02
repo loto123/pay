@@ -169,10 +169,9 @@ class WechatH5 implements DepositInterface
             throw new \Exception('汇付宝返回的单据号为空');
         }
         $allot_data = $config['allot_data'];
-
         $allot_result_arr = [];
-        foreach (explode($allot_data, '|') as $allot_item) {
-            $splits = explode($allot_item, '^');
+        foreach (explode('|', $allot_data) as $allot_item) {
+            $splits = explode('^', $allot_item);
             $share_percent = $splits[1];
             if ($share_percent !== 'remain_amt') {
                 $splits[1] = round(floatval($share_percent) * $deposit->amount, 4);

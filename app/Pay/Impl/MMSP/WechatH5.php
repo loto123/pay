@@ -99,6 +99,6 @@ class WechatH5 implements DepositInterface
 
     public function benefitShare(array $config, Deposit $deposit)
     {
-        // TODO: Implement benefitShare() method.
+        return true;
     }
 }
