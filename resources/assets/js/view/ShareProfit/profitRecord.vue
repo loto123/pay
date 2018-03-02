@@ -134,7 +134,7 @@
             cancel() {
                 this.showAlert = false;
             },
-            details(id) {
+            tabdetails(id) {
                 if(this.tabStatus[0] == true){
                     // 分润状态
                     this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=profit"});
