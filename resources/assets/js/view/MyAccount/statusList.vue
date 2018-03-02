@@ -177,7 +177,6 @@
                 }
 
                 return _dataList;
-                console.log(_dataList);
             },
 
              // 滚动
@@ -227,8 +226,7 @@
                     }
 
                     request.getInstance().getData(_url,_data).then(res=>{
-                        // console.log("%c ##############","color:orange;");
-                        // console.log(res.data.data);
+                       
                         if(res.data.data.grouping.length == 0){
                             this.canLoading = false;
                             this.loading = false;
@@ -253,8 +251,6 @@
                             }
                             
                         }
-
-                        // console.log(this.originList);
 
                         this.canLoading = true;
                         this.loading = false;

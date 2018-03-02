@@ -379,6 +379,8 @@ export default {
         payMoney: null,
         getMoney: null
       },
+
+      balance:0,
       payType: null,              // 支付方式，取钱get 放钱put
       transfer_id:"",             // 任务id
       shop_id:"",
@@ -429,26 +431,46 @@ export default {
         transfer_id: this.transfer_id
       };
 
-      request
-        .getInstance()
-        .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
-        .then(res => {
-          this.joiner = res.data.data.joiner;
-          this.renderData = res.data.data;
-          this.recordList = res.data.data.record;
-          this.shop_id = res.data.data.shop_id;
-          this.allow_reward = res.data.data.allow_reward;
-          this.isManager = res.data.data.allow_cancel;
-          this.status = res.data.data.status;
-          this.allow_remind = res.data.data.allow_remind;
-          this.isShow = true;
-          Loading.getInstance().close();
-        })
-        .catch(err => {
+      Promise.all([request.getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id),request.getInstance().getData("api/index")]).then(res=>{
+        this.joiner = res[0].data.data.joiner;
+        this.renderData = res[0].data.data;
+        this.recordList = res[0].data.data.record;
+        this.shop_id = res[0].data.data.shop_id;
+        this.allow_reward = res[0].data.data.allow_reward;
+        this.isManager = res[0].data.data.allow_cancel;
+        this.status = res[0].data.data.status;
+        this.allow_remind = res[0].data.data.allow_remind;
+        this.isShow = true;
+
+        this.balance = res[1].data.data.balance;
+        Loading.getInstance().close();
+        
+      }).catch(err=>{
           Toast(err.data.msg);
           Loading.getInstance().close();
           this.$router.push('/404notfound');
-        });
+      });
+
+      // request
+      //   .getInstance()
+      //   .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
+      //   .then(res => {
+      //     this.joiner = res.data.data.joiner;
+      //     this.renderData = res.data.data;
+      //     this.recordList = res.data.data.record;
+      //     this.shop_id = res.data.data.shop_id;
+      //     this.allow_reward = res.data.data.allow_reward;
+      //     this.isManager = res.data.data.allow_cancel;
+      //     this.status = res.data.data.status;
+      //     this.allow_remind = res.data.data.allow_remind;
+      //     this.isShow = true;
+      //     Loading.getInstance().close();
+      //   })
+      //   .catch(err => {
+      //     Toast(err.data.msg);
+      //     Loading.getInstance().close();
+      //     this.$router.push('/404notfound');
+      //   });
     },
 
     goTipPage() {
@@ -484,6 +506,11 @@ export default {
 
       if(this.payType == "put"){
         var _put = this.moneyData.payMoney;
+
+        if(_put > this.balance){
+          Toast("钻石数量不足");
+          return;
+        }
 
         if((parseFloat(_put)).toString().indexOf(".") != -1 || isNaN(Number(_put))){
           this.moneyData.payMoney = null;
