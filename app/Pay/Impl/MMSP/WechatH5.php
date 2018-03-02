@@ -22,7 +22,7 @@ class WechatH5 implements DepositInterface
 {
 
 
-    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
         $outID = $this->mixUpDepositId($deposit_id);
         $amount *= 100; //单位:分
@@ -59,7 +59,7 @@ class WechatH5 implements DepositInterface
 
     public function mixUpDepositId($depositId)
     {
-        return IdConfuse::mixUpDepositId($depositId, 20);
+        return IdConfuse::mixUpId($depositId, 20);
     }
 
     public function acceptNotify(array $config)
@@ -71,7 +71,7 @@ class WechatH5 implements DepositInterface
             $chkStatus = $resultMod->ckSign($params, $config['KEY']);
             if ($chkStatus) {
                 if ($params['STATUS'] == 1) {
-                    $deposit = Deposit::find(IdConfuse::recoveryDepositId($params['MERORDERID']));
+                    $deposit = Deposit::find(IdConfuse::recoveryId($params['MERORDERID']));
                     if ($deposit) {
                         //把支付结果更改商户自己的交易流水
                         $deposit->out_batch_no = $params['ORDERNO'];
@@ -88,11 +88,17 @@ class WechatH5 implements DepositInterface
     public function parseReturn(DepositMethod $method)
     {
         $outID = request()->query('batch');
-        $deposit = $method->deposits()->where('id', IdConfuse::recoveryDepositId($outID))->first();
+        $id = null;//IdConfuse::recoveryId($outID);
+        $deposit = $method->deposits()->where('id', $id)->first();
         if (!$deposit) {
             throw new Exception('无效订单');
         }
 
-        return new DepositResult($deposit->state, $deposit->amount, $deposit->out_batch_no);
+        return new DepositResult($deposit->state, $id, $deposit->amount, $outID);
+    }
+
+    public function benefitShare(array $config, Deposit $deposit)
+    {
+        return true;
     }
 }

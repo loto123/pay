@@ -3,7 +3,7 @@
     <topBack title="详情"></topBack>
     <div class="details-content">
       <div class="money-box">
-        <span>入账金额</span>
+        <span>入账钻石</span>
         <em>{{amount}}</em>
       </div>
       <ul class="billDetails-list">
@@ -16,15 +16,15 @@
           <div class="content">{{time}}</div>
         </li>
         <li>
-          <div class="title">交易单号</div>
+          <div class="title">任务单号</div>
           <div class="content">{{transfer_id}}</div>
         </li>
         <li>
-          <div class="title">分润来源</div>
+          <div class="title" style="line-height: 42px;">分润来源</div>
           <div class="content flex flex-align-center">
             <div>{{mobile}}</div>
             <div class="personal-img">
-              <img src="/images/avatar.jpg" width="40" height="40">
+              <img :src="thumb" width="40" height="40">
             </div>
           </div>
         </li>
@@ -55,7 +55,7 @@
       details() {
         var _temp = {};
         _temp.notice_id = this.$route.query.notice_id;
-        request.getInstance().postData('api/notice/detail', _temp)
+        request.getInstance().getData('api/notice/detail', _temp)
           .then((res) => {
             this.amount=res.data.data.amount;
             this.mobile=res.data.data.mobile;

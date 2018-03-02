@@ -6,21 +6,21 @@
             <form class="form-horizontal" method="post" action="{{Request::url()}}" pjax-container>
                 {{csrf_field()}}
                 <div class="form-group">
-                    <label class="col-sm-1 control-label">店主ID：</label>
+                    <label class="col-sm-1 control-label">会长ID：</label>
                     <div class="col-sm-2">
-                        <input type="text" id="aid" name="aid" class="form-control" placeholder="请输入店主ID" value="{{$aid}}">
+                        <input type="text" id="aid" name="aid" class="form-control" placeholder="请输入会长ID" value="{{$aid}}">
                     </div>
-                    <label class="col-sm-1 control-label">店铺名称：</label>
+                    <label class="col-sm-1 control-label">公会名称：</label>
                     <div class="col-sm-2">
-                        <input type="text" id="shop_name" name="shop_name" class="form-control" placeholder="请输入店铺名称" value="{{$shop_name}}">
+                        <input type="text" id="shop_name" name="shop_name" class="form-control" placeholder="请输入公会名称" value="{{$shop_name}}">
                     </div>
-                    <label class="col-sm-1 control-label">店铺ID：</label>
+                    <label class="col-sm-1 control-label">公会ID：</label>
                     <div class="col-sm-2">
-                        <input type="text" id="shop_id" name="shop_id" class="form-control" placeholder="请输入店铺ID" value="{{$shop_id}}">
+                        <input type="text" id="shop_id" name="shop_id" class="form-control" placeholder="请输入公会ID" value="{{$shop_id}}">
                     </div>
-                    <label class="col-sm-1 control-label">交易ID：</label>
+                    <label class="col-sm-1 control-label">任务ID：</label>
                     <div class="col-sm-2">
-                        <input type="text" id="id" name="id" class="form-control" placeholder="请输入交易ID" value="{{$id}}">
+                        <input type="text" id="id" name="id" class="form-control" placeholder="请输入任务ID" value="{{$id}}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -39,7 +39,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="box-body box">
-                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 个红包  ，累计交易费 <span class="text-yellow">{{$amount}}</span> 元</div>
+                <div class="lead">共 <span class="text-yellow">{{$count}}</span> 个任务  ，累计手续费 <span class="text-yellow">{{$amount}}</span> 元</div>
             </div>
         </div>
     </div>
@@ -50,13 +50,13 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>交易ID</th>
-                    <th>店铺</th>
-                    <th>店主</th>
-                    <th>平台交易费</th>
-                    <th>店铺收入</th>
+                    <th>任务ID</th>
+                    <th>公会</th>
+                    <th>会长</th>
+                    <th>平台手续费</th>
+                    <th>公会收入</th>
                     <th>参与人数</th>
-                    <th>交易状态</th>
+                    <th>任务状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>

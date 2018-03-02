@@ -1,6 +1,6 @@
 <template>
   <div id="dealManagement">
-      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
+      <top-back style="background:#26a2ff;color:#fff;" :title="'我的任务'">
           <div class="list-controller flex flex-reverse" 
             style="width:100%;padding-right:1em;box-sizing:border-box;"
             v-if="tabItem[1]"
@@ -12,12 +12,12 @@
       </top-back>
         <div id="tab-menu" class=" flex flex-align-center">
             <div class="menu-item flex flex-justify-center flex-align-center " v-bind:class="{active:tabItem[0]}" @click = "changeTab(0)">待结算</div>
-            <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已平账</div>
+            <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已完成</div>
             <div class="menu-item flex flex-justify-center flex-align-center" v-bind:class="{active:tabItem[2]}" @click = "changeTab(2)">已关闭</div>
         </div>
 
-        <div class="deal-wrap">
-            <ul v-bind:class="{wrap:tabItem[1] && isListRadioShow}">
+        <div class="deal-wrap" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+            <ul v-bind:class="{wrap:tabItem[1] && isListRadioShow}" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
                 <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
@@ -29,12 +29,15 @@
                         <h3>{{item.user.name}}</h3>
                     </div>
                     <div class="content-wrap flex flex-v flex-align-center flex-5">
-                        <div class="title">交易包中余额:￥{{item.amount}}</div>
+                        <div class="title">任务剩余钻石:{{item.amount}}</div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-v flex-align-center flex-3">
                         <div class="title">收益</div>
-                        <div class="m-text">￥{{item.tip_amount}}</div>
+                        <div class="m-text">
+                            {{item.tip_amount}}
+                            <i class="diamond" style="float: right;margin-top: 0.1em; margin-left: 0.2em;">&#xe6f9;</i>
+                        </div>
                     </div>
 
                     <div class="controller-wrap flex flex-align-center" v-if="isListRadioShow">
@@ -50,13 +53,20 @@
                  
                 <div class="group-controller flex flex-v flex-align-center" v-if="tabItem[1]&&isListRadioShow ">
                     <div class="delete-choise">
-                        <mt-button type="primary" size="large" style="background: red;" @click="closeTradementByChoise">关闭选中交易</mt-button>
+                        <mt-button type="primary" size="large" style="background: red;" @click="closeTradementByChoise">关闭选中任务</mt-button>
                     </div>
                     <div class="delete-all">
-                        <mt-button type="primary" size="large" style="background: #777;" @click="closeAllTradement">关闭所有已平账交易</mt-button>
+                        <mt-button type="primary" size="large" style="background: #777;" @click="closeAllTradement">关闭所有已完成的任务</mt-button>
                     </div>
                 </div>
             </ul>
+
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+                <!--<span>-->
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+                <!--</span>-->
+            </p>
         </div>
 
   </div>
@@ -187,6 +197,11 @@
             }
         }
 
+        .page-infinite-loading{
+            height: 2.5em;
+            text-align: center;
+        }
+
         .wrap{
             padding-bottom: 7em;
         }
@@ -211,14 +226,69 @@ export default {
         tabItem:[true,false,false],
         dataList:[],
         isListRadioShow:false,
-        shop_id:null
+        shop_id:null,
+
+        wrapperHeight:null,
+        loading: false,
+        allLoaded: false,
+        canLoading:true,
     }
   },
   methods:{
+    loadMore() {
+      this.loading =false;
+      if(this.dataList.length==0 || !this.canLoading){
+        return;
+      }
 
+      this.loading = true;
+
+      var _status = 0;
+
+      for(var i = 0; i<this.tabItem.length; i++){
+        if(this.tabItem[i] == true){
+          _status = i+1;
+        }
+      }
+
+
+      this.canLoading = false;
+
+      setTimeout(() => {
+
+        var _data = {
+          status:_status,
+          limit:50,
+          offset :[].concat(this.dataList).pop().id,
+          shop_id:this.shop_id,
+        }
+
+        request.getInstance().getData('api/transfer/shop',_data).then(res=>{
+
+          if(res.data.data.data.length == 0){
+            this.canLoading = false;
+            this.loading = false;
+            return;
+          }
+
+          for(var i = 0; i< res.data.data.data.length; i ++){
+            this.dataList.push(res.data.data.data[i]);
+          }
+
+          this.canLoading = true;
+          this.loading = false;
+        }).catch(err=>{
+
+        });
+      }, 1500);
+
+    },
     // 切换面板
     changeTab(item){
         Loading.getInstance().open();
+        this.dataList = [];
+        this.canLoading = true;
+//        this.loading = true;
         this.isListRadioShow = false;
         if(item>2 || item <0){
             return;
@@ -276,7 +346,6 @@ export default {
 
     // 删除选中的id
     closeTradementByChoise(){
-        Loading.getInstance().open();
 
         var _tList = [];
         for(let i = 0 ; i<this.dataList.length ; i++){
@@ -286,6 +355,7 @@ export default {
         }
 
         if(_tList.length == 0 ){
+            Loading.getInstance().close();
             Toast("当前未选择记录");
             return;
         }
@@ -294,10 +364,10 @@ export default {
             transfer_id:_tList,
             shop_id:this.dataList[0].shop_id 
         };
-
+        Loading.getInstance().open();
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
-            Toast("关闭成功");
+            Toast(res.data.msg);
             setTimeout(()=>{
                 this.init();
             },1500);
@@ -308,7 +378,7 @@ export default {
         });
     },
 
-    // 删除所有已平账的交易
+    // 删除所有已经完成的任务
     closeAllTradement(){
         Loading.getInstance().open();
         var _data = {
@@ -317,7 +387,7 @@ export default {
 
         request.getInstance().postData('api/transfer/close',_data).then(res=>{
             Loading.getInstance().close();
-            Toast("成功关闭所有已平账交易");
+            Toast(res.data.msg);
             this.init();
 
         }).catch(err=>{
@@ -328,6 +398,7 @@ export default {
 
     init(){
         Loading.getInstance().open();
+        this.isListRadioShow = false;
         this.shop_id = this.$route.query.shopId;
         
         var _status = 0;
@@ -358,7 +429,10 @@ export default {
         });
     }
 
+  },
 
+  mounted(){
+    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
   }
 };
 </script>

@@ -121,9 +121,20 @@ class WithdrawMethod extends Model
             }
 
             if ($result->state === Withdraw::STATE_PROCESS_FAIL) {
+                $exception = '';
+
+                //失败要更改卖单状态为未成交
+                try {
+                    SellBill::where('withdraw_id', $result->getKey())->update(['deal_closed' => 0]);
+                } catch (\Exception $e) {
+                    $exception = $e->getMessage();
+                    //break;
+                }
+
                 $result->exceptions()->save(new WithdrawException([
                     'message' => json_encode(['query' => request()->query(), 'body' => file_get_contents('php://input')], JSON_UNESCAPED_UNICODE),
                     'state' => $result->state,
+                    'exception' => $exception
                 ]));
             }
 

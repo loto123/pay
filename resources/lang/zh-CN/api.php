@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'error_password' => '用户名或密码错误',
+    'user_block' => '用户已被冻结',
     'error_shop_status' => '店铺不存在或已被关闭',
     'error_shop_perm' => '没有操作该店铺的权限',
     'error_shop_percent' => '交易费用不能超过平台交易费',
@@ -20,4 +22,6 @@ return [
     'user_exist' => '用户已存在',
     'invite_unexist' => '邀请人不存在',
     'user_unexist' => '用户不存在',
+    'user_already_is_proxy' => '用户已是代理',
+    'error_sms_code' => '手机号或验证码错误'
 ];

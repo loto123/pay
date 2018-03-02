@@ -61,7 +61,24 @@ abstract class Container extends Model
         if ($amount <= 0) {
             return false;
         }
-        return $this->changeBalance(-$amount, $amount);
+
+        DB::beginTransaction();
+        $commit = false;
+
+        if ($this->changeBalance(-$amount, $amount)) {
+            $freeze = new Freeze([
+                'amount' => $amount,
+                'operation' => Freeze::OPERATION_FREEZE,
+                'memo' => '',
+            ]);
+            $freeze->container()->associate($this);
+            if ($freeze->save()) {
+                $commit = true;
+            }
+        }
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $commit;
     }
 
     /**
@@ -116,7 +133,23 @@ abstract class Container extends Model
         if ($amount <= 0) {
             return false;
         }
-        return $this->changeBalance($amount, -$amount);
+
+        DB::beginTransaction();
+        $commit = false;
+        if ($this->changeBalance($amount, -$amount)) {
+            $freeze = new Freeze([
+                'amount' => $amount,
+                'operation' => Freeze::OPERATION_UNFREEZE,
+                'memo' => '',
+            ]);
+            $freeze->container()->associate($this);
+            if ($freeze->save()) {
+                $commit = true;
+            }
+        }
+
+        $commit ? DB::commit() : DB::rollBack();
+        return $commit;
     }
 
     /**
@@ -152,7 +185,7 @@ abstract class Container extends Model
             if ($profit_shares != []) {
                 if (array_filter($profit_shares, function ($profit_share) use (&$share_sum) {
                         if ($profit_share instanceof ProfitShare) {
-                            $share_sum += $profit_share->amount;
+                            $share_sum = bcadd($share_sum, $profit_share->amount, 2);
                         } else {
                             return false;
                         }
@@ -169,7 +202,7 @@ abstract class Container extends Model
              * 检查金额
              */
 
-            $actual_received = $amount - $fee - $share_sum; //实收金额
+            $actual_received = bcsub(bcsub($amount, $fee, 2), $share_sum, 2); //实收金额
             if ($actual_received <= 0) {
                 break;
             }

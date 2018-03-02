@@ -3,29 +3,29 @@
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
 			<div class="money-box">
-				<span>{{mode == 1?'出':'入'}}账金额</span>
+				<span>转钻数量</span>
 				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{status(mode)}}</div>
+					<div class="content">{{status(type)}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
 					<div class="content">{{changeTime(created_at)}}</div>
 				</li>
 				<li>
-					<div class="title">转账单号</div>
+					<div class="title">单号</div>
 					<div class="content">{{no}}</div>
 				</li>
+				<!-- <li>
+					<div class="title">提钻账户</div>
+					<div class="content">{{userName}}</div>
+				</li> -->
 				<li>
-					<div class="title">账户余钱</div>
-					<div class="content">{{balance}}</div>
-				</li>
-				<li>
-					<div class="title">转账账户</div>
-					<div class="content">{{remark}}</div>
+					<div class="title">备注</div>
+					<div class="content">{{remark.length==0?"无":remark}}</div>
 				</li>
 			</ul>
 		</div>
@@ -42,13 +42,12 @@
 			return {
 				showAlert: false,
 				created_at:null,	//时间
-				remark:null,		//备注
+				remark:0,		//备注
 				type:null,			//类型
-				no:null,			//交易单号
-				amount:null,		//入账金额
+				no:null,			//任务单号
+				amount:null,		//入账
 				mode:null,			//0:收入		1:支出
-				balance:null		//账户余钱
-
+				userName:null		//提钻账户
 			};
 		},
 		created(){
@@ -63,11 +62,11 @@
 					.then((res) => {
                         this.remark=res.data.data.remark
 						this.no=res.data.data.no
-						this.balance=res.data.data.balance
 						this.created_at=res.data.data.created_at
 						this.amount=res.data.data.amount
 						this.type=res.data.data.type	
 						this.mode=res.data.data.mode
+						this.userName=res.data.data.user_name
                         Loading.getInstance().close();
 					})
 					.catch((err) => {
@@ -90,9 +89,9 @@
 			status(type){
 				let res='';
 				switch(type){
-					case 0: res='提现'; break;
-					case 1: res='转账'; break;
-					case 2: res='收入'; break;
+					case 0: res='转账给个人'; break;
+                    case 1: res='转账给成员'; break;
+                    case 2: res='从个人转账'; break;
 				}
 				return res;
 			}

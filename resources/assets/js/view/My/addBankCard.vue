@@ -7,7 +7,7 @@
 				<section class="account-container">
 					<div class="account-box flex flex-align-center">
 						<span>姓名:</span>
-						<em class="flex-1 number">{{name}}</em>
+						<em class="flex-1 number">{{identify_name}}</em>
 					</div>
 					<div class="account-box flex flex-align-center">
 						<span>身份证号:</span>
@@ -70,7 +70,7 @@
 			<mt-button type="primary" size="large">确认</mt-button>
 		</a>
 
-		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList">
+		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList" title="请选择银行">
 		</inputList>
 	</div>
 </template>
@@ -90,6 +90,7 @@
 				dropListSwitch: false,
 				shopList: null,
 				name: null,
+				identify_name:null,
 				id_number: null,
 				dealShop: null,
 				mobile: null,
@@ -125,6 +126,7 @@
 				request.getInstance().getData("api/my/info")
 					.then((res) => {
 						this.name = res.data.data.name;
+						this.identify_name=res.data.data.identify_name;
 						this.id_number = res.data.data.id_number;
 						this.mobile = res.data.data.mobile;
 						Loading.getInstance().close();

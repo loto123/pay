@@ -23,7 +23,7 @@ class DepositController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('充值记录');
+            $content->header('购买记录');
             //$content->description('description');
 
             $content->body($this->grid());
@@ -60,7 +60,7 @@ SCRIPT
 
             );
             ChargeRetry::script();
-            $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with('masterContainer.user');
+            $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with(['masterContainer.user', 'petBuyBill.sellBill']);
 
             //工具按钮
             $grid->disableCreation();
@@ -98,13 +98,17 @@ SCRIPT
                 return $this->masterContainer->user->name;
             });
             $grid->updated_at('时间');
-            $grid->amount('充值金额');
+            $grid->amount('价格');
+            $grid->column('pet', '宠物编号')->display(function () {
+                return $this->petBuyBill ? $this->petBuyBill->sellBill->pet_id : '';
+            });
             $grid->channel()->name('支付通道');
             $grid->method()->title('支付方式');
             $grid->state('状态')->display(function ($value) {
                 $class = 'default';
                 switch ($value) {
                     case Deposit::STATE_UNPAID:
+                    case Deposit::STATE_EXPIRED:
                         $class = 'default';
                         break;
                     case Deposit::STATE_COMPLETE:

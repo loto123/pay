@@ -18,12 +18,18 @@
  *
  */
 
+use App\Admin\Extensions\WangEditor;
+use Encore\Admin\Form;
+
 Encore\Admin\Form::forget(['map', 'editor']);
 
-Admin::css('/css/backstage.css');
+//Admin::css('/css/backstage.css');
 Admin::css('/css/daterangepicker-bs3.css');
 Admin::css('/css/common.css');
 Admin::css('/css/admin.css');
+
 Admin::js('/js/moment.js');
 Admin::js('/js/daterangepicker.js');
 Admin::js('/js/layer/layer.js');
+
+Form::extend('editor', WangEditor::class);

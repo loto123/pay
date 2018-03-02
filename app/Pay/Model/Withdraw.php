@@ -27,8 +27,8 @@ class Withdraw extends Model
         'amount' => 'float',
         'system_fee' => 'float',
         'channel_fee' => 'float',
-        'create_at' => 'datetime',
-        'update_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'state' => 'integer'
     ];
     protected $guarded = ['id'];
@@ -80,6 +80,15 @@ class Withdraw extends Model
     public function method()
     {
         return $this->belongsTo(WithdrawMethod::class, 'method_id');
+    }
+
+    /**
+     * 宠物出售订单
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function petSellBill()
+    {
+        return $this->hasOne(SellBill::class);
     }
 
     /**

@@ -44,9 +44,9 @@
     <div class="row">
         <div class="col-md-6">
             <div class="box-body box">
-                <div class="lead">总交易笔数:<span class="text-yellow">{{$transfer_count}}</span></div>
-                <div class="lead">总收款金额（元）:<span class="text-yellow">{{$amount}}</span></div>
-                <div class="lead">店铺分润（元）含收手续费 {{$tip_amount}} 元:<span class="text-yellow">{{$shop_amount}}</span></div>
+                <div class="lead">总拿钻笔数 :<span class="text-yellow">{{$transfer_count}}</span></div>
+                <div class="lead">总拿钻数量（元）:<span class="text-yellow">{{$amount}}</span></div>
+                <div class="lead">公会分润（元）含收任务加速费 {{$tip_amount}} 元:<span class="text-yellow">{{$shop_amount}}</span></div>
                 <div class="lead">代理分润（元）:<span class="text-yellow">{{$proxy_amount}}</span></div>
                 <div class="lead">运营收入（元）:<span class="text-yellow">{{$company_amount}}</span></div>
             </div>
@@ -63,9 +63,9 @@
                         <th>用户</th>
                         <th>上级代理</th>
                         <th>上级运营</th>
-                        <th>收款笔数</th>
-                        <th>收款金额</th>
-                        <th>店铺分润</th>
+                        <th>拿钻笔数</th>
+                        <th>拿钻金额</th>
+                        <th>公会分润</th>
                         <th>代理分润</th>
                         <th>运营业绩</th>
                     </tr>
@@ -85,16 +85,16 @@
                                     </div>
                                 </div>
                             </td>
-                            @if($item->proxy)
+                            @if($item->parent)
                                 <td>
                                     <div class="user-panel clearfix">
                                         <div class="pull-left">
-                                            <img src="{{$item->proxy->avatar}}" width="40" height="40"
+                                            <img src="{{$item->parent->avatar}}" width="40" height="40"
                                                  class="img-circle">
                                         </div>
                                         <div class="pull-left ml7">
-                                            <p>{{$item->proxy->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->proxy->mobile}}</span></span>
+                                            <p>{{$item->parent->name}}</p>
+                                            <span>ID:<span class="text-yellow">{{$item->parent->mobile}}</span></span>
                                         </div>
                                     </div>
                                 </td>
@@ -118,11 +118,11 @@
                             @else
                                 <td>无</td>
                             @endif
-                            <td>{{$item->transfer_record()->where('stat',2)->count()}}</td>
-                            <td>{{$item->transfer_record()->where('stat',2)->sum('amount')}}</td>
-                            <td>{{$item->tips()->sum('amount')}}</td>
-                            <td>{{$item->output_profit()->sum('proxy_amount')}}</td>
-                            <td>{{$item->output_profit()->sum('fee_amount')}}</td>
+                            <td>{{$item->transfer_record->where('stat',2)->count()}}</td>
+                            <td>{{$item->transfer_record->where('stat',2)->sum('amount')}}</td>
+                            <td>{{$item->tips->sum('amount')}}</td>
+                            <td>{{$item->output_profit->sum('proxy_amount')}}</td>
+                            <td>{{$item->output_profit->sum('fee_amount')}}</td>
                         </tr>
                     @endforeach
                     </tbody>

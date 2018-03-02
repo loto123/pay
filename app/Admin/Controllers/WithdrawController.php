@@ -27,15 +27,15 @@ class WithdrawController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('提现记录');
+            $content->header('出售记录');
             //$content->description('description');
             $content->row(function (Row $row) {
                 //累计已提现
                 $withdrawed = Withdraw::has('masterContainer.user')->where('state', '<>', Withdraw::STATE_CANCELED)->sum('amount');
                 //累计待提现
                 $waitToWithdraw = MasterContainer::has('user')->sum('balance');
-                $row->column(3, "<h4>累计已提现:<span style='color:#FFAE20;font-weight:bold;'>$withdrawed</span>元</h4>");
-                $row->column(3, "<h4>累计待提现:<span style='color:#FFAE20;font-weight:bold;'>$waitToWithdraw</span>元</h4>");
+                $row->column(3, "<h4>累计销售额:<span style='color:#FFAE20;font-weight:bold;'>$withdrawed</span>元</h4>");
+                $row->column(3, "<h4>累计待销售:<span style='color:#FFAE20;font-weight:bold;'>$waitToWithdraw</span>元</h4>");
             });
 
 
@@ -102,7 +102,7 @@ SCRIPT
             WithdrawRetry::script();
             WithdrawCancel::script();
 
-            $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with('masterContainer.user');
+            $grid->model()->orderBy('id', 'desc')->has('masterContainer.user')->with(['masterContainer.user', 'petSellBill']);
             //工具按钮
             $grid->disableCreation();
             $grid->actions(function ($actions) {
@@ -149,7 +149,10 @@ SCRIPT
                 return $this->masterContainer->user->name;
             });
             $grid->updated_at('时间');
-            $grid->amount('提现金额');
+            $grid->amount('售价');
+            $grid->column('pet', '宠物编号')->display(function () {
+                return $this->petSellBill ? $this->petSellBill->pet_id : '';
+            });
             $grid->column('actual', '实际到账')->display(function () {
                 return sprintf('%.2f', $this->amount - $this->system_fee);
             });

@@ -7,7 +7,7 @@
                 {{csrf_field()}}
                 <div class="form-group">
                     <label class="col-sm-1 control-label">代理ID：</label>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <input type="text" name="aid" class="form-control" placeholder="请输入代理ID" value="{{$aid}}">
                     </div>
                     <label class="col-sm-1 control-label">身份：</label>
@@ -59,7 +59,7 @@
                     <th>上级代理</th>
                     <th>下级用户总数</th>
                     <th>代理业绩</th>
-                    <th>代理分润</th>
+                    <th>上级代理分润</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -82,16 +82,16 @@
                                 <span class="text-yellow">{{$v->display_name}}</span>
                             @endforeach
                         </td>
-                        @if($item->proxy)
+                        @if($item->parent)
                             <td>
                                 <div class="user-panel clearfix">
                                     <div class="pull-left">
-                                        <img src="{{$item->proxy->avatar}}" width="40" height="40"
+                                        <img src="{{$item->parent->avatar}}" width="40" height="40"
                                              class="img-circle">
                                     </div>
                                     <div class="pull-left ml7">
-                                        <p>{{$item->proxy->name}}</p>
-                                        <span>ID:<span class="text-yellow">{{$item->proxy->mobile}}</span></span>
+                                        <p>{{$item->parent->name}}</p>
+                                        <span>ID:<span class="text-yellow">{{$item->parent->mobile}}</span></span>
                                     </div>
                                 </div>
                             </td>

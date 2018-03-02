@@ -1,6 +1,6 @@
 <template>
   <div id="shop-share" class="flex flex-justify-center flex-align-center">
-      <topBack :title="!isUser?'邀请新会员':'加入店铺'" style="background:#26a2ff;color:#fff;"></topBack>
+      <topBack :title="!isUser?'邀请新会员':'加入公会'" style="background:#26a2ff;color:#fff;"></topBack>
 
       <div class="content-wrap-shop flex flex-v flex-align-center" v-if="!isUser">
         <div class="info flex flex-align-center">
@@ -13,7 +13,7 @@
         </div>
 
         <h3>
-          将二维码分享给好友，扫一扫加入店铺
+          将二维码分享给好友，扫一扫加入公会
         </h3>
       </div>
       
@@ -139,8 +139,8 @@ export default {
       isUser:false,             // false ：商户分享界面  true ：用户加入界面
       shopId:null,
       QRCode:"",
-      shopName:null,            //店铺名称
-      logo:null,                 // 店铺头像
+      shopName:null,            //公会名称
+      logo:null,                 // 公会头像
       membersCount:null,
       manager:null,
       timer:null

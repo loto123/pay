@@ -23,12 +23,12 @@ use Illuminate\Routing\Router;
 //    $router->post('auth/register', 'Api\AuthController@register');
 //});
 
-Route::any('test', 'Api\TestController@index');
+//Route::any('test', 'Api\TestController@index');
 
 Route::group([
     'prefix'       => '/my',
     'namespace'    => 'Api',
-    'middleware' => ['api.auth']
+    'middleware' => ['api.auth', 'block']
 ], function (Router $router){
     $router->get('index','UserController@index');
     $router->post('updatePassword','UserController@updatePassword');
@@ -40,18 +40,20 @@ Route::group([
     $router->get('info','UserController@info');
     $router->get('parent','UserController@parent');
     $router->post('pay_password','UserController@pay_password');
+    $router->post('resetPayPassword','UserController@resetPayPassword');
 });
 
 Route::group([
     'prefix'      => '/card',
     'namespace'   => 'Api',
-    'middleware' => ['api.auth']
+    'middleware' => ['api.auth', 'block']
 ], function(Router $router){
     $router->get('index', 'CardController@index');
     $router->post('create', 'CardController@create');
     $router->post('delete', 'CardController@delete');
     $router->get('getBanks','CardController@getBanks');
     $router->get('getBankCardParams','CardController@getBankCardParams');
+    $router->get('otherCards','CardController@otherCards');
 });
 
 $api = app('Dingo\Api\Routing\Router');
@@ -65,14 +67,16 @@ app('api.exception')->register(function (Exception $exception) {
     $request = Illuminate\Http\Request::capture();
     return app('App\Exceptions\Handler')->render($request, $exception);
 });
-$api->version('v1', function ($api) {
+$api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' => 1], function ($api) {
     $api->group([
         'prefix' => 'auth',
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->post('login', 'AuthController@login');
+        $api->post('sms/login', 'AuthController@sms_login');
         $api->post('register', 'AuthController@register');
         $api->get("login/wechat/url", 'AuthController@wechat_login_url');
+        $api->get("mobile/status", 'AuthController@mobile_status');
         $api->post("login/wechat", 'AuthController@wechat_login');
         $api->post("valid", 'AuthController@valid');
         $api->post("sms", 'AuthController@sms');
@@ -98,7 +102,7 @@ $api->version('v1', function ($api) {
     });
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'shop',
         'namespace' => 'App\Http\Controllers\Api',
@@ -133,7 +137,7 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     });
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'transfer',
         'namespace' => 'App\Http\Controllers\Api',
@@ -155,13 +159,13 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
     });
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'account',
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/', 'AccountController@index');
-        $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|andriod|ios', 'scene' => '\d+']);
+        $api->get('pay-methods/{os}/{scene}', 'AccountController@payMethods')->where(['os' => 'unknown|android|ios', 'scene' => '\d+']);
         $api->get('withdraw-methods', 'AccountController@withdrawMethods');
         $api->get('records', 'AccountController@records');
         $api->get('records/detail/{id}', 'AccountController@record_detail');
@@ -169,11 +173,66 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
         $api->get('records/month', 'AccountController@month_data');
+        $api->get('deposit_quotas', 'AccountController@depositQuotaList');
     });
 
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+//代理相关接口
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
+    $api->group([
+        'prefix' => 'agent',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/bound_vip', 'AgentController@myVip');
+    });
+
+});
+
+//推广员接口
+
+$api->version('v1', ['middleware' => ['api.auth', 'block', 'role:promoter']], function ($api) {
+    $api->group([
+        'prefix' => 'promoter',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->post('/transfer-card', 'PromoterController@transferCard');
+        $api->post('/bind-card', 'PromoterController@bindCard');
+        $api->post('/grant', 'PromoterController@grant');
+        $api->get('/cards-used', 'PromoterController@cardsUseRecords');
+        $api->get('/grant-history', 'PromoterController@grantRecords');
+        $api->get('/cards-reserve', 'PromoterController@cardsReserve');
+        $api->get('/cards_used_num', 'PromoterController@cardsUsedNum');
+        $api->post('/query-agent', 'PromoterController@queryAgent');
+        $api->post('/query-promoter', 'PromoterController@queryPromoter');
+        $api->post('/query-none-promoter', 'PromoterController@queryNonePromoter');
+        $api->post('/card-detail', 'PromoterController@cardDetail');
+    });
+
+});
+
+//宠物交易接口
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
+    $api->group([
+        'prefix' => 'pet',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/sellable', 'PetTradeController@sellable');
+        $api->get('/egg_acquire_times', 'PetTradeController@eggCanDrawTimes');
+        $api->get('/sold_record', 'PetTradeController@mySoldPets');
+
+        $api->post('/acquire_egg', 'PetTradeController@freeEgg');
+        $api->post('/brood', 'PetTradeController@broodTheEgg');
+        $api->post('/on_sale', 'PetTradeController@findSellBill');
+        $api->post('/refresh_pet', 'PetTradeController@queryPet');
+        $api->get('all_on_sale', 'PetTradeController@onSalePets');
+        $api->get('my_pets', 'PetTradeController@myPets');
+    });
+
+});
+
+
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'proxy',
         'namespace' => 'App\Http\Controllers\Api',
@@ -181,27 +240,56 @@ $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
         $api->get('share', 'ProxyController@share');
         $api->get('members/count', 'ProxyController@members_count');
         $api->get('members', 'ProxyController@members');
+        $api->get('qrcode', 'ProxyController@qrcode');
+        $api->post('create', 'ProxyController@create');
     });
 
 });
 
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+$api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     $api->group([
         'prefix' => 'index',
         'namespace' => 'App\Http\Controllers\Api',
     ], function ($api) {
         $api->get('/', 'IndexController@index');
+        $api->get('/safe', 'IndexController@safe');
     });
 
+});
+
+$api->version('v1', function ($api) {
+    $api->group([
+        'prefix' => 'app',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get("version", 'AppController@version');
+    });
 });
 
 Route::group([
     'prefix'      => '/notice',
     'namespace'   => 'Api',
-    'middleware' => ['api.auth']
+    'middleware' => ['api.auth', 'block']
 ],function(Router $router){
     $router->get('index','NoticeController@index');
     $router->post('create', 'NoticeController@create');
     $router->post('delete', 'NoticeController@delete');
-    $router->post('detail', 'NoticeController@detail');
+    $router->get('detail', 'NoticeController@detail');
+    $router->post('operator', 'NoticeController@operator');
+});
+
+Route::group([
+    'prefix' => '/profit',
+    'namespace' => 'Api',
+    'middleware' => ['api.auth', 'block', 'proxy']
+], function (Router $router) {
+    $router->get('index', 'ProfitController@index');
+    $router->get('balance', 'ProfitController@balance');
+    $router->post('count', 'ProfitController@count');
+    $router->post('data', 'ProfitController@data');
+    $router->post('withdraw', 'ProfitController@withdraw');
+    $router->get('show/{id}','ProfitController@show')->where('id', '[0-9]+');
+    $router->post('withdraw/count', 'ProfitController@withdrawCount');
+    $router->post('withdraw/data', 'ProfitController@withdrawData');
+    $router->get('withdraw/show/{id}','ProfitController@withdrawShow')->where('id', '[0-9]+');
 });

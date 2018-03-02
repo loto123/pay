@@ -8,6 +8,8 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\PayFactory;
 use App\User;
 use App\Role;
+use App\WechatOpen;
+use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -111,14 +113,33 @@ class AuthController extends BaseController {
      *         required=true,
      *         type="string",
      *     ),
-     *   @SWG\Response(
-     *     response=200,
-     *     description="A list with products",
-     *     examples={
-     *      "code":0,
-     *      "msg":"ok"
-     *     }
-     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="token", type="string", example="abcd",description="jwt token"),
+     *                  @SWG\Property(property="wechat", type="boolean", example=0,description="是否绑定微信"),
+     *                  @SWG\Property(property="id", type="string", example="1234",description="用户id"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -136,6 +157,103 @@ class AuthController extends BaseController {
 
         // all good so return the token
         $user = JWTAuth::toUser($token);
+        if ($user->status == User::STATUS_BLOCK) {
+            return $this->json([], trans('api.user_block'), 0);
+        }
+        $wechat = $user->wechat_user ? 1 : 0;
+        $id = $user->en_id();
+        return $this->json(compact('token', 'wechat', 'id'));
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/auth/sms/login",
+     *   summary="手机验证码登录",
+     *     tags={"登录"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="code",
+     *         in="formData",
+     *         description="验证码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="oauth_user",
+     *         in="formData",
+     *         description="微信用户id",
+     *         required=false,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="token", type="string", example="abcd",description="jwt token"),
+     *                  @SWG\Property(property="wechat", type="boolean", example=0,description="是否绑定微信"),
+     *                  @SWG\Property(property="id", type="string", example="1234",description="用户id"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function sms_login(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable(),
+            'code' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+            return $this->json([], trans("api.error_sms_code"), 0);
+        }
+        Cache::forget($cache_key);
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json([], trans("api.error_sms_code"), 0);
+        }
+        $token = JWTAuth::fromUser($user);
+
+        if ($user->status == User::STATUS_BLOCK) {
+            return $this->json([], trans('api.user_block'), 0);
+        }
+        if ($request->oauth_user) {
+            $oauth_user = OauthUser::findByEnId($request->oauth_user);
+            if ($oauth_user) {
+                $oauth_user->user_id = $user->id;
+                $user->avatar = $oauth_user->headimgurl;
+                $user->name = $oauth_user->nickname;
+                $oauth_user->save();
+            }
+        }
         $wechat = $user->wechat_user ? 1 : 0;
         $id = $user->en_id();
         return $this->json(compact('token', 'wechat', 'id'));
@@ -219,7 +337,7 @@ class AuthController extends BaseController {
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return $this->json([], trans("error code"), 0);
+            return $this->json([], trans("api.error_sms_code"), 0);
         }
         Cache::forget($cache_key);
         $input = $request->all();
@@ -254,7 +372,7 @@ class AuthController extends BaseController {
         if ($invite) {
             $user->parent_id = $invite->id;
             $user->operator_id = $invite->operator_id;
-            Notification::send($invite, new UserApply(['user_name' =>  $user->name, 'user_id' => $user->id]));
+            \App\Admin\Controllers\NoticeController::send([$invite->id],2,'您推荐的'.$user->mobile.'注册成功');
         }
         $user->channel_id = $channel->id;
         $user->save();
@@ -293,7 +411,10 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $app = EasyWeChat::officialAccount();
+        $app = Factory::officialAccount([
+            'app_id' => config("wechat.official_account.app_id"),
+            'secret' => config("wechat.official_account.secret"),
+        ]);
         $response = $app->oauth->scopes(['snsapi_userinfo'])
             ->redirect($request->redirect_url);
 //        var_dump( $app->access_token->getToken());
@@ -331,6 +452,13 @@ class AuthController extends BaseController {
      *         required=false,
      *         type="string",
      *     ),
+     *     @SWG\Parameter(
+     *         name="is_app",
+     *         in="formData",
+     *         description="是否为app调用 0=否 1=是",
+     *         required=false,
+     *         type="boolean",
+     *     ),
      *   @SWG\Response(
      *     response=200,
      *     description="A list with products",
@@ -351,13 +479,33 @@ class AuthController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $app = EasyWeChat::officialAccount();
-        $access_token = $app->oauth->getAccessToken($request->code);
-        $user = $app->user->get($access_token->openid);
-        $oauth_user = OauthUser::where("openid", $access_token->openid)->first();
+        if ($request->is_app) {
+            $appid = config("wechat.open_platform.app_id");
+            $app = new WechatOpen($appid, config("wechat.open_platform.secret"));
+            $user = $app->user($request->code);
+        } else {
+            $appid = config("wechat.official_account.app_id");
+            $app = Factory::officialAccount([
+                'app_id' => $appid,
+                'secret' => config("wechat.official_account.secret"),
+            ]);
+            $access_token = $app->oauth->getAccessToken($request->code);
+            $user = $app->user->get($access_token->openid);
+        }
+//        $app = app('wechat.official_account');
+        if (!$user || !isset($user['openid'])) {
+            return $this->json([], "auth error", 0);
+        }
+        if (isset($user['unionid'])) {
+            $oauth_user = OauthUser::where("unionid", $user['unionid'])->first();
+        } else {
+            $oauth_user = OauthUser::where("openid", $user['openid'])->first();
+        }
+        Log::info("oauth_user:".var_export($user, true));
         if (!$oauth_user) {
             $oauth_user = new OauthUser();
             $oauth_user->openid = $user['openid'];
+            $oauth_user->appid = $appid;
         }
         $oauth_user->subscribe = isset($user['subscribe']) ? $user['subscribe'] : 0;
         $oauth_user->nickname = isset($user['nickname']) ? $user['nickname'] : '';
@@ -371,6 +519,7 @@ class AuthController extends BaseController {
         $oauth_user->remark = isset($user['remark']) ? $user['remark'] : '';
         $oauth_user->groupid = isset($user['groupid']) ? $user['groupid'] : 0;
         $oauth_user->save();
+        $result = ['token' => '', 'oauth_user' => ''];
         if ($request->user_id) {
             if ($oauth_user->user_id) {
                 return $this->json([], trans("api.wechat_already_bind"), 0);
@@ -382,7 +531,7 @@ class AuthController extends BaseController {
                 $login_user->save();
                 $oauth_user->user_id = $login_user->id;
                 $oauth_user->save();
-                return $this->json(['token' => JWTAuth::fromUser($login_user)]);
+                $result['token'] = JWTAuth::fromUser($login_user);
             }
         } else {
             if ($oauth_user->user_id) {
@@ -391,12 +540,13 @@ class AuthController extends BaseController {
                     $login_user->avatar = $oauth_user->headimgurl;
                     $login_user->name = $oauth_user->nickname;
                     $login_user->save();
-                    return $this->json(['token' => JWTAuth::fromUser($login_user)]);
+                    $result['token'] = JWTAuth::fromUser($login_user);
                 }
             } else {
-                return $this->json(['oauth_user' => $oauth_user->en_id()]);
+                $result['oauth_user'] = $oauth_user->en_id();
             }
         }
+        return $this->json($result);
 
     }
 
@@ -468,10 +618,70 @@ class AuthController extends BaseController {
             $cache_key = "SMS_".$request->mobile;
             $cache_value = Cache::get($cache_key);
             if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-                return $this->json([], trans("error code"), 0);
+                return $this->json([], trans("api.error_sms_code"), 0);
             }
         }
         return $this->json();
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/auth/mobile/status",
+     *   summary="手机号状态",
+     *     tags={"登录"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="用户手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="status", type="integer", example=0,description="状态 0=未注册 1=已注册未绑定微信 2=已注册已绑定微信"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function mobile_status(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/',
+        ], ['mobile.regex'=>trans("api.error_mobile_format")]);
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json(['status' => 0]);
+        }
+
+        if ($user->wechat_user) {
+            return $this->json(['status' => 2]);
+        } else {
+            return $this->json(['status' => 1]);
+
+        }
     }
 
     /**
@@ -528,7 +738,12 @@ class AuthController extends BaseController {
             return $this->json();
         } else {
             Log::info("send sms error".var_export($result, true));
-            return $this->json([], 'error', 0);
+            if (isset($result['logs'][0]['result']['code']) && $result['logs'][0]['result']['code'] == '160040'){
+                return $this->json([], '今日短信发送次数已用完', 0);
+            } else {
+
+                return $this->json([], '发送失败', 0);
+            }
         }
     }
 
@@ -583,7 +798,7 @@ class AuthController extends BaseController {
         $cache_key = "SMS_".$request->mobile;
         $cache_value = Cache::get($cache_key);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
-            return $this->json([], trans("error code"), 0);
+            return $this->json([], trans("api.error_sms_code"), 0);
         }
         Cache::forget($cache_key);
         $user = User::where("mobile", $request->mobile)->first();

@@ -10,7 +10,7 @@
       <mt-button type="primary" size="large" @click="affirm">确认</mt-button>
     </div>
     <div class="forget-password-box">
-      <div class="notice">密码长度必须在6-16个字符之间个字符</div>
+      <div class="notice">密码长度必须在8-16个字符之间</div>
       <div class="forget-password">
         <a href="javascript:;" @click="forgetPassWord">
           忘记原密码?
@@ -49,13 +49,25 @@
           old_password: this.old_password,
           new_password:this.new_password,
           confirm_password:this.confirm_password
-        }  
+        }
+
+        var reg = /\s/;
+        if (reg.test(this.new_password)) { 
+          Toast("新密码不能包含空格");
+          return;
+        }
         if(!this.old_password){
           Toast('请填写原密码')
           return
         }else if(!this.new_password){
           Toast('请填写新密码')
           return
+        }else if(this.new_password.length < 8){
+          Toast("密码长度必须在8-16位之间");
+          return;
+        }else if(this.new_password.length >16){
+          Toast("密码长度必须在8-16位之间");
+          return;
         }else if(!this.confirm_password){
           Toast('请确认新密码')
           return

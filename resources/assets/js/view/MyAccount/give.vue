@@ -1,27 +1,26 @@
 <template>
 	<div id="give" class="give-container">
-		<topBack title="转账到店铺">
+		<topBack title="转钻到公会">
 			<div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
 				<i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
 			</div>
 		</topBack>
 		<div class="give-box">
-			<div class="title">转账金额</div>
+			<div class="title">转移钻石</div>
 			<div class="give-money flex flex-justify-center">
-				<label>￥</label>
-				<input type="text" placeholder="请输入金额" v-model="amount">
+				<input type="number" placeholder="请输入钻石" v-model="amount">
 			</div>
 			<div class="all-money flex">
-				<div class="money">可转账余额 ¥<span>{{balance}}</span>,</div>
-				<a href="javascript:;" class="all-giveAcc" @click="allGive">全部转账</a>
+				<div class="money">可转钻石 ¥<span>{{balance}}</span>,</div>
+				<a href="javascript:;" class="all-giveAcc" @click="allGive">全部转移</a>
 			</div>
 			<div class="select-wrap flex flex-align-center" @click="showDropList">
 
-				{{dealShop?dealShop:'请选择您要发起交易的店铺'}}
+				{{dealShop?dealShop:'请选择您要转移的公会'}}
 
 			</div>
 			<a href="javascript:;" class="transAcc-btn" @click="giveBtn">
-				<mt-button type="primary" size="large">转账</mt-button>
+				<mt-button type="primary" size="large">转移</mt-button>
 			</a>
 		</div>
 		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList"></inputList>
@@ -48,9 +47,9 @@
 				showPasswordTag:false,
 				dealShop: null,
 				shopList: null,
-				balance:null,  	            //可转账金额
+				balance:null,  	            //可转账
 
-				shopId: null,	            //店铺ID
+				shopId: null,	            //公会ID
 				amount:null, 	            //提现money
 				has_pay_password:null,	    //是否设置支付密码
 				shop_id:null
@@ -97,7 +96,7 @@
 						return this.shopList[i].label;
 					}
 				}
-				return "没有这个店铺";
+				return "没有这个公会";
 			},
 
 			showDropList() {
@@ -119,17 +118,16 @@
 				}
 
 				if (this.amount<=0) {
-					Toast('请输入转账金额');
+					Toast('请输入转账钻石数量');
 					return
 				}else if(this.amount>this.balance){
 					Toast('余额不足');
 					return
 				}else if (!this.shopId) {
-					Toast('请选择店铺');
+					Toast('请选择公会');
 					return
 				}
 				
-				console.log(this.has_pay_password);
 				if (this.has_pay_password==0) {
 					this.$router.push('/my/setting_password');//跳转到设置支付密码
 				}else{

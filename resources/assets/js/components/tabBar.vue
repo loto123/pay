@@ -11,8 +11,8 @@
           <li class="flex-1 flex flex-v flex-justify-center flex-align-center">
            <div class="make-deal flex flex-v flex-align-center">
               <a href="/#/makeDeal">
-                <i class="iconfont message-icon comonIcon normal">&#xe600;</i>
-                <p class="normal">发起交易</p>
+                <i class="iconfont message-icon comonIcon normal flex flex-align-center flex-justify-center">&#xe600;</i>
+                <p class="normal">发布任务</p>
               </a>
            </div>
           </li>
@@ -29,7 +29,7 @@
 
 <style lang="scss" scoped>
 i {
-  display: block;
+  /*display: block;*/
 }
 
 .active {
@@ -41,7 +41,7 @@ i {
 }
 
 #tabBar {
-  position: absolute;
+  position: fixed;
   bottom: 0em;
   left: 0em;
   height: 3em;
@@ -68,11 +68,13 @@ i {
         height: 4.5em;
         background: #f5f7fb;
         border-radius: 50%;
-        margin-top: -4em;
+        margin-top: -3.2em;
 
         i {
+          width:1.9em;
+          height: 1.9em;
           margin-top: 0.4em;
-          padding: 0.4em;
+          /*padding: 0.45em;*/
           background: #26a2ff;
           border-radius: 50%;
           color: #fff;

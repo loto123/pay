@@ -10,34 +10,40 @@
             v-if="recordList.length==0 && isManager"
             @click="cancelTrade"
             >
-              撤销交易
+              撤销任务
           </div>
         </topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage" v-if="allow_reward">
-            <p>打赏</p>
-            <p>店家</p>
+            <p>任务</p>
+            <p>加速</p>
+        </section>
+
+        <section class="mission-status " v-bind:class="[status!=3?'active':'disable']">
+          <p>
+            {{status!=3?'任务进行中':"任务已关闭"}}
+          </p>
         </section>
         
         <deal-content :renderData = "renderData"></deal-content>
 
-        <section class="pay-wrap flex flex-v flex-align-center">
+        <section class="pay-wrap flex flex-v flex-align-center" v-if="status!=3">
 
             <div class="pay-money flex flex-align-center flex-justify-around">
-                <label for="">我要付钱</label>
+                <label for="">交钻</label>
                 <div class="input-wrap">
                     <input type="text" placeholder="请输入您的分数" v-model="moneyData.payMoney">
                 </div>
             </div>
 
             <div class="get-money flex flex-align-center flex-justify-around">
-                <label for="">我要拿钱</label>
+                <label for="">拿钻</label>
                 <div class="input-wrap">
                     <input type="text" placeholder="请输入您的分数" v-model="moneyData.getMoney">
                 </div>
             </div>
 
-            <mt-button type="primary" size="large" @click="callPassword">确认</mt-button>
+            <mt-button type="primary" size="large" @click="callPassword" :disabled="submitClick">确认</mt-button>
         </section>
         
         <!-- 参与玩家记录 -->
@@ -53,7 +59,7 @@
                   v-for="item in joiner" 
                 >
                 
-                <span class="info-friend" @click="showMemberChoise">提醒好友</span>
+                <span class="info-friend" @click="showMemberChoise" v-if="status!=3 && allow_remind == true">提醒好友</span>
               </div>
             </div>
             
@@ -61,14 +67,27 @@
 
                 <li v-for=" item in recordList">
                     <slider @deleteIt="deleteIt(item.id)" v-bind:height="'3em'" v-bind:actionUser="'撤销'" v-bind:able="item.stat==2 && item.allow_cancel?false:true">
+
                         <div class="slider-item flex flex-align-center flex-justify-between">
                             <div class="img-wrap flex-2">
                                 <img :src=item.user.avatar alt="">
                             </div>
-                            <span class="flex-8">{{item.user.name}}</span>
+
+                            <span class="flex-8 infos flex flex-v">
+                                <span class="flex" style="margin-left:0.5em;">{{item.user.name}}</span>
+
+                                <span class="flex eggs-info" v-if="status==3 && item.eggs!=0"> 
+                                  <span>获得:</span> 
+                                  <span class="egg-wrap  flex flex-align-center flex-justify-center">
+                                    <img src="/images/egg.jpg" alt="">
+                                  </span>
+                                  <span class=" flex flex-justify-start">x {{item.eggs}}</span>
+                                </span>
+
+                            </span>
                             <div class="pay-money-text flex flex-v flex-justify-between flex-align-center flex-4">
                                 <span class="money" v-bind:class="[item.stat == 1?'':'green-color']">{{item.stat==2?'+':''}}{{item.amount}}</span>
-                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钱":"拿钱"}}</span>
+                                <span class="title" v-if="item.stat!=3"> {{item.stat==1?"付钻":"拿钻"}}</span>
                                 <span class="title" v-if="item.stat==3"> 已撤回</span>
                                 <!-- <span class="title"> {{item.stat==1?"放钱":"拿钱"}}</span> -->
                             </div>
@@ -80,7 +99,7 @@
         </section>
 
         <section id="qrcode" class="flex flex-justify-center"></section>
-        <h3 class="notice">扫描二维码快速交易</h3>
+        <h3 class="notice">扫描二维码快速加入任务</h3>
 
         <passwordPanel 
           :setSwitch="passWordSwitch" 
@@ -123,6 +142,34 @@
     text-align: center;
     font-size: 0.9em;
     color: #fff;
+  }
+}
+
+.mission-status{
+  width: 3em;
+  height: 6em;
+  position: absolute;
+  left: 2em;
+
+  p{
+    width: 1em;
+    display: block;
+    margin:0 auto;
+    margin-top:0.5em;
+  }
+}
+
+.active{
+  background: #26a2ff;
+  p{
+    color:#fff;
+  }
+}
+
+.disable{
+  background: #aaa;
+  p{
+    color:#fff;
   }
 }
 
@@ -237,18 +284,43 @@
             background: #fff;
           }
         }
-          .img-wrap{
-              img {
-                  width: 2.5em;
-                  height: 2.5em;
-                  display: block;
+
+        .img-wrap{
+            img {
+                width: 2.5em;
+                height: 2.5em;
+                display: block;
+            }
+        }
+        
+        .infos{
+          box-sizing: border-box;
+          padding-left: 0.5em;
+          padding-right: 0.5em;
+
+          .eggs-info{
+            margin-top:0.4em;
+
+            .egg-wrap{
+              >img{
+                width: 1em;
+                height: 1em;
+                display: block;
               }
+            }
+
+            >span{
+              margin-left: 0.5em;
+            }
           }
 
+          
+        }
 
-        span {
+        >span {
           display: block;
           text-align: center;
+          height: auto;
         }
       }
       /*#slider-component {
@@ -294,7 +366,7 @@ export default {
     return {
       passWordSwitch: false,
       isShow:false,
-      isManager:false,            // 是否是交易发起者
+      isManager:false,            // 是否是任务发起者
       renderData: {
         name: null,
         user:{
@@ -307,17 +379,22 @@ export default {
         payMoney: null,
         getMoney: null
       },
+
+      balance:0,
       payType: null,              // 支付方式，取钱get 放钱put
-      transfer_id:"",             // 交易id
+      transfer_id:"",             // 任务id
       shop_id:"",
       password:"",                // 支付密码
       allow_reward:false,         // 是否允许打赏
-      joiner:[],                  // 交易的参与者，需要提醒的人
+      joiner:[],                  // 任务的参与者，需要提醒的人
       memberList:[],              //成员数组
       
+      status:null,                // 1 待结算 2 已平账 3 已关闭
       recordList:[],
-
+      canClick:true,              // 防止连续点击
+      submitClick:false,
       choiseMemberSwitch:false,
+      allow_remind:true           // 是否允许提醒其他人
     };
   },
   created() {
@@ -327,7 +404,7 @@ export default {
     this._getQRCode();
   },
   methods: {
-    // 撤销交易
+    // 撤销任务
     deleteIt(id) {
       Loading.getInstance().open();
       var _data={
@@ -337,10 +414,7 @@ export default {
       request.getInstance().postData("api/transfer/withdraw",_data).then(res=>{
         Loading.getInstance().close();
         Toast("撤销成功");
-        
-        setTimeout(()=>{
-          this.init();
-        },1500);
+        this.init();
       }).catch(err=>{
         Toast("撤销失败");
         Loading.getInstance().close();
@@ -349,29 +423,54 @@ export default {
     },
 
     init() {
+
       Loading.getInstance().open();
+      this.canClick = true;
       this.transfer_id = this.$route.query.id;
       var _data = {
         transfer_id: this.transfer_id
       };
 
-      request
-        .getInstance()
-        .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
-        .then(res => {
-          this.joiner = res.data.data.joiner;
-          this.renderData = res.data.data;
-          this.recordList = res.data.data.record;
-          this.shop_id = res.data.data.shop_id;
-          this.allow_reward = res.data.data.allow_reward;
-          this.isManager = res.data.data.allow_cancel;
-          this.isShow = true;
+      Promise.all([request.getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id),request.getInstance().getData("api/index")]).then(res=>{
+        this.joiner = res[0].data.data.joiner;
+        this.renderData = res[0].data.data;
+        this.recordList = res[0].data.data.record;
+        this.shop_id = res[0].data.data.shop_id;
+        this.allow_reward = res[0].data.data.allow_reward;
+        this.isManager = res[0].data.data.allow_cancel;
+        this.status = res[0].data.data.status;
+        this.allow_remind = res[0].data.data.allow_remind;
+        this.isShow = true;
 
+        this.balance = res[1].data.data.balance;
+        Loading.getInstance().close();
+        
+      }).catch(err=>{
+          Toast(err.data.msg);
           Loading.getInstance().close();
-        })
-        .catch(err => {
-          console.error(err);
-        });
+          this.$router.push('/404notfound');
+      });
+
+      // request
+      //   .getInstance()
+      //   .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
+      //   .then(res => {
+      //     this.joiner = res.data.data.joiner;
+      //     this.renderData = res.data.data;
+      //     this.recordList = res.data.data.record;
+      //     this.shop_id = res.data.data.shop_id;
+      //     this.allow_reward = res.data.data.allow_reward;
+      //     this.isManager = res.data.data.allow_cancel;
+      //     this.status = res.data.data.status;
+      //     this.allow_remind = res.data.data.allow_remind;
+      //     this.isShow = true;
+      //     Loading.getInstance().close();
+      //   })
+      //   .catch(err => {
+      //     Toast(err.data.msg);
+      //     Loading.getInstance().close();
+      //     this.$router.push('/404notfound');
+      //   });
     },
 
     goTipPage() {
@@ -386,14 +485,37 @@ export default {
     },
 
     callPassword(){
+      
+      if(this.moneyData.payMoney == null && this.moneyData.getMoney==null){
+        Toast("请填写交钻分数或者拿钻分数");
+        return;
+      }
+
+      var reg = /^\s*(\S+)\s*$/;
+
+      if (!reg.test(this.moneyData.payMoney) ||!reg.test(this.moneyData.getMoney) ) 
+      { 
+        Toast("金额格式不正确");
+        return;
+      }
+
+      this.submitClick = true;
+      setTimeout(()=>{
+        this.submitClick = false;
+      },3000);
 
       if(this.payType == "put"){
         var _put = this.moneyData.payMoney;
 
+        if(_put > this.balance){
+          Toast("钻石数量不足");
+          return;
+        }
+
         if((parseFloat(_put)).toString().indexOf(".") != -1 || isNaN(Number(_put))){
           this.moneyData.payMoney = null;
 
-          Toast("分数只能是整数");
+          Toast("积分只能是整数");
           Loading.getInstance().close();
           return;
 
@@ -428,14 +550,18 @@ export default {
         }
 
       }else if(this.payType == "get"){
+        if(this.moneyData.getMoney == null){
+          Toast("请填写交钻分数或者拿钻分数");
+        }
+
         this.submitData();
       }else {
-        Toast("请填写拿钱数额或取钱数额");
+        Toast("请填写交钻分数或者拿钻分数");
       }
     },
 
     addMembersNotice(dataList){
-      if(!dataList){
+      if(dataList.length == 0){
         return;
       }
 
@@ -454,9 +580,7 @@ export default {
       request.getInstance().postData("api/transfer/notice",_data).then(res=>{
         Loading.getInstance().close();   
         Toast("编辑提醒成员成功...");
-        setTimeout(()=>{
-          this.init();
-        },2000);
+        this.init();
         
       }).catch(err=>{
         Loading.getInstance().close();
@@ -465,8 +589,9 @@ export default {
 
     },
 
-    // 提交交易  拿钱或者付钱
+    // 提交任务  拿钱或者付钱
     submitData(password){
+
       // 放钱
       if(this.payType == "put"){
 
@@ -479,7 +604,7 @@ export default {
 
         request.getInstance().postData("api/transfer/trade",_data).then(res=>{
           Loading.getInstance().close();
-          Toast("放钱进店铺成功");
+          Toast("放钻成功");
           this.moneyData.payMoney = null;
           setTimeout(()=>{
             this.init();
@@ -493,6 +618,9 @@ export default {
         this.hidePassword();
 
       }else if(this.payType == "get"){
+
+      
+
         // 拿钱
         var _data = {
           transfer_id :this.transfer_id,
@@ -504,13 +632,14 @@ export default {
           .then(res=>{
             var _data = {
               amount:res.data.data.amount,
-              real_amount:res.data.data.real_amount
+              real_amount:res.data.data.real_amount,
+              fee_total:res.data.data.fee_total
             }
 
             return Promise.resolve(_data);
           })
           .then(realData=>{
-            MessageBox.confirm("实际拿钱"+ realData.real_amount+ "元,手续费" + Math.floor((realData.amount- realData.real_amount)*100)/100 + "元").then(action => {
+            MessageBox.confirm("实际拿钻"+ realData.real_amount+ ",手续费" + realData.fee_total+ "钻石").then(action => {
 
               var _data = {
                 transfer_id :this.transfer_id,
@@ -521,7 +650,7 @@ export default {
               request.getInstance().postData("api/transfer/trade",_data)
                 .then(res=>{
                   Loading.getInstance().close();
-                  Toast("从店铺中拿钱成功");
+                  Toast("从公会中拿钱成功");
                   this.moneyData.getMoney = null;
                   setTimeout(()=>{
                     this.init();
@@ -558,17 +687,23 @@ export default {
 
       qrcode.makeCode(window.location.href);
     },
+
     cancelTrade(){
+      if(this.canClick == false){
+        return;
+      }
+      this.canClick = false;
       var _data = {
         transfer_id:this.transfer_id
       }
+
       request.getInstance().postData('api/transfer/cancel',_data).then(res=>{
-        Toast("撤销交易成功");
+        Toast("撤销任务成功");
         setTimeout(()=>{
           this.$router.push("/makeDeal/my_deal");
         },1500);
       }).catch(err=>{
-        Toast(err.data.data.msg);
+        Toast(err.data.msg);
       });
     },
 
@@ -603,28 +738,36 @@ export default {
         Loading.getInstance().close();
 
         if(res.data.data.members.length == 0){
-          Toast("当前店铺无成员");
+          Toast("当前公会无成员");
           return;
         }
 
         this.choiseMemberSwitch = true;
         
       }).catch(err=>{
-        console.error(err);
         Loading.getInstance().close();
+        Toast(err.data.msg);
       });
 
     },
     
   },
+
   watch: {
-    "moneyData.payMoney": function() {
+    "moneyData.payMoney": function(e) {
+      if(e == ""){
+        this.moneyData.payMoney = null;
+      }
       // 放钱
       this.moneyData.getMoney = null;
       this.payType = "put";
     },
-    "moneyData.getMoney": function() {
+    "moneyData.getMoney": function(e) {
       // 拿钱
+      if(e == ""){
+        this.moneyData.getMoney = null;
+      }
+
       this.moneyData.payMoney = null;
       this.payType = "get";
     }

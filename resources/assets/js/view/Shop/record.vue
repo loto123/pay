@@ -20,14 +20,23 @@
                 </div>
                 <div>图标</div>
             </div>
-            <ul class="bill-list">
+			<div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
+                <i class="iconfont">
+                    &#xe655;
+                </i>
+                <div>暂无数据</div>
+			</div>
+            <ul class="bill-list" v-else>
                 <li  v-for="item in recordList" @click="details(item.id)">
                     <a href="javascript:;" class="flex">
                         <div class="bill-content">
                             <h5>{{status(item.type)}}</h5>
                             <div class="time">{{changeTime(item.created_at)}}</div>
                         </div>
-                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">{{item.mode == 1?-item.amount:item.amount}}</div>
+                        <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">
+                            {{item.mode == 1?-item.amount:'+'+item.amount}}
+                            <i class="diamond">&#xe6f9;</i>
+                        </div>
                     </a>
                 </li>
             </ul>
@@ -35,7 +44,7 @@
         <transition name="slide">
             <div class="sel-type" v-if="showAlert">
                 <div class="sel-type-box">
-                    <h2>选择交易类型</h2>
+                    <h2>选择任务类型</h2>
                     <ul class="type-list">
                         <li class="active">
                             <a href="javascript:;">全部</a>
@@ -44,7 +53,7 @@
                             <a href="javascript:;">交易</a>
                         </li>
                         <li>
-                            <a href="javascript:;">店铺转账</a>
+                            <a href="javascript:;">公会转账</a>
                         </li>
                         <li>
                             <a href="javascript:;">全部</a>
@@ -59,7 +68,7 @@
                             <a href="javascript:;">交易</a>
                         </li>
                         <li>
-                            <a href="javascript:;">店铺转账</a>
+                            <a href="javascript:;">公会转账</a>
                         </li>
                         <li>
                             <a href="javascript:;">全部</a>
@@ -116,7 +125,6 @@
                 }
                 Loading.getInstance().open("加载中...");
                 this.shopId = this.$route.query.id;
-                console.log(this.shopId);
                 request.getInstance().getData("api/shop/transfer/records/"+this.shopId)
                     .then((res) => {
                         this.recordList=res.data.data.data;
@@ -143,15 +151,10 @@
             status(type){
                 let result='';
                 switch(type){
-                    case 0: result='充值'; break;
-                    case 1: result='提现'; break;
-                    case 2: result='交易收入'; break;
-                    case 3: result='交易支出'; break;
-                    case 4: result='转账到店铺'; break;
-                    case 5: result='店铺转入'; break;
-                    case 6: result='交易手续费'; break;
-                    case 7: result='提现手续费'; break;
-                    default: result='打赏店家费'
+                    case 0: result='转账给个人'; break;
+                    case 1: result='转账给成员'; break;
+                    case 2: result='从个人转账'; break;
+                 
                 }
                 return result;
             }
@@ -289,5 +292,18 @@
 
     .cancel-btn {
         margin-top: 1.5em;
+    }
+    .nodata{
+        margin-top:10%;
+        i,div{
+            color: #ddd;
+        }
+        i{
+            font-size: 3.5em;
+        }
+        div{
+            font-size: 2em;
+            margin-top:0.3em;
+        }
     }
 </style>

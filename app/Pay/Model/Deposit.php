@@ -20,6 +20,9 @@ class Deposit extends Model
     const STATE_PART_PAID = 3;//部分支付
     const STATE_API_ERR = 4;//接口不通
     const STATE_CHARGE_FAIL = 5;//到账失败
+    const STATE_TIMEOUT_PAY = 6;//超时支付(已支付,但超过订单有效期)
+    const STATE_EXPIRED = 7;//订单失效
+
     protected $table = 'pay_deposit';
 
     protected $casts = [
@@ -41,13 +44,15 @@ class Deposit extends Model
             case self::STATE_UNPAID:
                 return '未支付';
             case self::STATE_COMPLETE:
-                return '充值成功';
+                return '购买成功';
             case self::STATE_PAY_FAIL:
                 return '支付失败';
             case self::STATE_PART_PAID:
                 return '金额不足';
             case self::STATE_CHARGE_FAIL:
                 return '入账失败';
+            case self::STATE_EXPIRED:
+                return '订单失效';
             default:
                 return '异常';
         }
@@ -65,6 +70,15 @@ class Deposit extends Model
     public function channel()
     {
         return $this->belongsTo(Channel::class);
+    }
+
+    /**
+     * 宠物交易买单
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function petBuyBill()
+    {
+        return $this->hasOne(BillMatch::class, 'deposit_id');
     }
 
     /**

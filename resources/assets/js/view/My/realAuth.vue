@@ -31,6 +31,8 @@
   import topBack from "../../components/topBack";
   import request from '../../utils/userRequest';
   import { Toast } from "mint-ui";
+  import Loading from '../../utils/loading'
+  
   export default {
     data () {
       return {
@@ -81,24 +83,30 @@
         this.mobile=this.$route.query.mobile;
       },
       //短信验证码
-      sendYZM(){
-        var _temp = {};
-        _temp.mobile = this.$route.query.mobile;
+      sendYZM() {
+				if(this.computedTime !=null){
+					return;
+				}
+				var _data = {};
+				_data.mobile = this.$route.query.mobile;
 
-        request.getInstance().postData("api/auth/sms",_temp).then((res) => {
-          console.log(res);
-          this.computedTime = 60;
-          this.timer = setInterval(() => {
-              this.computedTime --;
-              console.log(this.computedTime); 
-              if (this.computedTime == 0) {
-                clearInterval(this.timer)
-              }
-          }, 1000)
-        }).catch((err) => {
-          Toast(err.data.msg);
-        })
-      }
+				this.computedTime = 60;
+				var timer = setInterval(() => {
+					this.computedTime--;
+					if (this.computedTime == 0) {
+						this.computedTime=null;
+						clearInterval(timer);
+					}
+				}, 1000)
+				
+				Loading.getInstance().open();
+				request.getInstance().postData("api/auth/sms", _data).then((res) => {
+					Loading.getInstance().close();
+				}).catch((err) => {
+					Toast(err.data.msg);
+					Loading.getInstance().close();
+				})
+			}
     }
   };
 </script>

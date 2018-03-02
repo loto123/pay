@@ -16,13 +16,13 @@
             </i>
           </div>
           
-          <h3 class="money-text">{{total_profit}}元</h3>
-          <h3>店铺总收益(元)</h3>
+          <h3 class="money-text">{{total_profit}}<i class="diamond" style="margin-left: 0.5em;">&#xe6f9;</i></h3>
+          <h3>公会总收益</h3>
 
       </div>
       
       <div class="tab-menu flex flex-align-center flex-justify-center" >
-        <div class="my-shop flex flex-align-center flex-justify-center active">我的店铺</div>
+        <div class="my-shop flex flex-align-center flex-justify-center active">我的公会</div>
         <div class="my-star flex flex-align-center flex-justify-center" @click="goMyCollection">我的收藏</div>
       </div>
 
@@ -36,8 +36,8 @@
           </div>
 
           <h3>{{SetString(item.name,6)}}</h3>
-          <p class="today-earn">今日收益:{{item.today_profit}}</p>
-          <p class="all-earn">总收益:{{item.total_profit}}</p>
+          <p class="today-earn">今日收益:{{item.today_profit}} <i class="diamond">&#xe6f9;</i></p>
+          <p class="all-earn">总收益:{{item.total_profit}}<i class="diamond">&#xe6f9;</i></p>
         </div>
 
         <div class="add-shop flex flex-v flex-align-center flex-justify-center" @click="addShop">
@@ -47,7 +47,7 @@
             </i>
           </div>
           
-          <h3>开新店</h3>
+          <h3>创建新公会</h3>
 
         </div>
 
@@ -55,24 +55,24 @@
 
     <transition name="slide">
 
-      <!-- 创建店铺拉起 -->
+      <!-- 创建公会拉起 -->
        <section class="add-shop-tab" v-if="addShopTabStatus" >
-          <top-back :title= "'填写店铺信息'" :userAction = "'hide'"  v-on:hide="hide"></top-back>
+          <top-back :title= "'填写公会信息'" :userAction = "'hide'"  v-on:hide="hide"></top-back>
 
           <div class= "item">
-            <mt-field label="店铺名称" placeholder="请设置店铺名称"  v-model="openNewShop.name"></mt-field>
+            <mt-field label="公会名称" placeholder="请设置公会名称"  v-model="openNewShop.name"></mt-field>
           </div>
 
           <div class= "item">
-            <mt-field label="设置单价" placeholder="请输入单价(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
+            <mt-field label="任务默认倍率" placeholder="请输入任务默认倍率(数字)" type="number" style="margin-top:0.4em;" v-model="openNewShop.rate"></mt-field>
           </div>
 
           <div class= "item">
-            <mt-field label="设置手续费率" placeholder="设置手续费率(整数%)" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
+            <mt-field label="设置公会佣金费率" placeholder="设置公会佣金费率(整数%)" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
           </div>
 
           <div class="item open-deal-switch flex flex-align-center">
-            <label for="" class="flex-7" style="padding-left:0.8em;">是否开启交易</label>
+            <label for="" class="flex-7" style="padding-left:0.8em;">是否开启任务</label>
             <span class="flex-3 flex flex-reverse" style="padding-right:1em;">
               <mt-switch v-model="openNewShop.active"></mt-switch>
             </span>
@@ -175,7 +175,7 @@
 }
 
 .shop-list {
-  // 店铺列表
+  // 公会列表
   .shop-item {
     width: 8em;
     min-height: 7em;
@@ -346,8 +346,8 @@ export default {
 
   data() {
     return {
-      addShopTabStatus: false,      // 创建店铺拉起状态
-      dealStatus: true,             // 是否开启交易(创建店铺tab)
+      addShopTabStatus: false,      // 创建公会拉起状态
+      dealStatus: true,             // 是否开启任务(创建公会tab)
       createShopSwitch: true,     // 防看止按钮多次点击的
 
       openNewShop:{
@@ -390,19 +390,18 @@ export default {
 
     },
 
-    // 创建店铺
+    // 创建公会
     createShop(){
       
       var data = this.openNewShop;
-      console.log(parseFloat(data.rate));
 
       if((parseFloat(data.rate)*10).toString().indexOf(".")!=-1 || parseFloat(data.rate) < 0){
-        Toast("请输入正确的单价(允许有一位小数)");
+        Toast("请输入正确的任务默认倍率(允许有一位小数)");
         return;
       }
 
       if(data.rate > 99999){
-        Toast("单价不能超过99999");
+        Toast("任务默认倍率不能超过99999");
         return;
       }
 

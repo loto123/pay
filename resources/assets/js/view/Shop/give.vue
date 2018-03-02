@@ -1,6 +1,6 @@
 <template>
   <div id="give" class="give-container">
-    <topBack title="转账给店铺成员">
+    <topBack title="转钻给公会成员">
       <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="goIndex">
         <i class="iconfont" style="font-size:1.4em;">&#xe602;</i>
       </div>
@@ -10,20 +10,21 @@
       <div class="user-box flex flex-v flex-align-center">
         <img :src="transferData.avatar" alt="">
         <h3 class="name">{{transferData.name}}</h3>
-        <h3 class="id">{{transferData.id}}</h3>
+        <h3 class="id">{{transferData.mobile}}</h3>
       </div>
     </div>
 
     <div class="give-box">
-      <div class="title">转账金额</div>
+      <div class="title">转钻</div>
       <div class="give-money flex flex-justify-center">
         <label>￥</label>
-        <input type="text" placeholder="请输入金额" v-model="amount">
+        <input type="number" placeholder="请输入钻石数量" v-model="amount">
       </div>
       <div class="all-money flex">
-        <div class="money">可转账余额 ¥
+        <div class="money">可转钻石数量
+          <i class="diamond">&#xe6f9;</i>
           <span>{{balance}}</span>, </div>
-        <a href="javascript:;" class="all-giveAcc" @click="allGive">全部转账</a>
+        <a href="javascript:;" class="all-giveAcc" @click="allGive">全部转钻</a>
       </div>
 
       <div class="comment flex flex-align-center flex-justify-center">
@@ -31,7 +32,7 @@
       </div>
 
       <a href="javascript:;" class="transAcc-btn">
-        <mt-button type="primary" size="large" @click="submitDate">转账</mt-button>
+        <mt-button type="primary" size="large" @click="submitDate">转钻</mt-button>
       </a>
     </div>
 
@@ -64,7 +65,7 @@
         memberList: [],
         shopId: null,
         transferData: {},
-        amount: null,                      // 转账金额
+        amount: null,                      // 转钻
         comment: "",
         balance: null,
         showPasswordTag: false,       // 密码弹出开关
@@ -92,10 +93,10 @@
       submitDate() {
         // /shop/transfer/{shop_id}/{user_id}
         if (this.amount <= 0) {
-          Toast("请输入转账金额");
+          Toast("请输入转钻钻石数量");
           return
         } else if (this.amount > this.balance) {
-          Toast("余额不足");
+          Toast("钻石数量不足");
           return
         }
         if (this.has_pay_password == 0) {
@@ -117,7 +118,7 @@
         Promise.all([request.getInstance().postData('api/my/pay_password', temp), request.getInstance().postData('api/shop/transfer/' + this.shopId + "/" + this.transferData.id, _data)])
           .then((res) => {
             Loading.getInstance().close();
-            Toast("转账成功");
+            Toast("钻成功");
             this.$router.push('/shop/shopAccount?id=' + this.shopId);
           })
           .catch((err) => {
@@ -157,9 +158,12 @@
             Loading.getInstance().close();
           });
       },
-      allGive() { //全部转账
+      allGive() { //全部转钻
         this.amount = this.balance;
       },
+      hidePassword(){
+        this.showPasswordTag = false;
+      }
     }
   };
 </script>

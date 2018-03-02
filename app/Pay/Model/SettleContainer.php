@@ -25,8 +25,8 @@ class SettleContainer extends Container
     protected $table = 'pay_settle_container';
     protected $casts = [
         'state' => 'integer',
-        'create_at' => 'datetime',
-        'update_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'balance' => 'float',
         'frozen_balance' => 'float',
     ];
@@ -46,7 +46,7 @@ class SettleContainer extends Container
             //获取总余额
             $reserve = DB::table($this->table)->select('balance', 'frozen_balance')->lockForUpdate()->first();
 
-            $toExtract = $reserve->balance + $reserve->frozen_balance;
+            $toExtract = bcadd($reserve->balance, $reserve->frozen_balance, 2);
             if ($toExtract <= 0) {
                 break;
             }

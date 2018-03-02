@@ -1,20 +1,20 @@
 <template>
-  <!-- 发起交易 -->
+  <!-- 发起任务 -->
   <div id = "makeDeal">
-    <topBack title="发起交易" style="background:#eee;"></topBack>
+    <topBack title="发布寻找宠物任务" style="background:#eee;"></topBack>
 
     <div class="select-wrap flex flex-align-center" @click="showDropList">
-        {{dealShop?dealShop:'请选择您要发起交易的店铺'}}
+        {{dealShop?dealShop:'选择一个公会来发布任务'}}
     </div>
 
     <div class="price flex">
-        <label for="" class="flex-1">设置单价：</label>
+        <label for="" class="flex-1">任务收益倍率</label>
         <input type="text" value = "10" class="flex-1" v-model="price" maxlength="6">
         <span class="cancer"></span>
     </div>
     
     <div class="textareaWrap">
-        <textarea name="" id="" cols="20" rows="3" placeholder = "大吉大利 恭喜发财" v-model="commentMessage">
+        <textarea name="" id="" cols="20" rows="3" placeholder = "任务描述" v-model="commentMessage">
         </textarea>
     </div>
     
@@ -33,15 +33,17 @@
     </div>
 
     <div class="commit-btn">
-        <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">确认</mt-button>
+        <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">发布任务</mt-button>
     </div>
 
-    <p class="notice">你可以在聊天中发起收付款交易，收到的钱将存入您的结算宝账户中。</p>
+    <p class="notice">任务完成后每个参与者都会获得一定的奖励</p>
 
     <inputList 
       :showSwitch = "dropListSwitch" 
       v-on:hideDropList="hideDropList" 
-      :optionsList = "shopList">
+      :optionsList = "shopList"
+      v-if="isShow"
+    >
     </inputList>
 
     <choiseMember 
@@ -208,7 +210,8 @@ export default {
       price: 10,
       commentMessage: null,
 
-      memberList:[]              //成员数组
+      memberList:[],              //成员数组
+      isShow:false
     };
   },
 
@@ -220,6 +223,7 @@ export default {
         .getData("api/shop/lists/all")
         .then(res => {
           this.setShopList(res);
+          this.isShow = true;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -248,7 +252,7 @@ export default {
         }
       }
 
-      return "没有这个店铺";
+      return "没有这个公会";
     },
 
       getDefaultPrice(id){
@@ -258,12 +262,12 @@ export default {
               }
           }
 
-//          return "没有这个店铺";
+//          return "没有这个公会";
       },
 
     showDropList() {
       if(this.shopList.length == 0){
-        Toast("当前无可选的店铺,请先加入店铺或创建店铺");
+        Toast("当前无可选的公会,请先加入公会或创建公会");
         return;
       }
 
@@ -275,14 +279,13 @@ export default {
       this.dealShop = this.getShopName(data);
       this.shopId = data;
       this.price = this.getDefaultPrice(data);
-
-      this.memberList = [];    // 清空店铺成员列表
+      this.memberList = [];    // 清空公会成员列表
     },
 
     // 获取所有要提醒的成员名单
     showMemberChoise(){
       if(this.shopId == null){
-        Toast("请选择发起交易的店铺");
+        Toast("请选择发布任务的公会");
         return;
       }
       Loading.getInstance().open();
@@ -291,7 +294,7 @@ export default {
         Loading.getInstance().close();
 
         if(res.data.data.members.length == 0){
-          Toast("当前店铺无成员");
+          Toast("当前公会无成员");
           return;
         }
 
@@ -305,11 +308,13 @@ export default {
     },
 
     getMemberData(data){
-      this.memberList = data;
+      if(data){
+        this.memberList = data;
+      }
     },
     // 初始化提醒玩家列表
     initMemberList(res){
-
+      
       if(this.memberList.length>0){
         return;
       }
@@ -318,6 +323,10 @@ export default {
           var _temp = {};
           _temp = res.data.data.members[i];
           _temp.checked = false;
+
+          if(i == 0){
+            _temp.checked = true;
+          }
           this.memberList.push(_temp);
         }
 
@@ -327,7 +336,7 @@ export default {
       this.choiseMemberSwitch = false;
     },
 
-    // 提交发起交易的数据
+    // 提交发起任务的数据
     submitData() {
       var _tempMessage = null;
       if (this.commentMessage == null) {
@@ -345,22 +354,22 @@ export default {
       };
 
       if(this.shopId == null){
-        Toast("请选择发起交易的店铺");
+        Toast("请选择发布任务的公会");
         return 
       }else if(this.price == ""){
-        Toast("请设置单价")
+        Toast("请设置任务默认倍率")
         return
       }
 
         //  输入数据验证
       if (!utils.testStringisNumber(parseFloat(_data.price)*10))
       {
-          Toast("请输入正确的金额，最多只能包含一位小数");
+          Toast("请输入正确的倍率，最多只能包含一位小数");
           return;
       }
 
       if(parseFloat(_data.price)>99999){
-          Toast("最大单价只能为99999");
+          Toast("最大任务默认倍率只能为99999");
           return;
       }
         this.submitSwitch = false;
@@ -384,7 +393,11 @@ export default {
     },
 
     getMembersId(){
-      if(this.memberList.length == 0){
+      if(!this.memberList){
+        return [];
+      }
+
+      if( this.memberList.length == 0){
         return [];
       }
 

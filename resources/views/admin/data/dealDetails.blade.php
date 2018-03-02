@@ -20,7 +20,7 @@
                 <div>{{$transfer->price}}</div>
             </li>
             <li class="flex flex-align-center">
-                <div class="title">包中余额:</div>
+                <div class="title">包中剩余钻石:</div>
                 <div>{{$transfer->amount}}</div>
             </li>
             <li>
@@ -71,7 +71,7 @@
             @endif
             @if($transfer->shop)
                 <li class="flex flex-align-center">
-                    <div class="title">店铺:</div>
+                    <div class="title">公会:</div>
                     <div class="flex-1">
                         <div>{{$transfer->shop->name}}</div>
                         <div>ID:{{$transfer->shop->en_id()}}</div>
@@ -79,23 +79,23 @@
                 </li>
             @endif
             <li class="flex flex-align-center">
-                <div class="title">平台交易费比例:</div>
+                <div class="title">平台手续费比例:</div>
                 <div>{{$transfer->fee_percent}}%</div>
             </li>
             <li class="flex flex-align-center">
-                <div class="title">店铺收入分成:</div>
+                <div class="title">公会收入分成:</div>
                 <div>{{$transfer->tip_percent}}%</div>
             </li>
             <li class="flex flex-align-center">
-                <div class="title">平台交易费:</div>
+                <div class="title">平台手续费:</div>
                 <div>{{$transfer->fee_amount}}元</div>
             </li>
             <li class="flex flex-align-center">
-                <div class="title">店铺收入:</div>
+                <div class="title">公会收入:</div>
                 <div>{{$transfer->tip_amount}}元</div>
             </li>
             <li class="flex flex-align-center">
-                <div class="title">交易状态:</div>
+                <div class="title">任务状态:</div>
                 @switch($transfer->status)
                 @case(1)
                 <div>待结算</div>
@@ -116,12 +116,13 @@
             </li>
         </ul>
         <div class="dealDetails-btn">
-            @if($transfer->status == 2 && Admin::user()->can('allow_close_transfer'))<a id="close_transfer_btn" class="confirm-btn">关闭交易</a>@endif
+            @if($transfer->status == 2 && Admin::user()->can('allow_close_transfer'))<a id="close_transfer_btn" class="confirm-btn">关闭任务</a>@endif
             <a class="back-btn" href="/admin/data/transfer" pjax-container>返回</a>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+    $(document).off("click",'#close_transfer_btn');
     $(document).on("click", '#close_transfer_btn', function () {
         var _btn = $(this);
         $.ajax({

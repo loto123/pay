@@ -1,7 +1,7 @@
 <template>
   <div id="shop-order">
       <div class="top">
-          <topBack style="background:#26a2ff;color:#fff;" :title="'店铺订单'"></topBack>
+          <topBack style="background:#26a2ff;color:#fff;" :title="'公会订单'"></topBack>
 
           <div class="data-input-wrap flex flex-align-center">
               <div class="start-time flex-4 flex flex-justify-center flex-align-center" @click = "openStartPicker">
@@ -20,7 +20,7 @@
           </div>
 
           <h3>
-            累计交易 11 笔，总收益23 元
+            累计完成任务 11 笔，总收益23 元
           </h3>
 
           <h4>

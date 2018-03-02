@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Bank;
+use App\Pay\Impl\ALiPay\Auth;
 use App\Pay\Impl\Heepay\Heepay;
 use App\Pay\Impl\Heepay\Reality;
 use App\Pay\Impl\Heepay\SmallBatchTransfer;
+use App\Pay\Impl\Showapi\Showapi;
 use App\PayInterfaceRecord;
 use App\User;
 use App\UserCard;
@@ -46,7 +48,7 @@ class CardController extends BaseController
      *                  @SWG\Property(property="card_num", type="string", example="123456******1234",description="银行卡号"),
      *                  @SWG\Property(property="bank", type="string", example="中国银行",description="开户行"),
      *                  @SWG\Property(property="card_type", type="string", example="储蓄卡",description="卡类型"),
-     *                  @SWG\Property(property="card_logo", type="string", example="url",description="银行卡logo"),
+     *                  @SWG\Property(property="card_logo", type="string", example="/image/1.jpg",description="银行卡logo"),
      *                  @SWG\Property(property="is_pay_card", type="integer", example=1,description="是否是结算卡 1：是，0：否"),
      *                  ),
      *              )
@@ -66,11 +68,8 @@ class CardController extends BaseController
         if($this->user->identify_status != 1) {
             return $this->json([],'未实名认证，该功能不可用',0);
         }
-        $user_card_table = (new UserCard)->getTable();
-        $cards = UserCard::leftJoin('banks as b', 'b.id', '=', $user_card_table.'.bank_id')
-            ->where('user_id', '=', $this->user->id)
-            ->select($user_card_table.'.*','b.name as bank_name','b.logo as bank_logo')
-            ->orderBy('id')->get();
+
+        $cards = UserCard::where('user_id',$this->user->id)->with('bank')->orderBy('id')->get();
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
@@ -85,10 +84,10 @@ class CardController extends BaseController
                 }
                 $data[$item->id] = [
                     'card_id' => $item->id,
-                    'card_num' => $this->formatNum($item->card_num), //做掩码处理
-                    'bank' => $item->bank_name,
+                    'card_num' => $this->user->formatNum($item->card_num), //做掩码处理
+                    'bank' => $item->bank->name,
                     'card_type' => $card_type,
-                    'card_logo' => $item->bank_logo,
+                    'card_logo' => $item->bank->logo ,
                     'is_pay_card' => ($item->id == $this->user->pay_card_id)? 1:0,
                 ];
             }
@@ -214,41 +213,60 @@ class CardController extends BaseController
         }
         Cache::forget($cache_key);
 
+        //验证当天可用次数
+        $times = $this->user->check_action_times('authentication', config('authentication_max_times',3));
+        if(!$times) {
+            return $this->json([], '添加银行卡请求次数超过当天最大限制次数！', 0);
+        }
+
         //同一用户只能绑定一次
         $card_list = UserCard::where('user_id',$this->user->id)->where('card_num',$request->card_num)->first();
         if (!empty($card_list) && count($card_list)>0) {
             return $this->json([],'已经绑定的银行卡不能重复绑定',0);
         }
 
+//        //验证银行卡号是否归属银行
+//        $bank = Bank::find($request->bank_id);
+//        if(!empty($bank) && !empty($bank->card_num_pre)) {
+//            $bank_card_pre_list = explode(',',$bank->card_num_pre);
+//            $card_pre = substr($request->card_no,0,$bank->card_num_pre_size);
+//            if(!isset($bank_card_pre_list[$card_pre])) {
+//                return $this->json([],'银行卡号输入错误或所属银行选择错误',0);
+//            }
+//        }
+
         if(!isset($this->user->channel['platform_id'])) {
             return $this->json([],'用户没有分配通道',0);
         }
 
         //添加记录
-        $bill_id = $this->createUniqueId();
+        $bill_id = UserCard::createUniqueId();
         try{
             $pay_record = new PayInterfaceRecord();
             $pay_record->bill_id = $bill_id;
             $pay_record->user_id = $this->user->id;
             $pay_record->type = UserCard::AUTH_TYPE;
-            $pay_record->platform = Heepay::PLATFORM;
+//            $pay_record->platform = Heepay::PLATFORM;
+            $pay_record->platform = Showapi::PLATFORM;
             $pay_record->save();
         } catch (\Exception $e) {
             return $this->json([],'记录无法生成',0);
         }
         //鉴权
-        $auth_res = Reality::authentication(
-            $pay_record->id,
-            $bill_id,
-            date('YmdHis'),
-            $request->card_num,
-            $this->user->id_number,
-            $this->user->name
-        );
-        if ($auth_res !== true) {
-            return $this->json([],$auth_res,0);
+        if(!config('app.debug')) {
+//            $auth_res = Reality::authentication(
+//                $pay_record->id,
+//                $bill_id,
+//                date('YmdHis'),
+//                $request->card_num,
+//                $this->user->id_number,
+//                $this->user->name
+//            );
+            $auth_res = Showapi::authentication($pay_record->id, $request->card_num, $this->user->id_number, $this->user->name);
+            if ($auth_res !== true) {
+                return $this->json([],$auth_res,0);
+            }
         }
-
         $cards = new UserCard();
         $cards->user_id = $this->user->id;
         $cards->card_num = $request->card_num;
@@ -445,25 +463,78 @@ class CardController extends BaseController
     }
 
 
-    //对字符串做掩码处理
-    private function formatNum($num,$pre=0,$suf=4)
+
+    /**
+     * @SWG\GET(
+     *   path="/card/otherCards",
+     *   summary="非结算卡列表",
+     *   tags={"我的"},
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="card_id", type="integer", example="1",description="银行卡id"),
+     *                  @SWG\Property(property="card_num", type="string", example="123456******1234",description="银行卡号"),
+     *                  @SWG\Property(property="bank", type="string", example="中国银行",description="开户行"),
+     *                  @SWG\Property(property="card_type", type="string", example="储蓄卡",description="卡类型"),
+     *                  @SWG\Property(property="card_logo", type="string", example="/image/1.jpg",description="银行卡logo"),
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function otherCards()
     {
-        $prefix = '';
-        $suffix = '';
-        if($pre>0) {
-            $prefix = substr($num, 0, $pre);
+        $this->user = JWTAuth::parseToken()->authenticate();
+        if($this->user->identify_status != 1) {
+            return $this->json([],'未实名认证，该功能不可用',0);
         }
-        if ($suf>0){
-            $suffix = substr($num, 0-$suf, $suf);
+        $cards = UserCard::where('user_id',$this->user->id)->with('bank')->orderBy('id')->get();
+        $data = [];
+        if( !empty($cards) && count($cards)>0 ) {
+            foreach ($cards as $item) {
+                if($item->id == $this->user->pay_card_id) {
+                    continue;
+                }
+                $card_type = '';
+                switch ($item->type) {
+                    case 1:
+                        $card_type = '储蓄卡';
+                        break;
+                    case 2:
+                        $card_type = '信用卡';
+                        break;
+                }
+                $data[] = [
+                    'card_id' => $item->id,
+                    'card_num' => $this->user->formatNum($item->card_num), //做掩码处理
+                    'bank' => $item->bank->name,
+                    'card_type' => $card_type,
+                    'card_logo' => $item->bank->logo ,
+                ];
+            }
         }
-        $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
-        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
-        return $maskBankCardNo;
+        return $this->json($data);
     }
 
-    //生成订单号
-    public static function createUniqueId()
-    {
-        return date('YmdHis') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
-    }
 }

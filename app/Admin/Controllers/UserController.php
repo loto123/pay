@@ -10,6 +10,7 @@ use App\Shop;
 use App\TransferRecord;
 use App\User;
 
+use App\UserFund;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -80,12 +81,12 @@ class UserController extends Controller
             $channel_id = Request::input('channel_id');
             $role = Request::input('role');
             $user_table = (new User)->getTable();
-            $grid->model()->leftJoin('transfer_record as tfr', 'tfr.user_id', '=', $user_table .'.id')
+            $grid->model()->leftJoin('user_funds as uf', 'uf.user_id', '=', $user_table .'.id')
                 ->with(['roles', 'operator'])
                 ->select($user_table.'.*',
-                    DB::raw('abs(SUM( CASE WHEN stat=1 THEN amount ELSE 0 END)) AS payment'),
-                    DB::raw('abs(SUM( CASE WHEN stat=2 THEN real_amount ELSE 0 END)) AS profit'),
-                    DB::raw('COUNT(tfr.id) AS transfer_count'));
+                    DB::raw('abs(SUM( CASE WHEN mode=1 THEN amount ELSE 0 END)) AS payment'),
+                    DB::raw('abs(SUM( CASE WHEN mode=0 THEN amount ELSE 0 END)) AS profits'),
+                    DB::raw('COUNT(*) AS transfer_count'));
             if ($user_mobile) {
                 $grid->model()->where($user_table.'.mobile', $user_mobile);
             }
@@ -115,15 +116,15 @@ class UserController extends Controller
                 return "<span style='color:black'>$this->name</span><br/><span style='color:gray'>$this->mobile</span>";
             });
             $grid->roles('身份')->pluck('display_name')->label();
-            $grid->transfer_count('交易笔数');
-            $grid->column('container.balance','余额');
+            $grid->transfer_count('任务笔数');
+            $grid->column('container.balance','剩余钻石');
             $grid->column('pure_profit', '收益')->display(function(){
-                return number_format($this->profit - $this->payment,2);
+                return number_format($this->profits - $this->payment,2);
             });
-            $grid->profit('收款')->display(function () {
-                return number_format($this->profit,2);
+            $grid->profits('拿钻')->display(function () {
+                return number_format($this->profits,2);
             });
-            $grid->payment('付款')->display(function () {
+            $grid->payment('交钻')->display(function () {
                 return number_format($this->payment,2);
             });
             $grid->column('operators','上级运营')->display(function ($value) {
@@ -153,6 +154,12 @@ class UserController extends Controller
             });
             $grid->disableFilter();
             $grid->disableExport();
+            //去掉批量删除
+            $grid->tools(function ($tools) {
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
 //            $grid->disableCreation();
         });
     }
@@ -170,20 +177,33 @@ class UserController extends Controller
                 return $this->en_id();
             });
             if ($id) {
-                $form->display('name', '用户名');
+                $form->display('name', '昵称');
             } else {
-                $form->text('name', '用户名');
+                $form->text('name', '昵称 *')->rules('required');
             }
-            $form->password('password', '密码');
-            $form->text('mobile', '手机号码');
-//            $form->display('name', '身份角色');
+            $form->password('password', '密码 *')->rules('required|min:8|max:16');
+            $form->text('mobile', '手机号码 *')->rules('required|regex:/^1[34578][0-9]{9}$/');
             if ($id) {
-                $form->display('container.balance', '余额');
+                $form->display('container.balance', '剩余钻石');
             }
-            $form->multipleSelect('roles', '角色')->options(Role::all()->pluck('display_name', 'id'));
-            $form->select('operator_id','上级运营')->options(\App\Admin::whereHas("roles", function($query){
+            //角色不允许直接编辑
+            if(!$id) {
+                $form->multipleSelect('roles', '角色')->options(Role::all()->pluck('display_name', 'id'));
+            } else {
+                $form->display('roles','角色')->with(function ($roles){
+                    $role = '';
+                    if (!empty($roles)) {
+                        foreach ($roles as $_role) {
+                            $role .= $_role['display_name'] . ' ';
+                        }
+                    }
+                    return $role;
+                });
+            }
+
+            $form->select('operator_id','上级运营 *')->options(\App\Admin::whereHas("roles", function($query){
                 $query->where("slug", 'operator');
-            })->pluck("username", 'id'));
+            })->pluck("username", 'id'))->rules('required');
             if ($id) {
                 $form->checkbox('wechat', '解绑微信号')->options(OauthUser::where('user_id',$id)->pluck('nickname','id'));
             }
@@ -193,11 +213,6 @@ class UserController extends Controller
             $form->hidden('channel_id');
             $form->ignore(['wechat']);
             $form->saving(function (Form $form) {
-                /*
-                 * 提交前需要做一些处理：
-                 * 1.解绑微信号，需要弹出一个js确认框
-                 * 2.验证手机号的唯一性
-                 * */
                 if($form->model()->mobile != $form->mobile && User::where('mobile',$form->mobile)->count()>0) {
                     $error = new MessageBag([
                         'title'   => '操作有误',
@@ -276,10 +291,10 @@ class UserController extends Controller
             $list = User::where('id',$id)->with(['roles','wechat_user'])->first();
             $list->id = $list->en_id($list->id);
             $list->parent_id = $list->parent_id==0?$list->parent_id:$list->parent->en_id($list->parent_id);
-            $transfer_record = TransferRecord::where('user_id', $id)
-                ->select(DB::raw('abs(SUM( CASE WHEN  stat=1 THEN amount ELSE 0 END)) AS payment'),
-                    DB::raw('abs(SUM( CASE WHEN  stat=2 THEN real_amount ELSE 0 END)) AS profit'),
-                    DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(fee_amount) AS fee_amount_count'))
+            $transfer_record = UserFund::where('user_id', $id)
+                ->select(DB::raw('abs(SUM( CASE WHEN  mode=1 THEN amount ELSE 0 END)) AS payment'),
+                    DB::raw('abs(SUM( CASE WHEN  mode=0 THEN amount ELSE 0 END)) AS profits'),
+                    DB::raw('COUNT(*) AS transfer_count'),DB::raw('SUM(CASE WHEN type=6 THEN amount ELSE 0 END) AS fee_amount_count'))
                 ->first();
             $data = compact('list', 'transfer_record');
             $content->row(view('admin/userDetail', $data));

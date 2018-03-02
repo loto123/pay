@@ -14,13 +14,13 @@
                     </i>
 
                     <div class="input-wrap flex-8 flex flex-align-center">
-                        <input type="text" placeholder="搜索">
+                        <input type="text" placeholder="搜索" v-model="searchValue">
                     </div>
                 </div>
             </div>
 
-             <ul>
-                <li class="flex flex-align-center" v-for="item in dataList" :key="item.id" @click="makeMark(item.id)">
+             <ul v-if='isShowList'>
+                <li class="flex flex-align-center" v-for="(item,index)  in searchDataList" :key="item.id" @click="index==0?'':makeMark(item.id)">
                     <span class="img-wrap flex-2">
                         <img :src="item.avatar" >
                     </span>
@@ -32,7 +32,7 @@
                     </span>
                 </li>
                 
-                <li class="flex flex-align-center flex-justify-center" v-if="!dataList.length">当前店铺无成员</li>
+                <li class="flex flex-align-center flex-justify-center" v-if="!dataList.length">当公会无成员</li>
                 <!-- <h3 v-if="dataList.length == 0">无数据</h3> -->
             </ul>
 
@@ -157,7 +157,10 @@ export default{
      */
     data(){
         return {
-            _dataList:[]
+            localDataList:[],
+            searchValue:'',
+            searchDataList:null,       // 搜索的结果列表
+            isShowList:false
         }
     },
     // isShow :组件开关
@@ -165,7 +168,17 @@ export default{
     // singleMode :单选模式
     // backUrl : 回退地址
     props:["isShow","dataList","singleMode","backUrl"],
+    mounted(){
+        this.searchDataList = [].concat(this.dataList);
+        this.isShowList = true;
+    },
+
     methods:{
+        init(){
+            this.searchDataList = [].concat(this.dataList);
+            this.isShowList = true;
+        },
+
         hidePage(control){
             if(control && this.$props.backUrl){
                 this.$emit("hide",true);
@@ -174,29 +187,52 @@ export default{
             }
         },
         submitData(){
-            this.$emit("submit",this._dataList);
+            this.$emit("submit",this.localDataList);
             this.hidePage();
         },
         makeMark(id){
             if(!this.singleMode){
-                this._dataList = [].concat(this.$props.dataList);
+                this.localDataList = [].concat(this.$props.dataList);
 
-                for(let i = 0; i< this._dataList.length; i++){
-                    if(this._dataList[i].id == id){
-                        this._dataList[i].checked = !this._dataList[i].checked;
+                for(let i = 0; i< this.localDataList.length; i++){
+                    if(this.localDataList[i].id == id){
+                        this.localDataList[i].checked = !this.localDataList[i].checked;
                     }
                 }
             }else {
-                this._dataList = [].concat(this.$props.dataList);
+                this.localDataList = [].concat(this.$props.dataList);
 
-                for(let i = 0; i< this._dataList.length; i++){
-                    if(this._dataList[i].id == id){
-                        this._dataList = this._dataList[i];
+                for(let i = 0; i< this.localDataList.length; i++){
+                    if(this.localDataList[i].id == id){
+                        this.localDataList = this.localDataList[i];
                     }
                 }
                 this.submitData();
             }
            
+        },
+        search(e){
+            if(e.length == 0){
+                this.searchDataList = this.dataList;
+                return;
+            }
+
+            var _tempList = [];
+            for(var i = 0; i<this.dataList.length; i++){
+                if(e == this.dataList[i].name){
+                    _tempList.push(this.dataList[i]);
+                }
+            }
+            this.searchDataList = _tempList;
+        }
+    },
+    watch:{
+        "searchValue": function(e){
+            this.search(e);
+        },
+
+        "dataList":function(){
+            this.init();
         }
     }
 }

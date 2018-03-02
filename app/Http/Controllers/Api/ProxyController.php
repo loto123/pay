@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Pay\Model\PayFactory;
+use App\Role;
 use App\User;
+use EasyWeChat\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use EasyWeChat;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
  *
@@ -49,7 +53,10 @@ class ProxyController extends BaseController {
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        $app = EasyWeChat::officialAccount();
+        $app = Factory::officialAccount([
+            'app_id' => config("wechat.official_account.app_id"),
+            'secret' => config("wechat.official_account.secret"),
+        ]);
         $app->jssdk->setUrl($request->share_url);
         $config = $app->jssdk->buildConfig($request->list);
         return $this->json([
@@ -71,40 +78,80 @@ class ProxyController extends BaseController {
      *     type="number"
      *   ),
      *   @SWG\Parameter(
-     *     name="page",
+     *     name="offset",
      *     in="path",
-     *     description="页码",
+     *     description="最后记录id",
      *     required=false,
-     *     type="number"
+     *     type="string"
      *   ),
      *   @SWG\Parameter(
-     *     name="size",
+     *     name="limit",
      *     in="path",
      *     description="数目",
      *     required=false,
      *     type="number"
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="total", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="list",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="id", type="string", example="12345676789",description="用户id"),
+     *                  @SWG\Property(property="avatar", type="string", example="url:",description="头像"),
+     *                  @SWG\Property(property="name", type="string", example="name",description="用户名"),
+     *                  @SWG\Property(property="mobile", type="string", example="123",description="手机号"),
+     *                  )
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
     public function members(Request $request) {
         $user = $this->auth->user();
         $list = [];
-        $query = $user->child_proxy();
+        $query = User::where("parent_id", $user->id)->where("status", User::STATUS_NORMAL);
         if ($request->type == 0) {
             $query->has("shop");
         } else {
             $query->doesntHave("shop");
         }
-        foreach ($query->paginate($request->input('size', 20)) as $_user) {
+        $count = (int)$query->count();
+        if ($request->offset) {
+            $query->where("id", "<", User::decrypt($request->offset));
+        }
+        $query->orderBy("id", "DESC")->limit($request->input('limit', 20));
+        foreach ($query->get() as $_user) {
             $list[] = [
+                'id' => $_user->en_id(),
                 'avatar' => $_user->avatar,
                 'name' => $_user->name,
                 'mobile' => $_user->mobile
             ];
         }
-        return $this->json(['total' => (int)$query->count(), 'list' => $list]);
+        return $this->json(['total' => $count, 'list' => $list]);
     }
 
     /**
@@ -112,12 +159,136 @@ class ProxyController extends BaseController {
      *   path="/proxy/members/count",
      *   summary="代理成员数",
      *   tags={"代理"},
-     *   @SWG\Response(response=200, description="successful operation"),
-     * )
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="total", type="integer", example=123,description="成员总数"),
+     *                  @SWG\Property(property="manager_total", type="integer", example=123,description="店主成员总数"),
+     *                  @SWG\Property(property="member_total", type="integer", example=123,description="普通成员总数"),
+     *              )
+     *          )
+     *      ),     * )
      * @return \Illuminate\Http\Response
      */
     public function members_count() {
         $user = $this->auth->user();
         return $this->json(['total' => (int)$user->child_proxy()->count(), 'manager_total' => (int)$user->child_proxy()->has("shop")->count(), 'member_total' => (int)$user->child_proxy()->doesntHave("shop")->count()]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/proxy/qrcode",
+     *   summary="代理二维码",
+     *   tags={"代理"},
+     *   @SWG\Parameter(
+     *     name="size",
+     *     in="query",
+     *     description="二维码尺寸",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="url", type="string", example="http://url",description="二维码链接"),
+     *                  @SWG\Property(property="thumb", type="string", example="http://url",description="用户头像"),
+     *                  @SWG\Property(property="name", type="string", example="用户名",description="用户名"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function qrcode(Request $request) {
+        $size = $request->input("size", 200);
+        $user = $this->auth->user();
+        /* @var $user User */
+        $url = url(sprintf("/#/shareUser/inviteLink/download?mobile=%s", $user->mobile));
+        $filename = md5($url."_".$size);
+        $path = 'qrcode/'.$filename.'.png';
+        if (!Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->put($path, QrCode::format('png')->size($size)->margin(1)->generate($url));
+        }
+        return $this->json(['url' => url('storage/'.$path), 'thumb' => $user->avatar, 'name' => $user->name]);
+    }
+
+    /**
+     * 成为代理
+     * @SWG\Post(
+     *   path="/proxy/create",
+     *   summary="成为代理",
+     *   tags={"代理"},
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object"
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function create() {
+        $user = $this->auth->user();
+        /* @var $user \App\User */
+        if ($user->hasRole('agent')) {
+            return $this->json([], trans("api.user_already_is_proxy"), 0);
+        }
+        $role = Role::where("name", 'agent')->first();
+        $user->attachRole($role);
+        $user->percent = config("default_agent_ratio", 0);
+        $wallet = PayFactory::MasterContainer();
+        $wallet->save();
+        $user->proxy_container_id = $wallet->id;
+        $user->save();
+        return $this->json();
     }
 }

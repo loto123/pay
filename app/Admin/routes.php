@@ -11,13 +11,23 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
     $router->resource('users',UserController::class);
+    $router->resource('versions',VersionController::class);
+    $router->resource('pets',PetController::class);
+    $router->resource('pets_record',PetRecordController::class);
+    $router->resource('pets_type',PetTypeController::class);
+    $router->resource('pets_dealer_transactions', DealerTransactionsController::class);
+    $router->get('pets_type/{id}/preview',"PetTypeController@preview");
+    $router->resource('pets_part',PetPartController::class);
+    $router->resource('pets_part_item',PetPartItemController::class);
     $router->resource('/roles', RoleController::class);
     $router->resource('/permissions', PermissionController::class);
+    $router->resource('/system_message', SystemMessageController::class);
     $router->any('/user/detail/{id}','UserController@details');
 
     $router->any('shop','ShopController@index');
-    $router->any('/shop/detail/{shop_id?}','ShopController@details');
-    $router->any('/shop/updates','ShopController@updates');
+    $router->any('/shop/detail/{shop_id}','ShopController@details');
+    $router->any('/shop/updates/{shop_id}/{status}','ShopController@updates');
+    $router->any('/shop/delete/{shop_id}','ShopController@delete');
 
     $router->post('/excel/shop', 'ExcelController@shop');
 
@@ -29,7 +39,12 @@ Route::group([
     $router->resource('pay/scene', PaySceneController::class);
     $router->resource('pay/deposits', DepositController::class);
     $router->resource('pay/withdraws', WithdrawController::class);
+    $router->resource('pay/transactions', ContainerTransactionsController::class);
     $router->resource('uploads', UploadFileController::class);
+
+    //代理vip卡模块
+    $router->resource('agent/card-type', AgentCardTypeController::class);
+    $router->resource('agent/promoter-grant', PromoterGrantController::class);
 
     $router->post('pay/support_banks/{platform}', 'PayPlatformController@bankSupport')->name('associate_bank');
 
@@ -53,6 +68,12 @@ Route::group([
 
     $router->post('/excel/data/user', 'ExcelController@dataUser');
     $router->post('/excel/data/profit', 'ExcelController@dataProfit');
+
+    //VIP卡 excel导出
+    $router->post('/excel/agent_card/card_record', 'ExcelController@card_record');
+    $router->post('/excel/agent_card/cards', 'ExcelController@cards');
+
+    $router->get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 });
 
 Route::group([
@@ -78,4 +99,19 @@ Route::group([
 ], function (Router $router) {
     $router->get('relation', 'AgentController@relation');
     $router->post('relation/update', 'AgentController@relation_update');
+});
+
+Route::group([
+    'prefix'        => config('admin.route.prefix').'/agent_card',
+    'namespace'     => config('admin.route.namespace'),
+    'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+    $router->get('operate', 'AgentCardDataController@operate');
+    $router->post('create_agent_card', 'AgentCardDataController@create_agent_card');
+    $router->get('promoter', 'AgentCardDataController@promoter');
+    $router->post('send_card_to_promoter', 'AgentCardDataController@send_card_to_promoter');
+    $router->any('card_record', 'AgentCardDataController@card_record');
+    $router->any('cards', 'AgentCardDataController@cards');
+    $router->any('/updates_card/{card_id}/{type?}','AgentCardDataController@updates_card');
+    $router->any('/card_trace/{card_id}','AgentCardDataController@card_trace');
 });

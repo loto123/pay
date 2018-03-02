@@ -1,10 +1,10 @@
 <table class="table table-hover">
         <thead>
         <tr>
-            <th>玩家</th>
+            <th>用户</th>
             <th>身份</th>
             {{--<th>绑定代理(玩家身份)</th>--}}
-            <th>上级代理(代理身份)</th>
+            <th>上级代理</th>
         </tr>
         </thead>
         <tbody>

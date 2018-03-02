@@ -2,7 +2,7 @@
 
     <div id="shop-account">
         <div class="top">
-            <top-back :title="'店铺账户'" style="background: #26a2ff; color:#fff;">
+            <top-back :title="'公会账户'" style="background: #26a2ff; color:#fff;">
               <div class="flex flex-reverse" style="width:100%;padding-right:1em;box-sizing:border-box;" @click="record">
                 提转记录
               </div>
@@ -10,11 +10,11 @@
             <div class="profit-wrap flex flex-align-center">
                 <div class="left flex flex-v flex-align-center flex-justify-around">
                     <div class="money">{{yesterday_profit}}</div>
-                    <div class="title">昨日收益(元)</div>
+                    <div class="title">昨日收益(钻石)</div>
                 </div>
                 <div class="right flex flex-v flex-align-center flex-justify-around">
                     <div class="money">{{today_profit}}</div>
-                    <div class="title">今日收益(元)</div>
+                    <div class="title">今日收益(钻石)</div>
                 </div>
             </div>
         </div>
@@ -22,17 +22,17 @@
         <div class="content flex flex-v flex-align-center">
             <div class="rest-money flex flex-v flex-align-center flex-justify-start">
                 <div class="money-text">
-                    {{balance}}
+                    {{balance}} <i class="diamond">&#xe6f9;</i>
                 </div>
-                <h3>当前店铺余额</h3>
-                <h4>单位(元)</h4>
+                <h3>当前公会余额</h3>
+                <h4>单位(钻石)</h4>
             </div>
 
             <div class="withdraw-cash" @click="goWithdraw">
-              <mt-button type="primary" size="large" style="background:#06d29d;">提现到个人账户</mt-button>
+              <mt-button type="primary" size="large" style="background:#06d29d;">提钻到个人账户</mt-button>
             </div>
             <div class="transfer-accounts" @click="goGive">
-              <mt-button type="primary" size="large" >转账给店铺会员</mt-button>
+              <mt-button type="primary" size="large" >转钻给公会会员</mt-button>
             </div>
 
             <div class="foot flex flex-v flex-align-center">
@@ -40,7 +40,7 @@
                   {{total_profit}}
               </div>
               <div class="title">
-                共累计收益（元）
+                共累计收益（钻石）
               </div>
             </div>
         </div>

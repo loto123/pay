@@ -1,11 +1,17 @@
 <div class="container-fluid">
     <!--查询开始-->
+
+    @if(session('status'))
+        <div class="alert alert-info"> {{session('status')}}
+        </div>
+    @endif
+
     <div class="box box-primary">
         <div class="box-header">
             <form class="form-horizontal" method="post" action="/admin/shop">
                 {{csrf_field()}}
                 <div class="form-group">
-                    <label class="col-sm-1 control-label">店主ID：</label>
+                    <label class="col-sm-1 control-label">会长ID：</label>
                     <div class="col-sm-2">
                         <input type="text" name="manager_id" id="manager_id" class="form-control" placeholder="店小二ID"
                                value="{{$manager_id}}">
@@ -40,24 +46,24 @@
     </div>
 
     <div class="box">
-        <!--店铺统计表格开始-->
+        <!--公会统计表格开始-->
         <div class="box-body table-responsive no-padding">
             @if($list && !$list->isEmpty())
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th>排名</th>
-                        <th>店铺</th>
-                        <th>店主</th>
-                        <th>店铺会员数</th>
-                        <th>店铺手续费率</th>
-                        <th>已付平台交易费</th>
-                        <th>交易笔数</th>
+                        <th>公会</th>
+                        <th>会长</th>
+                        <th>公会会员数</th>
+                        <th>公会佣金费率</th>
+                        <th>已付平台手续费</th>
+                        <th>任务笔数</th>
                         <th>总交易额</th>
-                        <th>店铺收入</th>
-                        <th>店铺余额</th>
-                        <th>店铺状态</th>
-                        <th>店铺交易状态</th>
+                        <th>公会获得钻石</th>
+                        <th>公会剩余钻石</th>
+                        <th>公会状态</th>
+                        <th>公会任务开关</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -101,6 +107,16 @@
                                 @endif
                             </td>
                             <td><a href="/admin/shop/detail/{{$item->id}}">详情</a></td>
+                            @if(Admin::user()->isRole('administrator'))
+                                @if($item->status == \App\Shop::STATUS_NORMAL)
+                                    <td><a href="/admin/shop/updates/{{$item->id}}/{{\App\Shop::STATUS_FREEZE}}"><span style='color:green'>冻结</span></a></td>
+                                @elseif ($item->status == \App\Shop::STATUS_FREEZE)
+                                    <td><a href="/admin/shop/updates/{{$item->id}}/{{\App\Shop::STATUS_NORMAL}}"><span style='color:blue'>解冻</span></a></td>
+                                @endif
+                            @endif
+                            @if(Admin::user()->isRole('administrator') && $unclose_cnt_list[$item->id] == 0)
+                                <td><a href="/admin/shop/delete/{{$item->id}}"><span style='color:red'>删除</span></a></td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>
@@ -110,7 +126,7 @@
             @endif
         </div>
         <div>{{ $list->appends(compact('manager_id', 'shop_id', 'shop_name', 'date_time'))->links() }}</div>
-        <!--店铺统计表格结束-->
+        <!--公会统计表格结束-->
     </div>
 </div>
 

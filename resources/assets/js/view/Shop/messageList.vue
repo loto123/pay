@@ -22,7 +22,7 @@
           </li>
       </ul>
       <h3 v-if="!messageList.length">无消息</h3>
-      <div class="all-list-controller flex flex-justify-center " v-if="!messageList">
+      <div class="all-list-controller flex flex-justify-center " v-if="messageList">
         <div class="btn-wrap flex flex-v flex-justify-around">
           <mt-button type="primary" size="large" style="background:#00cc00;">全部同意</mt-button>
           <mt-button type="primary" size="large" style="background:#ccc;">全部忽略</mt-button>
@@ -151,7 +151,7 @@ export default {
           Toast(err.data.msg);
       });
     },
-    // 同意加入店铺的请求
+    // 同意加入公会的请求
     agreeItem(id){
       Loading.getInstance().open();
       if(id==null){

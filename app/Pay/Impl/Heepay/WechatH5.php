@@ -17,8 +17,10 @@ use App\Pay\PayLogger;
 
 class WechatH5 implements DepositInterface
 {
+    protected $wrapper = null;
+    private $meta_option; //包装平台,DepositMethod::OS_*
 
-    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url)
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
         $params = [
             'version' => 1,
@@ -26,7 +28,7 @@ class WechatH5 implements DepositInterface
             'agent_id' => $config['agent_id'],
             'pay_type' => 30,
             'is_frame' => (int)(strpos(request()->header('User-Agent'), 'MicroMessenger') !== false),
-            'goods_name' => DepositInterface::GOOD_NAME,
+            'goods_name' => mb_convert_encoding(DepositInterface::GOOD_NAME, 'GB2312', 'UTF-8'),
             'agent_bill_time' => date('Ymdhis'),
             'agent_bill_id' => $this->mixUpDepositId($deposit_id),
             'notify_url' => $notify_url,
@@ -41,8 +43,28 @@ class WechatH5 implements DepositInterface
             $val = strtolower($val);
         });
 
+        //订单提交时间
+        $params['timestamp'] = time() * 1000;
+        $config['key_v1'] = "{$config['key_v1']}&timestamp={$params['timestamp']}";
+
+        switch ($this->wrapper) {
+            case null:
+                //原生H5
+                $this->setMetaOption('WAP', $config['website_name'], route('home'));
+                break;
+            case DepositMethod::OS_ANDROID:
+                //安卓
+                $this->setMetaOption('Android', $config['android_app_name'], $config['android_apk_key']);
+                break;
+            case DepositMethod::OS_IOS:
+                //苹果
+                $this->setMetaOption('IOS', $config['ios_app_name'], $config['ios_app_key']);
+                break;
+            default:
+                return null;
+        }
         //坑爹,汇付宝说参数全部转换为小写,这个参数不要
-        $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding('{"s":"WAP","n":"' . $config['website_name'] . '","id":"' . route('home') . '"}', "GB2312", "UTF-8")));
+        $params['meta_option'] = urlencode(base64_encode(mb_convert_encoding($this->meta_option, "GB2312", "UTF-8")));
 
         //签名
         $fieldsToSign = ['version', 'agent_id', 'agent_bill_id', 'agent_bill_time', 'pay_type', 'pay_amt', 'notify_url', 'return_url', 'user_ip'];
@@ -53,7 +75,15 @@ class WechatH5 implements DepositInterface
 
     public function mixUpDepositId($depositId)
     {
-        return IdConfuse::mixUpDepositId($depositId, 30);
+        return IdConfuse::mixUpId($depositId, 30);
+    }
+
+    /**
+     * 微信H5APP包装仅有meta_option不同
+     */
+    private function setMetaOption($s, $n, $id)
+    {
+        $this->meta_option = "{\"s\":\"$s\",\"n\":\"$n\",\"id\":\"$id\"}";
     }
 
     /**
@@ -90,7 +120,7 @@ class WechatH5 implements DepositInterface
     public function parseReturn(DepositMethod $method)
     {
         $request = request();
-        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_PAY_FAIL, $request->get('pay_amt'), $request->get('jnet_bill_no'));
+        return new DepositResult($request->get('result') == 1 ? Deposit::STATE_COMPLETE : Deposit::STATE_PAY_FAIL, IdConfuse::recoveryId($request->get('agent_bill_id')), $request->get('pay_amt'), $request->get('jnet_bill_no'));
     }
 
     public function acceptNotify(array $config)
@@ -110,7 +140,7 @@ class WechatH5 implements DepositInterface
                 /*
                  *@var $deposit Deposit
                  */
-                $deposit = Deposit::where([['id', IdConfuse::recoveryDepositId($params['agent_bill_id'])], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
+                $deposit = Deposit::where([['id', IdConfuse::recoveryId($params['agent_bill_id'])], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
                 if (!$deposit) {
                     return null;
                 }
@@ -130,5 +160,74 @@ class WechatH5 implements DepositInterface
 
         echo 'error';
         return null;
+    }
+
+    public function benefitShare(array $config, Deposit $deposit)
+    {
+        $url = 'https://pay.heepay.com/API/Payment/GuaranteeAllotSubmit.aspx';
+        if (!$deposit->out_batch_no) {
+            throw new \Exception('汇付宝返回的单据号为空');
+        }
+        $allot_data = $config['allot_data'];
+        $allot_result_arr = [];
+        foreach (explode('|', $allot_data) as $allot_item) {
+            $splits = explode('^', $allot_item);
+            $share_percent = $splits[1];
+            if ($share_percent !== 'remain_amt') {
+                $splits[1] = round(floatval($share_percent) * $deposit->amount, 4);
+                if ($splits[1] <= 0) {
+                    continue;
+                }
+            }
+            $allot_result_arr [] = implode('^', $splits);
+        }
+
+        if (!$allot_result_arr) {
+            throw new \Exception("分润配置无效:$allot_data");
+        }
+
+        $allot_result_str = implode('|', $allot_result_arr);
+        $allot_result_str = iconv('UTF-8', 'GB2312//IGNORE', $allot_result_str);
+        $params = [
+            'version' => 1,
+            'agent_id' => $config['agent_id'],
+            'agent_bill_id' => $this->mixUpDepositId($deposit->getKey()),
+            'timestamp' => time() * 1000,
+        ];
+
+        //参数转为小写
+        array_walk($params, function (&$val) {
+            $val = strtolower($val);
+        });
+
+        $params['allot_data'] = $allot_result_str;
+        $params['jnet_bill_no'] = $deposit->out_batch_no;
+        $key = $config['key_v1'];
+
+        //签名
+        $fieldsToSign = ['version', 'agent_id', 'agent_bill_id', 'jnet_bill_no', 'allot_data', 'timestamp'];
+        self::appendSign($params, $fieldsToSign, $key);
+
+        $response = SmallBatchTransfer::send_post($url, $params, $config['cert_path']);
+
+        $response = strtolower($response);
+
+        $response_arr = [];
+        foreach (explode('|', $response) as $kv_pair) {
+            $kv_pair = explode('=', $kv_pair);
+            $response_arr[$kv_pair[0]] = $kv_pair[1];
+        }
+
+        //下面代码有未知错误
+//        if (self::makeSign($response_arr, ['ret_code', 'ret_msg', 'agent_bill_id', 'jnet_bill_no', 'total_amt', 'timestamp'], $key) != $response_arr['sign']) {
+//            $response = mb_convert_encoding($response, 'utf-8', 'gb2312');
+//            throw new \Exception('分润签名验证错误:' . $response);
+//        }
+
+        if ($response_arr['ret_code'] === '0001') {
+            return true;
+        }
+        $response = mb_convert_encoding($response, 'utf-8', 'gb2312');
+        throw new \Exception("分润失败:$response,allot_data:$allot_data");
     }
 }

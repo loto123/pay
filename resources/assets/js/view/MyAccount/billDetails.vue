@@ -2,30 +2,31 @@
 	<div id="billDetails">
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
-			<div class="money-box">
-				<span>{{mode == 1?'出':'入'}}账金额</span>
-				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
+			<div class="money-box" v-if="this.type==0||this.type==1">
+				<span>{{mode == 1?'入':'出'}}账钻石数量</span>
+				<em v-bind:class="[mode==1?'active':'']">{{mode == 1?'+'+amount:-amount}}</em>
+			</div>
+			<div class="money-box" v-if="this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10">
+				<span>{{mode == 1?'出':'入'}}账钻石数量</span>
+				<em v-bind:class="[mode==1?'':'active']">{{mode == 1?-amount:'+'+amount}}</em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
 					<div class="title">类型</div>
-					<div class="content">{{(mode==1)?'支出':'收入'}}</div>
+					<div class="content" v-if="this.type==0||this.type==1">{{mode==1?'收入':'支出'}}</div>
+					<div class="content" v-if="this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10">{{mode==1?'支出':'收入'}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
 					<div class="content">{{changeTime(created_at)}}</div>
 				</li>
 				<li>
-					<div class="title">交易单号</div>
+					<div class="title">单号</div>
 					<div class="content">{{no}}</div>
 				</li>
 				<li>
-					<div class="title">账户余钱</div>
-					<div class="content">{{balance}}</div>
-				</li>
-				<li>
 					<div class="title">备注</div>
-					<div class="content">{{status(type)}}</div>
+					<div class="content">{{remark?remark:"无"}}</div>
 				</li>
 			</ul>
 		</div>
@@ -45,10 +46,8 @@
 				remark:null,		//备注
 				type:null,			//类型
 				no:null,			//交易单号
-				amount:null,		//入账金额
-				mode:null,			//0:收入		1:支出
-				balance:null		//账户余钱
-
+				amount:null,		//入账
+				mode:null			//0:收入		1:支出
 			};
 		},
 		created(){
@@ -63,7 +62,6 @@
 					.then((res) => {
                         this.remark=res.data.data.remark
 						this.no=res.data.data.no
-						this.balance=res.data.data.balance
 						this.created_at=res.data.data.created_at
 						this.amount=res.data.data.amount
 						this.type=res.data.data.type	
@@ -105,15 +103,16 @@
 			status(type){
 				let result='';
 				switch(type){
-					case 0: result='充值'; break;
-					case 1: result='提现'; break;
-					case 2: result='交易收入'; break;
-					case 3: result='交易支出'; break;
-					case 4: result='转账到店铺'; break;
-					case 5: result='店铺转入'; break;
-					case 6: result='交易手续费'; break;
-					case 7: result='提现手续费'; break;
-					default: result='打赏店家费'
+					case 0: result='购买'; break;
+					case 1: result='出售'; break;
+					case 2: result='任务拿钻'; break;
+					case 3: result='任务交钻'; break;
+					case 4: result='转账到公会'; break;
+					case 5: result='公会转入'; break;
+					case 6: result='任务手续费'; break;
+					case 8: result='任务加速'; break;
+					case 9: result='拿钻撤销'; break;
+					case 10: result='分润'; break;
 				}
 				return result;
 			}

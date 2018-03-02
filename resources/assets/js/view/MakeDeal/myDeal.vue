@@ -1,33 +1,36 @@
 <template>
   <div id="my-deal">
-      <top-back style="background:#26a2ff;color:#fff;" :title="'交易管理'">
+      <top-back style="background:#26a2ff;color:#fff;" :title="'我的任务'">
         <div class="mark-wrap flex flex-reverse" @click = "mark">
           {{isStar?"关闭编辑":"标记"}}
         </div>
       </top-back>
         <div id="tab-menu" class=" flex flex-align-center">
             <div class="menu-item flex flex-justify-center flex-align-center " v-bind:class="{active:tabItem[0]}" @click = "changeTab(0)">待结算</div>
-            <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已平账</div>
+            <div class="menu-item flex flex-justify-center flex-align-center" @click = "changeTab(1)" v-bind:class="{active:tabItem[1]}">已完成</div>
             <div class="menu-item flex flex-justify-center flex-align-center" v-bind:class="{active:tabItem[2]}" @click = "changeTab(2)">已关闭</div>
         </div>
 
-        <div class="deal-wrap">
-            <ul>
+        <div class="deal-wrap" ref="wrapper" >
+            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80" v-if="isListShow">
                 <!-- <li class="timer flex flex-align-center flex-justify-center">
                     <div>
                         2017年11月18日 12:45
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" >
+                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" v-bind:class="{h_5em:tabItem[2]==true}">
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{SettingString(item.shop_name,10)}}</div>
+                        <div class="eggs-wrap" v-if="tabItem[2]">
+                          <span>任务获得：</span>
+                          <span> <img src="/images/egg.jpg" alt=""> x {{item.eggs}}</span>
+                        </div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
                     <div class="pay-detail-wrap flex flex-align-center flex-justify-center flex-3">
-                        <!-- <div class="title">手续费收益</div> -->
-                        <div class="m-text">￥{{item.amount}}</div>
+                        <div class="m-text">{{item.amount}}<i class="diamond" style="margin-left:0.4em;font-size:1em;">&#xe6f9;</i></div>
                     </div>
                     <div class="star-wrap flex flex-align-center flex-justify-center flex-1" @click.stop="markItem(item.id)">
                       <i class="iconfont " v-bind:class="{'edit':isStar}" >
@@ -35,12 +38,24 @@
                       </i>
                     </div>
                 </li>
+
             </ul>
+            <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+              <!--<span>-->
+                <mt-spinner type="fading-circle"></mt-spinner>
+                <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+              <!--</span>-->
+            </p>
         </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+
+.h_5em{
+  height: 5em !important;
+}
+
 #my-deal {
   padding-top: 2em;
   background: #eee;
@@ -96,19 +111,7 @@
         margin-top: 0.1em;
         /*border-bottom:1px solid #eee;*/
 
-        // .avatar-wrap {
-        //   box-sizing: border-box;
-        //   padding-left: 0.5em;
-        //   img {
-        //     width: 2.3em;
-        //     height: 2.3em;
-        //     border-radius: 0.2em;
-        //   }
-        //   h3 {
-        //     font-size: 0.5em;
-        //     margin-top: 0.2em;
-        //   }
-        // }
+      
         .content-wrap {
           height: 100%;
           box-sizing: border-box;
@@ -117,12 +120,22 @@
             margin-top: 0.8em;
             width: 100%;
           }
+          
+          .eggs-wrap{
+            width:100%;
+            margin-top:0.4em;
+            font-size: 0.9em;
+            img{
+              width:1em;
+              height: 1em;
+            }
+          }
 
           .date {
             color: #999;
             font-size: 0.9em;
-            margin-top: 1em;
             width: 100%;
+            margin-top:0.4em;
           }
         }
 
@@ -159,6 +172,12 @@
         }
       }
     }
+
+    .page-infinite-loading{
+      height: 2.5em;
+      text-align: center;
+    }
+
   }
 }
 </style>
@@ -176,20 +195,80 @@ export default {
   },
   data() {
     return {
+      isListShow:false,                     // 列表是否显示
+
       tabItem: [true, false, false],
       isStar:false,
-      dataList:[]
+      dataList:[],
+
+      wrapperHeight:null,
+      loading: false,
+      allLoaded: false,
+      canLoading:true,
     };
   },
+
+  mounted(){
+    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+  },
   methods: {
+    loadMore() {
+      this.loading =false;
+      if(this.dataList.length==0 || !this.canLoading){
+        return;
+      }
+
+      this.loading = true;
+
+      var _status = 0;
+      for(var i = 0; i<this.tabItem.length; i++){
+        if(this.tabItem[i] == true){
+          _status = i+1;
+        }
+      }
+
+      this.canLoading = false;
+      setTimeout(() => {
+        var _data = {
+          status:_status,
+          limit:50,
+          offset :[].concat(this.dataList).pop().id
+        }
+
+      request.getInstance().getData('api/transfer/record',_data).then(res=>{
+
+        if(res.data.data.data.length == 0){
+          this.canLoading = false;
+          this.loading = false;
+          return;
+        }
+
+        for(var i = 0; i< res.data.data.data.length; i ++){
+            this.dataList.push(res.data.data.data[i]);
+        }
+
+        this.canLoading = true;
+        this.loading = false;
+      }).catch(err=>{
+
+        });
+      }, 1500);
+
+    },
+
     SettingString(str,len){
       return utils.SetString(str,len);
     },
 
     changeTab(item) {
+      if(this.loading == true){
+        return;
+      }
+      this.isListShow = false;
       if (item > 2 || item < 0) {
         return;
       } else {
+        this.canLoading = true;
         this.tabItem = [false, false, false];
         this.tabItem[item] = true;
 
@@ -202,6 +281,7 @@ export default {
           request.getInstance().getData('api/transfer/record',_data).then(res=>{
             this.dataList = res.data.data.data;
             Loading.getInstance().close();
+            this.isListShow = true;
             
           }).catch(err=>{
             Loading.getInstance().close();
@@ -240,8 +320,7 @@ export default {
           Loading.getInstance().close();
           
         }).catch(err=>{
-        Loading.getInstance().close();
-
+          Loading.getInstance().close();
         });
       }
     },
@@ -267,6 +346,7 @@ export default {
     },
     init(){
       Loading.getInstance().open();
+      this.isListShow = false;
       var _status = 0;
       for(var i = 0; i<this.tabItem.length; i++){
         if(this.tabItem[i] == true){
@@ -281,6 +361,7 @@ export default {
       request.getInstance().getData('api/transfer/record',_data).then(res=>{
         this.dataList = res.data.data.data;
         Loading.getInstance().close();
+        this.isListShow = true;
         
       }).catch(err=>{
         Loading.getInstance().close();

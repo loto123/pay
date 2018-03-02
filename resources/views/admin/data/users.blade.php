@@ -90,9 +90,9 @@
                         <th>上级运营</th>
                         <th>交易总额</th>
                         <th>交易笔数</th>
-                        <th>收款</th>
-                        <th>付款</th>
-                        <th>余额</th>
+                        <th>拿钻</th>
+                        <th>交钻</th>
+                        <th>剩余钻石</th>
                         <th>已付平台手续费</th>
                         <th>直属用户数</th>
                         <th>直属代理数</th>
@@ -122,16 +122,16 @@
                                     <span class="text-yellow">{{$v->display_name}}</span>
                                 @endforeach
                             </td>
-                            @if($item->proxy)
+                            @if($item->parent)
                                 <td>
                                     <div class="user-panel clearfix">
                                         <div class="pull-left">
-                                            <img src="{{$item->proxy->avatar}}" width="40" height="40"
+                                            <img src="{{$item->parent->avatar}}" width="40" height="40"
                                                  class="img-circle">
                                         </div>
                                         <div class="pull-left ml7">
-                                            <p>{{$item->proxy->name}}</p>
-                                            <span>ID:<span class="text-yellow">{{$item->proxy->mobile}}{{$item->proxy->status ? '（已封号）' : ''}}</span></span>
+                                            <p>{{$item->parent->name}}</p>
+                                            <span>ID:<span class="text-yellow">{{$item->parent->mobile}}{{$item->parent->status ? '（已封号）' : ''}}</span></span>
                                         </div>
                                     </div>
                                 </td>
@@ -155,11 +155,11 @@
                                 <td>无</td>
                             @endif
                             <td>{{$item->trans_amount or 0}}</td>
-                            <td>{{$item->transfer_record()->count()}}</td>
-                            <td>{{$item->transfer_record()->where('stat',2)->sum('amount')}}</td>
-                            <td>{{abs($item->transfer_record()->where('stat',1)->sum('amount'))}}</td>
+                            <td>{{$item->transfer_record->count()}}</td>
+                            <td>{{$item->transfer_record->where('stat',2)->sum('amount')}}</td>
+                            <td>{{abs($item->transfer_record->where('stat',1)->sum('amount'))}}</td>
                             <td>{{$item->balance}}</td>
-                            <td>{{$item->output_profit()->sum('fee_amount')}}</td>
+                            <td>{{$item->output_profit->sum('fee_amount')}}</td>
                             <td>{{$item->child_user_count}}</td>
                             <td>{{$item->child_proxy_count}}</td>
                             <td>{{$item->proxy_fee_amount or 0}}</td>

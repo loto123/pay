@@ -15,6 +15,20 @@ class UserFund extends Model
 
     const TYPE_TRANSFER = 4;
 
+    const TYPE_TRADE_IN = 2;
+
+    const TYPE_TRADE_OUT = 3;
+
+    const TYPE_SHOP_TRANSFER = 5;
+
+    const TYPE_TRADE_FEE = 6;
+
+    const TYPE_TRADE_BACK = 9;
+
+    const TYPE_PROFIT = 10;
+
+    const TYPE_TIPS = 8;
+
     const MODE_IN = 0;
 
     const MODE_OUT = 1;
@@ -27,7 +41,7 @@ class UserFund extends Model
 
     use Skip32Trait;
 
-    protected static $skip32_id = '0123456789abcdef0123';
+    protected static $skip32_id = '048571cc8f64f34dc730';
 
     public function charge_order() {
         return $this->hasOne(Deposit::class, 'id', 'no');

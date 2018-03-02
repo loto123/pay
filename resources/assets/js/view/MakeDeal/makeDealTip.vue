@@ -6,22 +6,22 @@
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
             <label for="" class="flex-4" style="padding-left:1em;">打赏店家</label>
             <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
-            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >元<input type="text" class="tipMoney" placeholder="点击打赏店家"  maxlength="6" v-model="renderData.moneyData"></span>
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >钻<input type="text" class="tipMoney" placeholder="点击任务加速"  maxlength="6" v-model="renderData.moneyData"></span>
         </div>
 
         <div class="button-wrap">
-            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">确认打赏</mt-button>
+            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">加速</mt-button>
         </div>
 
         <div class="tip-record">
-            <h3>打赏店家记录</h3>
+            <h3>任务加速记录</h3>
             <ul class="flex flex-v">
                 <li class="flex flex-justify-between flex-align-center" v-for="item in renderData.tips">
                     <img :src="item.user.avatar?item.user.avatar:'/images/default_avatar.jpg'" alt="">
                     <span>{{item.user.name}}</span>
                     <div class="flex flex-v flex-align-center">
                         <div style="font-size: 1.4em;">{{item.amount}}</div>
-                        <div style="font-size: 0.8em;color:#999;">已打赏</div>
+                        <div style="font-size: 0.8em;color:#999;">已加速</div>
                     </div>
                 </li>
             </ul>
@@ -135,7 +135,7 @@ export default {
         .getInstance()
         .getData("api/transfer/feerecord" + "?transfer_id=" + _id)
         .then(res => {
-          this.renderData = res.data.data.data;
+          this.renderData = res.data.data;
           Loading.getInstance().close();
         })
         .catch(err => {
@@ -144,7 +144,7 @@ export default {
     },
     payTip() {
       if (this.renderData.moneyData == null) {
-        Toast("请输入打赏店家金额");
+        Toast("请输入任务加速钻石数");
         return;
       }
 
@@ -195,7 +195,6 @@ export default {
         .catch(err => {
           Loading.getInstance().close();
           Toast(err.data.msg);
-//          console.error(err);
         });
     },
 
@@ -217,12 +216,12 @@ export default {
       };
 
       this.hidePassword();
-      // 打赏店家接口
+      // 任务加速接口
       request
         .getInstance()
         .postData("api/transfer/payfee", _data)
         .then(res => {
-          Toast("打赏店家成功");
+          Toast("任务加速成功");
           this.hidePassword();
           this.init();
         })

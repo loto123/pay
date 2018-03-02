@@ -124,7 +124,7 @@ class SmallBatchTransfer implements WithdrawInterface
 
     public function mixUpWithdrawId($withdrawId)
     {
-        return IdConfuse::mixUpDepositId($withdrawId, 30); //对外统一30位长度
+        return IdConfuse::mixUpId($withdrawId, 30); //对外统一30位长度
     }
 
     /**
@@ -212,7 +212,7 @@ class SmallBatchTransfer implements WithdrawInterface
 
             PayLogger::withdraw()->info('签名正确');
 
-            $withdraw = Withdraw::where([['id', IdConfuse::recoveryDepositId($params['ext_param1'])], ['state', Withdraw::STATE_SUBMIT]])->lockForUpdate()->first();
+            $withdraw = Withdraw::where([['id', IdConfuse::recoveryId($params['ext_param1'])], ['state', Withdraw::STATE_SUBMIT]])->lockForUpdate()->first();
             if (!$withdraw) {
                 break;
             }

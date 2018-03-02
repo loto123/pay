@@ -14,7 +14,7 @@ use App\Pay\Model\DepositResult;
  */
 interface DepositInterface
 {
-    const GOOD_NAME = "余额充值";
+    const GOOD_NAME = '购买宠物';
 
     /**
      * 向支付平台发出充值订单,返回支付信息给客户端
@@ -25,8 +25,9 @@ interface DepositInterface
      * @param $notify_url string 通知地址
      * @param $return_url
      * @return mixed 返回储值信息,失败返回null
+     * @param $timeout int 订单超时秒数,null不设
      */
-    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url);
+    public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout);
 
     /**
      * 接收支付平台的通知并解析结果
@@ -49,4 +50,12 @@ interface DepositInterface
      * @return string
      */
     public function mixUpDepositId($depositId);
+
+    /**
+     * 分润
+     * @param array $config
+     * @param Deposit $deposit
+     * @return bool
+     */
+    public function benefitShare(array $config, Deposit $deposit);
 }

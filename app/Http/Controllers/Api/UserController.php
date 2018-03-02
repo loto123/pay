@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Agent\Card;
 use App\Bank;
+use App\Pay\Impl\ALiPay\Auth;
 use App\Pay\Impl\Heepay\Heepay;
 use App\Pay\Impl\Heepay\Reality;
+use App\Pay\Impl\Showapi\Showapi;
 use App\PayInterfaceRecord;
 use App\User;
 use App\UserCard;
@@ -12,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
 
@@ -133,8 +137,8 @@ class UserController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'old_password' => 'bail|required',
-                'new_password' => 'bail|required|min:6|max:16',
-                'confirm_password' => 'bail|required|min:6|max:16',
+                'new_password' => 'bail|required|min:8|max:16',
+                'confirm_password' => 'bail|required|min:8|max:16',
             ],
             [
                 'required' => trans('trans.required'),
@@ -292,6 +296,7 @@ class UserController extends BaseController
             ],
             [
                 'required' => trans('trans.required'),
+                'digits' => trans('trans.digits'),
             ]
         );
 
@@ -433,8 +438,8 @@ class UserController extends BaseController
         $data = [
             'user_mobile' => $this->user->mobile,
             'holder_name' => $user_card->holder_name,
-            'holder_id' => $this->formatNum($user_card->holder_id,6,4),
-            'card_num' => $this->formatNum($user_card->card_num,6,4),
+            'holder_id' => $this->user->formatNum($user_card->holder_id,6,4),
+            'card_num' => $this->user->formatNum($user_card->card_num,6,4),
             'bank' => $bank->name,
         ];
         return $this->json($data);
@@ -499,7 +504,11 @@ class UserController extends BaseController
         $validator = Validator::make($request->all(),
             [
                 'name' => 'bail|required',
-                'id_number' => 'bail|required|size:18',
+                'id_number' => [
+                    'bail',
+                    'required',
+                    'regex:/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/'
+                ],
                 'code' => 'bail|required',
             ],
             [
@@ -510,34 +519,46 @@ class UserController extends BaseController
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-//        Log::info(['param'=>$request->all()]);
-        $name = $request->input('name');
+
+        $identify_name = $request->input('name');
         $id_number = $request->input('id_number');
         $cache_key = "SMS_".$this->user->mobile;
         $cache_value = Cache::get($cache_key);
-//        Log::info(['cache'=>[$cache_key=>$cache_value]]);
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return $this->json([], '验证码已失效或填写错误', 0);
         }
         Cache::forget($cache_key);
+
+        //验证当天可用次数
+        $times = $this->user->check_action_times('identify', config('identify_max_times',10));
+        if(!$times) {
+            return $this->json([], '实名认证超过当天最大限制次数！', 0);
+        }
+
         //添加记录
-        $bill_id = CardController::createUniqueId();
+        $bill_id = UserCard::createUniqueId();
         try{
             $pay_record = new PayInterfaceRecord();
             $pay_record->bill_id = $bill_id;
             $pay_record->user_id = $this->user->id;
             $pay_record->type = UserCard::IDENTIFY_TYPE;
-            $pay_record->platform = Heepay::PLATFORM;
+//            $pay_record->platform = Heepay::PLATFORM;
+            $pay_record->platform = Showapi::PLATFORM;
             $pay_record->save();
         } catch (\Exception $e) {
             return $this->json([], '记录无法生成', 0);
         }
         //调用实名认证接口
-        $reality_res = Reality::identify($pay_record->id,$name,$id_number);
+        if(!config('app.debug')) {
+            $reality_res = Showapi::identify($pay_record->id,$identify_name,$id_number);
+//            $reality_res = Reality::identify($pay_record->id,$name,$id_number);
+        } else {
+            $reality_res = true;
+        }
         if($reality_res === true) {
             User::where('id',$this->user->id)->update([
                 'identify_status' => 1,
-                'name' => $name,
+                'identify_name' => $identify_name,
                 'id_number' => $id_number,
             ]);
             return $this->json();
@@ -567,6 +588,7 @@ class UserController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="name", type="string", example="张三",description="昵称"),
+     *                  @SWG\Property(property="identity_name", type="string", example="张三",description="真实姓名"),
      *                  @SWG\Property(property="mobile", type="string", example="13333333333",description="手机号"),
      *                  @SWG\Property(property="thumb", type="string", example="url",description="头像"),
      *                  @SWG\Property(property="has_pay_password", type="integer", example="1",description="是否已设置支付密码 1：已设置，0：未设置"),
@@ -592,32 +614,17 @@ class UserController extends BaseController
         $parent = User::find($this->user->parent_id);
         $data = [
             'name' => $this->user->name,
+            'identify_name' => $this->user->identify_name??'',
             'mobile' => $this->user->mobile,
             'thumb' => $this->user->avatar??'',
             'has_pay_password' => empty($this->user->pay_password) ? 0 : 1,
-            'id_number' => $this->user->id_number ? str_replace(' ','',$this->formatNum($this->user->id_number,4,4)) : '',
+            'id_number' => $this->user->id_number ? str_replace(' ','',$this->user->formatNum($this->user->id_number,4,4)) : '',
             'has_parent'=> $this->user->parent_id>0 ? 1 : 0,
             'parent_name' => $parent->name??'',
             'parent_mobile' => $parent->mobile??'',
             'pay_card_id' => $this->user->pay_card_id??'',
         ];
         return $this->json($data);
-    }
-
-    //对字符串做掩码处理
-    private function formatNum($num,$pre=0,$suf=4)
-    {
-        $prefix = '';
-        $suffix = '';
-        if($pre>0) {
-            $prefix = substr($num, 0, $pre);
-        }
-        if ($suf>0){
-            $suffix = substr($num, 0-$suf, $suf);
-        }
-        $maskBankCardNo = $prefix . str_repeat('*', strlen($num)-$pre-$suf) . $suffix;
-        $maskBankCardNo = rtrim(chunk_split($maskBankCardNo, 4, ' '));
-        return $maskBankCardNo;
     }
 
     /**
@@ -676,7 +683,8 @@ class UserController extends BaseController
      */
     public function pay_password(Request $request) {
         $validator = Validator::make($request->all(),
-            ['password' => 'bail|required']
+            ['password' => 'bail|required'],
+            ['required' => trans('trans.required'),]
         );
 
         if ($validator->fails()) {
@@ -691,6 +699,74 @@ class UserController extends BaseController
         } catch (\Exception $e) {
             return $this->json([], $e->getMessage(),0);
         }
+        return $this->json();
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/my/resetPayPassword",
+     *   summary="忘记支付密码",
+     *     tags={"我的"},
+     *     @SWG\Parameter(
+     *         name="mobile",
+     *         in="formData",
+     *         description="用户手机号",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="pay_password",
+     *         in="formData",
+     *         description="新密码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         name="code",
+     *         in="formData",
+     *         description="验证码",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="ok",
+     *     examples={
+     *      "code":0,
+     *      "msg":"",
+     *      "data": {}
+     *     }
+     *   ),
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPayPassword(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|exists:'.(new User)->getTable(),
+            'pay_password' => 'required|digits:6',
+            'code' => 'required'
+        ],
+        [
+            'required' => trans('trans.required'),
+            'digits' => trans('trans.digits'),
+        ]
+        );
+
+        if ($validator->fails()) {
+            return $this->json([], $validator->errors()->first(), 0);
+        }
+        $cache_key = "SMS_".$request->mobile;
+        $cache_value = Cache::get($cache_key);
+        if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
+            return $this->json([], trans("api.error_sms_code"), 0);
+        }
+        Cache::forget($cache_key);
+        $user = User::where("mobile", $request->mobile)->first();
+        if (!$user) {
+            return $this->json([], trans("error user"), 0);
+        }
+        $user->pay_password = Hash::make($request->pay_password);
+        $user->save();
         return $this->json();
     }
 

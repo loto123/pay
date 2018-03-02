@@ -7,7 +7,7 @@
             <img :src="logo" alt="" class="avatar">
         </div>
         <h3 style="margin-top:0.5em;">{{shopName}}</h3>
-        <h3>店铺id:{{shopId}}</h3>
+        <h3>公会id:{{shopId}}</h3>
       </div>
 
       <div class="menu flex " v-if="isGroupMaster">
@@ -15,29 +15,29 @@
               <i class="iconfont">
                   &#xe61e;
               </i>
-              <h3>店铺账户</h3>
+              <h3>公会账户</h3>
           </div>
 
           <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goDealManagement">
               <i class="iconfont">
                   &#xe63b;
               </i>
-              <h3>交易管理</h3>
+              <h3>任务管理</h3>
           </div>
-          <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopOrder">
+          <!-- <div class="menu-item flex flex-v flex-align-center flex-justify-around" @click="goShopOrder">
               <i class="iconfont">
                   &#xe603;
               </i>
               <h3>
-                  店铺订单
+                  公会订单
               </h3>
-          </div>
+          </div> -->
       </div>
 
     <div class="shop-info">
 
         <div class="info-item flex flex-align-center flex-justify-between" @click="updateShop('shopName')">
-            <span class="title flex-4"> 店铺名称 </span>
+            <span class="title flex-4"> 公会名称 </span>
             <span class="name flex-5">{{SetString(shopName,16)}}</span>
             <i class="iconfont flex-1">
             &#xe62e;
@@ -45,7 +45,7 @@
         </div>
 
         <div class="shop-qrcode flex flex-align-center flex-justify-between" @click="invite">
-            <span class="title flex-8">店铺二维码</span>
+            <span class="title flex-8">公会二维码</span>
             <span class="qr-code flex-1">
                 <i class="iconfont">
                     &#xe9c4;
@@ -70,7 +70,7 @@
                 <img :src="item.avatar" alt="">
             </div>
             
-            <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember">
+            <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember" v-if="isGroupMaster">
                 <i class="iconfont">
                     &#xe600;
                 </i>
@@ -110,7 +110,7 @@
         </div>
 
         <div class="flex flex-align-center flex-justify-between" @click="updateShop('rate')">
-            <span class="title flex-9"> 默认单价 </span>
+            <span class="title flex-9"> 任务默认倍率 </span>
             <span class="text flex-1">{{rate}}</span>
         </div>
         
@@ -118,19 +118,19 @@
 
     <div class="commission" v-if="isGroupMaster">
         <div class="flex flex-align-center flex-justify-between">
-            <span class="title flex-9" @click="updateShop('percent')"> 手续费率 </span>
+            <span class="title flex-9" @click="updateShop('percent')"> 公会佣金费率 </span>
             <span class="text flex-1">{{percent}}%</span>
         </div>
 
         <div class="flex flex-align-center flex-justify-between">
-            <span class="title flex-9"> 是否开启交易功能 </span>
+            <span class="title flex-9"> 是否开启任务功能 </span>
             <span class="text flex-1 flex flex-reverse">
                 <mt-switch v-model="tradeStatus" @change = "changeTradeStatus"></mt-switch>
             </span>
         </div>
     </div>
 
-    <div class="complaint" v-if="!isGroupMaster">
+    <div class="complaint" v-if="!isGroupMaster && user_feedback" @click="complaint">
         <div class="flex flex-align-center flex-justify-between">
             <span class="title flex-9"> 投诉 </span>
             <span class="text flex-1"></span>
@@ -138,8 +138,8 @@
     </div>
 
     <div class="button-wrap">
-        <mt-button type="danger" size="large" @click = "dissShop" v-if="isGroupMaster">解散店铺</mt-button>
-        <mt-button type="danger" size="large" @click = "exitShop" v-if="!isGroupMaster">退出店铺</mt-button>
+        <mt-button type="danger" size="large" @click = "dissShop" v-if="isGroupMaster">解散公会</mt-button>
+        <mt-button type="danger" size="large" @click = "exitShop" v-if="!isGroupMaster">退出公会</mt-button>
     </div>
 
     <div class="add-members-pop flex flex-justify-center flex-align-center" @touchmove.prevent v-if="addMemberSwitch" v-bind:class="{poAbsolute:isFixed}">
@@ -173,8 +173,11 @@
                 <span style="margin-top:-0.5em;">昵称:{{searchData.name}}</span>
                 <span>账号:{{searchData.mobile}}</span>
             </div>
-
           </div>
+        </div>
+
+        <div class="no-result" v-if="searchData.id!=0 && !searchData.id">
+          <h3>无匹配结果</h3>
         </div>
 
       <div class="submit flex flex-justify-center" v-if="searchData.id" @click="submitAddMember">
@@ -198,7 +201,7 @@
 
   .top {
     padding-top: 2em;
-    height: 10em;
+    /*height: 10em;*/
     background: #26a2ff;
     box-sizing: border-box;
 
@@ -496,6 +499,16 @@
         }
       }
 
+      .no-result{
+        h3{
+          text-align: center;
+          font-size: 1.5em;
+          height: 4em;
+          line-height:4em;
+          color:#555;
+        }
+      }
+
       .submit{
         width:100%;
       }
@@ -523,10 +536,10 @@ export default {
     return {
       isShow:false,
 
-      inviteLinkStatus: true,    // 邀请链接状态
-      tradeStatus: true,         // 交易状态
-      isGroupMaster: true,       // 是否是群主
-      searchUserMobile:null,     // 搜索店铺成员的手机号
+      inviteLinkStatus: true,     // 邀请链接状态
+      tradeStatus: true,          // 任务状态
+      isGroupMaster: true,        // 是否是群主
+      searchUserMobile:null,      // 搜索公会成员的手机号
 
       isFixed:false,
 
@@ -538,15 +551,16 @@ export default {
       membersList:[],
       active: null,
       platform_fee:null,
-      addMemberSwitch: false,      // 添加成员开关
-      logo:null,                    // 店铺的头像
+      addMemberSwitch: false,       // 添加成员开关
+      logo:null,                    // 公会的头像
 
-      searchData:{                 // 搜索出来的数据
+      searchData:{                  // 搜索出来的数据
         avatar:null,
-        id:null,
+        id:0,
         mobile:null,
         name:null
-      }
+      },
+      user_feedback:null            // 投诉配置的地址
     };
   },
   methods: {
@@ -554,10 +568,10 @@ export default {
     hide() {},
     goMember() {
       if(!this.membersCount){
-        Toast("当前店铺无成员,");
+        Toast("当前公会无成员,");
         return ;
       }
-      this.$router.push("/shop/shop_member?shopId="+this.shopId);
+      this.$router.push("/shop/shop_member?shopId="+this.shopId+"&isGroupMaster="+this.isGroupMaster);
     },
     goDealManagement() {
       this.$router.push("/shop/deal_management?shopId="+this.shopId);
@@ -598,6 +612,9 @@ export default {
     // 数据控制
     init() {
       Loading.getInstance().open();
+
+      this.user_feedback = window.user_feedback;
+
       var self = this;
       var _id = this.$route.query.id;
 
@@ -641,9 +658,9 @@ export default {
         });
     },
 
-    // 解散店铺
+    // 结算公会
     dissShop() {
-        MessageBox.confirm('确定删除店铺?').then(action => {
+        MessageBox.confirm('确定删除公会?').then(action => {
 
             Loading.getInstance().open();
 
@@ -652,7 +669,7 @@ export default {
               .postData("api/shop/close/" + this.shopId)
               .then(res => {
                 Loading.getInstance().close();
-                Toast("店铺解散成功");
+                Toast("公会解散成功");
                 setTimeout(()=>{
                   this.$router.push("/shop");
                 },1000);
@@ -669,7 +686,7 @@ export default {
     },
 
     exitShop(){
-      MessageBox.confirm('确定退出店铺?').then(action => {
+      MessageBox.confirm('确定退出公会?').then(action => {
 
             Loading.getInstance().open();
 
@@ -678,7 +695,7 @@ export default {
               .postData("api/shop/quit/" + this.shopId)
               .then(res => {
                 Loading.getInstance().close();
-                Toast("退出店铺成功");
+                Toast("退出公会成功");
                 setTimeout(()=>{
                   this.$router.push("/shop");
                 },1000);
@@ -728,14 +745,22 @@ export default {
       if (!this.isGroupMaster){
           return;
       }
-      // 修改店铺名称
+      // 修改公会名称
       if(type == "shopName"){
 
-        MessageBox.prompt("请输入新的店铺名称","修改店铺名称",).then(({ value, action }) => {
+        MessageBox.prompt("请输入新的公会名称","修改公会名称",).then(({ value, action }) => {
           if(value.length ==0){
-            Toast("新店铺名称不能为空");
+            Toast("新公会名称不能为空");
             return;
           }
+          var reg = /^\s*(\S+)\s*$/;
+
+          if (!reg.test(value)) 
+          { 
+            Toast("新公会名称格式不正确");
+            return;
+          }
+
           Loading.getInstance().open();
           var _data = {
             name:value
@@ -743,7 +768,7 @@ export default {
           request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
             Loading.getInstance().close();
             
-            Toast("店铺改名成功");
+            Toast("公会改名成功");
             setTimeout(()=>{
               this.init();
             },1500);
@@ -756,22 +781,20 @@ export default {
 
       // 手续费率
       if(type=="percent"){
-         MessageBox.prompt("请输入新的手续费率(0%~"+this.platform_fee+"%)","修改手续费率(小于平台交易费率)",).then(({ value, action }) => {
+         MessageBox.prompt("请输入新的公会佣金费率(0%~"+this.platform_fee+"%)","修改公会佣金费率(必须小于平台交易费率)",).then(({ value, action }) => {
           
           if(value.length ==0){
-            Toast("手续费率不能为空");
+            Toast("公会佣金费率不能为空");
             return;
           }
 
           if(isNaN(Number(value))){
-            Toast("请输入正确的手续费率");
+            Toast("请输入正确的公会佣金费率");
             return;
           }
 
-          console.log(Number(value));
-          console.log(this.platform_fee);
-          if(Number(value)>= Number(this.platform_fee)){
-              Toast("手续费率必须小于平台交易费率"+this.platform_fee+"%");
+          if(Number(value)> Number(this.platform_fee)){
+              Toast("公会佣金费率必须小于平台交易费率"+this.platform_fee+"%");
               return;
           }
 
@@ -795,27 +818,27 @@ export default {
         }).catch(err=>{});
       }
 
-      // 设置单价
+      // 设置任务默认倍率
       if(type=="rate"){
-          MessageBox.prompt("请输入新的单价(允许有1位小数)","修改单价",).then(({ value, action }) => {
+          MessageBox.prompt("请输入新的任务默认倍率(允许有1位小数)","修改任务默认倍率",).then(({ value, action }) => {
 
             if(!value){
-              Toast("单价不能为空");
+              Toast("任务默认倍率不能为空");
               return;
             }
 
             if(isNaN(Number(value))){
-              Toast("请输入正确的单价");
+              Toast("请输入正确的任务默认倍率");
               return;
             }
 
             if((parseFloat(value)*10).toString().indexOf(".")!=-1 && parseFloat(value) > 0){
-              Toast("请输入正确的单价(允许有1位小数)");
+              Toast("请输入正确的任务默认倍率(允许有1位小数)");
               return;
             }
 
             if(parseFloat(value) >=100000){
-              Toast("单价的最大值位99999");
+              Toast("任务默认倍率的最大值位99999");
             }
 
             var _data = {
@@ -826,7 +849,7 @@ export default {
             request.getInstance().postData('api/shop/update/'+this.shopId,_data).then(res=>{
               Loading.getInstance().close();
               
-              Toast("修改单价成功");
+              Toast("修任务默认倍率成功");
               setTimeout(()=>{
                 this.init();
               },1500);
@@ -889,7 +912,12 @@ export default {
         Toast("设置失败");
         this.init();
       });
+    },
+
+    complaint(){
+      location.href=this.user_feedback;
     }
+
 
   },
 //  watch:{

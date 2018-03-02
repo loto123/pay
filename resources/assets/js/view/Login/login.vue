@@ -10,7 +10,7 @@
       <div class="circle-wrap flex flex-align-center">
         <img src="/images/logo.png" alt="logo">
       </div> 
-      <h3>游戏宝</h3>
+      <h3>聚宝朋</h3>
     </div>
 
     <div class="text-area flex flex-v flex-justify-center">
@@ -65,7 +65,6 @@
     width: 7em;
     height: 7em;
     border-radius: 50%;
-    border: 1px solid #eee;
   }
 
   img {
@@ -108,7 +107,7 @@
   width: 100%;
   // margin-top: 5em;
   height: 5em;
-
+  
   hr {
     border: none;
     border-top: 1px solid #eee;
@@ -184,15 +183,15 @@ export default {
       request.getInstance().postData('api/auth/login',data).then(function(res){
           self.userId = res.data.data.id;
 
-           if(res.data.data.wechat == 0){
+          // 微信登录控制，生产环境开启
+          if(res.data.data.wechat == 0 && debug == 0){
              Toast("登录成功，正在跳转绑定微信...");
              setTimeout(()=>{
                  Loading.getInstance().open();
              },1000);
 
              return Promise.resolve(true);
-
-           }
+          }
 
           request.getInstance().setToken(res.data.data.token);
           Toast("登录成功");
@@ -212,7 +211,7 @@ export default {
         }
       }).catch(function(err){
         Toast(err.data.msg);
-        console.log(err);
+        console.error(err);
       });
 
     },

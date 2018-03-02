@@ -36,4 +36,10 @@ class Admin extends Administrator
             $query->where('name', 'promoter');
         });
     }
+
+    //拥有的VIP卡
+    public function card_stock()
+    {
+        return $this->hasMany('App\Agent\CardStock','operator','id');
+    }
 }
