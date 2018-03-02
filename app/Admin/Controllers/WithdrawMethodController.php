@@ -99,9 +99,9 @@ class WithdrawMethodController extends Controller
             })->toArray()))->rules('nullable');
             $form->text('impl', '实现路径')->rules('required|max:255', ['required' => '必填项']);
             $form->text('memo', '备注')->rules('nullable');
-            $form->decimal('fee_value', '手续费')->default(0)->rules('required|min:0', ['required' => '请设置手续费', 'min' => '不能低于0']);
             $form->decimal('max_quota', '最大限额')->default(0)->rules('required|min:0', ['required' => '请设置最大限额', 'min' => '不能低于0']);
-            $form->radio('fee_mode', '收费方式')->options(['0' => '%百分比', '1' => '单笔固定'])->default('0');
+            $form->decimal('fee_value', '手续费')->default(0)->rules('required|min:0', ['required' => '请设置手续费', 'min' => '不能低于0']);
+            $form->radio('fee_mode', '手续费模式')->options(['0' => '%百分比', '1' => '单笔固定'])->default('0');
             $form->textarea('config', '接口参数')->rules('nullable');
             $form->saving(function (Form $form) {
                 if ($form->target_platform && !Platform::find($form->target_platform)) {
