@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\ConfirmExecuteResult;
-
 class HomeController extends Controller
 {
     /**
@@ -23,6 +21,5 @@ class HomeController extends Controller
      */
     public function index()
     {
-        dump(ConfirmExecuteResult::fail('执行失败'));
     }
 }
