@@ -53,7 +53,7 @@
                             <div class="time"> {{item.created_at}}</div>
                         </div>
                         <div class="bill-money" v-bind:class="[item.mode == 1?'':'active']">
-                            {{tabStatus[0]?"+":"-"}} {{tabStatus[0]?item.proxy_amount:item.amount}} 
+                            {{tabStatus[0]?"+":"-"}} {{tabStatus[0]?item.proxy_amount:item.amount}}
                             <i class="diamond">&#xe6f9;</i>
                         </div>
                     </a>
@@ -70,7 +70,7 @@
                 <span style="margin-left: 0.5em;color:#999;">加载中...</span>
             </p>
         </div>
-       
+
         <mt-datetime-picker
             v-model="dateModel"
             class="profit-date"
@@ -152,7 +152,7 @@
                     limit:15,
                     offset:0
                 }
-                
+
                 Loading.getInstance().open();
 
                 if(this.tabStatus[0] == true){
@@ -170,7 +170,7 @@
                         for(var i = 0; i <_dataList.length;i++){
                             _dataList[i].isTimePanel = false;
                         }
-                        
+
                         this.recordList = _dataList;
                         this.buildTimePanel();
                         Loading.getInstance().close();
@@ -195,11 +195,11 @@
                             this.recordList = [];
                             return;
                         }
-                        
+
                         for(var i = 0; i <_dataList.length;i++){
                             _dataList[i].isTimePanel = false;
                         }
-                        
+
                         this.recordList = _dataList;
 
                         this.buildTimePanel();
@@ -210,7 +210,7 @@
                         Loading.getInstance().close();
                     })
                 }
-                
+
             },
 
             changeTime(shijianchuo){
@@ -225,12 +225,12 @@
                 var s = time.getSeconds();
                 return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
             },
-            
+
             changeTab(tabindex){
                 if(this.loading == true){
                     return;
                 }
-                
+
                 this.tabStatus = [false,false];
                 this.tabStatus[tabindex] = true;
                 this.headList = [];
@@ -254,8 +254,9 @@
                     var data = _t[0]+"年"+_t[1]+"月";
                     return data;
                 }
-                
+
                 var key = 0;
+
                 // 设置头部
                 if(this.recordList.length!=0){
                     if(this.recordList[0].isTimePanel == false){
@@ -266,7 +267,7 @@
                         var _head = getTheDate(this.recordList[key].created_at);
                     }
                 }
-                
+
                 var _initialData = {
                     time:_head,
                     index:key,
@@ -280,31 +281,32 @@
                 for(var i = 0; i <this.recordList.length; i++){
                     if(this.recordList[i].isTimePanel == true){
                         _head =getTheDate(this.recordList[i+1].created_at);
+                        console.log(_head);
                         continue;
                     }
 
                     try{
                          var label = getTheDate(this.recordList[i].created_at);
-                         
+
                         //  当头部与当前的创建时间不一致时
-                       
-                         if(_head != getTheDate(this.recordList[i].created_at)){
+
+                         if(_head != getTheDate(this.recordList[i].created_at) && this.recordList[i].isTimePanel == false){
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
-                            
+
                             var data = {
                                 time:_head,
                                 index:i,
                                 total:"加载中..."
                             }
-                         
+
                             this.headList.push(data);
-                          
+
                         }
                     }catch(e){
                         console.error(e);
                     }
-                   
+
                 }
 
                 var count=  0;
@@ -347,7 +349,7 @@
                                     this.tabTotal = this.recordList[0].total;
                                 }).catch();
                         }
-                        
+
                     }
                 }
                 count = 0;
@@ -356,19 +358,16 @@
             // 滚动
             handleScroll(){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-                
+
                 if(!this.$refs.timeTab){
                     return;
                 }
 
                 for(var i = 0; i< this.$refs.timeTab.length; i++){
                     if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
-                        if(i>1){
-                            this.timeInfo = this.headList[i-1].time;
-                            this.tabTotal = this.headList[i-1].total;
-                        }
+                        this.timeInfo = this.headList[i].time;
+                        this.tabTotal = this.headList[i].total;
                     }
-                  
                 }
             },
 
@@ -398,7 +397,7 @@
                         limit:5,
                         offset :[].concat(this.recordList).pop().id,
                     }
-                    
+
                     if (this.dateChoise!=null){
                         _data.date = this.dateChoise;
                     }
@@ -409,15 +408,16 @@
                             this.loading = false;
                             return;
                         }
-        
+
                         for(var i = 0; i< res.data.data.data.length; i ++){
                             res.data.data.data[i].isTimePanel = false;
                             this.recordList.push(res.data.data.data[i]);
                         }
 
+                        console.log(this.recordList);
                         this.canLoading = true;
                         this.loading = false;
-                        this.buildTimePanel();
+//                        this.buildTimePanel();
                     }).catch(err=>{
 
                         Loading.getInstance().close;
@@ -462,7 +462,7 @@
                             for(var i = 0; i <_dataList.length;i++){
                                 _dataList[i].isTimePanel = false;
                             }
-                            
+
                             this.recordList = _dataList;
                             this.buildTimePanel();
                             Loading.getInstance().close();
@@ -485,7 +485,7 @@
                             for(var i = 0; i <_dataList.length;i++){
                                 _dataList[i].isTimePanel = false;
                             }
-                            
+
                             this.recordList = _dataList;
                             this.buildTimePanel();
                             Loading.getInstance().close();
