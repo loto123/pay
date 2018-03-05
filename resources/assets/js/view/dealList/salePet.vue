@@ -116,9 +116,11 @@
 			}
 		},
 		saveData(param){
-			console.log(param);
-			localStorage.setItem("Authorization",param,true);
-		}
+          localStorage.setItem("token",param,true);
+          localStorage.getItem("token")
+          console.log("android调用此方法=====>getData==="+localStorage.getItem("token"));
+          window.android.getUserKey();
+       }
 	};
 </script>
 
