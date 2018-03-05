@@ -201,7 +201,6 @@ class CardController extends BaseController
             ]
         );
 
-//        Log::info(['param'=>$request->all()]);
         if ($validator->fails()) {
             return $this->json([],$validator->errors()->first(),0);
         }
@@ -212,6 +211,10 @@ class CardController extends BaseController
             return $this->json([],'验证码已失效或填写错误',0);
         }
         Cache::forget($cache_key);
+
+        if($this->user->identify_status != 1) {
+            return $this->json([],'未实名认证，该功能不可用',0);
+        }
 
         //验证当天可用次数
         $times = $this->user->check_action_times('authentication', config('authentication_max_times',3));
