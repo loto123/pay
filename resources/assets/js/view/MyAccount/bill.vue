@@ -7,7 +7,7 @@
                </div>
                <div style="width:50%;text-align:center">
                     <i class="iconfont" style="font-size:1.4em;" @click="filterDate">
-                        &#xe704;
+                        &#xe663;
                     </i>
                 </div>
             </div>
@@ -403,16 +403,19 @@
                 if (!this.$refs.timeTab) {
                     return;
                 }
-
+                
                 for (var i = 0; i < this.$refs.timeTab.length; i++) {
+                    
+
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
-                        if (i > 1) {
+                        // console.log(222);
+                        if (i > 0) {
                             this.timeInfo = this.headList[i - 1].time;
                             this.tabIncome = this.headList[i - 1].in;
                             this.tabDisburse = this.headList[i - 1].out;
+                            // console.log(this.tabIncome);
                         }
                     }
-
                 }
             },
 
