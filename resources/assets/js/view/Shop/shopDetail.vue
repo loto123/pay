@@ -754,8 +754,6 @@ export default {
             return;
           }
           var reg = /^\s*(\S+)\s*$/;
-          console.log("--------------test");
-          console.log(reg.test(value));
 
           if (!reg.test(value)) 
           { 

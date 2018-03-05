@@ -5,7 +5,7 @@
         >
             <div class="flex flex-reverse flex-align-center header-right">
                 <i class="iconfont" style="font-size:1.4em;" @click="filterDate">
-                    &#xe704;
+                    &#xe663;
                 </i>
             </div>
         </topBack>
@@ -134,7 +134,7 @@
             cancel() {
                 this.showAlert = false;
             },
-            details(id) {
+            tabdetails(id) {
                 if(this.tabStatus[0] == true){
                     // 分润状态
                     this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=profit"});
@@ -360,15 +360,15 @@
                 if(!this.$refs.timeTab){
                     return;
                 }
-
                 for(var i = 0; i< this.$refs.timeTab.length; i++){
                     if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
+                        console.log(i);
                         if(i>1){
+                            console.log(this.headList);
                             this.timeInfo = this.headList[i-1].time;
                             this.tabTotal = this.headList[i-1].total;
                         }
                     }
-                  
                 }
             },
 
@@ -495,10 +495,7 @@
                             Loading.getInstance().close();
                         })
                 }
-
-                
             }
-
         },
 
         components: {

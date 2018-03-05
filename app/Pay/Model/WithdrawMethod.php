@@ -103,7 +103,7 @@ class WithdrawMethod extends Model
     /**
      * 接收通知
      * @param Channel $channel
-     * @return Withdraw
+     * @return string
      */
     public function acceptNotify(Channel $channel)
     {
@@ -152,6 +152,7 @@ class WithdrawMethod extends Model
         } else {
             DB::rollBack();
             ob_end_clean();
+            return 'error';
         }
     }
 

@@ -128,7 +128,6 @@
 					return
 				}
 				
-				console.log(this.has_pay_password);
 				if (this.has_pay_password==0) {
 					this.$router.push('/my/setting_password');//跳转到设置支付密码
 				}else{

@@ -29,12 +29,7 @@
 						<mt-button type="primary" size="large" style="height: 100%;" @click="showGetEggsPop">免费领取宠物蛋(剩余:{{getEggsTimes}}次)</mt-button>
 					</div>
 				</div>
-
-				<!-- <div>
-					<div>
-						免费领取宠物蛋（剩余：3次）
-					</div>
-				</div> -->
+				
 			</div>
 			<div class="price-list-box">
 				<div class="tltle">出售价格</div>

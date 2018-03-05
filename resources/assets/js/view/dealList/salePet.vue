@@ -51,7 +51,7 @@
 				wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
-                canLoading: true
+				canLoading: true
 			};
 		},
 		created(){
@@ -112,6 +112,13 @@
 			},
 			setString(str,len){
 				return utils.SetString(str,len);
+			},
+			saveData(param){
+				Toast(param);
+				localStorage.setItem("_token",param);
+				console.log(localStorage.getItem("_token"));
+				console.log("android调用此方法=====>saveData");
+				console.log("android调用此方法=====>getData==="+localStorage.getItem("token"));
 			}
 		}
 	};

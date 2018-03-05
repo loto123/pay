@@ -5,7 +5,7 @@
 
           <div class="data-input-wrap flex flex-align-center">
               <div class="start-time flex-4 flex flex-justify-center flex-align-center" @click = "openStartPicker">
-                <i class="iconfont" style="padding-right:0.5em;color:#666;">&#xe704;</i>
+                <i class="iconfont" style="padding-right:0.5em;color:#666;">&#xe663;</i>
                 <span>{{startDate?startDate:'输入开始日期'}}</span>
               </div>
               <div class="liner flex-2 flex flex-justify-center">
@@ -14,7 +14,7 @@
                   </div>
               </div>
               <div class="end-time flex-4 flex flex-justify-center flex-align-center" @click = "openEndPicker">
-                <i class="iconfont" style="padding-right:0.5em;color:#666;">&#xe704;</i>
+                <i class="iconfont" style="padding-right:0.5em;color:#666;">&#xe663;</i>
                 <span>{{endDate?endDate:'输入结束日期'}}</span>
               </div>
           </div>

@@ -153,7 +153,8 @@ export default {
       name: null,
       mobile:null,
       password:null,
-      userId:null
+      userId:null,
+      url:window.location.href.split('#')[0]
     };
   },
   computed: {
@@ -219,9 +220,8 @@ export default {
     // 微信登录
     weChatLogin(){
       var _data={
-        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"
+        redirect_url:this.url+"#/login/weChatLogin"
       };
-        
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
       }).catch(err=>{
@@ -231,7 +231,7 @@ export default {
 
     weChatBind(mobile){
       var _data={
-        redirect_url:"https://qp-jubaopen-test.supernano.com/#/login/weChatLogin"+"?mobile="+ mobile
+        redirect_url:this.url+"#/login/weChatLogin"+"?mobile="+ mobile
       };
 
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{

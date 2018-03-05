@@ -43,7 +43,6 @@
 				_temp.notice_id = this.$route.query.notice_id;
 				request.getInstance().getData('api/notice/detail', _temp)
 					.then((res) => {
-						console.log(res);
 						this.title = res.data.data.title;
 						this.time = res.data.data.time;
 						this.content = res.data.data.content;
