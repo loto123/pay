@@ -35,7 +35,7 @@ class WechatH5 implements DepositInterface
             'pay_amt' => $amount,
             'return_url' => $return_url,
             'user_ip' => str_replace('.', '_', request()->getClientIp()),
-            'remark' => '',
+            'remark' => array_key_exists('remark', $config) ? $config['remark'] : '',
         ];
 
         //参数转为小写
