@@ -89,11 +89,13 @@
 }
 
 .login-button {
-  width: 100%;
+  width: 90%;
+  margin:auto;
   margin-top: 3em;
 }
 
 .forget-password{
+  margin-top:2em;
   height: 2em;
   padding-right:1em;
   box-sizing: border-box;

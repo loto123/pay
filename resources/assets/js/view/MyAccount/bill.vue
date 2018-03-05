@@ -403,15 +403,12 @@
                 if (!this.$refs.timeTab) {
                     return;
                 }
-                // console.log(this.$refs.timeTab);
-                for (var i = 0; i < this.$refs.timeTab.length; i++) {
+                for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
-                        // console.log(this.headList);
-                        if (i >=1) {
-                            this.timeInfo = this.headList[i - 1].time;
-                            this.tabIncome = this.headList[i - 1].in;
-                            this.tabDisburse = this.headList[i - 1].out;
-                            // console.log(this.tabIncome);
+                        if (i >0) {
+                            this.timeInfo = this.headList[i].time;
+                            this.tabIncome = this.headList[i].in;
+                            this.tabDisburse = this.headList[i].out;
                         }
                     }
                 }

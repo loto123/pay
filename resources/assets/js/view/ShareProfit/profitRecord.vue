@@ -360,15 +360,15 @@
                 if(!this.$refs.timeTab){
                     return;
                 }
-
                 for(var i = 0; i< this.$refs.timeTab.length; i++){
                     if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
+                        console.log(i);
                         if(i>1){
+                            console.log(this.headList);
                             this.timeInfo = this.headList[i-1].time;
                             this.tabTotal = this.headList[i-1].total;
                         }
                     }
-                  
                 }
             },
 

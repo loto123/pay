@@ -201,7 +201,6 @@ class CardController extends BaseController
             ]
         );
 
-//        Log::info(['param'=>$request->all()]);
         if ($validator->fails()) {
             return $this->json([],$validator->errors()->first(),0);
         }
@@ -212,6 +211,10 @@ class CardController extends BaseController
             return $this->json([],'验证码已失效或填写错误',0);
         }
         Cache::forget($cache_key);
+
+        if($this->user->identify_status != 1) {
+            return $this->json([],'未实名认证，该功能不可用',0);
+        }
 
         //验证当天可用次数
         $times = $this->user->check_action_times('authentication', config('authentication_max_times',3));
@@ -224,16 +227,6 @@ class CardController extends BaseController
         if (!empty($card_list) && count($card_list)>0) {
             return $this->json([],'已经绑定的银行卡不能重复绑定',0);
         }
-
-//        //验证银行卡号是否归属银行
-//        $bank = Bank::find($request->bank_id);
-//        if(!empty($bank) && !empty($bank->card_num_pre)) {
-//            $bank_card_pre_list = explode(',',$bank->card_num_pre);
-//            $card_pre = substr($request->card_no,0,$bank->card_num_pre_size);
-//            if(!isset($bank_card_pre_list[$card_pre])) {
-//                return $this->json([],'银行卡号输入错误或所属银行选择错误',0);
-//            }
-//        }
 
         if(!isset($this->user->channel['platform_id'])) {
             return $this->json([],'用户没有分配通道',0);
@@ -271,7 +264,7 @@ class CardController extends BaseController
         $cards->user_id = $this->user->id;
         $cards->card_num = $request->card_num;
         $cards->bank_id = $request->bank_id;
-        $cards->holder_name = $this->user->name;
+        $cards->holder_name = $this->user->identify_name;
         $cards->holder_id = $this->user->id_number;
         $cards->holder_mobile = $this->user->mobile;
         $cards->province = $request->province;
