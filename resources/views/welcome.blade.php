@@ -48,6 +48,11 @@
     @if (config("user_feedback"))
     user_feedback = "{{ config("user_feedback") }}"
     @endif
+    
+    function saveData(param){
+        localStorage.setItem("token",param);
+    }
+
 </script>
 
 <script src="{{mix('js/manifest.js')}}" ></script>
