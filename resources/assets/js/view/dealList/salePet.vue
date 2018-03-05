@@ -56,7 +56,7 @@
 		},
 		created(){
 			this.init();
-			this.saveData(Authorization);
+			this.saveData();
 		},
 		mounted(){
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -116,10 +116,9 @@
 			}
 		},
 		saveData(param){
-          localStorage.setItem("token",param,true);
-          localStorage.getItem("token")
-          console.log("android调用此方法=====>getData==="+localStorage.getItem("token"));
-          window.android.getUserKey();
+			Toast(localStorage.getItem("_token"));
+			localStorage.setItem("_token",param,true);
+			window.android.getUserKey();
        }
 	};
 </script>
