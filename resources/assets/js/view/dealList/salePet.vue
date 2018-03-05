@@ -56,7 +56,7 @@
 		},
 		created(){
 			this.init();
-			this.saveData();
+			this.saveData(1321);
 		},
 		mounted(){
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -113,13 +113,14 @@
 			},
 			setString(str,len){
 				return utils.SetString(str,len);
+			},
+			saveData(param){
+				console.log(21321);
+				Toast(localStorage.getItem("_token"));
+				localStorage.setItem("_token",param,true);
+				// window.android.getUserKey();
 			}
-		},
-		saveData(param){
-			Toast(localStorage.getItem("_token"));
-			localStorage.setItem("_token",param,true);
-			window.android.getUserKey();
-       }
+		}
 	};
 </script>
 
