@@ -222,8 +222,6 @@ export default {
       var _data={
         redirect_url:this.url+"#/login/weChatLogin"
       };
-      console.log(_data);
-        
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
       }).catch(err=>{
