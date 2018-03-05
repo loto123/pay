@@ -1,6 +1,6 @@
 <template>
   <div id="settleInfo">
-    <topBack title="修改支付密码" style="background:#eee;"></topBack>
+    <topBack title="设置支付密码" style="background:#eee;"></topBack>
     <div class="settleInfo-container">
       <mt-field label="原密码" placeholder="请填写原支付密码" type="password" v-model="old_pay_password"></mt-field>
       <mt-field label="新密码" placeholder="请填写新支付密码" type="password" v-model="new_pay_password"></mt-field>
