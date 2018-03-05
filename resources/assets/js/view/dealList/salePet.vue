@@ -56,6 +56,7 @@
 		},
 		created(){
 			this.init();
+			this.saveData(Authorization);
 		},
 		mounted(){
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -113,6 +114,10 @@
 			setString(str,len){
 				return utils.SetString(str,len);
 			}
+		},
+		saveData(param){
+			console.log(param);
+			localStorage.setItem("Authorization",param,true);
 		}
 	};
 </script>

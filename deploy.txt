@@ -72,3 +72,5 @@ php artisan queue:work --queue=pets --tries=3
 
 添加cron任务调度
 * * * * * php /项目路径/artisan schedule:run >> /dev/null 2>&1
+
+同步测试服的storage下所有目录及内容到正式服
