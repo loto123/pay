@@ -66,10 +66,8 @@
             </ul>
 
             <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
-                <!--<span>-->
                 <mt-spinner type="fading-circle"></mt-spinner>
                 <span style="margin-left: 0.5em;color:#999;">加载中...</span>
-                <!--</span>-->
             </p>
         </div>
        
@@ -136,7 +134,7 @@
             cancel() {
                 this.showAlert = false;
             },
-            details(id) {
+            tabdetails(id) {
                 if(this.tabStatus[0] == true){
                     // 分润状态
                     this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=profit"});
@@ -497,10 +495,7 @@
                             Loading.getInstance().close();
                         })
                 }
-
-                
             }
-
         },
 
         components: {

@@ -513,6 +513,9 @@ class CardController extends BaseController
         $data = [];
         if( !empty($cards) && count($cards)>0 ) {
             foreach ($cards as $item) {
+                if($item->id == $this->user->pay_card_id) {
+                    continue;
+                }
                 $card_type = '';
                 switch ($item->type) {
                     case 1:
@@ -522,13 +525,12 @@ class CardController extends BaseController
                         $card_type = '信用卡';
                         break;
                 }
-                $data[$item->id] = [
+                $data[] = [
                     'card_id' => $item->id,
                     'card_num' => $this->user->formatNum($item->card_num), //做掩码处理
                     'bank' => $item->bank->name,
                     'card_type' => $card_type,
                     'card_logo' => $item->bank->logo ,
-                    'is_pay_card' => ($item->id == $this->user->pay_card_id)? 1:0,
                 ];
             }
         }

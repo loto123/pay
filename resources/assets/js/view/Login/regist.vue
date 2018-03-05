@@ -377,8 +377,6 @@
             }
 
             var reg = /^\s*(\S+)\s*$/;
-            console.log("--------------test");
-            console.log(reg.test(this.userPassword));
 
             if (!reg.test(this.userPassword)) 
             { 

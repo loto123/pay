@@ -10,6 +10,7 @@
 namespace App\Pay\Model;
 
 use App\Jobs\SubmitWithdrawRequest;
+use App\Pay\DepositInterface;
 use App\Pay\PayLogger;
 use App\User;
 use App\UserFund;
@@ -133,9 +134,14 @@ class DepositMethod extends Model
         DB::beginTransaction();
         ob_start();
 
+        /**
+         * @var $payImplement DepositInterface
+         */
+        $payImplement = new $this->impl;
+        $config = array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config));
         do {
             try {
-                $result = (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
+                $result = $payImplement->acceptNotify($config);
                 if (!$result) {
                     break;
                 }
@@ -164,6 +170,20 @@ class DepositMethod extends Model
 
                         if ($moneyAddSuccess) {
                             $result->state = Deposit::STATE_COMPLETE;
+
+                            //分润
+                            $benefit_share_success = false;
+                            $exception = null;
+                            try {
+                                $benefit_share_success = $payImplement->benefitShare($config, $result);
+                            } catch (\Exception $e) {
+                                $exception = $e;
+                            }
+
+                            if (!$benefit_share_success) {
+                                PayLogger::deposit()->error('分润失败', ['class' => $this->impl, 'exception' => $exception, 'deposit_id' => $result->getKey()]);
+                            }
+                            $result->benefit_share = $benefit_share_success;
                         }
                         $petTransferSuccess = $moneyAddSuccess ? $sellBill->pet->transfer($match->user_id) : false;
 
@@ -211,7 +231,7 @@ class DepositMethod extends Model
             //卖家转出了宠物给卖家提现
             if ($sellBill->deal_closed && $sellBill->withdraw) {
                 if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($sellBill->withdraw))->handle()->state)) {
-                    PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_di' => $sellBill->getKey(), 'match_id' => $match->getKey()]);
+                    PayLogger::withdraw()->error('用户出售提现失败', ['sell_bill_id' => $sellBill->getKey(), 'match_id' => $match->getKey()]);
                 }
             }
             return ob_get_clean();

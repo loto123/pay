@@ -96,4 +96,9 @@ class WechatH5 implements DepositInterface
 
         return new DepositResult($deposit->state, $id, $deposit->amount, $outID);
     }
+
+    public function benefitShare(array $config, Deposit $deposit)
+    {
+        return true;
+    }
 }
