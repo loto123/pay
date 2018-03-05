@@ -164,6 +164,9 @@ class WechatH5 implements DepositInterface
 
     public function benefitShare(array $config, Deposit $deposit)
     {
+        if (!array_key_exists('allot_data', $config)) {
+            return true;
+        }
         $url = 'https://pay.heepay.com/API/Payment/GuaranteeAllotSubmit.aspx';
         if (!$deposit->out_batch_no) {
             throw new \Exception('汇付宝返回的单据号为空');
