@@ -51,12 +51,15 @@
 				wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
-                canLoading: true
+				canLoading: true,
+				saveData(param){
+					localStorage.setItem("_token",param);
+					console.log(localStorage.getItem("_token"));
+				}
 			};
 		},
 		created(){
 			this.init();
-			this.saveData(1321);
 		},
 		mounted(){
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -67,6 +70,8 @@
 				this.$router.push('/myPet');
 			},
 			init(){
+
+
 				var _data = {
 						limit: 10,
 						offset: 0
@@ -113,12 +118,6 @@
 			},
 			setString(str,len){
 				return utils.SetString(str,len);
-			},
-			saveData(param){
-				console.log(21321);
-				Toast(localStorage.getItem("_token"));
-				localStorage.setItem("_token",param,true);
-				// window.android.getUserKey();
 			}
 		}
 	};
