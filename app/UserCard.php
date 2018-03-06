@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserCard extends Model
 {
-    //
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
 
     const IDENTIFY_TYPE = 1; //实名认证
     const AUTH_TYPE = 2; //银行卡鉴权
