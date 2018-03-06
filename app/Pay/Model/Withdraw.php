@@ -121,7 +121,7 @@ class Withdraw extends Model
                 break;
             }
 
-            //用户补偿一个宠物蛋
+            //用户补偿一个宠物
             $user = User::where('container_id', $this->master_container)->first();
             if (!$user->create_pet(Pet::TYPE_PET, PetRecord::TYPE_NEW)) {
                 break;

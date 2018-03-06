@@ -12,6 +12,7 @@ use Encore\Admin\Admin;
 
 class WithdrawCancel extends PayRetry
 {
+    const PERMISSION_NAME = 'refund_withdraws';
     public static $abnormal_states = [Withdraw::STATE_SEND_FAIL, Withdraw::STATE_PROCESS_FAIL];
 
     public static function script()

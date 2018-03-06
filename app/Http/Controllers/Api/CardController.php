@@ -254,7 +254,7 @@ class CardController extends BaseController
 //                $this->user->id_number,
 //                $this->user->name
 //            );
-            $auth_res = Showapi::authentication($pay_record->id, $request->card_num, $this->user->id_number, $this->user->name);
+            $auth_res = Showapi::authentication($pay_record->id, $request->card_num, $this->user->id_number, $this->user->identify_name);
             if ($auth_res !== true) {
                 return $this->json([],$auth_res,0);
             }
