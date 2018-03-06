@@ -55,7 +55,7 @@ class Withdraw extends Model
             case self::STATE_COMPLETE:
                 return '提现成功';
             case self::STATE_CANCELED:
-                return '已取消';
+                return '已退款';
             default:
                 return '异常';
         }
