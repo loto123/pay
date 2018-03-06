@@ -93,8 +93,6 @@ $api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' =>
         $api->post("valid", 'AuthController@valid');
         $api->post("sms", 'AuthController@sms');
         $api->post("password/reset", 'AuthController@reset_password');
-        $api->post('card/create', 'CardController@create');
-        $api->post('my/identify','UserController@identify');
     });
 });
 
