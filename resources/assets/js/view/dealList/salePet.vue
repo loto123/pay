@@ -1,7 +1,7 @@
 <template>
 	<div id="dealList">
-		<topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'">
-		</topBack>
+		<!-- <topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'">
+		</topBack> -->
 		<div class="tab-menu flex flex-align-center flex-justify-center">
 			<div class="flex flex-align-center flex-justify-center active">在售宠物</div>
 			<div class="flex flex-align-center flex-justify-center" @click="goMyPet">我的宠物</div>
@@ -112,13 +112,6 @@
 			},
 			setString(str,len){
 				return utils.SetString(str,len);
-			},
-			saveData(param){
-				Toast(param);
-				localStorage.setItem("_token",param);
-				console.log(localStorage.getItem("_token"));
-				console.log("android调用此方法=====>saveData");
-				console.log("android调用此方法=====>getData==="+localStorage.getItem("token"));
 			}
 		}
 	};
@@ -128,7 +121,7 @@
 	@import "../../../sass/oo_flex.scss";
 	#dealList {
 		width: 100%;
-		padding-top: 2em;
+		/* padding-top: 2em; */
 		box-sizing: border-box;
 		background: #f4f4f4;
 		min-height: 100vh;

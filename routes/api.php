@@ -36,7 +36,7 @@ Route::group([
     $router->post('updatePayPassword','UserController@updatePayPassword');
     $router->post('updatePayCard','UserController@updatePayCard');
     $router->get('getPayCard','UserController@getPayCard');
-    $router->post('identify','UserController@identify');
+//    $router->post('identify','UserController@identify');
     $router->get('info','UserController@info');
     $router->get('parent','UserController@parent');
     $router->post('pay_password','UserController@pay_password');
@@ -49,7 +49,7 @@ Route::group([
     'middleware' => ['api.auth', 'block']
 ], function(Router $router){
     $router->get('index', 'CardController@index');
-    $router->post('create', 'CardController@create');
+//    $router->post('create', 'CardController@create');
     $router->post('delete', 'CardController@delete');
     $router->get('getBanks','CardController@getBanks');
     $router->get('getBankCardParams','CardController@getBankCardParams');
@@ -83,6 +83,18 @@ $api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' =>
         $api->post("password/reset", 'AuthController@reset_password');
     });
 });
+
+//限制请求次数
+$api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' => 1], function ($api) {
+    $api->group([
+        'prefix' => '',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->post('card/create', 'CardController@create'); //添加银行卡
+        $api->post('my/identify','UserController@identify'); //实名认证
+    });
+});
+
 //
 //$api->version('v1', function ($api) {
 //    $api->group([
@@ -172,6 +184,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
+        $api->post('charge_query', 'AccountController@charge_query');
         $api->get('records/month', 'AccountController@month_data');
         $api->get('deposit_quotas', 'AccountController@depositQuotaList');
     });

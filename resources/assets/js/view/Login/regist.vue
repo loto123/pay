@@ -32,7 +32,7 @@
         </div>
 
         <p class="agreement-btn" v-if="!$store.state.regist.refindPassword">注册代表你同意
-          <a href="javascript:;" @click="showAgreement"> 结算宝服务使用协议 </a>
+          <a href="javascript:;" @click="showAgreement"> {{product_name}}服务使用协议 </a>
         </p>
       </section>
     </transition>
@@ -132,7 +132,9 @@
       margin-top: 2em;
     }
     .submit-button {
-      margin-top: 2em;
+      width: 90%;
+      margin:auto;
+      margin-top: 3em;
     }
 
     .agreement-btn {
@@ -229,7 +231,8 @@
         smsTimer: null,                  //短信验证倒计
 
         mobile: null,                     //推荐人手机号
-        isdisabled: null
+        isdisabled: null,
+        product_name:product_name
       };
     },
     created() {

@@ -218,6 +218,8 @@ export default {
   methods: {
     init() {
       Loading.getInstance().open();
+
+      // 拿到所有的店铺
       request
         .getInstance()
         .getData("api/shop/lists/all")
@@ -324,9 +326,9 @@ export default {
           _temp = res.data.data.members[i];
           _temp.checked = false;
 
-          if(i == 0){
-            _temp.checked = true;
-          }
+//          if(i == 0){
+//            _temp.checked = true;
+//          }
           this.memberList.push(_temp);
         }
 
