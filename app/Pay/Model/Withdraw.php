@@ -7,6 +7,9 @@
 
 namespace App\Pay\Model;
 
+use App\Pet;
+use App\PetRecord;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -52,7 +55,7 @@ class Withdraw extends Model
             case self::STATE_COMPLETE:
                 return '提现成功';
             case self::STATE_CANCELED:
-                return '已取消';
+                return '已退款';
             default:
                 return '异常';
         }
@@ -115,6 +118,12 @@ class Withdraw extends Model
             }
 
             if (!$this->masterContainer->changeBalance($this->amount, 0)) {
+                break;
+            }
+
+            //用户补偿一个宠物蛋
+            $user = User::where('container_id', $this->master_container)->first();
+            if (!$user->create_pet(Pet::TYPE_PET, PetRecord::TYPE_NEW)) {
                 break;
             }
 
