@@ -239,7 +239,7 @@
             .bottom-info {
                 .content {
                     color: #999;
-                    font-size: 0.8em;
+                    font-size: 0.9em;
                     text-overflow: ellipsis;
                     overflow: hidden;
                     white-space: nowrap;
