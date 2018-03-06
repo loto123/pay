@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Jobs\SubmitPetSell;
+use App\Pay\IdConfuse;
 use App\Pay\Model\BillMatch;
 use App\Pay\Model\Channel;
 use App\Pay\Model\Deposit;
@@ -119,6 +120,7 @@ class AccountController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="redirect_url", type="string", example="url",description="充值跳转链接"),
+     *                  @SWG\Property(property="order_id", type="string", example="123456789",description="订单id,供客户端查询"),
      *              )
      *          )
      *      ),
@@ -194,6 +196,7 @@ class AccountController extends BaseController
                     $bill->locked = true;
                     if ($bill->save() && $match->save()) {
                         $data = ['redirect_url' => $result['pay_info']];
+                        $data['order_id'] = IdConfuse::mixUpId($match->getKey(), 20, true);
                         $commit = true;
                     }
                 } else {
@@ -208,6 +211,58 @@ class AccountController extends BaseController
 
         $commit ? DB::commit() : DB::rollBack();
         return $this->json($data, $message, (int)$commit);
+    }
+
+    /**
+     * @SWG\Post(
+     *   path="/account/charge_query",
+     *   summary="查询购买状态",
+     *   tags={"账户"},
+     *   @SWG\Parameter(
+     *     name="order_id",
+     *     in="formData",
+     *     description="购买订单id",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="state", type="integer", example="1",description="状态:0待成交,1付款失败,2超时付款,3成交,4已退款,5已超时,6交割失败(宠物,余额,提现环节失败)"),
+     *              )
+     *          )
+     *      ),
+     * )
+     * @param Request $request
+     * @return mixed
+     */
+    public function charge_query(Request $request)
+    {
+        $id = $request->post('order_id');
+        if (!$id) {
+            return $this->json([], '缺少order_id', 0);
+        }
+
+        $id = IdConfuse::recoveryId($id, true);
+        $buy_order = BillMatch::where([['id', $id], ['user_id', Auth::id()]])->first();
+        if (!$buy_order) {
+            return $this->json([], '订单不存在', 0);
+        }
+
+        return $this->json(['state' => $buy_order->state]);
     }
 
     /**
