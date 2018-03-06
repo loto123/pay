@@ -45,6 +45,6 @@ SCRIPT
 
     protected function render()
     {
-        return "<a class='btn btn-xs btn-default fa grid-cancel-withdraw' data-id='{$this->id}'>取消</a>";
+        return "<a class='btn btn-xs btn-danger fa grid-cancel-withdraw' data-id='{$this->id}'>退款</a>";
     }
 }
