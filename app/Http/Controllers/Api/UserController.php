@@ -527,7 +527,6 @@ class UserController extends BaseController
         if (!$cache_value || !isset($cache_value['code']) || !$cache_value['code'] || $cache_value['code'] != $request->code || $cache_value['time'] < (time() - 300)) {
             return $this->json([], '验证码已失效或填写错误', 0);
         }
-        Cache::forget($cache_key);
 
         //验证当天可用次数
         $times = $this->user->check_action_times('identify', config('identify_max_times',10));
@@ -555,6 +554,9 @@ class UserController extends BaseController
         } else {
             $reality_res = true;
         }
+
+        Cache::forget($cache_key);
+
         if($reality_res === true) {
             User::where('id',$this->user->id)->update([
                 'identify_status' => 1,

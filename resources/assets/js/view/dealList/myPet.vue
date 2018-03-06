@@ -1,7 +1,7 @@
 <template>
     <div id="dealList">
-        <topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'">
-        </topBack>
+        <!-- <topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'">
+        </topBack> -->
         <div class="tab-menu flex flex-align-center flex-justify-center">
             <div class="flex flex-align-center flex-justify-center" @click="goSalePet">在售宠物</div>
             <div class="flex flex-align-center flex-justify-center active">我的宠物</div>
@@ -122,7 +122,7 @@
     @import "../../../sass/oo_flex.scss";
     #dealList {
         width: 100%;
-		padding-top: 2em;
+		/* padding-top: 2em; */
 		box-sizing: border-box;
 		background: #f4f4f4;
 		min-height: 100vh;
