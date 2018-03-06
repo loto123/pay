@@ -39,6 +39,7 @@ class NanoWithdrawForward implements WithdrawInterface
                 'subbranch' => $card->bank->name,
                 'user_id' => $withdraw_id,
                 'channel' => $config['nano_channel'],
+                'app_id' => $config['app_id'],
             ];
             PayLogger::withdraw()->debug('汇付宝提现公司接口', $params);
             $res_json = SmallBatchTransfer::send_post($config['url'], http_build_query($params), null);

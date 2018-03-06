@@ -51,12 +51,11 @@
 				wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
-                canLoading: true
+				canLoading: true
 			};
 		},
 		created(){
 			this.init();
-			this.saveData(Authorization);
 		},
 		mounted(){
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -113,11 +112,14 @@
 			},
 			setString(str,len){
 				return utils.SetString(str,len);
+			},
+			saveData(param){
+				Toast(param);
+				localStorage.setItem("_token",param);
+				console.log(localStorage.getItem("_token"));
+				console.log("android调用此方法=====>saveData");
+				console.log("android调用此方法=====>getData==="+localStorage.getItem("token"));
 			}
-		},
-		saveData(param){
-			console.log(param);
-			localStorage.setItem("Authorization",param,true);
 		}
 	};
 </script>
