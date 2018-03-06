@@ -38,7 +38,7 @@
 					</li>
 				</ul>
 
-				<div class="high-price flex flex-align-center flex-justify-center" @click="choiseMaxQuoto" v-bind:class="{active:isMaxQuota}" v-if="balance!=0">¥{{myMaxQuota}}(最高价)</div>
+				<div class="high-price flex flex-align-center flex-justify-center" @click="choiseMaxQuoto" v-bind:class="{active:isMaxQuota}" v-if="myMaxQuota!=0">¥{{myMaxQuota}}(最高价)</div>
 
 			</div>
 			<div class="usable-diamond">拥有钻石{{balance}}，出售消耗钻石<span>{{amount}}</span></div>

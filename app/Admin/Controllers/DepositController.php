@@ -51,8 +51,9 @@ $('.bill_info').each(function(){
 $(this).popover(
 {
     html:true,
-    content:'<p>商户订单号:<br/><input type="text" readonly value ="'+$(this).data('bill') +'"/></p><p>内部ID:<span class="text-danger">(仅限内部查询,刮开查看)</span><span style="background-color:#ccc;color:#ccc;display: block;">'+$(this).data('inner_id')+'</span></p>',
+    content:'<p>商户订单号:<br/><input type="text" readonly value ="'+$(this).data('bill') +'"/></p><p>内部ID:<span class="text-danger">(仅限内部查询,刮开查看)</span><span style="cursor:text;background-color:#ccc;color:#ccc;display: block;text-indent:1em;">'+$(this).data('inner_id')+'</span></p>',
     title:'凭据信息',
+    placement:'top'
 }
 );});
 
@@ -67,7 +68,7 @@ SCRIPT
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
                 $actions->disableEdit();
-                if ($actions->row['state'] == Deposit::STATE_CHARGE_FAIL) {
+                if (in_array($actions->row['state'], [Deposit::STATE_CHARGE_FAIL, Deposit::STATE_TIMEOUT_PAY, Deposit::STATE_EXPIRED])) {
                     $actions->append(new ChargeRetry($actions->getKey()));
                 }
             });

@@ -2,6 +2,7 @@
 
 namespace App\Channels;
 
+use App\SystemMessage;
 use App\User;
 use Illuminate\Notifications\Notification;
 use JPush\Client as JPush;
@@ -18,10 +19,6 @@ class JPushChannel
 
     public function __construct()
     {
-        $app_key = config('jpush.app_key');
-        $master_secret = config('jpush.secret');
-
-        $this->jpush = (new JPush($app_key, $master_secret))->push();
     }
 
     public function send($notifiable, Notification $notification)
@@ -30,30 +27,39 @@ class JPushChannel
         if (!$DatabaseNotification) {
             return;
         }
+        $app_key = config('jpush.app_key');
+        $master_secret = config('jpush.secret');
 //        Log::info($DatabaseNotification->uid);
 //        Log::info($notification->uid);
         Log::info("jpush");
         $user = User::find($DatabaseNotification->notifiable_id);
+
         /* @var $user User */
         try {
-            $response = $this->jpush
+            $data = $DatabaseNotification->data;
+//            $message = SystemMessage::find($data['param']['message_id']);
+            /* @var $message \App\SystemMessage */
+            $jpush = (new JPush($app_key, $master_secret))->push();
+            $response = $jpush
                 ->setPlatform('all')
                 ->addAlias($user->en_id())
-                ->setNotificationAlert('Hi, JPush')
-                ->iosNotification('Hello IOS', array(
+                ->setNotificationAlert($data['title'])
+                ->iosNotification($data['content'], array(
 //                'sound' => 'sound.caf',
                     'badge' => $user->unreadNotifications()->count(),
                     // 'content-available' => true,
                     // 'mutable-content' => true,
                     'extras' => array(
-                        'key' => 'value',
+                        'link' => $data['param']['link'],
+                        'type' => (int)$data['type']
                     ),
                 ))
-                ->androidNotification('Hello Android', array(
-                    'title' => 'hello jpush',
+                ->androidNotification($data['content'], array(
+                    'title' => $data['title'],
                     // 'builder_id' => 2,
                     'extras' => array(
-                        'key' => 'value',
+                        'link' => $data['param']['link'],
+                        'type' => (int)$data['type']
                     ),
                 ))->options(array(
                     // sendno: 表示推送序号，纯粹用来作为 API 调用标识，
@@ -67,7 +73,7 @@ class JPushChannel
                     // 'time_to_live' => 1,
                     // apns_production: 表示APNs是否生产环境，
                     // True 表示推送生产环境，False 表示要推送开发环境；如果不指定则默认为推送生产环境
-                    'apns_production' => false,
+                    'apns_production' => config('app.debug') ? false : true,
                     // big_push_duration: 表示定速推送时长(分钟)，又名缓慢推送，把原本尽可能快的推送速度，降低下来，
                     // 给定的 n 分钟内，均匀地向这次推送的目标用户推送。最大值为1400.未设置则不是定速推送
                     // 这里设置为 1 仅作为示例
