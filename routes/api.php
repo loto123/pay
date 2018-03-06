@@ -187,6 +187,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->post('charge', 'AccountController@charge');
         $api->post('withdraw', 'AccountController@withdraw');
         $api->post('transfer', 'AccountController@transfer');
+        $api->post('charge_query', 'AccountController@charge_query');
         $api->get('records/month', 'AccountController@month_data');
         $api->get('deposit_quotas', 'AccountController@depositQuotaList');
     });
