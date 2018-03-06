@@ -130,11 +130,16 @@
         })
       },
       shareBtn(){
-        MessageBox({
-          title: '提示',
-          message: '请点击微信右上角进行分享',
-          showCancelButton: false
-        });
+        let apps=this.$route.query.curApp
+        if(!apps){
+          MessageBox({
+            title: '提示',
+            message: '请点击微信右上角进行分享',
+            showCancelButton: false
+          });
+        }else{
+          window.android.getShareKey();
+        }
       }
     }
   }
