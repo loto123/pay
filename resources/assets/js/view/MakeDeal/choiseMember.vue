@@ -20,7 +20,7 @@
             </div>
 
              <ul v-if='isShowList'>
-                <li class="flex flex-align-center" v-for="(item,index)  in searchDataList" :key="item.id" @click="index==0?'':makeMark(item.id)">
+                <li class="flex flex-align-center" v-for="(item,index)  in searchDataList" :key="item.id" @click="makeMark(item.id)">
                     <span class="img-wrap flex-2">
                         <img :src="item.avatar" >
                     </span>
