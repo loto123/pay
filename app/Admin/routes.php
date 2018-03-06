@@ -57,6 +57,9 @@ Route::group([
 
     //提现取消
     $router->post('pay/cancel-withdraw/{withdraw}', function (\App\Pay\Model\Withdraw $withdraw) {
+        if (\Encore\Admin\Facades\Admin::user()->cannot(\App\Pay\Model\WithdrawCancel::PERMISSION_NAME)) {
+            return ['status' => false, 'msg' => '没有提现退款权限'];
+        }
         return ['status' => $withdraw->cancel()];
     })->name('withdraw_cancel')->where(['id' => '\d+']);
 

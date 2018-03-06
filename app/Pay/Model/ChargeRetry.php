@@ -9,13 +9,20 @@
 namespace App\Pay\Model;
 
 
+use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\DB;
 
 class ChargeRetry extends PayRetry
 {
+    const PERMISSION_NAME = 'retry_charges';
     protected static $type = 'charge';
+
     function reDo()
     {
+        if (Admin::user()->cannot(self::PERMISSION_NAME)) {
+            return $this->response(false, '没有到账重试权限');
+        }
+
         // 手动到账
         $commit = false;
         DB::beginTransaction();

@@ -10,10 +10,12 @@ namespace App\Pay\Model;
 
 
 use App\Jobs\SubmitWithdrawRequest;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\DB;
 
 class WithdrawRetry extends PayRetry
 {
+    const PERMISSION_NAME = 'retry_withdraws';
     public static $abnormal_states = [Withdraw::STATE_SEND_FAIL, Withdraw::STATE_PROCESS_FAIL];
     protected static $type = 'withdraw';
 
@@ -29,6 +31,9 @@ class WithdrawRetry extends PayRetry
 
     function reDo()
     {
+        if (Admin::user()->cannot(self::PERMISSION_NAME)) {
+            return $this->response(false, '没有提现重试权限');
+        }
         // 手动提现
         $commit = false;
         DB::beginTransaction();
