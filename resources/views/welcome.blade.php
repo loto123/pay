@@ -51,7 +51,7 @@
     @endif
 
     window.saveData=function(param){
-        alert(param);
+        console.log(param);
         localStorage.setItem("token",param);
     }
    
