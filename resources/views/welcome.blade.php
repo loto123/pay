@@ -50,11 +50,11 @@
     user_feedback = "{{ config("user_feedback") }}"
     @endif
 
-    function saveData(param){
+    window.saveData=function(param){
         alert(param);
         localStorage.setItem("token",param);
     }
-
+   
 </script>
 
 <script src="{{mix('js/manifest.js')}}" ></script>
