@@ -51,6 +51,7 @@ class JPushChannel
                     // 'mutable-content' => true,
                     'extras' => array(
                         'link' => $data['param']['link'],
+                        'type' => (int)$data['type']
                     ),
                 ))
                 ->androidNotification($data['content'], array(
@@ -58,6 +59,7 @@ class JPushChannel
                     // 'builder_id' => 2,
                     'extras' => array(
                         'link' => $data['param']['link'],
+                        'type' => (int)$data['type']
                     ),
                 ))->options(array(
                     // sendno: 表示推送序号，纯粹用来作为 API 调用标识，
