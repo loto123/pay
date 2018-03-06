@@ -36,7 +36,7 @@ class JPushChannel
 
         /* @var $user User */
         try {
-            $data = json_decode($DatabaseNotification->data);
+            $data = $DatabaseNotification->data;
 //            $message = SystemMessage::find($data['param']['message_id']);
             /* @var $message \App\SystemMessage */
             $jpush = (new JPush($app_key, $master_secret))->push();
