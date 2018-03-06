@@ -51,12 +51,11 @@
 				wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
-                canLoading: true
+				canLoading: true
 			};
 		},
 		created(){
 			this.init();
-			this.saveData();
 		},
 		mounted(){
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -114,12 +113,7 @@
 			setString(str,len){
 				return utils.SetString(str,len);
 			}
-		},
-		saveData(param){
-			Toast(localStorage.getItem("_token"));
-			localStorage.setItem("_token",param,true);
-			window.android.getUserKey();
-       }
+		}
 	};
 </script>
 
