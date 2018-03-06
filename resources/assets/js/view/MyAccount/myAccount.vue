@@ -1,6 +1,6 @@
 <template>
     <div id="myAccount" class="myAccount-container">
-        <topBack title="我的钱包" style="background:#26a2ff;color:#fff;">
+        <topBack title="我的钱包" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'">
             <div class= "flex flex-reverse flex-align-center header-right">
                 <a href="/#/myAccount/bill" style="color:#fff;">账单明细</a>
             </div>
