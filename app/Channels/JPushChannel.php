@@ -18,10 +18,6 @@ class JPushChannel
 
     public function __construct()
     {
-        $app_key = config('jpush.app_key');
-        $master_secret = config('jpush.secret');
-
-        $this->jpush = (new JPush($app_key, $master_secret))->push();
     }
 
     public function send($notifiable, Notification $notification)
@@ -30,13 +26,16 @@ class JPushChannel
         if (!$DatabaseNotification) {
             return;
         }
+        $app_key = config('jpush.app_key');
+        $master_secret = config('jpush.secret');
 //        Log::info($DatabaseNotification->uid);
 //        Log::info($notification->uid);
         Log::info("jpush");
         $user = User::find($DatabaseNotification->notifiable_id);
         /* @var $user User */
         try {
-            $response = $this->jpush
+            $jpush = (new JPush($app_key, $master_secret))->push();
+            $response = $jpush
                 ->setPlatform('all')
                 ->addAlias($user->en_id())
                 ->setNotificationAlert('Hi, JPush')
