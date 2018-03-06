@@ -4,6 +4,7 @@
       <ul class="flex flex-v ">
          
           <li class="flex flex-v flex-justify-around" v-for="item in messageList">
+
               <div class="notice-content flex flex-align-center flex-justify-around">
                   <div class="user-info flex flex-align-center">
                     <img :src="item.user_avatar" alt="" class="avatar">
@@ -11,6 +12,7 @@
                   </div>
                   <span> {{item.type==0?"申请":"邀请你"}}加入 <i style="color:#26a2ff;">{{setString(item.shop_name,8)}}</i> </span>
               </div>
+
               <div class="notice-controller flex flex-align-center flex-justify-around">
                   <div>{{toDate(item.created_at)}}</div>
                   <div>{{toTime(item.created_at)}}</div>
@@ -21,11 +23,13 @@
               </div>
           </li>
       </ul>
+
       <h3 v-if="!messageList.length">无消息</h3>
-      <div class="all-list-controller flex flex-justify-center " v-if="messageList">
+
+      <div class="all-list-controller flex flex-justify-center " v-if="messageList.length>0">
         <div class="btn-wrap flex flex-v flex-justify-around">
-          <mt-button type="primary" size="large" style="background:#00cc00;">全部同意</mt-button>
-          <mt-button type="primary" size="large" style="background:#ccc;">全部忽略</mt-button>
+          <mt-button type="primary" size="large" style="background:#00cc00;" @click="agreeItem(null)">全部同意</mt-button>
+          <mt-button type="primary" size="large" style="background:#ccc;" @click="antiItem(null)" >全部忽略</mt-button>
         </div>
         
       </div>
@@ -151,6 +155,7 @@ export default {
           Toast(err.data.msg);
       });
     },
+
     // 同意加入公会的请求
     agreeItem(id){
       Loading.getInstance().open();

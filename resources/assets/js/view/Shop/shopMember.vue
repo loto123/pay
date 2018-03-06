@@ -7,7 +7,7 @@
 
       <div id="search-wrap" class="flex flex-align-center">
           <div class="flex flex-align-center flex-justify-around">
-              <input type="text" placeholder="搜索" id="search-input" class="flex-7" @keyup="openSearchSwitch" v-model="searchData">
+              <input type="text" placeholder="搜索" id="search-input" class="flex-7"  v-model="searchData">
               <button type="button" class="flex-3" v-if="searchSwitch" @click="cancerSearch"> 取消 </button>
           </div>
       </div>
@@ -170,7 +170,9 @@ export default {
       isGroupMaster:0
     };
   },
+
   components: { topBack },
+
   methods: {
     // 删除成员
     deleteMember(id){
@@ -188,7 +190,8 @@ export default {
     },
 
     // 每次用户输入都执行搜索
-    openSearchSwitch() {
+    openSearchSwitch(e) {
+      console.log(e);
       this.searchSwitch = true;
 
       if(this.dataList.length >0){
@@ -199,10 +202,13 @@ export default {
         if(this.searchData == this.searchDataList[i].name){
           this.dataList = [];
           this.dataList.push(this.searchDataList[i]);
-        }else {
-          this.dataList = [];
         }
       }
+
+      if(e == null){
+        this.dataList = this.searchDataList;
+      }
+
     },
 
     openControlSwitch(){
@@ -232,7 +238,15 @@ export default {
       this.searchData = null;
       this.init();
     }
+  },
+
+  watch:{
+    "searchData":function(e){
+//      console.log(this.searchData);
+      this.openSearchSwitch(e);
+    }
   }
+
 };
 </script>
 

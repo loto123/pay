@@ -3,7 +3,7 @@
   <!-- 登录模块 -->
   <div id="login">
     <div class="top flex flex-reverse flex-align-center">
-      <a href="javascript:;" @click = "regist">注册</a>
+      <!--<a href="javascript:;" @click = "regist">注册</a>-->
     </div>
     
     <div class="logo-wrap flex flex-v flex-align-center" >
@@ -22,9 +22,14 @@
       <mt-button type="primary" size="large" @click="login">登录</mt-button>
     </div>
     
-    <div class="forget-password flex flex-reverse flex-align-center">
+    <div class="forget-password flex flex-reverse flex-align-center flex-justify-between">
+
       <a href="javascript:;" @click="forgetPassWord">
         忘记密码
+      </a>
+
+      <a href="javascript:;" @click="regist" >
+        注册
       </a>
     </div>
 
@@ -97,7 +102,8 @@
 .forget-password{
   margin-top:2em;
   height: 2em;
-  padding-right:1em;
+  padding-right:2em;
+  padding-left: 2em;
   box-sizing: border-box;
 
   >a{
@@ -107,8 +113,8 @@
 
 .bottom {
   width: 100%;
-  // margin-top: 5em;
-  height: 5em;
+  margin-top: 1em;
+  height: 0.5em;
   
   hr {
     border: none;
