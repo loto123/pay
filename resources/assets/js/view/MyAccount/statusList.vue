@@ -90,6 +90,7 @@
       ref="picker"
       year-format="{value} 年"
       month-format="{value} 月"
+      :startDate="startDate"
       :endDate="endDate"
       @confirm="choiseDate">
     </mt-datetime-picker>
@@ -127,7 +128,7 @@
         //日期部分
         dateModel: null,
         dateChoise: null,    // 选择的日期
-        startDate: new Date("2017,1,1"),
+        startDate: new Date("2017,1"),
         endDate: new Date()
       };
     },
@@ -144,7 +145,7 @@
       // 日期部分：
       filterDate() {
         this.$refs.picker.open();
-        // this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
+        this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
       },
 
       choiseDate(res) {
