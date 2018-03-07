@@ -191,7 +191,6 @@ export default {
 
     // 每次用户输入都执行搜索
     openSearchSwitch(e) {
-      console.log(e);
       this.searchSwitch = true;
 
       if(this.dataList.length >0){

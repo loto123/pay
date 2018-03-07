@@ -114,7 +114,7 @@
 
                 dateModel:null,
                 dateChoise:null,    // 选择的日期
-                startDate:new Date("2017,1,1"),
+                startDate:new Date(2017,1),
                 endDate:new Date()
             };
         },
@@ -281,7 +281,6 @@
                 for(var i = 0; i <this.recordList.length; i++){
                     if(this.recordList[i].isTimePanel == true){
                         _head =getTheDate(this.recordList[i+1].created_at);
-                        console.log(_head);
                         continue;
                     }
 
@@ -414,7 +413,6 @@
                             this.recordList.push(res.data.data.data[i]);
                         }
 
-                        console.log(this.recordList);
                         this.canLoading = true;
                         this.loading = false;
 //                        this.buildTimePanel();
