@@ -130,7 +130,7 @@
         })
       },
       shareBtn(){
-        let apps=this.$route.query.curApp
+        let apps=this.$route.query.curApp;
         if(!apps){
           MessageBox({
             title: '提示',
@@ -138,7 +138,11 @@
             showCancelButton: false
           });
         }else{
-          window.android.getShareKey();
+          if (apps=="ios") {
+            window.webkit.messageHandlers.getShareKey();
+          }else {
+            window.android.getShareKey();
+          }
         }
       }
     }
