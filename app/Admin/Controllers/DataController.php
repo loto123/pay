@@ -479,13 +479,13 @@ class DataController extends Controller
                     }
                 })->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'));
             }
-            if($orderby == 'profit_proxy_amount') {
+            if($orderby == 'proxy_fee_amount') {
                 $listQuery->leftJoin('profit_record', function ($join) use ($begin, $end) {
                     $join->on('users.id', '=', 'profit_record.proxy');
                     if ($begin && $end) {
                         $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
                     }
-                })->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'));
+                })->addSelect(DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'));
             }
             $listQuery->orderBy($orderby, 'DESC');
         }

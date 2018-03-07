@@ -43,7 +43,7 @@
                             <option value="trans_amount" {{isset($orderby) && $orderby == 'trans_amount' ? 'selected="selected"' : ''}}>
                                 交易总额从多到少
                             </option>
-                            <option value="profit_proxy_amount" {{isset($orderby) && $orderby == 'profit_proxy_amount' ? 'selected="selected"' : ''}}>
+                            <option value="proxy_fee_amount" {{isset($orderby) && $orderby == 'proxy_fee_amount' ? 'selected="selected"' : ''}}>
                                 代理业绩从多到少
                             </option>
                             {{--<option value="3" {{isset($orderby) && $orderby == 3 ? 'selected="selected"' : ''}}>已售卡数从多到少</option>--}}
