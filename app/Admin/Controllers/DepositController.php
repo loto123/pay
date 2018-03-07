@@ -68,7 +68,7 @@ SCRIPT
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
                 $actions->disableEdit();
-                if ($actions->row['state'] == Deposit::STATE_CHARGE_FAIL) {
+                if (in_array($actions->row['state'], [Deposit::STATE_CHARGE_FAIL, Deposit::STATE_TIMEOUT_PAY, Deposit::STATE_EXPIRED])) {
                     $actions->append(new ChargeRetry($actions->getKey()));
                 }
             });
