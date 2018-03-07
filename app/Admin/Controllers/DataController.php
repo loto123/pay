@@ -491,7 +491,6 @@ class DataController extends Controller
         }
         $roles = Role::get();
         $list = $listQuery->orderBy('created_at', 'DESC')->paginate(self::PAGE_SIZE);
-        debug($list);
         $data = compact('aid', 'date_time', 'parent', 'operator', 'role', 'roles', 'orderby', 'list',
             'put_amount', 'list', 'user_count', 'user_new', 'promoter_count', 'promoter_new', 'proxy_count', 'proxy_new');
         return Admin::content(function (Content $content) use ($data) {

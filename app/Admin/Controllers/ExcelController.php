@@ -183,24 +183,14 @@ class ExcelController extends Controller
                 if ($begin && $end) {
                     $query->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
                 }
+            },
+            'proxy_profit' => function ($query) use ($begin, $end) {
+                if ($begin && $end) {
+                    $query->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+                }
             }
         ])
             ->withCount(['child_proxy', 'child_user'])
-            ->leftJoin('transfer_record', function ($join) use ($begin, $end) {
-                $join->on('users.id', '=', 'transfer_record.user_id');
-                $join->where('stat', '>', 0)->where('stat', '<>', 3);
-                if ($begin && $end) {
-                    $join->where('transfer_record.created_at', '>=', $begin)->where('transfer_record.created_at', '<=', $end);
-                }
-            })
-            ->leftJoin('profit_record', function ($join) use ($begin, $end) {
-                $join->on('users.id', '=', 'profit_record.proxy');
-                if ($begin && $end) {
-                    $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
-                }
-            })
-            ->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'))
-            ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
             ->groupBy('users.id');
         //用户ID
         $aid = $request->input('aid');
@@ -227,6 +217,23 @@ class ExcelController extends Controller
         //排序方式
         $orderby = $request->input('orderby', 'trans_amount');
         if ($orderby) {
+            if($orderby == 'trans_amount') {
+                $listQuery->leftJoin('transfer_record', function ($join) use ($begin, $end) {
+                    $join->on('users.id', '=', 'transfer_record.user_id');
+                    $join->where('stat', '>', 0)->where('stat', '<>', 3);
+                    if ($begin && $end) {
+                        $join->where('transfer_record.created_at', '>=', $begin)->where('transfer_record.created_at', '<=', $end);
+                    }
+                })->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'));
+            }
+            if($orderby == 'proxy_fee_amount') {
+                $listQuery->leftJoin('profit_record', function ($join) use ($begin, $end) {
+                    $join->on('users.id', '=', 'profit_record.proxy');
+                    if ($begin && $end) {
+                        $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+                    }
+                })->addSelect(DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'));
+            }
             $listQuery->orderBy($orderby, 'DESC');
         }
         $list = $listQuery->orderBy('created_at', 'DESC')->get();
@@ -244,7 +251,9 @@ class ExcelController extends Controller
                 $item->proxy ? $item->proxy->name : '无',
                 $item->operator ? $item->operator->id : '无',
                 $item->operator ? $item->operator->name : '无',
-                $item->trans_amount ?? 0,
+                $item->transfer_record->sum(function ($list) {
+                    return abs($list['amount']);
+                }),
                 $item->transfer_record->count(),
                 $item->transfer_record->where('stat', 2)->sum('amount'),
                 abs($item->transfer_record->where('stat', 1)->sum('amount')),
@@ -252,8 +261,8 @@ class ExcelController extends Controller
                 $item->output_profit->sum('fee_amount'),
                 $item->child_user_count,
                 $item->child_proxy_count,
-                $item->proxy_fee_amount ?? 0,
-                $item->profit_proxy_amount ?? 0
+                $item->proxy_profit->sum('fee_amount'),
+                $item->proxy_profit->sum('proxy_amount')
             ];
         }
         Excel::create('用户统计', function ($excel) use ($cellData) {
