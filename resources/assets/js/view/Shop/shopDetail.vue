@@ -44,7 +44,7 @@
             </i>
         </div>
 
-        <div class="shop-qrcode flex flex-align-center flex-justify-between" @click="invite">
+        <!-- <div class="shop-qrcode flex flex-align-center flex-justify-between" @click="invite">
             <span class="title flex-8">公会二维码</span>
             <span class="qr-code flex-1">
                 <i class="iconfont">
@@ -54,7 +54,7 @@
             <i class="iconfont flex-1">
             &#xe62e;
             </i>
-        </div>
+        </div> -->
     </div>
 
     <div class="member-wrap flex flex-align-center flex-justify-around" @click="goMember">
@@ -254,7 +254,7 @@
   .shop-info {
     margin-top: 0.5em;
     background: #fff;
-    height: 5em;
+    /* height: 5em; */
     width: 100%;
 
     .info-item {

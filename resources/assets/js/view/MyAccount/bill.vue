@@ -364,12 +364,12 @@
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
                         var _timer = _year + "-" + _month;
                         if (this.tabStatus[0] == true) {
-                            var _data1 = {
+                            var _data3 = {
                                 month: _timer,
                                 type:[0,1]
                             }
                             // 获取当月的总额度(分润)
-                            request.getInstance().getData("api/account/records/month", _data1)
+                            request.getInstance().getData("api/account/records/month", _data3)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;   
@@ -379,11 +379,11 @@
                             }).catch();
                         } else {
                             // 获取当月的总额度(分润)
-                            var _data2 = {
+                            var _data4 = {
                                 month: _timer,
                                 type:[2,3,4,5,6,8,9,10]
                             }
-                            request.getInstance().getData("api/account/records/month", _data2)
+                            request.getInstance().getData("api/account/records/month", _data4)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out; 
@@ -405,11 +405,10 @@
                 }
                 for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
-                        if (i >0) {
-                            this.timeInfo = this.headList[i].time;
-                            this.tabIncome = this.headList[i].in;
-                            this.tabDisburse = this.headList[i].out;
-                        }
+                        console.log(this.headList[i])
+                        this.timeInfo = this.headList[i].time;
+                        this.tabIncome = this.headList[i].in;
+                        this.tabDisburse = this.headList[i].out;
                     }
                 }
             },
