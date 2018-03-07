@@ -37,7 +37,7 @@
           <li class="flex flex-v flex-align-center" v-for="(item,index) in dataList">
               <img :src="item.avatar" alt="" class="avatar">
               <h3>{{SetString(item.name,6)}}  </h3>
-              <span class="notice flex flex-align-center flex-justify-center" v-if="controlSwitch &&  index!=0" @click="deleteMember(item.id)">
+              <span class="notice flex flex-align-center flex-justify-center" v-if="controlSwitch" @click="deleteMember(item.id)">
                 - 
               </span>
           </li>
@@ -202,23 +202,38 @@ export default {
         if(this.searchData == this.searchDataList[i].name){
           this.dataList = [];
           this.dataList.push(this.searchDataList[i]);
+          return;
         }
       }
 
-      if(e == null){
+      this.dataList = [];
+
+      if(e == null || e == ""){
         this.dataList = this.searchDataList;
       }
 
     },
 
     openControlSwitch(){
-      this.controlSwitch = true;
+
+      if(this.controlSwitch == true){
+        this.controlSwitch = false;
+      }else {
+        this.controlSwitch = true;
+      }
+
     },
 
     init(){
       Loading.getInstance().open();
       this.shopId = this.$route.query.shopId;
       this.isGroupMaster = this.$route.query.isGroupMaster;
+
+      // setTimeout(()=>{
+        this.searchData = null;
+        this.searchSwitch = false;
+      // },500)
+      
 
       request.getInstance().getData("api/shop/members/"+this.shopId).then(res=>{
         this.dataList = res.data.data.members;

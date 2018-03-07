@@ -169,9 +169,7 @@ export default {
       request.getInstance().postData("api/shop/agree",_data).then(res=>{
         Loading.getInstance().close();
         Toast("操作成功");
-        setTimeout(()=>{
-          this.init();
-        },1500);
+        this.init();
       }).catch(err=>{
 
       });
@@ -190,9 +188,7 @@ export default {
       request.getInstance().postData("api/shop/ignore",_data).then(res=>{
         Loading.getInstance().close();
         Toast("操作成功");
-        setTimeout(()=>{
-          this.init();
-        },1500);
+        this.init();
       }).catch(err=>{
 
       });

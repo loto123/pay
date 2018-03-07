@@ -145,7 +145,7 @@
       // 日期部分：
       filterDate() {
         this.$refs.picker.open();
-        this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
+        // this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
       },
 
       choiseDate(res) {
