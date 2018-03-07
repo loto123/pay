@@ -130,6 +130,7 @@
 	import Loading from "../../utils/loading"
 	import topBack from "../../components/topBack"
 	import { Toast } from "mint-ui"
+	import wx from 'weixin-js-sdk'
 
 	export default {
 		components: { topBack },
