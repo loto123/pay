@@ -424,6 +424,11 @@ class DataController extends Controller
                 if ($begin && $end) {
                     $query->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
                 }
+            },
+            'proxy_profit' => function ($query) use ($begin, $end) {
+                if ($begin && $end) {
+                    $query->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+                }
             }
         ])
 //            ->withCount(['child_proxy','child_user'])
@@ -439,21 +444,6 @@ class DataController extends Controller
                     });
                 }
             ])
-            ->leftJoin('transfer_record', function ($join) use ($begin, $end) {
-                $join->on('users.id', '=', 'transfer_record.user_id');
-                $join->where('stat', '>', 0)->where('stat', '<>', 3);
-                if ($begin && $end) {
-                    $join->where('transfer_record.created_at', '>=', $begin)->where('transfer_record.created_at', '<=', $end);
-                }
-            })
-            ->leftJoin('profit_record', function ($join) use ($begin, $end) {
-                $join->on('users.id', '=', 'profit_record.proxy');
-                if ($begin && $end) {
-                    $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
-                }
-            })
-            ->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'))
-            ->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'))
             ->groupBy('users.id');
         //用户ID
         $aid = $request->input('aid');
@@ -480,10 +470,28 @@ class DataController extends Controller
         //排序方式
         $orderby = $request->input('orderby', 'trans_amount');
         if ($orderby) {
+            if($orderby == 'trans_amount') {
+                $listQuery->leftJoin('transfer_record', function ($join) use ($begin, $end) {
+                    $join->on('users.id', '=', 'transfer_record.user_id');
+                    $join->where('stat', '>', 0)->where('stat', '<>', 3);
+                    if ($begin && $end) {
+                        $join->where('transfer_record.created_at', '>=', $begin)->where('transfer_record.created_at', '<=', $end);
+                    }
+                })->addSelect(DB::raw('sum(abs(transfer_record.amount)) as trans_amount'));
+            }
+            if($orderby == 'profit_proxy_amount') {
+                $listQuery->leftJoin('profit_record', function ($join) use ($begin, $end) {
+                    $join->on('users.id', '=', 'profit_record.proxy');
+                    if ($begin && $end) {
+                        $join->where('profit_record.created_at', '>=', $begin)->where('profit_record.created_at', '<=', $end);
+                    }
+                })->addSelect(DB::raw('sum(profit_record.proxy_amount) as profit_proxy_amount'), DB::raw('sum(profit_record.fee_amount) as proxy_fee_amount'));
+            }
             $listQuery->orderBy($orderby, 'DESC');
         }
         $roles = Role::get();
         $list = $listQuery->orderBy('created_at', 'DESC')->paginate(self::PAGE_SIZE);
+        debug($list);
         $data = compact('aid', 'date_time', 'parent', 'operator', 'role', 'roles', 'orderby', 'list',
             'put_amount', 'list', 'user_count', 'user_new', 'promoter_count', 'promoter_new', 'proxy_count', 'proxy_new');
         return Admin::content(function (Content $content) use ($data) {
