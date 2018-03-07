@@ -43,7 +43,7 @@
                             <option value="trans_amount" {{isset($orderby) && $orderby == 'trans_amount' ? 'selected="selected"' : ''}}>
                                 交易总额从多到少
                             </option>
-                            <option value="profit_proxy_amount" {{isset($orderby) && $orderby == 'profit_proxy_amount' ? 'selected="selected"' : ''}}>
+                            <option value="proxy_fee_amount" {{isset($orderby) && $orderby == 'proxy_fee_amount' ? 'selected="selected"' : ''}}>
                                 代理业绩从多到少
                             </option>
                             {{--<option value="3" {{isset($orderby) && $orderby == 3 ? 'selected="selected"' : ''}}>已售卡数从多到少</option>--}}
@@ -113,7 +113,8 @@
                                     </div>
                                     <div class="pull-left ml7">
                                         <p>{{$item->name}}</p>
-                                        <span>ID:<span class="text-yellow">{{$item->mobile}}{{$item->status ? '（已封号）' : ''}}</span></span>
+                                        <span>ID:<span
+                                                    class="text-yellow">{{$item->mobile}}{{$item->status ? '（已封号）' : ''}}</span></span>
                                     </div>
                                 </div>
                             </td>
@@ -142,8 +143,7 @@
                                 <td>
                                     <div class="user-panel clearfix">
                                         <div class="pull-left">
-                                            <img src="{{$item->operator->avatar}}" width="40" height="40"
-                                                 class="img-circle">
+                                            <img src="{{$item->operator->avatar}}" width="40" height="40" class="img-circle">
                                         </div>
                                         <div class="pull-left ml7">
                                             <p>{{$item->operator->name}}</p>
@@ -154,7 +154,14 @@
                             @else
                                 <td>无</td>
                             @endif
-                            <td>{{$item->trans_amount or 0}}</td>
+                            <td>
+                                {{
+                                    $item->transfer_record->sum(function ($list) {
+                                        return abs($list['amount']);
+                                    })
+                                }}
+                            </td>
+                            {{--<td>{{$item->trans_amount or 0}}</td>--}}
                             <td>{{$item->transfer_record->count()}}</td>
                             <td>{{$item->transfer_record->where('stat',2)->sum('amount')}}</td>
                             <td>{{abs($item->transfer_record->where('stat',1)->sum('amount'))}}</td>
@@ -162,8 +169,10 @@
                             <td>{{$item->output_profit->sum('fee_amount')}}</td>
                             <td>{{$item->child_user_count}}</td>
                             <td>{{$item->child_proxy_count}}</td>
-                            <td>{{$item->proxy_fee_amount or 0}}</td>
-                            <td>{{$item->profit_proxy_amount or 0}}</td>
+                            <td>{{$item->proxy_profit->sum('fee_amount')}}</td>
+                            <td>{{$item->proxy_profit->sum('proxy_amount')}}</td>
+                            {{--<td>{{$item->proxy_fee_amount or 0}}</td>--}}
+                            {{--<td>{{$item->profit_proxy_amount or 0}}</td>--}}
                             {{--<td>持有VIP卡数</td>--}}
                             {{--<td>已售VIP卡数</td>--}}
                         </tr>
