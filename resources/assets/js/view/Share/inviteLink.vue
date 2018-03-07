@@ -139,7 +139,7 @@
           });
         }else{
           if (apps=="ios") {
-            window.webkit.messageHandlers.getShareKey();
+            window.webkit.messageHandlers.getShareKey.postMessage();
           }else {
             window.android.getShareKey();
           }
