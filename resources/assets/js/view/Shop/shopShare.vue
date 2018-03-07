@@ -165,11 +165,11 @@
 				return Promise.all([request.getInstance().getData("api/shop/qrcode/" + this.shopId), request.getInstance().getData("api/shop/summary/" + this.shopId), request.getInstance().getData("api/proxy/share", data)])
 					.then(res => {
 						this.QRCode = res[0].data.data.url;
+						this.shareFriend_url=res[0].data.data.share_url;
 						this.logo = res[1].data.data.logo;
 						this.shopName = res[1].data.data.name;
 						this.membersCount = res[1].data.data.membersCount;
-						this.shareFriend_url=res[1].data.data.share_url;
-
+						
 						var Data = res[2].data.data;
 						var content = JSON.parse(Data.config);
 						wx.config(content);
