@@ -196,16 +196,23 @@ export default {
       if(this.dataList.length >0){
         this.searchDataList = [].concat(this.dataList);
       }
-
+      this.dataList = [];
+      
       for(var i =0; i<this.searchDataList.length; i++){
-        if(this.searchData == this.searchDataList[i].name){
-          this.dataList = [];
+        // if(this.searchData == this.searchDataList[i].name){
+        //   this.dataList = [];
+        //   this.dataList.push(this.searchDataList[i]);
+        //   return;
+        // }
+        console.log(this.searchDataList[i].name.indexOf(this.searchData));
+
+        if( this.searchDataList[i].name.indexOf(this.searchData) != -1){
+          // this.dataList = [];
           this.dataList.push(this.searchDataList[i]);
-          return;
+          // return;
         }
       }
 
-      this.dataList = [];
 
       if(e == null || e == ""){
         this.dataList = this.searchDataList;
