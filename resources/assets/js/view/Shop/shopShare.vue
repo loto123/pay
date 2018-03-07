@@ -154,7 +154,7 @@
 			});
 		},
 		methods: {
-			initContent() {
+			init() {
 				this.shopId = this.$route.query.id;
 				var data = {
 					share_url: window.location.href.split('#')[0],
