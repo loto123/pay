@@ -110,18 +110,18 @@ SCRIPT
                 $actions->disableDelete();
                 $actions->disableEdit();
 
+                $show_exceptions = in_array($actions->row['state'], WithdrawRetry::$abnormal_states) || $actions->row['state'] == Withdraw::STATE_CANCELED;
+                if ($show_exceptions) {
+                    $actions->append("<a style=\"margin-right:5em;\" class='btn btn-sm btn-default fa exception-detail' data-id='{$actions->getKey()}'>异常记录</a>");
+                }
+
                 if (in_array($actions->row['state'], WithdrawRetry::$abnormal_states)) {
                     $actions->append(new WithdrawRetry($actions->getKey()));
                     $actions->append('&nbsp;&nbsp;');
                     $actions->append(new WithdrawCancel($actions->getKey()));
-                    $show_exceptions = true;
-                } else {
-                    $show_exceptions = $actions->row['state'] == Withdraw::STATE_CANCELED;
                 }
 
-                if ($show_exceptions) {
-                    $actions->append("&nbsp;&nbsp;<a class='btn btn-xs btn-warning fa exception-detail' data-id='{$actions->getKey()}'>异常记录</a>");
-                }
+
             });
             $grid->tools(function ($tools) {
                 $tools->batch(function ($batch) {
