@@ -184,10 +184,10 @@
 			},
 			shareContent() {
 				let url = window.location.href.split('#')[0];
-				let links = url + this.shareFriend_url;
+				let links = this.shareFriend_url;
 				let title = '聚宝朋';
 				let desc = '邀请你加入公会:'+this.shopName;
-				let imgUrl = url + this.logo;
+				let imgUrl = this.logo;
 				wx.ready(() => {
 					//分享给朋友
 					wx.onMenuShareAppMessage({
