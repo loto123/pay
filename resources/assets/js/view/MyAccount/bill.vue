@@ -161,7 +161,7 @@
 
                 dateModel: null,
                 dateChoise: null,    // 选择的日期
-                startDate: new Date("2017,1,1"),
+                startDate: new Date(2017,1),
                 endDate: new Date(),
                 items: [
                     { type: 0, title: '购买', isBuy:true},

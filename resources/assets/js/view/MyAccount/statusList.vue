@@ -128,7 +128,7 @@
         //日期部分
         dateModel: null,
         dateChoise: null,    // 选择的日期
-        startDate: new Date("2017,1,1"),
+        startDate: new Date(2017,1,1),
         endDate: new Date()
       };
     },
