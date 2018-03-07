@@ -90,7 +90,6 @@
       ref="picker"
       year-format="{value} 年"
       month-format="{value} 月"
-      :startDate="startDate"
       :endDate="endDate"
       @confirm="choiseDate">
     </mt-datetime-picker>
