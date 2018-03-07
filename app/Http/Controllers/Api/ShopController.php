@@ -1026,6 +1026,7 @@ class ShopController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="url", type="string", example="http://url",description="二维码链接"),
+     *                  @SWG\Property(property="share_url", type="string", example="http://url",description="分享链接"),
      *              )
      *          )
      *      ),
@@ -1059,7 +1060,7 @@ class ShopController extends BaseController
         if (!Storage::disk('public')->exists($path)) {
             Storage::disk('public')->put($path, QrCode::format('png')->size($size)->margin(1)->generate($url));
         }
-        return $this->json(['url' => url('storage/'.$path)]);
+        return $this->json(['url' => url('storage/'.$path), 'share_url' => $url]);
     }
 
     /**
