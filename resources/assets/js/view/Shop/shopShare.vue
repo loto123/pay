@@ -148,21 +148,22 @@
 			}
 		},
 		created() {
-			this.initQrcode();
-			this.initShare().then(res => {
+			this.init();
+			this.init2().then(res => {
 				if (res) {
 					this.shareContent()
 				}
 			});
 		},
 		methods: {
-			initQrcode() {
+			init() {
 				this.shopId = this.$route.query.id;
 				Loading.getInstance().open();
-				request.getInstance().getData("api/shop/qrcode/" + this.shopId)
+				request.getInstance().getData("api/shop/summary/" + this.shopId)
 					.then(res => {
-						this.QRCode = res.data.data.url;
-						this.shareFriend_url=res.data.data.share_url;
+						this.logo = res.data.data.logo;
+						this.shopName = res.data.data.name;
+						this.membersCount = res.data.data.membersCount;
 						Loading.getInstance().close();
 					}).catch(err => {
 						Loading.getInstance().close();
@@ -170,17 +171,16 @@
 						console.error(err);
 					});
 			},
-			initShare() {
+			init2() {
 				var data = {
 					share_url: window.location.href.split('#')[0],
 					list: ['onMenuShareTimeline', 'onMenuShareAppMessage']
 				}
 				Loading.getInstance().open();
-				return Promise.all([request.getInstance().getData("api/shop/summary/" + this.shopId), request.getInstance().getData("api/proxy/share", data)])
+				return Promise.all([request.getInstance().getData("api/shop/qrcode/" + this.shopId), request.getInstance().getData("api/proxy/share", data)])
 					.then(res => {
-						this.logo = res[0].data.data.logo;
-						this.shopName = res[0].data.data.name;
-						this.membersCount = res[0].data.data.membersCount;
+						this.QRCode = res[0].data.data.url;
+						this.shareFriend_url=res[0].data.data.share_url;
 						
 						var Data = res[1].data.data;
 						var content = JSON.parse(Data.config);
