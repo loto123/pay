@@ -461,7 +461,11 @@ class ShopController extends BaseController
         $member_size = $request->input('member_size', 5);
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
-            return $this->json([], trans("api.error_shop_status"), 0);
+            if ($shop && $shop->status == Shop::STATUS_FREEZE) {
+                return $this->json([], trans("api.shop_freeze"), 0);
+            } else {
+                return $this->json([], trans("api.error_shop_status"), 0);
+            }
         }
         /* @var $shop Shop */
 
