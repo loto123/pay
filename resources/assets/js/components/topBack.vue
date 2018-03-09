@@ -1,6 +1,6 @@
 <template>
     <div id="top-component" class="flex flex-align-center flex-justify-between">
-        <div v-on:click="goBack" class="flex-2" v-if="ShowLocalBack">返回</div>
+        <div v-on:click="showLocalBack?goBack:null" class="flex-2">{{showLocalBack?"返回":""}}</div>
         <h3 class="flex-3">{{title}}</h3>
         <div class="flex-2">
           <slot></slot>
@@ -34,12 +34,13 @@ export default {
   props: ["title", "backUrl", "userAction","showBack"],
   data(){
     return{
-      ShowLocalBack:true
+      showLocalBack:true
     }
   },
   mounted(){
+    console.log(this.$props.showBack);
     if(!this.$props.showBack){
-      this.ShowLocalBack==this.$props.showBack;
+      this.showLocalBack = this.$props.showBack;
     }
   },
   methods: {
