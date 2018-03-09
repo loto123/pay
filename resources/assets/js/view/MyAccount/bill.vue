@@ -75,7 +75,7 @@
                             <div v-if="tabStatus[1]">
                                 <div class="bill-money"v-bind:class="[item.type == 2 || item.type == 5||item.type == 10?'green-color':'']">{{item.type == 2||item.type == 5||item.type == 10?'+'+item.amount:'-'+item.amount}}<i class="diamond">&#xe6f9;</i></div>
                             </div>
-                            
+
                             <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>
                         </div>
                     </a>
@@ -161,7 +161,7 @@
 
                 dateModel: null,
                 dateChoise: null,    // 选择的日期
-                startDate: new Date("2017,1,1"),
+                startDate: new Date(2017,1),
                 endDate: new Date(),
                 items: [
                     { type: 0, title: '购买', isBuy:true},
@@ -364,29 +364,31 @@
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
                         var _timer = _year + "-" + _month;
                         if (this.tabStatus[0] == true) {
-                            var _data1 = {
+                            var _data3 = {
                                 month: _timer,
                                 type:[0,1]
                             }
                             // 获取当月的总额度(分润)
-                            request.getInstance().getData("api/account/records/month", _data1)
+                            request.getInstance().getData("api/account/records/month", _data3)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
-                                this.recordList[m].out = res.data.data.out;   
+                                this.recordList[m].out = res.data.data.out;
+
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
+
                             }).catch();
                         } else {
                             // 获取当月的总额度(分润)
-                            var _data2 = {
+                            var _data4 = {
                                 month: _timer,
                                 type:[2,3,4,5,6,8,9,10]
                             }
-                            request.getInstance().getData("api/account/records/month", _data2)
+                            request.getInstance().getData("api/account/records/month", _data4)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
-                                this.recordList[m].out = res.data.data.out; 
+                                this.recordList[m].out = res.data.data.out;
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
@@ -405,11 +407,13 @@
                 }
                 for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
-                        if (i >0) {
-                            this.timeInfo = this.headList[i].time;
-                            this.tabIncome = this.headList[i].in;
-                            this.tabDisburse = this.headList[i].out;
-                        }
+
+                        console.log(this.headList[i]);
+                        console.dir(this.$refs.timeTab[i]);
+
+                        this.timeInfo = this.headList[i].time;
+                        this.tabIncome = this.headList[i].in;
+                        this.tabDisburse = this.headList[i].out;
                     }
                 }
             },

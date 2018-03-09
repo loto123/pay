@@ -590,7 +590,7 @@ class UserController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="name", type="string", example="张三",description="昵称"),
-     *                  @SWG\Property(property="identity_name", type="string", example="张三",description="真实姓名"),
+     *                  @SWG\Property(property="identify_name", type="string", example="张三",description="真实姓名"),
      *                  @SWG\Property(property="mobile", type="string", example="13333333333",description="手机号"),
      *                  @SWG\Property(property="thumb", type="string", example="url",description="头像"),
      *                  @SWG\Property(property="has_pay_password", type="integer", example="1",description="是否已设置支付密码 1：已设置，0：未设置"),

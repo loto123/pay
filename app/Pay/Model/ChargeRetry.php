@@ -12,6 +12,7 @@ namespace App\Pay\Model;
 use App\Pet;
 use App\PetRecord;
 use App\User;
+use App\UserFund;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\DB;
 
@@ -71,6 +72,15 @@ class ChargeRetry extends PayRetry
                 break;
             }
 
+            //添加用户账单明细
+            $record = new UserFund();
+            $record->user_id = $user->getKey();
+            $record->type = UserFund::TYPE_CHARGE;
+            $record->mode = UserFund::MODE_IN;
+            $record->amount = $deposit->amount;
+            $record->status = UserFund::STATUS_SUCCESS;
+            $record->no = $deposit->getKey();
+            $record->save();
 
             $commit = true;
             $msg = '到账成功';
