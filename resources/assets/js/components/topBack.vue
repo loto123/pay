@@ -1,6 +1,6 @@
 <template>
     <div id="top-component" class="flex flex-align-center flex-justify-between">
-        <div v-on:click="goBack" class="flex-2">返回</div>
+        <div v-on:click="goBack" class="flex-2" v-if="ShowLocalBack">返回</div>
         <h3 class="flex-3">{{title}}</h3>
         <div class="flex-2">
           <slot></slot>
@@ -31,10 +31,17 @@
 <script>
 export default {
   name: "topBack",
-  props: ["title", "backUrl", "userAction"],
-  // mounted(){
- 
-  // },
+  props: ["title", "backUrl", "userAction","showBack"],
+  data(){
+    return{
+      ShowLocalBack:true
+    }
+  },
+  mounted(){
+    if(!this.$props.showBack){
+      this.ShowLocalBack==this.$props.showBack;
+    }
+  },
   methods: {
     goBack() {
       if (!this.$props.userAction) {

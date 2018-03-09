@@ -1,6 +1,6 @@
 <template>
 	<div id="dealList">
-		<topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="VAR">
+		<topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'" :showBack="null">
 		</topBack>
 		<div class="tab-menu flex flex-align-center flex-justify-center">
 			<div class="flex flex-align-center flex-justify-center active">在售宠物</div>
@@ -51,13 +51,11 @@
 				wrapperHeight: null,
         loading: false,
         allLoaded: false,
-        canLoading: true,
-        isShow:false
+        canLoading: true
 			};
 		},
 		created(){
       this.init();
-      this.init2();
 		},
 		mounted(){
             this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -65,7 +63,12 @@
 		components: { topBack },
 		methods: {
 			goMyPet(){
-				this.$router.push('/myPet');
+        let apps=this.$route.query.curApp;
+        if(!apps){
+          this.$router.push('/myPet');
+        }else{
+          this.$router.push('/myPet?curApp='+apps);
+        }
 			},
 			init(){
 				var _data = {

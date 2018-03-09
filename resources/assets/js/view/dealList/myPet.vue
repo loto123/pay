@@ -1,6 +1,6 @@
 <template>
   <div id="dealList">
-    <topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'" v-if="isShow">
+    <topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'" :showBack="null">
     </topBack>
     <div class="tab-menu flex flex-align-center flex-justify-center">
       <div class="flex flex-align-center flex-justify-center" @click="goSalePet">在售宠物</div>
@@ -57,7 +57,6 @@
     },
     created() {
       this.init();
-      this.init2();
     },
     mounted() {
       this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -65,7 +64,12 @@
     components: { topBack },
     methods: {
       goSalePet() {
-        this.$router.push('/salePet');
+        let apps=this.$route.query.curApp;
+        if(!apps){
+          this.$router.push('/salePet');
+        }else{
+          this.$router.push('/salePet?curApp='+apps);
+        }
       },
       init() {
         var _data = {
@@ -114,18 +118,6 @@
       },
       setString(str, len) {
         return utils.SetString(str, len);
-      },
-      init2(){
-        let apps=this.$route.query.curApp;
-        if(!apps){
-            this.isShow=true;
-        }else{
-          if (apps=="ios") {
-            this.isShow=false;
-          }else {
-            this.isShow=false;
-          }
-        }
       }
     }
   };
