@@ -699,6 +699,7 @@ class PetTradeController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  description="宠物列表",
+     *                  @SWG\Property(property="count", type="integer", example="10", description="总数"),
      *                  @SWG\Property(
      *                      property="1",
      *                      type="array",
@@ -778,6 +779,7 @@ class PetTradeController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  description="宠物列表",
+     *                  @SWG\Property(property="count", type="integer", example="10", description="总数"),
      *                  @SWG\Property(
      *                      property="1",
      *                      type="array",
@@ -785,6 +787,7 @@ class PetTradeController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="pet_id", type="integer", example="1", description="宠物编号"),
      *                          @SWG\Property(property="holder_name", type="string", example="张三", description="持有人"),
+     *                          @SWG\Property(property="on_sale", type="integer", example="1", description="1：在售，0：非在售"),
      *                          @SWG\Property(property="price", type="string", example="100", description="出售价格"),
      *                          @SWG\Property(property="time", type="string", example="100", description="时间"),
      *                          @SWG\Property(property="pet_image", type="string", example="url", description="宠物图片"),
@@ -799,32 +802,21 @@ class PetTradeController extends BaseController
      */
     public function myPets(Request $request)
     {
+        //用户的所有宠物
         $query = Pet::where('user_id',$this->user()->id);
-        if($request->offset)
-        {
+        if($request->offset) {
             $query = $query->where('updated_at', '<', date('Y-m-d H:i:s',$request->offset));
         }
+        $query = $query->orderBy('updated_at','DESC')->limit($request->input('limit', 20));
+        $pets = $query->select('id','image','updated_at')->get();
+        $pets_ids = $query->pluck('id');
 
-        $pets = $query->limit($request->input('limit', 20))->get();
-        //用户购买宠物记录
-        $user_bill = $this->user()->whereHas('bill_match', function($query) use($pets) {
-            $query->whereHas('sellBill', function($query) use($pets) {
-                $query->whereIn('pet_id', $pets->pluck('id'));
-            });
-        })->first();
-
-        //买来的宠物
-        $pay_pets = [];
-        if(isset($user_bill->bill_match) && count($user_bill->bill_match)>0) {
-            foreach ($user_bill->bill_match as $item) {
-                if(isset($pay_pets[$item->sellBill->pet_id])
-                    && $pay_pets[$item->sellBill->pet_id]['created_at'] > (string)$item->created_at) {
-                    continue;
-                }
-                $pay_pets[$item->sellBill->pet_id] = [
-                    'price' => $item->sellBill->price,
-                    'created_at' => (string)$item->created_at,
-                ];
+        //用户的在售宠物
+        $sell_pets = [];
+        $sell_bill_pets = SellBill::where('place_by',$this->user()->id)->where('deal_closed',0)->whereIn('pet_id',$pets_ids)->get();
+        if($sell_bill_pets) {
+            foreach ($sell_bill_pets as $item) {
+                $sell_pets[$item->pet_id] = $item;
             }
         }
 
@@ -837,8 +829,9 @@ class PetTradeController extends BaseController
                     'pet_id' => $_pet->id,
                     'holder_name'=>$this->user()->name,
                     'pet_image' => $_pet->image,
-                    'price' => isset($pay_pets[$_pet->id]) ? $pay_pets[$_pet->id]['price'] : 0,
-                    'time' => strtotime((string)$_pet->updated_at),
+                    'on_sale' => isset($sell_pets[$_pet->id]) ? '1' : '0', //是否在售
+                    'price' => isset($sell_pets[$_pet->id]) ? $sell_pets[$_pet->id]['price'] : '',
+                    'time' => strtotime($_pet->updated_at->toDateTimeString()),
                 ];
             }
         }
