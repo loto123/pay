@@ -27,7 +27,6 @@
 }
 </style>
 
-
 <script>
 export default {
   name: "topBack",
@@ -39,7 +38,7 @@ export default {
   },
   mounted(){
     if(!this.$props.showBack){
-      this.ShowLocalBack==this.$props.showBack;
+      this.ShowLocalBack=this.$props.showBack;
     }
   },
   methods: {
