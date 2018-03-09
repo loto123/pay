@@ -75,7 +75,7 @@
                             <div v-if="tabStatus[1]">
                                 <div class="bill-money"v-bind:class="[item.type == 2 || item.type == 5||item.type == 10?'green-color':'']">{{item.type == 2||item.type == 5||item.type == 10?'+'+item.amount:'-'+item.amount}}<i class="diamond">&#xe6f9;</i></div>
                             </div>
-                            
+
                             <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>
                         </div>
                     </a>
@@ -372,10 +372,12 @@
                             request.getInstance().getData("api/account/records/month", _data3)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
-                                this.recordList[m].out = res.data.data.out;   
+                                this.recordList[m].out = res.data.data.out;
+
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
+
                             }).catch();
                         } else {
                             // 获取当月的总额度(分润)
@@ -386,7 +388,7 @@
                             request.getInstance().getData("api/account/records/month", _data4)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
-                                this.recordList[m].out = res.data.data.out; 
+                                this.recordList[m].out = res.data.data.out;
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
@@ -405,7 +407,10 @@
                 }
                 for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
-                        console.log(this.headList[i])
+
+                        console.log(this.headList[i]);
+                        console.dir(this.$refs.timeTab[i]);
+
                         this.timeInfo = this.headList[i].time;
                         this.tabIncome = this.headList[i].in;
                         this.tabDisburse = this.headList[i].out;
