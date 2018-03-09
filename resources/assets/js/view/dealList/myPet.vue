@@ -22,9 +22,10 @@
             <div class="pet-number">宠物编号:{{item.pet_id}}</div>
             <div class="pet-owner">持有人:{{setString(item.holder_name,5)}}</div>
           </div>
-          <div class="flex-4 price">
-            售价:
-            <span>{{item.price=="面议"?"面议":(item.price+"元")}}</span>
+          <div class="flex-4 price" v-if="item.on_sale==1">
+            售价:<span>{{item.price+"元"}}</span>
+          </div>
+          <div class="flex-4 price" v-else>
           </div>
         </li>
       </ul>
