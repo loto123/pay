@@ -38,7 +38,6 @@ export default {
     }
   },
   mounted(){
-    console.log(this.$props.showBack);
     if(!this.$props.showBack){
       this.showLocalBack = this.$props.showBack;
     }

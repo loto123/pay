@@ -1,6 +1,6 @@
 <template>
   <div id="dealList">
-    <topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'" :showBack="null">
+    <topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'" :showBack="isCanBack">
     </topBack>
     <div class="tab-menu flex flex-align-center flex-justify-center">
       <div class="flex flex-align-center flex-justify-center" @click="goSalePet">在售宠物</div>
@@ -52,7 +52,8 @@
         wrapperHeight: null,
         loading: false,
         allLoaded: false,
-        canLoading: true
+        canLoading: true,
+        isCanBack: true
       };
     },
     created() {
@@ -72,6 +73,12 @@
         }
       },
       init() {
+        let apps = this.$route.query.curApp;
+        if (!apps) {
+          this.isCanBack = true;
+        } else {
+          this.isCanBack = false;
+        }
         var _data = {
           limit: 10,
           offset: 0
