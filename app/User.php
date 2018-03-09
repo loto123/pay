@@ -403,7 +403,7 @@ class User extends Authenticatable
      *  用户可售宠物
      */
     public function pets_for_sale() {
-        return $this->hasMany(Pet::class, "user_id", "id")->whereIn("status", [Pet::STATUS_HATCHED, Pet::STATUS_UNHATCHED]);
+        return $this->hasMany(Pet::class, "user_id", "id")->whereIn("status", [Pet::STATUS_HATCHED, Pet::STATUS_UNHATCHED])->orderBy("status", "DESC")->orderBy("id", "DESC");
     }
 
     /**
