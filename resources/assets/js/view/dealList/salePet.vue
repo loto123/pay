@@ -52,7 +52,7 @@
         loading: false,
         allLoaded: false,
         canLoading: true,
-        isCanBack: true
+        isCanBack: false
       };
     },
     created() {
@@ -75,9 +75,9 @@
       init() {
         let apps = this.$route.query.curApp;
         if (!apps) {
-          this.isCanBack = true;
-        } else {
           this.isCanBack = false;
+        } else {
+          this.isCanBack = true;
         }
 
         var _data = {
