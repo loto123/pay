@@ -1,6 +1,6 @@
 <template>
 	<div id="dealList">
-		<topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="'\/index\/'" v-if="isShow">
+		<topBack title="交易行" style="background:#26a2ff;color:#fff;" :backUrl="VAR">
 		</topBack>
 		<div class="tab-menu flex flex-align-center flex-justify-center">
 			<div class="flex flex-align-center flex-justify-center active">在售宠物</div>
@@ -114,18 +114,6 @@
 			},
 			setString(str,len){
 				return utils.SetString(str,len);
-      },
-      init2(){
-        let apps=this.$route.query.curApp;
-        if(!apps){
-            this.isShow=true;
-        }else{
-          if (apps=="ios") {
-            this.isShow=false;
-          }else {
-            this.isShow=false;
-          }
-        }
       }
 		}
 	};
