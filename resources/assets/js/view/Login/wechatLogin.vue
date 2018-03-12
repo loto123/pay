@@ -35,7 +35,6 @@
         };
 
         if (this.bindMobile) {
-          console.log(this.bindMobile);
           _data.user_ticket = this.bindMobile;
         }
 
