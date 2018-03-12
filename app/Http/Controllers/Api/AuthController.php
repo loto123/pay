@@ -132,6 +132,7 @@ class AuthController extends BaseController {
      *                  @SWG\Property(property="token", type="string", example="abcd",description="jwt token"),
      *                  @SWG\Property(property="wechat", type="boolean", example=0,description="是否绑定微信"),
      *                  @SWG\Property(property="id", type="string", example="1234",description="用户id"),
+     *                  @SWG\Property(property="ticket", type="string", example="abcd",description="用户ticket"),
      *              )
      *          )
      *      ),
@@ -161,8 +162,15 @@ class AuthController extends BaseController {
             return $this->json([], trans('api.user_block'), 0);
         }
         $wechat = $user->wechat_user ? 1 : 0;
+        if (!$wechat) {
+            $ticket = md5(sprintf("%d_%s_%s", $user->id, time(), str_random(10)));
+            Cache::store('redis')->put("USER_TICKET_".$ticket, $user->id, 60*60);
+        } else {
+            $ticket = "";
+        }
         $id = $user->en_id();
-        return $this->json(compact('token', 'wechat', 'id'));
+
+        return $this->json(compact('token', 'wechat', 'id', 'ticket'));
     }
 
     /**
@@ -246,7 +254,12 @@ class AuthController extends BaseController {
             return $this->json([], trans('api.user_block'), 0);
         }
         if ($request->oauth_user) {
-            $oauth_user = OauthUser::findByEnId($request->oauth_user);
+            $oauth_user_id = Cache::store('redis')->get("OAUTH_USER_TICKET_".$request->oauth_user);
+            if (!$oauth_user_id) {
+                return $this->json([], trans("api.auth_error"), 0);
+            }
+            Cache::store('redis')->forget("OAUTH_USER_TICKET_".$request->oauth_user);
+            $oauth_user = OauthUser::find($oauth_user_id);
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
                 $user->avatar = $oauth_user->headimgurl;
@@ -360,7 +373,12 @@ class AuthController extends BaseController {
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
         if ($request->oauth_user) {
-            $oauth_user = OauthUser::findByEnId($request->oauth_user);
+            $oauth_user_id = Cache::store('redis')->get("OAUTH_USER_TICKET_".$request->oauth_user);
+            if (!$oauth_user_id) {
+                return $this->json([], trans("api.auth_error"), 0);
+            }
+            Cache::store('redis')->forget("OAUTH_USER_TICKET_".$request->oauth_user);
+            $oauth_user = OauthUser::find($oauth_user_id);
             if ($oauth_user) {
                 $oauth_user->user_id = $user->id;
                 $user->avatar = $oauth_user->headimgurl;
@@ -446,9 +464,9 @@ class AuthController extends BaseController {
      *         type="string",
      *     ),
      *     @SWG\Parameter(
-     *         name="user_id",
+     *         name="user_ticket",
      *         in="formData",
-     *         description="要绑定的用户id",
+     *         description="要绑定的用户ticket",
      *         required=false,
      *         type="string",
      *     ),
@@ -520,11 +538,18 @@ class AuthController extends BaseController {
         $oauth_user->groupid = isset($user['groupid']) ? $user['groupid'] : 0;
         $oauth_user->save();
         $result = ['token' => '', 'oauth_user' => ''];
-        if ($request->user_id) {
+        if ($request->user_ticket) {
+            $user_id = Cache::store('redis')->get("USER_TICKET_".$request->user_ticket);
+            if (!$user_id) {
+                return $this->json([], trans("api.auth_error"), 0);
+            }
+
             if ($oauth_user->user_id) {
                 return $this->json([], trans("api.wechat_already_bind"), 0);
             }
-            $login_user = User::findByEnId($request->user_id);
+            Cache::store('redis')->forget("USER_TICKET_".$request->user_ticket);
+
+            $login_user = User::find($user_id);
             if ($login_user) {
                 $login_user->avatar = $oauth_user->headimgurl;
                 $login_user->name = $oauth_user->nickname;
@@ -543,7 +568,9 @@ class AuthController extends BaseController {
                     $result['token'] = JWTAuth::fromUser($login_user);
                 }
             } else {
-                $result['oauth_user'] = $oauth_user->en_id();
+                $ticket = md5(sprintf("%d_%s_%s", $oauth_user->id, time(), str_random(10)));
+                Cache::store('redis')->put("OAUTH_USER_TICKET_".$ticket, $oauth_user->id, 60*60);
+                $result['oauth_user'] = $ticket;
             }
         }
         return $this->json($result);
