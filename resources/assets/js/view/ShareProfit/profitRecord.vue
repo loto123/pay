@@ -1,8 +1,6 @@
 <template>
     <div id="profit-record">
-        <topBack title="账单明细"
-            style="background:#26a2ff;color:#fff;"
-        >
+        <topBack title="账单明细" style="background:#26a2ff;color:#fff;">
             <div class="flex flex-reverse flex-align-center header-right">
                 <i class="iconfont" style="font-size:1.4em;" @click="filterDate">
                     &#xe663;
@@ -21,7 +19,7 @@
             <div class="amount">{{tabStatus[0]==true?'收益：':'提现：'}}{{tabTotal}}</div>
         </div>
 
-        <div class="bill-box" >
+        <div class="bill-box">
             <div class="bill-date flex flex-align-center flex-justify-between" style="display:none;">
                 <div class="left-content">
                     <div class="cur-date">2017年11月</div>
@@ -37,16 +35,16 @@
                 <div>图标</div>
             </div>
 
-            <div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata" >
+            <div v-if="recordList.length == 0" class="flex flex-v flex-align-center nodata">
                 <i class="iconfont">
                     &#xe655;
                 </i>
                 <div>暂无数据</div>
             </div>
 
-            <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80" >
+            <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
 
-                <li  v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
+                <li v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
                     <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="tabStatus[0]?tabdetails(item.id):''">
                         <div class="bill-content">
                             <h5>{{tabStatus[0]?"分润":"提现"}}(分润比例 {{item.proxy_percent}})</h5>
@@ -71,16 +69,8 @@
             </p>
         </div>
 
-        <mt-datetime-picker
-            v-model="dateModel"
-            class="profit-date"
-            type="date"
-            ref="picker"
-            year-format="{value} 年"
-            month-format="{value} 月"
-            :startDate="startDate"
-            :endDate="endDate"
-            @confirm="choiseDate">
+        <mt-datetime-picker v-model="dateModel" class="profit-date" type="date" ref="picker" year-format="{value} 年" month-format="{value} 月"
+            :startDate="startDate" :endDate="endDate" @confirm="choiseDate">
         </mt-datetime-picker>
 
     </div>
@@ -97,32 +87,32 @@
         data() {
             return {
                 showAlert: false,
-                type:null,              //类型
-                created_at:null,        //结束时间
-                size:null,              //数目
-                recordList:[],
+                type: null,              //类型
+                created_at: null,        //结束时间
+                size: null,              //数目
+                recordList: [],
 
-                headList:[],            // timeTab数组
-                timeInfo:null,
-                tabTotal:"",
-                tabStatus:[true,false],
+                headList: [],            // timeTab数组
+                timeInfo: null,
+                tabTotal: "",
+                tabStatus: [true, false],
 
-                wrapperHeight:null,
+                wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
-                canLoading:true,
+                canLoading: true,
 
-                dateModel:null,
-                dateChoise:null,    // 选择的日期
-                startDate:new Date(2017,1),
-                endDate:new Date()
+                dateModel: null,
+                dateChoise: null,    // 选择的日期
+                startDate: new Date(2017, 1),
+                endDate: new Date()
             };
         },
-        created(){
+        created() {
             this.init();
         },
 
-        mounted(){
+        mounted() {
             // this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
             window.addEventListener('scroll', this.handleScroll);
         },
@@ -135,214 +125,214 @@
                 this.showAlert = false;
             },
             tabdetails(id) {
-                if(this.tabStatus[0] == true){
+                if (this.tabStatus[0] == true) {
                     // 分润状态
-                    this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=profit"});
-                }else if(this.tabStatus[1] == true){
+                    this.$router.push({ path: "/profit_record/detail/?id=" + id + "&type=profit" });
+                } else if (this.tabStatus[1] == true) {
                     // 提现状态
-                    this.$router.push({ path: "/profit_record/detail/?id="+id+"&type=withDraw"});
+                    this.$router.push({ path: "/profit_record/detail/?id=" + id + "&type=withDraw" });
                 }
             },
 
-            init(){
+            init() {
 
                 Loading.getInstance().open();
                 this.dateChoise = null;
                 var _data = {
-                    limit:15,
-                    offset:0
+                    limit: 15,
+                    offset: 0
                 }
 
                 Loading.getInstance().open();
 
-                if(this.tabStatus[0] == true){
-                    request.getInstance().postData("api/profit/data",_data)
-                    .then((res) => {
+                if (this.tabStatus[0] == true) {
+                    request.getInstance().postData("api/profit/data", _data)
+                        .then((res) => {
 
-                        var _dataList = res.data.data.data;
+                            var _dataList = res.data.data.data;
 
-                        if(_dataList.length == 0){
-                            this.recordList = [];
+                            if (_dataList.length == 0) {
+                                this.recordList = [];
+                                Loading.getInstance().close();
+                                return;
+                            }
+
+                            for (var i = 0; i < _dataList.length; i++) {
+                                _dataList[i].isTimePanel = false;
+                            }
+
+                            this.recordList = _dataList;
+                            this.buildTimePanel();
                             Loading.getInstance().close();
-                            return;
-                        }
-
-                        for(var i = 0; i <_dataList.length;i++){
-                            _dataList[i].isTimePanel = false;
-                        }
-
-                        this.recordList = _dataList;
-                        this.buildTimePanel();
-                        Loading.getInstance().close();
-                    })
-                    .catch((err) => {
-                        Toast(err.data.msg);
-                        Loading.getInstance().close();
-                    })
-                } else if(this.tabStatus[1] == true){
+                        })
+                        .catch((err) => {
+                            Toast(err.data.msg);
+                            Loading.getInstance().close();
+                        })
+                } else if (this.tabStatus[1] == true) {
                     var _data = {
-                        limit:15,
-                        offset:0
+                        limit: 15,
+                        offset: 0
                     }
 
-                    request.getInstance().postData("api/profit/withdraw/data",_data)
-                    .then((res) => {
+                    request.getInstance().postData("api/profit/withdraw/data", _data)
+                        .then((res) => {
 
-                        var _dataList = res.data.data.data;
+                            var _dataList = res.data.data.data;
 
-                        if(_dataList.length == 0){
+                            if (_dataList.length == 0) {
+                                Loading.getInstance().close();
+                                this.recordList = [];
+                                return;
+                            }
+
+                            for (var i = 0; i < _dataList.length; i++) {
+                                _dataList[i].isTimePanel = false;
+                            }
+
+                            this.recordList = _dataList;
+
+                            this.buildTimePanel();
                             Loading.getInstance().close();
-                            this.recordList = [];
-                            return;
-                        }
-
-                        for(var i = 0; i <_dataList.length;i++){
-                            _dataList[i].isTimePanel = false;
-                        }
-
-                        this.recordList = _dataList;
-
-                        this.buildTimePanel();
-                        Loading.getInstance().close();
-                    })
-                    .catch((err) => {
-                        Toast(err.data.msg);
-                        Loading.getInstance().close();
-                    })
+                        })
+                        .catch((err) => {
+                            Toast(err.data.msg);
+                            Loading.getInstance().close();
+                        })
                 }
 
             },
 
-            changeTime(shijianchuo){
-                function add0(m){return m<10?'0'+m:m }
+            changeTime(shijianchuo) {
+                function add0(m) { return m < 10 ? '0' + m : m }
 
-                var time = new Date(shijianchuo*1000);
+                var time = new Date(shijianchuo * 1000);
                 var y = time.getFullYear();
-                var m = time.getMonth()+1;
+                var m = time.getMonth() + 1;
                 var d = time.getDate();
                 var h = time.getHours();
                 var mm = time.getMinutes();
                 var s = time.getSeconds();
-                return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
+                return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
             },
 
-            changeTab(tabindex){
-                if(this.loading == true){
+            changeTab(tabindex) {
+                if (this.loading == true) {
                     return;
                 }
 
-                this.tabStatus = [false,false];
+                this.tabStatus = [false, false];
                 this.tabStatus[tabindex] = true;
                 this.headList = [];
                 this.init();
             },
 
             // 建立时间面板
-            buildTimePanel(){
-                var _head=0;
+            buildTimePanel() {
+                var _head = 0;
 
-                var getTheDate = (timecode)=>{
-                    if(!timecode){
+                var getTheDate = (timecode) => {
+                    if (!timecode) {
                         return null;
                     }
 
                     var _index = timecode.indexOf("-");
-                    if(_index == -1){
+                    if (_index == -1) {
                         return null
                     }
                     var _t = timecode.split("-");
-                    var data = _t[0]+"年"+_t[1]+"月";
+                    var data = _t[0] + "年" + _t[1] + "月";
                     return data;
                 }
 
                 var key = 0;
 
                 // 设置头部
-                if(this.recordList.length!=0){
-                    if(this.recordList[0].isTimePanel == false){
+                if (this.recordList.length != 0) {
+                    if (this.recordList[0].isTimePanel == false) {
                         key = 0;
                         var _head = getTheDate(this.recordList[key].created_at);
-                    }else if(this.recordList[1].isTimePanel == false){
+                    } else if (this.recordList[1].isTimePanel == false) {
                         key = 1;
                         var _head = getTheDate(this.recordList[key].created_at);
                     }
                 }
 
                 var _initialData = {
-                    time:_head,
-                    index:key,
-                    total:"加载中..."
+                    time: _head,
+                    index: key,
+                    total: "加载中..."
                 }
-                if(this.headList.length == 0){
+                if (this.headList.length == 0) {
                     this.headList.push(_initialData);
                 }
 
                 // 插入时间标签
-                for(var i = 0; i <this.recordList.length; i++){
-                    if(this.recordList[i].isTimePanel == true){
-                        _head =getTheDate(this.recordList[i+1].created_at);
+                for (var i = 0; i < this.recordList.length; i++) {
+                    if (this.recordList[i].isTimePanel == true) {
+                        _head = getTheDate(this.recordList[i + 1].created_at);
                         continue;
                     }
 
-                    try{
-                         var label = getTheDate(this.recordList[i].created_at);
+                    try {
+                        var label = getTheDate(this.recordList[i].created_at);
 
                         //  当头部与当前的创建时间不一致时
 
-                         if(_head != getTheDate(this.recordList[i].created_at) && this.recordList[i].isTimePanel == false){
+                        if (_head != getTheDate(this.recordList[i].created_at) && this.recordList[i].isTimePanel == false) {
                             // 更新头部
                             _head = getTheDate(this.recordList[i].created_at);
 
                             var data = {
-                                time:_head,
-                                index:i,
-                                total:"加载中..."
+                                time: _head,
+                                index: i,
+                                total: "加载中..."
                             }
 
                             this.headList.push(data);
 
                         }
-                    }catch(e){
+                    } catch (e) {
                         console.error(e);
                     }
 
                 }
 
-                var count=  0;
+                var count = 0;
 
                 // recordList 插值
-                for(let k=0 ;k<this.headList.length;k++){
-                    var _index = this.headList[k].index+count;
+                for (let k = 0; k < this.headList.length; k++) {
+                    var _index = this.headList[k].index + count;
 
-                    if(this.recordList[_index].isTimePanel == true){
+                    if (this.recordList[_index].isTimePanel == true) {
                         continue;
                     }
-                    this.recordList.splice(_index,0,{isTimePanel:true,time:this.headList[k].time,total:this.headList[k].total});
+                    this.recordList.splice(_index, 0, { isTimePanel: true, time: this.headList[k].time, total: this.headList[k].total });
                     count++;
                 }
 
-                for(let m = 0; m < this.recordList.length; m++){
-                    if(this.recordList[m].isTimePanel == true && this.recordList[m].total == "加载中..."){
+                for (let m = 0; m < this.recordList.length; m++) {
+                    if (this.recordList[m].isTimePanel == true && this.recordList[m].total == "加载中...") {
 
                         var _year = this.recordList[m].time.split("年")[0];
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
-                        var _timer = _year+"-"+_month;
+                        var _timer = _year + "-" + _month;
                         var _data = {
-                            date :_timer
+                            date: _timer
                         }
 
-                        if(this.tabStatus[0] == true){
+                        if (this.tabStatus[0] == true) {
                             // 获取当月的总额度(分润)
-                            request.getInstance().postData("api/profit/count",_data)
-                                .then(res=>{
+                            request.getInstance().postData("api/profit/count", _data)
+                                .then(res => {
                                     this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
                                     this.tabTotal = this.recordList[0].total;
                                 }).catch();
-                        }else {
+                        } else {
                             // 获取当月的总额度(分润)
-                            request.getInstance().postData("api/profit/withdraw/count",_data)
-                                .then(res=>{
+                            request.getInstance().postData("api/profit/withdraw/count", _data)
+                                .then(res => {
                                     this.recordList[m].total = res.data.data.total;
                                     this.timeInfo = this.recordList[0].time;
                                     this.tabTotal = this.recordList[0].total;
@@ -355,15 +345,15 @@
             },
 
             // 滚动
-            handleScroll(){
+            handleScroll() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
-                if(!this.$refs.timeTab){
+                if (!this.$refs.timeTab) {
                     return;
                 }
 
-                for(var i = 0; i< this.$refs.timeTab.length; i++){
-                    if(this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top >0){
+                for (var i = 0; i < this.$refs.timeTab.length; i++) {
+                    if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
                         this.timeInfo = this.headList[i].time;
                         this.tabTotal = this.headList[i].total;
                     }
@@ -372,17 +362,17 @@
 
             // 上滑加载更多
             loadMore() {
-                this.loading =false;
-                if(this.recordList.length==0 || !this.canLoading){
+                this.loading = false;
+                if (this.recordList.length == 0 || !this.canLoading) {
                     return;
                 }
 
                 var _url = "";
                 var _data = {};
 
-                if(this.tabStatus[0] == true){
+                if (this.tabStatus[0] == true) {
                     _url = "api/profit/data";
-                }else if(this.tabStatus[1] == true){
+                } else if (this.tabStatus[1] == true) {
                     _url = "api/profit/withdraw/data";
                 }
 
@@ -393,30 +383,30 @@
                 setTimeout(() => {
 
                     var _data = {
-                        limit:5,
-                        offset :[].concat(this.recordList).pop().id,
+                        limit: 5,
+                        offset: [].concat(this.recordList).pop().id,
                     }
 
-                    if (this.dateChoise!=null){
+                    if (this.dateChoise != null) {
                         _data.date = this.dateChoise;
                     }
 
-                    request.getInstance().postData(_url,_data).then(res=>{
-                        if(res.data.data.data.length == 0){
+                    request.getInstance().postData(_url, _data).then(res => {
+                        if (res.data.data.data.length == 0) {
                             this.canLoading = false;
                             this.loading = false;
                             return;
                         }
 
-                        for(var i = 0; i< res.data.data.data.length; i ++){
+                        for (var i = 0; i < res.data.data.data.length; i++) {
                             res.data.data.data[i].isTimePanel = false;
                             this.recordList.push(res.data.data.data[i]);
                         }
 
                         this.canLoading = true;
                         this.loading = false;
-//                        this.buildTimePanel();
-                    }).catch(err=>{
+                        //                        this.buildTimePanel();
+                    }).catch(err => {
 
                         Loading.getInstance().close;
                         Toast(err.data.meg);
@@ -425,39 +415,39 @@
                 }, 1500);
             },
 
-            filterDate(){
+            filterDate() {
                 this.$refs.picker.open();
                 this.$refs.picker.$children[0].$children[0].$children[2].$el.style.display = "none";
             },
 
-            choiseDate(res){
+            choiseDate(res) {
                 // this.dateChoise = null;
                 this.headList = [];
                 var _year = res.getFullYear();
-                var _month = res.getMonth()+1;
-                if(_month<10){
-                    _month  = "0" + _month.toString();
+                var _month = res.getMonth() + 1;
+                if (_month < 10) {
+                    _month = "0" + _month.toString();
                 }
-                var _date = _year+'-'+_month;
+                var _date = _year + '-' + _month;
                 this.dateChoise = _date;
                 var _data = {
-                    limit:15,
-                    offset:0,
-                    date:this.dateChoise
+                    limit: 15,
+                    offset: 0,
+                    date: this.dateChoise
                 }
 
-                if(this.tabStatus[0] == true){
-                    request.getInstance().postData("api/profit/data",_data)
+                if (this.tabStatus[0] == true) {
+                    request.getInstance().postData("api/profit/data", _data)
                         .then((res) => {
 
                             var _dataList = res.data.data.data;
 
-                            if(_dataList.length == 0){
+                            if (_dataList.length == 0) {
                                 Loading.getInstance().close();
                                 this.recordList = [];
                                 return;
                             }
-                            for(var i = 0; i <_dataList.length;i++){
+                            for (var i = 0; i < _dataList.length; i++) {
                                 _dataList[i].isTimePanel = false;
                             }
 
@@ -469,18 +459,18 @@
                             Toast(err.data.msg);
                             Loading.getInstance().close();
                         })
-                }else if(this.tabStatus[1] == true){
-                    request.getInstance().postData("api/profit/withdraw/data",_data)
+                } else if (this.tabStatus[1] == true) {
+                    request.getInstance().postData("api/profit/withdraw/data", _data)
                         .then((res) => {
 
                             var _dataList = res.data.data.data;
 
-                            if(_dataList.length == 0){
+                            if (_dataList.length == 0) {
                                 Loading.getInstance().close();
                                 this.recordList = [];
                                 return;
                             }
-                            for(var i = 0; i <_dataList.length;i++){
+                            for (var i = 0; i < _dataList.length; i++) {
                                 _dataList[i].isTimePanel = false;
                             }
 
@@ -503,56 +493,54 @@
 </script>
 
 <style lang="scss" scoped>
-
-    .tab-fixed{
+    .tab-fixed {
         position: fixed;
-        top:5em;
+        top: 5em;
         left: 0em;
-        z-index:1001;
-        width:100%;
-        height:3em;
-        background:#eee;
-        box-sizing:border-box;
-        padding-left: 1em;
-        padding-right:1em;
-
-        >div{
-            color: #555;
-            margin-top:0.3em;
-        }
-    }
-
-    .time-tab{
-        width:100%;
-        // height:3em;
-        background:#eee;
-        padding:0;
-        box-sizing:border-box;
-        padding-left: 1em;
-        padding-right:1em;
-
-         >div{
-            color: #555;
-            margin-top:0.3em;
-        }
-    }
-
-    .change-tab{
-        width:100%;
+        z-index: 1001;
+        width: 100%;
         height: 3em;
-        background:#26a2ff;
+        background: #eee;
+        box-sizing: border-box;
+        padding-left: 1em;
+        padding-right: 1em;
+
+        >div {
+            color: #555;
+            margin-top: 0.3em;
+        }
+    }
+
+    .time-tab {
+        width: 100%; // height:3em;
+        background: #eee;
+        padding: 0;
+        box-sizing: border-box;
+        padding-left: 1em;
+        padding-right: 1em;
+
+        >div {
+            color: #555;
+            margin-top: 0.3em;
+        }
+    }
+
+    .change-tab {
+        width: 100%;
+        height: 3em;
+        background: #26a2ff;
         position: fixed;
-        top:2em;
-        border:1px solid #fff;
+        top: 2em;
+        border: 1px solid #fff;
         box-sizing: border-box;
 
-        >div{
-            color:#fff;
+        >div {
+            color: #fff;
         }
 
-        .active{
-            background:#fff;
-            color:#26a2ff;
+        .active {
+            background: #fff;
+            color: #26a2ff;
         }
     }
 
@@ -584,7 +572,7 @@
             }
         }
 
-        ul{
+        ul {
             width: 100%;
             height: auto;
             display: block;
@@ -687,17 +675,19 @@
     .cancel-btn {
         margin-top: 1.5em;
     }
-    .nodata{
-        margin-top:20vh;
-        i,div{
+
+    .nodata {
+        margin-top: 20vh;
+        i,
+        div {
             color: #ddd;
         }
-        i{
+        i {
             font-size: 3.5em;
         }
-        div{
+        div {
             font-size: 2em;
-            margin-top:0.3em;
+            margin-top: 0.3em;
         }
     }
 </style>

@@ -461,7 +461,11 @@ class ShopController extends BaseController
         $member_size = $request->input('member_size', 5);
         $shop = Shop::findByEnId($id);
         if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
-            return $this->json([], trans("api.error_shop_status"), 0);
+            if ($shop && $shop->status == Shop::STATUS_FREEZE) {
+                return $this->json([], trans("api.shop_freeze"), 0);
+            } else {
+                return $this->json([], trans("api.error_shop_status"), 0);
+            }
         }
         /* @var $shop Shop */
 
@@ -1026,6 +1030,7 @@ class ShopController extends BaseController
      *                  property="data",
      *                  type="object",
      *                  @SWG\Property(property="url", type="string", example="http://url",description="二维码链接"),
+     *                  @SWG\Property(property="share_url", type="string", example="http://url",description="分享链接"),
      *              )
      *          )
      *      ),
@@ -1059,7 +1064,7 @@ class ShopController extends BaseController
         if (!Storage::disk('public')->exists($path)) {
             Storage::disk('public')->put($path, QrCode::format('png')->size($size)->margin(1)->generate($url));
         }
-        return $this->json(['url' => url('storage/'.$path)]);
+        return $this->json(['url' => url('storage/'.$path), 'share_url' => $url]);
     }
 
     /**
@@ -1400,6 +1405,9 @@ class ShopController extends BaseController
                 try {
                     $user = User::find($notification->data['user_id']);
                     $shop = Shop::find($notification->data['shop_id']);
+                    if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+                        return $this->json([], trans("api.error_shop_status"), 0);
+                    }
                     $exist = ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->first();
                     if (!$exist) {
                         $shop_user = new ShopUser();
@@ -1415,6 +1423,9 @@ class ShopController extends BaseController
                 try {
                     $user = User::find($notification->data['user_id']);
                     $shop = Shop::find($notification->data['shop_id']);
+                    if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+                        continue;
+                    }
                     $exist = ShopUser::where("user_id", $user->id)->where("shop_id", $shop->id)->first();
                     if (!$exist) {
                         $shop_user = new ShopUser();
