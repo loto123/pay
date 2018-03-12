@@ -65,8 +65,8 @@ return [
         'admin' => [
             'driver' => 'local',
             'visibility' => 'private',
-            'root' => public_path('storage'),
-            'url' => rtrim(env('APP_URL'), '/').'/storage',
+            'root' => storage_path('app/admin'),
+//            'url' => rtrim(env('APP_URL'), '/').'/storage',
         ],
     ],
 

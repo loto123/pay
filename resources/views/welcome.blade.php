@@ -54,6 +54,13 @@
         console.log(param);
         localStorage.setItem("token",param);
     }
+    window.setVAR=function(VAR){
+      if(VAR){
+        VAR=VAR;
+      }else{
+        VAR="'\/index\/'"
+      }
+    }
    
 </script>
 

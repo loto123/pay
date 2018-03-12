@@ -152,7 +152,7 @@
         margin-top: 1em;
         padding: 1em;
         h2 {
-            margin-left: 75px;
+            margin-left: 65px;
             font-size: 1.2em;
         }
         .userData-box {
@@ -160,10 +160,10 @@
                 margin-top: 1.5em;
                 height: 4em;
                 .img {
-                    width: 65px;
+                    width: 55px;
                     img {
                         display: block;
-                        width: 65px;
+                        width: 55px;
                     }
                 }
 
@@ -174,7 +174,7 @@
                         color: #262626;
                     }
                     p {
-                        font-size: 0.9em;
+                        font-size: 0.8em;
                         color: #a9a9a9;
                         line-height: 1.5em;
                     }
@@ -189,13 +189,13 @@
         padding: 1em;
         h2 {
             font-size: 1.2em;
-            margin-left: 75px;
+            margin-left: 65px;
         }
         .privacy-box {
             margin-top: 1em;
             img {
                 display: block;
-                width: 65px;
+                width: 55px;
             }
         }
         .privacy-content {
@@ -207,7 +207,7 @@
             .list {
                 li {
                     color: #a9a9a9;
-                    font-size: 0.9em;
+                    font-size: 0.8em;
                     margin-bottom: 0.4em;
                     i{  
                         display: block;
