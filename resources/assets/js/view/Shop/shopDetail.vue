@@ -656,9 +656,14 @@
                     });
             },
 
-            // 结算公会
+            // 解散公会
             dissShop() {
                 MessageBox.confirm('确定删除公会?').then(action => {
+
+                    if(this.tradeStatus == true){
+                        Toast("请先关闭公会交易功能");
+                        return;
+                    }
 
                     Loading.getInstance().open();
 
