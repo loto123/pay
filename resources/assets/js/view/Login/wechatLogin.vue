@@ -1,6 +1,6 @@
 <template>
   <div id="we-chat">
-    微信登录中...
+    {{!bindMobile?"'微信登录中...'":"'绑定微信中...'"}}
   </div>
 </template>
 
@@ -17,7 +17,8 @@
     data() {
       return {
         state: null,
-        code: null
+        code: null,
+        bindMobile:false
       }
     },
     created() {
@@ -43,7 +44,13 @@
           if (!res.data.data.token) {
             window.location.href = "/#/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
           } else {
-            Toast("微信登录成功");
+
+            if(this.bindMobile){
+              Toast("微信绑定成功");
+            }else {
+              Toast("微信登录成功");
+            }
+
             request.getInstance().setToken(res.data.data.token);
 
             setTimeout(() => {

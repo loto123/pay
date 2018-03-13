@@ -162,6 +162,7 @@ export default {
       mobile:null,
       password:null,
       userId:null,
+      
       url:window.location.href.split('#')[0]
     };
   },
@@ -230,6 +231,7 @@ export default {
       var _data={
         redirect_url:this.url+"#/login/weChatLogin"
       };
+
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
       }).catch(err=>{
