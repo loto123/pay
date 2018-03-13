@@ -232,7 +232,9 @@
 
         mobile: null,                     //推荐人手机号
         isdisabled: null,
-        product_name:product_name
+        product_name:product_name,
+
+        url:window.location.href.split('#')[0]  
       };
     },
     created() {
@@ -400,8 +402,12 @@
             request.getInstance().postData('api/auth/register', data).then(function (res) {
               sessionStorage.setItem("_token", res.data.data.token);
               Loading.getInstance().close();
-              Toast("注册成功");
-              self.$router.push("/login");
+              Toast("注册成功,请绑定微信");
+
+              console.log(this.userAccountName);
+              this.weChatBind(this.userAccountName);
+              
+              // self.$router.push("/login");
             }).catch((err) => {
               Loading.getInstance().close();
               console.error(err);
@@ -448,6 +454,25 @@
           Loading.getInstance().close();
 
         });
+      },
+
+      // 注册之后绑定微信
+      weChatBind(mobile){
+
+        console.log(mobile);
+        
+        var _data={
+          redirect_url:this.url+"#/login/weChatLogin"+"?mobile="+ mobile
+        };
+
+        request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
+          window.location.href = res.data.data.url;
+          Loading.getInstance().close();
+
+        }).catch(err=>{
+          Toast(err.data.msg);
+        });
+
       }
     },
     components: { topBack }
