@@ -403,7 +403,6 @@ export default {
     this.init().then(res=>{
       if (res) {
         this.initImage();
-        this.shareContent();
       }
     });
   },
@@ -459,7 +458,6 @@ export default {
         Loading.getInstance().close();
         
       }).catch(err=>{
-          console.error(err);
           Toast(err.data.msg);
           Loading.getInstance().close();
           this.$router.push('/404notfound');
@@ -468,6 +466,7 @@ export default {
     initImage(){
       request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
         this.logo = res.data.data.logo;
+        this.shareContent();
         Loading.getInstance().close();
       }).catch(err=>{
         Toast(err.data.msg);
