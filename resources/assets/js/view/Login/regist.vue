@@ -258,7 +258,6 @@
 
     methods: {
       init() {
-        console.log(1);
         this.mobile = this.$route.query.mobile;
         if (!this.mobile) {
           this.isdisabled = false;
@@ -404,7 +403,8 @@
               sessionStorage.setItem("_token", res.data.data.token);
               Loading.getInstance().close();
               Toast("注册成功,请绑定微信");
-              self.weChatBind(self.userAccountName);
+              // console.log(res.data.data.ticket);
+              self.weChatBind(res.data.data.ticket);
               
             }).catch((err) => {
               Loading.getInstance().close();
