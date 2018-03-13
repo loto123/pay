@@ -476,7 +476,7 @@ export default {
     },
     shareContent() {
       let url=window.location.href.split('#')[0];
-      let links = url+'/#/shareUser/inviteLink/download?mobile='+this.mobile;
+      let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
       let title = '邀请您加入任务';
       let desc = '任务池的钻石已经放不下啦，还不来拿?';
       let imgUrl = this.logo;
