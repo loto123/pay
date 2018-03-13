@@ -76,7 +76,7 @@
     created() {
       this.init().then(res=>{
         if (res) {
-          this.shareContent()
+          this.initInfo();
         }
       });
     },
@@ -85,7 +85,8 @@
       return {
         thumb: null,
         name: null,
-        QRCode: null
+        QRCode: null,
+        mobile:null
       }
     },
     methods: {
@@ -109,6 +110,18 @@
           }).catch(err => {
             Toast(err.data.msg);
           });
+      },
+      initInfo(){
+        Loading.getInstance().open();
+        request.getInstance().getData("api/my/info").then(res=>{
+            this.mobile=res.data.data.mobile;
+            this.shareContent();
+            Loading.getInstance().close();
+          })
+          .catch((err) => {
+            Toast(err.data.msg);
+            Loading.getInstance().close();
+          })
       },
       shareContent() {
         let url = window.location.href.split('#')[0];
