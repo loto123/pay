@@ -403,7 +403,7 @@
               sessionStorage.setItem("_token", res.data.data.token);
               Loading.getInstance().close();
               Toast("注册成功,请绑定微信");
-              
+
               console.log(this.userAccountName);
               this.weChatBind(this.userAccountName);
               
@@ -459,19 +459,21 @@
       // 注册之后绑定微信
       weChatBind(mobile){
 
-      var _data={
-        redirect_url:this.url+"#/login/weChatLogin"+"?mobile="+ mobile
-      };
+        console.log(mobile);
+        
+        var _data={
+          redirect_url:this.url+"#/login/weChatLogin"+"?mobile="+ mobile
+        };
 
-      request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
-        window.location.href = res.data.data.url;
-        Loading.getInstance().close();
+        request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
+          window.location.href = res.data.data.url;
+          Loading.getInstance().close();
 
-      }).catch(err=>{
-        Toast(err.data.msg);
-      });
+        }).catch(err=>{
+          Toast(err.data.msg);
+        });
 
-    },
+      }
     },
     components: { topBack }
   };
