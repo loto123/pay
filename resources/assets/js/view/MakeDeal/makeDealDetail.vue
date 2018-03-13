@@ -402,7 +402,7 @@ export default {
   created() {
     this.init().then(res=>{
       if (res) {
-        this.init2();
+        this.initImage();
         this.shareContent();
       }
     });
@@ -465,7 +465,7 @@ export default {
           this.$router.push('/404notfound');
       });
     },
-    init2(){
+    initImage(){
       request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
         this.logo = res.data.data.logo;
         Loading.getInstance().close();
