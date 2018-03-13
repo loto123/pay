@@ -26,6 +26,7 @@
                     </li>
                 </ul>	
             </div>
+            <div class="get-diamond">可获得钻石:<span>{{curPrice}}</span><i class="diamond" style="margin-top: -0.1em;margin-left:0.4em;">&#xe6f9;</i></div>
             <div class="purchase-way">
                 <div class="title">选择购买方式</div>
                 <div class="list-wrap">
@@ -254,5 +255,14 @@
         display: block;
         margin-top: 3em;
         margin-bottom: 1em;
+    }
+    .get-diamond{
+      margin-top:0.8em;
+      color:#666;
+      vertical-align: middle;
+      span{
+       display: inline-block;
+       margin-left:0.1em;
+      }
     }
 </style>

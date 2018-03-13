@@ -162,6 +162,7 @@ export default {
       mobile:null,
       password:null,
       userId:null,
+      
       url:window.location.href.split('#')[0]
     };
   },
@@ -190,7 +191,7 @@ export default {
       }
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
-          self.userId = res.data.data.id;
+          self.userId = res.data.data.ticket;
 
           // 微信登录控制，生产环境开启
           if(res.data.data.wechat == 0 && debug == 0){
@@ -230,6 +231,7 @@ export default {
       var _data={
         redirect_url:this.url+"#/login/weChatLogin"
       };
+
       request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
         window.location.href = res.data.data.url;
       }).catch(err=>{
