@@ -1,6 +1,6 @@
 <template>
   <div id="we-chat">
-    {{!bindMobile?"'微信登录中...'":"'绑定微信中...'"}}
+    {{!bindMobile?"微信登录中...":"绑定微信中..."}}
   </div>
 </template>
 
