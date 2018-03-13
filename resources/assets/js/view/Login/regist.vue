@@ -403,10 +403,11 @@
               sessionStorage.setItem("_token", res.data.data.token);
               Loading.getInstance().close();
               Toast("注册成功,请绑定微信");
-
+              
+              console.log(this.userAccountName);
               this.weChatBind(this.userAccountName);
               
-              self.$router.push("/login");
+              // self.$router.push("/login");
             }).catch((err) => {
               Loading.getInstance().close();
               console.error(err);
