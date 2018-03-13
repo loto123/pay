@@ -269,7 +269,8 @@ class AuthController extends BaseController {
         }
         $wechat = $user->wechat_user ? 1 : 0;
         $id = $user->en_id();
-        return $this->json(compact('token', 'wechat', 'id'));
+        $name = $user->name;
+        return $this->json(compact('token', 'wechat', 'id', 'name'));
     }
 
     /**
@@ -372,6 +373,19 @@ class AuthController extends BaseController {
         
         $success['token'] = JWTAuth::fromUser($user);
         $success['name'] = $user->name;
+        $success['id'] = $user->en_id();
+        $wechat = $user->wechat_user ? 1 : 0;
+        if (!$wechat) {
+            $ticket = md5(sprintf("%d_%s_%s", $user->id, time(), str_random(10)));
+            Cache::store('redis')->put("USER_TICKET_".$ticket, $user->id, 60*60);
+            $success['wechat'] = 0;
+            
+        } else {
+            $ticket = "";
+            $success['wechat'] = 1;
+        }
+        $success['ticket'] = $ticket;
+
         if ($request->oauth_user) {
             $oauth_user_id = Cache::store('redis')->get("OAUTH_USER_TICKET_".$request->oauth_user);
             if (!$oauth_user_id) {
