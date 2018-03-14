@@ -334,7 +334,6 @@ class NoticeController extends BaseController
 
         //已经操作过的消息不能再操作
         if(!empty($notice) && isset($notice['data']['operators']) && empty($notice['data']['operators']['result'])) {
-            Log::info($notice['data']);
             $operators = $notice['data']['operators'];
             try{
                 $res = call_user_func(unserialize($operators['callback_method']),$value,$operators['callback_params']);
