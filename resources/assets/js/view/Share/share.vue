@@ -205,6 +205,7 @@ export default {
 
           Loading.getInstance().close();
           Toast("申请加公会成功");
+          this.$router.push("/index");
 
         }).catch(error=>{
 
