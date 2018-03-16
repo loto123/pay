@@ -7,6 +7,7 @@ use App\Pet;
 use App\PetRecord;
 use App\Profit;
 use App\Shop;
+use App\ShopFund;
 use App\TipRecord;
 use App\Transfer;
 use App\TransferRecord;
@@ -713,6 +714,16 @@ class TransferController extends BaseController
             if (isset($tip) && $tip) {
                 $tip->record_id = $record->id;
                 $tip->save();
+                //店铺账单明细
+                $shopFound = new ShopFund();
+                $shopFound->shop_id = $transfer->shop_id;
+                $shopFound->type = ShopFund::TYPE_FEE;
+                $shopFound->user_id = $user->id;
+                $shopFound->mode = ShopFund::MODE_IN;
+                $shopFound->amount = $tip->amount;
+                $shopFound->balance = $transfer->shop->container->balance;
+                $shopFound->status = ShopFund::STATUS_SUCCESS;
+                $shopFound->save();
             }
             //保存交易关系
             if (!$transfer->joiner()->where('user_id', $user->id)->exists()) {
@@ -1153,6 +1164,16 @@ class TransferController extends BaseController
                 $found->amount = $record->amount;
                 $found->no = $record->transfer_id;
                 $found->save();
+                //店铺账单明细
+                $shopFound = new ShopFund();
+                $shopFound->shop_id = $transfer->shop_id;
+                $shopFound->type = ShopFund::TYPE_TIP;
+                $shopFound->user_id = $user->id;
+                $shopFound->mode = ShopFund::MODE_IN;
+                $shopFound->amount = $record->amount;
+                $shopFound->balance = $transfer->shop->container->balance;
+                $shopFound->status = ShopFund::STATUS_SUCCESS;
+                $shopFound->save();
                 DB::commit();
                 return $this->json([], trans('trans.pay_fee_success'), 1);
             } catch (\Exception $e) {
