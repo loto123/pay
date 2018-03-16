@@ -1936,14 +1936,17 @@ class ShopController extends BaseController
      */
     public function transfer_records($shop_id, Request $request) {
         $data = [];
-//        $user = $this->auth->user();
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
-        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL || $shop->manager_id != $user->id) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         $query = $shop->funds();
-        if ($request->type !== null) {
+        $types = [ShopFund::TYPE_TRANAFER, ShopFund::TYPE_TRANAFER_IN, ShopFund::TYPE_TRANAFER_MEMBER];
+        if ($request->type !== null && in_array($request->type, $types)) {
             $query->where("type", $request->type);
+        } else {
+            $query->whereIn("type", $types);
         }
         if ($request->start) {
             $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
@@ -2113,5 +2116,111 @@ class ShopController extends BaseController
         }
 
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/tips",
+     *   summary="我的赏金",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="offset",
+     *     in="query",
+     *     description="上次记录ID",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="query",
+     *     description="店铺id",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="id", type="string", example="1234567890", description="记录id"),
+     *                      @SWG\Property(property="shop_id", type="string", example="1234567890", description="店铺id"),
+     *                      @SWG\Property(property="shop_name", type="string", example="店铺名", description="店铺名"),
+     *                      @SWG\Property(property="user_name", type="string", example="1234567890", description="用户名"),
+     *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
+     *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
+     *                  )
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function tips(Request $request) {
+        $data = [];
+        $user = $this->auth->user();
+        if ($request->shop_id) {
+            $shop = Shop::findByEnId($request->shop_id);
+            if (!$shop || $shop->status != Shop::STATUS_NORMAL || $shop->manager_id != $user->id) {
+                return $this->json([], trans("api.error_shop_status"), 0);
+            }
+            $query = $shop->funds();
+        } else {
+            $query = $user->shop_funds();
+
+        }
+        $query->with(["shop", 'user'])->where((new ShopFund())->getTable().".type", ShopFund::TYPE_TIP);
+
+        if ($request->start) {
+            $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
+            $query->where("created_at", "<", $start);
+        }
+        $count = $query->count();
+        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
+        if ($request->offset) {
+            $query->where("id", "<", ShopFund::decrypt($request->offset));
+        }
+        /* @var $user User */
+        foreach ($query->get() as $_fund) {
+            $data[] = [
+                'id' => $_fund->en_id(),
+                'shop_id' => $_fund->shop ? $_fund->shop->en_id() : "",
+                'shop_name' => $_fund->shop ? $_fund->shop->name : "",
+                'user_name' => $_fund->user ? $_fund->user->name : "",
+                'mode' => (int)$_fund->mode,
+                'amount' => (double)$_fund->amount,
+                'created_at' => strtotime($_fund->created_at)
+            ];
+        }
+        return $this->json(['count' => (int)$count, 'data' => $data]);
     }
 }
