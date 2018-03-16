@@ -54,6 +54,13 @@ class TransferController extends BaseController
      *     required=false,
      *     type="string"
      *   ),
+     *  @SWG\Parameter(
+     *     name="privately",
+     *     in="formData",
+     *     description="私密状态 0 公开 1 私密",
+     *     required=true,
+     *     type="integer"
+     *   ),
      *    @SWG\Parameter(
      *     name="joiner",
      *     in="formData",
@@ -100,6 +107,7 @@ class TransferController extends BaseController
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
                 'comment' => 'bail|max:200',
+                'privately' => ['bail','required',Rule::in([0,1])],
                 'joiner' => 'bail|array',
             ],
             [
@@ -132,6 +140,7 @@ class TransferController extends BaseController
         $transfer->user_id = $user->id;
         $transfer->price = $request->price;
         $transfer->comment = $request->input('comment', '');
+        $transfer->privately = $request->privately;
 //        if ($shop->type == 0) {
 //            $transfer->tip_type = 1;
 //            $transfer->tip_amount = $shop->type_value;
@@ -276,12 +285,12 @@ class TransferController extends BaseController
         if (!$transferObj) {
             return $this->json([], trans('trans.trans_not_exist'), 0);
         }
-
         $user = JWTAuth::parseToken()->authenticate();
-
-//        if (!$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
-//            return $this->json([], trans('trans.trans_permission_deny'), 0);
-//        }
+        //权限
+        if(($transferObj->privately && !$transferObj->joiner()->where('user_id',$user->id)->exists())
+            || !$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
+            return $this->json([], trans('trans.trans_permission_deny'), 0);
+        }
 
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
@@ -543,7 +552,9 @@ class TransferController extends BaseController
         if (!$transfer) {
             return $this->json([], trans('trans.trans_not_exist'), 0);
         }
-        if (!$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+        //权限
+        if(($transfer->privately && !$transfer->joiner()->where('user_id',$user->id)->exists())
+            || !$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
             return $this->json([], trans('trans.trans_permission_deny'), 0);
         }
         if ($transfer->status == 3) {
@@ -895,7 +906,7 @@ class TransferController extends BaseController
         DB::beginTransaction();
         try {
             foreach ($request->friend_id as $value) {
-                $real_id = User::decrypt( $value);
+                $real_id = User::decrypt($value);
                 if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
                     $relation = new TransferUserRelation();
                     $relation->transfer_id = $transfer->id;
