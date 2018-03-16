@@ -2165,9 +2165,13 @@ class ShopController extends BaseController
      *                      property="data",
      *                      type="array",
      *                  @SWG\Items(
-     *                      @SWG\Property(property="id", type="string", example="1234567890", description="店铺id"),
-     *                      @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
-     *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址")
+     *                      @SWG\Property(property="id", type="string", example="1234567890", description="记录id"),
+     *                      @SWG\Property(property="shop_id", type="string", example="1234567890", description="店铺id"),
+     *                      @SWG\Property(property="shop_name", type="string", example="店铺名", description="店铺名"),
+     *                      @SWG\Property(property="user_name", type="string", example="1234567890", description="用户名"),
+     *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
+     *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
      *                  )
      *                  ),
      *              )
