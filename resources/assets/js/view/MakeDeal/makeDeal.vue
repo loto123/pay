@@ -374,7 +374,7 @@
           price: this.price,
           comment: _tempMessage,
           joiner: _members,
-          privately:this.privateSwitchStatus
+          privately:this.privateSwitchStatus==true?1:0
         };
 
         if (this.shopId == null) {

@@ -168,7 +168,6 @@
         // 拿到所有的店铺列表
         request.getInstance().getData("api/shop/tips")
           .then(res => {
-            console.log(res);
             Loading.getInstance().close();
           })
           .catch(err => {

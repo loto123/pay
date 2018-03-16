@@ -457,8 +457,6 @@
       // 注册之后绑定微信
       weChatBind(mobile){
 
-        console.log(mobile);
-        
         var _data={
           redirect_url:this.url+"#/login/weChatLogin"+"?mobile="+ mobile
         };

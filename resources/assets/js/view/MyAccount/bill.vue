@@ -408,8 +408,7 @@
                 for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
 
-                        console.log(this.headList[i]);
-                        console.dir(this.$refs.timeTab[i]);
+
 
                         this.timeInfo = this.headList[i].time;
                         this.tabIncome = this.headList[i].in;
