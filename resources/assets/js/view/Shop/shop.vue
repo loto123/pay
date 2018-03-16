@@ -28,25 +28,32 @@
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
 
-        <div class="shop-item flex flex-v flex-align-center" @click="goDetail(item.id)"  v-for="item in shopList" :key ="item.id">
-          <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around">
+        <div class="shop-item flex flex-align-center" @click="goDetail(item.id)"  v-for="item in shopList" :key ="item.id">
+
+          <div class="img-wrap flex flex-justify-around flex-wrap-on flex-align-around ">
             <!-- <div class="notice"></div> -->
             <img :src="item.logo" alt="">
-            
           </div>
 
-          <h3>{{SetString(item.name,6)}}</h3>
-          <p class="today-earn">今日收益:{{item.today_profit}} <i class="diamond">&#xe6f9;</i></p>
-          <p class="all-earn">总收益:{{item.total_profit}}<i class="diamond">&#xe6f9;</i></p>
+          <div class="center-box flex-5">
+            <h3>{{SetString(item.name,6)}}</h3>
+            <p class="today-earn">今日收益:{{item.today_profit}} <i class="diamond">&#xe6f9;</i></p>
+            <p class="all-earn">总收益:{{item.total_profit}}<i class="diamond">&#xe6f9;</i></p>
+          </div>
+
+          <div class="flex-1">
+            <i class="iconfont">
+              &#xe62e;
+            </i>
+          </div>
+         
         </div>
 
         <div class="add-shop flex flex-v flex-align-center flex-justify-center" @click="addShop">
-          <div class="flex flex-v flex-align-center flex-justify-center">
-            <i class="iconfont ">
-              &#xe600;
-            </i>
-          </div>
-          
+          <i class="iconfont ">
+            &#xe600;
+          </i>
+
           <h3>创建新公会</h3>
 
         </div>
@@ -100,6 +107,16 @@
 .slide-enter,
 .slide-leave-to {
   transform: translateY(100vh);
+}
+
+.diamond{
+  font-size: 1em;
+  margin-left: 0.4em;
+}
+
+#shop{
+  min-height:100vh;
+  background: #eee;
 }
 
 #top {
@@ -175,14 +192,21 @@
 }
 
 .shop-list {
+
+  padding-bottom:0.5em;
+
   // 公会列表
   .shop-item {
-    width: 8em;
+    width: 98%;
     min-height: 7em;
-    border-radius: 0.4em;
+    border-radius: 0.2em;
     border: 1px solid #eee;
-    margin-top: 1em;
+    background: #fff;
+    margin-top: 0.2em;
     position: relative;
+    box-sizing: border-box;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 
     .img-wrap {
       margin-top: 0.2em;
@@ -190,8 +214,8 @@
       padding: 0.2em;
       box-sizing: border-box;
       background: #eee;
-      width: 3.6em;
-      height: 3.6em;
+      width: 5.5em;
+      height: 5.5em;
       position: relative;
 
       .notice {
@@ -213,49 +237,51 @@
       }
     }
 
-    h3 {
-      font-size: 0.95em;
-      padding-top: 0.1em;
-      padding-bottom: 0.1em;
-      text-align: center;
-    }
+    .center-box{
+      box-sizing: border-box;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
 
-    p {
-      display: block;
-      width: 100%;
-      text-align: center;
-      background: #eee;
-      margin-top: 0.1em;
-    }
+      h3 {
+        font-size: 1em;
+        padding-top: 0.1em;
+        padding-bottom: 0.1em;
+        color:#555;
+      }
 
-    .today-earn {
-      font-size: 0.9em;
-    }
+      p {
+        display: block;
+        width: 100%;
+        margin-top: 0.3em;
+        color:#555;
+      }
 
-    .all-earn {
-      font-size: 0.9em;
+      .today-earn {
+        font-size: 1em;
+      }
+
+      .all-earn {
+        @extend .today-earn;
+      }
     }
+    
   }
 
   .add-shop {
-    width: 8em;
-    height: 7em;
-    margin-top: 1em;
+    width: 95%;
+    height: 5.5em;
+    border-radius: 0.5em;
+    margin-top: 0.4em;
     position: relative;
+    background:#fff;
+    border: 0.1em dashed #ddd;
 
-    > div {
-      border-radius: 0.4em;
-      width:85%;
-      height: 85%;
-      border: 1px dashed #eee;
-
-      > i {
-          font-size: 4em;
-          color: #bbb;
-          display: block;
-          width: 1em;
-          height: 1em;
-      }
+    >i{
+      font-size: 2.5em;
+      color: #bbb;
+      display: block;
+      width: 1em;
+      height: 1em;
     }
 
     h3{
@@ -270,7 +296,6 @@
   height: 100vh;
   background: #eee;
   padding-bottom: 2em;
-  padding-top: 1em;
   position: fixed;
   top: 0em;
   left: 0em;
