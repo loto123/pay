@@ -54,4 +54,5 @@ class Transfer extends Model
     {
         return $this->hasOne(SettleContainer::class, 'id', 'container_id');
     }
+
 }

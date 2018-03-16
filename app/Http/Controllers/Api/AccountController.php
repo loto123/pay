@@ -421,11 +421,7 @@ class AccountController extends BaseController
 
 
         //计算手续费
-        if ($method->fee_value <= 0) {
-            $fee = 0;
-        } else {
-            $fee = $method->fee_mode == 0 ? round($request->amount * $method->fee_value / 100, 2) : $method->fee_value;
-        }
+        $fee = round($request->amount * $method->fee_percent / 100 + $method->fee_money, 2);
 
         if (bcsub($request->amount, $fee, 2) <= 0) {
             return $this->json([], '提现金额必须大于0', 0);
@@ -742,8 +738,8 @@ class AccountController extends BaseController
      *                  @SWG\Items(
      *                  @SWG\Property(property="id", type="integer", description="收款方式id"),
      *                  @SWG\Property(property="label", type="string", description="展示文本"),
-     *                  @SWG\Property(property="fee_value", type="float", example="0.3",description="手续费"),
-     *                  @SWG\Property(property="fee_mode", type="integer", example="0",description="手续费模式:0百分比,1单笔固定"),
+     *                  @SWG\Property(property="fee_money", type="float", example="0.3",description="手续费固定金额"),
+     *                  @SWG\Property(property="fee_percent", type="float", example="1",description="手续费百分比"),
      *                  @SWG\Property(property="my_max_quota", type="float", example="100.00",description="我的最大价格"),
      *                  @SWG\Property(property="quota_list", type="array", example="100,200,300",description="价格列表",@SWG\Items()),
      *                  @SWG\Property(property="required-params", type="object", description="该方式需要的必要参数说明。每种方式不同,key/描述。仅调试模式返回"),
@@ -772,7 +768,7 @@ class AccountController extends BaseController
             return $this->json(null, '没有可用支付通道', 0);
         }
 
-        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_value', 'fee_mode', 'max_quota')->get();
+        $methods = $channelBind->platform->withdrawMethods()->where('disabled', 0)->select('id', 'show_label as label', 'fee_money', 'fee_percent', 'max_quota')->get();
         if (config('app.debug')) {
             $methods->each(function (&$item) {
                 $item['required-params'] = WithdrawMethod::find($item['id'])->getReceiverDescription();
