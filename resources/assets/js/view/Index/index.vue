@@ -91,7 +91,14 @@
             <h3>我的vip</h3>
           </a>
         </li>
-
+        <li class="flex flex-v flex-align-center">
+          <a href="/#/MyReward" class="flex flex-v flex-align-center">
+            <i class="iconfont transaction-icon common-icon">
+              &#xe6e1;
+            </i>
+            <h3>我的赏金</h3>
+          </a>
+        </li>
       </ul>
 
       <div class="menu-class flex flex-align-center">
