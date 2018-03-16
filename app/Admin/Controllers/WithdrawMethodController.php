@@ -50,8 +50,8 @@ class WithdrawMethodController extends Controller
             $grid->column('platform.name', '支付平台');
             $grid->column('memo', '备注');
             //$grid->column('targetPlatform.name', '提现目标');
-            $grid->fee_value('手续费')->display(function ($value) {
-                return $this->fee_mode == 0 ? "$value&nbsp;%/笔" : "$value&nbsp;元/笔";
+            $grid->fee('手续费')->display(function () {
+                return $this->fee_percent . '%+' . $this->fee_money . '元';
             });
             $grid->max_quota('最大限额')->display(function () {
                 return $this->max_quota . '元';
@@ -100,8 +100,8 @@ class WithdrawMethodController extends Controller
             $form->text('impl', '实现路径')->rules('required|max:255', ['required' => '必填项']);
             $form->text('memo', '备注')->rules('nullable');
             $form->decimal('max_quota', '最大限额')->default(0)->rules('required|min:0', ['required' => '请设置最大限额', 'min' => '不能低于0']);
-            $form->decimal('fee_value', '手续费')->default(0)->rules('required|min:0', ['required' => '请设置手续费', 'min' => '不能低于0']);
-            $form->radio('fee_mode', '手续费模式')->options(['0' => '%百分比', '1' => '单笔固定'])->default('0');
+            $form->decimal('fee_percent', '比例手续费')->default(0)->rules('required|between:0,100', ['required' => '请设置手续费', 'between' => '0-100%'])->help('百分比,比如1%则50元收费0.5元');
+            $form->decimal('fee_money', '固定手续费')->default(0)->rules('required|min:0', ['required' => '请设置手续费', 'min' => '不能低于0'])->help('收取比例手续费外的固定费用,比如2元/笔');
             $form->textarea('config', '接口参数')->rules('nullable');
             $form->saving(function (Form $form) {
                 if ($form->target_platform && !Platform::find($form->target_platform)) {

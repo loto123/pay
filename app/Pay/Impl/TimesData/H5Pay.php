@@ -9,6 +9,7 @@
 namespace App\Pay\Impl\TimesData;
 
 
+use App\Admin\Model\UploadFile;
 use App\Pay\DepositInterface;
 use App\Pay\IdConfuse;
 use App\Pay\Model\Deposit;
@@ -22,7 +23,7 @@ class H5Pay implements DepositInterface
     public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
         $request = new PayRequest('h5_pay_request', $this->mixUpDepositId($deposit_id), $config['mechid'], 8);
-        $request->setRSAInstance(new RSA($config['platform_public_key'], $config['merchant_private_key'], 'base64', OPENSSL_PKCS1_PADDING, OPENSSL_ALGO_MD5));
+        $request->setRSAInstance(new RSA(UploadFile::getFile($config['platform_public_key']), UploadFile::getFile($config['merchant_private_key']), 'base64', OPENSSL_PKCS1_PADDING, OPENSSL_ALGO_MD5));
         $request->appendData('paytype', 0);
         $request->appendData('total_fee', bcmul($amount, 100));
         $request->appendData('device_ip', request()->ip());
