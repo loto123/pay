@@ -20,13 +20,17 @@
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
 
-        <div class="list-wrap flex flex-v flex-align-center" v-for="item in shopList" :key = "item.id" @click="goDetail(item.id)">
-          <div class="shop-item flex flex-justify-around flex-wrap-on flex-align-around">
-            <!-- <div class="notice"></div> -->
+        <div class="list-wrap flex flex-align-center" v-for="item in shopList" :key = "item.id" @click="goDetail(item.id)">
+
+          <div class="shop-item flex flex-justify-around flex-align-around">
             <img :src="item.logo"  alt="">
           </div>
 
-          <h3>{{SetString(item.name,10)}}</h3>
+          <h3 class="flex-6">{{SetString(item.name,10)}}</h3>
+
+          <i class="iconfont flex-1">
+            &#xe62e;
+          </i>
         </div>
         
       </div>
@@ -34,6 +38,12 @@
 </template>
 
 <style lang="scss" scoped>
+
+#my-collection{
+  min-height: 100vh;
+  background: #eee;
+}
+
 #top {
   height: 10em;
   padding-top:2em;
@@ -58,7 +68,7 @@
   h3 {
     margin-top: 1em;
     color: #fff;
-    text-align: center;
+    /*text-align: center;*/
     font-size: 1.2em;
   }
 }
@@ -80,16 +90,19 @@
 }
 
 .shop-list {
-  padding-top: 0.7em;
+
   .list-wrap {
-    width:33%;
+    width:98%;
+    background: #fff;
+    border-radius: 0.4em;
+    height: 5em;
+    margin-top:0.4em;
 
     .shop-item {
       width: 4em;
       height: 4em;
       margin-left: 1em;
       margin-right: 1em;
-      margin-top: 0.5em;
       background: #eee;
       border-radius: 0.4em;
       box-sizing: border-box;
@@ -116,8 +129,7 @@
     }
   }
   h3 {
-    font-size:0.9em;
-    text-align: center;
+    font-size:1em;
     padding-top:0.1em;
     padding-bottom: 0.1em;
   }

@@ -13,6 +13,10 @@ class ShopFund extends Model
 
     const TYPE_TRANAFER_IN = 2;
 
+    const TYPE_TIP = 3; //茶水费
+
+    const TYPE_FEE = 4; //手续费
+
     const MODE_IN = 0;
 
     const MODE_OUT = 1;
