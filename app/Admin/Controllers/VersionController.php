@@ -131,7 +131,9 @@ class VersionController extends Controller
 //                    }
                     $file = Request::file("url_file");
                     $form->md5 = md5_file($file->path());
-                    $form->url = Storage::disk(config('admin.upload.disk'))->putFileAs(config("admin.upload.directory.file"), $file, md5(uniqid()).'.'.$file->getClientOriginalExtension());
+                    $filename = md5(uniqid()).'.'.$file->getClientOriginalExtension();
+                    Storage::disk("public")->putFileAs("files", $file, $filename);
+                    $form->url = Storage::disk("public")->url("files/".$filename);
                 } else if (Request::input("url_link")) {
                     $form->url = Request::input("url_link");
                     $form->md5 = md5(Request::input("url_link"));

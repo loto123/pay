@@ -355,6 +355,7 @@ import request from "../../utils/userRequest";
 import {Toast,MessageBox} from "mint-ui"
 import choiseMember from "./choiseMember.vue"
 import Loading from "../../utils/loading";
+import wx from 'weixin-js-sdk'
 
 import qrCode from "../../utils/qrCode";
 
@@ -394,11 +395,16 @@ export default {
       canClick:true,              // 防止连续点击
       submitClick:false,
       choiseMemberSwitch:false,
-      allow_remind:true           // 是否允许提醒其他人
+      allow_remind:true,           // 是否允许提醒其他人
+      logo:null
     };
   },
   created() {
-    this.init();
+    this.init().then(res=>{
+      if (res) {
+        this.initImage();
+      }
+    });
   },
   mounted() {
     this._getQRCode();
@@ -423,15 +429,17 @@ export default {
     },
 
     init() {
-
       Loading.getInstance().open();
       this.canClick = true;
       this.transfer_id = this.$route.query.id;
       var _data = {
         transfer_id: this.transfer_id
       };
-
-      Promise.all([request.getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id),request.getInstance().getData("api/index")]).then(res=>{
+      var data = {
+        share_url: window.location.href.split('#')[0],
+        list: ['onMenuShareTimeline', 'onMenuShareAppMessage']
+      };
+      return Promise.all([request.getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id),request.getInstance().getData("api/index"),request.getInstance().getData("api/proxy/share", data)]).then(res=>{
         this.joiner = res[0].data.data.joiner;
         this.renderData = res[0].data.data;
         this.recordList = res[0].data.data.record;
@@ -443,6 +451,10 @@ export default {
         this.isShow = true;
 
         this.balance = res[1].data.data.balance;
+        var Data = res[2].data.data;
+        var content=JSON.parse(Data.config);
+        wx.config(content);
+        return Promise.resolve(true);
         Loading.getInstance().close();
         
       }).catch(err=>{
@@ -450,29 +462,55 @@ export default {
           Loading.getInstance().close();
           this.$router.push('/404notfound');
       });
-
-      // request
-      //   .getInstance()
-      //   .getData("api/transfer/show" + "?transfer_id=" + this.transfer_id)
-      //   .then(res => {
-      //     this.joiner = res.data.data.joiner;
-      //     this.renderData = res.data.data;
-      //     this.recordList = res.data.data.record;
-      //     this.shop_id = res.data.data.shop_id;
-      //     this.allow_reward = res.data.data.allow_reward;
-      //     this.isManager = res.data.data.allow_cancel;
-      //     this.status = res.data.data.status;
-      //     this.allow_remind = res.data.data.allow_remind;
-      //     this.isShow = true;
-      //     Loading.getInstance().close();
-      //   })
-      //   .catch(err => {
-      //     Toast(err.data.msg);
-      //     Loading.getInstance().close();
-      //     this.$router.push('/404notfound');
-      //   });
     },
-
+    initImage(){
+      request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
+        this.logo = res.data.data.logo;
+        this.shareContent();
+        Loading.getInstance().close();
+      }).catch(err=>{
+        Toast(err.data.msg);
+        Loading.getInstance().close();
+      });
+    },
+    shareContent() {
+      let url=window.location.href.split('#')[0];
+      let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
+      let title = '邀请您加入任务';
+      let desc = '任务池的钻石已经放不下啦，还不来拿?';
+      let imgUrl = this.logo;
+      wx.ready(() => {
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+          title: title, // 分享标题
+          desc: desc, // 分享描述
+          link: links, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: imgUrl, // 分享图标
+          success: function () {
+            // 用户确认分享后执行的回调函数
+            Toast('成功分享给朋友');
+          },
+          cancel: function () {
+            // 用户取消分享后执行的回调函数
+            Toast('分享失败，您取消了分享');
+          }
+        })
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+          title: title, // 分享标题
+          link: links, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: imgUrl, // 分享图标
+          success: function () {
+            // 用户确认分享后执行的回调函数
+            Toast('成功分享到朋友圈');
+          },
+          cancel: function () {
+            // 用户取消分享后执行的回调函数
+            Toast('分享失败，您取消了分享');
+          }
+        })
+      })
+    },
     goTipPage() {
       this.$router.push("/makeDeal/deal_tip" + "?id=" + this.transfer_id);
     },

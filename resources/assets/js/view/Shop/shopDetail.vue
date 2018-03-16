@@ -57,6 +57,7 @@
         </div> -->
         </div>
 
+        <!-- 公会成员 -->
         <div class="member-wrap flex flex-align-center flex-justify-around" @click="goMember">
 
             <div class="flex-1" style="padding-left:1em;">
@@ -66,8 +67,9 @@
             </div>
 
             <div class="avatar-wrap flex-5 flex flex-justify-around">
-                <div class="avatar-item" v-for="item in membersList">
-                    <img :src="item.avatar" alt="">
+
+                <div class="avatar-item" v-for="(item,index) in membersList">
+                    <img :src="item.avatar" alt="" v-if="index < 5">
                 </div>
 
                 <div class="add-avatar flex flex-align-center flex-justify-center" @click.stop="addMember" v-if="isGroupMaster">
@@ -656,9 +658,14 @@
                     });
             },
 
-            // 结算公会
+            // 解散公会
             dissShop() {
                 MessageBox.confirm('确定删除公会?').then(action => {
+
+                    if(this.tradeStatus == true){
+                        Toast("请先关闭公会交易功能");
+                        return;
+                    }
 
                     Loading.getInstance().open();
 

@@ -229,7 +229,6 @@ export default {
           Loading.getInstance().close();
         })
         .catch(err => {
-          console.error(err);
           Loading.getInstance().close();
         });
     },
@@ -390,7 +389,6 @@ export default {
         .catch(err => {
             Toast(err.data.msg);
             this.submitSwitch = true;
-            console.error(err);
         });
     },
 
