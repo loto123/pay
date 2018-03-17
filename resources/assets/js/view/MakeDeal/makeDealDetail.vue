@@ -389,6 +389,8 @@ export default {
       allow_reward:false,         // 是否允许打赏
       joiner:[],                  // 任务的参与者，需要提醒的人
       memberList:[],              //成员数组
+      shop_name:null,             //店铺名称
+      comment:null,               //任务备注
       
       status:null,                // 1 待结算 2 已平账 3 已关闭
       recordList:[],
@@ -448,7 +450,10 @@ export default {
         this.isManager = res[0].data.data.allow_cancel;
         this.status = res[0].data.data.status;
         this.allow_remind = res[0].data.data.allow_remind;
+        this.shop_name=res[0].data.data.shop_name;
+        this.comment=res[0].data.data.comment;
         this.isShow = true;
+        
 
         this.balance = res[1].data.data.balance;
         var Data = res[2].data.data;
@@ -476,8 +481,8 @@ export default {
     shareContent() {
       let url=window.location.href.split('#')[0];
       let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
-      let title = '邀请您加入任务';
-      let desc = '任务池的钻石已经放不下啦，还不来拿?';
+      let title = this.shop_name;
+      let desc = this.comment;
       let imgUrl = this.logo;
       wx.ready(() => {
         //分享给朋友
