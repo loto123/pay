@@ -7,8 +7,8 @@
     </div>
     <div class="deal-wrap">
       <ul>
-        <li class="reward-list">
-          <div class="topContent">来自公会:公会1</div>
+        <li class="reward-list" v-for="item in shopContent">
+          <div class="topContent">来自公会:{{item.shop_name}}</div>
           <div class="infoContent-box flex">
             <div class="left-content">
               <div class="avatar-wrap">
@@ -17,11 +17,11 @@
             </div>
             <div class="right-content flex flex-7 flex-align-center">
               <div class="reward-content flex flex-v flex-justify-center">
-                <div class="title"><span>leaf</span>打赏了你</div>
+                <div class="title"><span>{{item.user_name}}</span>打赏了你</div>
                 <div class="date">2018-11-06 08:30</div>
               </div>
               <div class="reward-oney">
-                <div class="m-text">99
+                <div class="m-text">{{item.amount}}
                   <i class="diamond" style="float: right;margin-top: 0.1em; margin-left: 0.2em;">&#xe6f9;</i>
                 </div>
               </div>
@@ -59,6 +59,7 @@
     ul {
       width: 100%;
       border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
       .reward-list {
         background: #fff;
         width: 100%;
@@ -144,7 +145,8 @@
         dealShop: null,
         shopList: null,
         shopId: null,
-        isShow: false
+        isShow: false,
+        shopContent:[]
       };
     },
 
@@ -152,8 +154,7 @@
       init() {
         Loading.getInstance().open();
         // 拿到所有的店铺
-        request
-          .getInstance().getData("api/shop/lists/mine")
+        request.getInstance().getData("api/shop/lists/mine")
           .then(res => {
             this.setShopList(res);
             this.isShow = true;
@@ -165,10 +166,13 @@
       },
       init2(){
         Loading.getInstance().open();
+        var data={
+          shop_id:this.shopId
+        }
         // 拿到所有的店铺列表
-        request.getInstance().getData("api/shop/tips")
+        request.getInstance().getData("api/shop/tips",data)
           .then(res => {
-            console.log(res);
+            this.shopContent=res.data.data.data;
             Loading.getInstance().close();
           })
           .catch(err => {
@@ -192,10 +196,8 @@
             return this.shopList[i].label;
           }
         }
-
         return "没有这个公会";
       },
-
       getDefaultPrice(id) {
         for (let i = 0; i < this.shopList.length; i++) {
           if (this.shopList[i].value == id) {
@@ -203,7 +205,6 @@
           }
         }
       },
-
       showDropList() {
         if (this.shopList.length == 0) {
           Toast("当前无可选的公会,请先加入公会或创建公会");
@@ -211,11 +212,12 @@
         }
         this.dropListSwitch = true;
       },
-
       hideDropList(data) {
         this.dropListSwitch = false;
         this.dealShop = this.getShopName(data);
+        console.log(data);
         this.shopId = data;
+        this.init2();
       }
     },
     components: { topBack, inputList }
