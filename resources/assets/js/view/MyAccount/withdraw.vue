@@ -416,6 +416,12 @@
 
 			// 选择出售狗狗的价格
 			choiseSalePrice(price){
+
+				if(price > this.myMaxQuota){
+				    Toast("您的钻石不足");
+				    return;
+				}
+
 				this.isMaxQuota = false;
 				for(let j = 0; j<this.priceList.length; j ++){
 					this.priceList[j].isChecked = false;
@@ -424,6 +430,7 @@
 						this.amount = this.priceList[j].price;
 					}
 				}
+
 			},
 
 			showGetEggsPop(){

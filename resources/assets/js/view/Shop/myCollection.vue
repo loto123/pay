@@ -68,7 +68,7 @@
   h3 {
     margin-top: 1em;
     color: #fff;
-    /*text-align: center;*/
+    text-align: center;
     font-size: 1.2em;
   }
 }
