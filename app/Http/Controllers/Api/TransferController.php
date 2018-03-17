@@ -206,6 +206,7 @@ class TransferController extends BaseController
      *                  type="object",
      *                  @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
      *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
+     *                  @SWG\Property(property="shop_name", type="string", example="1号公会", description="店铺名称"),
      *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
      *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
      *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
@@ -338,6 +339,7 @@ class TransferController extends BaseController
             unset($transfer->joiner[$key]->transfer_id);
             unset($transfer->joiner[$key]->user_id);
         }
+        $transfer->shop_name = $transfer->shop->name;
         unset($transfer->user_id);
         unset($transfer->shop);
         return $this->json($transfer, 'ok', 1);
