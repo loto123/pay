@@ -109,7 +109,7 @@ class ShopController extends BaseController
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        if ($request->percent > config("platform_fee_percent")) {
+        if ($request->percent > config("guild_commission")) {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
@@ -985,7 +985,7 @@ class ShopController extends BaseController
         }
 
         if ($request->percent !== null) {
-            if ($request->percent > config("platform_fee_percent")) {
+            if ($request->percent > config("guild_commission")) {
                 return $this->json([], trans("api.error_shop_percent"), 0);
             }
             $shop->fee = $request->percent;
