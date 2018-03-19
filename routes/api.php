@@ -146,6 +146,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->get('transfer/records/detail/{id}', 'ShopController@record_detail');
 
         $api->get('tips', 'ShopController@tips');
+        $api->get('settings', 'ShopController@settings');
 
     });
 });
