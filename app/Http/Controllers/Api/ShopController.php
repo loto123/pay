@@ -2227,4 +2227,42 @@ class ShopController extends BaseController
         }
         return $this->json(['count' => (int)$count, 'data' => $data]);
     }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/settings",
+     *   summary="店铺配置",
+     *   tags={"店铺"},
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="guild_commission", type="double", example=1.2,description="最大佣金数"),
+     *                  @SWG\Property(property="price", type="string", example="200.00",description="原价"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function setting() {
+        return $this->json(['guild_commission' => (double)config("guild_commission"), 'price' => config("shop_price")]);
+    }
 }
