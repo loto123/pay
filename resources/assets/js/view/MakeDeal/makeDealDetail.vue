@@ -551,21 +551,18 @@ export default {
 
       if(this.payType == "put"){
         var _put = this.moneyData.payMoney;
-
-        if(_put > this.balance){
-          Toast("钻石数量不足");
-          return;
-        }
-
         if((parseFloat(_put)).toString().indexOf(".") != -1 || isNaN(Number(_put))){
           this.moneyData.payMoney = null;
-
           Toast("积分只能是整数");
           Loading.getInstance().close();
           return;
+        }
 
-        }else{
+        var _data = {};
+        _data.transfer_id = this.transfer_id;
+        _data.points  = _put;
 
+        request.getInstance().postData("api/transfer/validate",_data).then(res=>{
           Loading.getInstance().open();
 
           request.getInstance().getData("api/my/info").then(res=>{
@@ -581,18 +578,20 @@ export default {
               }, 2000);
 
             }else {
-
               Loading.getInstance().close();
               this.showPassword();
-
             }
-
-          }).catch(err=>{
-
             Loading.getInstance().close();
-
+            
+          }).catch(err=>{
+            Loading.getInstance().close();
           });
-        }
+
+        }).catch(err=>{
+          Toast(err.data.msg);
+        });
+
+        
 
       }else if(this.payType == "get"){
         if(this.moneyData.getMoney == null){
@@ -651,9 +650,7 @@ export default {
           Loading.getInstance().close();
           Toast("放钻成功");
           this.moneyData.payMoney = null;
-          setTimeout(()=>{
-            this.init();
-          },1500);
+          this.init();
         }).catch(err=>{
           Loading.getInstance().close();
 
@@ -663,8 +660,6 @@ export default {
         this.hidePassword();
 
       }else if(this.payType == "get"){
-
-      
 
         // 拿钱
         var _data = {
