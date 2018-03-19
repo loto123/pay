@@ -467,7 +467,10 @@ export default {
       }).catch(err=>{
           Toast(err.data.msg);
           Loading.getInstance().close();
-          // this.$router.push('/404notfound');
+          
+          if(err.data.msg == "交易不存在"){
+            this.$router.push('/404notfound');
+          }
       });
     },
     // initImage(){
