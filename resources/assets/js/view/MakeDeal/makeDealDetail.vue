@@ -483,7 +483,7 @@ export default {
     shareContent() {
       let url=window.location.href.split('#')[0];
       let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
-      let title = this.content;
+      let title = this.comment;
       let desc = "21321";
       let imgUrl = url+'/images/logo.png';
       wx.ready(() => {
