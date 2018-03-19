@@ -406,7 +406,7 @@ export default {
   created() {
     this.init().then(res=>{
       if (res) {
-        this.initImage();
+        this.shareContent();
       }
     });
   },
@@ -470,16 +470,16 @@ export default {
           this.$router.push('/404notfound');
       });
     },
-    initImage(){
-      request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
-        this.logo = res.data.data.logo;
-        this.shareContent();
-        Loading.getInstance().close();
-      }).catch(err=>{
-        Toast(err.data.msg);
-        Loading.getInstance().close();
-      });
-    },
+    // initImage(){
+    //   request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
+    //     this.logo = res.data.data.logo;
+    //     this.shareContent();
+    //     Loading.getInstance().close();
+    //   }).catch(err=>{
+    //     Toast(err.data.msg);
+    //     Loading.getInstance().close();
+    //   });
+    // },
     shareContent() {
       let url=window.location.href.split('#')[0];
       let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
