@@ -461,13 +461,16 @@ export default {
         var Data = res[2].data.data;
         var content=JSON.parse(Data.config);
         wx.config(content);
-        return Promise.resolve(true);
         Loading.getInstance().close();
+        return Promise.resolve(true);
         
       }).catch(err=>{
           Toast(err.data.msg);
           Loading.getInstance().close();
-          this.$router.push('/404notfound');
+          
+          if(err.data.msg == "交易不存在"){
+            this.$router.push('/404notfound');
+          }
       });
     },
     // initImage(){
