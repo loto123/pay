@@ -363,7 +363,7 @@
       submitData() {
         var _tempMessage = null;
         if (this.commentMessage == null) {
-          _tempMessage = "大吉大利 恭喜发财";
+          _tempMessage = "恭喜发财";
         } else {
           _tempMessage = this.commentMessage;
         }
