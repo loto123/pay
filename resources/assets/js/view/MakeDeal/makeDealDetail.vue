@@ -473,7 +473,6 @@ export default {
     initImage(){
       request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
         this.logo = res.data.data.logo;
-        console.log(this.logo);
         this.shareContent();
         Loading.getInstance().close();
       }).catch(err=>{
@@ -486,7 +485,7 @@ export default {
       let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
       let title = this.shop_name;
       let desc = this.comment;
-      let imgUrl = this.logo;
+      let imgUrl = url+'/images/logo.png';
       wx.ready(() => {
         //分享给朋友
         wx.onMenuShareAppMessage({
