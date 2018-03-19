@@ -2208,9 +2208,9 @@ class ShopController extends BaseController
             $query->where("created_at", "<", $start);
         }
         $count = $query->count();
-        $query->orderBy('id',  'DESC')->limit($request->input('limit', 20));
+        $query->orderBy((new ShopFund())->getTable().'.id',  'DESC')->limit($request->input('limit', 20));
         if ($request->offset) {
-            $query->where("id", "<", ShopFund::decrypt($request->offset));
+            $query->where((new ShopFund())->getTable().".id", "<", ShopFund::decrypt($request->offset));
         }
         /* @var $user User */
         foreach ($query->get() as $_fund) {
