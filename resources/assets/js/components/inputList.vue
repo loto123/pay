@@ -116,7 +116,9 @@ export default {
       }
   },
   watch:{
-      "choiseValue":'hideTab'
+      "choiseValue":function(e){
+          this.hideTab();
+      }
   }
 }
 </script>

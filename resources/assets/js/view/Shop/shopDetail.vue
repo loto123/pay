@@ -553,6 +553,7 @@
                 platform_fee: null,
                 addMemberSwitch: false,       // 添加成员开关
                 logo: null,                    // 公会的头像
+                fee_limit:0,
 
                 searchData: {                  // 搜索出来的数据
                     avatar: null,
@@ -633,7 +634,7 @@
                         this.membersCount = res.data.data.members_count;
                         this.membersList = res.data.data.members;
                         this.logo = res.data.data.logo;
-
+                        this.fee_limit = res.data.data.guild_commission;
 
                         if (res.data.data.active == 1) {
                             this.tradeStatus = true;
@@ -785,7 +786,7 @@
 
                 // 手续费率
                 if (type == "percent") {
-                    MessageBox.prompt("请输入新的公会佣金费率(0%~" + this.platform_fee + "%)", "修改公会佣金费率(必须小于平台交易费率)", ).then(({ value, action }) => {
+                    MessageBox.prompt("请输入新的公会佣金费率", "修改公会佣金费率(必须小于"+this.fee_limit+"%)", ).then(({ value, action }) => {
 
                         if (value.length == 0) {
                             Toast("公会佣金费率不能为空");
@@ -797,8 +798,8 @@
                             return;
                         }
 
-                        if (Number(value) > Number(this.platform_fee)) {
-                            Toast("公会佣金费率必须小于平台交易费率" + this.platform_fee + "%");
+                        if (Number(value) > Number(this.fee_limit)) {
+                            Toast("公会佣金费率必须小于" + this.fee_limit + "%");
                             return;
                         }
 
