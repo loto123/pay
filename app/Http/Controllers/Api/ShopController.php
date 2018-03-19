@@ -109,7 +109,7 @@ class ShopController extends BaseController
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        if ($request->percent > config("platform_fee_percent")) {
+        if ($request->percent > config("guild_commission")) {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
@@ -985,7 +985,7 @@ class ShopController extends BaseController
         }
 
         if ($request->percent !== null) {
-            if ($request->percent > config("platform_fee_percent")) {
+            if ($request->percent > config("guild_commission")) {
                 return $this->json([], trans("api.error_shop_percent"), 0);
             }
             $shop->fee = $request->percent;
@@ -2169,6 +2169,7 @@ class ShopController extends BaseController
      *                      @SWG\Property(property="shop_id", type="string", example="1234567890", description="店铺id"),
      *                      @SWG\Property(property="shop_name", type="string", example="店铺名", description="店铺名"),
      *                      @SWG\Property(property="user_name", type="string", example="1234567890", description="用户名"),
+     *                      @SWG\Property(property="user_avatar", type="string", example="url", description="用户头像"),
      *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
      *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
      *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
@@ -2216,6 +2217,7 @@ class ShopController extends BaseController
                 'shop_id' => $_fund->shop ? $_fund->shop->en_id() : "",
                 'shop_name' => $_fund->shop ? $_fund->shop->name : "",
                 'user_name' => $_fund->user ? $_fund->user->name : "",
+                'user_avatar' => $_fund->user ? $_fund->user->avatar : "",
                 'mode' => (int)$_fund->mode,
                 'amount' => (double)$_fund->amount,
                 'created_at' => strtotime($_fund->created_at)

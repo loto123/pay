@@ -22,8 +22,8 @@
       </div>
       
       <div class="tab-menu flex flex-align-center flex-justify-center" >
-        <div class="my-shop flex flex-align-center flex-justify-center active">我的公会</div>
-        <div class="my-star flex flex-align-center flex-justify-center" @click="goMyCollection">我的收藏</div>
+        <div class="my-shop flex flex-align-center flex-justify-center active">我创建的公会</div>
+        <div class="my-star flex flex-align-center flex-justify-center" @click="goMyCollection">我加入的公会</div>
       </div>
 
       <div class="shop-list flex flex-justify-around flex-wrap-on">
