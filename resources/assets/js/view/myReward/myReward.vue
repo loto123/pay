@@ -8,8 +8,8 @@
         {{dealShop?dealShop:'全部'}}
       </div>
     </div>
-    <div class="deal-wrap">
-      <ul>
+    <div class="deal-wrap" ref='wrapper'>
+      <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
         <li class="reward-list" v-for="item in shopContent">
           <div class="topContent">来自公会:{{item.shop_name}}</div>
           <div class="infoContent-box flex">
@@ -33,6 +33,10 @@
           </div>
         </li>
       </ul>
+      <p v-if="loading" class="page-infinite-loading flex flex-align-center flex-justify-center">
+        <mt-spinner type="fading-circle"></mt-spinner>
+        <span style="margin-left: 0.5em;color:#999;">加载中...</span>
+      </p>
     </div>
     <inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList" v-if="isShow" title="选择打赏来源公会">
     </inputList>
@@ -157,11 +161,19 @@
         dropListSwitch: false,       // 下拉框开关
         choiseMemberSwitch: false,    // 选择提醒玩家开关
         dealShop: null,
-        shopList: ['全部'],
+        shopList: [],
         shopId: null,
         isShow: false,
-        shopContent: []
+        shopContent: [],
+
+        wrapperHeight: null,
+        loading: false,
+        allLoaded: false,
+        canLoading: true
       };
+    },
+    mounted() {
+      this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
     },
     methods: {
       init() {
@@ -170,7 +182,6 @@
         request.getInstance().getData("api/shop/lists/mine")
           .then(res => {
             this.setShopList(res);
-            this.allShop();
             this.isShow = true;
             Loading.getInstance().close();
           })
@@ -180,8 +191,9 @@
       },
       allShop() {
         var _data = {
-          limit: 100,
-          offset: 0
+          limit: 10,
+          offset: 0,
+          shop_id: this.shopId
         }
         Loading.getInstance().open();
         // 拿到所有的公会列表
@@ -194,23 +206,42 @@
             Loading.getInstance().close();
           });
       },
-      selShop() {
-        Loading.getInstance().open();
-        var data = {
-          shop_id: this.shopId
+      loadMore() {
+        this.loading = false;
+        if (this.shopContent.length == 0 || !this.canLoading) {
+          return;
         }
-        //sel公会列表
-        request.getInstance().getData("api/shop/tips",data)
-          .then(res => {
-            this.shopContent = res.data.data.data;
-            Loading.getInstance().close();
-          })
-          .catch(err => {
-            Loading.getInstance().close();
+        this.loading = true;
+        this.canLoading = false;
+        setTimeout(() => {
+          var _data = {
+            limit: 10,
+            shop_id: this.shopId,
+            offset: [].concat(this.shopContent).pop().id
+          }
+          request.getInstance().getData('api/shop/tips', _data).then(res => {
+            if (res.data.data.data.length == 0) {
+              this.canLoading = false;
+              this.loading = false;
+              return;
+            }
+            for (var i = 0; i < res.data.data.data.length; i++) {
+              this.shopContent.push(res.data.data.data[i]);
+            }
+            this.canLoading = true;
+            this.loading = false;
+          }).catch(err => {
+
           });
+        }, 1500);
       },
       setShopList(res) {
-        var _tempList = ['全部'];
+        var _tempList = [
+          {
+            label:"全部",
+            value:"0"
+          }
+        ];
         for (let i = 0; i < res.data.data.data.length; i++) {
           var _t = {};
           _t.value = res.data.data.data[i].id.toString();
@@ -227,7 +258,6 @@
           }
         }
         // return "没有这个公会";
-        this.allShop();
       },
       getDefaultPrice(id) {
         for (let i = 0; i < this.shopList.length; i++) {
@@ -247,7 +277,8 @@
         this.dropListSwitch = false;
         this.dealShop = this.getShopName(data);
         this.shopId = data;
-        this.selShop();
+        this.allShop();
+        this.canLoading = true;
       },
       changeTime(shijianchuo) {
         function add0(m) { return m < 10 ? '0' + m : m }
