@@ -455,7 +455,6 @@ export default {
         this.shop_logo=res[0].data.data.shop_logo;
         this.comment=res[0].data.data.comment;
         this.isShow = true;
-        
 
         this.balance = res[1].data.data.balance;
         var Data = res[2].data.data;
