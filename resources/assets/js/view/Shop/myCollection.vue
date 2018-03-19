@@ -76,6 +76,7 @@
 .tab-menu {
   width: 100%;
   height: 3em;
+  background: #fff;
 
   > div {
     width: 50%;
