@@ -37,9 +37,7 @@ export default class UserRequest {
                         resolve(res);
                     }else if(res.data.code == 2){
                         Loading.getInstance().close();
-                        setTimeout(function(){
-                            window.location.href = "/#/login";
-                        },1000);
+                        window.location.href = "/#/login";
                         
                         reject(res);
                     }
@@ -73,9 +71,7 @@ export default class UserRequest {
                     }else if(res.data.code == 2){
 
                         Loading.getInstance().close();
-                        setTimeout(function(){
-                            window.location.href = "/#/login"
-                        },2000);
+                        window.location.href = "/#/login"
                         reject(res);
                         
                     }
