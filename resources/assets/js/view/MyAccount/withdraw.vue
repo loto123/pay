@@ -173,8 +173,8 @@
 				way: null,	                    // 提现方式
 				value: null,
 				has_pay_password: null,         // 是否设置支付密码
-				balance:null,		            // 最高价
-				fee_value: null,
+				balance:null,		                // 最高价
+				// fee_value: null,
 				isFee: false,                   // 是否展示手续费
 				isShow:false,
 				isPayInfoDetailShow:false,      // 付款后的提示
@@ -183,23 +183,26 @@
 				getEggsTimes:0,
 				isPopDetailShow:false,          // 查看更多显示
 				isPopGetEggsShow:false,         // 领取宠物蛋弹窗显示
-				isPopBroodEggs:false,		    // 是否孵蛋
-				broodInfo:null,					// 孵蛋提示信息
+				isPopBroodEggs:false,		        // 是否孵蛋
+				broodInfo:null,					        // 孵蛋提示信息
 				amount:null,                    // 提交的价格
-				petId:null,						// 宠物id
+				petId:null,						          // 宠物id
 				myMaxQuota:0,                   // 玩家可以提现的最高价格
 				isMaxQuota:false,               // 是否选中了最高价格
-				priceList:[],	                // 价格列表
+				priceList:[],	                  // 价格列表
 				sheetVisible:false,
 				has_pay_card:0,                 // 是否绑定了银行卡
 				actions:[],                     // 右上角动作列表
 
 				isBroodClick:false,             // 孵化按钮防止连续点击
-				fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
+				// fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
 				bankInfo:null,                  // 提现成功后的银行卡信息提示
-				fee:1,
+				fee:1,													// 需要支付的手续费
 				isCanSale:false,
-				remains_times:0                 // 剩余的提现次数
+				remains_times:0,                // 剩余的提现次数
+				fee_percent:0,
+				fee_money:0
+
 			}
 		},
 		mounted(){
@@ -256,8 +259,6 @@
 						this.has_pay_password = res[1].data.data.has_pay_password;
 						this.has_pay_card = res[1].data.data.has_pay_card;
 
-						// this.fee_mode= res[2].data.data.fee_mode;
-						// this.fee_value = res[2].data.data.fee_value;
 						this.dataList = res[2].data.data.methods;
 						this.setBankList(res[2]);//获取提现方式列表
 
@@ -315,12 +316,9 @@
 					way: this.value
 				}
 
-				if(this.fee_mode == 0){          // 百分比模式
-					var temp = this.amount * ((this.fee_value)/100);
-					this.fee = Math.floor(temp*100)/100;
-				}else if(this.fee_mode == 1){    // 指定金额模式
-					this.fee = this.fee_value;
-				}
+//        提现手续费 = round(提现金额 * fee_percent/100 + fee_money,2)
+				this.fee = parseFloat(this.amount * (this.fee_percent/100) + parseFloat(this.fee_money));
+				this.fee = this.fee.toFixed(2);
 
 				if (!this.value) {
 					Toast('请选择支付方式');
@@ -375,9 +373,10 @@
 
 						// 获取最高价
 						this.myMaxQuota = this.dataList[i].my_max_quota;
-						this.fee_mode = this.dataList[i].fee_mode;
-						this.fee_value = this.dataList[i].fee_value;
-
+						// 
+						this.fee_money = this.dataList[i].fee_money;
+						this.fee_percent = this.dataList[i].fee_percent;
+						
 						for(var k = 0; k < this.dataList[i].quota_list.length; k++){
 							var _temp =  {};
 							_temp.price = this.dataList[i].quota_list[k];
