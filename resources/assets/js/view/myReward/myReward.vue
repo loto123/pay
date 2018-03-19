@@ -278,6 +278,7 @@
         this.dealShop = this.getShopName(data);
         this.shopId = data;
         this.allShop();
+        this.canLoading = true;
       },
       changeTime(shijianchuo) {
         function add0(m) { return m < 10 ? '0' + m : m }
