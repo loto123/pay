@@ -389,20 +389,23 @@ export default {
       allow_reward:false,         // 是否允许打赏
       joiner:[],                  // 任务的参与者，需要提醒的人
       memberList:[],              //成员数组
-      
+      shop_name:null,             //店铺名称
+      comment:null,               //任务备注
+      shop_logo:null,             //店铺logo
+
       status:null,                // 1 待结算 2 已平账 3 已关闭
       recordList:[],
       canClick:true,              // 防止连续点击
       submitClick:false,
       choiseMemberSwitch:false,
       allow_remind:true,           // 是否允许提醒其他人
-      logo:null
+      
     };
   },
   created() {
     this.init().then(res=>{
       if (res) {
-        this.initImage();
+        this.shareContent();
       }
     });
   },
@@ -448,6 +451,9 @@ export default {
         this.isManager = res[0].data.data.allow_cancel;
         this.status = res[0].data.data.status;
         this.allow_remind = res[0].data.data.allow_remind;
+        this.shop_name=res[0].data.data.shop_name;
+        this.shop_logo=res[0].data.data.shop_logo;
+        this.comment=res[0].data.data.comment;
         this.isShow = true;
 
         this.balance = res[1].data.data.balance;
@@ -463,22 +469,12 @@ export default {
           this.$router.push('/404notfound');
       });
     },
-    initImage(){
-      request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
-        this.logo = res.data.data.logo;
-        this.shareContent();
-        Loading.getInstance().close();
-      }).catch(err=>{
-        Toast(err.data.msg);
-        Loading.getInstance().close();
-      });
-    },
     shareContent() {
       let url=window.location.href.split('#')[0];
       let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
-      let title = '邀请您加入任务';
-      let desc = '任务池的钻石已经放不下啦，还不来拿?';
-      let imgUrl = this.logo;
+      let title = this.shop_name;
+      let desc = this.comment;
+      let imgUrl = this.shop_logo;
       wx.ready(() => {
         //分享给朋友
         wx.onMenuShareAppMessage({

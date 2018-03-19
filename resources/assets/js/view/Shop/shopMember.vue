@@ -262,7 +262,6 @@ export default {
 
   watch:{
     "searchData":function(e){
-//      console.log(this.searchData);
       this.openSearchSwitch(e);
     }
   }
