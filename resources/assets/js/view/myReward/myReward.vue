@@ -179,9 +179,13 @@
           });
       },
       allShop() {
+        var _data = {
+          limit: 100,
+          offset: 0
+        }
         Loading.getInstance().open();
         // 拿到所有的公会列表
-        request.getInstance().getData("api/shop/tips")
+        request.getInstance().getData("api/shop/tips",_data)
           .then(res => {
             this.shopContent = res.data.data.data;
             Loading.getInstance().close();
