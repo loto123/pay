@@ -406,7 +406,7 @@ export default {
   created() {
     this.init().then(res=>{
       if (res) {
-        this.shareContent();
+        this.initImage();
       }
     });
   },
@@ -473,6 +473,7 @@ export default {
     initImage(){
       request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
         this.logo = res.data.data.logo;
+        console.log(this.logo);
         this.shareContent();
         Loading.getInstance().close();
       }).catch(err=>{
