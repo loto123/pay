@@ -2262,7 +2262,7 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function setting() {
+    public function settings() {
         return $this->json(['guild_commission' => (double)config("guild_commission"), 'price' => config("shop_price")]);
     }
 }
