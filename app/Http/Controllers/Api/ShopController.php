@@ -109,7 +109,7 @@ class ShopController extends BaseController
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        if ($request->percent > config("guild_commission")) {
+        if ($request->percent > config("guild_commission", 0)) {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
@@ -495,7 +495,7 @@ class ShopController extends BaseController
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
                 'platform_fee' => (double)config("platform_fee_percent"),
-                'guild_commission' => (double)config("guild_commission"),
+                'guild_commission' => (double)config("guild_commission", 0),
                 'rate' => (double)$shop->price,
                 'percent' => (double)$shop->fee,
                 'created_at' => strtotime($shop->created_at),
@@ -987,7 +987,7 @@ class ShopController extends BaseController
         }
 
         if ($request->percent !== null) {
-            if ($request->percent > config("guild_commission")) {
+            if ($request->percent > config("guild_commission", 0)) {
                 return $this->json([], trans("api.error_shop_percent"), 0);
             }
             $shop->fee = $request->percent;
@@ -2263,6 +2263,6 @@ class ShopController extends BaseController
      * @return \Illuminate\Http\Response
      */
     public function settings() {
-        return $this->json(['guild_commission' => (double)config("guild_commission"), 'price' => config("shop_price")]);
+        return $this->json(['guild_commission' => (double)config("guild_commission", 0), 'price' => config("shop_price")]);
     }
 }
