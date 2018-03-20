@@ -21,7 +21,7 @@
                     <span>{{item.user.name}}</span>
                     <div class="flex flex-v flex-align-center">
                         <div style="font-size: 1.4em;">{{item.amount}}</div>
-                        <div style="font-size: 0.8em;color:#999;">已加速</div>
+                        <div style="font-size: 0.8em;color:#999;">已打赏</div>
                     </div>
                 </li>
             </ul>

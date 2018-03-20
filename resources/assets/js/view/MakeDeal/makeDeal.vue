@@ -45,7 +45,7 @@
           <mt-switch v-model="privateSwitchStatus" @change=""></mt-switch>
       </span>
     </div>
-    <div class="notice-box flex flex-align-center">
+    <div class="notice-box flex flex-align-center flex-justify-center">
       <div class="notice-img">
         <img src="/images/notice.png">
       </div>
@@ -187,7 +187,7 @@
     }
   }
   .notice-box{
-    padding:0 1.5em;
+    padding:0 1em;
     margin-top: 0.7em;
     .notice-img{
       width: 14px;
