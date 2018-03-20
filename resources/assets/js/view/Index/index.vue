@@ -2,10 +2,9 @@
   <div id="index">
     <section id="top">
       <div class="message flex flex-reverse flex-align-center" @click="goInform">
-        <i class="iconfont" style="color:#fff; font-size:1.5em;">
-          &#xe626;
-        </i>
-
+        <div class="news">
+          <img src="/images/news.png">
+        </div>
         <span class="notice" v-if="newMessage>0">
             </span>
       </div>
@@ -21,7 +20,7 @@
         </div>
 
         <div class="center flex-5 flex flex-v flex-align-center flex-justify-center" @click="goMyAccount">
-          <h3 class="flex">{{amount}} <i class="diamond" style="margin-top:0.1em;margin-left:0.4em;">&#xe6f9;</i></h3>
+          <div class="flex diamond-box">{{amount}} <div class="diamond"><img src="/images/zuanshi.png"></div></div>
           <h4>账户余额(钻石)</h4>
         </div>
 
@@ -169,8 +168,15 @@
       width: 100%;
       padding-right: 1em;
       box-sizing: border-box;
-      position: relative;
-
+      .news{
+        position: relative;
+        width: 32px;
+        margin-top: 1.5em;
+        img{
+          display: block;
+          width: 100%;
+        }
+      }
       .notice {
         width: 0.6em;
         height: 0.6em;
@@ -201,11 +207,18 @@
         text-align: center;
         color: #fff;
       }
-
-      h3 {
+      .diamond-box{
         font-size: 1.8em;
         text-align: center;
         color: #fff;
+        .diamond{
+          width:30px;
+          margin-left:0.2em;
+          img{
+            display: block;
+            width: 100%;
+          }
+        }
       }
 
       h4 {
@@ -278,7 +291,7 @@
         width: 33.33%;
         height: 5.5em;
         .home-icon {
-          width: 30px;
+          width: 35px;
           img{
             display: block;
             width: 100%;
@@ -287,7 +300,7 @@
         h3 {
           color: #000;
           margin-top: 0.4em;
-          font-size: 0.7em;
+          font-size: 0.9em;
         }
       }
 

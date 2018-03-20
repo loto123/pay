@@ -3,7 +3,9 @@
       <div id="top">
           <topBack :backUrl="'\/index\/'" style="color:#fff;background:#26a2ff;" >
               <div class="top-message flex flex-reverse" @click = "goMessagePage">
-                <i class="iconfont">&#xe626;</i>
+                <div class="news">
+                  <img src="/images/news.png">
+                </div>
                 <span class="notice" v-if="messageCount">
                   {{this.messageCount>99?"99":this.messageCount}}
                 </span>
@@ -130,24 +132,26 @@
     width: 100%;
     height: 100%;
     padding-right: 0.8em;
-    padding-top:1.5em;
-    position: relative;
+    padding-top:1em;
+    .news{
+      position: relative;
+      width: 32px;
+      margin-top: 0.5em;
+      img{
+        display: block;
+        width: 100%;
+      }
+    }
     .notice {
       position: absolute;
       background: red;
       width: 1.5em;
       height: 1.5em;
-      top: 1em;
       right: 0.5em;
       border-radius: 50%;
       text-align: center;
       line-height: 1.5em;
       font-size: 0.1em;
-    }
-
-    > i {
-      font-size: 1.5em;
-      color: #fff;
     }
   }
 
