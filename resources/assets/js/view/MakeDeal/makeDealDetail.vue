@@ -461,34 +461,21 @@ export default {
         var Data = res[2].data.data;
         var content=JSON.parse(Data.config);
         wx.config(content);
-        Loading.getInstance().close();
         return Promise.resolve(true);
+        Loading.getInstance().close();
         
       }).catch(err=>{
           Toast(err.data.msg);
           Loading.getInstance().close();
-          
-          if(err.data.msg == "交易不存在"){
-            this.$router.push('/404notfound');
-          }
+          this.$router.push('/404notfound');
       });
     },
-    // initImage(){
-    //   request.getInstance().getData("api/shop/summary/" + this.shop_id).then(res=>{
-    //     this.logo = res.data.data.logo;
-    //     this.shareContent();
-    //     Loading.getInstance().close();
-    //   }).catch(err=>{
-    //     Toast(err.data.msg);
-    //     Loading.getInstance().close();
-    //   });
-    // },
     shareContent() {
       let url=window.location.href.split('#')[0];
       let links = url+'/#/makeDeal/deal_detail?id='+this.transfer_id;
-      let title = this.comment;
-      let desc = "21321";
-      let imgUrl = url+'/images/logo.png';
+      let title = this.shop_name;
+      let desc = this.comment;
+      let imgUrl = this.shop_logo;
       wx.ready(() => {
         //分享给朋友
         wx.onMenuShareAppMessage({
