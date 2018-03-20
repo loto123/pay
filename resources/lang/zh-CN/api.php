@@ -6,7 +6,7 @@ return [
     'error_shop_status' => '店铺不存在或已被关闭',
     'shop_freeze' => '店铺已被冻结',
     'error_shop_perm' => '没有操作该店铺的权限',
-    'error_shop_percent' => '交易费用不能超过平台交易费',
+    'error_shop_percent' => '佣金费率不能超过平台限制',
     'over_max_times' => '超过最大开店次数',
     'over_pay_password_max_times' => '密码错误次数超过限制，请稍后重试',
     'cannot_delete_self' => '不能从成员里删除自己',
