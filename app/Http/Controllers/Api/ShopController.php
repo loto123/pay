@@ -178,7 +178,8 @@ class ShopController extends BaseController
      *                  @SWG\Items(
      *                      @SWG\Property(property="id", type="string", example="1234567890", description="店铺id"),
      *                      @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
-     *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址")
+     *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址"),
+     *                      @SWG\Property(property="status", type="integer", example=1, description="店铺状态 0=正常 2=冻结"),
      *                  )
      *                  ),
      *              )
@@ -354,6 +355,7 @@ class ShopController extends BaseController
      *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址"),
      *                      @SWG\Property(property="today_profit", type="double", example=1.23, description="店铺今日收益"),
      *                      @SWG\Property(property="total_profit", type="double", example=1.23, description="店铺总收益"),
+     *                      @SWG\Property(property="status", type="integer", example=1, description="店铺状态 0=正常 2=冻结"),
      *                  )
      *                  ),
      *              )
