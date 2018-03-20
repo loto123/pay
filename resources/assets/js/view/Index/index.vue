@@ -184,7 +184,6 @@
         border-radius: 50%;
         position: absolute;
         right: 0.7em;
-        top: 0em;
       }
     }
 

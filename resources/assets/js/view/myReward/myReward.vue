@@ -31,11 +31,11 @@
               <div class="reward-content flex flex-v flex-justify-center">
                 <div class="title">
                   <span>{{item.user_name}}</span>打赏了你</div>
-                <div class="date">{{changeTime(item.created_at)}}</div>
+                <div class="date">+{{changeTime(item.created_at)}}</div>
               </div>
               <div class="reward-oney">
-                <div class="m-text">{{item.amount}}
-                  <i class="diamond" style="float: right;margin-top: 0.1em; margin-left: 0.2em;">&#xe6f9;</i>
+                <div class="m-text">+{{item.amount}}
+                  <i class="diamond" style="margin-top: 0.1em;">&#xe6f9;</i>
                 </div>
               </div>
             </div>
@@ -142,6 +142,7 @@
         .title {
           margin-bottom: 0.7em;
           color: #666;
+          font-size:0.9em;
           span {
             margin-right: 0.5em;
             color: #333;
@@ -149,7 +150,13 @@
         }
         .date {
           color: #999;
+          font-size:0.9em;
         }
+      }
+      .reward-oney{
+        width: 30%;
+        text-align: center;
+        color: #26d929;
       }
     }
     .left-content {
