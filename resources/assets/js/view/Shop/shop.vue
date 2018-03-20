@@ -5,7 +5,7 @@
               <div class="top-message flex flex-reverse" @click = "goMessagePage">
                 <i class="iconfont">&#xe626;</i>
                 <span class="notice" v-if="messageCount">
-
+                  {{this.messageCount>99?"99":this.messageCount}}
                 </span>
               </div>
           </topBack>
@@ -130,16 +130,19 @@
     width: 100%;
     height: 100%;
     padding-right: 0.8em;
-    padding-top: 0.4em;
+    padding-top:1.5em;
     position: relative;
     .notice {
       position: absolute;
       background: red;
-      width: 0.6em;
-      height: 0.6em;
-      top: 0.3em;
-      right: 0.6em;
+      width: 1.5em;
+      height: 1.5em;
+      top: 1em;
+      right: 0.5em;
       border-radius: 50%;
+      text-align: center;
+      line-height: 1.5em;
+      font-size: 0.1em;
     }
 
     > i {

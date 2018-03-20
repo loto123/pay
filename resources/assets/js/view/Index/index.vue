@@ -49,53 +49,53 @@
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/shop" class="flex flex-v flex-align-center">
-            <i class="iconfont myShop-icon common-icon">
-              &#xe611;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/gonghui.png" alt="">
+            </div>
             <h3>我的公会</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe605;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/renwu.png" alt="">
+            </div>
             <h3>我的任务</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goShareProfit">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe61d;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/fenrun.png" alt="">
+            </div>
             <h3>我的分润</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goMyUsers">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe621;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/yonghu.png" alt="">
+            </div>
             <h3>我的用户</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/my_vip" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe6e1;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/vip.png" alt="">
+            </div>
             <h3>我的vip</h3>
           </a>
         </li>
         <li class="flex flex-v flex-align-center">
           <a href="/#/MyReward" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe6e1;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/shangjin.png" alt="">
+            </div>
             <h3>我的赏金</h3>
           </a>
         </li>
@@ -109,34 +109,34 @@
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/shareUser" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe64f;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/zhanye.png" alt="">
+            </div>
             <h3>展业</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center" v-if="isPromoters==1">
           <a class="flex flex-v flex-align-center" @click="goVipOpenCard">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe650;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/kaika.png" alt="">
+            </div>
             <h3>vip开卡</h3>
           </a>
         </li>
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goDealList">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe617;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/jiaoyihang.png" alt="">
+            </div>
             <h3>前往交易行</h3>
           </a>
         </li>
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goSafety">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe69a;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/baozhang.png" alt="">
+            </div>
             <h3>安全保障</h3>
           </a>
         </li>
@@ -276,16 +276,18 @@
         padding-top: 0.5em;
         box-sizing: border-box;
         width: 33.33%;
-        height: 6em;
-
-        .common-icon {
-          font-size: 2em;
-          color: #26a2ff;
+        height: 5.5em;
+        .home-icon {
+          width: 30px;
+          img{
+            display: block;
+            width: 100%;
+          }
         }
         h3 {
           color: #000;
           margin-top: 0.4em;
-          font-size: 0.90em;
+          font-size: 0.7em;
         }
       }
 
