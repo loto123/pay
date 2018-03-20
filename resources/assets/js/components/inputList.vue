@@ -46,6 +46,7 @@
     top:0;
     left: 0;
     z-index: 1001;
+
     .content{
         left: 10vw;
         top:10vh;
@@ -62,8 +63,9 @@
         }
         
         .list-wrap{
-            height:70%;
+            height:74%;
             overflow: scroll;
+            border: 1px dashed #eee;
         }
         
         .loading-more{

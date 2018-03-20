@@ -75,7 +75,7 @@
           </div>
 
           <div class= "item">
-            <mt-field label="设置公会佣金费率" placeholder="设置公会佣金费率(整数%)" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
+            <mt-field label="设置公会佣金费率" :placeholder="'公会佣金费率不得超过' + guild_commission +'%'" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
           </div>
 
           <div class="item open-deal-switch flex flex-align-center">
@@ -375,9 +375,9 @@ export default {
 
   data() {
     return {
-      addShopTabStatus: false,      // 创建公会拉起状态
-      dealStatus: true,             // 是否开启任务(创建公会tab)
-      createShopSwitch: true,     // 防看止按钮多次点击的
+      addShopTabStatus: false,       // 创建公会拉起状态
+      dealStatus: true,              // 是否开启任务(创建公会tab)
+      createShopSwitch: true,        // 防看止按钮多次点击的
 
       openNewShop:{
         name :null,
@@ -388,7 +388,9 @@ export default {
 
       shopList:[],
       total_profit:null,
-      messageCount:null            // 新消息数量
+      messageCount:null,             // 新消息数量
+      guild_commission : 0           // 公会佣金费率上限
+
     };
   },
   methods: {
@@ -454,17 +456,26 @@ export default {
 
     // 数据处理
     getShopData(){
+
       Loading.getInstance().open();
-      Promise.all([request.getInstance().getData("api/shop/lists/mine"),request.getInstance().getData("api/shop/profit"),request.getInstance().getData("api/shop/messages/count")])
+
+      Promise.all([
+          request.getInstance().getData("api/shop/lists/mine"),
+          request.getInstance().getData("api/shop/profit"),
+          request.getInstance().getData("api/shop/messages/count"),
+          request.getInstance().getData("api/shop/settings")
+          ])
         .then(res=>{
           this.shopList = res[0].data.data.data;
           this.total_profit = res[1].data.data.profit;
           this.messageCount = res[2].data.data.count;
+
+          this.guild_commission = res[3].data.data.guild_commission;
           Loading.getInstance().close();
         })
         .catch(err=>{
           Loading.getInstance().close();
-
+          Toast(err.data.msg);
           console.error(err);
         });
     },

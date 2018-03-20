@@ -4,7 +4,14 @@
     <topBack title="发布寻找宠物任务" style="background:#eee;"></topBack>
 
     <div class="select-wrap flex flex-align-center" @click="showDropList">
-      {{dealShop ? dealShop : '选择一个公会来发布任务'}}
+      <span class="flex-9">
+        {{dealShop ? dealShop : '选择一个公会来发布任务'}}
+      </span>
+      <span class="flex-1">
+        <i class="iconfont" style="color:#999;" v-if="!dropListSwitch">
+          &#xe62f;
+        </i>
+      </span>
     </div>
 
     <div class="price flex">

@@ -98,18 +98,18 @@ class ShopController extends BaseController
         ],['name.required'=>'店铺名必填',
         'name.max'=>'公会名称不能超过10个字符',
         'rate.required'=>'默认倍率必填',
-        'rate.regex'=>'默认倍率格式错误',
+        'rate.regex'=>'默认倍率请填写0.1到99999之间数字',
         'rate.between' => '默认倍率请填写0.1到99999之间数字',
         'rate.numeric' => '默认倍率请填写0.1到99999之间数字',
-        'percent.required'=>'手续费率不能为空',
-        'percent.integer'=>'手续费必须为0-100的整数',
-        'percent.between'=>'手续费必须为0-100的整数'
+        'percent.required'=>'佣金费率不能为空',
+        'percent.integer'=>'佣金费率必须为0-100的整数',
+        'percent.between'=>'佣金费率必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        if ($request->percent > config("guild_commission")) {
+        if ($request->percent > config("guild_commission", 0)) {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
@@ -495,7 +495,7 @@ class ShopController extends BaseController
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
                 'platform_fee' => (double)config("platform_fee_percent"),
-                'guild_commission' => (double)config("guild_commission"),
+                'guild_commission' => (double)config("guild_commission", 0),
                 'rate' => (double)$shop->price,
                 'percent' => (double)$shop->fee,
                 'created_at' => strtotime($shop->created_at),
@@ -949,11 +949,11 @@ class ShopController extends BaseController
             'percent' => 'integer|between:0,100',
         ],[
         'name.max'=>'公会名称不能超过10个字符',
-        'rate.regex'=>'倍率格式错误',
+        'rate.regex'=>'倍率请填写0.1到99999之间数字',
         'rate.between' => '倍率请填写0.1到99999之间数字',
         'rate.numeric' => '倍率请填写0.1到99999之间数字',
-        'percent.integer'=>'手续费必须为0-100的整数',
-        'percent.between'=>'手续费必须为0-100的整数'
+        'percent.integer'=>'佣金费率必须为0-100的整数',
+        'percent.between'=>'佣金费率必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -987,7 +987,7 @@ class ShopController extends BaseController
         }
 
         if ($request->percent !== null) {
-            if ($request->percent > config("guild_commission")) {
+            if ($request->percent > config("guild_commission", 0)) {
                 return $this->json([], trans("api.error_shop_percent"), 0);
             }
             $shop->fee = $request->percent;
@@ -2263,6 +2263,6 @@ class ShopController extends BaseController
      * @return \Illuminate\Http\Response
      */
     public function settings() {
-        return $this->json(['guild_commission' => (double)config("guild_commission"), 'price' => config("shop_price")]);
+        return $this->json(['guild_commission' => (double)config("guild_commission", 0), 'price' => config("shop_price")]);
     }
 }
