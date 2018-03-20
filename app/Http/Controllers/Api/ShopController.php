@@ -98,12 +98,12 @@ class ShopController extends BaseController
         ],['name.required'=>'店铺名必填',
         'name.max'=>'公会名称不能超过10个字符',
         'rate.required'=>'默认倍率必填',
-        'rate.regex'=>'默认倍率格式错误',
+        'rate.regex'=>'默认倍率请填写0.1到99999之间数字',
         'rate.between' => '默认倍率请填写0.1到99999之间数字',
         'rate.numeric' => '默认倍率请填写0.1到99999之间数字',
-        'percent.required'=>'手续费率不能为空',
-        'percent.integer'=>'手续费必须为0-100的整数',
-        'percent.between'=>'手续费必须为0-100的整数'
+        'percent.required'=>'佣金费率不能为空',
+        'percent.integer'=>'佣金费率必须为0-100的整数',
+        'percent.between'=>'佣金费率必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -949,11 +949,11 @@ class ShopController extends BaseController
             'percent' => 'integer|between:0,100',
         ],[
         'name.max'=>'公会名称不能超过10个字符',
-        'rate.regex'=>'倍率格式错误',
+        'rate.regex'=>'倍率请填写0.1到99999之间数字',
         'rate.between' => '倍率请填写0.1到99999之间数字',
         'rate.numeric' => '倍率请填写0.1到99999之间数字',
-        'percent.integer'=>'手续费必须为0-100的整数',
-        'percent.between'=>'手续费必须为0-100的整数'
+        'percent.integer'=>'佣金费率必须为0-100的整数',
+        'percent.between'=>'佣金费率必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
