@@ -468,7 +468,6 @@ export default {
           this.messageCount = res[2].data.data.count;
 
           this.guild_commission = res[3].data.data.guild_commission;
-          console.log(res[3]);
           Loading.getInstance().close();
         })
         .catch(err=>{
