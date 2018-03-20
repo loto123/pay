@@ -15,8 +15,7 @@
         </topBack>
 
         <section class="big-winner-tip flex flex-v flex-align-center flex-justify-center" @click="goTipPage" v-if="allow_reward">
-            <p>任务</p>
-            <p>加速</p>
+            <p>打赏</p>
         </section>
 
         <section class="mission-status " v-bind:class="[status!=3?'active':'disable']">

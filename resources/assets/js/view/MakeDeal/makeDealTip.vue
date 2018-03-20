@@ -4,17 +4,17 @@
         <dealContent :renderData="renderData"></dealContent>
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
-            <label for="" class="flex-4" style="padding-left:1em;">打赏店家</label>
+            <label for="" class="flex-4" style="padding-left:1em;">打赏会长</label>
             <!-- <span style="color:#999;" class="flex-4">请大家自觉缴纳</span> -->
-            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;" >钻<input type="text" class="tipMoney" placeholder="点击任务加速"  maxlength="6" v-model="renderData.moneyData"></span>
+            <span class="flex flex-align-center flex-6 flex-reverse" style="padding-right:1em;color:#aaa;" >钻<input type="text" class="tipMoney" maxlength="6" v-model="renderData.moneyData"></span>
         </div>
 
         <div class="button-wrap">
-            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">加速</mt-button>
+            <mt-button type="primary" size="large" class="green-color-bg" @click = "payTip">打赏</mt-button>
         </div>
 
         <div class="tip-record">
-            <h3>任务加速记录</h3>
+            <h3>打赏记录</h3>
             <ul class="flex flex-v">
                 <li class="flex flex-justify-between flex-align-center" v-for="item in renderData.tips">
                     <img :src="item.user.avatar?item.user.avatar:'/images/default_avatar.jpg'" alt="">
@@ -64,7 +64,7 @@
 .button-wrap {
   width: 90%;
   margin: 0 auto;
-  margin-top: 0.5em;
+  margin-top: 1.5em;
 }
 
 .green-color-bg {

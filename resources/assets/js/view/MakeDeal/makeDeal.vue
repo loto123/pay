@@ -45,12 +45,17 @@
           <mt-switch v-model="privateSwitchStatus" @change=""></mt-switch>
       </span>
     </div>
-
+    <div class="notice-box flex flex-align-center">
+      <div class="notice-img">
+        <img src="/images/notice.png">
+      </div>
+      <div class="notice-content">注意：开启后，只有任务参与人才能进入此次任务界面</div>
+    </div>
     <div class="commit-btn">
       <mt-button type="primary" size="large" @click="submitData" v-bind:disabled="!submitSwitch">发布任务</mt-button>
     </div>
 
-    <p class="notice">任务完成后每个参与者都会获得一定的奖励</p>
+    <p class="notice">任务完成后每个参与者都会获得一定的宠物蛋奖励</p>
 
     <inputList
       :showSwitch="dropListSwitch"
@@ -181,7 +186,22 @@
       }
     }
   }
-
+  .notice-box{
+    padding:0 1.5em;
+    margin-top: 0.7em;
+    .notice-img{
+      width: 14px;
+      img{
+        display: block;
+        width: 100%;
+      }
+    }
+    .notice-content{
+      margin-left:0.2em;
+      font-size: 0.8em;
+      color: #aaa;
+    }
+  }
   .private-switch{
     width: 90%;
     height: 3em;
@@ -196,14 +216,13 @@
   .commit-btn {
     width: 90%;
     margin: 0 auto;
-    margin-top: 1em;
+    margin-top: 3em;
   }
 
   .notice {
     text-align: center;
     margin: 0 auto;
     margin-top: 5.5em;
-    width: 80%;
     font-size: 0.9em;
   }
 </style>
