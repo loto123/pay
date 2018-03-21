@@ -465,7 +465,7 @@
         };
         request.getInstance().getData("api/proxy/share", data)
         .then(res => {
-            var Data = res[1].data.data;
+            var Data = res.data.data;
             var content = JSON.parse(Data.config);
             wx.config(content);
             this.shareContent();
