@@ -16,14 +16,14 @@
 			</div>
 			<div class="select-wrap flex flex-align-center" @click="showDropList">
 
-				{{dealShop?dealShop:'请选择您要转移的公会'}}
+				{{dealShop?dealShop:'请选择您要转钻的公会'}}
 
 			</div>
 			<a href="javascript:;" class="transAcc-btn" @click="giveBtn">
 				<mt-button type="primary" size="large">转移</mt-button>
 			</a>
 		</div>
-		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList"></inputList>
+		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList" title="请选择您要转钻的公会"></inputList>
 		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
 	</div>
 </template>
@@ -65,7 +65,7 @@
 			},
 			init() {
 				Loading.getInstance().open();
-				Promise.all([request.getInstance().getData("api/account"),request.getInstance().getData("api/shop/lists/all")])
+				Promise.all([request.getInstance().getData("api/account"),request.getInstance().getData("api/shop/lists/mine")])
 					.then(res => {
 						this.setShopList(res[1]);
 						this.balance=res[0].data.data.balance;
