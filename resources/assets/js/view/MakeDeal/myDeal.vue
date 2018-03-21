@@ -289,6 +289,14 @@ export default {
       }
     },
     goDetail(id) {
+      request.getInstance().getData("api/transfer/show?transfer_id="+id).then(res=>{
+        Loading.getInstance().close();
+        Toast("撤销成功");
+        this.init();
+      }).catch(err=>{
+        Toast("撤销失败");
+        Loading.getInstance().close();
+      });
       this.$router.push("/makeDeal/deal_detail"+"?id="+id);
     },
 
