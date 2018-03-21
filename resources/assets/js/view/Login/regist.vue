@@ -80,6 +80,9 @@
 
     <transition name="slide">
       <section class="agreement-main" v-if="agrementState" v-on:click="closeAgreenment">
+        <div class="back">
+          <a href="#">返回</a>
+        </div>
         <h3>用户协议</h3>
         <p>
           尊敬的用户，欢迎阅读本协议： 1.长沙找找公司依据本协议的规定提供服务，本协议具有合同效力。您必须完全同意以下所有条款并完成个人资料的填写，才能保证享受到更好的聚宝朋客服服务。您使用服务的行为将视为对本协议的接受，并同意接受本协议各项条款的约束。
@@ -188,10 +191,19 @@
     height: 100vh;
     background: #fff;
     padding-bottom: 2em;
-    padding-top: 1em;
     position: absolute;
     top: 0em;
     left: 0em;
+    z-index: 1000;
+    .back{
+      height: 2em;
+      line-height: 2em;
+      padding-left: 1em;
+      a{
+        display: block;
+        width: 100%;
+      }
+    }
     h3 {
       font-size: 1.8em;
       text-align: center;
