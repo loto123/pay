@@ -390,11 +390,7 @@
       };
     },
     created() {
-      this.init().then(res => {
-        if (res) {
-          this.shareContent();
-        }
-      });
+      this.init();
     },
     mounted() {
       this._getQRCode();
@@ -426,10 +422,6 @@
         var _data = {
           transfer_id: this.transfer_id
         };
-        var data = {
-          share_url: window.location.href.split('#')[0],
-          list: ['onMenuShareTimeline', 'onMenuShareAppMessage']
-        };
         if (myDealList != null) {
           this.joiner = myDealList.joiner;
           this.renderData = myDealList;
@@ -443,38 +435,45 @@
           this.shop_logo = myDealList.shop_logo;
           this.comment = myDealList.comment;
           this.isShow = true;
-        } else{
-          return Promise.all([
-            request.getInstance().getData("api/transfer/show?transfer_id=" + this.transfer_id),
-            request.getInstance().getData("api/proxy/share", data)
-          ]).then(res => {
-            this.joiner = res[0].data.data.joiner;
-            this.renderData = res[0].data.data;
-            this.recordList = res[0].data.data.record;
-            this.shop_id = res[0].data.data.shop_id;
-            this.allow_reward = res[0].data.data.allow_reward;
-            this.isManager = res[0].data.data.allow_cancel;
-            this.status = res[0].data.data.status;
-            this.allow_remind = res[0].data.data.allow_remind;
-            this.shop_name = res[0].data.data.shop_name;
-            this.shop_logo = res[0].data.data.shop_logo;
-            this.comment = res[0].data.data.comment;
+          this.initShare();
+        }else{
+          request.getInstance().getData("api/transfer/show?transfer_id=" + this.transfer_id)
+          .then(res => {
+            this.joiner = res.data.data.joiner;
+            this.renderData = res.data.data;
+            this.recordList = res.data.data.record;
+            this.shop_id = res.data.data.shop_id;
+            this.allow_reward = res.data.data.allow_reward;
+            this.isManager = res.data.data.allow_cancel;
+            this.status = res.data.data.status;
+            this.allow_remind = res.data.data.allow_remind;
+            this.shop_name = res.data.data.shop_name;
+            this.shop_logo = res.data.data.shop_logo;
+            this.comment = res.data.data.comment;
             this.isShow = true;
-
-            var Data = res[1].data.data;
-            var content = JSON.parse(Data.config);
-            wx.config(content);
-            return Promise.resolve(true);
-            Loading.getInstance().close();
-
+            this.initShare();
           }).catch(err => {
             Toast(err.data.msg);
-            if (err.data.code == '4') {
-              this.$router.go(-1);
-            }
             Loading.getInstance().close();
           });
         }
+      },
+      initShare(){
+        var data = {
+          share_url: window.location.href.split('#')[0],
+          list: ['onMenuShareTimeline', 'onMenuShareAppMessage']
+        };
+        request.getInstance().getData("api/proxy/share", data)
+        .then(res => {
+            var Data = res[1].data.data;
+            var content = JSON.parse(Data.config);
+            wx.config(content);
+            this.shareContent();
+            Loading.getInstance().close();
+          }).catch(err => {
+            Toast(err.data.msg);
+            Loading.getInstance().close();
+          });
       },
       shareContent() {
         let url = window.location.href.split('#')[0];
