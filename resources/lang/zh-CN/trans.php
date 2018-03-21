@@ -62,4 +62,5 @@ return [
     'proxy_withdraw_failed' => '提现失败',
     'trans_permission_deny' => '您没有权限进入此任务',
     'notice_not_allow' => '您不是该公会成员，不能通知好友',
+    'shop_been_frozen' => '此公会被冻结，请联系会长处理',
 ];
