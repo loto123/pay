@@ -47,9 +47,10 @@
         </div>
 
         <div class="bottom flex flex-align-center flex-justify-between">
-          <img :src="item.user.avatar?item.user.avatar:'/images/avatar.jpg'" alt="" v-for="item in joiner">
-
-          <span class="info-friend" @click="showMemberChoise" v-if="status!=3 && allow_remind == true">提醒好友</span>
+          <div class="img-box flex flex-align-center">
+            <img :src="item.user.avatar?item.user.avatar:'/images/avatar.jpg'" v-for="item in joiner">
+          </div>
+          <div class="info-friend" @click="showMemberChoise" v-if="status!=3 && allow_remind == true">提醒好友</div>
         </div>
       </div>
 
@@ -217,11 +218,18 @@
       .bottom {
         width: 100%;
         height: 3.5em;
-        img {
-          width: 2em;
-          height: 2em;
-          display: block;
-          margin-left: 0.5em;
+        .img-box{
+          width: 72%;
+          height: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          overflow-x: scroll;
+          -webkit-overflow-scrolling: touch;
+          img {
+            width: 2em;
+            height: 2em;
+            margin-left: 0.5em;
+          }
         }
       }
 
@@ -422,7 +430,6 @@
           share_url: window.location.href.split('#')[0],
           list: ['onMenuShareTimeline', 'onMenuShareAppMessage']
         };
-        
         if (myDealList != null) {
           this.joiner = myDealList.joiner;
           this.renderData = myDealList;
@@ -437,7 +444,6 @@
           this.comment = myDealList.comment;
           this.isShow = true;
         } else{
-
           return Promise.all([
             request.getInstance().getData("api/transfer/show?transfer_id=" + this.transfer_id),
             request.getInstance().getData("api/proxy/share", data)
