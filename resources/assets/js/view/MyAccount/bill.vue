@@ -143,37 +143,33 @@
         data() {
             return {
                 showAlert: false,
-                type: null,              //类型
-                created_at: null,        //结束时间
-                size: null,              //数目
+                type: null,                  //类型
+                created_at: null,            //结束时间
+                size: null,                  //数目
                 recordList: [],
 
-                headList: [],            // timeTab数组
+                headList: [],               // timeTab数组
                 timeInfo: null,
                 tabTotal: "",
                 tabStatus: [true, false],
-                tabIncome:"",  //收入
-                tabDisburse:"", //支出
+                tabIncome:"",               //收入
+                tabDisburse:"",             //支出
                 wrapperHeight: null,
                 loading: false,
                 allLoaded: false,
                 canLoading: true,
 
                 dateModel: null,
-                dateChoise: null,    // 选择的日期
+                dateChoise: null,           // 选择的日期
                 startDate: new Date(2017,1),
                 endDate: new Date(),
                 items: [
                     { type: 0, title: '购买', isBuy:true},
                     { type: 1, title: '出售', isBuy:true},
                     { type: [2,3,9], title: '任务', isBuy:false},
-                    // { type: 3, title: '任务交钻', isBuy:false},
                     { type: [4,5], title: '公会转账', isBuy:false},
-                    // { type: 5, title: '公会转入', isBuy:false},
                     { type: 6, title: '任务手续费', isBuy:false},
-                    // { type: 7, title: '出售手续费', isBuy:false},
                     { type: 8, title: '任务加速', isBuy:false},
-                    // { type: 9, title: '拿钻撤销', isBuy:false},
                     { type: 10, title: '分润', isBuy:false}
                 ]
             };
@@ -212,6 +208,8 @@
                     type:[0,1]
                 }
                 Loading.getInstance().open();
+
+                // 宠物买卖
                 if (this.tabStatus[0] == true) {
                     request.getInstance().getData("api/account/records", _data1)
                         .then((res) => {
@@ -234,12 +232,13 @@
                             Toast(err.data.msg);
                             Loading.getInstance().close();
                         })
-                } else if (this.tabStatus[1] == true) {
+                } else if (this.tabStatus[1] == true) {    // 公会
                     var _data2 = {
                         limit: 15,
                         offset: 0,
                         type:[2,3,4,5,6,8,9,10]
                     }
+
                     request.getInstance().getData("api/account/records", _data2)
                         .then((res) => {
 
@@ -266,7 +265,9 @@
                 }
 
             },
+
             changeTab(tabindex){
+
                 if(this.loading==true){
                     return
                 }
@@ -275,6 +276,7 @@
                 this.headList = [];
                 this.init();
             },
+
             // 建立时间面板
             buildTimePanel() {
                 var _head = 0;
@@ -294,6 +296,7 @@
                 }
 
                 var key = 0;
+
                 // 设置头部
                 if (this.recordList.length != 0) {
                     if (this.recordList[0].isTimePanel == false) {
@@ -342,7 +345,6 @@
                     } catch (e) {
                         console.error(e);
                     }
-
                 }
 
                 var count = 0;
@@ -357,22 +359,28 @@
                     this.recordList.splice(_index, 0, { isTimePanel: true, time: this.headList[k].time, in: this.headList[k].in, out: this.headList[k].out});
                     count++;
                 }
+
                 for (let m = 0; m < this.recordList.length; m++) {
+
                     if (this.recordList[m].isTimePanel == true && this.recordList[m].in == "加载中..."&& this.recordList[m].out == "加载中...") {
 
                         var _year = this.recordList[m].time.split("年")[0];
                         var _month = this.recordList[m].time.split("年")[1].split("月")[0];
                         var _timer = _year + "-" + _month;
+
                         if (this.tabStatus[0] == true) {
                             var _data3 = {
                                 month: _timer,
                                 type:[0,1]
                             }
-                            // 获取当月的总额度(分润)
+                            // 获取当月的总额度 宠物买卖
                             request.getInstance().getData("api/account/records/month", _data3)
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
+
+                                this.headList[this.headList.length - 1 ].in = res.data.data.in;
+                                this.headList[this.headList.length - 1].out = res.data.data.out;
 
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
@@ -380,7 +388,7 @@
 
                             }).catch();
                         } else {
-                            // 获取当月的总额度(分润)
+                            // 获取当月的总额度 公会
                             var _data4 = {
                                 month: _timer,
                                 type:[2,3,4,5,6,8,9,10]
@@ -389,6 +397,10 @@
                             .then(res => {
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
+
+                                this.headList[this.headList.length - 1].in = res.data.data.in;
+                                this.headList[this.headList.length - 1].out = res.data.data.out;
+
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
@@ -398,6 +410,7 @@
                 }
                 count = 0;
             },
+
             // 滚动
             handleScroll() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
@@ -405,10 +418,12 @@
                 if (!this.$refs.timeTab) {
                     return;
                 }
+
                 for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
 
-
+                        // console.log(this.headList[i].time);
+                        // console.log(this.headList[i].in);
 
                         this.timeInfo = this.headList[i].time;
                         this.tabIncome = this.headList[i].in;

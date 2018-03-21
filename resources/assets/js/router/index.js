@@ -64,7 +64,7 @@ var routerList = {
     myReward:MyReward,
 
     // 404页面
-    notFound:ForOForPage
+    // notFound:ForOForPage
 };
 
 var router = [];
