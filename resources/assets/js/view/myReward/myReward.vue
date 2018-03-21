@@ -1,11 +1,20 @@
 <template>
   <!-- 发起任务 -->
   <div id="myReward">
-    <topBack title="我的赏金" style="background:#26a2ff;color:#fff;"></topBack>
-    <div class="select-wrap-box flex">
-      <div class="title flex-3">选择打赏来源公会:</div>
-      <div class="select-wrap flex flex-align-center" @click="showDropList">
-        {{dealShop?dealShop:'全部'}}
+    <div class="top-box clearfix">
+      <topBack title="我的赏金" style="background:#fff;"></topBack>
+      <div class="select-wrap-box flex">
+        <div class="title flex-3">选择打赏来源公会:</div>
+        <div class="select-wrap flex flex-align-center" @click="showDropList">
+          <span class="flex-9">
+            {{dealShop?dealShop:'全部'}}
+          </span>
+          <span class="flex-1">
+            <i class="iconfont" style="color:#999;" v-if="!dropListSwitch">
+              &#xe62f;
+            </i>
+          </span>
+        </div>
       </div>
     </div>
     <div class="deal-wrap" ref='wrapper'>
@@ -22,11 +31,11 @@
               <div class="reward-content flex flex-v flex-justify-center">
                 <div class="title">
                   <span>{{item.user_name}}</span>打赏了你</div>
-                <div class="date">{{changeTime(item.created_at)}}</div>
+                <div class="date">+{{changeTime(item.created_at)}}</div>
               </div>
               <div class="reward-oney">
-                <div class="m-text">{{item.amount}}
-                  <i class="diamond" style="float: right;margin-top: 0.1em; margin-left: 0.2em;">&#xe6f9;</i>
+                <div class="m-text">+{{item.amount}}
+                  <i class="diamond" style="margin-top: 0.1em;">&#xe6f9;</i>
                 </div>
               </div>
             </div>
@@ -46,38 +55,54 @@
 <style scoped lang="scss">
   #myReward {
     padding-top: 2em;
-    background: #eee;
+    background: #fff;
     width: 100%;
     height: 100vh;
     box-sizing: border-box;
+    #top-component{
+      height: 2.5em;
+    }
   }
 
+  .top-box {
+    background: #fff;
+  }
   .select-wrap-box {
-    margin-top: 0.5em;
-    .title{
+    border: 1px solid #ddd;
+    background: #fff;
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: 2.5em;
+    border-radius: 10px;
+    margin-bottom: 1em;
+    width: 98%;
+    .title {
       height: 2.5em;
-      line-height:2.5em;
+      line-height: 2.5em;
       width: 40%;
-      background: #fff;
-      padding-left:0.5em;
+      padding-left: 0.5em;
+      color: #323232;
     }
     .select-wrap {
       width: 60%;
       margin: 0 auto;
       height: 2.5em;
-      line-height:2.5em;
+      line-height: 2.5em;
       padding-left: 0.5em;
       box-sizing: border-box;
-      background: #fff;
     }
   }
 
   .deal-wrap {
     width: 100%;
+    margin-top: 3.5em;
+    max-height: 100vh;
+    overflow-y: scroll;
     ul {
       width: 100%;
       border-top: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
       .reward-list {
         background: #fff;
         width: 100%;
@@ -116,15 +141,22 @@
         width: 70%;
         .title {
           margin-bottom: 0.7em;
-          color:#666;
+          color: #666;
+          font-size:0.9em;
           span {
             margin-right: 0.5em;
-            color:#333;
+            color: #333;
           }
         }
         .date {
           color: #999;
+          font-size:0.9em;
         }
+      }
+      .reward-oney{
+        width: 30%;
+        text-align: center;
+        color: #26d929;
       }
     }
     .left-content {
@@ -197,7 +229,7 @@
         }
         Loading.getInstance().open();
         // 拿到所有的公会列表
-        request.getInstance().getData("api/shop/tips",_data)
+        request.getInstance().getData("api/shop/tips", _data)
           .then(res => {
             this.shopContent = res.data.data.data;
             Loading.getInstance().close();
@@ -238,8 +270,8 @@
       setShopList(res) {
         var _tempList = [
           {
-            label:"全部",
-            value:"0"
+            label: "全部",
+            value: "0"
           }
         ];
         for (let i = 0; i < res.data.data.data.length; i++) {

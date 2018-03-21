@@ -400,10 +400,17 @@
             Loading.getInstance().open();
 
             request.getInstance().postData('api/auth/register', data).then(function (res) {
-              sessionStorage.setItem("_token", res.data.data.token);
+              // sessionStorage.setItem("_token", res.data.data.token);
+              request.getInstance().setToken(res.data.data.token);
               Loading.getInstance().close();
-              Toast("注册成功,请绑定微信");
-              self.weChatBind(res.data.data.ticket);
+
+              if(debug == 0){
+                Toast("注册成功,请绑定微信");
+                self.weChatBind(res.data.data.ticket);
+              }else {
+                Toast("注册成功");
+                self.$router.push("/index");
+              }
               
             }).catch((err) => {
               Loading.getInstance().close();

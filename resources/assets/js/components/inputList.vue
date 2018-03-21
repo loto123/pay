@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div id = "drop-list-component"  v-if="showSwitch">
-        <div class="mask" @click="hideTab">
+        <div class="mask" @click="hideTab" @touchmove.prevent>
 
         </div>
         <div class="content">
