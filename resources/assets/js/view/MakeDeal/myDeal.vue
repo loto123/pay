@@ -25,7 +25,7 @@
                         <div class="title">{{SettingString(item.shop_name,10)}}</div>
                         <div class="eggs-wrap" v-if="tabItem[2]">
                           <span>任务获得：</span>
-                          <span> <img src="/images/egg.jpg" alt=""> x {{item.eggs}}</span>
+                          <span> <img src="/images/egg.png" alt=""> x {{item.eggs}}</span>
                         </div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
@@ -187,6 +187,7 @@ import topBack from "../../components/topBack";
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
 import utils from "../../utils/utils.js"
+import { Toast } from "mint-ui";
 
 export default {
   components: { topBack },
@@ -290,14 +291,13 @@ export default {
     },
     goDetail(id) {
       request.getInstance().getData("api/transfer/show?transfer_id="+id).then(res=>{
+        this.$store.dispatch("deal_setMyData",res.data.data);
+        this.$router.push("/makeDeal/deal_detail"+"?id="+id);
         Loading.getInstance().close();
-        Toast("撤销成功");
-        this.init();
       }).catch(err=>{
-        Toast("撤销失败");
+        Toast(err.data.msg);
         Loading.getInstance().close();
       });
-      this.$router.push("/makeDeal/deal_detail"+"?id="+id);
     },
 
     mark(){

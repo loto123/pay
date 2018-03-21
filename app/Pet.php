@@ -46,7 +46,7 @@ class Pet extends Model
         if (!filter_var($value, FILTER_VALIDATE_URL) === false) {
             return $value;
         }
-        return $value ? Storage::disk('public')->url($value) : asset("images/personal.jpg");
+        return $value ? Storage::disk('public')->url($value) : asset("images/egg.png");
     }
 
     /**
