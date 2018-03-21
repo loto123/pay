@@ -25,6 +25,7 @@ class RSA
     public function __construct($publicKeyFile, $privateKeyFile = null, $encode = 'base64', $padding = OPENSSL_PKCS1_PADDING, $sign_algo = OPENSSL_ALGO_SHA1)
     {
         $this->pubKey = openssl_get_publickey(file_get_contents($publicKeyFile));
+        dump($publicKeyFile);
 
         if ($privateKeyFile) {
             //dump($privateKeyFile);
@@ -140,6 +141,7 @@ class RSA
         $ret = false;
         $sign = $this->decode($sign);
         if ($sign !== false) {
+            dump($this->pubKey);
             switch (openssl_verify($data, $sign, $this->pubKey, $this->signAlgo)) {
                 case 1:
                     $ret = true;

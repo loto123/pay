@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Pay\Impl\TimesData;
-
 use App\Pay\RSA;
 
 /**
@@ -48,15 +47,6 @@ class Request extends Message
         if (!array_key_exists($name, $this->dataFields)) {
             $this->dataFields[$name] = $value;
         }
-    }
-
-    /**
-     * 设置RSA实例
-     * @param RSA $instance
-     */
-    public function setRSAInstance(RSA $instance)
-    {
-        $this->RSAInstance = $instance;
     }
 
     /**
@@ -133,7 +123,7 @@ class Request extends Message
 
         $context = stream_context_create($opts);
         $response = file_get_contents($url, false, $context);
-        return self::parseResponse($response, $this->signType);
+        return self::parseResponse($response, $this->signType, $this->RSAInstance);
     }
 
     /**
@@ -142,18 +132,39 @@ class Request extends Message
      * @return Response
      * @throws \Exception
      */
-    public static function parseResponse($str, $signType)
+    public static function parseResponse($str, $signType, RSA $RSAInstance = null)
     {
         $xmlObj = simplexml_load_string($str);
         if ($xmlObj === false) {
             throw new \Exception('无效响应:' . $str);
         }
+
         $response = json_decode(json_encode($xmlObj, JSON_UNESCAPED_UNICODE), true);
+
+        foreach ($response['head'] as &$value) {
+            if (empty($value)) {
+                $value = '';
+            }
+        }
+
+        if (array_key_exists('data', $response)) {
+            foreach ($response['data'] as &$value) {
+                if (empty($value)) {
+                    $value = '';
+                }
+            }
+        }
+
+        //dump($response);
+
         $responseObj = new Response($response['head']['respCd'], $response['head']['respMsg'], $response['head']['reqNo'], $response['head']['respNo']);
         $responseObj->dataFields = array_key_exists('data', $response) ? $response['data'] : [];
         $responseObj->signType = $signType;
+        if ($signType == Message::SIGN_RSA1) {
+            $responseObj->setRSAInstance($RSAInstance);
+        }
 
-        if ($response['head']['sign'] !== $responseObj->sign()) {
+        if ($responseObj->verify($response['head']['sign'])) {
             throw new \Exception('响应报文签名校验错误' . json_encode($response));
         }
         return $responseObj;

@@ -22,7 +22,7 @@ class H5Pay implements DepositInterface
 
     public function deposit($deposit_id, $amount, array $config, $notify_url, $return_url, $timeout)
     {
-        $request = new PayRequest('h5_pay_request', $this->mixUpDepositId($deposit_id), $config['mechid'], 8);
+        $request = new PayRequest('h5_pay_request', $this->mixUpDepositId($deposit_id), $config['mechid'], '01');
         $request->setRSAInstance(new RSA(UploadFile::getFile($config['platform_public_key']), UploadFile::getFile($config['merchant_private_key']), 'base64', OPENSSL_PKCS1_PADDING, OPENSSL_ALGO_MD5));
         $request->appendData('paytype', 0);
         $request->appendData('total_fee', bcmul($amount, 100));
@@ -44,7 +44,7 @@ class H5Pay implements DepositInterface
     public function acceptNotify(array $config)
     {
         $response = file_get_contents('php://input');
-        $response = Request::parseResponse($response, Message::SIGN_RSA1);
+        $response = Request::parseResponse($response, Message::SIGN_RSA1, new RSA(UploadFile::getFile($config['platform_public_key']), UploadFile::getFile($config['merchant_private_key']), 'base64', OPENSSL_PKCS1_PADDING, OPENSSL_ALGO_MD5));
         $deposit_id = IdConfuse::recoveryId($response->getReqNo(), true);
         if ($response->isOk()) {
             if ($response->tType == 0) {
@@ -69,6 +69,6 @@ class H5Pay implements DepositInterface
 
     public function benefitShare(array $config, Deposit $deposit)
     {
-        // TODO: Implement benefitShare() method.
+        return true;
     }
 }

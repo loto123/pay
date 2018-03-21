@@ -74,4 +74,22 @@ class Response extends Message
     {
         return $this->headFields['respNo'];
     }
+
+    /**
+     * 验证
+     * @return bool
+     */
+    public function verify($sign)
+    {
+        $allFields = array_merge($this->headFields, $this->dataFields);
+        ksort($allFields);
+        $data = implode($allFields);
+
+        switch ($this->signType) {
+            case self::SIGN_RSA1:
+                return $this->RSAInstance->verify($data, $sign);
+            case self::SIGN_MD5:
+                return $this->sign() === $sign;
+        }
+    }
 }
