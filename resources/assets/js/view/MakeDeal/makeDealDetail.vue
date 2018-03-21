@@ -465,8 +465,11 @@ export default {
         
       }).catch(err=>{
           Toast(err.data.msg);
+          if(err.data.code=='4'){
+            this.$router.go(-1);
+          }
           Loading.getInstance().close();
-          this.$router.push('/404notfound');
+          // this.$router.push('/404notfound');
       });
     },
     shareContent() {
