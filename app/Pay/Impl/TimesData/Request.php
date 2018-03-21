@@ -150,7 +150,7 @@ class Request extends Message
         }
         $response = json_decode(json_encode($xmlObj, JSON_UNESCAPED_UNICODE), true);
         $responseObj = new Response($response['head']['respCd'], $response['head']['respMsg'], $response['head']['reqNo'], $response['head']['respNo']);
-        $responseObj->dataFields = $response['data'];
+        $responseObj->dataFields = array_key_exists('data', $response) ? $response['data'] : [];
         $responseObj->signType = $signType;
 
         if ($response['head']['sign'] !== $responseObj->sign()) {

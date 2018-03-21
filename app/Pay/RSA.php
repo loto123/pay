@@ -27,9 +27,9 @@ class RSA
         $this->pubKey = openssl_get_publickey(file_get_contents($publicKeyFile));
 
         if ($privateKeyFile) {
-            dump($privateKeyFile);
+            //dump($privateKeyFile);
             $this->priKey = openssl_get_privatekey(file_get_contents($privateKeyFile));
-            dump($this->priKey);
+            //dump($this->priKey);
         }
         $this->padding = $padding;
         $this->signAlgo = $sign_algo;
@@ -120,7 +120,7 @@ class RSA
     public function sign($data)
     {
         $ret = false;
-        dump($this->priKey);
+        //dump($this->priKey);
         if (openssl_sign($data, $ret, $this->priKey, $this->signAlgo)) {
             $ret = $this->encode($ret);
         }
