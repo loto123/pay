@@ -416,7 +416,7 @@
 			// 选择出售狗狗的价格
 			choiseSalePrice(price){
 
-				if(price > this.myMaxQuota){
+				if(price > this.balance){
 				    Toast("您的钻石不足");
 				    return;
 				}
