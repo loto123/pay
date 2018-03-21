@@ -442,31 +442,37 @@ export default {
         share_url: window.location.href.split('#')[0],
         list: ['onMenuShareTimeline', 'onMenuShareAppMessage']
       };
-      return Promise.all([request.getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id),request.getInstance().getData("api/index"),request.getInstance().getData("api/proxy/share", data)]).then(res=>{
-        this.joiner = res[0].data.data.joiner;
-        this.renderData = res[0].data.data;
-        this.recordList = res[0].data.data.record;
-        this.shop_id = res[0].data.data.shop_id;
-        this.allow_reward = res[0].data.data.allow_reward;
-        this.isManager = res[0].data.data.allow_cancel;
-        this.status = res[0].data.data.status;
-        this.allow_remind = res[0].data.data.allow_remind;
-        this.shop_name=res[0].data.data.shop_name;
-        this.shop_logo=res[0].data.data.shop_logo;
-        this.comment=res[0].data.data.comment;
-        this.isShow = true;
+      return Promise.all([
+        request.getInstance().getData("api/transfer/show" + "?transfer_id=" + this.transfer_id),
+        request.getInstance().getData("api/index"),
+        request.getInstance().getData("api/proxy/share", data)
+        ]).then(res=>{
+          this.joiner = res[0].data.data.joiner;
+          this.renderData = res[0].data.data;
+          this.recordList = res[0].data.data.record;
+          this.shop_id = res[0].data.data.shop_id;
+          this.allow_reward = res[0].data.data.allow_reward;
+          this.isManager = res[0].data.data.allow_cancel;
+          this.status = res[0].data.data.status;
+          this.allow_remind = res[0].data.data.allow_remind;
+          this.shop_name=res[0].data.data.shop_name;
+          this.shop_logo=res[0].data.data.shop_logo;
+          this.comment=res[0].data.data.comment;
+          this.isShow = true;
 
-        this.balance = res[1].data.data.balance;
-        var Data = res[2].data.data;
-        var content=JSON.parse(Data.config);
-        wx.config(content);
-        return Promise.resolve(true);
-        Loading.getInstance().close();
+          this.balance = res[1].data.data.balance;
+          var Data = res[2].data.data;
+          var content=JSON.parse(Data.config);
+          wx.config(content);
+          return Promise.resolve(true);
+          Loading.getInstance().close();
         
       }).catch(err=>{
           Toast(err.data.msg);
           if(err.data.code=='4'){
             this.$router.go(-1);
+          }else if(err.data.code == 404){
+            this.$router.push("/404notfound?codeMsg="+ err.data.msg);
           }
           Loading.getInstance().close();
           // this.$router.push('/404notfound');
