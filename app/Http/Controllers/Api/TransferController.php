@@ -297,7 +297,7 @@ class TransferController extends BaseController
 
         //公会冻结
         if($transferObj->shop->status == Shop::STATUS_FREEZE) {
-            return $this->json([], trans('trans.shop_been_frozen'), 0);
+            return $this->json([], trans('trans.shop_been_frozen'), 4);
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
