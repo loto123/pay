@@ -729,7 +729,7 @@ export default {
       request.getInstance().postData('api/transfer/cancel',_data).then(res=>{
         Toast("撤销任务成功");
         setTimeout(()=>{
-          this.$router.push("/makeDeal/my_deal");
+          this.$router.push("/index");
         },1500);
       }).catch(err=>{
         Toast(err.data.msg);
