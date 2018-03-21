@@ -221,13 +221,6 @@ class ShopController extends BaseController
      *   path="/shop/lists/all",
      *   summary="我所有店铺（创建交易）",
      *   tags={"店铺"},
-     *   @SWG\Parameter(
-     *     name="limit",
-     *     in="query",
-     *     description="数目",
-     *     required=false,
-     *     type="integer"
-     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -265,15 +258,14 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function all(Request $request)
+    public function all()
     {
-        $limit = $request->input('limit', 10);
         $user = $this->auth->user();
         $shops = [];
         $count = 0;
         foreach ($user->transfer as $_transfer) {
             $count += $_transfer->shop()->count();
-            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit)->get() as $_shop) {
+            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
                     $shops[$_shop->id] = $_shop;
                 }
@@ -281,20 +273,16 @@ class ShopController extends BaseController
         }
         $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
         $count += $query1->count();
-        if (count($shops) < $limit) {
-            foreach ($query1->limit($limit - count($shops))->get() as $_shop) {
-                if (!isset($shops[$_shop->id])) {
-                    $shops[$_shop->id] = $_shop;
-                }
+        foreach ($query1->get() as $_shop) {
+            if (!isset($shops[$_shop->id])) {
+                $shops[$_shop->id] = $_shop;
             }
         }
         $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
         $count += $query2->count();
-        if (count($shops) < $limit) {
-            foreach ($query2->limit($limit - count($shops))->get() as $_shop) {
-                if (!isset($shops[$_shop->id])) {
-                    $shops[$_shop->id] = $_shop;
-                }
+        foreach ($query2->get() as $_shop) {
+            if (!isset($shops[$_shop->id])) {
+                $shops[$_shop->id] = $_shop;
             }
         }
 
