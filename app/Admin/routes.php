@@ -69,6 +69,9 @@ Route::group([
 
     $router->resource('bank', BankController::class);
 
+    //实名认证、银行卡鉴权
+    $router->resource('pay_interface_data', PayInterfaceRecordController::class);
+
     $router->post('/excel/data/user', 'ExcelController@dataUser');
     $router->post('/excel/data/profit', 'ExcelController@dataProfit');
 

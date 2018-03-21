@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div id = "drop-list-component"  v-if="showSwitch">
-        <div class="mask" @click="hideTab">
+        <div class="mask" @click="hideTab" @touchmove.prevent>
 
         </div>
         <div class="content">
@@ -46,6 +46,7 @@
     top:0;
     left: 0;
     z-index: 1001;
+
     .content{
         left: 10vw;
         top:10vh;
@@ -62,8 +63,9 @@
         }
         
         .list-wrap{
-            height:70%;
+            height:74%;
             overflow: scroll;
+            border: 1px dashed #eee;
         }
         
         .loading-more{
@@ -116,7 +118,9 @@ export default {
       }
   },
   watch:{
-      "choiseValue":'hideTab'
+      "choiseValue":function(e){
+          this.hideTab();
+      }
   }
 }
 </script>

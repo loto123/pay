@@ -193,9 +193,7 @@ export default {
             localStorage.setItem("url",window.location.href);
 
             Toast("当前用户未登录");
-            setTimeout(()=>{
-                this.$router.push("/login");
-            },1000)
+            this.$router.push("/login");
         }
 
         // 防止连续点击

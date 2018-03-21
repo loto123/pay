@@ -37,10 +37,7 @@ export default class UserRequest {
                         resolve(res);
                     }else if(res.data.code == 2){
                         Loading.getInstance().close();
-                        // Toast("用户未登录,即将跳转登录...");
-                        setTimeout(function(){
-                            window.location.href = "/#/login";
-                        },1000);
+                        window.location.href = "/#/login";
                         
                         reject(res);
                     }
@@ -74,12 +71,8 @@ export default class UserRequest {
                     }else if(res.data.code == 2){
 
                         Loading.getInstance().close();
-                        // Toast("用户未登录,即将跳转登录...");
-                        setTimeout(function(){
-                            window.location.href = "/#/login"
-                        },2000);
+                        window.location.href = "/#/login"
                         reject(res);
-                        
                     }
                     else {
                         reject(res);
@@ -97,11 +90,10 @@ export default class UserRequest {
         var urlShare = window.location.href.indexOf("#/share");
 
         if(!token && url==-1 && urlShare==-1){
+            localStorage.setItem("url",window.location.href);
             Loading.getInstance().close();
             Toast("用户未登录,即将跳转登录...");
-            setTimeout(function(){
-                window.location.href = "/#/login";
-            },1000);
+            window.location.href = "/#/login";
         }
     }
 

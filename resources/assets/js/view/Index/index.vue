@@ -2,10 +2,9 @@
   <div id="index">
     <section id="top">
       <div class="message flex flex-reverse flex-align-center" @click="goInform">
-        <i class="iconfont" style="color:#fff; font-size:1.5em;">
-          &#xe626;
-        </i>
-
+        <div class="news">
+          <img src="/images/news.png">
+        </div>
         <span class="notice" v-if="newMessage>0">
             </span>
       </div>
@@ -21,7 +20,7 @@
         </div>
 
         <div class="center flex-5 flex flex-v flex-align-center flex-justify-center" @click="goMyAccount">
-          <h3 class="flex">{{amount}} <i class="diamond" style="margin-top:0.1em;margin-left:0.4em;">&#xe6f9;</i></h3>
+          <div class="flex diamond-box">{{amount}} <div class="diamond"><img src="/images/zuanshi.png"></div></div>
           <h4>账户余额(钻石)</h4>
         </div>
 
@@ -49,53 +48,53 @@
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/shop" class="flex flex-v flex-align-center">
-            <i class="iconfont myShop-icon common-icon">
-              &#xe611;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/gonghui.png" alt="">
+            </div>
             <h3>我的公会</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe605;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/renwu.png" alt="">
+            </div>
             <h3>我的任务</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goShareProfit">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe61d;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/fenrun.png" alt="">
+            </div>
             <h3>我的分润</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goMyUsers">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe621;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/yonghu.png" alt="">
+            </div>
             <h3>我的用户</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/my_vip" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe6e1;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/vip.png" alt="">
+            </div>
             <h3>我的vip</h3>
           </a>
         </li>
         <li class="flex flex-v flex-align-center">
           <a href="/#/MyReward" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe6e1;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/shangjin.png" alt="">
+            </div>
             <h3>我的赏金</h3>
           </a>
         </li>
@@ -109,34 +108,34 @@
 
         <li class="flex flex-v flex-align-center">
           <a href="/#/shareUser" class="flex flex-v flex-align-center">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe64f;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/zhanye.png" alt="">
+            </div>
             <h3>展业</h3>
           </a>
         </li>
 
         <li class="flex flex-v flex-align-center" v-if="isPromoters==1">
           <a class="flex flex-v flex-align-center" @click="goVipOpenCard">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe650;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/kaika.png" alt="">
+            </div>
             <h3>vip开卡</h3>
           </a>
         </li>
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goDealList">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe617;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/jiaoyihang.png" alt="">
+            </div>
             <h3>前往交易行</h3>
           </a>
         </li>
         <li class="flex flex-v flex-align-center">
           <a class="flex flex-v flex-align-center" @click="goSafety">
-            <i class="iconfont transaction-icon common-icon">
-              &#xe69a;
-            </i>
+            <div class="home-icon">
+              <img src="/images/home/baozhang.png" alt="">
+            </div>
             <h3>安全保障</h3>
           </a>
         </li>
@@ -169,8 +168,15 @@
       width: 100%;
       padding-right: 1em;
       box-sizing: border-box;
-      position: relative;
-
+      .news{
+        position: relative;
+        width: 32px;
+        margin-top: 1.5em;
+        img{
+          display: block;
+          width: 100%;
+        }
+      }
       .notice {
         width: 0.6em;
         height: 0.6em;
@@ -178,7 +184,6 @@
         border-radius: 50%;
         position: absolute;
         right: 0.7em;
-        top: 0em;
       }
     }
 
@@ -201,11 +206,18 @@
         text-align: center;
         color: #fff;
       }
-
-      h3 {
+      .diamond-box{
         font-size: 1.8em;
         text-align: center;
         color: #fff;
+        .diamond{
+          width:30px;
+          margin-left:0.2em;
+          img{
+            display: block;
+            width: 100%;
+          }
+        }
       }
 
       h4 {
@@ -276,16 +288,18 @@
         padding-top: 0.5em;
         box-sizing: border-box;
         width: 33.33%;
-        height: 6em;
-
-        .common-icon {
-          font-size: 2em;
-          color: #26a2ff;
+        height: 5.5em;
+        .home-icon {
+          width: 35px;
+          img{
+            display: block;
+            width: 100%;
+          }
         }
         h3 {
           color: #000;
           margin-top: 0.4em;
-          font-size: 0.90em;
+          font-size: 0.9em;
         }
       }
 
