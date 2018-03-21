@@ -133,10 +133,12 @@
     height: 100%;
     padding-right: 0.8em;
     padding-top:1em;
+    
     .news{
       position: relative;
-      width: 32px;
-      margin-top: 0.5em;
+      width: 28px;
+      top:-0.4em;
+
       img{
         display: block;
         width: 100%;

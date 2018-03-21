@@ -96,7 +96,7 @@
 						return this.shopList[i].label;
 					}
 				}
-				return "没有这个公会";
+				return "请选择您要转移的公会";
 			},
 
 			showDropList() {

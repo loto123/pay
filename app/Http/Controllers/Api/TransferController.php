@@ -295,6 +295,11 @@ class TransferController extends BaseController
             return $this->json([], trans('trans.trans_permission_deny'), 0);
         }
 
+        //公会冻结
+        if($transferObj->shop->status == Shop::STATUS_FREEZE) {
+            return $this->json([], trans('trans.shop_been_frozen'), 0);
+        }
+
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
         }, 'record' => function ($query) {

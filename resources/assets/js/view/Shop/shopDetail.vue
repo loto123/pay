@@ -676,9 +676,7 @@
                         .then(res => {
                             Loading.getInstance().close();
                             Toast("公会解散成功");
-                            setTimeout(() => {
-                                this.$router.push("/shop");
-                            }, 1000);
+                            this.$router.push("/shop");
                         })
                         .catch(error => {
                             console.error(error);
@@ -702,9 +700,7 @@
                         .then(res => {
                             Loading.getInstance().close();
                             Toast("退出公会成功");
-                            setTimeout(() => {
-                                this.$router.push("/shop");
-                            }, 1000);
+                            this.$router.push("/shop");
                         })
                         .catch(error => {
                             console.error(error);
@@ -774,9 +770,7 @@
                             Loading.getInstance().close();
 
                             Toast("公会改名成功");
-                            setTimeout(() => {
-                                this.init();
-                            }, 1500);
+                            this.init();
                         }).catch(err => {
                             Loading.getInstance().close();
                             Toast(err.data.msg);
@@ -812,9 +806,7 @@
                         request.getInstance().postData('api/shop/update/' + this.shopId, _data).then(res => {
                             Loading.getInstance().close();
                             Toast("修改手续费率成功");
-                            setTimeout(() => {
-                                this.init();
-                            }, 1500);
+                            this.init();
                         }).catch(err => {
                             Loading.getInstance().close();
 
@@ -855,9 +847,7 @@
                             Loading.getInstance().close();
 
                             Toast("修任务默认倍率成功");
-                            setTimeout(() => {
-                                this.init();
-                            }, 1500);
+                            this.init();
                         }).catch(err => {
                             Loading.getInstance().close();
                             Toast(err.data.msg);
