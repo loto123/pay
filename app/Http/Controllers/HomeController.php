@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SubmitWithdrawRequest;
+use App\Pay\Model\Withdraw;
+use App\Pay\Model\WithdrawRetry;
+use App\Pay\PayLogger;
+
 class HomeController extends Controller
 {
     /**
@@ -21,15 +26,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $deposit = new Deposit([
-            ['id' => 123,
-                'amount' => 1,
-                'master_container' => 1
-            ]
-        ]);
-        $method = DepositMethod::find(8);
-        $deposit->channel()->associate(Channel::find(6));
-        $deposit->method()->associate($method);
-        dump($method->deposit($deposit, 0));
+        /**
+         * 测试提现
+         */
+
+        /**
+         * @var $order Withdraw
+         */
+        $order = Withdraw::find(265);
+
+        if (WithdrawRetry::isWithdrawFailed((new SubmitWithdrawRequest($order))->handle()->state)) {
+            PayLogger::withdraw()->error('系统自动提现失败', ['sell_bill_id' => $order->getKey()]);
+        }
+
     }
 }

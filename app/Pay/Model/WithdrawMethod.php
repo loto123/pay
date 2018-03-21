@@ -19,6 +19,10 @@ class WithdrawMethod extends Model
     public $timestamps = false;
     protected $table = 'pay_withdraw_method';
 
+    public static function pollState($withdraw_id)
+    {
+
+    }
 
     /**
      * 所属支付平台
@@ -39,7 +43,6 @@ class WithdrawMethod extends Model
             'name' => '银行卡',
         ]);
     }
-
 
     /**
      * 该方式的提现记录

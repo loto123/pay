@@ -92,4 +92,9 @@ class Response extends Message
                 return $this->sign() === $sign;
         }
     }
+
+    public function __toString()
+    {
+        return json_encode($this->headFields);
+    }
 }

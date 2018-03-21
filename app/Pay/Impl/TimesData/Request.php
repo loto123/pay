@@ -25,12 +25,13 @@ class Request extends Message
      */
     private $reqUrl;
 
-    public function __construct($appId, $version, $reqType, $reqUrl, $reqNo, $signType = self::SIGN_RSA1)
+    public function __construct($appId, $version, $reqType, $reqUrl, $reqNo, $mchid, $signType = self::SIGN_RSA1)
     {
         $this->headFields = ['appId' => $appId,
             'version' => $version,
             'reqType' => $reqType,
             'reqNo' => $reqNo,
+            'mchid' => $mchid,
             'signType' => [self::SIGN_RSA1 => 'RSA1', self::SIGN_MD5 => 'MD5'][$signType]
         ];
         $this->signType = $signType;
@@ -120,6 +121,7 @@ class Request extends Message
                 'content' => $xml
             )
         );
+        dump($xml);
 
         $context = stream_context_create($opts);
         $response = file_get_contents($url, false, $context);
