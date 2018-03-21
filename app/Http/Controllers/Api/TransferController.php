@@ -286,13 +286,13 @@ class TransferController extends BaseController
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
         if (!$transferObj) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         $user = JWTAuth::parseToken()->authenticate();
         //权限
         if(($transferObj->privately && !$transferObj->joiner()->where('user_id',$user->id)->exists())
             || !$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
-            return $this->json([], trans('trans.trans_permission_deny'), 0);
+            return $this->json([], trans('trans.trans_permission_deny'), 404);
         }
 
         //公会冻结
@@ -398,7 +398,7 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -478,7 +478,7 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -560,12 +560,12 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         //权限
         if(($transfer->privately && !$transfer->joiner()->where('user_id',$user->id)->exists())
             || !$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
-            return $this->json([], trans('trans.trans_permission_deny'), 0);
+            return $this->json([], trans('trans.trans_permission_deny'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -794,7 +794,7 @@ class TransferController extends BaseController
         }
         $transfer = $record->transfer;
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -909,7 +909,7 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
 
         $user = JWTAuth::parseToken()->authenticate();
@@ -1033,7 +1033,7 @@ class TransferController extends BaseController
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
         if (!$transferObj) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->with(['user' => function ($query) {
@@ -1118,7 +1118,7 @@ class TransferController extends BaseController
         }
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -1705,7 +1705,7 @@ class TransferController extends BaseController
         $user = JWTAuth::parseToken()->authenticate();
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->user_id != $user->id) {
             return $this->json([], trans('trans.trans_not_belong_user'), 0);
