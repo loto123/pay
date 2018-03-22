@@ -98,6 +98,7 @@
 
     <choiseMember :isShow="choiseMemberSwitch" v-on:hide="hideMemberChoise" :dataList="memberList" v-on:submit="addMembersNotice">
     </choiseMember>
+
   </div>
 </template>
 

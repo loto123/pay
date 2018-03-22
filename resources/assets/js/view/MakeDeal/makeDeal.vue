@@ -57,13 +57,13 @@
 
     <p class="notice">任务完成后每个参与者都会获得一定的宠物蛋奖励</p>
 
-    <inputList
+    <!-- <inputList
       :showSwitch="dropListSwitch"
       v-on:hideDropList="hideDropList"
       :optionsList="shopList"
       v-if="isShow"
     >
-    </inputList>
+    </inputList> -->
 
     <choiseMember
       :isShow="choiseMemberSwitch"
@@ -72,6 +72,17 @@
       v-on:submit="getMemberData"
     >
     </choiseMember>
+    
+    <picker-component
+      :dataList = "shopList"
+      :isShow = "dropListSwitch"
+      v-on:submitData = "getMemberData"
+      v-if = "dropListSwitch"
+      v-on:isShow = "hideDropList"
+    >
+      
+    </picker-component>
+
   </div>
 </template>
 
@@ -234,10 +245,10 @@
 
   import Loading from "../../utils/loading";
   import request from "../../utils/userRequest";
-
   import utils from "../../utils/utils"
 
   import {Toast} from 'mint-ui'
+  import pickerComponent from '../../components/pickerComponent.vue'
 
   export default {
     name: "makeDeal",
@@ -259,7 +270,14 @@
         commentMessage: null,
 
         memberList: [],              //成员数组
-        isShow: false
+        isShow: false,
+
+        testdata:[
+          {
+            values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+            textAlign: 'center'
+          }
+        ]
       };
     },
 
@@ -285,7 +303,7 @@
         var _tempList = [];
         for (let i = 0; i < res.data.data.data.length; i++) {
           var _t = {};
-          _t.value = res.data.data.data[i].id.toString();
+          _t.id = res.data.data.data[i].id.toString();
           _t.label = utils.SetString(res.data.data.data[i].name, 10);
           _t.price = res.data.data.data[i].price;
           _tempList.push(_t);
@@ -295,8 +313,9 @@
       },
 
       getShopName(id) {
+
         for (let i = 0; i < this.shopList.length; i++) {
-          if (this.shopList[i].value == id) {
+          if (this.shopList[i].id == id) {
             return this.shopList[i].label;
           }
         }
@@ -325,6 +344,10 @@
 
       hideDropList(data) {
         this.dropListSwitch = false;
+        
+        if(!data){
+          return;
+        }
         this.dealShop = this.getShopName(data);
         this.shopId = data;
         this.price = this.getDefaultPrice(data);
@@ -460,7 +483,7 @@
         return _tempIdList;
       }
     },
-    components: {topBack, inputList, choiseMember}
+    components: {topBack, inputList, choiseMember, pickerComponent}
   };
 </script>
 
