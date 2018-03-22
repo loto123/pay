@@ -354,9 +354,6 @@
                 // recordList 插值
                 for (let k = 0; k < this.headList.length; k++) {
                     var _index = this.headList[k].index + count;
-                    console.log("================");
-                    console.log(_index);
-                    console.log(count);
 
                     if (this.recordList[_index].isTimePanel == true) {
                         continue;
@@ -384,8 +381,8 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
-                                console.log(_tempIndex);
-                                console.log(this.headList.length);
+                                // console.log(_tempIndex);
+                                // console.log(this.headList.length);
                                 if(_tempIndex <this.headList.length){
                                     ++_tempIndex;
                                 }
@@ -415,10 +412,10 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
-                                console.log("####################");
-                                console.log(_timer);
-                                console.log(_tempIndex);
-                                console.log(this.headList.length);
+                                // console.log("####################");
+                                // console.log(_timer);
+                                // console.log(_tempIndex);
+                                // console.log(this.headList.length);
                                 if(_tempIndex <this.headList.length){
                                     ++_tempIndex;
                                 }
@@ -427,7 +424,6 @@
                                     this.headList[_tempIndex].in = res.data.data.in;
                                     this.headList[_tempIndex].out = res.data.data.out;
                                 } else {
-                                    console.log(5555555555);
                                     this.headList[this.headList.length - 1].in = res.data.data.in;
                                     this.headList[this.headList.length - 1].out = res.data.data.out;
                                 }
