@@ -34,12 +34,11 @@
       },
 
       goIndex(){
-        if(window.history.length <= 2){
+        if(window.history.length <= 3){
           this.$router.push('/index');
         }else {
           this.$router.go(-2);
         }
-        this.$router.push("/index");
       }
     }
   }
