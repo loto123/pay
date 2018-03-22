@@ -371,6 +371,7 @@
                         var _timer = _year + "-" + _month;
 
                         if (this.tabStatus[0] == true) {
+
                             var _data3 = {
                                 month: _timer,
                                 type:[0,1]
@@ -381,19 +382,24 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
-                                // console.log(_tempIndex);
-                                // console.log(this.headList.length);
-                                if(_tempIndex <this.headList.length){
-                                    ++_tempIndex;
+                                // if(_tempIndex <this.headList.length){
+                                //     ++_tempIndex;
+                                // }
+
+                                for(var j = 0 ; j< this.headList.length; j ++ ){
+                                    if(this.headList[j].time == this.recordList[m].time){
+                                        this.headList[j].in = res.data.data.in;
+                                        this.headList[j].out = res.data.data.out;
+                                    }
                                 }
 
-                                if(_tempIndex > 0){
-                                    this.headList[_tempIndex].in = res.data.data.in;
-                                    this.headList[_tempIndex].out = res.data.data.out;
-                                } else {
-                                    this.headList[this.headList.length - 1].in = res.data.data.in;
-                                    this.headList[this.headList.length - 1].out = res.data.data.out;
-                                }
+                                // if(_tempIndex > 0){
+                                //     this.headList[_tempIndex].in = res.data.data.in;
+                                //     this.headList[_tempIndex].out = res.data.data.out;
+                                // } else {
+                                //     this.headList[this.headList.length - 1].in = res.data.data.in;
+                                //     this.headList[this.headList.length - 1].out = res.data.data.out;
+                                // }
                                 
 
                                 this.timeInfo = this.recordList[0].time;
@@ -412,21 +418,31 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
-                                // console.log("####################");
-                                // console.log(_timer);
-                                // console.log(_tempIndex);
-                                // console.log(this.headList.length);
-                                if(_tempIndex <this.headList.length){
-                                    ++_tempIndex;
-                                }
+                                for(var j = 0 ; j< this.headList.length; j ++ ){
 
-                               if(_tempIndex > 0){
-                                    this.headList[_tempIndex].in = res.data.data.in;
-                                    this.headList[_tempIndex].out = res.data.data.out;
-                                } else {
-                                    this.headList[this.headList.length - 1].in = res.data.data.in;
-                                    this.headList[this.headList.length - 1].out = res.data.data.out;
+                                    if(this.headList[j].time == this.recordList[m].time){
+                                        this.headList[j].in = res.data.data.in;
+                                        this.headList[j].out = res.data.data.out;
+                                    }
+
                                 }
+                                
+                               //  if(_tempIndex <this.headList.length){
+                               //      ++_tempIndex;
+                               //  }
+
+                               //  console.log("####################");
+                               //  console.log(_timer);
+                               //  console.log(_tempIndex);
+                               //  console.log(this.headList.length);
+
+                               // if(_tempIndex > -1 && ){
+                               //      this.headList[_tempIndex].in = res.data.data.in;
+                               //      this.headList[_tempIndex].out = res.data.data.out;
+                               //  } else {
+                               //      this.headList[this.headList.length - 1].in = res.data.data.in;
+                               //      this.headList[this.headList.length - 1].out = res.data.data.out;
+                               //  }
 
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
