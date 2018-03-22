@@ -7,6 +7,7 @@ use App\Pet;
 use App\PetRecord;
 use App\Profit;
 use App\Shop;
+use App\ShopFund;
 use App\TipRecord;
 use App\Transfer;
 use App\TransferRecord;
@@ -54,6 +55,13 @@ class TransferController extends BaseController
      *     required=false,
      *     type="string"
      *   ),
+     *  @SWG\Parameter(
+     *     name="privately",
+     *     in="formData",
+     *     description="私密状态 0 公开 1 私密",
+     *     required=true,
+     *     type="integer"
+     *   ),
      *    @SWG\Parameter(
      *     name="joiner",
      *     in="formData",
@@ -100,6 +108,7 @@ class TransferController extends BaseController
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
                 'comment' => 'bail|max:200',
+                'privately' => ['bail','required',Rule::in([0,1])],
                 'joiner' => 'bail|array',
             ],
             [
@@ -132,6 +141,7 @@ class TransferController extends BaseController
         $transfer->user_id = $user->id;
         $transfer->price = $request->price;
         $transfer->comment = $request->input('comment', '');
+        $transfer->privately = $request->privately;
 //        if ($shop->type == 0) {
 //            $transfer->tip_type = 1;
 //            $transfer->tip_amount = $shop->type_value;
@@ -196,6 +206,8 @@ class TransferController extends BaseController
      *                  type="object",
      *                  @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
      *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
+     *                  @SWG\Property(property="shop_name", type="string", example="1号公会", description="店铺名称"),
+     *                  @SWG\Property(property="shop_log", type="string", example="storage/logo/956ae69edfcb690eb3ee6e5db6c12cfa.jpg", description="店铺logo"),
      *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
      *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
      *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
@@ -274,14 +286,19 @@ class TransferController extends BaseController
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
         if (!$transferObj) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
+        }
+        $user = JWTAuth::parseToken()->authenticate();
+        //权限
+        if(($transferObj->privately && !$transferObj->joiner()->where('user_id',$user->id)->exists())
+            || !$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
+            return $this->json([], trans('trans.trans_permission_deny'), 404);
         }
 
-        $user = JWTAuth::parseToken()->authenticate();
-
-//        if (!$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
-//            return $this->json([], trans('trans.trans_permission_deny'), 0);
-//        }
+        //公会冻结
+        if($transferObj->shop->status == Shop::STATUS_FREEZE) {
+            return $this->json([], trans('trans.shop_been_frozen'), 4);
+        }
 
         $transfer = Transfer::where('id', $transferObj->id)->withCount('joiner')->with(['user' => function ($query) {
             $query->select('id', 'name', 'avatar');
@@ -328,6 +345,8 @@ class TransferController extends BaseController
             unset($transfer->joiner[$key]->transfer_id);
             unset($transfer->joiner[$key]->user_id);
         }
+        $transfer->shop_name = $transfer->shop->name;
+        $transfer->shop_logo = $transfer->shop->logo;
         unset($transfer->user_id);
         unset($transfer->shop);
         return $this->json($transfer, 'ok', 1);
@@ -379,7 +398,7 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -459,7 +478,7 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -541,10 +560,12 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
-        if (!$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
-            return $this->json([], trans('trans.trans_permission_deny'), 0);
+        //权限
+        if(($transfer->privately && !$transfer->joiner()->where('user_id',$user->id)->exists())
+            || !$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+            return $this->json([], trans('trans.trans_permission_deny'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -702,6 +723,16 @@ class TransferController extends BaseController
             if (isset($tip) && $tip) {
                 $tip->record_id = $record->id;
                 $tip->save();
+                //店铺账单明细
+                $shopFound = new ShopFund();
+                $shopFound->shop_id = $transfer->shop_id;
+                $shopFound->type = ShopFund::TYPE_FEE;
+                $shopFound->user_id = $user->id;
+                $shopFound->mode = ShopFund::MODE_IN;
+                $shopFound->amount = $tip->amount;
+                $shopFound->balance = $transfer->shop->container->balance;
+                $shopFound->status = ShopFund::STATUS_SUCCESS;
+                $shopFound->save();
             }
             //保存交易关系
             if (!$transfer->joiner()->where('user_id', $user->id)->exists()) {
@@ -763,7 +794,7 @@ class TransferController extends BaseController
         }
         $transfer = $record->transfer;
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -878,7 +909,7 @@ class TransferController extends BaseController
 
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
 
         $user = JWTAuth::parseToken()->authenticate();
@@ -895,7 +926,7 @@ class TransferController extends BaseController
         DB::beginTransaction();
         try {
             foreach ($request->friend_id as $value) {
-                $real_id = User::decrypt( $value);
+                $real_id = User::decrypt($value);
                 if (!$transfer->joiner()->where('user_id', $real_id)->exists()) {
                     $relation = new TransferUserRelation();
                     $relation->transfer_id = $transfer->id;
@@ -1002,7 +1033,7 @@ class TransferController extends BaseController
 
         $transferObj = Transfer::findByEnId($request->transfer_id);
         if (!$transferObj) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
 
         $transfer = Transfer::where('id', $transferObj->id)->with(['user' => function ($query) {
@@ -1087,7 +1118,7 @@ class TransferController extends BaseController
         }
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
@@ -1142,6 +1173,16 @@ class TransferController extends BaseController
                 $found->amount = $record->amount;
                 $found->no = $record->transfer_id;
                 $found->save();
+                //店铺账单明细
+                $shopFound = new ShopFund();
+                $shopFound->shop_id = $transfer->shop_id;
+                $shopFound->type = ShopFund::TYPE_TIP;
+                $shopFound->user_id = $user->id;
+                $shopFound->mode = ShopFund::MODE_IN;
+                $shopFound->amount = $record->amount;
+                $shopFound->balance = $transfer->shop->container->balance;
+                $shopFound->status = ShopFund::STATUS_SUCCESS;
+                $shopFound->save();
                 DB::commit();
                 return $this->json([], trans('trans.pay_fee_success'), 1);
             } catch (\Exception $e) {
@@ -1201,6 +1242,7 @@ class TransferController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
      *                          @SWG\Property(property="transfer_id", type="string", example="1234567",description="交易红包ID"),
+	 *							@SWG\Property(property="transfer_amount", type="double", example=9.9, description="任务余额"),
      *                          @SWG\Property(property="shop_name", type="string", example="XX的店",description="交易红包所属店铺名称"),
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
      *                          @SWG\Property(property="eggs", type="int", example=9, description="获得宠物蛋数量"),
@@ -1242,7 +1284,7 @@ class TransferController extends BaseController
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
         })->with(['transfer' => function ($query) {
-            $query->select('id', 'shop_id');
+            $query->select('id', 'amount', 'shop_id');
         },
 //        }])
 //        }, 'transfer.record' => function ($query) {
@@ -1263,6 +1305,7 @@ class TransferController extends BaseController
         foreach ($list as $key => $item) {
             $data[$key]['id'] = $item->id;
             $data[$key]['transfer_id'] = $item->transfer ? $item->transfer->en_id() : 0;
+			$data[$key]['transfer_amount'] = $item->transfer ? $item->transfer->amount : 0;
             $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
             $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
             $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
@@ -1664,7 +1707,7 @@ class TransferController extends BaseController
         $user = JWTAuth::parseToken()->authenticate();
         $transfer = Transfer::findByEnId($request->transfer_id);
         if (!$transfer) {
-            return $this->json([], trans('trans.trans_not_exist'), 0);
+            return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         if ($transfer->user_id != $user->id) {
             return $this->json([], trans('trans.trans_not_belong_user'), 0);

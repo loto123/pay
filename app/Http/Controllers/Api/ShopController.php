@@ -95,21 +95,21 @@ class ShopController extends BaseController
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/|numeric|between:0.1,99999',
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
-        ],['name.required'=>'店铺名必填',
+        ],['name.required'=>'公会名必填',
         'name.max'=>'公会名称不能超过10个字符',
         'rate.required'=>'默认倍率必填',
-        'rate.regex'=>'默认倍率格式错误',
+        'rate.regex'=>'默认倍率请填写0.1到99999之间数字',
         'rate.between' => '默认倍率请填写0.1到99999之间数字',
         'rate.numeric' => '默认倍率请填写0.1到99999之间数字',
-        'percent.required'=>'手续费率不能为空',
-        'percent.integer'=>'手续费必须为0-100的整数',
-        'percent.between'=>'手续费必须为0-100的整数'
+        'percent.required'=>'佣金费率不能为空',
+        'percent.integer'=>'佣金费率必须为0-100的整数',
+        'percent.between'=>'佣金费率必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
             return $this->json([], $validator->errors()->first(), 0);
         }
-        if ($request->percent > config("platform_fee_percent")) {
+        if ($request->percent > config("guild_commission", 0)) {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
         $user = $this->auth->user();
@@ -178,7 +178,8 @@ class ShopController extends BaseController
      *                  @SWG\Items(
      *                      @SWG\Property(property="id", type="string", example="1234567890", description="店铺id"),
      *                      @SWG\Property(property="name", type="string", example="我的店铺", description="店铺名"),
-     *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址")
+     *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址"),
+     *                      @SWG\Property(property="status", type="integer", example=1, description="店铺状态 0=正常 2=冻结"),
      *                  )
      *                  ),
      *              )
@@ -220,13 +221,6 @@ class ShopController extends BaseController
      *   path="/shop/lists/all",
      *   summary="我所有店铺（创建交易）",
      *   tags={"店铺"},
-     *   @SWG\Parameter(
-     *     name="limit",
-     *     in="query",
-     *     description="数目",
-     *     required=false,
-     *     type="integer"
-     *   ),
      *     @SWG\Response(
      *          response=200,
      *          description="成功返回",
@@ -264,15 +258,14 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function all(Request $request)
+    public function all()
     {
-        $limit = $request->input('limit', 10);
         $user = $this->auth->user();
         $shops = [];
         $count = 0;
         foreach ($user->transfer as $_transfer) {
             $count += $_transfer->shop()->count();
-            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->limit($limit)->get() as $_shop) {
+            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
                 if (!isset($shops[$_shop->id])) {
                     $shops[$_shop->id] = $_shop;
                 }
@@ -280,20 +273,16 @@ class ShopController extends BaseController
         }
         $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
         $count += $query1->count();
-        if (count($shops) < $limit) {
-            foreach ($query1->limit($limit - count($shops))->get() as $_shop) {
-                if (!isset($shops[$_shop->id])) {
-                    $shops[$_shop->id] = $_shop;
-                }
+        foreach ($query1->get() as $_shop) {
+            if (!isset($shops[$_shop->id])) {
+                $shops[$_shop->id] = $_shop;
             }
         }
         $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
         $count += $query2->count();
-        if (count($shops) < $limit) {
-            foreach ($query2->limit($limit - count($shops))->get() as $_shop) {
-                if (!isset($shops[$_shop->id])) {
-                    $shops[$_shop->id] = $_shop;
-                }
+        foreach ($query2->get() as $_shop) {
+            if (!isset($shops[$_shop->id])) {
+                $shops[$_shop->id] = $_shop;
             }
         }
 
@@ -354,6 +343,7 @@ class ShopController extends BaseController
      *                      @SWG\Property(property="logo", type="string", example="http://url/logo", description="店铺logo地址"),
      *                      @SWG\Property(property="today_profit", type="double", example=1.23, description="店铺今日收益"),
      *                      @SWG\Property(property="total_profit", type="double", example=1.23, description="店铺总收益"),
+     *                      @SWG\Property(property="status", type="integer", example=1, description="店铺状态 0=正常 2=冻结"),
      *                  )
      *                  ),
      *              )
@@ -437,6 +427,7 @@ class ShopController extends BaseController
      *                  ),
      *                  @SWG\Property(property="members_count", type="integer", example=20, description="成员总数"),
      *                  @SWG\Property(property="platform_fee", type="double", example=9.9, description="平台交易费"),
+     *                  @SWG\Property(property="guild_commission", type="double", example=9.9, description="最多佣金数"),
      *                  @SWG\Property(property="rate", type="double", example=9.9, description="单机"),
      *                  @SWG\Property(property="percent", type="double", example=9.9, description="抽水比例 百分比数"),
      *                  @SWG\Property(property="created_at", type="integer", example=1514949735, description="创建时间戳"),
@@ -494,6 +485,7 @@ class ShopController extends BaseController
                 'members' => $members,
                 'members_count' => (int)$shop->users()->count(),
                 'platform_fee' => (double)config("platform_fee_percent"),
+                'guild_commission' => (double)config("guild_commission", 0),
                 'rate' => (double)$shop->price,
                 'percent' => (double)$shop->fee,
                 'created_at' => strtotime($shop->created_at),
@@ -947,11 +939,11 @@ class ShopController extends BaseController
             'percent' => 'integer|between:0,100',
         ],[
         'name.max'=>'公会名称不能超过10个字符',
-        'rate.regex'=>'倍率格式错误',
+        'rate.regex'=>'倍率请填写0.1到99999之间数字',
         'rate.between' => '倍率请填写0.1到99999之间数字',
         'rate.numeric' => '倍率请填写0.1到99999之间数字',
-        'percent.integer'=>'手续费必须为0-100的整数',
-        'percent.between'=>'手续费必须为0-100的整数'
+        'percent.integer'=>'佣金费率必须为0-100的整数',
+        'percent.between'=>'佣金费率必须为0-100的整数'
         ]);
 
         if ($validator->fails()) {
@@ -985,7 +977,7 @@ class ShopController extends BaseController
         }
 
         if ($request->percent !== null) {
-            if ($request->percent > config("platform_fee_percent")) {
+            if ($request->percent > config("guild_commission", 0)) {
                 return $this->json([], trans("api.error_shop_percent"), 0);
             }
             $shop->fee = $request->percent;
@@ -1936,14 +1928,17 @@ class ShopController extends BaseController
      */
     public function transfer_records($shop_id, Request $request) {
         $data = [];
-//        $user = $this->auth->user();
+        $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
-        if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
+        if (!$shop || $shop->status != Shop::STATUS_NORMAL || $shop->manager_id != $user->id) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         $query = $shop->funds();
-        if ($request->type !== null) {
+        $types = [ShopFund::TYPE_TRANAFER, ShopFund::TYPE_TRANAFER_IN, ShopFund::TYPE_TRANAFER_MEMBER];
+        if ($request->type !== null && in_array($request->type, $types)) {
             $query->where("type", $request->type);
+        } else {
+            $query->whereIn("type", $types);
         }
         if ($request->start) {
             $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
@@ -2113,5 +2108,151 @@ class ShopController extends BaseController
         }
 
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/tips",
+     *   summary="我的赏金",
+     *   tags={"店铺"},
+     *   @SWG\Parameter(
+     *     name="offset",
+     *     in="query",
+     *     description="上次记录ID",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="shop_id",
+     *     in="query",
+     *     description="店铺id",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="limit",
+     *     in="query",
+     *     description="数目",
+     *     required=false,
+     *     type="integer"
+     *   ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="count", type="integer", example=20,description="总数"),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="id", type="string", example="1234567890", description="记录id"),
+     *                      @SWG\Property(property="shop_id", type="string", example="1234567890", description="店铺id"),
+     *                      @SWG\Property(property="shop_name", type="string", example="店铺名", description="店铺名"),
+     *                      @SWG\Property(property="user_name", type="string", example="1234567890", description="用户名"),
+     *                      @SWG\Property(property="user_avatar", type="string", example="url", description="用户头像"),
+     *                  @SWG\Property(property="mode", type="integer", example=1,description="收入支出 0=收入 1=支出"),
+     *                  @SWG\Property(property="amount", type="double", example=9.9,description="金额"),
+     *                  @SWG\Property(property="created_at", type="integer", example=152000000,description="创建时间戳"),
+     *                  )
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function tips(Request $request) {
+        $data = [];
+        $user = $this->auth->user();
+        if ($request->shop_id) {
+            $shop = Shop::findByEnId($request->shop_id);
+            if (!$shop || $shop->status != Shop::STATUS_NORMAL || $shop->manager_id != $user->id) {
+                return $this->json([], trans("api.error_shop_status"), 0);
+            }
+            $query = $shop->funds();
+        } else {
+            $query = $user->shop_funds();
+
+        }
+        $query->with(["shop", 'user'])->where((new ShopFund())->getTable().".type", ShopFund::TYPE_TIP);
+
+        if ($request->start) {
+            $start = date("Y-m-d H:i:s", strtotime($request->start." +1 month"));
+            $query->where("created_at", "<", $start);
+        }
+        $count = $query->count();
+        $query->orderBy((new ShopFund())->getTable().'.id',  'DESC')->limit($request->input('limit', 20));
+        if ($request->offset) {
+            $query->where((new ShopFund())->getTable().".id", "<", ShopFund::decrypt($request->offset));
+        }
+        /* @var $user User */
+        foreach ($query->get() as $_fund) {
+            $data[] = [
+                'id' => $_fund->en_id(),
+                'shop_id' => $_fund->shop ? $_fund->shop->en_id() : "",
+                'shop_name' => $_fund->shop ? $_fund->shop->name : "",
+                'user_name' => $_fund->user ? $_fund->user->name : "",
+                'user_avatar' => $_fund->user ? $_fund->user->avatar : "",
+                'mode' => (int)$_fund->mode,
+                'amount' => (double)$_fund->amount,
+                'created_at' => strtotime($_fund->created_at)
+            ];
+        }
+        return $this->json(['count' => (int)$count, 'data' => $data]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/shop/settings",
+     *   summary="店铺配置",
+     *   tags={"店铺"},
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="guild_commission", type="double", example=1.2,description="最大佣金数"),
+     *                  @SWG\Property(property="price", type="string", example="200.00",description="原价"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function settings() {
+        return $this->json(['guild_commission' => (double)config("guild_commission", 0), 'price' => config("shop_price")]);
     }
 }

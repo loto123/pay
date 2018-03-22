@@ -204,7 +204,6 @@ export default {
         //   this.dataList.push(this.searchDataList[i]);
         //   return;
         // }
-        console.log(this.searchDataList[i].name.indexOf(this.searchData));
 
         if( this.searchDataList[i].name.indexOf(this.searchData) != -1){
           // this.dataList = [];
@@ -263,7 +262,6 @@ export default {
 
   watch:{
     "searchData":function(e){
-//      console.log(this.searchData);
       this.openSearchSwitch(e);
     }
   }

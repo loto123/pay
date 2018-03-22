@@ -145,6 +145,8 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->get('transfer/records/month/{shop_id}', 'ShopController@month_data')->where('shop_id', '[0-9]+');
         $api->get('transfer/records/detail/{id}', 'ShopController@record_detail');
 
+        $api->get('tips', 'ShopController@tips');
+        $api->get('settings', 'ShopController@settings');
 
     });
 });

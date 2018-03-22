@@ -1,8 +1,11 @@
 <template>
     <div id="FOF-page" class="flex flex-v flex-align-center">
         <div class="img-wrap">
-            <img src="/images/404.jpg" alt="">
-            <h3>页面未找到</h3>
+            <div>
+              <img src="/images/404.jpg" alt="" v-if="!reason">
+            </div>
+            <h3 >页面未找到</h3>
+            <h3 v-if="reason" style="margin-top:0.4em;">原因：{{reason}}</h3>
         </div>
         <div class="index-button">
             <mt-button type="primary" size="large" @click="goIndex">回到首页</mt-button>
@@ -21,8 +24,11 @@
     .img-wrap{
         width: 90%;
 
-        >img{
+        >div{
+          min-height: 5em;
+          >img{
             width: 100%;
+          }
         }
 
         h3{
@@ -41,7 +47,24 @@
 
 <script>
 export default {
-  methods:{
+    data(){
+      return {
+        reason: null,
+      }
+    },
+
+    created(){
+      this.init();
+    },
+
+    methods:{
+
+      init(){
+        if(this.$route.query.codeMsg){
+          this.reason = this.$route.query.codeMsg;
+        }
+      },
+
       goIndex(){
           this.$router.push('/index');
       }

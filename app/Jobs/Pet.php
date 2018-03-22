@@ -40,7 +40,7 @@ class Pet implements ShouldQueue
         //
         $pet_type = PetType::inRandomOrder()->first();
         /* @var $pet_type \App\PetType */
-        $prefix = Storage::disk(config('admin.upload.disk'))->getAdapter()->getPathPrefix();
+        $prefix = Storage::disk("public")->getAdapter()->getPathPrefix();
         if (!file_exists($prefix.$pet_type->image)) {
             return;
         }

@@ -12,7 +12,7 @@
 
 					<ul class="pet-list flex flex-justify-start flex-wrap-on" v-if="isShow && petsList.length!=0">
 						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id,item.is_egg)">
-							<img :src="item.pic?item.pic:'/images/egg.jpg'">
+							<img :src="item.pic?item.pic:'/images/egg.png'">
 						</li>
 					</ul>
 					
@@ -72,7 +72,7 @@
 				<div class="pets">
 					<ul class="flex flex-wrap-on">
 						<li class="flex flex-align-center flex-justify-center" v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id,item.is_egg)">
-							<img :src="item.pic?item.pic:'/images/egg.jpg'" alt="">
+							<img :src="item.pic?item.pic:'/images/egg.png'" alt="">
 						</li>
 					</ul>
 				</div>
@@ -87,7 +87,7 @@
 		<!-- 领取宠物蛋弹窗 -->
 		<div class="popGetEggs flex flex-v flex-align-center" v-if="isPopGetEggsShow" @touchmove.stop.prevent>
 			<div class="imgWrap">
-				<img src="/images/egg.jpg" alt="">
+				<img src="/images/egg.png" alt="">
 			</div>
 			<h3>
 				{{broodInfo}}
@@ -173,8 +173,8 @@
 				way: null,	                    // 提现方式
 				value: null,
 				has_pay_password: null,         // 是否设置支付密码
-				balance:null,		            // 最高价
-				fee_value: null,
+				balance:null,		                // 最高价
+				// fee_value: null,
 				isFee: false,                   // 是否展示手续费
 				isShow:false,
 				isPayInfoDetailShow:false,      // 付款后的提示
@@ -183,23 +183,26 @@
 				getEggsTimes:0,
 				isPopDetailShow:false,          // 查看更多显示
 				isPopGetEggsShow:false,         // 领取宠物蛋弹窗显示
-				isPopBroodEggs:false,		    // 是否孵蛋
-				broodInfo:null,					// 孵蛋提示信息
+				isPopBroodEggs:false,		        // 是否孵蛋
+				broodInfo:null,					        // 孵蛋提示信息
 				amount:null,                    // 提交的价格
-				petId:null,						// 宠物id
+				petId:null,						          // 宠物id
 				myMaxQuota:0,                   // 玩家可以提现的最高价格
 				isMaxQuota:false,               // 是否选中了最高价格
-				priceList:[],	                // 价格列表
+				priceList:[],	                  // 价格列表
 				sheetVisible:false,
 				has_pay_card:0,                 // 是否绑定了银行卡
 				actions:[],                     // 右上角动作列表
 
 				isBroodClick:false,             // 孵化按钮防止连续点击
-				fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
+				// fee_mode:0,                     // 手续费支付方式  0 为百分比  1为单笔固定
 				bankInfo:null,                  // 提现成功后的银行卡信息提示
-				fee:1,
+				fee:1,													// 需要支付的手续费
 				isCanSale:false,
-				remains_times:0                 // 剩余的提现次数
+				remains_times:0,                // 剩余的提现次数
+				fee_percent:0,
+				fee_money:0
+
 			}
 		},
 		mounted(){
@@ -256,8 +259,6 @@
 						this.has_pay_password = res[1].data.data.has_pay_password;
 						this.has_pay_card = res[1].data.data.has_pay_card;
 
-						// this.fee_mode= res[2].data.data.fee_mode;
-						// this.fee_value = res[2].data.data.fee_value;
 						this.dataList = res[2].data.data.methods;
 						this.setBankList(res[2]);//获取提现方式列表
 
@@ -315,12 +316,9 @@
 					way: this.value
 				}
 
-				if(this.fee_mode == 0){          // 百分比模式
-					var temp = this.amount * ((this.fee_value)/100);
-					this.fee = Math.floor(temp*100)/100;
-				}else if(this.fee_mode == 1){    // 指定金额模式
-					this.fee = this.fee_value;
-				}
+//        提现手续费 = round(提现金额 * fee_percent/100 + fee_money,2)
+				this.fee = parseFloat(this.amount * (this.fee_percent/100) + parseFloat(this.fee_money));
+				this.fee = this.fee.toFixed(2);
 
 				if (!this.value) {
 					Toast('请选择支付方式');
@@ -375,9 +373,10 @@
 
 						// 获取最高价
 						this.myMaxQuota = this.dataList[i].my_max_quota;
-						this.fee_mode = this.dataList[i].fee_mode;
-						this.fee_value = this.dataList[i].fee_value;
-
+						// 
+						this.fee_money = this.dataList[i].fee_money;
+						this.fee_percent = this.dataList[i].fee_percent;
+						
 						for(var k = 0; k < this.dataList[i].quota_list.length; k++){
 							var _temp =  {};
 							_temp.price = this.dataList[i].quota_list[k];
@@ -416,6 +415,12 @@
 
 			// 选择出售狗狗的价格
 			choiseSalePrice(price){
+
+				if(price > this.balance){
+				    Toast("您的钻石不足");
+				    return;
+				}
+
 				this.isMaxQuota = false;
 				for(let j = 0; j<this.priceList.length; j ++){
 					this.priceList[j].isChecked = false;
@@ -424,6 +429,7 @@
 						this.amount = this.priceList[j].price;
 					}
 				}
+
 			},
 
 			showGetEggsPop(){
@@ -746,13 +752,19 @@
 		padding-top: 2em;
 		
 		.imgWrap{
-			margin-top:5em;
+      margin-top: 45%;
+      width: 60%;
+      img{
+        display: block;
+        width: 100%;
+      }
 		}
 
 		.comfirm-button{
-			margin: 0 auto;
-			margin-top:1em;
-			width: 96%;
+      margin: 0 auto;
+      width: 96%;
+      position: fixed;
+      bottom: 2em;
 		}
 
 		h3{
@@ -818,7 +830,6 @@
 					>img{
 						display: block;
 						width: 3.8em;
-						height: 3.8em;
 						border-radius:0.2em;
 					}
 				}

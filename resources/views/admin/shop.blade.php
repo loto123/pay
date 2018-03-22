@@ -17,15 +17,15 @@
                                value="{{$manager_id}}">
                     </div>
 
-                    <label class="col-sm-1 control-label">商户ID：</label>
+                    <label class="col-sm-1 control-label">公会ID：</label>
                     <div class="col-sm-2">
-                        <input type="text" name="shop_id" id="shop_id" class="form-control" placeholder="请输入商户ID"
+                        <input type="text" name="shop_id" id="shop_id" class="form-control" placeholder="请输入公会ID"
                                value="{{$shop_id}}">
                     </div>
 
-                    <label class="col-sm-1 control-label">商户名称：</label>
+                    <label class="col-sm-1 control-label">公会名称：</label>
                     <div class="col-sm-2">
-                        <input type="text" name="shop_name" id="shop_name" class="form-control" placeholder="请输入商户名称"
+                        <input type="text" name="shop_name" id="shop_name" class="form-control" placeholder="请输入公会名称"
                                value="{{$shop_name}}">
                     </div>
                 </div>

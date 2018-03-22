@@ -15,6 +15,7 @@ import Vip from './vip'
 import ForOForPage from './404'
 import SalePet from './dealList'
 import Safety from './safety'
+import MyReward from './myReward'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -58,6 +59,9 @@ var routerList = {
 
     //安全保障
     safety:Safety,
+
+    //我的赏金
+    myReward:MyReward,
 
     // 404页面
     notFound:ForOForPage
