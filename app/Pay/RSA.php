@@ -27,9 +27,7 @@ class RSA
         $this->pubKey = openssl_get_publickey(file_get_contents($publicKeyFile));
 
         if ($privateKeyFile) {
-            //dump($privateKeyFile);
             $this->priKey = openssl_get_privatekey(file_get_contents($privateKeyFile));
-            //dump($this->priKey);
         }
         $this->padding = $padding;
         $this->signAlgo = $sign_algo;

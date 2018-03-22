@@ -40,10 +40,10 @@ interface WithdrawInterface
     public function acceptNotify(array $config);
 
     /**
-     * 主动查询提现状态并在方法内更新提现状态
+     * 主动查询提现状态并更新
      * @param Withdraw $withdraw
      * @param $config
-     * @return mixed
+     * @return WithdrawResult
      */
     public function queryState(Withdraw $withdraw, array $config);
 

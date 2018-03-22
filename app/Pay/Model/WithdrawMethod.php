@@ -9,19 +9,27 @@
 
 namespace App\Pay\Model;
 
+use App\Jobs\WithdrawStatePoll;
 use App\Pay\PayLogger;
 use App\Pay\WithdrawInterface;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class WithdrawMethod extends Model
 {
+    public static $state_poll_delays = [30, 30, 60, 60, 900, 900, 900, 1800, 3600];
     public $timestamps = false;
     protected $table = 'pay_withdraw_method';
 
-    public static function pollState($withdraw_id)
+    /**
+     * 启动状态轮询
+     * @param $withdraw_id
+     * @param array $config
+     */
+    public static function pollState($withdraw_id, array $config)
     {
-
+        WithdrawStatePoll::dispatch(new WithdrawStatePoll($withdraw_id, $config))->delay(Carbon::now()->addSeconds(self::$state_poll_delays[0]));
     }
 
     /**
@@ -117,31 +125,19 @@ class WithdrawMethod extends Model
         ob_start();
 
         do {
+            /**
+             * @var $result Withdraw
+             */
             $result = (new $this->impl)->acceptNotify(array_merge((array)parse_ini_string($this->config), (array)parse_ini_string($channel->config)));
 
             if (!$result) {
                 break;
             }
 
-            if ($result->state === Withdraw::STATE_PROCESS_FAIL) {
-                $exception = '';
-
-                //失败要更改卖单状态为未成交
-                try {
-                    SellBill::where('withdraw_id', $result->getKey())->update(['deal_closed' => 0]);
-                } catch (\Exception $e) {
-                    $exception = $e->getMessage();
-                    //break;
-                }
-
-                $result->exceptions()->save(new WithdrawException([
-                    'message' => json_encode(['query' => request()->query(), 'body' => file_get_contents('php://input')], JSON_UNESCAPED_UNICODE),
-                    'state' => $result->state,
-                    'exception' => $exception
-                ]));
-            }
-
-            if (!$result->save()) {
+            /**
+             * 更新相关状态
+             */
+            if (!$result->stateCallback(request()->query(), file_get_contents('php://input'))) {
                 break;
             }
 

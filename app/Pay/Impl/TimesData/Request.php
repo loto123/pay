@@ -12,13 +12,13 @@ use App\Pay\RSA;
 class Request extends Message
 {
 
-    const ENCRYPT_NONE = 0;
-    const ENCRYPT_RSA = 1; //不加密
+    const ENCRYPT_NONE = 0;//不加密
+    const ENCRYPT_RSA = 1; //RSA
     /**
      * 消息体加密算法
      * @var int
      */
-    private $encryptAlgo = self::ENCRYPT_NONE; //RSA
+    private $encryptAlgo = self::ENCRYPT_NONE;
     /**
      * 请求接口地址
      * @var string
@@ -68,7 +68,10 @@ class Request extends Message
             }
             switch ($this->encryptAlgo) {
                 case self::ENCRYPT_RSA:
+                    //dump('加密前:'.$data);
+
                     $data = $this->RSAInstance->encrypt($data);
+                    //dump('加密后:'.$data);
                     break;
             }
         }
@@ -121,7 +124,6 @@ class Request extends Message
                 'content' => $xml
             )
         );
-        dump($xml);
 
         $context = stream_context_create($opts);
         $response = file_get_contents($url, false, $context);
@@ -157,8 +159,6 @@ class Request extends Message
             }
         }
 
-        //dump($response);
-
         $responseObj = new Response($response['head']['respCd'], $response['head']['respMsg'], $response['head']['reqNo'], $response['head']['respNo']);
         $responseObj->dataFields = array_key_exists('data', $response) ? $response['data'] : [];
         $responseObj->signType = $signType;
@@ -166,8 +166,8 @@ class Request extends Message
             $responseObj->setRSAInstance($RSAInstance);
         }
 
-        if ($responseObj->verify($response['head']['sign'])) {
-            throw new \Exception('响应报文签名校验错误' . json_encode($response));
+        if (!$responseObj->verify($response['head']['sign'])) {
+            throw new \Exception('响应报文签名校验错误' . $response['head']['sign']);
         }
         return $responseObj;
     }

@@ -39,14 +39,14 @@ class H5Pay implements DepositInterface
 
     public function mixUpDepositId($depositId)
     {
-        return IdConfuse::mixUpId($depositId, 32, true);
+        return 'p' . IdConfuse::mixUpId($depositId, 31, true);
     }
 
     public function acceptNotify(array $config)
     {
         $response = file_get_contents('php://input');
         $response = Request::parseResponse($response, Message::SIGN_RSA1, new RSA(UploadFile::getFile($config['platform_public_key']), UploadFile::getFile($config['merchant_private_key']), 'base64', OPENSSL_PKCS1_PADDING, OPENSSL_ALGO_MD5));
-        $deposit_id = IdConfuse::recoveryId($response->getReqNo(), true);
+        $deposit_id = IdConfuse::recoveryId(substr($response->getReqNo(), 1), true);
         if ($response->isOk()) {
             if ($response->tType == 0) {
                 $deposit = Deposit::find($deposit_id);
