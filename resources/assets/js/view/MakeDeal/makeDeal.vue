@@ -81,7 +81,7 @@
     padding-top: 2em;
     background: #eee;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
     .mint-cell-wrapper {
       background-image: none;
@@ -222,8 +222,9 @@
   .notice {
     text-align: center;
     margin: 0 auto;
-    margin-top: 5.5em;
+    margin-top: 2em;
     font-size: 0.9em;
+    color: #777;
   }
 </style>
 
