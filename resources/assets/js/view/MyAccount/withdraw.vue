@@ -752,7 +752,7 @@
 		padding-top: 2em;
 		
 		.imgWrap{
-      margin-top: 10em;
+      margin-top: 45%;
       width: 60%;
       img{
         display: block;
