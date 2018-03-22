@@ -319,11 +319,12 @@
 
                 // 插入时间标签
                 for (var i = 0; i < this.recordList.length; i++) {
+
                     if (this.recordList[i].isTimePanel == true) {
                         _head = getTheDate(this.recordList[i + 1].created_at);
                         continue;
                     }
-                    console.log(JSON.stringify(this.recordList[i]));
+
                     try {
                         var label = getTheDate(this.recordList[i].created_at);
 
@@ -356,12 +357,12 @@
                     if (this.recordList[_index].isTimePanel == true) {
                         continue;
                     }
+
                     this.recordList.splice(_index, 0, { isTimePanel: true, time: this.headList[k].time, in: this.headList[k].in, out: this.headList[k].out});
                     count++;
                 }
 
                 for (let m = 0; m < this.recordList.length; m++) {
-
                     if (this.recordList[m].isTimePanel == true && this.recordList[m].in == "加载中..."&& this.recordList[m].out == "加载中...") {
 
                         var _year = this.recordList[m].time.split("年")[0];
@@ -398,6 +399,7 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
+                                console.log(_timer);
                                 this.headList[this.headList.length - 1].in = res.data.data.in;
                                 this.headList[this.headList.length - 1].out = res.data.data.out;
 
@@ -421,9 +423,6 @@
 
                 for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
-
-                        // console.log(this.headList[i].time);
-                        // console.log(this.headList[i].in);
 
                         this.timeInfo = this.headList[i].time;
                         this.tabIncome = this.headList[i].in;

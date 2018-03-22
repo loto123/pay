@@ -139,8 +139,7 @@ export default class UserRequest {
             localStorage.setItem("url",window.location.href);
             Loading.getInstance().close();
             Toast("用户未登录,即将跳转登录...");
-            app.$router.push("/login");
-            // window.location.href = "/#/login";
+            window.location.href = "/#/login";
         }
     }
 
