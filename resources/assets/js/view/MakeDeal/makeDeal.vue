@@ -57,14 +57,6 @@
 
     <p class="notice">任务完成后每个参与者都会获得一定的宠物蛋奖励</p>
 
-    <!-- <inputList
-      :showSwitch="dropListSwitch"
-      v-on:hideDropList="hideDropList"
-      :optionsList="shopList"
-      v-if="isShow"
-    >
-    </inputList> -->
-
     <choiseMember
       :isShow="choiseMemberSwitch"
       v-on:hide="hideMemberChoise"
