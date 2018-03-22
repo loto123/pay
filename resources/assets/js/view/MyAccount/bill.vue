@@ -323,7 +323,7 @@
                         _head = getTheDate(this.recordList[i + 1].created_at);
                         continue;
                     }
-
+                    console.log(this.recordList[i]);
                     try {
                         var label = getTheDate(this.recordList[i].created_at);
 
