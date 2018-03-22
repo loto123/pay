@@ -1293,7 +1293,7 @@ class TransferController extends BaseController
             'transfer.shop' => function ($query) {
                 $query->select('id', 'name');
             }])
-            ->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
+            ->select('id', 'transfer_id', 'amount', 'created_at', 'mark')->orderBy('created_at', 'DESC');
         if ($request->limit) {
             $query->limit($request->limit);
         }
