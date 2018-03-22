@@ -297,7 +297,7 @@
 
                 var key = 0;
 
-                // 设置头部
+                // 初始化头部
                 if (this.recordList.length != 0) {
                     if (this.recordList[0].isTimePanel == false) {
                         key = 0;
@@ -307,6 +307,7 @@
                         var _head = getTheDate(this.recordList[key].created_at);
                     }
                 }
+
                 var _initialData = {
                     time: _head,
                     index: key,
@@ -353,6 +354,9 @@
                 // recordList 插值
                 for (let k = 0; k < this.headList.length; k++) {
                     var _index = this.headList[k].index + count;
+                    console.log("================");
+                    console.log(_index);
+                    console.log(count);
 
                     if (this.recordList[_index].isTimePanel == true) {
                         continue;
@@ -383,7 +387,7 @@
                                 if(_tempIndex <this.headList.length){
                                     ++_tempIndex;
                                 }
-                                
+
                                 this.headList[_tempIndex].in = res.data.data.in;
                                 this.headList[_tempIndex].out = res.data.data.out;
 
