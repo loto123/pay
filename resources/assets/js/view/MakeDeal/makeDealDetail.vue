@@ -417,6 +417,7 @@
       init() {
         Loading.getInstance().open();
         var myDealList=this.$store.state.myDeal.dealData;
+        this.$store.dispatch("deal_setMyData",null);
         this.canClick = true;
         this.transfer_id = this.$route.query.id;
         var _data = {
