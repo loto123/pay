@@ -95,7 +95,7 @@ class ShopController extends BaseController
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/|numeric|between:0.1,99999',
             'percent' => 'required|integer|between:0,100',
             'active' => 'required'
-        ],['name.required'=>'店铺名必填',
+        ],['name.required'=>'公会名必填',
         'name.max'=>'公会名称不能超过10个字符',
         'rate.required'=>'默认倍率必填',
         'rate.regex'=>'默认倍率请填写0.1到99999之间数字',
