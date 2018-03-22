@@ -607,7 +607,9 @@
 
         var _tempList = [];
         for (let i = 0; i < dataList.length; i++) {
-          _tempList.push(dataList[i].id);
+          if(dataList[i].checked == true){
+            _tempList.push(dataList[i].id);
+          }
         }
 
         var _data = {
