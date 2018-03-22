@@ -24,7 +24,7 @@
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{SettingString(item.shop_name,10)}}</div>
                         <div class="deal-diamond" v-if="tabItem[0]">
-                          <div>任务池剩余钻石:32121</div>
+                          <div>任务池剩余钻石:{{item.transfer_amount=null?"0":item.transfer_amount}}</div>
                         </div>
                         <div class="eggs-wrap" v-if="tabItem[2]">
                           <span>任务获得：</span>
