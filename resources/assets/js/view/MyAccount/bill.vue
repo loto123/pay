@@ -280,7 +280,7 @@
             // 建立时间面板
             buildTimePanel() {
                 var _head = 0;
-
+                var _tempIndex = -1;
                 var getTheDate = (timecode) => {
                     if (!timecode) {
                         return null;
@@ -380,8 +380,12 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
-                                this.headList[this.headList.length - 1 ].in = res.data.data.in;
-                                this.headList[this.headList.length - 1].out = res.data.data.out;
+                                if(_tempIndex <this.headList.length){
+                                    ++_tempIndex;
+                                }
+                                
+                                this.headList[_tempIndex].in = res.data.data.in;
+                                this.headList[_tempIndex].out = res.data.data.out;
 
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
@@ -400,8 +404,12 @@
                                 this.recordList[m].out = res.data.data.out;
 
                                 console.log(_timer);
-                                this.headList[this.headList.length - 1].in = res.data.data.in;
-                                this.headList[this.headList.length - 1].out = res.data.data.out;
+                                if(_tempIndex <this.headList.length){
+                                    ++_tempIndex;
+                                }
+
+                                this.headList[_tempIndex].in = res.data.data.in;
+                                this.headList[_tempIndex].out = res.data.data.out;
 
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
