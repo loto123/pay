@@ -1242,6 +1242,7 @@ class TransferController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
      *                          @SWG\Property(property="transfer_id", type="string", example="1234567",description="交易红包ID"),
+	 *							@SWG\Property(property="transfer_amount", type="double", example=9.9, description="任务余额"),
      *                          @SWG\Property(property="shop_name", type="string", example="XX的店",description="交易红包所属店铺名称"),
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
      *                          @SWG\Property(property="eggs", type="int", example=9, description="获得宠物蛋数量"),
@@ -1304,6 +1305,7 @@ class TransferController extends BaseController
         foreach ($list as $key => $item) {
             $data[$key]['id'] = $item->id;
             $data[$key]['transfer_id'] = $item->transfer ? $item->transfer->en_id() : 0;
+			$data[$key]['transfer_amount'] = $item->transfer ? $item->transfer->amount : 0;
             $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
             $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
             $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
