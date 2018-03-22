@@ -1284,7 +1284,7 @@ class TransferController extends BaseController
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
         })->with(['transfer' => function ($query) {
-            $query->select('id', 'shop_id');
+            $query->select('id', 'amount', 'shop_id');
         },
 //        }])
 //        }, 'transfer.record' => function ($query) {

@@ -752,13 +752,19 @@
 		padding-top: 2em;
 		
 		.imgWrap{
-			margin-top:5em;
+      margin-top: 45%;
+      width: 60%;
+      img{
+        display: block;
+        width: 100%;
+      }
 		}
 
 		.comfirm-button{
-			margin: 0 auto;
-			margin-top:1em;
-			width: 96%;
+      margin: 0 auto;
+      width: 96%;
+      position: fixed;
+      bottom: 2em;
 		}
 
 		h3{
@@ -824,7 +830,6 @@
 					>img{
 						display: block;
 						width: 3.8em;
-						height: 3.8em;
 						border-radius:0.2em;
 					}
 				}

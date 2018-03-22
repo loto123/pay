@@ -9,17 +9,17 @@
         </span>
       </div>
 
-      <section class="transaction flex flex-justify-center">
+      <section class="transaction flex flex-justify-start">
         <div class="left flex-3">
           <!-- <a href="/#/myAccount"> -->
-          <div class="imggWrap flex flex-justify-center flex-align-center">
+          <div class="imggWrap flex flex-justify-center flex-align-start">
             <img :src="avatar" alt="">
           </div>
           <h2>{{userName}}</h2>
           <!-- </a> -->
         </div>
 
-        <div class="center flex-5 flex flex-v flex-align-center flex-justify-center" @click="goMyAccount">
+        <div class="center flex-5 flex flex-v flex-align-start flex-justify-center" @click="goMyAccount">
           <div class="flex diamond-box">{{amount}}
             <div class="diamond">
               <img src="/images/zuanshi.png">
@@ -27,19 +27,21 @@
           </div>
           <h4>账户余额(钻石)</h4>
         </div>
-
-        <div class="right flex-2">
-          <span class="flex flex-align-center" @click="goMyAccount">
-            <!--<i class="iconfont">&#xe6bd;</i>-->
-            <span class="wallet-icon">
-              <img src="/images/qianbao.png" alt="">
-            </span>
-            <i class="iconfont">&#xe62e;</i>
-          </span>
-        </div>
-
       </section>
-
+      <div class="wallet-container">
+        <div class="flex flex-align-center wallet-content" @click="goMyAccount">
+          <div class="wallet-box">
+            <img src="/images/qianbao.png">
+          </div>
+          <div class="wallet-icon">
+            <img src="/images/icon_qianbao.png">
+          </div>
+          <div class="my-wallet">我的钱包</div>
+          <div class="right-icon">
+            <i class="iconfont">&#xe62e;</i>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="content">
@@ -56,7 +58,7 @@
             </div>
             <h3>我的公会</h3>
             <span class="shop-notice" v-if="messageCount">
-                {{this.messageCount>99?"99":this.messageCount}}
+              {{this.messageCount>99?"99":this.messageCount}}
             </span>
           </a>
         </li>
@@ -167,7 +169,7 @@
     height: 12em;
     background: #26a2ff;
     box-sizing: border-box;
-
+    position: relative;
     .message {
       height: 2em;
       width: 100%;
@@ -195,7 +197,7 @@
 
     .transaction {
       width: 100%;
-      height: 8em;
+      height: 6em;
 
       .imggWrap {
         height: 5em;
@@ -257,15 +259,44 @@
             font-size: 1.0em;
           }
 
-          .wallet-icon {
-            width: 2.0em;
-            >img {
-              width: 100%;
-            }
-          }
         }
       }
     }
+  }
+
+  .wallet-container {
+    width: 35%;
+    position: absolute;
+    right: 0;
+    bottom: 1em;
+  }
+
+  .wallet-box {
+    width: 100%;
+    position: relative;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .wallet-icon {
+    position: absolute;
+    left: 5%;
+    width: 20%;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .my-wallet{
+    position: absolute;
+    left: 30%;
+    color: #fff;
+  }
+  .right-icon{
+    position: absolute;
+    right:0.2em;
+    color: #fff;
   }
 
   .content {
@@ -311,9 +342,11 @@
 
     }
   }
-  .shop-notice-box{
+
+  .shop-notice-box {
     position: relative;
   }
+
   .shop-notice {
     position: absolute;
     background: red;
@@ -346,7 +379,7 @@
 
         isAgent: 0,    // 是否是代理
         isPromoters: 0,  // 是否是推广员
-        messageCount:null             // 新消息数量
+        messageCount: null             // 新消息数量
       }
     },
     created() {
@@ -424,22 +457,22 @@
 
       init() {
         Loading.getInstance().open();
-        Promise.all([request.getInstance().getData("api/index"),request.getInstance().getData("api/shop/messages/count")])
-        .then(res => {
-          this.amount = res[0].data.data.balance;
-          this.avatar = res[0].data.data.avatar;
-          this.newMessage = res[0].data.data.new_message;
-          this.userName = res[0].data.data.name;
+        Promise.all([request.getInstance().getData("api/index"), request.getInstance().getData("api/shop/messages/count")])
+          .then(res => {
+            this.amount = res[0].data.data.balance;
+            this.avatar = res[0].data.data.avatar;
+            this.newMessage = res[0].data.data.new_message;
+            this.userName = res[0].data.data.name;
 
-          this.isAgent = res[0].data.data.is_agent;
-          this.isPromoters = res[0].data.data.is_promoter;
+            this.isAgent = res[0].data.data.is_agent;
+            this.isPromoters = res[0].data.data.is_promoter;
 
-          this.messageCount = res[1].data.data.count;
-          Loading.getInstance().close();
+            this.messageCount = res[1].data.data.count;
+            Loading.getInstance().close();
 
-        }).catch(err => {
-          Loading.getInstance().close();
-        });
+          }).catch(err => {
+            Loading.getInstance().close();
+          });
 
       }
     }
