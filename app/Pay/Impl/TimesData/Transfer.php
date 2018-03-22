@@ -29,7 +29,7 @@ class Transfer implements WithdrawInterface
     public function withdraw($withdraw_id, $amount, array $receiver_info, array $config, $notify_url)
     {
         $reqNo = $this->getRequestNo($withdraw_id);
-        $request = new TransferQueryRequest($reqNo, $config['mechid'], $config['url']);
+        $request = new TransferRequest($reqNo, $config['mechid'], $config['url']);
         $request->setRSAInstance(new RSA(UploadFile::getFile($config['platform_public_key']), UploadFile::getFile($config['merchant_private_key']), 'base64', OPENSSL_PKCS1_PADDING, OPENSSL_ALGO_MD5));
         $request->appendData('orderId', $this->orderId);
         $request->appendData('money', bcmul($amount, 100));
