@@ -8,7 +8,7 @@
     <h3>{{noticeInfo?noticeInfo:"页面无法显示"}}</h3>
     
     <div class="button-wrap flex flex-justify-center">
-      <mt-button type="primary" size="large" @click="goIndex">返回首页</mt-button>
+      <mt-button type="primary" size="large" @click="goIndex">返回</mt-button>
     </div>
 
   </div>
