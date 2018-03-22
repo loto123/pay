@@ -23,8 +23,8 @@
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{SettingString(item.shop_name,10)}}</div>
-                        <div class="deal-diamond" v-if="tabItem[0]">
-                          <div>任务池剩余钻石:32121</div>
+                        <div class="deal-diamond-box" v-if="tabItem[0]">
+                          <div class="deal-diamond">任务池剩余钻石:<span>{{item.transfer_amount}}</span></div>
                         </div>
                         <div class="eggs-wrap" v-if="tabItem[2]">
                           <span>任务获得：</span>
@@ -123,10 +123,18 @@
             margin-top: 0.8em;
             width: 100%;
           }
-          .deal-diamond{
+          .deal-diamond-box{
             width:100%;
             margin-top:0.4em;
             font-size: 0.9em;
+            .deal-diamond{
+              color: #777;
+              span{
+                color:orange;
+                vertical-align: middle;
+                margin-left:0.3em;
+              }
+            }
           }
           .eggs-wrap{
             width:100%;
