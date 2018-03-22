@@ -271,13 +271,6 @@
 
         memberList: [],              //成员数组
         isShow: false,
-
-        testdata:[
-          {
-            values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
-            textAlign: 'center'
-          }
-        ]
       };
     },
 
@@ -329,8 +322,6 @@
             return this.shopList[i].price;
           }
         }
-
-//          return "没有这个公会";
       },
 
       showDropList() {

@@ -1,5 +1,5 @@
 <template>
-  <div id="picker-component" >
+  <div id="picker-component" @touchmove.prevent>
      <mt-picker 
         :slots="pickerSlots" 
         :showToolbar=true
