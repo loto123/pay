@@ -280,7 +280,7 @@
             // 建立时间面板
             buildTimePanel() {
                 var _head = 0;
-
+                var _tempIndex = -1;
                 var getTheDate = (timecode) => {
                     if (!timecode) {
                         return null;
@@ -297,7 +297,7 @@
 
                 var key = 0;
 
-                // 设置头部
+                // 初始化头部
                 if (this.recordList.length != 0) {
                     if (this.recordList[0].isTimePanel == false) {
                         key = 0;
@@ -307,6 +307,7 @@
                         var _head = getTheDate(this.recordList[key].created_at);
                     }
                 }
+
                 var _initialData = {
                     time: _head,
                     index: key,
@@ -319,6 +320,7 @@
 
                 // 插入时间标签
                 for (var i = 0; i < this.recordList.length; i++) {
+
                     if (this.recordList[i].isTimePanel == true) {
                         _head = getTheDate(this.recordList[i + 1].created_at);
                         continue;
@@ -356,12 +358,12 @@
                     if (this.recordList[_index].isTimePanel == true) {
                         continue;
                     }
+                    this.headList[k].index = _index;
                     this.recordList.splice(_index, 0, { isTimePanel: true, time: this.headList[k].time, in: this.headList[k].in, out: this.headList[k].out});
                     count++;
                 }
 
                 for (let m = 0; m < this.recordList.length; m++) {
-
                     if (this.recordList[m].isTimePanel == true && this.recordList[m].in == "加载中..."&& this.recordList[m].out == "加载中...") {
 
                         var _year = this.recordList[m].time.split("年")[0];
@@ -369,6 +371,7 @@
                         var _timer = _year + "-" + _month;
 
                         if (this.tabStatus[0] == true) {
+
                             var _data3 = {
                                 month: _timer,
                                 type:[0,1]
@@ -379,8 +382,12 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
-                                this.headList[this.headList.length - 1 ].in = res.data.data.in;
-                                this.headList[this.headList.length - 1].out = res.data.data.out;
+                                for(var j = 0 ; j< this.headList.length; j ++ ){
+                                    if(this.headList[j].time == this.recordList[m].time){
+                                        this.headList[j].in = res.data.data.in;
+                                        this.headList[j].out = res.data.data.out;
+                                    }
+                                }
 
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
@@ -398,9 +405,15 @@
                                 this.recordList[m].in = res.data.data.in;
                                 this.recordList[m].out = res.data.data.out;
 
-                                this.headList[this.headList.length - 1].in = res.data.data.in;
-                                this.headList[this.headList.length - 1].out = res.data.data.out;
+                                for(var j = 0 ; j< this.headList.length; j ++ ){
 
+                                    if(this.headList[j].time == this.recordList[m].time){
+                                        this.headList[j].in = res.data.data.in;
+                                        this.headList[j].out = res.data.data.out;
+                                    }
+
+                                }
+                                
                                 this.timeInfo = this.recordList[0].time;
                                 this.tabIncome = this.recordList[0].in; //收入
                                 this.tabDisburse = this.recordList[0].out;//支出
@@ -421,9 +434,6 @@
 
                 for (var i = 0; i< this.$refs.timeTab.length; i++) {
                     if (this.$refs.timeTab[i].getBoundingClientRect().top <= "70" && this.$refs.timeTab[i].getBoundingClientRect().top > 0) {
-
-                        // console.log(this.headList[i].time);
-                        // console.log(this.headList[i].in);
 
                         this.timeInfo = this.headList[i].time;
                         this.tabIncome = this.headList[i].in;
