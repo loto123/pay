@@ -1284,7 +1284,7 @@ class TransferController extends BaseController
         $query = $user->involved_transfer()->whereHas('transfer', function ($query) use ($status) {
             $query->where('status', $status);
         })->with(['transfer' => function ($query) {
-            $query->select('id', 'shop_id');
+            $query->select('id', 'amount', 'shop_id');
         },
 //        }])
 //        }, 'transfer.record' => function ($query) {
@@ -1293,7 +1293,7 @@ class TransferController extends BaseController
             'transfer.shop' => function ($query) {
                 $query->select('id', 'name');
             }])
-            ->select('id', 'transfer_id', 'amount', 'created_at', 'mark')->orderBy('created_at', 'DESC');
+            ->select('id', 'transfer_id', 'created_at', 'mark')->orderBy('created_at', 'DESC');
         if ($request->limit) {
             $query->limit($request->limit);
         }
