@@ -19,10 +19,13 @@
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" v-bind:class="{h_5em:tabItem[2]==true}">
+                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" v-bind:class="[{h_5em:tabItem[0]==true},{h_5em:tabItem[2]==true}]">
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{SettingString(item.shop_name,10)}}</div>
+                        <div class="deal-diamond" v-if="tabItem[0]">
+                          <div>任务池剩余钻石:32121</div>
+                        </div>
                         <div class="eggs-wrap" v-if="tabItem[2]">
                           <span>任务获得：</span>
                           <span> <img src="/images/egg.png" alt=""> x {{item.eggs}}</span>
@@ -120,7 +123,11 @@
             margin-top: 0.8em;
             width: 100%;
           }
-          
+          .deal-diamond{
+            width:100%;
+            margin-top:0.4em;
+            font-size: 0.9em;
+          }
           .eggs-wrap{
             width:100%;
             margin-top:0.4em;
