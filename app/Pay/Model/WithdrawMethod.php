@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class WithdrawMethod extends Model
 {
-    public static $state_poll_delays = [30, 30, 60, 60, 900, 900, 900, 1800, 3600];
+    public static $state_poll_delays = [30, 30, 60, 60, 900, 900, 900, 1800, 3600, 24 * 60 * 60];
     public $timestamps = false;
     protected $table = 'pay_withdraw_method';
 
@@ -29,7 +29,7 @@ class WithdrawMethod extends Model
      */
     public static function pollState($withdraw_id, array $config)
     {
-        WithdrawStatePoll::dispatch(new WithdrawStatePoll($withdraw_id, $config))->delay(Carbon::now()->addSeconds(self::$state_poll_delays[0]));
+        WithdrawStatePoll::dispatch($withdraw_id, $config)->delay(Carbon::now()->addSeconds(self::$state_poll_delays[0]));
     }
 
     /**

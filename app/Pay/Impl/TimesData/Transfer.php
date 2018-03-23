@@ -77,7 +77,7 @@ class Transfer implements WithdrawInterface
      */
     private function getOrderId($withdraw_id)
     {
-        $this->orderId = $this->mixUpWithdrawId($withdraw_id);
+        return $this->orderId = $this->mixUpWithdrawId($withdraw_id);
     }
 
     public function mixUpWithdrawId($withdrawId)

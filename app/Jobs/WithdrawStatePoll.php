@@ -63,9 +63,9 @@ class WithdrawStatePoll implements ShouldQueue
                 $retry = true;
             }
 
-            if ($retry) {
+            if ($retry && $this->attempts() <= count(WithdrawMethod::$state_poll_delays) - 1) {
                 //继续轮询
-                $this->release(WithdrawMethod::$state_poll_delays[min($this->attempts(), count(WithdrawMethod::$state_poll_delays) - 1)]);
+                $this->release(WithdrawMethod::$state_poll_delays[$this->attempts()]);
             }
         }
 
