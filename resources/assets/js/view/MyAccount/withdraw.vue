@@ -12,7 +12,7 @@
 
 					<ul class="pet-list flex flex-justify-start flex-wrap-on" v-if="isShow && petsList.length!=0">
 						<li class="flex flex-align-center flex-justify-center " v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id,item.is_egg)">
-							<img :src="item.pic?item.pic:'/images/egg.jpg'">
+							<img :src="item.pic?item.pic:'/images/egg.png'">
 						</li>
 					</ul>
 					
@@ -72,7 +72,7 @@
 				<div class="pets">
 					<ul class="flex flex-wrap-on">
 						<li class="flex flex-align-center flex-justify-center" v-for="item in petsList" v-bind:class="{active:item.isChecked}" @click ="setActive(item.id,item.is_egg)">
-							<img :src="item.pic?item.pic:'/images/egg.jpg'" alt="">
+							<img :src="item.pic?item.pic:'/images/egg.png'" alt="">
 						</li>
 					</ul>
 				</div>
@@ -87,7 +87,7 @@
 		<!-- 领取宠物蛋弹窗 -->
 		<div class="popGetEggs flex flex-v flex-align-center" v-if="isPopGetEggsShow" @touchmove.stop.prevent>
 			<div class="imgWrap">
-				<img src="/images/egg.jpg" alt="">
+				<img src="/images/egg.png" alt="">
 			</div>
 			<h3>
 				{{broodInfo}}
@@ -752,13 +752,19 @@
 		padding-top: 2em;
 		
 		.imgWrap{
-			margin-top:5em;
+      margin-top: 45%;
+      width: 60%;
+      img{
+        display: block;
+        width: 100%;
+      }
 		}
 
 		.comfirm-button{
-			margin: 0 auto;
-			margin-top:1em;
-			width: 96%;
+      margin: 0 auto;
+      width: 96%;
+      position: fixed;
+      bottom: 2em;
 		}
 
 		h3{
@@ -824,7 +830,6 @@
 					>img{
 						display: block;
 						width: 3.8em;
-						height: 3.8em;
 						border-radius:0.2em;
 					}
 				}

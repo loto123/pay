@@ -70,8 +70,22 @@
 			<mt-button type="primary" size="large">确认</mt-button>
 		</a>
 
-		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList" title="请选择银行">
-		</inputList>
+		<!-- <inputList 
+			:showSwitch="dropListSwitch" 
+			v-on:hideDropList="hideDropList" 
+			:optionsList="shopList" 
+			title="请选择银行">
+		</inputList> -->
+		
+	      <!-- v-on:submitData = "getMemberData" -->
+		<picker-component
+	      :dataList = "shopList"
+	      :isShow = "dropListSwitch"
+	      v-on:isShow = "hideDropList"
+	      v-if = "dropListSwitch"
+	    >
+      
+    </picker-component>
 	</div>
 </template>
 
@@ -82,6 +96,7 @@
 	import inputList from "../../components/inputList";
 	import { MessageBox, Toast, Picker, Popup } from "mint-ui";
 	import Loading from '../../utils/loading'
+	import pickerComponent from "../../components/pickerComponent.vue"
 
 	export default {
 		data() {
@@ -110,7 +125,7 @@
 
 			}
 		},
-		components: { topBack, inputList },
+		components: { topBack, inputList ,pickerComponent},
 		created() {
 			this.personalInfo();
 
@@ -186,7 +201,7 @@
 				var _tempList = [];
 				for (let i = 0; i < res.data.data.length; i++) {
 					var _t = {};
-					_t.value = res.data.data[i].id;
+					_t.id = res.data.data[i].id;
 					_t.label = res.data.data[i].name;
 					_tempList.push(_t);
 				}
@@ -196,7 +211,7 @@
 
 			getShopName(id) {
 				for (let i = 0; i < this.shopList.length; i++) {
-					if (this.shopList[i].value == id) {
+					if (this.shopList[i].id == id) {
 						return this.shopList[i].label;
 					}
 				}
@@ -208,8 +223,11 @@
 			},
 			hideDropList(data) {
 				this.dropListSwitch = false;
-				this.dealShop = this.getShopName(data);
+				if(!data){
+					return;
+				}
 
+				this.dealShop = this.getShopName(data);
 				this.shopId = data;
 			},
 			affirmAdd() {

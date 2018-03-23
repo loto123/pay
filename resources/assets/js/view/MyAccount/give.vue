@@ -23,7 +23,22 @@
 				<mt-button type="primary" size="large">转移</mt-button>
 			</a>
 		</div>
-		<inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList" title="请选择您要转钻的公会"></inputList>
+
+		<!-- <inputList 
+			:showSwitch="dropListSwitch" 
+			v-on:hideDropList="hideDropList" 
+			:optionsList="shopList" 
+			title="请选择您要转钻的公会">
+		</inputList> -->
+
+		 <picker-component
+      :dataList = "shopList"
+      :isShow = "dropListSwitch"
+      v-if = "dropListSwitch"
+      v-on:isShow = "hideDropList"
+    >
+    </picker-component>
+
 		<passWorld :setSwitch="showPasswordTag" v-on:hidePassword="hidePassword" v-on:callBack="callBack"></passWorld>
 	</div>
 </template>
@@ -36,6 +51,7 @@
 
 	import Loading from "../../utils/loading";
 	import {Toast} from 'mint-ui'
+	import pickerComponent from "../../components/pickerComponent.vue"
 
 	export default {
 		created() {
@@ -55,7 +71,7 @@
 				shop_id:null
 			};
 		},
-		components: { topBack, inputList,passWorld},
+		components: { topBack, inputList,passWorld,pickerComponent},
 		methods: {
 			goIndex() {
 				this.$router.push("/index");
@@ -82,7 +98,7 @@
 				var _tempList = [];
 				for (let i = 0; i < res.data.data.data.length; i++) {
 					var _t = {};
-					_t.value = res.data.data.data[i].id.toString();
+					_t.id = res.data.data.data[i].id.toString();
 					_t.label = res.data.data.data[i].name;
 					_tempList.push(_t);
 				}
@@ -92,7 +108,7 @@
 
 			getShopName(id) {
 				for (let i = 0; i < this.shopList.length; i++) {
-					if (this.shopList[i].value == id) {
+					if (this.shopList[i].id == id) {
 						return this.shopList[i].label;
 					}
 				}
@@ -104,8 +120,10 @@
 			},
 			hideDropList(data) {
 				this.dropListSwitch = false;
+				if(!data){
+					return ;
+				}
 				this.dealShop = this.getShopName(data);
-
 				this.shopId = data;
 			},
 			hidePassword() {

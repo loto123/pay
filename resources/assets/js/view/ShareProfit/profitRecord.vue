@@ -307,6 +307,8 @@
                     if (this.recordList[_index].isTimePanel == true) {
                         continue;
                     }
+                    
+                    this.headList[k].index = _index;
                     this.recordList.splice(_index, 0, { isTimePanel: true, time: this.headList[k].time, total: this.headList[k].total });
                     count++;
                 }
@@ -326,6 +328,13 @@
                             request.getInstance().postData("api/profit/count", _data)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
+
+                                    for(var j = 0 ; j< this.headList.length; j ++ ){
+                                        if(this.headList[j].time == this.recordList[m].time){
+                                            this.headList[j].total = res.data.data.total;
+                                        }
+                                    }
+
                                     this.timeInfo = this.recordList[0].time;
                                     this.tabTotal = this.recordList[0].total;
                                 }).catch();
@@ -334,6 +343,13 @@
                             request.getInstance().postData("api/profit/withdraw/count", _data)
                                 .then(res => {
                                     this.recordList[m].total = res.data.data.total;
+
+                                    for(var j = 0 ; j< this.headList.length; j ++ ){
+                                        if(this.headList[j].time == this.recordList[m].time){
+                                            this.headList[j].total = res.data.data.total;
+                                        }
+                                    }
+
                                     this.timeInfo = this.recordList[0].time;
                                     this.tabTotal = this.recordList[0].total;
                                 }).catch();

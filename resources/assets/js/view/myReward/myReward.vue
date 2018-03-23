@@ -47,8 +47,23 @@
         <span style="margin-left: 0.5em;color:#999;">加载中...</span>
       </p>
     </div>
-    <inputList :showSwitch="dropListSwitch" v-on:hideDropList="hideDropList" :optionsList="shopList" v-if="isShow" title="选择打赏来源公会">
-    </inputList>
+
+    <!-- <inputList 
+      :showSwitch="dropListSwitch" 
+      v-on:hideDropList="hideDropList" 
+      :optionsList="shopList" 
+      v-if="isShow" 
+      title="选择打赏来源公会">
+    </inputList> -->
+
+      
+    <picker-component
+      :dataList = "shopList"
+      :isShow = "dropListSwitch"
+      v-if = "dropListSwitch"
+      v-on:isShow = "hideDropList"
+    >
+    </picker-component>
   </div>
 </template>
 
@@ -182,9 +197,9 @@
   import request from "../../utils/userRequest";
   import utils from "../../utils/utils"
   import { Toast } from 'mint-ui'
+  import pickerComponent from "../../components/pickerComponent.vue"
 
   export default {
-    name: "makeDeal",
     created() {
       this.init();
     },
@@ -215,12 +230,14 @@
           .then(res => {
             this.setShopList(res);
             this.isShow = true;
+            this.allShop();
             Loading.getInstance().close();
           })
           .catch(err => {
             Loading.getInstance().close();
           });
       },
+
       allShop() {
         var _data = {
           limit: 10,
@@ -238,6 +255,7 @@
             Loading.getInstance().close();
           });
       },
+
       loadMore() {
         this.loading = false;
         if (this.shopContent.length == 0 || !this.canLoading) {
@@ -271,12 +289,12 @@
         var _tempList = [
           {
             label: "全部",
-            value: "0"
+            id: "0"
           }
         ];
         for (let i = 0; i < res.data.data.data.length; i++) {
           var _t = {};
-          _t.value = res.data.data.data[i].id.toString();
+          _t.id = res.data.data.data[i].id.toString();
           _t.label = utils.SetString(res.data.data.data[i].name, 10);
           _tempList.push(_t);
         }
@@ -285,7 +303,7 @@
 
       getShopName(id) {
         for (let i = 0; i < this.shopList.length; i++) {
-          if (this.shopList[i].value == id) {
+          if (this.shopList[i].id == id) {
             return this.shopList[i].label;
           }
         }
@@ -293,7 +311,7 @@
       },
       getDefaultPrice(id) {
         for (let i = 0; i < this.shopList.length; i++) {
-          if (this.shopList[i].value == id) {
+          if (this.shopList[i].id == id) {
             return this.shopList[i].price;
           }
         }
@@ -307,6 +325,9 @@
       },
       hideDropList(data) {
         this.dropListSwitch = false;
+        if(!data){
+          return;
+        }
         this.dealShop = this.getShopName(data);
         this.shopId = data;
         this.allShop();
@@ -325,6 +346,6 @@
         return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
       }
     },
-    components: { topBack, inputList }
+    components: { topBack, inputList ,pickerComponent}
   };
 </script>

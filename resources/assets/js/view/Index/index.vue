@@ -6,36 +6,42 @@
           <img src="/images/news.png">
         </div>
         <span class="notice" v-if="newMessage>0">
-            </span>
+        </span>
       </div>
 
-      <section class="transaction flex flex-justify-center">
+      <section class="transaction flex flex-justify-start">
         <div class="left flex-3">
           <!-- <a href="/#/myAccount"> -->
-          <div class="imggWrap flex flex-justify-center flex-align-center">
+          <div class="imggWrap flex flex-justify-center flex-align-start">
             <img :src="avatar" alt="">
           </div>
           <h2>{{userName}}</h2>
           <!-- </a> -->
         </div>
 
-        <div class="center flex-5 flex flex-v flex-align-center flex-justify-center" @click="goMyAccount">
-          <div class="flex diamond-box">{{amount}} <div class="diamond"><img src="/images/zuanshi.png"></div></div>
+        <div class="center flex-5 flex flex-v flex-align-start flex-justify-center" @click="goMyAccount">
+          <div class="flex diamond-box">{{amount}}
+            <div class="diamond">
+              <img src="/images/zuanshi.png">
+            </div>
+          </div>
           <h4>账户余额(钻石)</h4>
         </div>
-
-        <div class="right flex-2">
-              <span class="flex flex-align-center" @click="goMyAccount">
-                <!--<i class="iconfont">&#xe6bd;</i>-->
-                <span class="wallet-icon">
-                  <img src="/images/qianbao.png" alt="">
-                </span>
-                <i class="iconfont">&#xe62e;</i>              
-              </span>
-        </div>
-
       </section>
-
+      <div class="wallet-container">
+        <div class="flex flex-align-center wallet-content" @click="goMyAccount">
+          <div class="wallet-box">
+            <img src="/images/qianbao.png">
+          </div>
+          <div class="wallet-icon">
+            <img src="/images/icon_qianbao.png">
+          </div>
+          <div class="my-wallet">我的钱包</div>
+          <div class="right-icon">
+            <i class="iconfont">&#xe62e;</i>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="content">
@@ -45,13 +51,15 @@
       </div>
 
       <ul class="flex flex-wrap-on">
-
         <li class="flex flex-v flex-align-center">
-          <a href="/#/shop" class="flex flex-v flex-align-center">
+          <a href="/#/shop" class="flex flex-v flex-align-center shop-notice-box">
             <div class="home-icon">
               <img src="/images/home/gonghui.png" alt="">
             </div>
             <h3>我的公会</h3>
+            <span class="shop-notice" v-if="messageCount">
+              {{this.messageCount>99?"99":this.messageCount}}
+            </span>
           </a>
         </li>
 
@@ -148,7 +156,6 @@
 </template>
 
 <style lang="scss" scoped>
-
   #index {
     background: #f5f7fb;
     height: 100vh;
@@ -162,17 +169,17 @@
     height: 12em;
     background: #26a2ff;
     box-sizing: border-box;
-
+    position: relative;
     .message {
       height: 2em;
       width: 100%;
       padding-right: 1em;
       box-sizing: border-box;
-      .news{
+      .news {
         position: relative;
         width: 32px;
-        margin-top: 1.5em;
-        img{
+        margin-top: 1em;
+        img {
           display: block;
           width: 100%;
         }
@@ -184,17 +191,18 @@
         border-radius: 50%;
         position: absolute;
         right: 0.7em;
+        top: 0.3em;
       }
     }
 
     .transaction {
       width: 100%;
-      height: 8em;
+      height: 6em;
 
       .imggWrap {
         height: 5em;
 
-        > img {
+        >img {
           width: 4em;
           height: 4em;
           border-radius: 50%;
@@ -206,14 +214,14 @@
         text-align: center;
         color: #fff;
       }
-      .diamond-box{
+      .diamond-box {
         font-size: 1.8em;
         text-align: center;
         color: #fff;
-        .diamond{
-          width:30px;
-          margin-left:0.2em;
-          img{
+        .diamond {
+          width: 30px;
+          margin-left: 0.2em;
+          img {
             display: block;
             width: 100%;
           }
@@ -235,10 +243,10 @@
         padding-top: 6em;
         box-sizing: border-box;
 
-        > span {
+        >span {
           margin-top: 0.5em;
 
-          > i {
+          >i {
             font-size: 2.5em;
             color: #fff;
           }
@@ -251,15 +259,44 @@
             font-size: 1.0em;
           }
 
-          .wallet-icon {
-            width: 2.0em;
-            > img {
-              width: 100%;
-            }
-          }
         }
       }
     }
+  }
+
+  .wallet-container {
+    width: 35%;
+    position: absolute;
+    right: 0;
+    bottom: 1em;
+  }
+
+  .wallet-box {
+    width: 100%;
+    position: relative;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .wallet-icon {
+    position: absolute;
+    left: 5%;
+    width: 20%;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .my-wallet{
+    position: absolute;
+    left: 30%;
+    color: #fff;
+  }
+  .right-icon{
+    position: absolute;
+    right:0.2em;
+    color: #fff;
   }
 
   .content {
@@ -273,7 +310,7 @@
       padding-left: 0.5em;
       box-sizing: border-box;
 
-      > span {
+      >span {
         width: 0.4em;
         height: 85%;
         background: #26a2ff;
@@ -291,7 +328,7 @@
         height: 5.5em;
         .home-icon {
           width: 35px;
-          img{
+          img {
             display: block;
             width: 100%;
           }
@@ -305,17 +342,34 @@
 
     }
   }
+
+  .shop-notice-box {
+    position: relative;
+  }
+
+  .shop-notice {
+    position: absolute;
+    background: red;
+    width: 1.5em;
+    height: 1.5em;
+    right: 0.5em;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1.5em;
+    font-size: 0.1em;
+    color: #fff;
+  }
 </style>
 
 <script>
   import tabBar from "../../components/tabBar";
   import Loading from "../../utils/loading"
   import request from "../../utils/userRequest"
-  import {MessageBox, Toast} from 'mint-ui'
+  import { MessageBox, Toast } from 'mint-ui'
 
   export default {
     name: "index",
-    components: {tabBar},
+    components: { tabBar },
     data() {
       return {
         amount: null,
@@ -324,8 +378,8 @@
         userName: "",
 
         isAgent: 0,    // 是否是代理
-        isPromoters: 0  // 是否是推广员
-
+        isPromoters: 0,  // 是否是推广员
+        messageCount: null             // 新消息数量
       }
     },
     created() {
@@ -403,19 +457,22 @@
 
       init() {
         Loading.getInstance().open();
-        request.getInstance().getData("api/index").then(res => {
-          this.amount = res.data.data.balance;
-          this.avatar = res.data.data.avatar;
-          this.newMessage = res.data.data.new_message;
-          this.userName = res.data.data.name;
+        Promise.all([request.getInstance().getData("api/index"), request.getInstance().getData("api/shop/messages/count")])
+          .then(res => {
+            this.amount = res[0].data.data.balance;
+            this.avatar = res[0].data.data.avatar;
+            this.newMessage = res[0].data.data.new_message;
+            this.userName = res[0].data.data.name;
 
-          this.isAgent = res.data.data.is_agent;
-          this.isPromoters = res.data.data.is_promoter;
-          Loading.getInstance().close();
+            this.isAgent = res[0].data.data.is_agent;
+            this.isPromoters = res[0].data.data.is_promoter;
 
-        }).catch(err => {
-          Loading.getInstance().close();
-        });
+            this.messageCount = res[1].data.data.count;
+            Loading.getInstance().close();
+
+          }).catch(err => {
+            Loading.getInstance().close();
+          });
 
       }
     }
