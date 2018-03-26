@@ -44,7 +44,7 @@ class ApplePay implements DepositInterface
     {
         $request = request();
 
-        if (!$request->has('token') || !$request->has('order_id') || !$request->has('sign')) {
+        if (!$request->has('order_id') || !$request->has('sign')) {
             echo 'invalid request';
             return;
         }
@@ -55,7 +55,7 @@ class ApplePay implements DepositInterface
             return;
         }
 
-        $token = $request->post('token');
+        $token = file_get_contents('php://input');
         $order_id = IdConfuse::recoveryId($request->get('order_id'), false);
 
         //充值到账
