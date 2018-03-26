@@ -21,21 +21,6 @@ class Channel extends Model
 
 
     /**
-     * 获取通道通知地址
-     * @param $type string
-     * @return string
-     * @throws \Exception
-     */
-    public function getNotifyUrl($type)
-    {
-        if ($type === 'deposit' || $type === 'withdraw') {
-            return route('pay_notify', ['channel' => $this->getKey(), 'type' => $type]);
-        }
-        throw new \Exception('Invalid notify type ' . $type);
-    }
-
-
-    /**
      * 获取备用通道
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
