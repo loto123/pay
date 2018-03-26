@@ -27,7 +27,7 @@ class ApplePay implements DepositInterface
             'order_id' => $order_id,
             'sign' => self::makeSign($order_id),
         ];
-        return $notify_url . '?' . http_build_query($query);
+        return ['notify_url' => $notify_url . '?' . http_build_query($query), 'product_name' => $config['product_name']];
     }
 
     public function mixUpDepositId($depositId)
@@ -84,7 +84,7 @@ class ApplePay implements DepositInterface
         /**
          * @var $order Deposit
          */
-        $order = Deposit::find($order_id);
+        $order = Deposit::where([['id', $order_id], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
 
         if (!$order) {
             return;
@@ -95,8 +95,21 @@ class ApplePay implements DepositInterface
             return;
         }
 
+        $replace_str = $config['product_name'] . '.';
+        $amount_str = str_replace($replace_str, '', $product_id);    // 替换产品内容，得到充值金额
+        $amount = floatval($amount_str);
+
+        $order->out_batch_no = $transaction_id;
+
+        if ($amount > 0 && $order->amount > $amount) {
+            $order->state = Deposit::STATE_PART_PAID;
+        } else {
+            $order->state = Deposit::STATE_COMPLETE;
+        }
+        echo 'ok';
         PayLogger::deposit()->debug('苹果响应', $info);
 
+        return $order;
     }
 
     public function parseReturn(DepositMethod $method)
