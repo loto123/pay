@@ -55,7 +55,7 @@ class ApplePay implements DepositInterface
             return;
         }
 
-        $token = file_get_contents('php://input');
+        $token = base64_decode(file_get_contents('php://input'));
         $order_id = IdConfuse::recoveryId($request->get('order_id'), false);
 
         //充值到账
@@ -73,7 +73,7 @@ class ApplePay implements DepositInterface
             && property_exists($info, 'transaction_id'))
         ) {
             PayLogger::deposit()->error('苹果支付响应异常', (array)$info);
-            return;
+            return ['msg' => '苹果支付响应异常', 'info' => $info];
         }
 
         $product_id = $info->product_id;
@@ -106,10 +106,11 @@ class ApplePay implements DepositInterface
         } else {
             $order->state = Deposit::STATE_COMPLETE;
         }
-        echo 'ok';
+        //echo 'ok';
         PayLogger::deposit()->debug('苹果响应', $info);
+        return ['msg' => 'ok', 'info' => $info];
 
-        return $order;
+        //return $order;
     }
 
     public function parseReturn(DepositMethod $method)
