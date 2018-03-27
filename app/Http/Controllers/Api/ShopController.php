@@ -2099,12 +2099,13 @@ class ShopController extends BaseController
         if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
-        if ($request->type) {
+        $types = [ShopFund::TYPE_TRANAFER, ShopFund::TYPE_TRANAFER_IN, ShopFund::TYPE_TRANAFER_MEMBER];
+        if ($request->type !== null && in_array($request->type, $types)) {
             $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
             $out_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
         } else {
-            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
-            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
+            $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $types)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
+            $out_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $types)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
         }
 
         return $this->json(['in' => $in_amount, 'out' => $out_amount]);
