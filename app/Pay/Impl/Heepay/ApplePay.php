@@ -72,7 +72,7 @@ class ApplePay implements DepositInterface
         if (!(is_object($info) && property_exists($info, 'product_id')
             && property_exists($info, 'transaction_id'))
         ) {
-            PayLogger::deposit()->error('苹果支付响应异常', $info);
+            PayLogger::deposit()->error('苹果支付响应异常', (array)$info);
             return;
         }
 
