@@ -92,6 +92,8 @@ class ApplePay implements DepositInterface
             return;
         }
 
+        PayLogger::deposit()->debug('苹果响应', ['info' => $info]);
+
         if (Deposit::where([['method_id', $order->method_id], ['out_batch_no', $transaction_id]])->count() > 0) {
             //Receipt已使用
             PayLogger::deposit()->error('Apple Receipt已使用');
@@ -110,7 +112,7 @@ class ApplePay implements DepositInterface
             $order->state = Deposit::STATE_COMPLETE;
         }
         echo 'ok';
-        PayLogger::deposit()->debug('苹果响应', ['info' => $info]);
+
 
         return $order;
     }
