@@ -69,11 +69,12 @@ class ApplePay implements DepositInterface
 
         $iap = new ItunesReceiptValidator($is_sandbox, $signature_base64data);
         $info = $iap->validateReceipt();
+        $info = $info->in_app[0];
         if (!(is_object($info) && property_exists($info, 'product_id')
             && property_exists($info, 'transaction_id'))
         ) {
-            PayLogger::deposit()->error('苹果支付响应异常', (array)$info);
-            return ['msg' => '苹果支付响应异常', 'info' => $info];
+            PayLogger::deposit()->error('苹果支付响应异常', ['info' => $info]);
+            return null;
         }
 
         $product_id = $info->product_id;
@@ -87,11 +88,13 @@ class ApplePay implements DepositInterface
         $order = Deposit::where([['id', $order_id], ['state', Deposit::STATE_UNPAID]])->lockForUpdate()->first();//取出订单
 
         if (!$order) {
+            PayLogger::deposit()->error('Apple 订单不存在' . $order_id, ['order' => $order]);
             return;
         }
 
         if (Deposit::where([['method_id', $order->method_id], ['out_batch_no', $transaction_id]])->count() > 0) {
             //Receipt已使用
+            PayLogger::deposit()->error('Apple Receipt已使用');
             return;
         }
 
@@ -106,11 +109,10 @@ class ApplePay implements DepositInterface
         } else {
             $order->state = Deposit::STATE_COMPLETE;
         }
-        //echo 'ok';
-        PayLogger::deposit()->debug('苹果响应', (array)$info);
-        return ['msg' => 'ok', 'info' => $info];
+        echo 'ok';
+        PayLogger::deposit()->debug('苹果响应', ['info' => $info]);
 
-        //return $order;
+        return $order;
     }
 
     public function parseReturn(DepositMethod $method)
