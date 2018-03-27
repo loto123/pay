@@ -2100,7 +2100,7 @@ class ShopController extends BaseController
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         $types = [ShopFund::TYPE_TRANAFER, ShopFund::TYPE_TRANAFER_IN, ShopFund::TYPE_TRANAFER_MEMBER];
-        if ($request->type !== null && in_array($request->type, $types)) {
+        if ($request->type) {
             $in_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_IN)->sum("amount");
             $out_amount = (double)ShopFund::where("shop_id", $shop->id)->whereIn("type", $request->type)->where("created_at", ">=", date("Y-m-01", strtotime($request->month)))->where("created_at", "<", date("Y-m-01", strtotime($request->month . " +1 month")))->where("mode", ShopFund::MODE_OUT)->sum("amount");
         } else {
