@@ -107,7 +107,7 @@ class ApplePay implements DepositInterface
             $order->state = Deposit::STATE_COMPLETE;
         }
         //echo 'ok';
-        PayLogger::deposit()->debug('苹果响应', $info);
+        PayLogger::deposit()->debug('苹果响应', (array)$info);
         return ['msg' => 'ok', 'info' => $info];
 
         //return $order;
