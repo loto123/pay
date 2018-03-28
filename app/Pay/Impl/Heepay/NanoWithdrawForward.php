@@ -97,4 +97,9 @@ class NanoWithdrawForward implements WithdrawInterface
         $withdraw->state = $params['state'] == 1 ? Withdraw::STATE_COMPLETE : Withdraw::STATE_PROCESS_FAIL;
         return $withdraw;
     }
+
+    public function queryState(Withdraw $withdraw, array $config)
+    {
+        // TODO: Implement queryState() method.
+    }
 }

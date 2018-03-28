@@ -104,6 +104,48 @@ class Withdraw extends Model
     }
 
     /**
+     * 提现状态变更回调,会保存相关状态到数据库
+     * @param $query
+     * @param $content
+     * @return bool
+     */
+    public function stateCallback($query, $content)
+    {
+        if ($this->state === Withdraw::STATE_PROCESS_FAIL) {
+            $exception = '';
+
+            //失败要更改卖单状态为未成交
+            try {
+                SellBill::where('withdraw_id', $this->getKey())->update(['deal_closed' => 0]);
+            } catch (\Exception $e) {
+                $exception = $e->getMessage();
+                //break;
+            }
+
+            $this->exceptions()->save(new WithdrawException([
+                'message' => json_encode(['query' => $query, 'body' => $content], JSON_UNESCAPED_UNICODE),
+                'state' => $this->state,
+                'exception' => $exception
+            ]));
+        }
+
+        if (!$this->save()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 提现异常
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function exceptions()
+    {
+        return $this->hasMany(WithdrawException::class);
+    }
+
+    /**
      * 取消提现
      * @return bool
      */
@@ -141,14 +183,5 @@ class Withdraw extends Model
     public function masterContainer()
     {
         return $this->belongsTo(MasterContainer::class, 'master_container');
-    }
-
-    /**
-     * 提现异常
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function exceptions()
-    {
-        return $this->hasMany(WithdrawException::class);
     }
 }

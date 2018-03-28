@@ -22,6 +22,6 @@ class Version extends Model
         if (filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
         }
-        return Storage::disk(config('admin.upload.disk'))->url($value);
+        return Storage::disk("public")->url($value);
     }
 }

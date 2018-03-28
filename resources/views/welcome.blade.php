@@ -45,13 +45,8 @@
 <script>
     var debug = {{config('app.debug')}};
     var product_name = "{{config('product_name')}}";
-    var user_feedback = null;
-    @if (config("user_feedback"))
-    user_feedback = "{{ config("user_feedback") }}"
-    @endif
 
     window.saveData=function(param){
-        console.log(param);
         localStorage.setItem("token",param);
     }
     window.setVAR=function(VAR){
