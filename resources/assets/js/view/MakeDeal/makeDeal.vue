@@ -309,7 +309,7 @@
           }
         }
 
-        return "没有这个公会";
+        return "请选择公会";
       },
 
       getDefaultPrice(id) {
