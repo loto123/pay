@@ -565,11 +565,14 @@ class NoticeController extends BaseController
             return $this->json([],'消息不存在',0);
         }
 
+        //已读标志，默认设置为已读
+        $read_flag = true;
         //操作消息
         $operator_options = new \stdClass();
         $operators_res = new \stdClass();
         $operator_state = 0;
         if(!empty($notice->data['operators'])) {
+            $read_flag = false; //操作消息不置为已读
             $operators = $notice->data['operators'];
             //判断是否已经操作过了
             if(isset($operators['result']) && isset($operators['result']['code'])
@@ -620,7 +623,10 @@ class NoticeController extends BaseController
                 'operator_state' => $operator_state,
             ];
         }
-        $notice->markAsRead();
+
+        if($read_flag) {
+            $notice->markAsRead();
+        }
         return $this->json($data);
     }
 
@@ -684,7 +690,7 @@ class NoticeController extends BaseController
         }
 
         try{
-            $this->user->notifications()->where('type',$notice_type[$request->type])->delete();
+            $this->user->notifications()->where('type',$notice_type[$request->type])->whereNotNull('read_at')->delete();
             return $this->json();
         } catch (\Exception $e) {
             return $this->json([],'操作失败',0);

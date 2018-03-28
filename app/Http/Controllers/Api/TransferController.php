@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\CustomMath;
 use App\Pay\Model\PayFactory;
 use App\Pet;
 use App\PetRecord;
@@ -108,7 +109,7 @@ class TransferController extends BaseController
                 'shop_id' => 'bail|required',
                 'price' => 'bail|required|numeric|between:0.1,99999',
                 'comment' => 'bail|max:200',
-                'privately' => ['bail','required',Rule::in([0,1])],
+                'privately' => ['bail', 'required', Rule::in([0, 1])],
                 'joiner' => 'bail|array',
             ],
             [
@@ -290,13 +291,14 @@ class TransferController extends BaseController
         }
         $user = JWTAuth::parseToken()->authenticate();
         //权限
-        if(($transferObj->privately && !$transferObj->joiner()->where('user_id',$user->id)->exists())
-            || !$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()) {
+        if (($transferObj->privately && !$transferObj->joiner()->where('user_id', $user->id)->exists())
+            || !$transferObj->shop->shop_user()->where('user_id', $user->id)->exists()
+        ) {
             return $this->json([], trans('trans.trans_permission_deny'), 404);
         }
 
         //公会冻结
-        if($transferObj->shop->status == Shop::STATUS_FREEZE) {
+        if ($transferObj->shop->status == Shop::STATUS_FREEZE) {
             return $this->json([], trans('trans.shop_been_frozen'), 4);
         }
 
@@ -483,18 +485,18 @@ class TransferController extends BaseController
         if ($transfer->status == 3) {
             return $this->json([], trans('trans.trans_already_closed'), 0);
         }
-        $amount = bcmul($request->points, $transfer->price, 2);
+        $amount = CustomMath::result(bcmul($request->points, $transfer->price, CustomMath::SCALE));
         $tips = 0;
         if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
-            $tips = bcdiv(bcmul($transfer->tip_percent, $amount, 2), 100, 2);
+            $tips = CustomMath::result(bcdiv(bcmul($transfer->tip_percent, $amount, CustomMath::SCALE), 100, CustomMath::SCALE));
         }
         //收手续费
         $fee_amount = 0;
         if ($transfer->fee_percent) {
-            $fee_amount = bcdiv(bcmul($amount, $transfer->fee_percent, 2), 100, 2);
+            $fee_amount = CustomMath::result(bcdiv(bcmul($amount, $transfer->fee_percent, CustomMath::SCALE), 100, CustomMath::SCALE));
         }
-        $real_amount = bcsub(bcsub($amount, $tips, 2), $fee_amount, 2);
-        $fee_total = bcadd($fee_amount, $tips, 2);
+        $real_amount = CustomMath::result(bcsub(bcsub($amount, $tips, CustomMath::SCALE), $fee_amount, CustomMath::SCALE));
+        $fee_total = CustomMath::result(bcadd($fee_amount, $tips, CustomMath::SCALE));
         return $this->json(['amount' => $amount, 'real_amount' => $real_amount, 'fee_total' => $fee_total], 'ok', 1);
     }
 
@@ -563,8 +565,9 @@ class TransferController extends BaseController
             return $this->json([], trans('trans.trans_not_exist'), 404);
         }
         //权限
-        if(($transfer->privately && !$transfer->joiner()->where('user_id',$user->id)->exists())
-            || !$transfer->shop->shop_user()->where('user_id', $user->id)->exists()) {
+        if (($transfer->privately && !$transfer->joiner()->where('user_id', $user->id)->exists())
+            || !$transfer->shop->shop_user()->where('user_id', $user->id)->exists()
+        ) {
             return $this->json([], trans('trans.trans_permission_deny'), 404);
         }
         if ($transfer->status == 3) {
@@ -575,7 +578,7 @@ class TransferController extends BaseController
             $record = new TransferRecord();
             $record->transfer_id = $transfer->id;
             $record->user_id = $user->id;
-            $record->amount = bcmul($request->points, $transfer->price, 2);
+            $record->amount = CustomMath::result(bcmul($request->points, $transfer->price, CustomMath::SCALE));
             $record->points = $request->points;
             $record->fee_amount = 0;
             //放钱
@@ -612,9 +615,9 @@ class TransferController extends BaseController
                 $found->save();
 
                 //红包加钱
-                $transfer->amount = bcadd($transfer->amount, $record->amount, 2);
-                $record->real_amount = bcmul($record->amount, -1, 2);
-                $record->amount = bcmul($record->amount, -1, 2);
+                $transfer->amount = CustomMath::result(bcadd($transfer->amount, $record->amount, CustomMath::SCALE));
+                $record->real_amount = CustomMath::result(bcmul($record->amount, -1, CustomMath::SCALE));
+                $record->amount = CustomMath::result(bcmul($record->amount, -1, CustomMath::SCALE));
             }
             //拿钱
             if ($request->action == 'get') {
@@ -627,9 +630,9 @@ class TransferController extends BaseController
                 $profit_shares = [];
 //                if ($transfer->tip_type == 2 && $transfer->tip_percent > 0) {
                 if ($transfer->tip_percent > 0 && config('shop_fee_status')) {
-                    $tips = bcdiv(bcmul($transfer->tip_percent, $record->amount, 2), 100, 2);
+                    $tips = CustomMath::result(bcdiv(bcmul($transfer->tip_percent, $record->amount, CustomMath::SCALE), 100, CustomMath::SCALE));
                     //红包茶水费金额增加
-                    $transfer->tip_amount = bcadd($transfer->tip_amount, $tips, 2);
+                    $transfer->tip_amount = CustomMath::result(bcadd($transfer->tip_amount, $tips, CustomMath::SCALE));
                     //生成茶水费记录
                     $tip = new TipRecord();
                     $tip->shop_id = $transfer->shop_id;
@@ -653,9 +656,9 @@ class TransferController extends BaseController
                 $proxy_fee = 0;
                 if ($transfer->fee_percent) {
                     //手续费
-                    $record->fee_amount = bcdiv(bcmul($record->amount, $transfer->fee_percent, 2), 100, 2);
+                    $record->fee_amount = CustomMath::result(bcdiv(bcmul($record->amount, $transfer->fee_percent, CustomMath::SCALE), 100, CustomMath::SCALE));
                     //红包手续费金额
-                    $transfer->fee_amount = bcadd($transfer->fee_amount, $record->fee_amount, 2);
+                    $transfer->fee_amount = CustomMath::result(bcadd($transfer->fee_amount, $record->fee_amount, CustomMath::SCALE));
                     //代理分润
                     if ($user->parent && $user->parent->percent && $user->parent->status == 0) {
 //                        $user_receiver = PayFactory::MasterContainer($user->parent->container->id);
@@ -663,7 +666,7 @@ class TransferController extends BaseController
                         $user_receiver = $user->parent->proxy_container;
                         if ($user_receiver) {
                             $record->proxy_percent = $user->parent->percent;
-                            $proxy_fee = bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), 2), '100', 2);
+                            $proxy_fee = CustomMath::result(bcdiv(bcmul(strval($record->fee_amount), strval($user->parent->percent), CustomMath::SCALE), '100', CustomMath::SCALE));
                             if ($proxy_fee > 0) {
                                 $profit_shares[] = PayFactory::profitShare($user_receiver, $proxy_fee, true);
                             }
@@ -671,18 +674,18 @@ class TransferController extends BaseController
                     }
                 }
                 //实际获得
-                $record->real_amount = bcsub(bcsub($record->amount, $record->fee_amount, 2), $tips, 2);
+                $record->real_amount = CustomMath::result(bcsub(bcsub($record->amount, $record->fee_amount, CustomMath::SCALE), $tips, CustomMath::SCALE));
                 //用户加钱
 //                $user->balance = $user->balance + $record->real_amount;
                 //红包减钱
-                $transfer->amount = bcsub($transfer->amount, $record->amount, 2);
+                $transfer->amount = CustomMath::result(bcsub($transfer->amount, $record->amount, CustomMath::SCALE));
                 //容器转账
 //                $user_container = PayFactory::MasterContainer($user->container->id);
 //                $transfer_container = PayFactory::MasterContainer($transfer->container->id);
 //                $pay_transfer = $transfer_container->transfer($user_container, $record->amount - $tips, $record->fee_amount - $proxy_fee, 0, 0, $profit_shares);
-                $pay_transfer = $transfer->container->transfer($user->container, $record->amount, bcsub($record->fee_amount, $proxy_fee, 2), 0, 0, $profit_shares);
+                $pay_transfer = $transfer->container->transfer($user->container, $record->amount, CustomMath::result(bcsub($record->fee_amount, $proxy_fee, CustomMath::SCALE)), 0, 0, $profit_shares);
                 if (!$pay_transfer) {
-                    Log::error('拿钱失败,容器转账失败', [$transfer->container->getKey(), $user->container->getKey(), bcsub($record->amount, $tips, 2), bcsub($record->fee_amount, $proxy_fee, 2), json_encode($profit_shares)]);
+                    Log::error('拿钱失败,容器转账失败', [$transfer->container->getKey(), $user->container->getKey(), CustomMath::result(bcsub($record->amount, $tips, CustomMath::SCALE)), CustomMath::result(bcsub($record->fee_amount, $proxy_fee, CustomMath::SCALE)), json_encode($profit_shares)]);
                     DB::rollBack();
                     return $this->json([], trans('trans.trade_failed'), 0);
                 }
@@ -703,7 +706,7 @@ class TransferController extends BaseController
                 $found->status = UserFund::STATUS_SUCCESS;
                 $found->type = UserFund::TYPE_TRADE_FEE;
                 $found->mode = UserFund::MODE_OUT;
-                $found->amount = bcadd($record->fee_amount, $tips, 2);
+                $found->amount = CustomMath::result(bcadd($record->fee_amount, $tips, CustomMath::SCALE));
                 $found->no = $record->transfer_id;
                 $found->save();
             }
@@ -819,7 +822,7 @@ class TransferController extends BaseController
             //扣除红包手续费
             if ($record->fee_amount > 0) {
                 //红包手续费减少
-                $transfer->fee_amount = bcsub($transfer->fee_amount, $record->fee_amount, 2);
+                $transfer->fee_amount = CustomMath::result(bcsub($transfer->fee_amount, $record->fee_amount, CustomMath::SCALE));
             }
             //扣除商店茶水费
             $tip = $record->tip;
@@ -836,13 +839,13 @@ class TransferController extends BaseController
                 //删除茶水费记录
                 TipRecord::where('id', $tip->id)->delete();
                 //红包茶水费减少
-                $transfer->tip_amount = bcsub($transfer->tip_amount, $tip->amount, 2);
+                $transfer->tip_amount = CustomMath::result(bcsub($transfer->tip_amount, $tip->amount, CustomMath::SCALE));
             }
             //用户余额增加
 //                $user->balance = $user->balance + $record->amount;
 //                $user->save();
             //红包余额增加
-            $transfer->amount = bcadd($transfer->amount, $record->amount, 2);
+            $transfer->amount = CustomMath::result(bcadd($transfer->amount, $record->amount, CustomMath::SCALE));
             if ($transfer->amount > 0) {
                 $transfer->status = 1;
             }
@@ -1148,7 +1151,7 @@ class TransferController extends BaseController
 //                $user->balance = $user->balance - $request->fee;
 //                $user->save();
                 //增加交易红包茶水费总额 交易红包茶水费状态改为已结清
-                $transfer->tip_amount = bcadd($transfer->tip_amount, $request->fee, 2);
+                $transfer->tip_amount = CustomMath::result(bcadd($transfer->tip_amount, $request->fee, CustomMath::SCALE));
                 $transfer->tip_status = 1;
                 $transfer->save();
                 //增加店铺余额
@@ -1242,7 +1245,7 @@ class TransferController extends BaseController
      *                      @SWG\Items(
      *                          @SWG\Property(property="id", type="string", example="1234567",description="交易记录ID"),
      *                          @SWG\Property(property="transfer_id", type="string", example="1234567",description="交易红包ID"),
-	 *							@SWG\Property(property="transfer_amount", type="double", example=9.9, description="任务余额"),
+     *							@SWG\Property(property="transfer_amount", type="double", example=9.9, description="任务余额"),
      *                          @SWG\Property(property="shop_name", type="string", example="XX的店",description="交易红包所属店铺名称"),
      *                          @SWG\Property(property="amount", type="double", example=9.9, description="交易金额"),
      *                          @SWG\Property(property="eggs", type="int", example=9, description="获得宠物蛋数量"),
@@ -1305,7 +1308,7 @@ class TransferController extends BaseController
         foreach ($list as $key => $item) {
             $data[$key]['id'] = $item->id;
             $data[$key]['transfer_id'] = $item->transfer ? $item->transfer->en_id() : 0;
-			$data[$key]['transfer_amount'] = $item->transfer ? $item->transfer->amount : 0;
+            $data[$key]['transfer_amount'] = $item->transfer ? $item->transfer->amount : 0;
             $data[$key]['shop_name'] = $item->transfer && $item->transfer->shop ? $item->transfer->shop->name : '';
             $data[$key]['created_at'] = date('Y-m-d H:i:s', strtotime($item->created_at));
             $data[$key]['amount'] = $item->transfer ? $item->transfer->record()->where('user_id', $user->id)
@@ -1598,7 +1601,7 @@ class TransferController extends BaseController
                             //茶水费记录到账
                             $tipModel = $value->tip;
                             if ($tipModel) {
-                                $tip_amount = bcadd($tip_amount, $tipModel->amount, 2);
+                                $tip_amount = CustomMath::result(bcadd($tip_amount, $tipModel->amount, CustomMath::SCALE));
                                 $tipModel->status = 1;
                                 $tipModel->save();
                             }
@@ -1613,7 +1616,7 @@ class TransferController extends BaseController
                             $profit->proxy_amount = 0;
                             $profit->fee_amount = 0;
                             if ($value->proxy_percent > 0) {
-                                $profit->proxy_amount = bcdiv(bcmul(strval($value->fee_amount), strval($value->proxy_percent), 2), '100', 2);
+                                $profit->proxy_amount = CustomMath::result(bcdiv(bcmul(strval($value->fee_amount), strval($value->proxy_percent), CustomMath::SCALE), '100', CustomMath::SCALE));
                                 if ($profit->proxy_amount > 0) {
                                     $profit->proxy = $value->user->parent->id;
                                     $profit->proxy_percent = $value->proxy_percent;
@@ -1629,7 +1632,7 @@ class TransferController extends BaseController
 //                                $proxy_container = PayFactory::MasterContainer($value->user->parent->container->id);
                             if ($value->user->operator) {
                                 $profit->operator = $value->user->operator->id;
-                                $profit->fee_amount = bcsub($value->fee_amount, $profit->proxy_amount, 2);
+                                $profit->fee_amount = CustomMath::result(bcsub($value->fee_amount, $profit->proxy_amount, CustomMath::SCALE));
 //                        $profit->operator_percent = $value->id;
 //                        $profit->operator_amount = $value->id;
                             }
