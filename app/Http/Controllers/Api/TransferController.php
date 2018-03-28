@@ -890,7 +890,34 @@ class TransferController extends BaseController
      *             type="string"
      *      )
      *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @SWG\Items(
+     *                          @SWG\Property(property="name", type="string", example="测试", description="参与人昵称"),
+     *                          @SWG\Property(property="avatar", type="string", example="http://dev.pay.local/images/personal.jpg",description="参与人头像"),
+     *                    )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
      * )
      * @return \Illuminate\Http\Response
      */
@@ -938,8 +965,16 @@ class TransferController extends BaseController
                 }
             }
             DB::commit();
-            return $this->json([], trans('trans.notice_success'), 1);
+            $joiners = $transfer->joiner()->with('user')->get();
+            $list = [];
+            foreach ($joiners as $item) {
+                $tmp['name'] = $item->user->name;
+                $tmp['avatar'] = $item->user->avatar;
+                $list[] = $tmp;
+            }
+            return $this->json($list, trans('trans.notice_success'), 1);
         } catch (\Exception $e) {
+            Log::error('通知好友失败：',$e->getTrace());
             DB::rollBack();
         }
         return $this->json([], trans('trans.notice_failed'), 0);
