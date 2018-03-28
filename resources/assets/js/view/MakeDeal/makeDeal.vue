@@ -259,7 +259,7 @@
         privateSwitchStatus:false,    // 私密任务开关
 
         shopId: null,
-        price: 10,
+        price: null,
         commentMessage: null,
 
         memberList: [],              //成员数组
@@ -294,8 +294,11 @@
           _t.price = res.data.data.data[i].price;
           _tempList.push(_t);
         }
-
         this.shopList = _tempList;
+        
+        this.shopId=localStorage.getItem('shopId');
+        this.dealShop=this.getShopName(this.shopId);
+        this.price=localStorage.getItem('price');
       },
 
       getShopName(id) {
@@ -409,7 +412,8 @@
           joiner: _members,
           privately:this.privateSwitchStatus==true?1:0
         };
-
+        localStorage.setItem('shopId',this.shopId);
+        localStorage.setItem('price',this.price);
         if (this.shopId == null) {
           Toast("请选择发布任务的公会");
           return
