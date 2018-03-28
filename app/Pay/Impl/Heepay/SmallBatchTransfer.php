@@ -240,4 +240,9 @@ class SmallBatchTransfer implements WithdrawInterface
             'bank_card' => '银行卡对象,后端设置'
         ];
     }
+
+    public function queryState(Withdraw $withdraw, array $config)
+    {
+        // TODO: Implement queryState() method.
+    }
 }

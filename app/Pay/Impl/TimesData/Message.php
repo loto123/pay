@@ -39,6 +39,14 @@ abstract class Message
         $this->MD5Key = $key;
     }
 
+    /**
+     * 设置RSA实例
+     * @param RSA $instance
+     */
+    public function setRSAInstance(RSA $instance)
+    {
+        $this->RSAInstance = $instance;
+    }
 
     /**
      * 签名

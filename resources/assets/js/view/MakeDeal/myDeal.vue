@@ -19,13 +19,16 @@
                     </div>
                 </li> -->
                 
-                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" v-bind:class="{h_5em:tabItem[2]==true}">
+                 <li class="deal-item flex flex-align-center" @click="goDetail(item.transfer_id)" v-for="item in dataList" v-bind:class="[{h_5em:tabItem[0]==true},{h_5em:tabItem[2]==true}]">
                     
                     <div class="content-wrap flex flex-v flex-align-center flex-6">
                         <div class="title">{{SettingString(item.shop_name,10)}}</div>
+                        <div class="deal-diamond-box" v-if="tabItem[0]">
+                          <div class="deal-diamond">任务池剩余钻石:<span>{{item.transfer_amount}}</span></div>
+                        </div>
                         <div class="eggs-wrap" v-if="tabItem[2]">
                           <span>任务获得：</span>
-                          <span> <img src="/images/egg.jpg" alt=""> x {{item.eggs}}</span>
+                          <span> <img src="/images/egg.png" alt=""> x {{item.eggs}}</span>
                         </div>
                         <div class="date">{{item.created_at}}</div>
                     </div>
@@ -120,7 +123,19 @@
             margin-top: 0.8em;
             width: 100%;
           }
-          
+          .deal-diamond-box{
+            width:100%;
+            margin-top:0.4em;
+            font-size: 0.9em;
+            .deal-diamond{
+              color: #777;
+              span{
+                color:orange;
+                vertical-align: middle;
+                margin-left:0.3em;
+              }
+            }
+          }
           .eggs-wrap{
             width:100%;
             margin-top:0.4em;
@@ -187,6 +202,7 @@ import topBack from "../../components/topBack";
 import request from "../../utils/userRequest"
 import Loading from "../../utils/loading"
 import utils from "../../utils/utils.js"
+import { Toast } from "mint-ui";
 
 export default {
   components: { topBack },
@@ -289,7 +305,14 @@ export default {
       }
     },
     goDetail(id) {
-      this.$router.push("/makeDeal/deal_detail"+"?id="+id);
+      request.getInstance().getData("api/transfer/show?transfer_id="+id).then(res=>{
+        this.$store.dispatch("deal_setMyData",res.data.data);
+        this.$router.push("/makeDeal/deal_detail"+"?id="+id);
+        Loading.getInstance().close();
+      }).catch(err=>{
+        Toast(err.data.msg);
+        Loading.getInstance().close();
+      });
     },
 
     mark(){

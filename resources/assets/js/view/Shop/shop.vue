@@ -131,14 +131,12 @@
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding-right: 0.8em;
+    padding-right: 1em;
     padding-top:1em;
     
     .news{
       position: relative;
-      width: 28px;
-      top:-0.4em;
-
+      width: 32px;
       img{
         display: block;
         width: 100%;
@@ -149,7 +147,8 @@
       background: red;
       width: 1.5em;
       height: 1.5em;
-      right: 0.5em;
+      right: 0.7em;
+      top: 0.3em;
       border-radius: 50%;
       text-align: center;
       line-height: 1.5em;

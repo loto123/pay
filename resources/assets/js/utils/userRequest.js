@@ -2,6 +2,7 @@ import Axios from 'axios'
 import 'babel-polyfill'
 import {Toast} from 'mint-ui'
 import Loading from './loading'
+
 export default class UserRequest {
     static getInstance() {
         if (this._instance == null) {
@@ -24,26 +25,35 @@ export default class UserRequest {
         var _token = this.getToken();
         this.validToken(_token);
 
-        return new Promise(function (resolve, reject) {
+        return new Promise( (resolve, reject)=> {
             Axios({
                 method: 'post',
                 url: tempUrl,
                 data: postData,
                 headers:{Authorization:"Bearer "+_token}
             })
-                .then(function (res) {
-
-                    if(res.data.code == 1){
+                .then( res => {
+                    this._validCode(res).then(res=>{
                         resolve(res);
-                    }else if(res.data.code == 2){
-                        Loading.getInstance().close();
-                        window.location.href = "/#/login";
-                        
-                        reject(res);
-                    }
-                    else {
-                        reject(res);
-                    }
+                    }).catch(err=>{
+                        reject(err);
+                    });;
+                    // switch(res.data.code){
+                    //     case 1:
+                    //         resolve(res);
+                    //         break;
+                    //     case 2:
+                    //         Loading.getInstance().close();
+                    //         window.location.href = "/#/login";
+                    //         reject(res);
+                    //         break;
+                    //     case 404:
+                    //         console.log(404);
+                    //         break;
+                    //     default:
+                    //         reject(res);
+                    // }
+                   
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -58,30 +68,66 @@ export default class UserRequest {
         var _token = this.getToken();
         this.validToken(_token);
 
-        return new Promise(function (resolve, reject) {
+        return new Promise( (resolve, reject)=> {
             Axios({
                 method: 'get',
                 url: tempUrl,
                 params: postData,
                 headers:{Authorization:"Bearer "+_token}
             })
-                .then(function (res) {
-                    if(res.data.code == 1){
+                .then(res=> {
+                    this._validCode(res).then(res=>{
                         resolve(res);
-                    }else if(res.data.code == 2){
-
-                        Loading.getInstance().close();
-                        window.location.href = "/#/login"
-                        reject(res);
-                    }
-                    else {
-                        reject(res);
-                    }
+                    }).catch(err=>{
+                        reject(err);
+                    });
+                   // switch(res.data.code){
+                   //      case 1:
+                   //          resolve(res);
+                   //          break;
+                   //      case 2:
+                   //          Loading.getInstance().close();
+                   //          window.location.href = "/#/login";
+                   //          reject(res);
+                   //          break;
+                   //      case 404:
+                   //          console.log(404);
+                   //          break;
+                   //      default:
+                   //          reject(res);
+                   //  }
                 })
                 .catch(function (error) {
                     console.error(error);
                 });
         });
+    }
+
+    _validCode(res){
+        return new Promise(function(resolve,reject){
+            switch(res.data.code){
+                case 1:
+                    resolve(res);
+                    break;
+                case 2:
+                    Loading.getInstance().close();
+                    // window.location.href = "/#/login";
+                    app.$router.push("/login");
+                    reject(res);
+                    break;
+                case 404:
+                    // if(window.history.length <= 2){
+                    app.$router.push("/notice?notice="+res.data.msg);
+                    Loading.getInstance().close();
+                    // window.location.href = '/#/notice?notice='+res.data.msg;
+                      // }else {
+                      //   window.history.go(-1);
+                      // }
+                    break;
+                default:
+                    reject(res);
+            }
+        })
     }
 
     // 验证token是否存在
