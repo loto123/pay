@@ -55,7 +55,7 @@ class ApplePay implements DepositInterface
             return;
         }
 
-        $signature_base64data = base64_decode(file_get_contents('php://input'));
+        $signature_base64data = file_get_contents('php://input');
         $order_id = IdConfuse::recoveryId($request->get('order_id'), false);
 
         //充值到账
