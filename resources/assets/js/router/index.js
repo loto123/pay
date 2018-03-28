@@ -20,6 +20,7 @@ import MyReward from './myReward'
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
 import '../../sass/iconfont.scss'
+import '../../sass/new.scss'
 
 Vue.use(Mint)
 Vue.use(Router)

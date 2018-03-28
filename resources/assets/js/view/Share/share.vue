@@ -209,6 +209,7 @@ export default {
 
           Loading.getInstance().close();
           Toast(error.data.msg);
+          this.$router.push("/index");
           setTimeout(()=>{
             this.clickEnable = false;
           },1500);
