@@ -55,11 +55,11 @@ class ApplePay implements DepositInterface
             return;
         }
 
-        $token = base64_decode(file_get_contents('php://input'));
+        $signature_base64data = base64_decode(file_get_contents('php://input'));
         $order_id = IdConfuse::recoveryId($request->get('order_id'), false);
 
         //充值到账
-        $signature_base64data = base64_encode($token);
+        $token = base64_decode($signature_base64data);
 
         if (strpos($token, 'Sandbox') > -1) {
             $is_sandbox = true;
@@ -69,7 +69,7 @@ class ApplePay implements DepositInterface
 
         $iap = new ItunesReceiptValidator($is_sandbox, $signature_base64data);
         $info = $iap->validateReceipt();
-        $info = $info->in_app[0];
+        $info = array_pop($info->in_app);
         if (!(is_object($info) && property_exists($info, 'product_id')
             && property_exists($info, 'transaction_id'))
         ) {
