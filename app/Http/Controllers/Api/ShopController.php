@@ -14,6 +14,7 @@ use App\User;
 use App\UserFund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -261,39 +262,25 @@ class ShopController extends BaseController
     public function all()
     {
         $user = $this->auth->user();
-        $shops = [];
-        $count = 0;
-        foreach ($user->transfer as $_transfer) {
-            $count += $_transfer->shop()->count();
-            foreach ($_transfer->shop()->where("status", Shop::STATUS_NORMAL)->get() as $_shop) {
-                if (!isset($shops[$_shop->id])) {
-                    $shops[$_shop->id] = $_shop;
-                }
-            }
+        $in_shops = $shops = [];
+        $in_query = $user->in_shops()->where("status", Shop::STATUS_NORMAL);
+        $count = $in_query->count();
+        foreach ($in_query->get() as $_shop) {
+            $in_shops[$_shop->id] = $_shop;
         }
-        $query1 = $user->shop()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
-        $count += $query1->count();
-        foreach ($query1->get() as $_shop) {
-            if (!isset($shops[$_shop->id])) {
-                $shops[$_shop->id] = $_shop;
+        //最近交易店铺
+        $transfer_shop_ids = $user->transfer()->select(DB::raw("shop_id, max(id) as id_order"))->groupBy("shop_id")->orderBy("id_order", "DESC")->pluck("shop_id");
+        $manager_shop_ids = $user->shop()->where("status", Shop::STATUS_NORMAL)->pluck("id");
+        $shop_ids = $transfer_shop_ids->merge($manager_shop_ids)->merge(array_keys($in_shops))->unique()->all();
+        foreach ($shop_ids as $shop_id) {
+            if (isset($in_shops[$shop_id])) {
+                $_shop = $in_shops[$shop_id];
+                $data[] = [
+                    'id' => $_shop->en_id(),
+                    'name' => $_shop->name,
+                    'price' => (double)$_shop->price
+                ];
             }
-        }
-        $query2 = $user->in_shops()->where("status", Shop::STATUS_NORMAL)->whereNotIn((new Shop)->getTable() . '.id', array_keys($shops));
-        $count += $query2->count();
-        foreach ($query2->get() as $_shop) {
-            if (!isset($shops[$_shop->id])) {
-                $shops[$_shop->id] = $_shop;
-            }
-        }
-
-        $data = [];
-        foreach ($shops as $_shop) {
-            /* @var $_shop Shop */
-            $data[] = [
-                'id' => $_shop->en_id(),
-                'name' => $_shop->name,
-                'price' => (double)$_shop->price
-            ];
         }
         return $this->json(['count' => $count, 'data' => $data]);
     }

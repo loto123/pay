@@ -205,6 +205,9 @@ class NoticeController extends BaseController
                                 array_unshift($list,$list_data);
                                 continue;
                             }
+                        } else {
+                            //将非操作消息都置为已读
+                            $item->markAsRead();
                         }
                         $list[] = $list_data;
                     }
