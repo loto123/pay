@@ -300,6 +300,7 @@ Route::group([
     $router->post('delete', 'NoticeController@delete');
     $router->get('detail', 'NoticeController@detail');
     $router->post('operator', 'NoticeController@operator');
+    $router->get('info', 'NoticeController@info');
 });
 
 Route::group([
