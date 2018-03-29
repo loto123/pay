@@ -651,7 +651,7 @@ class ShopController extends BaseController
         $members = [];
         $query->orderBy((new ShopUser)->getTable().".id");
         if ($request->offset) {
-            $query->where("id", ">", User::decrypt($request->offset));
+            $query->where((new User)->getTable().".id", ">", User::decrypt($request->offset));
         }
         foreach ($query->limit($request->input("limit", 20))->get() as $_user) {
             /* @var $_user User */
