@@ -20,3 +20,4 @@ resources/assets/.idea/workspace.xml
 resources/assets/.idea/codeStyleSettings.xml
 resources/assets/.idea/
 *.un~
+app/Http/Controllers/HomeController.php

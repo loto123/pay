@@ -132,4 +132,9 @@ class SingleTransfer implements WithdrawInterface
 
         // TODO: Implement acceptNotify() method.
     }
+
+    public function queryState(Withdraw $withdraw, array $config)
+    {
+        // TODO: Implement queryState() method.
+    }
 }

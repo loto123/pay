@@ -272,6 +272,15 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
 
 });
 
+$api->version('v1', ['middleware' => 'api.throttle', 'limit' => 10, 'expires' => 1], function ($api) {
+    $api->group([
+        'prefix' => 'index',
+        'namespace' => 'App\Http\Controllers\Api',
+    ], function ($api) {
+        $api->get('/settings', 'IndexController@settings');
+    });
+});
+
 $api->version('v1', function ($api) {
     $api->group([
         'prefix' => 'app',
@@ -291,6 +300,7 @@ Route::group([
     $router->post('delete', 'NoticeController@delete');
     $router->get('detail', 'NoticeController@detail');
     $router->post('operator', 'NoticeController@operator');
+    $router->get('info', 'NoticeController@info');
 });
 
 Route::group([

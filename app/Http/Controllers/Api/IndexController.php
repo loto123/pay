@@ -10,6 +10,7 @@ use App\Pay\Model\WithdrawMethod;
 use App\User;
 use App\UserFund;
 use DateTime;
+use Encore\Admin\Config\ConfigModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -110,5 +111,61 @@ class IndexController extends BaseController {
         $diff = (new DateTime($start_date))->diff(new DateTime())->format('%a') + 1;
 
         return $this->json(['users' => User::count(), 'days' => $diff]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/index/settings",
+     *   summary="后台配置",
+     *   description="登录用户带token请求会获取到登录用户的配置，否则只有未登录配置",
+     *   tags={"首页"},
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="api_*", type="string", example="url",description="配置"),
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function settings() {
+        $is_login = false;
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            if ($user->status == User::STATUS_BLOCK) {
+                throw new \Exception();
+            }
+            $is_login = true;
+        } catch (\Exception $e) {
+        }
+        $api_configs = ConfigModel::where("name", "like", "api_%")->get();
+        $data = [];
+        foreach ($api_configs as $_config) {
+
+            if (preg_match("#^api_user_#", $_config->name) && !$is_login) {
+                continue;
+            }
+            $data[$_config->name] = config($_config->name);
+        }
+        return $this->json($data);
     }
 }

@@ -13,8 +13,7 @@ class PayRequest extends Request
 {
     public function __construct($reqType, $reqNo, $mechId, $channel, $url = 'https://bp.timesdata.net/payserver/x2xpay/doRequest.action')
     {
-        parent::__construct('DEFAULT', '1.0', $reqType, $url, $reqNo);
-        $this->appendHead('mchid', $mechId);
+        parent::__construct('DEFAULT', '1.0', $reqType, $url, $reqNo, $mechId);
         $this->appendHead('channel', $channel);
     }
 
