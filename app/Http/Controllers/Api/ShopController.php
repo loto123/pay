@@ -268,6 +268,7 @@ class ShopController extends BaseController
         foreach ($in_query->get() as $_shop) {
             $in_shops[$_shop->id] = $_shop;
         }
+        $data = [];
         //最近交易店铺
         $transfer_shop_ids = $user->transfer()->select(DB::raw("shop_id, max(id) as id_order"))->groupBy("shop_id")->orderBy("id_order", "DESC")->pluck("shop_id");
         $manager_shop_ids = $user->shop()->where("status", Shop::STATUS_NORMAL)->pluck("id");
