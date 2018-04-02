@@ -35,7 +35,7 @@
         </li>
         <li>
           <div class="title">备注</div>
-          <div class="content">{{remark?remark:"无"}}</div>
+          <div class="content">{{status(this.type)}}</div>
         </li>
       </ul>
     </div>
@@ -80,7 +80,6 @@
             Loading.getInstance().close();
           })
           .catch((err) => {
-            console.error(err);
             Loading.getInstance().close();
           })
         this.curType = this.$route.query.types;

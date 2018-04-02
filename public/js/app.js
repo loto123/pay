@@ -8089,7 +8089,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.mode = res.data.data.mode;
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       }).catch(function (err) {
-        console.error(err);
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       });
       this.curType = this.$route.query.types;
@@ -34000,7 +33999,7 @@ var render = function() {
             _c("div", { staticClass: "title" }, [_vm._v("备注")]),
             _vm._v(" "),
             _c("div", { staticClass: "content" }, [
-              _vm._v(_vm._s(_vm.remark ? _vm.remark : "无"))
+              _vm._v(_vm._s(_vm.status(this.type)))
             ])
           ])
         ])
