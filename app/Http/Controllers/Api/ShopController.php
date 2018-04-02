@@ -674,7 +674,7 @@ class ShopController extends BaseController
     /**
      * @SWG\Post(
      *   path="/shop/members/{shop_id}/delete/{user_id}",
-     *   description="url中带用户id则为删除该单个用户，url中不带用户id并post多个用户id则为删除多个",
+     *   description="url中带用户id则为删除该单个用户，url中不带用户id并post用户id数组则为删除多个",
      *   summary="删除店铺成员",
      *   tags={"店铺"},
      *   @SWG\Parameter(
@@ -687,7 +687,7 @@ class ShopController extends BaseController
      *   @SWG\Parameter(
      *     name="user_id",
      *     in="query",
-     *     description="用户id",
+     *     description="用户id数组",
      *     required=false,
      *     type="array",
      *     @SWG\Items(
