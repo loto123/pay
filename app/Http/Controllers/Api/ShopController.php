@@ -691,7 +691,7 @@ class ShopController extends BaseController
      *     required=false,
      *     type="array",
      *     @SWG\Items(
-     *      type="integer"
+     *      type="string"
      *     )
      *   ),
      *   @SWG\Parameter(
