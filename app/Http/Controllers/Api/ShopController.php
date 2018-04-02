@@ -757,10 +757,14 @@ class ShopController extends BaseController
             }
             $member_ids[] = $member->id;
         }
-        ShopUser::whereIn("user_id", $member_ids)->where("shop_id", $shop->id)->delete();
-        Artisan::queue('shop:logo', [
-            '--id' => $shop->id
-        ])->onQueue('shop_logo');
+        if ($member_ids) {
+            ShopUser::whereIn("user_id", $member_ids)->where("shop_id", $shop->id)->delete();
+            Artisan::queue('shop:logo', [
+                '--id' => $shop->id
+            ])->onQueue('shop_logo');
+        } else {
+            return $this->json([], trans("api.error"), 0);
+        }
         return $this->json();
     }
     
