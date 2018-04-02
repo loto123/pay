@@ -21,16 +21,16 @@
       <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
       <div v-if="tabStatus[0]==true">
         <div class="amount">
-          <span>收入:{{tabDisburse}}</span>
-          <span>支出:{{tabIncome}}</span>
+          <span>收入:￥{{tabDisburse}}</span>
+          <span>支出:￥{{tabIncome}}</span>
         </div>
       </div>
       <div v-if="tabStatus[1]==true">
         <div class="amount">
-          <span>支出:{{tabDisburse}}
+          <span>收入:￥{{tabDisburse}}
             <i class="diamond">&#xe6f9;</i>
           </span>
-          <span>收入:{{tabIncome}}
+          <span>支出:￥{{tabIncome}}
             <i class="diamond">&#xe6f9;</i>
           </span>
         </div>
@@ -90,16 +90,16 @@
             <div class="month">{{item.time}}</div>
             <div v-if="tabStatus[0]==true">
               <div class="amount">
-                <span>出售:{{item.out}}</span>
-                <span>购买:{{item.in}}</span>
+                <span>收入:￥{{item.out}}</span>
+                <span>支出:￥{{item.in}}</span>
               </div>
             </div>
             <div v-if="tabStatus[1]==true">
               <div class="amount">
-                <span>支出:{{item.out}}
+                <span>支出:￥{{item.out}}
                   <i class="diamond">&#xe6f9;</i>
                 </span>
-                <span>收入:{{item.in}}
+                <span>收入:￥{{item.in}}
                   <i class="diamond">&#xe6f9;</i>
                 </span>
               </div>

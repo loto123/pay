@@ -2,24 +2,23 @@
   <div id="billDetails">
     <topBack title="账单明细"></topBack>
     <div class="details-content">
-      <div class="money-box" v-if="this.type==0||this.type==1&&this.curType==1">
-        <span>{{mode == 1?'收入':'支出'}}</span>
-        <em v-bind:class="[mode==1?'active':'']">{{mode == 1?'+'+amount:-amount}}</em>
+      <div class="money-box" v-if="(this.type==0||this.type==1)&&this.curType==1">
+        <span>{{this.mode == 0?'收入':'支出'}}</span>
+        <em v-bind:class="[mode==1?'active':'']">{{this.mode == 1?'+'+amount:-amount}}</em>
       </div>
-      <div class="money-box" v-if="this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10||this.curType==2">
-        <span>{{mode == 1?'支出':'收入'}}钻石</span>
-        <em v-bind:class="[mode==1?'':'active']">{{mode == 1?-amount:'+'+amount}}</em>
+      <div class="money-box" v-if="(this.type==0||this.type==1||this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10)&&this.curType==2">
+        <span>{{this.mode == 0?'支出':'收入'}}钻石</span>
+        <em v-bind:class="[mode==1?'':'active']">{{this.mode == 1?-amount:'+'+amount}}</em>
       </div>
       <ul class="billDetails-list">
         <li>
           <div class="title">类型</div>
-          <div v-if="this.curType==2">
-            <div class="content" v-if="this.type==0||this.type==1">{{mode==1?'支出':'收入'}}</div>
+          <div v-if="(this.type==0||this.type==1)&&this.curType==1">
+            <div class="content">{{this.mode==1?'收入':'支出'}}</div>
           </div>
-          <div v-else>
-            <div class="content" v-if="this.type==0||this.type==1">{{mode==1?'收入':'支出'}}</div>
+          <div v-if="(this.type==0||this.type==1||this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10)&&this.curType==2">
+            <div class="content" >{{this.mode==0?'收入':'支出'}}</div>
           </div>
-          <div class="content" v-if="this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10">{{mode==1?'支出':'收入'}}</div>
         </li>
         <li>
           <div class="title">时间</div>
@@ -83,6 +82,7 @@
             Loading.getInstance().close();
           })
         this.curType = this.$route.query.types;
+        console.log(this.curType);
       },
       monthData() {
         Loading.getInstance().open("加载中...");
