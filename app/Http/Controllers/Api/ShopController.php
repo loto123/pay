@@ -268,6 +268,7 @@ class ShopController extends BaseController
         foreach ($in_query->get() as $_shop) {
             $in_shops[$_shop->id] = $_shop;
         }
+        $data = [];
         //最近交易店铺
         $transfer_shop_ids = $user->transfer()->select(DB::raw("shop_id, max(id) as id_order"))->groupBy("shop_id")->orderBy("id_order", "DESC")->pluck("shop_id");
         $manager_shop_ids = $user->shop()->where("status", Shop::STATUS_NORMAL)->pluck("id");
@@ -650,7 +651,10 @@ class ShopController extends BaseController
         $members = [];
         $query->orderBy((new ShopUser)->getTable().".id");
         if ($request->offset) {
-            $query->where("id", ">", User::decrypt($request->offset));
+            $shop_user_id = ShopUser::where("shop_id", $shop->id)->where("user_id", User::decrypt($request->offset))->value("id");
+            if ($shop_user_id) {
+                $query->where((new ShopUser)->getTable().".id", ">", $shop_user_id);
+            }
         }
         foreach ($query->limit($request->input("limit", 20))->get() as $_user) {
             /* @var $_user User */
@@ -670,6 +674,7 @@ class ShopController extends BaseController
     /**
      * @SWG\Post(
      *   path="/shop/members/{shop_id}/delete/{user_id}",
+     *   description="url中带用户id则为删除该单个用户，url中不带用户id并post用户id数组则为删除多个",
      *   summary="删除店铺成员",
      *   tags={"店铺"},
      *   @SWG\Parameter(
@@ -681,9 +686,19 @@ class ShopController extends BaseController
      *   ),
      *   @SWG\Parameter(
      *     name="user_id",
+     *     in="query",
+     *     description="用户id数组",
+     *     required=false,
+     *     type="array",
+     *     @SWG\Items(
+     *      type="string"
+     *     )
+     *   ),
+     *   @SWG\Parameter(
+     *     name="user_id",
      *     in="path",
      *     description="用户id",
-     *     required=true,
+     *     required=false,
      *     type="integer"
      *   ),
      *     @SWG\Response(
@@ -713,23 +728,43 @@ class ShopController extends BaseController
      * )
      * @return \Illuminate\Http\Response
      */
-    public function member_delete($shop_id, $user_id) {
+    public function member_delete($shop_id, $user_id = null, Request $request) {
         $user = $this->auth->user();
         $shop = Shop::findByEnId($shop_id);
-        $member = User::findByEnId($user_id);
+        $members = [];
+        if ($user_id) {
+            $members[] = User::findByEnId($user_id);
+        } else if ($request->user_id) {
+            $user_ids = [];
+            foreach ($request->user_id as $_user_id) {
+                $user_ids = User::decrypt($_user_id);
+            }
+            $members = User::whereIn('id', $user_ids)->get();
+        } else {
+            return $this->json([], trans("api.error"), 0);
+
+        }
         if (!$shop || $shop->status != Shop::STATUS_NORMAL) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         if ($shop->manager_id != $user->id) {
             return $this->json([], trans("api.error_shop_status"), 0);
         }
-        if ($member->id == $user->id) {
-            return $this->json([], trans("api.cannot_delete_self"), 0);
+        $member_ids = [];
+        foreach ($members as $member) {
+            if ($member->id == $user->id) {
+                return $this->json([], trans("api.cannot_delete_self"), 0);
+            }
+            $member_ids[] = $member->id;
         }
-        ShopUser::where("user_id", $member->id)->where("shop_id", $shop->id)->delete();
-        Artisan::queue('shop:logo', [
-            '--id' => $shop->id
-        ])->onQueue('shop_logo');
+        if ($member_ids) {
+            ShopUser::whereIn("user_id", $member_ids)->where("shop_id", $shop->id)->delete();
+            Artisan::queue('shop:logo', [
+                '--id' => $shop->id
+            ])->onQueue('shop_logo');
+        } else {
+            return $this->json([], trans("api.error"), 0);
+        }
         return $this->json();
     }
     

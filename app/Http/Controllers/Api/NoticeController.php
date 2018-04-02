@@ -8,6 +8,7 @@ use App\Profit;
 use App\SystemMessage;
 use App\Transfer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Validator;
@@ -701,5 +702,69 @@ class NoticeController extends BaseController
 
     }
 
+
+    /**
+     * @SWG\Get(
+     *   path="/notice/info",
+     *   summary="消息模块基本数据",
+     *   tags={"消息"},
+     *   @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @SWG\Property(property="1", type="object",
+     *                      @SWG\Property(property="type", type="string", example="1",description="消息类型"),
+     *                      @SWG\Property(property="unreadCount", type="string", example="10",description="未读消息总数"),
+     *                  )
+     *              )
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+
+    public function info()
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+        //用户的未读消息
+        $type_list = Notice::where('notifiable_id',$this->user->id)->whereNull('read_at')
+            ->select(DB::raw('count(*) as type_count, type'))->groupBy('type')->get();
+        //未读消息类型，去掉斜杆
+        $type_data = [];
+        if(!empty($type_list)) {
+            foreach ($type_list as $item) {
+                $type_data[stripslashes($item->type)] = $item->type_count;
+            }
+        }
+
+        //配置的type
+        $notice_type_list = Notice::typeConfig();
+        $data = [];
+        foreach ($notice_type_list as $key => $value) {
+            $value = stripslashes($value);
+            $data[] = [
+                'type' => $key,
+                'unreadCount' => isset($type_data[$value])?$type_data[$value]:0,
+            ];
+        }
+        return $this->json($data);
+    }
 
 }
