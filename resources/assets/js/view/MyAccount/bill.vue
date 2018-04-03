@@ -27,10 +27,10 @@
       </div>
       <div v-if="tabStatus[1]==true">
         <div class="amount">
-          <span>收入:￥{{tabDisburse}}
+          <span>收入:￥{{tabIncome}}
             <i class="diamond">&#xe6f9;</i>
           </span>
-          <span>支出:￥{{tabIncome}}
+          <span>支出:￥{{tabDisburse}}
             <i class="diamond">&#xe6f9;</i>
           </span>
         </div>
@@ -74,10 +74,10 @@
             </div>
             <div class="flex-3 recordList-content">
               <div v-if="tabStatus[0]">
-                <div class="bill-money" v-bind:class="[item.type == 0?'':'green-color']">{{item.type == 0?'-'+item.amount:'+'+item.amount}}</div>
+                <div class="bill-money" v-bind:class="[item.mode == 0?'':'green-color']">{{item.mode == 0?'-'+item.amount:'+'+item.amount}}</div>
               </div>
               <div v-if="tabStatus[1]">
-                <div class="bill-money" v-bind:class="[item.type == 2 || item.type == 5||item.type == 10?'green-color':'']">{{item.type == 2||item.type == 5||item.type == 10?'+'+item.amount:'-'+item.amount}}
+                <div class="bill-money" v-bind:class="[item.mode == 0?'green-color':'']">{{item.mode == 0?'+'+item.amount:'-'+item.amount}}
                   <i class="diamond">&#xe6f9;</i>
                 </div>
               </div>
@@ -593,7 +593,7 @@
           case 4: result = '转账到公会'; break;
           case 5: result = '公会转入'; break;
           case 6: result = '任务手续费'; break;
-          case 8: result = '任务加速'; break;
+          case 8: result = '任务打赏'; break;
           case 9: result = '拿钻撤销'; break;
           case 10: result = '分润转入'; break;
         }
@@ -609,7 +609,7 @@
           case 4: result = '转账到公会'; break;
           case 5: result = '公会转入'; break;
           case 6: result = '任务手续费'; break;
-          case 8: result = '任务加速'; break;
+          case 8: result = '任务打赏'; break;
           case 9: result = '拿钻撤销'; break;
           case 10: result = '分润转入'; break;
         }

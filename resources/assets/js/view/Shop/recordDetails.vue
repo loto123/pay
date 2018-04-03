@@ -3,29 +3,29 @@
 		<topBack title="账单明细"></topBack>
 		<div class="details-content">
 			<div class="money-box">
-				<span>转钻数量</span>
-				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}</em>
+				<span>{{status(type)}}</span>
+				<em v-bind:class="[(mode==1)?'':'active']">{{mode == 1?-amount:amount}}<i class="diamond">&#xe6f9;</i></em>
 			</div>
 			<ul class="billDetails-list">
 				<li>
-					<div class="title">类型</div>
-					<div class="content">{{status(type)}}</div>
+          <div class="title">类型</div>
+          <div class="content">{{this.mode==0?'收入':'转出'}}</div>
 				</li>
 				<li>
 					<div class="title">时间</div>
 					<div class="content">{{changeTime(created_at)}}</div>
-				</li>
-				<li>
+        </li>
+        <li v-if="this.type==3">
+          <div class="title">任务单号</div>
+          <div class="content">{{no}}</div>
+        </li>
+				<li v-else>
 					<div class="title">单号</div>
 					<div class="content">{{no}}</div>
 				</li>
-				<!-- <li>
-					<div class="title">提钻账户</div>
+				<li v-if="this.type==1">
+					<div class="title">转给账户</div>
 					<div class="content">{{userName}}</div>
-				</li> -->
-				<li>
-					<div class="title">备注</div>
-					<div class="content">{{remark.length==0?"无":remark}}</div>
 				</li>
 			</ul>
 		</div>
@@ -87,13 +87,14 @@
 				return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
 			},
 			status(type){
-				let res='';
+				let result='';
 				switch(type){
-					case 0: res='转账给个人'; break;
-                    case 1: res='转账给成员'; break;
-                    case 2: res='从个人转账'; break;
+          case 0: result = '转至个人账户'; break;
+          case 1: result = '转给公会成员'; break;
+          case 2: result = '个人账户转入'; break;
+          case 3: result = '任务分成'; break;
 				}
-				return res;
+				return result;
 			}
 		},
 		components: {
@@ -103,7 +104,10 @@
 </script>
 
 <style lang="scss" scoped>
-	@import "../../../sass/oo_flex.scss";
+  @import "../../../sass/oo_flex.scss";
+  .diamond {
+    margin-left: 3px;
+  }
 	#billDetails {
 		padding-top: 2em;
 		background: #eee;
@@ -113,7 +117,7 @@
 
 	.details-content {
 		background: #fff;
-		padding-bottom: 7em;
+		padding-bottom: 5em;
 	}
 
 	.money-box {

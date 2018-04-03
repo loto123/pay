@@ -3,11 +3,11 @@
     <topBack title="账单明细"></topBack>
     <div class="details-content">
       <div class="money-box" v-if="(this.type==0||this.type==1)&&this.curType==1">
-        <span>{{this.mode == 0?'收入':'支出'}}</span>
+        <span>{{this.mode == 0?'支出':'收入'}}</span>
         <em v-bind:class="[mode==1?'active':'']">{{this.mode == 1?'+'+amount:-amount}}</em>
       </div>
       <div class="money-box" v-if="(this.type==0||this.type==1||this.type==2||this.type==3||this.type==4||this.type==5||this.type==6||this.type==8||this.type==9||this.type==10)&&this.curType==2">
-        <span>{{this.mode == 0?'支出':'收入'}}钻石</span>
+        <span>{{this.mode == 0?'收入':'支出'}}钻石</span>
         <em v-bind:class="[mode==1?'':'active']">{{this.mode == 1?-amount:'+'+amount}}</em>
       </div>
       <ul class="billDetails-list">

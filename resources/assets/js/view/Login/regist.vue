@@ -466,27 +466,22 @@
         request.getInstance().postData("api/auth/sms", _data).then(res => {
           Loading.getInstance().close();
         }).catch(err => {
-          console.error(err);
+          Toast(err.data.msg);
           Loading.getInstance().close();
 
         });
       },
-
       // 注册之后绑定微信
       weChatBind(mobile){
-
         var _data={
           redirect_url:this.url+"#/login/weChatLogin"+"?mobile="+ mobile
         };
-
         request.getInstance().getData("api/auth/login/wechat/url",_data).then(res=>{
           window.location.href = res.data.data.url;
           Loading.getInstance().close();
-
         }).catch(err=>{
           Toast(err.data.msg);
         });
-
       }
     },
     components: { topBack }
