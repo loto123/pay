@@ -386,7 +386,8 @@
           case 0: result = '转至个人账户'; break;
           case 1: result = '转给公会成员'; break;
           case 2: result = '个人账户转入'; break;
-          case 3: result = '任务分成'; break;
+          case 3: result = '任务打赏'; break;
+          case 4: result = '任务分成'; break;
         }
         return result;
       }
