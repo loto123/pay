@@ -737,7 +737,7 @@ class ShopController extends BaseController
         } else if ($request->user_id) {
             $user_ids = [];
             foreach ($request->user_id as $_user_id) {
-                $user_ids = User::decrypt($_user_id);
+                $user_ids[] = User::decrypt($_user_id);
             }
             $members = User::whereIn('id', $user_ids)->get();
         } else {
