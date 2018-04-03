@@ -8088,7 +8088,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().close();
       });
       this.curType = this.$route.query.types;
-      console.log(this.curType);
     },
     monthData: function monthData() {
       __WEBPACK_IMPORTED_MODULE_2__utils_loading__["a" /* default */].getInstance().open("加载中...");

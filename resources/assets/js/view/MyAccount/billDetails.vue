@@ -82,7 +82,6 @@
             Loading.getInstance().close();
           })
         this.curType = this.$route.query.types;
-        console.log(this.curType);
       },
       monthData() {
         Loading.getInstance().open("加载中...");
