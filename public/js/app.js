@@ -41814,7 +41814,7 @@ var render = function() {
                   _c("h3", [_vm._v(_vm._s(item.name))]),
                   _vm._v(" "),
                   item.id == 1 && _vm.messageCount
-                    ? _c("span", { staticClass: "shop-notice" }, [
+                    ? _c("span", { staticClass: "shop-notice no11" }, [
                         _vm._v(
                           "\n            " +
                             _vm._s(
