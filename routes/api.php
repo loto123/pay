@@ -268,6 +268,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     ], function ($api) {
         $api->get('/', 'IndexController@index');
         $api->get('/safe', 'IndexController@safe');
+        $api->get('/module', 'IndexController@module');
     });
 
 });
