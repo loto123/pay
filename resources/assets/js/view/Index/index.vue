@@ -46,8 +46,8 @@
 
     <section class="content">
 
-      <div class="menu-class flex flex-align-center">
-        <span></span>我的
+      <div class="menu-class flex flex-align-center" v-if="myTitle != null">
+        <span></span>{{myTitle}}
       </div>
 
       <ul class="flex flex-wrap-on">
@@ -108,8 +108,8 @@
         </li> -->
       </ul>
 
-      <div class="menu-class flex flex-align-center">
-        <span></span>拓展
+      <div class="menu-class flex flex-align-center" v-if="expandTitle!=null">
+        <span></span>{{expandTitle}}
       </div>
 
       <ul class="flex flex-wrap-on">
@@ -389,7 +389,10 @@
         messageCount: null,             // 新消息数量
 
         myList:null,      //我的列表
-        expandList:null   //拓展列表
+        myTitle:null,
+
+        expandList:null,   //拓展列表
+        expandTitle:null
       }
     },
     created() {
@@ -458,8 +461,13 @@
 
             this.messageCount = res[1].data.data.count;
 
+            
             this.myList=res[2].data.data[0].list;
+            this.myTitle=res[2].data.data[0].name;
+
             this.expandList=res[2].data.data[1].list;
+            this.expandTitle=res[2].data.data[1].name;
+
             Loading.getInstance().close();
           }).catch(err => {
             Loading.getInstance().close();
