@@ -80,6 +80,7 @@ class ModuleController extends Controller
             $grid->id('ID')->sortable();
             $grid->module_id('模块ID')->sortable();
             $grid->name('名称');
+            $grid->order('排序');
             $grid->logo('图标')->image();
             $grid->url('链接')->link();
             $grid->roles('身份')->pluck('display_name')->label();
@@ -98,8 +99,9 @@ class ModuleController extends Controller
         return Admin::form(IndexModule::class, function (Form $form) {
             $form->display('id', 'ID');
             $form->number("module_id", "模块ID");
+            $form->number("order", '排序')->help("排序越小越靠前");
             $form->text('name',  '名称')->rules('required');
-            $form->image('logo', '图标')->uniqueName()->rules('required');
+            $form->image('logo', '图标')->uniqueName()->rules('required')->disk("public");
             $form->url("url", '链接')->rules('required');
             $form->select("type", "类型")->options(IndexModule::$types);
             $form->multipleSelect('roles', '角色')->options(Role::all()->pluck('display_name', 'id'));
