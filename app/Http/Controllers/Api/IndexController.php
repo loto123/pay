@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\IndexModule;
 use App\Notice;
 use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
@@ -70,6 +71,75 @@ class IndexController extends BaseController {
             'is_agent' => $user->hasRole("agent") ? 1 : 0,
             'is_promoter' => $user->hasRole("promoter") ? 1 : 0,
         ]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="/index/module",
+     *   summary="首页模块",
+     *   tags={"首页"},
+     *     @SWG\Response(
+     *          response=200,
+     *          description="成功返回",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="code",
+     *                  type="integer",
+     *                  example=1
+     *              ),
+     *              @SWG\Property(
+     *                  property="msg",
+     *                  type="string"
+     *              ),
+     *                  @SWG\Property(
+     *                      property="data",
+     *                      type="array",
+     *                  @SWG\Items(
+     *                  @SWG\Property(property="name", type="string", example="我的",description="模块类别名"),
+     *                  @SWG\Property(
+     *                      property="list",
+     *                      type="array",
+     *                      @SWG\Items(
+     *                          @SWG\Property(property="name", type="string", example="我的公会",description="模块名"),
+     *                          @SWG\Property(property="logo", type="string", example="url",description="模块图标"),
+     *                          @SWG\Property(property="id", type="integer", example=1,description="模块id"),
+     *                          @SWG\Property(property="url", type="string", example="url",description="模块链接"),
+     *                      )
+     *                  ),
+     *                  )
+     *                  ),
+     *          )
+     *      ),
+     *      @SWG\Response(
+     *         response="default",
+     *         description="错误返回",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *      )
+     * )
+     * @return \Illuminate\Http\Response
+     */
+    public function module() {
+        $user = $this->auth->user();
+        $data = [];
+        foreach (IndexModule::$types as $_type => $_name) {
+            $list = [];
+            $modules = IndexModule::where("type", $_type)->orderBy("order")->get();
+            foreach ($modules as $_module) {
+                $list[] = [
+                    'name' => $_module->name,
+                    'logo' => $_module->logo,
+                    'id' => $_module->module_id,
+                    'url' => $_module->url,
+                ];
+            }
+            if ($list) {
+                $data[] = [
+                    'name' => $_name,
+                    'list' => $list
+                ];
+            }
+        }
+        return $this->json($data);
     }
 
     /**
