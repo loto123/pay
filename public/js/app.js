@@ -1391,15 +1391,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
-    goMyAccount: function goMyAccount() {
-      this.$router.push('/myAccount');
-    },
-    goInform: function goInform() {
-      this.$router.push("/inform");
-    },
-    goDealList: function goDealList() {
-      this.$router.push('/salePet');
-    },
     goShareProfit: function goShareProfit() {
       var _this = this;
 
@@ -1407,11 +1398,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"])({
           title: '温馨提示',
-          message: '此功能只对代理开放，是否开通代理？?',
+          message: '此功能只对代理开放，是否开通代理?',
           confirmButtonText: '开通',
           showCancelButton: true
         }).then(function (res) {
-
           if (res != "confirm") {
             return;
           }
@@ -1427,23 +1417,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$router.push("/share_profit");
       }
     },
-    goVipOpenCard: function goVipOpenCard() {
-      this.$router.push("/vipCard");
-    },
     goMyUsers: function goMyUsers() {
       var _this2 = this;
 
       if (this.isAgent == 0) {
         Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["MessageBox"])({
           title: '温馨提示',
-          message: '此功能只对代理开放，是否开通代理？?',
+          message: '此功能只对代理开放，是否开通代理?',
           confirmButtonText: '开通',
           showCancelButton: true
         }).then(function (res) {
           if (res != "confirm") {
             return;
           }
-
           __WEBPACK_IMPORTED_MODULE_2__utils_userRequest__["a" /* default */].getInstance().postData("api/proxy/create").then(function (res) {
             Object(__WEBPACK_IMPORTED_MODULE_3_mint_ui__["Toast"])("成功开通代理...");
             _this2.init();
@@ -1454,12 +1440,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       } else if (this.isAgent == 1) {
         this.$router.push("/my/my_users");
       }
-    },
-    goSafety: function goSafety() {
-      this.$router.push('/safety');
-    },
-    goAuthAgent: function goAuthAgent() {
-      this.$router.push('/authAgent');
     },
     init: function init() {
       var _this3 = this;

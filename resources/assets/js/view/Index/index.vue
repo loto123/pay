@@ -397,26 +397,15 @@
     },
 
     methods: {
-      goMyAccount() {
-        this.$router.push('/myAccount');
-      },
-
-      goInform() {
-        this.$router.push("/inform");
-      },
-      goDealList() {
-        this.$router.push('/salePet')
-      },
       goShareProfit() {
         if (this.isAgent == 0) {
 
           MessageBox({
             title: '温馨提示',
-            message: '此功能只对代理开放，是否开通代理？?',
+            message: '此功能只对代理开放，是否开通代理?',
             confirmButtonText: '开通',
             showCancelButton: true
           }).then(res => {
-
             if (res != "confirm") {
               return;
             }
@@ -433,21 +422,17 @@
           this.$router.push("/share_profit");
         }
       },
-      goVipOpenCard() {
-        this.$router.push("/vipCard");
-      },
       goMyUsers() {
         if (this.isAgent == 0) {
           MessageBox({
             title: '温馨提示',
-            message: '此功能只对代理开放，是否开通代理？?',
+            message: '此功能只对代理开放，是否开通代理?',
             confirmButtonText: '开通',
             showCancelButton: true
           }).then(res => {
             if (res != "confirm") {
               return;
             }
-
             request.getInstance().postData("api/proxy/create").then(res => {
               Toast("成功开通代理...");
               this.init();
@@ -455,16 +440,9 @@
               Toast(err.data.msg)
             })
           });
-
         } else if (this.isAgent == 1) {
           this.$router.push("/my/my_users");
         }
-      },
-      goSafety() {
-        this.$router.push('/safety')
-      },
-      goAuthAgent(){
-        this.$router.push('/authAgent')
       },
       init() {
         Loading.getInstance().open();
@@ -486,7 +464,6 @@
           }).catch(err => {
             Loading.getInstance().close();
           });
-
       }
     }
   };
