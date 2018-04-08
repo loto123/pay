@@ -14,23 +14,23 @@
     </topBack>
     <div class="change-tab flex">
       <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(0)" :class="{active:tabStatus[0]}">宠物买卖</div>
-      <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(1)" :class="{active:tabStatus[1]}">公会</div>
+      <div class="flex-1 flex flex-justify-center flex-align-center" @click="changeTab(1)" :class="{active:tabStatus[1]}">钻石流转</div>
     </div>
     <!-- 固定 -->
     <div class="tab-fixed flex flex-v flex-align-start" v-if="recordList.length != 0" v-show="isShowPanel">
       <div class="month">{{timeInfo==null?"加载中...":timeInfo}}</div>
       <div v-if="tabStatus[0]==true">
         <div class="amount">
-          <span>出售:{{tabDisburse}}</span>
-          <span>购买:{{tabIncome}}</span>
+          <span>收入:￥{{tabDisburse}}</span>
+          <span>支出:￥{{tabIncome}}</span>
         </div>
       </div>
       <div v-if="tabStatus[1]==true">
         <div class="amount">
-          <span>支出:{{tabDisburse}}
+          <span>收入:￥{{tabIncome}}
             <i class="diamond">&#xe6f9;</i>
           </span>
-          <span>收入:{{tabIncome}}
+          <span>支出:￥{{tabDisburse}}
             <i class="diamond">&#xe6f9;</i>
           </span>
         </div>
@@ -62,43 +62,44 @@
       <ul class="bill-list" v-else v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="80">
         <li v-for="item in recordList" :class="{'time-tab':item.isTimePanel}">
           <a href="javascript:;" class="flex" v-if="item.isTimePanel == false" @click="details(item.id)">
-            <div class="flex-8">
+            <div class="flex-7">
               <div class="bill-content" v-if="tabStatus[0]">
                 <h5>{{status(item.type)}}</h5>
                 <div class="time">{{changeTime(item.created_at)}}</div>
               </div>
               <div class="bill-content" v-if="tabStatus[1]">
-                <h5>{{status(item.type)}}</h5>
+                <h5>{{status2(item.type)}}</h5>
                 <div class="time">{{changeTime(item.created_at)}}</div>
               </div>
             </div>
-            <div class="flex-2">
+            <div class="flex-3 recordList-content">
               <div v-if="tabStatus[0]">
-                <div class="bill-money" v-bind:class="[item.type == 0?'':'green-color']">{{item.type == 0?'-'+item.amount:'+'+item.amount}}</div>
+                <div class="bill-money" v-bind:class="[item.mode == 0?'':'green-color']">{{item.mode == 0?'-'+item.amount:'+'+item.amount}}</div>
               </div>
               <div v-if="tabStatus[1]">
-                <div class="bill-money" v-bind:class="[item.type == 2 || item.type == 5||item.type == 10?'green-color':'']">{{item.type == 2||item.type == 5||item.type == 10?'+'+item.amount:'-'+item.amount}}
+                <div class="bill-money" v-bind:class="[item.mode == 0?'green-color':'']">{{item.mode == 0?'+'+item.amount:'-'+item.amount}}
                   <i class="diamond">&#xe6f9;</i>
                 </div>
               </div>
-
-              <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>
+              <div v-if="tabStatus[0]">
+                <div class="fee" v-if="item.type==1">手续费:{{tabStatus[0]?item.fee:''}}</div>
+              </div>
             </div>
           </a>
           <div v-if="item.isTimePanel == true" class="time-tab" ref="timeTab">
             <div class="month">{{item.time}}</div>
             <div v-if="tabStatus[0]==true">
               <div class="amount">
-                <span>出售:{{item.out}}</span>
-                <span>购买:{{item.in}}</span>
+                <span>收入:￥{{item.out}}</span>
+                <span>支出:￥{{item.in}}</span>
               </div>
             </div>
             <div v-if="tabStatus[1]==true">
               <div class="amount">
-                <span>支出:{{item.out}}
+                <span>支出:￥{{item.out}}
                   <i class="diamond">&#xe6f9;</i>
                 </span>
-                <span>收入:{{item.in}}
+                <span>收入:￥{{item.in}}
                   <i class="diamond">&#xe6f9;</i>
                 </span>
               </div>
@@ -176,11 +177,11 @@
         items: [
           { type: 0, title: '购买', isBuy: true },
           { type: 1, title: '出售', isBuy: true },
-          { type: [2, 3, 9], title: '任务', isBuy: false },
+          { type: [2,3,6,9], title: '任务', isBuy: false },
           { type: [4, 5], title: '公会转账', isBuy: false },
-          { type: 6, title: '任务手续费', isBuy: false },
-          { type: 8, title: '任务加速', isBuy: false },
-          { type: 10, title: '分润', isBuy: false }
+          { type: 8, title: '任务打赏', isBuy: false },
+          { type: 10, title: '分润', isBuy: false },
+          { type: [0, 1], title: '宠物买卖', isBuy: false }
         ],
         isShowPanel: true,
         newArray: []
@@ -204,10 +205,10 @@
       details(id) {
         if (this.tabStatus[0] == true) {
           // 分润状态
-          this.$router.push({ path: "/myAccount/bill/bill_details/?id=" + id + "&type=profit" });
+          this.$router.push({ path: "/myAccount/bill/bill_details/?id=" + id + "&types=1" });
         } else if (this.tabStatus[1] == true) {
           // 提现状态
-          this.$router.push({ path: "/myAccount/bill/bill_details/?id=" + id + "&type=withDraw" });
+          this.$router.push({ path: "/myAccount/bill/bill_details/?id=" + id + "&types=2" });
         }
       },
       init() {
@@ -246,7 +247,7 @@
           var _data2 = {
             limit: 20,
             offset: 0,
-            type: [2, 3, 4, 5, 6, 8, 9, 10]
+            type: [0,1,2, 3, 4, 5, 6, 8, 9, 10]
           }
 
           request.getInstance().getData("api/account/records", _data2)
@@ -407,7 +408,7 @@
               // 获取当月的总额度 公会
               var _data4 = {
                 month: _timer,
-                type: [2, 3, 4, 5, 6, 8, 9, 10]
+                type: [0,1,2, 3, 4, 5, 6, 8, 9, 10]
               }
               request.getInstance().getData("api/account/records/month", _data4)
                 .then(res => {
@@ -470,7 +471,7 @@
           _data = {
             limit: 20,
             offset: [].concat(this.recordList).pop().id,
-            type: this.newArray.length > 0 ? this.newArray : [2, 3, 4, 5, 6, 7, 8, 9, 10]
+            type: this.newArray.length > 0 ? this.newArray : [0,1,2, 3, 4, 5, 6, 7, 8, 9, 10]
           }
         }
         this.loading = true;
@@ -548,7 +549,7 @@
             limit: 20,
             offset: 0,
             start: this.dateChoise,
-            type: [2, 3, 4, 5, 6, 8, 9, 10]
+            type: [0,1,2, 3, 4, 5, 6, 8, 9, 10]
           }
           request.getInstance().getData("api/account/records", _data)
             .then((res) => {
@@ -592,13 +593,28 @@
           case 4: result = '转账到公会'; break;
           case 5: result = '公会转入'; break;
           case 6: result = '任务手续费'; break;
-          case 8: result = '任务加速'; break;
+          case 8: result = '任务打赏'; break;
           case 9: result = '拿钻撤销'; break;
           case 10: result = '分润转入'; break;
         }
         return result;
       },
-
+      status2(type) {
+        let result = '';
+        switch (type) {
+          case 0: result = '购买宠物'; break;
+          case 1: result = '出售宠物'; break;
+          case 2: result = '任务拿钻'; break;
+          case 3: result = '任务交钻'; break;
+          case 4: result = '转账到公会'; break;
+          case 5: result = '公会转入'; break;
+          case 6: result = '任务手续费'; break;
+          case 8: result = '任务打赏'; break;
+          case 9: result = '拿钻撤销'; break;
+          case 10: result = '分润转入'; break;
+        }
+        return result;
+      },
       selContent(type2) {
         this.newArray = [];
         this.newArray = [].concat(type2);
@@ -732,6 +748,9 @@
       }
       &:last-child {
         border-bottom: 1px solid #ccc;
+      }
+      .recordList-content{
+        text-align: right;
       }
     }
   }

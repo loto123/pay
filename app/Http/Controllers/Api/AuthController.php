@@ -264,6 +264,7 @@ class AuthController extends BaseController {
                 $oauth_user->user_id = $user->id;
                 $user->avatar = $oauth_user->headimgurl;
                 $user->name = $oauth_user->nickname;
+                $user->save();
                 $oauth_user->save();
             }
         }

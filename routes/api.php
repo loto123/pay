@@ -124,7 +124,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->get('lists/all', 'ShopController@all');
         $api->get('detail/{id}', 'ShopController@detail');
         $api->get('members/{id}', 'ShopController@members');
-        $api->post('members/{shop_id}/delete/{user_id}', 'ShopController@member_delete');
+        $api->post('members/{shop_id}/delete/{user_id?}', 'ShopController@member_delete');
         $api->post('close/{id}', 'ShopController@close');
         $api->post('quit/{id}', 'ShopController@quit');
         $api->post('update/{id}', 'ShopController@update');
@@ -268,6 +268,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
     ], function ($api) {
         $api->get('/', 'IndexController@index');
         $api->get('/safe', 'IndexController@safe');
+        $api->get('/module', 'IndexController@module');
     });
 
 });
