@@ -124,7 +124,9 @@ class IndexController extends BaseController {
         $data = [];
         foreach (IndexModule::$types as $_type => $_name) {
             $list = [];
-            $modules = IndexModule::where("type", $_type)->orderBy("order")->get();
+            $modules = IndexModule::where("type", $_type)->whereHas("roles", function($query) use ($user) {
+                $query->whereIn((new Role())->getTable().".id", $user->roles()->pluck("id"));
+            })->orderBy("order")->get();
             foreach ($modules as $_module) {
                 $list[] = [
                     'name' => $_module->name,
