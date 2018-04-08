@@ -179,8 +179,8 @@
           { type: 1, title: '出售', isBuy: true },
           { type: [2,3,6,9], title: '任务', isBuy: false },
           { type: [4, 5], title: '公会转账', isBuy: false },
-          { type: 8, title: '任务加速', isBuy: false },
-          { type: 10, title: '分润', isBuy: false },
+          { type: 8, title: '任务打赏', isBuy: false },
+          // { type: 10, title: '分润', isBuy: false },
           { type: [0, 1], title: '宠物买卖', isBuy: false }
         ],
         isShowPanel: true,
