@@ -57,7 +57,7 @@
               <img :src="item.logo">
             </div>
             <h3>{{item.name}}</h3>
-            <span class="shop-notice" v-if="item.id==1">
+            <span class="shop-notice" v-if="item.id==1&&messageCount>=1">
               {{messageCount>99?"99":messageCount}}
             </span>
           </a>
