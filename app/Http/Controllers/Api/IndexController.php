@@ -14,6 +14,7 @@ use DateTime;
 use Encore\Admin\Config\ConfigModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 
@@ -127,7 +128,7 @@ class IndexController extends BaseController {
             foreach ($modules as $_module) {
                 $list[] = [
                     'name' => $_module->name,
-                    'logo' => $_module->logo,
+                    'logo' => Storage::disk("public")->url($_module->logo),
                     'id' => $_module->module_id,
                     'url' => $_module->url,
                 ];
