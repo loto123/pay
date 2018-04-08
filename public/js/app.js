@@ -41819,7 +41819,7 @@ var render = function() {
                         _vm._v(
                           "\n            " +
                             _vm._s(
-                              this.messageCount > 99 ? "99" : this.messageCount
+                              _vm.messageCount > 99 ? "99" : _vm.messageCount
                             ) +
                             "\n          "
                         )
