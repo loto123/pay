@@ -57,7 +57,7 @@
               <img :src="item.logo" alt="">
             </div>
             <h3>{{item.name}}</h3>
-            <span class="shop-notice" v-if="messageCount">
+            <span class="shop-notice" v-if="item.id==1 && messageCount">
               {{this.messageCount>99?"99":this.messageCount}}
             </span>
           </a>
@@ -113,7 +113,6 @@
       </div>
 
       <ul class="flex flex-wrap-on">
-
         <li class="flex flex-v flex-align-center" v-for="(item,index) in expandList">
           <a v-bind:href="item.url" class="flex flex-v flex-align-center">
             <div class="home-icon">

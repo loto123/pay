@@ -1361,7 +1361,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -41814,7 +41813,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("h3", [_vm._v(_vm._s(item.name))]),
                   _vm._v(" "),
-                  _vm.messageCount
+                  item.id == 1 && _vm.messageCount
                     ? _c("span", { staticClass: "shop-notice" }, [
                         _vm._v(
                           "\n            " +
