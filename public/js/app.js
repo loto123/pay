@@ -41809,12 +41809,12 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "home-icon" }, [
-                    _c("img", { attrs: { src: item.logo, alt: "" } })
+                    _c("img", { attrs: { src: item.logo } })
                   ]),
                   _vm._v(" "),
                   _c("h3", [_vm._v(_vm._s(item.name))]),
                   _vm._v(" "),
-                  item.id == 1 && _vm.messageCount
+                  item.id == 1
                     ? _c("span", { staticClass: "shop-notice no11" }, [
                         _vm._v(
                           "\n            " +
