@@ -8,6 +8,7 @@ use App\Pay\Model\Channel;
 use App\Pay\Model\DepositMethod;
 use App\Pay\Model\Scene;
 use App\Pay\Model\WithdrawMethod;
+use App\Role;
 use App\User;
 use App\UserFund;
 use DateTime;
