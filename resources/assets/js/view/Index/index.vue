@@ -114,16 +114,16 @@
 
       <ul class="flex flex-wrap-on">
 
-        <li class="flex flex-v flex-align-center">
-          <a href="/#/shareUser" class="flex flex-v flex-align-center">
+        <li class="flex flex-v flex-align-center" v-for="(item,index) in expandList">
+          <a v-bind:href="item.url" class="flex flex-v flex-align-center">
             <div class="home-icon">
-              <img src="/images/home/zhanye.png" alt="">
+              <img :src="item.logo">
             </div>
-            <h3>展业</h3>
+            <h3>{{item.name}}</h3>
           </a>
         </li>
 
-        <li class="flex flex-v flex-align-center" v-if="isPromoters==1">
+        <!-- <li class="flex flex-v flex-align-center" v-if="isPromoters==1">
           <a class="flex flex-v flex-align-center" @click="goVipOpenCard">
             <div class="home-icon">
               <img src="/images/home/kaika.png" alt="">
@@ -154,7 +154,7 @@
             </div>
             <h3>授权代理</h3>
           </a>
-        </li>
+        </li> -->
       </ul>
 
     </section>
@@ -389,7 +389,8 @@
         isPromoters: 0,  // 是否是推广员
         messageCount: null,             // 新消息数量
 
-        myList:null     //我的列表
+        myList:null,      //我的列表
+        expandList:null   //拓展列表
       }
     },
     created() {
@@ -481,10 +482,8 @@
             this.messageCount = res[1].data.data.count;
 
             this.myList=res[2].data.data[0].list;
-            console.log(this.myList);
-            console.log(res[2].data.data[0]);
+            this.expandList=res[2].data.data[1].list;
             Loading.getInstance().close();
-
           }).catch(err => {
             Loading.getInstance().close();
           });
