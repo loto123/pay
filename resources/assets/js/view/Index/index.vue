@@ -400,6 +400,12 @@
     },
 
     methods: {
+      goMyAccount() {
+        this.$router.push('/myAccount');
+      },
+      goInform() {
+        this.$router.push("/inform");
+      },
       goShareProfit() {
         if (this.isAgent == 0) {
 

@@ -1394,6 +1394,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
+    goMyAccount: function goMyAccount() {
+      this.$router.push('/myAccount');
+    },
+    goInform: function goInform() {
+      this.$router.push("/inform");
+    },
     goShareProfit: function goShareProfit() {
       var _this = this;
 
