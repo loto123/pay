@@ -16,6 +16,7 @@ import ForOForPage from './404'
 import SalePet from './dealList'
 import Safety from './safety'
 import MyReward from './myReward'
+import AuthAgent from './authAgent'
 
 import 'mint-ui/lib/style.css'
 import '../../sass/oo_flex.scss'
@@ -63,6 +64,9 @@ var routerList = {
 
     //我的赏金
     myReward:MyReward,
+
+    //授权代理
+    authAgent:AuthAgent,
 
     // 404页面
     notFound:ForOForPage

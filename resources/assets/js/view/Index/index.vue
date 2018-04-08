@@ -51,19 +51,19 @@
       </div>
 
       <ul class="flex flex-wrap-on">
-        <li class="flex flex-v flex-align-center">
-          <a href="/#/shop" class="flex flex-v flex-align-center shop-notice-box">
+        <li class="flex flex-v flex-align-center" v-for="(item,index) in myList">
+          <a v-bind:href="item.url" class="flex flex-v flex-align-center shop-notice-box">
             <div class="home-icon">
-              <img src="/images/home/gonghui.png" alt="">
+              <img :src="item.logo" alt="">
             </div>
-            <h3>我的公会</h3>
+            <h3>{{item.name}}</h3>
             <span class="shop-notice" v-if="messageCount">
               {{this.messageCount>99?"99":this.messageCount}}
             </span>
           </a>
         </li>
 
-        <li class="flex flex-v flex-align-center">
+        <!-- <li class="flex flex-v flex-align-center">
           <a href="/#/makeDeal/my_deal" class="flex flex-v flex-align-center">
             <div class="home-icon">
               <img src="/images/home/renwu.png" alt="">
@@ -105,7 +105,7 @@
             </div>
             <h3>我的赏金</h3>
           </a>
-        </li>
+        </li> -->
       </ul>
 
       <div class="menu-class flex flex-align-center">
@@ -145,6 +145,14 @@
               <img src="/images/home/baozhang.png" alt="">
             </div>
             <h3>安全保障</h3>
+          </a>
+        </li>
+        <li class="flex flex-v flex-align-center">
+          <a class="flex flex-v flex-align-center" @click="goAuthAgent">
+            <div class="home-icon">
+              <img src="/images/home/baozhang.png" alt="">
+            </div>
+            <h3>授权代理</h3>
           </a>
         </li>
       </ul>
@@ -379,7 +387,9 @@
 
         isAgent: 0,    // 是否是代理
         isPromoters: 0,  // 是否是推广员
-        messageCount: null             // 新消息数量
+        messageCount: null,             // 新消息数量
+
+        myList:null     //我的列表
       }
     },
     created() {
@@ -450,14 +460,15 @@
           this.$router.push("/my/my_users");
         }
       },
-
       goSafety() {
         this.$router.push('/safety')
       },
-
+      goAuthAgent(){
+        this.$router.push('/authAgent')
+      },
       init() {
         Loading.getInstance().open();
-        Promise.all([request.getInstance().getData("api/index"), request.getInstance().getData("api/shop/messages/count")])
+        Promise.all([request.getInstance().getData("api/index"), request.getInstance().getData("api/shop/messages/count"), request.getInstance().getData("api/index/module")])
           .then(res => {
             this.amount = res[0].data.data.balance;
             this.avatar = res[0].data.data.avatar;
@@ -468,6 +479,10 @@
             this.isPromoters = res[0].data.data.is_promoter;
 
             this.messageCount = res[1].data.data.count;
+
+            this.myList=res[2].data.data[0].list;
+            console.log(this.myList);
+            console.log(res[2].data.data[0]);
             Loading.getInstance().close();
 
           }).catch(err => {
