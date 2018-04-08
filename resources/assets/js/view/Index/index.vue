@@ -45,7 +45,7 @@
     </section>
 
     <section class="content">
-
+      <div class="space"></div>
       <div class="menu-class flex flex-align-center" v-if="myTitle != null">
         <span></span>{{myTitle}}
       </div>
@@ -107,7 +107,7 @@
           </a>
         </li> -->
       </ul>
-
+      <div class="space"></div>
       <div class="menu-class flex flex-align-center" v-if="expandTitle!=null">
         <span></span>{{expandTitle}}
       </div>
@@ -164,7 +164,7 @@
 
 <style lang="scss" scoped>
   #index {
-    background: #f5f7fb;
+    background: #fff;
     height: 100vh;
   }
 
@@ -312,7 +312,6 @@
 
     .menu-class {
       background: #fff;
-      margin-top: 0.5em;
       height: 2em;
       padding-left: 0.5em;
       box-sizing: border-box;
@@ -365,6 +364,10 @@
     line-height: 1.5em;
     font-size: 0.1em;
     color: #fff;
+  }
+  .space{
+    height: 0.5em;
+    background: #f5f7fb;
   }
 </style>
 
