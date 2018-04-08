@@ -479,6 +479,7 @@
             this.isPromoters = res[0].data.data.is_promoter;
 
             this.messageCount = res[1].data.data.count;
+            console.log(this.messageCount);
 
             this.myList=res[2].data.data[0].list;
             this.expandList=res[2].data.data[1].list;

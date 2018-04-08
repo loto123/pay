@@ -1475,6 +1475,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this3.isPromoters = res[0].data.data.is_promoter;
 
         _this3.messageCount = res[1].data.data.count;
+        console.log(_this3.messageCount);
 
         _this3.myList = res[2].data.data[0].list;
         _this3.expandList = res[2].data.data[1].list;
