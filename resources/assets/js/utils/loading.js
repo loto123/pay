@@ -16,10 +16,13 @@ class Loading {
 
     open(value) {
         if(!value){
-            value = "加载中...";
+          value = "加载中...";
         }
         this.errSwitch = true;
-        Indicator.open(value);
+        Indicator.open({
+          value,
+          spinnerType: 'fading-circle'
+        });
 
         if (this._timer == null) {
             this._timer = setTimeout(() => {

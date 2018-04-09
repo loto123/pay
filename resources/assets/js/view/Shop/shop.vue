@@ -65,7 +65,7 @@
     <transition name="slide">
 
       <!-- 创建公会拉起 -->
-       <section class="add-shop-tab" v-if="addShopTabStatus" >
+       <section class="add-shop-tab" v-if="addShopTabStatus">
           <top-back :title= "'填写公会信息'" :userAction = "'hide'"  v-on:hide="hide"></top-back>
 
           <div class= "item">
@@ -77,7 +77,7 @@
           </div>
 
           <div class= "item">
-            <mt-field label="设置公会佣金费率" :placeholder="'公会佣金费率不得超过' + guild_commission +'%'" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
+            <mt-field label="设置公会佣金费率(%)" :placeholder="'公会佣金费率不得超过'+guild_commission" type="number" style="margin-top:0.4em;" v-model="openNewShop.percent"></mt-field>
           </div>
 
           <div class="item open-deal-switch flex flex-align-center">
@@ -330,6 +330,9 @@
   .item {
     width: 95%;
     margin: 0 auto;
+    label{
+      font-size:0.8em;
+    }
   }
 
   .open-deal-switch {
@@ -361,6 +364,9 @@
     margin-top: 2em;
     width: 95%;
   }
+}
+.mint-cell-title{
+  font-size: 0.8em !important;
 }
 </style>
 

@@ -1,0 +1,21 @@
+.add-shop-tab{
+  .item{
+    .mint-cell-title{
+      font-size: 0.8em;
+      width: 40%;
+    }
+    .mint-cell-value{
+      font-size: 0.8em;
+    }
+  }
+}
+.mint-indicator{
+  .mint-indicator-wrapper{
+    background: none;
+    .mint-spinner-fading-circle{
+      width: 25px !important;
+      height: 25px !important;
+    }
+  }
+}
+

@@ -103,7 +103,7 @@
                     Toast('当前没有消息')
                     return
                 }
-                MessageBox.confirm("是否确认清空全部消息?", "温馨提示").then(
+                MessageBox.confirm("是否确认清空已读消息?", "温馨提示").then(
                     () => {
                         request.getInstance().postData("api/notice/delete?type=" + type)
                             .then((res) => {
