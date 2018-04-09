@@ -9,4 +9,13 @@
     }
   }
 }
+.mint-indicator{
+  .mint-indicator-wrapper{
+    background: none;
+    .mint-spinner-fading-circle{
+      width: 25px !important;
+      height: 25px !important;
+    }
+  }
+}
 
