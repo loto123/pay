@@ -224,6 +224,14 @@ class TransferController extends BaseController
      *                      @SWG\Property(property="avatar",type="string", example="url", description="发起交易红包人头像"),
      *                  ),
      *                  @SWG\Property(
+     *                      property="shop_manager",
+     *                      type="object",
+     *                      description="公会负责人信息",
+     *                      @SWG\Property(property="id", type="string", example="1234567",description="公会负责人id"),
+     *                      @SWG\Property(property="name", type="string", example="1234567", description="公会负责人昵称"),
+     *                      @SWG\Property(property="avatar",type="string", example="url", description="公会负责人头像"),
+     *                  ),
+     *                  @SWG\Property(
      *                      property="record",
      *                      type="array",
      *                      description="交易记录",
@@ -312,6 +320,10 @@ class TransferController extends BaseController
             $query->select('transfer_id', 'user_id');
         }, 'joiner.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
+        },  'shop'  => function ($query) {
+            $query->select('id', 'name', 'logo', 'manager_id');
+        },'shop.manager'  => function ($query) {
+            $query->select('id', 'name', 'avatar');
         }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status')->first();
 
         //装填响应数据
@@ -349,6 +361,8 @@ class TransferController extends BaseController
         }
         $transfer->shop_name = $transfer->shop->name;
         $transfer->shop_logo = $transfer->shop->logo;
+        $transfer->shop->manager->id = $transfer->shop->manager->en_id();
+        $transfer->shop_manager = $transfer->shop->manager;
         unset($transfer->user_id);
         unset($transfer->shop);
         return $this->json($transfer, 'ok', 1);
