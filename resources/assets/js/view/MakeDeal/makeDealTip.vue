@@ -1,7 +1,7 @@
 <template>
     <div id="makeDealTip">
         <topBack style="background:#eee;"></topBack>
-        <dealContent :renderData="renderData"></dealContent>
+        <shopContent :renderData="renderData"></shopContent>
 
          <div class="tip-wrap flex flex-align-center flex-justify-around" >
             <label for="" class="flex-4" style="padding-left:1em;">打赏会长</label>
@@ -103,7 +103,7 @@
 
 <script>
 import topBack from "../../components/topBack";
-import dealContent from "./dealContent";
+import shopContent from "./shopContent";
 import Loading from "../../utils/loading";
 import request from "../../utils/userRequest";
 import passwordTab from "../../components/password";
@@ -113,7 +113,7 @@ export default {
   created() {
     this.init();
   },
-  components: { topBack, dealContent, passwordTab },
+  components: { topBack, shopContent, passwordTab },
   data() {
     return {
       renderData: {
