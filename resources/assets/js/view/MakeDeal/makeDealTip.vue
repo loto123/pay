@@ -120,6 +120,7 @@ export default {
         name: null,
         moneyData: null,
         user:{},
+        shop_manager:{}
       },
       passwordData: {
         switch: false,
@@ -139,7 +140,7 @@ export default {
           Loading.getInstance().close();
         })
         .catch(err => {
-          console.error(err);
+          Toast(err.data.msg); 
         });
     },
     payTip() {
@@ -186,7 +187,6 @@ export default {
                 Loading.getInstance().close();
               })
               .catch(err => {
-                console.error(err);
                 Loading.getInstance().close();
                 Toast(err.data.msg);       
               });
@@ -226,7 +226,6 @@ export default {
           this.init();
         })
         .catch(err => {
-          console.error(err);
           Loading.getInstance().close();
           Toast(err.data.msg);
         });

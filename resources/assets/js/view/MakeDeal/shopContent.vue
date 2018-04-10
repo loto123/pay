@@ -1,8 +1,8 @@
 <template>
     <div>
         <section class="content flex flex-v flex-align-center">
-            <img :src="renderData.shop_logo" class="avatar">
-            <h3 class="user-name">{{renderData.shop_name}}</h3>
+            <img :src="renderData.shop_manager.avatar" class="avatar">
+            <h3 class="user-name">{{renderData.shop_manager.name}}</h3>
             <p class="transfer-id">任务ID:{{renderData.id}}</p>
             <p class="message">{{(renderData.comment==0)?'无消息':renderData.comment}}</p>
         </section>
