@@ -16,7 +16,8 @@
 
     <div class="price flex">
       <label for="" class="flex-1">任务收益倍率</label>
-      <input type="text" value="10" class="flex-1" v-model="price" maxlength="6">
+      <span class="cutPrice">{{price}}</span>
+      <!-- <input type="text" value="price" class="flex-1" v-model="price" maxlength="6"> -->
       <span class="cancer"></span>
     </div>
 
@@ -123,11 +124,10 @@
       font-size: 1em;
     }
 
-    input {
+    .cutPrice {
       display: block;
       width: 30%;
       font-size: 1.2em;
-      outline: none;
       border: none;
       color: #666;
     }
@@ -314,7 +314,7 @@
 
       getDefaultPrice(id) {
         for (let i = 0; i < this.shopList.length; i++) {
-          if (this.shopList[i].value == id) {
+          if (this.shopList[i].id == id) {
             return this.shopList[i].price;
           }
         }
@@ -360,7 +360,6 @@
           this.choiseMemberSwitch = true;
 
         }).catch(err => {
-          console.error(err);
           Loading.getInstance().close();
         });
 

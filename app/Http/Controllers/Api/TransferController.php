@@ -208,7 +208,7 @@ class TransferController extends BaseController
      *                  @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
      *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
      *                  @SWG\Property(property="shop_name", type="string", example="1号公会", description="店铺名称"),
-     *                  @SWG\Property(property="shop_log", type="string", example="storage/logo/956ae69edfcb690eb3ee6e5db6c12cfa.jpg", description="店铺logo"),
+     *                  @SWG\Property(property="shop_logo", type="string", example="http://192.168.32.123:9999/storage/logo/956ae69edfcb690eb3ee6e5db6c12cfa.jpg", description="店铺logo"),
      *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
      *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
      *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
@@ -222,6 +222,14 @@ class TransferController extends BaseController
      *                      @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
      *                      @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
      *                      @SWG\Property(property="avatar",type="string", example="url", description="发起交易红包人头像"),
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="shop_manager",
+     *                      type="object",
+     *                      description="公会负责人信息",
+     *                      @SWG\Property(property="id", type="string", example="1234567",description="公会负责人id"),
+     *                      @SWG\Property(property="name", type="string", example="1234567", description="公会负责人昵称"),
+     *                      @SWG\Property(property="avatar",type="string", example="url", description="公会负责人头像"),
      *                  ),
      *                  @SWG\Property(
      *                      property="record",
@@ -312,6 +320,10 @@ class TransferController extends BaseController
             $query->select('transfer_id', 'user_id');
         }, 'joiner.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
+        }, 'shop'  => function ($query) {
+            $query->select('id', 'name', 'logo', 'manager_id');
+        },'shop.manager'  => function ($query) {
+            $query->select('id', 'name', 'avatar');
         }])->select('id', 'shop_id', 'user_id', 'price', 'amount', 'comment', 'status')->first();
 
         //装填响应数据
@@ -349,6 +361,8 @@ class TransferController extends BaseController
         }
         $transfer->shop_name = $transfer->shop->name;
         $transfer->shop_logo = $transfer->shop->logo;
+        $transfer->shop->manager->id = $transfer->shop->manager->en_id();
+        $transfer->shop_manager = $transfer->shop->manager;
         unset($transfer->user_id);
         unset($transfer->shop);
         return $this->json($transfer, 'ok', 1);
@@ -1010,6 +1024,8 @@ class TransferController extends BaseController
      *                  type="object",
      *                  @SWG\Property(property="id", type="string", example="1234567",description="交易红包id"),
      *                  @SWG\Property(property="shop_id", type="string", example="1234567", description="店铺ID"),
+     *                  @SWG\Property(property="shop_name", type="string", example="1号公会", description="店铺名称"),
+     *                  @SWG\Property(property="shop_logo", type="string", example="http://192.168.32.123:9999/storage/logo/956ae69edfcb690eb3ee6e5db6c12cfa.jpg", description="店铺logo"),
      *                  @SWG\Property(property="price", type="double", example=9.9, description="单价"),
      *                  @SWG\Property(property="amount", type="double", example=9.9, description="红包余额"),
      *                  @SWG\Property(property="comment", type="string", example="大吉大利，恭喜发财", description="备注"),
@@ -1021,6 +1037,14 @@ class TransferController extends BaseController
      *                      @SWG\Property(property="id", type="string", example="1234567",description="发起交易红包人id"),
      *                      @SWG\Property(property="name", type="string", example="1234567", description="发起交易红包人昵称"),
      *                      @SWG\Property(property="avatar",type="string", example="url", description="发起交易红包人头像"),
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="shop_manager",
+     *                      type="object",
+     *                      description="公会负责人信息",
+     *                      @SWG\Property(property="id", type="string", example="1234567",description="公会负责人id"),
+     *                      @SWG\Property(property="name", type="string", example="1234567", description="公会负责人昵称"),
+     *                      @SWG\Property(property="avatar",type="string", example="url", description="公会负责人头像"),
      *                  ),
      *                  @SWG\Property(
      *                      property="tips",
@@ -1080,16 +1104,26 @@ class TransferController extends BaseController
             $query->select('transfer_id', 'user_id', 'amount', 'created_at')->where('record_id', 0)->orderBy('created_at', 'DESC');
         }, 'tips.user' => function ($query) {
             $query->select('id', 'name', 'avatar');
-        }])->select('id', 'user_id', 'price', 'amount', 'comment', 'status')->first();
+        },'shop'  => function ($query) {
+            $query->select('id', 'name', 'logo', 'manager_id');
+        },'shop.manager'  => function ($query) {
+            $query->select('id', 'name', 'avatar');
+        }])->select('id', 'user_id', 'shop_id', 'price', 'amount', 'comment', 'status')->first();
 
         //装填响应数据
         $transfer->id = $transfer->en_id();
         $transfer->user->id = $transfer->user->en_id();
+        $transfer->shop_id = $transfer->shop->en_id();
         foreach ($transfer->tips as $key => $record) {
             $transfer->tips[$key]->user->id = $record->user->en_id();
             unset($transfer->tips[$key]->transfer_id);
             unset($transfer->tips[$key]->user_id);
         }
+        $transfer->shop_name = $transfer->shop->name;
+        $transfer->shop_logo = $transfer->shop->logo;
+        $transfer->shop->manager->id = $transfer->shop->manager->en_id();
+        $transfer->shop_manager = $transfer->shop->manager;
+        unset($transfer->shop);
         unset($transfer->user_id);
 
         return $this->json($transfer, 'ok', 1);
