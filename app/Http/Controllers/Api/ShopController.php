@@ -1956,10 +1956,13 @@ class ShopController extends BaseController
             return $this->json([], trans("api.error_shop_status"), 0);
         }
         $query = $shop->funds();
-        $types = [ShopFund::TYPE_TRANAFER, ShopFund::TYPE_TRANAFER_IN, ShopFund::TYPE_TRANAFER_MEMBER];
-        if ($request->type !== null && in_array($request->type, $types)) {
-            $query->where("type", $request->type);
-        } else {
+        if ($request->type !== null) {
+            $types = [];
+            if (is_array($request->type)) {
+                $types = $request->type;
+            } else {
+                $types[] = $request->type;
+            }
             $query->whereIn("type", $types);
         }
         if ($request->start) {
