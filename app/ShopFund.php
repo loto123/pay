@@ -17,6 +17,8 @@ class ShopFund extends Model
 
     const TYPE_FEE = 4; //手续费
 
+    const TYPE_WITHDRAW = 5; //撤回
+
     const MODE_IN = 0;
 
     const MODE_OUT = 1;

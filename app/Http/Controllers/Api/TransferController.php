@@ -873,6 +873,16 @@ class TransferController extends BaseController
             $found->amount = $record->real_amount;
             $found->no = $record->transfer_id;
             $found->save();
+            //店铺账单明细
+            $shopFound = new ShopFund();
+            $shopFound->shop_id = $transfer->shop_id;
+            $shopFound->type = ShopFund::TYPE_WITHDRAW;
+            $shopFound->user_id = $user->id;
+            $shopFound->mode = ShopFund::MODE_OUT;
+            $shopFound->amount = $record->tip;
+            $shopFound->balance = $transfer->shop->container->balance;
+            $shopFound->status = ShopFund::STATUS_SUCCESS;
+            $shopFound->save();
             DB::commit();
             return $this->json([], trans('trans.withdraw_success'), 1);
         } catch (\Exception $e) {
