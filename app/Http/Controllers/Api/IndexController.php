@@ -73,7 +73,7 @@ class IndexController extends BaseController {
             'new_message' => $user->unreadNotifications()->whereIn("type", Notice::typeConfig())->count() > 0 ? 1 : 0,
             'is_agent' => $user->hasRole("agent") ? 1 : 0,
             'is_promoter' => $user->hasRole("promoter") ? 1 : 0,
-            'allow_create_shop' => $user->can('create_shop')?1:0,
+            'allow_create_shop' => $user->can('create_guild')?1:0,
         ]);
     }
 
