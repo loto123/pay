@@ -24,5 +24,6 @@ return [
     'invite_unexist' => '邀请人不存在',
     'user_unexist' => '用户不存在',
     'user_already_is_proxy' => '用户已是代理',
-    'error_sms_code' => '手机号或验证码错误'
+    'error_sms_code' => '手机号或验证码错误',
+    'error_create_guild' => '你暂时无权创建公会，请联系相关人员处理'
 ];
