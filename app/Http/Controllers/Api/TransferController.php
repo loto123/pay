@@ -879,7 +879,7 @@ class TransferController extends BaseController
             $shopFound->type = ShopFund::TYPE_WITHDRAW;
             $shopFound->user_id = $user->id;
             $shopFound->mode = ShopFund::MODE_OUT;
-            $shopFound->amount = $record->tip;
+            $shopFound->amount = $tip->amount;
             $shopFound->balance = $transfer->shop->container->balance;
             $shopFound->status = ShopFund::STATUS_SUCCESS;
             $shopFound->save();
