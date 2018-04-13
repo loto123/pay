@@ -51,6 +51,7 @@ class IndexController extends BaseController {
      *                  @SWG\Property(property="new_message", type="boolean", example=0,description="是否有新消息"),
      *                  @SWG\Property(property="is_agent", type="boolean", example=0,description="是否为代理"),
      *                  @SWG\Property(property="is_promoter", type="boolean", example=0,description="是否为推广员"),
+     *                  @SWG\Property(property="allow_create_shop", type="boolean", example=0,description="是否允许创建公会"),
      *              )
      *          )
      *      ),
@@ -72,6 +73,7 @@ class IndexController extends BaseController {
             'new_message' => $user->unreadNotifications()->whereIn("type", Notice::typeConfig())->count() > 0 ? 1 : 0,
             'is_agent' => $user->hasRole("agent") ? 1 : 0,
             'is_promoter' => $user->hasRole("promoter") ? 1 : 0,
+            'allow_create_shop' => $user->can('create_guild')?1:0,
         ]);
     }
 
