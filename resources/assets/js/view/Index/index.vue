@@ -226,8 +226,9 @@
         text-align: center;
         color: #fff;
         .diamond {
-          width: 30px;
+          width: 23px;
           margin-left: 0.2em;
+          margin-top: 0.15em;
           img {
             display: block;
             width: 100%;

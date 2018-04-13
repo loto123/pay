@@ -216,12 +216,12 @@ export default {
       };
 
       this.hidePassword();
-      // 任务加速接口
+      // 任务打赏接口
       request
         .getInstance()
         .postData("api/transfer/payfee", _data)
         .then(res => {
-          Toast("任务加速成功");
+          Toast("打赏成功");
           this.hidePassword();
           this.init();
         })
