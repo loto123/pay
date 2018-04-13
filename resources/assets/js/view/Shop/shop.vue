@@ -372,7 +372,7 @@
 
 <script>
 import topBack from "../../components/topBack"
-import {Indicator,Toast} from 'mint-ui'
+import {MessageBox,Indicator,Toast} from 'mint-ui'
 import request from '../../utils/userRequest'
 import Loading from '../../utils/loading'
 import utils from '../../utils/utils.js'
@@ -389,23 +389,20 @@ export default {
       addShopTabStatus: false,       // 创建公会拉起状态
       dealStatus: true,              // 是否开启任务(创建公会tab)
       createShopSwitch: true,        // 防看止按钮多次点击的
-
       openNewShop:{
         name :null,
         rate :null,
         percent :null,
         active :true
       },
-
       shopList:[],
       total_profit:null,
       messageCount:null,             // 新消息数量
-      guild_commission : 0           // 公会佣金费率上限
-
+      guild_commission : 0,           // 公会佣金费率上限
+      allowCreateShop:null
     };
   },
   methods: {
-
     // 路由跳转
     goMyCollection() {
       this.$router.push("/shop/my_collection");
@@ -418,7 +415,17 @@ export default {
       this.$router.push("/shop/shop_detail"+"?id="+e);
     },
     addShop() {
-      this.addShopTabStatus = true;
+      if(this.allowCreateShop==1){
+        MessageBox({
+          title: '温馨提示',
+          message: '您暂时无法创建公会,请联系相关人员处理',
+          confirmButtonText: '我知道了',
+          showCancelButton: false
+        });
+      }else{
+        this.addShopTabStatus = true;
+      }
+      
     },
     hide() {
       this.addShopTabStatus = false;
@@ -467,7 +474,7 @@ export default {
 
     // 数据处理
     getShopData(){
-
+      this.allowCreateShop=localStorage.getItem("allowCreateShop");
       Loading.getInstance().open();
 
       Promise.all([
@@ -487,7 +494,6 @@ export default {
         .catch(err=>{
           Loading.getInstance().close();
           Toast(err.data.msg);
-          console.error(err);
         });
     },
 
