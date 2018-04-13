@@ -415,7 +415,7 @@ export default {
       this.$router.push("/shop/shop_detail"+"?id="+e);
     },
     addShop() {
-      if(this.allowCreateShop==1){
+      if(this.allowCreateShop==0){
         MessageBox({
           title: '温馨提示',
           message: '您暂时无法创建公会,请联系相关人员处理',

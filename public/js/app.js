@@ -13460,7 +13460,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$router.push("/shop/shop_detail" + "?id=" + e);
     },
     addShop: function addShop() {
-      if (this.allowCreateShop == 1) {
+      if (this.allowCreateShop == 0) {
         Object(__WEBPACK_IMPORTED_MODULE_1_mint_ui__["MessageBox"])({
           title: '温馨提示',
           message: '您暂时无法创建公会,请联系相关人员处理',
