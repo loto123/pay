@@ -91,6 +91,10 @@ class ShopController extends BaseController
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request){
+        $user = $this->auth->user();
+        if (!$user->can("create_guild")) {
+            return $this->json([], trans("api.error_create_guild"), 0);
+        }
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:10',
             'rate' => 'required|regex:/^\d{0,5}(\.\d{1})?$/|numeric|between:0.1,99999',
@@ -113,7 +117,7 @@ class ShopController extends BaseController
         if ($request->percent > config("guild_commission", 0)) {
             return $this->json([], trans("api.error_shop_percent"), 0);
         }
-        $user = $this->auth->user();
+
         if ($user->shop()->where("status", Shop::STATUS_NORMAL)->count() >= config("max_shops", 3)) {
             return $this->json([], trans("api.over_max_times"), 0);
         }
