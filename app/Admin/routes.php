@@ -122,3 +122,13 @@ Route::group([
     $router->any('/updates_card/{card_id}/{type?}','AgentCardDataController@updates_card');
     $router->any('/card_trace/{card_id}','AgentCardDataController@card_trace');
 });
+
+Route::group([
+    'prefix' => config('admin.route.prefix').'/agent_grant',
+    'namespace' => config('admin.route.namespace'),
+    'middleware' => config('admin.route.middleware'),
+],function (Router $router) {
+    $router->get('query','AgentGrantController@query');
+    $router->post('grant','AgentGrantController@grant');
+    $router->get('records','AgentGrantController@records');
+});

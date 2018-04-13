@@ -96,10 +96,10 @@
             </div>
             <div v-if="tabStatus[1]==true">
               <div class="amount">
-                <span>支出:￥{{item.out}}
+                <span>收入:￥{{item.in}}
                   <i class="diamond">&#xe6f9;</i>
                 </span>
-                <span>收入:￥{{item.in}}
+                <span>支出:￥{{item.out}}
                   <i class="diamond">&#xe6f9;</i>
                 </span>
               </div>

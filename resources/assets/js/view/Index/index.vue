@@ -466,6 +466,7 @@
             this.userName = res[0].data.data.name;
 
             this.isAgent = res[0].data.data.is_agent;
+            localStorage.setItem("allowCreateShop",res[0].data.data.allow_create_shop);
             this.isPromoters = res[0].data.data.is_promoter;
 
             this.messageCount = res[1].data.data.count;
