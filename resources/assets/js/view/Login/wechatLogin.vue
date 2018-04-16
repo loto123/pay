@@ -40,11 +40,13 @@
         }
 
         request.getInstance().postData("api/auth/login/wechat", _data).then(res => {
+          console.log(res.data.code);
+          console.log(1111);
           if (res.data.code == 0) {
             Toast(res.data.msg);
-            setTimeout(() => {
+            // setTimeout(() => {
               window.location.href = "/#/index";
-            }, 2000);
+            // }, 2000);
           }
 
           if (!res.data.data.token) {
