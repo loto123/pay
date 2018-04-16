@@ -256,7 +256,7 @@ $api->version('v1', ['middleware' => ['api.auth', 'block']], function ($api) {
         $api->get('members/count', 'ProxyController@members_count');
         $api->get('members', 'ProxyController@members');
         $api->get('qrcode', 'ProxyController@qrcode');
-        $api->post('create', 'ProxyController@create');
+//        $api->post('create', 'ProxyController@create');
     });
 
 });
