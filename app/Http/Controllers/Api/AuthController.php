@@ -399,6 +399,7 @@ class AuthController extends BaseController {
                 $user->avatar = $oauth_user->headimgurl;
                 $user->name = $oauth_user->nickname;
                 $oauth_user->save();
+                $success['wechat'] = 1;
             }
         }
         $invite = User::where("mobile", $request->invite_mobile)->first();
