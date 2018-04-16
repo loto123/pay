@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Pay\Model\PayFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -83,7 +84,13 @@ class AgentGrant extends Model
             $agent_grant->old_roles = $old_roles;
             $agent_grant->new_roles = $old_roles . ',' . $grant_roles;
             $agent_grant->save();
+            //添加代理角色，分配代理容器，分润比例等
             $grant_to->roles()->attach($grant_roles);
+            $grant_to->percent = config("default_agent_ratio", 0);
+            $wallet = PayFactory::MasterContainer();
+            $wallet->save();
+            $grant_to->proxy_container_id = $wallet->id;
+            $grant_to->save();
         }catch (\Exception $e){
             DB::rollBack();
             return false;
