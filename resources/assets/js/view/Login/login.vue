@@ -192,7 +192,7 @@ export default {
 
       request.getInstance().postData('api/auth/login',data).then(function(res){
           self.userId = res.data.data.ticket;
-
+          localStorage.setItem("login_id",res.data.data.id);
           // 微信登录控制，生产环境开启
           if(res.data.data.wechat == 0 && debug == 0){
              Toast("登录成功，正在跳转绑定微信...");

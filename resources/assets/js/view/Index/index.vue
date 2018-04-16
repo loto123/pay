@@ -226,8 +226,9 @@
         text-align: center;
         color: #fff;
         .diamond {
-          width: 30px;
+          width: 23px;
           margin-left: 0.2em;
+          margin-top: 0.15em;
           img {
             display: block;
             width: 100%;
@@ -466,6 +467,7 @@
             this.userName = res[0].data.data.name;
 
             this.isAgent = res[0].data.data.is_agent;
+            localStorage.setItem("allowCreateShop",res[0].data.data.allow_create_shop);
             this.isPromoters = res[0].data.data.is_promoter;
 
             this.messageCount = res[1].data.data.count;
