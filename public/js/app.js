@@ -3021,7 +3021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       __WEBPACK_IMPORTED_MODULE_0__utils_userRequest__["a" /* default */].getInstance().postData("api/auth/login/wechat", _data).then(function (res) {
         if (res.data.code == 0) {
-          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(data.msg);
+          Object(__WEBPACK_IMPORTED_MODULE_2_mint_ui__["Toast"])(res.data.msg);
           setTimeout(function () {
             window.location.href = "/#/index";
           }, 2000);

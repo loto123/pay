@@ -41,7 +41,7 @@
 
         request.getInstance().postData("api/auth/login/wechat", _data).then(res => {
           if (res.data.code == 0) {
-            Toast(data.msg);
+            Toast(res.data.msg);
             setTimeout(() => {
               window.location.href = "/#/index";
             }, 2000);
