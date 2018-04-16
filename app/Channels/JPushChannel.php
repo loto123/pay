@@ -50,7 +50,7 @@ class JPushChannel
                     // 'content-available' => true,
                     // 'mutable-content' => true,
                     'extras' => array(
-                        'link' => $data['param']['link'],
+                        'link' => isset($data['param']['link']) ? $data['param']['link'] : "",
                         'type' => (int)$data['type']
                     ),
                 ))
@@ -58,7 +58,7 @@ class JPushChannel
                     'title' => $data['title'],
                     // 'builder_id' => 2,
                     'extras' => array(
-                        'link' => $data['param']['link'],
+                        'link' => isset($data['param']['link']) ? $data['param']['link'] : "",
                         'type' => (int)$data['type']
                     ),
                 ))->options(array(

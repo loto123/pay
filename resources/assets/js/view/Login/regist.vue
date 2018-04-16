@@ -416,7 +416,7 @@
               request.getInstance().setToken(res.data.data.token);
               Loading.getInstance().close();
 
-              if(debug == 0){
+              if(debug == 0&&res.data.data.wechat==0){
                 Toast("注册成功,请绑定微信");
                 self.weChatBind(res.data.data.ticket);
               }else {

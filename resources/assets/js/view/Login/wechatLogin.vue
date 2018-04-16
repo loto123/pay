@@ -18,7 +18,7 @@
       return {
         state: null,
         code: null,
-        bindMobile:false
+        bindMobile: false
       }
     },
     created() {
@@ -40,17 +40,14 @@
         }
 
         request.getInstance().postData("api/auth/login/wechat", _data).then(res => {
-
           if (!res.data.data.token) {
             window.location.href = "/#/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
           } else {
-
-            if(this.bindMobile){
+            if (this.bindMobile) {
               Toast("微信绑定成功");
-            }else {
+            } else {
               Toast("微信登录成功");
             }
-
             request.getInstance().setToken(res.data.data.token);
 
             setTimeout(() => {
