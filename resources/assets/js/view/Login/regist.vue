@@ -265,12 +265,13 @@
         this.$store.dispatch("setRefindPassWordState", true);
         this.$store.dispatch("setStep", _step);
       }
-
     },
 
     methods: {
       init() {
-        this.mobile = this.$route.query.mobile;
+        this.mobile = localStorage.getItem("Mobile");
+        //  this.mobile= this.$route.query.mobile;
+        Mobile
         if (!this.mobile) {
           this.isdisabled = false;
           return

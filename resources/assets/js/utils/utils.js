@@ -31,7 +31,6 @@ utils.SetString = function(str,len)
 }
 
 //检测一个输入是否为整数
-
 utils.testStringisNumber = function (testString) {
     var t= Number(testString);
     if (isNaN(t) || testString.toString().indexOf(".")!=-1)
@@ -42,4 +41,8 @@ utils.testStringisNumber = function (testString) {
     }
 }
 
+//手机号码截取
+// utils.mobileString = function (mobiles) {
+//   mobiles.toString().substr(0, 3) + '****' + mobiles.toString().substr(7);  
+// }
 export default utils;
