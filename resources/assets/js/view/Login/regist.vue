@@ -270,6 +270,7 @@
     methods: {
       init() {
         this.mobile = localStorage.getItem("Mobile");
+        console.log(this.mobile);
         //  this.mobile= this.$route.query.mobile;
         Mobile
         if (!this.mobile) {

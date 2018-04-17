@@ -193,7 +193,7 @@
         return this.parent_mobile.substr(0, 3) + '****' + this.parent_mobile.substr(7);  
       },
       nameString() {
-        return this.parent_name.substr(0, 1) + '****';  
+        return this.parent_name.substr(0, 1) + this.parent_name.replace(new RegExp(this.parent_name,'g'),"***");
       }
     }
 	};
