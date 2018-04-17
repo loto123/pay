@@ -270,7 +270,6 @@
     methods: {
       init() {
         this.mobile = sessionStorage.getItem("mobile");
-        console.log(this.mobile);
         //  this.mobile= this.$route.query.mobile;
         if (!this.mobile) {
           this.isdisabled = false;
@@ -309,7 +308,6 @@
             }).catch(err => {
               Loading.getInstance().close();
               Toast(err.data.msg);
-              console.error(err);
             });
 
           } else {
@@ -321,7 +319,6 @@
             }).catch(err => {
               Loading.getInstance().close();
               Toast(err.data.msg);
-              console.error(err);
             });
           }
 
@@ -342,7 +339,6 @@
             Loading.getInstance().close();
             this.goNextStep();
           }).catch(err => {
-            console.error(err);
             Loading.getInstance().close();
             Toast(err.data.msg);
           });
