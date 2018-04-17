@@ -1,7 +1,7 @@
 <template>
   <!-- 注册模块 -->
   <div id="regist">
-    <!-- <topBack style="background:#fff;"></topBack> -->
+    <topBack style="background:#fff;"></topBack>
     <section class="content step1" v-if="$store.state.regist.step==0?true:false">
       <h3>
         请输入推荐码
@@ -246,7 +246,8 @@
         isdisabled: null,
         product_name:product_name,
 
-        url:window.location.href.split('#')[0]  
+        url:window.location.href.split('#')[0],
+        types:null  
       };
     },
     created() {
@@ -270,7 +271,11 @@
     methods: {
       init() {
         this.mobile = sessionStorage.getItem("mobile");
-        //  this.mobile= this.$route.query.mobile;
+        this.types= this.$route.query.types;
+        if(this.types==1){
+          this.inviteMobile="";
+          this.isdisabled = false;
+        }
         if (!this.mobile) {
           this.isdisabled = false;
           return

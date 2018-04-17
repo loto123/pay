@@ -261,7 +261,7 @@ export default {
         this.$store.dispatch("setStep",0);
         localStorage.setItem("registStep",0);
         this.$store.dispatch("setRefindPassWordState",false);
-        this.$router.push("/login/regist");
+        this.$router.push("/login/regist?"+"types=1");
     },
 
     // 忘记密码
