@@ -272,16 +272,16 @@
       init() {
         this.mobile = sessionStorage.getItem("mobile");
         this.types= this.$route.query.types;
-        if(this.types==1){
-          this.inviteMobile=null;
-          this.isdisabled = false;
-        }
         if (!this.mobile) {
           this.isdisabled = false;
           return
         } else {
           this.inviteMobile = this.mobile;
           this.isdisabled = true;
+        }
+        if(this.types==1){
+          this.inviteMobile=null;
+          this.isdisabled = false;
         }
       },
       comfirm() {
