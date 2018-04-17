@@ -54,8 +54,9 @@
               window.location.href = "/#/index";
             }, 2000);
           }
-
-        }).catch();
+        }).catch(err=>{
+          Toast(err.data.msg);
+        });
       }
     }
 
