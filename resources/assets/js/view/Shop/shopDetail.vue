@@ -679,7 +679,6 @@
                             this.$router.push("/shop");
                         })
                         .catch(error => {
-                            console.error(error);
                             Loading.getInstance().close();
                             Toast(error.data.msg);
                         });

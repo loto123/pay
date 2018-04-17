@@ -57,7 +57,9 @@
     methods: {
       regist() {
         this.mobile=this.$route.query.mobile;
-        this.$router.push("/login/regist?mobile="+this.mobile);
+        sessionStorage.setItem('mobile',this.mobile);
+        this.$router.push("/login/regist");
+        this.$store.dispatch("setStep",1);
       }
     },
     components: { topBack }

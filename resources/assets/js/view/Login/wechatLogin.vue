@@ -29,19 +29,18 @@
         this.code = utils.getQueryString("code");
         this.state = utils.getQueryString("state");
         this.bindMobile = window.location.href.split("mobile=")[1];
-
+        
         var _data = {
           code: this.code,
-          state: this.state,
+          state: this.state
         };
 
         if (this.bindMobile) {
           _data.user_ticket = this.bindMobile;
         }
-
         request.getInstance().postData("api/auth/login/wechat", _data).then(res => {
           if (!res.data.data.token) {
-            window.location.href = "/#/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
+            window.location.href = "/#/login/regist/?oauth_user=" + res.data.data.oauth_user+"&types=1";
           } else {
             if (this.bindMobile) {
               Toast("微信绑定成功");
@@ -54,8 +53,9 @@
               window.location.href = "/#/index";
             }, 2000);
           }
-
-        }).catch();
+        }).catch(err=>{
+          Toast(err.data.msg);
+        });
       }
     }
 

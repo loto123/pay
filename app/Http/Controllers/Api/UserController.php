@@ -599,6 +599,7 @@ class UserController extends BaseController
      *                  @SWG\Property(property="parent_name", type="string", example="李四",description="推荐人昵称"),
      *                  @SWG\Property(property="parent_mobile", type="string", example="14444444444",description="推荐人手机号"),
      *                  @SWG\Property(property="pay_card_id", type="integer", example="1",description="结算卡id"),
+     *                  @SWG\Property(property="show_parent", type="integer", example="1",description="是否显示推荐人,1:显示,0:不显示"),
      *              )
      *          )
      *      ),
@@ -625,6 +626,7 @@ class UserController extends BaseController
             'parent_name' => $parent->name??'',
             'parent_mobile' => $parent->mobile??'',
             'pay_card_id' => $this->user->pay_card_id??'',
+            'show_parent' => config('api_show_parent',0),
         ];
         return $this->json($data);
     }

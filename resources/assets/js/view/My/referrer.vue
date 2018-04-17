@@ -8,9 +8,9 @@
             <img :src="avatar">
           </div>
           <div class="referrer-info">
-            <h2>{{name}}</h2>
+            <h2>{{nameString}}</h2>
             <div class="tel">电话:
-              <span>{{mobile}}</span>
+              <span>{{mobileString}}</span>
             </div>
             <div class="wx-number">微信号:
               <span></span>
@@ -59,6 +59,14 @@
           Toast(err.data.msg);
           Loading.getInstance().close();
         });
+      }
+    },
+    computed: {
+      mobileString() {
+        return this.mobile.substr(0, 3) + '****' + this.mobile.substr(7);  
+      },
+      nameString() {
+        return this.name.substr(0, 1) + '***';  
       }
     }
   };
