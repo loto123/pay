@@ -1,8 +1,7 @@
 <template>
   <!-- 注册模块 -->
   <div id="regist">
-    <topBack style="background:#fff;" v-if="this.$store.state.regist.step == 0" :backUrl="'\/index\/'"></topBack>
-    <topBack style="background:#fff;" v-else></topBack>
+    <topBack style="background:#fff;" :backUrl="'\/index\/'"></topBack>
     <section class="content step1" v-if="$store.state.regist.step==0?true:false">
       <h3>
         请输入推荐码
