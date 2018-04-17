@@ -41,7 +41,7 @@
 
         request.getInstance().postData("api/auth/login/wechat", _data).then(res => {
           if (!res.data.data.token) {
-            window.location.href = "/#/login/regist/" + "?oauth_user=" + res.data.data.oauth_user;
+            window.location.href = "/#/login/regist/?oauth_user=" + res.data.data.oauth_user+"&types=1";
           } else {
             if (this.bindMobile) {
               Toast("微信绑定成功");
