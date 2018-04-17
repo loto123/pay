@@ -269,7 +269,7 @@
 
     methods: {
       init() {
-        this.mobile = localStorage.getItem("Mobile");
+        this.mobile = sessionStorage.getItem("mobile");
         console.log(this.mobile);
         //  this.mobile= this.$route.query.mobile;
         Mobile
