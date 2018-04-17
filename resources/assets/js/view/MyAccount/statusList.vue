@@ -185,7 +185,6 @@
 
           })
           .catch((err) => {
-            console.error(err);
             Toast(err.data.msg);
             Loading.getInstance().close();
           })
@@ -227,7 +226,6 @@
 
           })
           .catch((err) => {
-            console.error(err);
             Toast(err.data.msg);
             Loading.getInstance().close();
           })
@@ -335,7 +333,6 @@
             this.showList = this.buildDataList();
 
           }).catch(err => {
-            console.error(err);
             Loading.getInstance().close;
             Toast(err.data.msg);
 

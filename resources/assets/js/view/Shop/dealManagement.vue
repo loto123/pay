@@ -374,7 +374,6 @@ export default {
         }).catch(err=>{
             Loading.getInstance().close();
             Toast(err.data.msg)
-            console.error(err);
         });
     },
 

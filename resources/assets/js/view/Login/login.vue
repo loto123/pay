@@ -221,7 +221,6 @@ export default {
         }
       }).catch(function(err){
         Toast(err.data.msg);
-        console.error(err);
       });
 
     },
