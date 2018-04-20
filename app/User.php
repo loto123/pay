@@ -311,10 +311,12 @@ class User extends Authenticatable
             return false;
         } else if (!$times) {
             Cache::put($key, 1, Carbon::now()->addDay(1));
-            return $total_times-$times-1;
+//            return $total_times-$times-1;
+            return true;
         } else {
             Cache::increment($key);
-            return $total_times-1;
+            return true;
+//            return $total_times-1;
         }
     }
 
