@@ -59,7 +59,6 @@
             this.$router.push('/my/setting_password?status='+"resetPassword"+"&mobile="+this.mobile+"&code="+this.code);
           }).catch(err=>{
             Toast(err.data.msg);
-            console.error(err);
           });
 
         }

@@ -168,7 +168,6 @@
           }).catch(err => {
             Loading.getInstance().close();
             Toast("请求错误");
-            console.error(err);
           });
       },
       init2() {

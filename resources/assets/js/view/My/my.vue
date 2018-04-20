@@ -13,10 +13,10 @@
 		</section>
 		<section>
 			<ul class="my-list">
-				<li @click="referrer">
+				<li v-if="show_parent==1" @click="referrer">
 					<mt-cell title="推荐人" is-link>
 						<img slot="icon" src="/images/referrer.png" width="30" height="30">
-						<span>{{parent_name}} <em>{{parent_mobile}}</em></span>
+						<span id="parent_name">{{nameString}} <em id="parent_mobile">{{mobileString}}</em></span>
 					</mt-cell>
 				</li>
 				<li @click="realAuth(mobile)">
@@ -99,6 +99,7 @@
 	import request from '../../utils/userRequest';
 	import { Toast,MessageBox } from 'mint-ui';
 	import Loading from '../../utils/loading'
+  import utils from "../../utils/utils"
 
 	export default {
 		data () {
@@ -112,7 +113,9 @@
 				parent_name:null,		//推荐人名字
 				parent_mobile:null,		//推荐人手机号
 				card_count:null,		//银行卡
-				identify_status:null	//认证状态
+        identify_status:null,	//认证状态
+        
+        show_parent:null    //是否显示推荐人信息  0：不显示     1：显示
 				
 				
 			}
@@ -131,12 +134,13 @@
 					this.identify_name=res[0].data.data.identify_name;
 					this.mobile=res[0].data.data.mobile;
 					this.thumb=res[0].data.data.thumb;
+          this.show_parent=res[0].data.data.show_parent; 
 
 					this.parent_name=res[1].data.data.parent_name;
 					this.parent_mobile=res[1].data.data.parent_mobile;
 					this.card_count=res[1].data.data.card_count;
 					this.identify_status=res[1].data.data.identify_status;
-
+          
 					Loading.getInstance().close();
 				})
 				.catch((err)=>{
@@ -179,7 +183,18 @@
 			},
 			referrer(){
 				this.$router.push('/my/referrer');
-			}
-		}
+      },
+       setString(str, len) {
+        return utils.SetString(str, len);
+      }
+    },
+    computed: {
+      mobileString () {
+        return this.parent_mobile.substr(0, 3) + '****' + this.parent_mobile.substr(7);  
+      },
+      nameString() {
+        return this.parent_name.substr(0, 1) + this.parent_name.replace(new RegExp(this.parent_name,'g'),"***");
+      }
+    }
 	};
 </script>

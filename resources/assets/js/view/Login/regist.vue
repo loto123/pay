@@ -1,7 +1,7 @@
 <template>
   <!-- 注册模块 -->
   <div id="regist">
-    <topBack style="background:#fff;"></topBack>
+    <topBack style="background:#fff;" :backUrl="'\/index\/'"></topBack>
     <section class="content step1" v-if="$store.state.regist.step==0?true:false">
       <h3>
         请输入推荐码
@@ -246,7 +246,8 @@
         isdisabled: null,
         product_name:product_name,
 
-        url:window.location.href.split('#')[0]  
+        url:window.location.href.split('#')[0],
+        types:null  
       };
     },
     created() {
@@ -265,18 +266,22 @@
         this.$store.dispatch("setRefindPassWordState", true);
         this.$store.dispatch("setStep", _step);
       }
-
     },
 
     methods: {
       init() {
-        this.mobile = this.$route.query.mobile;
+        this.mobile = sessionStorage.getItem("mobile");
+        this.types= this.$route.query.types;
         if (!this.mobile) {
           this.isdisabled = false;
           return
         } else {
           this.inviteMobile = this.mobile;
           this.isdisabled = true;
+        }
+        if(this.types==1){
+          this.inviteMobile=null;
+          this.isdisabled = false;
         }
       },
       comfirm() {
@@ -308,7 +313,6 @@
             }).catch(err => {
               Loading.getInstance().close();
               Toast(err.data.msg);
-              console.error(err);
             });
 
           } else {
@@ -320,7 +324,6 @@
             }).catch(err => {
               Loading.getInstance().close();
               Toast(err.data.msg);
-              console.error(err);
             });
           }
 
@@ -341,7 +344,6 @@
             Loading.getInstance().close();
             this.goNextStep();
           }).catch(err => {
-            console.error(err);
             Loading.getInstance().close();
             Toast(err.data.msg);
           });
