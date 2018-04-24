@@ -7,8 +7,8 @@
 return [
 
 
-    'app_key' => "70f4f80d0fa1497b20b5da5f",
+    'app_key' => "61158485c6f57c5d480fb6f1",
 
 
-    'secret' => "0f4aa9fc075848aa68492fb5",
+    'secret' => "36961668d9a5a928cbd51d70",
 ];
